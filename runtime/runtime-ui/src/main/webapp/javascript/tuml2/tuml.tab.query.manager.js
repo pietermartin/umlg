@@ -333,12 +333,6 @@
             textArea.text(query.queryString);
             textArea.appendTo(oclTextAreaDiv);
 
-            var newLines = query.queryString.match(/\n/g);
-            var count = 0;
-            if (newLines !== null) {
-                count = newLines.length;
-            }
-
             codeMirror = CodeMirror.fromTextArea(textArea[0], {
                     lineNumbers: true,
                     extraKeys: {"Ctrl-Space": "autocomplete"},
@@ -391,11 +385,11 @@
 
                 onresize_end: function () {
                     //Resize the textarea
-                    console.log(myLayout.state.north.size);
-                    var northHeight = $('.query-north').height() - 15;
                     $('.ocltextarea .CodeMirror').css("height", myLayout.state.north.size);
                     codeMirror.refresh();
-                    this.resultCodeMirror.refresh();
+                    if (this.resultCodeMirror !== undefined) {
+                        this.resultCodeMirror.refresh();
+                    }
                     return true;
                 }
             });

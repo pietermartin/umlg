@@ -219,6 +219,8 @@
             if ((self.contextVertexId !== null && self.contextVertexId !== undefined) || (self.propertyNavigatingTo !== null && self.propertyNavigatingTo !== undefined)) {
                 self.executeButton.text('Execute ' + $(this).text());
                 self.executeButton.val($(this).text());
+                self.getOpenQueryTabViewManager().tumlTabQueryManager.query.type = $(this).text();
+//                $.data(divPanel[0], 'tabEnum', this.tabEnum);
             } else {
                 if ($(this).text() === 'OCL') {
                     alert('OCL can only be be executed from a context!');
@@ -227,6 +229,7 @@
                 } else {
                     self.executeButton.text('Execute ' + $(this).text());
                     self.executeButton.val($(this).text());
+                    self.getOpenQueryTabViewManager().tumlTabQueryManager.query.type = $(this).text();
                 }
             }
         });
@@ -295,7 +298,8 @@
                 this.queryDeleteButtonFormGroupDiv.show();
             } else if (query.queryType === 'rootQuery') {
                 this.querySaveInstanceFormGroupDiv.hide();
-                this.querySaveClassFormGroupDiv.hide();
+//                this.querySaveClassFormGroupDiv.hide();
+                this.querySaveClassFormGroupDiv.show();
                 this.querySaveRootFormGroupDiv.show();
                 this.queryCancelButtonFormGroupDiv.show();
                 this.queryDeleteButtonFormGroupDiv.show();

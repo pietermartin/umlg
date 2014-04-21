@@ -397,7 +397,7 @@
             //Activate the relevant accordion
             self.parentTabContainerManager.handleTabActivate(e);
             //This is needed else the layout manager gets the widths wrong.
-            var queryLayoutDiv = $('#queryLayoutDiv').layout().resizeAll();
+            $('#queryLayoutDiv').layout().resizeAll();
         })
 
 

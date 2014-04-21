@@ -190,6 +190,7 @@
         }
 
         this.handleTabActivate = function (e) {
+//            this.query.queryEnum = this.tumlTabViewManager.parentTabContainerManager.executeButton.val();
             var activatedTab = e.target.offsetParent // activated tab
             var activatedTabContentDiv = this.tabContainer.find('#' + activatedTab.id.substring(2));
             if (self instanceof Tuml.TumlMainViewManager) {
