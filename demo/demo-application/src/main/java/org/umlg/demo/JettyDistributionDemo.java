@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.MovedContextHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.umlg.runtime.util.UmlgProperties;
 
@@ -27,6 +28,11 @@ public class JettyDistributionDemo {
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
 
+        MovedContextHandler root = new MovedContextHandler();
+        root.setContextPath("/");
+        root.setNewContextURL("/demo");
+        root.setClassLoader(Thread.currentThread().getContextClassLoader());
+
         WebAppContext demo = new WebAppContext();
         demo.setContextPath("/demo");
 //        demo.setDescriptor("./demo/demo-application/src/main/webapp/WEB-INF/web.xml");
@@ -37,7 +43,7 @@ public class JettyDistributionDemo {
 
         WebAppContext graphOfTheGods = new WebAppContext();
         graphOfTheGods.setContextPath("/graphofthegods");
-//        graphOfTheGods.setWar("./demo/graphofthegods/graphofthegods-application/graphofthegods-war/target/graphofthegods-war");
+        graphOfTheGods.setWar("./demo/graphofthegods/graphofthegods-application/graphofthegods-war/target/graphofthegods-war");
         graphOfTheGods.setWar("../lib/graphofthegods-war.war");
 
         WebAppContext tinkerGraph = new WebAppContext();
@@ -45,7 +51,7 @@ public class JettyDistributionDemo {
 //        tinkerGraph.setWar("./demo/tinkergraph/tinkergraph-application/tinkergraph-war/target/tinkergraph-war");
         tinkerGraph.setWar("../lib/tinkergraph-war.war");
 
-        contexts.setHandlers(new Handler[] {  demo, graphOfTheGods, tinkerGraph });
+        contexts.setHandlers(new Handler[] {  root, demo, graphOfTheGods, tinkerGraph });
         server.setHandler(contexts);
 
         server.start();

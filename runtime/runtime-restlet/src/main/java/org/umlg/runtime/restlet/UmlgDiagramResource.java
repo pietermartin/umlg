@@ -21,9 +21,9 @@ public class UmlgDiagramResource extends ServerResource {
     protected Representation get() throws ResourceException {
         String path = UmlgURLDecoder.decode(getQueryValue("path"));
         if (path.endsWith("SVG") || path.endsWith("svg")) {
-            return new InputRepresentation(ClassLoader.getSystemResourceAsStream(path), MediaType.IMAGE_SVG);
+            return new InputRepresentation(Thread.currentThread().getContextClassLoader().getResourceAsStream(path), MediaType.IMAGE_SVG);
         } else {
-            return new InputRepresentation(ClassLoader.getSystemResourceAsStream(path), MediaType.IMAGE_PNG);
+            return new InputRepresentation(Thread.currentThread().getContextClassLoader().getResourceAsStream(path), MediaType.IMAGE_PNG);
         }
     }
 
