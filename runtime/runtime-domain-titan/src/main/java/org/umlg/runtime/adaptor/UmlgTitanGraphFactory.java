@@ -46,8 +46,6 @@ public class UmlgTitanGraphFactory implements UmlgGraphFactory {
                     UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
                     UmlGIndexFactory.getUmlgIndexManager().createIndexes();
                     this.umlgGraph.commit();
-                    //Prepare groovy
-                    GroovyExecutor ge = GroovyExecutor.INSTANCE;
                 } catch (Exception e) {
                     logger.log(Level.SEVERE, "Could not start titan db!", e);
                     if (this.umlgGraph != null) {
@@ -62,6 +60,8 @@ public class UmlgTitanGraphFactory implements UmlgGraphFactory {
             } else {
                 this.umlgGraph = new UmlgTitanGraph(new GraphDatabaseConfiguration(this.propertiesConfiguration));
             }
+            //Prepare groovy
+            GroovyExecutor ge = GroovyExecutor.INSTANCE;
         }
         return this.umlgGraph;
     }

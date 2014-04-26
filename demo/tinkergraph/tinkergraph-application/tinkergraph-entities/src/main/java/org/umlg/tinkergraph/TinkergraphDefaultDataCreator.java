@@ -63,14 +63,22 @@ public class TinkergraphDefaultDataCreator implements DefaultDataCreator {
             Work joshRipple = new Work();
             joshRipple.setWeight(1.0);
             josh.addToCreated(ripple, joshRipple);
+        }
 
-            RootQuery deleteAll = new RootQuery(true);
+        if (RootQuery.allInstances().isEmpty()) {
+            RootQuery warmUpCache = new RootQuery();
+            warmUpCache.setName("warmUpCache");
+            warmUpCache.setDescription("Warm up the db cache.");
+            warmUpCache.setQueryEnum(QueryEnum.GROOVY);
+            warmUpCache.setQueryString("g.V.outE.count();");
+
+            RootQuery deleteAll = new RootQuery();
             deleteAll.setName("deleteAll");
             deleteAll.setDescription("Deletes all persons and programs");
             deleteAll.setQueryEnum(QueryEnum.GROOVY);
             deleteAll.setQueryString("for (Person person : Person.allInstances()) {\\n    person.delete();\\n}\\nfor (Program program : Program.allInstances()) {\\n    program.delete();\\n}\\nUMLG.get().commit();");
 
-            RootQuery createDefaultData = new RootQuery(true);
+            RootQuery createDefaultData = new RootQuery();
             createDefaultData.setName("createDefaultData");
             createDefaultData.setDescription("Creates tinkergraph default data.");
             createDefaultData.setQueryEnum(QueryEnum.GROOVY);
@@ -121,7 +129,8 @@ public class TinkergraphDefaultDataCreator implements DefaultDataCreator {
             sb.append("}");
 
             createDefaultData.setQueryString(sb.toString());
-            UMLG.get().commit();
         }
+
+        UMLG.get().commit();
     }
 }

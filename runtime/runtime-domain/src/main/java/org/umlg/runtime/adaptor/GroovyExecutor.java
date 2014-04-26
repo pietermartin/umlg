@@ -1,18 +1,12 @@
 package org.umlg.runtime.adaptor;
 
-import com.google.common.io.Resources;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.gremlin.groovy.jsr223.DefaultImportCustomizerProvider;
-import com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
 import com.tinkerpop.pipes.transform.ToStringPipe;
 import com.tinkerpop.pipes.util.iterators.SingleIterator;
-import groovy.lang.Closure;
-import groovy.lang.ProxyMetaClass;
 import org.apache.commons.lang.time.StopWatch;
 import org.umlg.runtime.gremlin.UmlgGremlinReadOnlyKeyIndexableGraph;
-import org.umlg.runtime.util.UmlgProperties;
 
-import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.lang.reflect.Field;
 import java.util.Set;

@@ -34,7 +34,7 @@
                     self.afterExecuteQuery(data);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    $('#serverErrorMsg_' + self.queryTabDivName).addClass('server-error-msg').html(errorThrown.responseText);
+                    $('#serverErrorMsg_' + self.queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
                 }
             });
         }
@@ -48,7 +48,7 @@
                     outerDivForResults.children().remove();
                     var textAreaResult = $('<textarea />', {id: 'queryResultId'});
                     textAreaResult.text("no result").appendTo(outerDivForResults);
-                    resultCodeMirror = CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-sh', readOnly: true});
+                    this.resultCodeMirror = CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-sh', readOnly: true});
                 }
             } else {
                 var outerDivForResults = $('#' + this.queryTabDivName + '_' + 'OclResult');
@@ -59,7 +59,7 @@
                 } else {
                     textAreaResult.text(data.result).appendTo(outerDivForResults);
                 }
-                resultCodeMirror = CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-sh', readOnly: true});
+                this.resultCodeMirror = CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-sh', readOnly: true});
             }
             $('#serverErrorMsg_' + this.queryTabDivName).removeClass('server-error-msg');
             $('#serverErrorMsg_' + this.queryTabDivName).empty();

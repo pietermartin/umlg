@@ -45,8 +45,6 @@ public class UmlgOrientDbGraphFactory implements UmlgGraphFactory {
                 this.umlgGraph.addDeletionNode();
                 UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
                 this.umlgGraph.commit();
-                //Prepare groovy
-                GroovyExecutor ge = GroovyExecutor.INSTANCE;
             } catch (Exception e) {
                 logger.log(Level.SEVERE, "Could not start titan db!", e);
                 if (this.umlgGraph != null) {
@@ -58,11 +56,11 @@ public class UmlgOrientDbGraphFactory implements UmlgGraphFactory {
                     throw new RuntimeException(e);
                 }
             }
-
         } else {
-
             this.umlgGraph = new UmlgOrientDbGraph(this.propertiesConfiguration);
         }
+        //Prepare groovy
+        GroovyExecutor ge = GroovyExecutor.INSTANCE;
         return this.umlgGraph;
     }
 

@@ -765,7 +765,7 @@
                     if (this.updatedData[property.name]) {
                         input.attr('checked', 'checked');
                     } else if (this.data[property.name]){
-                        input.attr('checked', false);
+                        input.attr('checked', true);
                     } else {
                         input.attr('checked', false);
                     }

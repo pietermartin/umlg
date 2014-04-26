@@ -44,8 +44,6 @@ public class UmlgBitsyGraphFactory implements UmlgGraphFactory {
                     UmlGIndexFactory.getUmlgIndexManager().createIndexes();
                     this.umlgGraph.commit();
                     this.umlgGraph.commit();
-                    //Prepare groovy
-                    GroovyExecutor ge = GroovyExecutor.INSTANCE;
                 } catch (Exception e) {
                     logger.log(Level.SEVERE, "Could not start titan db!", e);
                     if (this.umlgGraph != null) {
@@ -62,6 +60,8 @@ public class UmlgBitsyGraphFactory implements UmlgGraphFactory {
                 BitsyGraph bitsyGraph = new BitsyGraph(dbPath);
                 this.umlgGraph = new UmlgBitsyGraph(bitsyGraph);
             }
+            //Prepare groovy
+            GroovyExecutor ge = GroovyExecutor.INSTANCE;
         }
         return this.umlgGraph;
     }
