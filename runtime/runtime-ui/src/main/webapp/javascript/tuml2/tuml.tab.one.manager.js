@@ -230,7 +230,7 @@
 
                     }
                     if ($input !== undefined) {
-                        if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
+                        if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined && !property.readOnly) {
                             if (property.dataTypeEnum == 'Date') {
 
                                 $input.parent().addClass("input-group date");

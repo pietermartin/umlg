@@ -7,6 +7,7 @@ import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.collectiontest.*;
 import org.umlg.tests.indexing.TestIndexing;
+import org.umlg.tests.root.TestRootMethods;
 
 /**
  * Date: 2013/10/19
@@ -33,7 +34,8 @@ import org.umlg.tests.indexing.TestIndexing;
 //        ManyToManySequenceTest.class,
 //        ManyToManyToSelfSequenceTest.class
 //        TestIndexing.class,
-        TestGroovyExecutor.class
+//        TestGroovyExecutor.class,
+        TestRootMethods.class
 
 
         })

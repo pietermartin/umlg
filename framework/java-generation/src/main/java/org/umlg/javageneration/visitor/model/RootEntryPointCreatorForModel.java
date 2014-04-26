@@ -1,18 +1,12 @@
 package org.umlg.javageneration.visitor.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
-import org.umlg.java.metamodel.OJField;
-import org.umlg.java.metamodel.OJPackage;
-import org.umlg.java.metamodel.OJPathName;
-import org.umlg.java.metamodel.OJStatement;
-import org.umlg.java.metamodel.OJVisibilityKind;
+import org.umlg.framework.ModelLoader;
+import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.annotation.OJAnnotationValue;
@@ -27,9 +21,9 @@ import org.umlg.javageneration.validation.Validation;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.javageneration.visitor.clazz.RuntimePropertyImplementor;
 
-public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model> {
+public class RootEntryPointCreatorForModel extends BaseVisitor implements Visitor<Model> {
 
-    public RootEntryPointCreator(Workspace workspace) {
+    public RootEntryPointCreatorForModel(Workspace workspace) {
         super(workspace);
     }
 
@@ -50,6 +44,37 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
         addGetRootVertex(root);
         addModelAndRebuildAsJson(model, root);
         implementTumlRootNode(root);
+        addGetMetaClassForQualifiedName(root);
+
+        generateInternalPropertyFile(model);
+    }
+
+    private void generateInternalPropertyFile(Model model) {
+        addToPropertiesSource("model.java.name", UmlgGenerationUtil.UmlgRootPackage.toJavaString() + "." + StringUtils.capitalize(model.getQualifiedName()));
+    }
+
+    private void addGetMetaClassForQualifiedName(OJAnnotatedClass root) {
+        OJAnnotatedOperation getMetaClassForQualifiedName = new OJAnnotatedOperation("getMetaClassForQualifiedName", UmlgGenerationUtil.UmlgMetaNode.getLast());
+        getMetaClassForQualifiedName.addToParameters(new OJParameter("qualifiedName", "String"));
+        getMetaClassForQualifiedName.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
+        root.addToOperations(getMetaClassForQualifiedName);
+        root.addToImports(UmlgGenerationUtil.UmlgMetaNode);
+
+        OJSwitchStatement ojSwitchStatement = new OJSwitchStatement();
+        ojSwitchStatement.setCondition("qualifiedName");
+
+        for (Class clazz : ModelLoader.INSTANCE.getAllConcreteClasses()) {
+            OJSwitchCase ojSwitchCase = new OJSwitchCase();
+            ojSwitchCase.setLabel("\"" + clazz.getQualifiedName() + "\"");
+            ojSwitchCase.getBody().addToStatements("return get" + UmlgClassOperations.getMetaClassPathName(clazz).getLast() + "()");
+            ojSwitchCase.setBreakInCase(false);
+            ojSwitchStatement.addToCases(ojSwitchCase);
+        }
+        OJSwitchCase ojSwitchCase = new OJSwitchCase();
+        ojSwitchCase.getBody().addToStatements("throw new IllegalArgumentException(\"Unknown qualified name: \" + qualifiedName + \"!\")");
+        ojSwitchStatement.setDefCase(ojSwitchCase);
+
+        getMetaClassForQualifiedName.getBody().addToStatements(ojSwitchStatement);
     }
 
     private void implementTumlRootNode(OJAnnotatedClass root) {

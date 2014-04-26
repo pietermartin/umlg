@@ -14,25 +14,32 @@ public class UmlgProperties {
 
     public static UmlgProperties INSTANCE = new UmlgProperties();
     private CompositeConfiguration properties;
+    private CompositeConfiguration internalProperties;
 
     private UmlgProperties() {
         try {
             this.properties = new CompositeConfiguration();
             PropertiesConfiguration pc = new PropertiesConfiguration("umlg.env.properties");
             this.properties.addConfiguration(pc);
-            //override properties prefixed with the model name
         } catch (Exception e) {
             throw new RuntimeException("Expecting \"umlg.env.properties\" file on the classpath with ");
+        }
+        try {
+            this.internalProperties = new CompositeConfiguration();
+            PropertiesConfiguration internalPc = new PropertiesConfiguration("umlg.internal.properties");
+            this.internalProperties.addConfiguration(internalPc);
+        } catch (Exception e) {
+            throw new RuntimeException("Expecting \"umlg.internal.properties\" file on the classpath with ");
         }
         try {
             PropertiesConfiguration overrideProperties = null;
             if (isDistribution() && Thread.currentThread().getContextClassLoader().getResource("WEB-INF/web.xml") != null) {
                 //own assembly
-                File f = new File("../resources/" + this.properties.getProperty("umlg.model.name") + ".umlg.env.properties");
+                File f = new File("../resources/" + this.properties.getProperty("umlg.model.file.name") + ".umlg.env.properties");
                 overrideProperties = new PropertiesConfiguration(f.getAbsolutePath());
             } else if (isWebContainer()) {
                 //tomcat or glasfish or jetty
-                overrideProperties = new PropertiesConfiguration(this.properties.getProperty("umlg.model.name") + ".umlg.env.properties");
+                overrideProperties = new PropertiesConfiguration(this.properties.getProperty("umlg.model.file.name") + ".umlg.env.properties");
             }
             if (overrideProperties != null) {
                 overrideProperties.setReloadingStrategy(new FileChangedReloadingStrategy());
@@ -55,12 +62,16 @@ public class UmlgProperties {
         return this.properties.getString("umlg.db.location", System.getProperty("java.io.tmpdir"));
     }
 
-    public String getModelName() {
-        return this.properties.getString("umlg.model.name", "setumlgmodename");
+    public String getModelFileName() {
+        return this.properties.getString("umlg.model.file.name");
+    }
+
+    public String getModelJavaName() {
+        return this.internalProperties.getString("model.java.name");
     }
 
     public String getUmlgDbLocation() {
-        return this.getUmlgDbRootLocation() + "/" + this.getModelName();
+        return this.getUmlgDbRootLocation() + "/" + this.getModelFileName();
     }
 
     public boolean isStartAdminApplication() {

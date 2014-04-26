@@ -33,8 +33,8 @@
                 success: function (data) {
                     self.afterExecuteQuery(data);
                 },
-                error: function (jqXHR) {
-                    $('#serverErrorMsg_' + self.queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $('#serverErrorMsg_' + self.queryTabDivName).addClass('server-error-msg').html(errorThrown.responseText);
                 }
             });
         }
@@ -118,6 +118,8 @@
             } else {
                 throw 'Unknown query uri!';
             }
+
+            url += "?qualifiedName=" + this.tumlTabViewManager.parentTabContainerManager.qualifiedName;
 
             var isInstanceQuery = this.instanceQueryUri !== '' ? true : false;
             this.query.qualifiedName = isInstanceQuery ? 'umlglib::org::umlg::query::InstanceQuery' : 'umlglib::org::umlg::query::ClassQuery';
@@ -203,8 +205,9 @@
             } else {
                 overloadedPostData.update.push(this.query);
             }
+            var classQueryUriTmp = this.classQueryUri + "?qualifiedName=" + this.tumlTabViewManager.parentTabContainerManager.qualifiedName;
             $.ajax({
-                url: this.classQueryUri,
+                url: classQueryUriTmp,
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -219,6 +222,7 @@
                         }
                     }
 
+                    Umlg.ClassQuery.Cache.removeFromCache(classQueryUriTmp);
                     if (self.query.post) {
                         self.afterSaveClassQuery({queryType: 'classQuery', query: queryFromDb, gridData: tumlQueryGridManager.getResult()});
                     } else {

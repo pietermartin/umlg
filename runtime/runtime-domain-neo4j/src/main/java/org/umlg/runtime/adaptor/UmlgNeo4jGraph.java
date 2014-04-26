@@ -5,10 +5,9 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Edge;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
-import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Vertex;
+import org.apache.commons.lang.StringUtils;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
-import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.kernel.GraphDatabaseAPI;
@@ -16,7 +15,9 @@ import org.neo4j.kernel.impl.core.NodeManager;
 import org.neo4j.kernel.impl.util.StringLogger;
 import org.umlg.runtime.collection.memory.UmlgLazyList;
 import org.umlg.runtime.domain.PersistentObject;
+import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.domain.UmlgNode;
+import org.umlg.runtime.util.UmlgProperties;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -30,6 +31,7 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
 
     private UmlgTransactionEventHandler transactionEventHandler;
     private static final Logger logger = Logger.getLogger(UmlgNeo4jGraph.class.getPackage().getName());
+    private Class<UmlgApplicationNode> umlgApplicationNodeClass;
 
     public UmlgNeo4jGraph(String directory) {
         super(directory);
@@ -220,6 +222,22 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
     @Override
     public Vertex getRoot() {
         return this.getVertex(0L);
+    }
+
+    @Override
+    public UmlgApplicationNode getUmlgApplicationNode() {
+        try {
+            if (this.umlgApplicationNodeClass == null) {
+                this.umlgApplicationNodeClass = (Class<UmlgApplicationNode>) Thread.currentThread().getContextClassLoader().loadClass(UmlgProperties.INSTANCE.getModelJavaName());
+            }
+            return (UmlgApplicationNode) this.umlgApplicationNodeClass.getField("INSTANCE").get(null);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

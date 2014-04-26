@@ -25,6 +25,10 @@
             return classQueryIdx[url];
         }
 
+        this.removeFromCache = function (url) {
+            classQueryIdx[url] = undefined;
+        }
+
         this.clear = function () {
             classQueryIdx = {};
         }

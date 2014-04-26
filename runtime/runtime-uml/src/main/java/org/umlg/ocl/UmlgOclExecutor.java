@@ -1,13 +1,11 @@
 package org.umlg.ocl;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.time.StopWatch;
 import org.eclipse.ocl.ParserException;
 import org.eclipse.ocl.expressions.OCLExpression;
-import org.eclipse.ocl.helper.Choice;
 import org.eclipse.uml2.uml.Classifier;
 import org.ruml.runtime.groovy.UmlgGroovyShell;
 import org.umlg.java.metamodel.OJConstructor;
@@ -66,6 +64,10 @@ public class UmlgOclExecutor {
         return result;
     }
 
+    public static String executeOclQueryAsJson(String contextQualifiedName, String query) {
+        return toJson(executeOclQuery(contextQualifiedName, query));
+    }
+
     public static <T> T executeOclQuery(UmlgNode contextTumlNode, String query) {
         Classifier contextClassifier = (Classifier) ModelLoader.INSTANCE.findNamedElement(contextTumlNode.getQualifiedName());
         OJAnnotatedClass oclClass = new OJAnnotatedClass("OclQuery");
@@ -100,6 +102,10 @@ public class UmlgOclExecutor {
     @SuppressWarnings("unchecked")
     public static String executeOclQueryAsJson(UmlgNode contextTumlNode, String query) {
         Object result = executeOclQuery(contextTumlNode, query);
+        return toJson(result);
+    }
+
+    private static String toJson(Object result) {
         if (result instanceof Map) {
 //            return UmlgOclExecutor.tupleMapToJson((Map<String, Object>) result);
             //TODO

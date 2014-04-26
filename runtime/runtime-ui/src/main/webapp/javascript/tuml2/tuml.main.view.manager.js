@@ -121,7 +121,7 @@
             } else {
                 instanceQueryTumlUri = '';
             }
-            classQueryTumlUri = "/" + tumlModelName + "/classquery/" + this.contextVertexId + "/query";
+            classQueryTumlUri = "/" + tumlModelName + "/classquery";
             rootQueryTumlUri = "/" + tumlModelName + "/rootquerys";
 
             if (this.contextVertexId != undefined && this.contextVertexId !== -1 && contextChanged) {
@@ -562,7 +562,7 @@
                     tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.ClassQueries, this.tabContainer, '', classQueryTumlUri, '', query.getDivName(), query.name, query.id);
                 } else {
                     //Root queries
-                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.RootQueries, this.tabContainer, '', '', rootQueryTumlUri, query.getDivName(), query.name, query.id);
+                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.RootQueries, this.tabContainer, '', classQueryTumlUri, rootQueryTumlUri, query.getDivName(), query.name, query.id);
                 }
                 tumlTabViewManagerQuery.createTab(post);
                 tumlTabViewManagerQuery.parentTabContainerManager = this;

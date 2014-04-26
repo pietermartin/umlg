@@ -4,9 +4,12 @@ import com.google.common.base.Preconditions;
 import com.thinkaurelius.titan.graphdb.configuration.GraphDatabaseConfiguration;
 import com.thinkaurelius.titan.graphdb.database.StandardTitanGraph;
 import com.tinkerpop.blueprints.*;
+import org.apache.commons.lang.StringUtils;
 import org.umlg.runtime.collection.memory.UmlgLazyList;
 import org.umlg.runtime.domain.PersistentObject;
+import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.domain.UmlgNode;
+import org.umlg.runtime.util.UmlgProperties;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -23,6 +26,7 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
 
     private static final Logger logger = Logger.getLogger(UmlgTitanGraph.class.getPackage().getName());
     private UmlgTransactionEventHandler transactionEventHandler;
+    private Class<UmlgApplicationNode> umlgApplicationNodeClass;
 
     public UmlgTitanGraph(GraphDatabaseConfiguration configuration) {
         super(configuration);
@@ -172,6 +176,22 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
             }
         } else {
             throw new RuntimeException(String.format("Unsupport type for indexing!", new String[]{elementClass.getName()}));
+        }
+    }
+
+    @Override
+    public UmlgApplicationNode getUmlgApplicationNode() {
+        try {
+            if (this.umlgApplicationNodeClass == null) {
+                this.umlgApplicationNodeClass = (Class<UmlgApplicationNode>) Thread.currentThread().getContextClassLoader().loadClass(UmlgProperties.INSTANCE.getModelJavaName());
+            }
+            return (UmlgApplicationNode) this.umlgApplicationNodeClass.getField("INSTANCE").get(null);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 

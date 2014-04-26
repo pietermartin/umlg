@@ -5,9 +5,12 @@ import com.lambdazen.bitsy.wrapper.BitsyAutoReloadingGraph;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
+import org.apache.commons.lang.StringUtils;
 import org.umlg.runtime.collection.memory.UmlgLazyList;
 import org.umlg.runtime.domain.PersistentObject;
+import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.domain.UmlgNode;
+import org.umlg.runtime.util.UmlgProperties;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -22,8 +25,9 @@ import java.util.logging.Logger;
  */
 public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph {
 
-    private UmlgTransactionEventHandler transactionEventHandler;
     private static final Logger logger = Logger.getLogger(UmlgBitsyGraph.class.getPackage().getName());
+    private UmlgTransactionEventHandler transactionEventHandler;
+    private Class<UmlgApplicationNode> umlgApplicationNodeClass;
 
     public UmlgBitsyGraph(BitsyGraph wrappedGraph) {
         super(wrappedGraph);
@@ -137,6 +141,23 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
         List<PersistentObject> lazy = new UmlgLazyList(iterator);
         return lazy;
     }
+
+    @Override
+    public UmlgApplicationNode getUmlgApplicationNode() {
+        try {
+            if (this.umlgApplicationNodeClass == null) {
+                this.umlgApplicationNodeClass = (Class<UmlgApplicationNode>) Thread.currentThread().getContextClassLoader().loadClass(UmlgProperties.INSTANCE.getModelJavaName());
+            }
+            return (UmlgApplicationNode) this.umlgApplicationNodeClass.getField("INSTANCE").get(null);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     /** Generic for all graphs end */
 

@@ -2,6 +2,7 @@ package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.blueprints.*;
 import org.umlg.runtime.domain.PersistentObject;
+import org.umlg.runtime.domain.UmlgApplicationNode;
 
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +24,12 @@ public interface UmlgGraph extends TransactionalGraph, KeyIndexableGraph {
      * @return The singleton root node of the application/model
      */
     Vertex getRoot();
+
+    /**
+     * returns the singleton Entity that represents the model.
+     * @return
+     */
+    UmlgApplicationNode getUmlgApplicationNode();
 
     Vertex addVertex(String className);
 

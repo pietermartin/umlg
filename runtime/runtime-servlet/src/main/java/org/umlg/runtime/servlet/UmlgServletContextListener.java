@@ -14,7 +14,7 @@ public class UmlgServletContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        UmlgOcl2Parser.INSTANCE.init(UmlgProperties.INSTANCE.getModelName() + ".uml");
+        UmlgOcl2Parser.INSTANCE.init(UmlgProperties.INSTANCE.getModelFileName() + ".uml");
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.umlg.javageneration.visitor.enumeration.TofromJsonForEnumCreator;
 import org.umlg.javageneration.visitor.interfaze.InterfaceVisitor;
 import org.umlg.javageneration.visitor.model.IndexCreator;
 import org.umlg.javageneration.visitor.model.MetaNodeCreator;
-import org.umlg.javageneration.visitor.model.RootEntryPointCreator;
+import org.umlg.javageneration.visitor.model.RootEntryPointCreatorForModel;
 import org.umlg.javageneration.visitor.operation.OperationImplementorSimple;
 import org.umlg.javageneration.visitor.property.*;
 
@@ -25,7 +25,7 @@ public class DefaultVisitors {
         result.add(new InterfaceVisitor(Workspace.INSTANCE));
         result.add(new ClassCreator(Workspace.INSTANCE));
         result.add(new ClassBuilder(Workspace.INSTANCE));
-        result.add(new RootEntryPointCreator(Workspace.INSTANCE));
+        result.add(new RootEntryPointCreatorForModel(Workspace.INSTANCE));
         result.add(new RootEntryPointBuilder(Workspace.INSTANCE));
         result.add(new QualifiedNameClassNameMapBuilder(Workspace.INSTANCE));
         result.add(new QualifiedNameClassMapCreator(Workspace.INSTANCE));

@@ -1,6 +1,6 @@
 package org.umlg.associationclass.test;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.tinkergraph.*;

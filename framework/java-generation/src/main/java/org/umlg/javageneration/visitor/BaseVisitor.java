@@ -16,12 +16,14 @@ public class BaseVisitor {
     protected Workspace workspace;
     protected String sourceDir;
     protected String resourceDir;
+    protected String generatedResourceDir;
 
     public BaseVisitor(Workspace workspace) {
         super();
         this.workspace = workspace;
         this.sourceDir = Workspace.DEFAULT_SOURCE_FOLDER;
         this.resourceDir = Workspace.RESOURCE_FOLDER;
+        this.generatedResourceDir = Workspace.GENERATED_RESOURCE_FOLDER;
     }
 
     public BaseVisitor(Workspace workspace, String sourceDir) {
@@ -31,11 +33,15 @@ public class BaseVisitor {
     }
 
     protected void addToSource(OJAnnotatedClass source) {
-        this.workspace.addToClassMap(source, sourceDir);
+        this.workspace.addToClassMap(source, this.sourceDir);
     }
 
     protected void addToGroovySource(String qualifiedName, String source) {
-        this.workspace.addToGroovyMap(qualifiedName, source, sourceDir);
+        this.workspace.addToGroovyMap(qualifiedName, source, this.sourceDir);
+    }
+
+    protected void addToPropertiesSource(String key, String value) {
+        this.workspace.addToProperties(key, value, this.generatedResourceDir);
     }
 
     protected OJAnnotatedClass findOJClass(NamedElement owner) {

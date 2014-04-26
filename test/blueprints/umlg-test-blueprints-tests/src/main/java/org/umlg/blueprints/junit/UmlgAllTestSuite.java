@@ -37,6 +37,7 @@ import org.umlg.tests.qualifiertest.TestQualifierOnManyToMany;
 import org.umlg.tests.query.TestMetaQueries;
 import org.umlg.tests.query.TestQueryBaseModelUmlgAssociation;
 import org.umlg.tests.ringtest.TestFingerRing;
+import org.umlg.tests.root.TestRootMethods;
 import org.umlg.tests.speed.SpeedTest;
 import org.umlg.tests.subsetting.TestSubsetting;
 import org.umlg.tests.validationtest.TestValidation;
@@ -100,7 +101,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestAssociationToSelf.class,
         ManyToManyOrderedSetTest.class,
         ManyToManySequenceTest.class,
-        ManyToManyToSelfSequenceTest.class
+        ManyToManyToSelfSequenceTest.class,
+        TestRootMethods.class
 })
 public class UmlgAllTestSuite {
 }

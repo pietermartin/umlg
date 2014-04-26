@@ -4,16 +4,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.io.FileUtils;
 
 public class ModelPrinter {
 
 	private Map<Source, String> sourceFiles = new HashMap<Source, String>();
+    private Map<Source, Properties> propertyFiles = new HashMap<Source, Properties>();
 
     public ModelPrinter(SOURCE_TYPE sourceType) {
         this.sourceType = sourceType;
@@ -26,7 +24,11 @@ public class ModelPrinter {
 		sourceFiles.put(new ModelPrinter.Source(qualifiedName, sourceDir), source);
 	}
 
-	public void clear() {
+    public void addToSource(String qualifiedName, String sourceDir, Properties properties) {
+        propertyFiles.put(new ModelPrinter.Source(qualifiedName, sourceDir), properties);
+    }
+
+    public void clear() {
 		this.sourceFiles.clear();
 	}
 
@@ -49,16 +51,39 @@ public class ModelPrinter {
 					javaPackage.mkdirs();
 					String javaFileName = source.qualifiedName.substring(source.qualifiedName.lastIndexOf(".") + 1);
                     File sourceFile;
-                    if (sourceType==SOURCE_TYPE.JAVA) {
-                        sourceFile =new File(project, source.sourceDir + "/" + packageName + "/" + javaFileName + ".java");
-                    } else {
-                        sourceFile =new File(project, source.sourceDir + "/" + packageName + "/" + javaFileName + ".groovy");
+                    switch (sourceType) {
+                        case JAVA:
+                            sourceFile =new File(project, source.sourceDir + "/" + packageName + "/" + javaFileName + ".java");
+                            BufferedWriter writer = new BufferedWriter(new FileWriter(sourceFile));
+                            writer.append(sourceFiles.get(source));
+                            writer.close();
+                            break;
+                        case GROOVY:
+                            sourceFile =new File(project, source.sourceDir + "/" + packageName + "/" + javaFileName + ".groovy");
+                            writer = new BufferedWriter(new FileWriter(sourceFile));
+                            writer.append(sourceFiles.get(source));
+                            writer.close();
+                            break;
+                        default:
+                            throw new IllegalStateException("Unknown sourceType " + sourceType);
                     }
-					BufferedWriter writer = new BufferedWriter(new FileWriter(sourceFile));
-					writer.append(sourceFiles.get(source));
-					writer.close();
 				}
-			} catch (IOException e) {
+
+                for (Source source : propertyFiles.keySet()) {
+                    File sourceFile;
+                    switch (sourceType) {
+                        case PROPERTIES:
+                            sourceFile =new File(project, source.sourceDir + "/" + source.qualifiedName);
+                            BufferedWriter writer = new BufferedWriter(new FileWriter(sourceFile));
+                            propertyFiles.get(source).store(writer, "UMLG generated properties");
+                            writer.close();
+                            break;
+                        default:
+                            throw new IllegalStateException("Unknown sourceType " + sourceType);
+                    }
+                }
+
+            } catch (IOException e) {
 				throw new RuntimeException(e);
 			}
 		} else {
@@ -140,6 +165,6 @@ public class ModelPrinter {
 	}
 
     public enum SOURCE_TYPE {
-        JAVA,GROOVY;
+        JAVA,GROOVY,PROPERTIES;
     }
 }

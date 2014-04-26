@@ -9,8 +9,8 @@
                 INSTANCE_QUERIES: {index: 2, label: 'Instance Queries', id: 'instanceQueriesAccordion'},
                 CLASS_QUERIES: {index: 3, label: 'Class Queries', id: 'classQueriesAccordion'},
                 ROOT_QUERIES: {index: 4, label: 'Root Queries', id: 'rootQueriesAccordion'},
-                INSTANCE_GROOVY: {index: 5, label: 'Instance Groovy', id: 'instanceQueriesAccordion'},
-                CLASS_GROOVY: {index: 6, label: 'Class Groovy', id: 'classGroovy'},
+//                INSTANCE_GROOVY: {index: 5, label: 'Instance Groovy', id: 'instanceGroovyAccordion'},
+//                CLASS_GROOVY: {index: 6, label: 'Class Groovy', id: 'classGroovy'},
                 DIAGRAMS: {index: 7, label: 'Diagrams', id: 'diagrams'}
             }
         }
@@ -62,6 +62,9 @@
             this.createDiagramsTreeView();
             if (isUmlgLib && this.contextVertexId !== undefined && this.contextVertexId !== null) {
                 this.createInstanceQueryMenu(-1);
+            }
+            //TODO check, only if not root
+            if (this.contextMetaDataTo.name !== tumlModelName) {
                 this.createClassQueryMenu(-1);
             }
             this.createRootQueryMenu(-1);
@@ -100,11 +103,15 @@
             this.umlDiagramDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.DIAGRAMS.label, Tuml.AccordionEnum.DIAGRAMS.id);
             if (isUmlgLib && this.contextVertexId !== undefined && this.contextVertexId !== null) {
                 this.umlInstanceQueriesDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_QUERIES.label, Tuml.AccordionEnum.INSTANCE_QUERIES.id);
-                this.umlClassQueriesDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_QUERIES.label, Tuml.AccordionEnum.CLASS_QUERIES.id);
-                this.umlInstanceGroovyDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_GROOVY.label, Tuml.AccordionEnum.INSTANCE_GROOVY.id);
-                this.umlClassGroovyDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_GROOVY.label, Tuml.AccordionEnum.CLASS_GROOVY.id);
+//                this.umlInstanceGroovyDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_GROOVY.label, Tuml.AccordionEnum.INSTANCE_GROOVY.id);
             }
-            this.umlRootQueriesDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.ROOT_QUERIES.label, Tuml.AccordionEnum.ROOT_QUERIES.id);
+            if (isUmlgLib) {
+                if (this.contextMetaDataTo.name !== tumlModelName) {
+                    this.umlClassQueriesDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_QUERIES.label, Tuml.AccordionEnum.CLASS_QUERIES.id);
+//                    this.umlClassGroovyDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_GROOVY.label, Tuml.AccordionEnum.CLASS_GROOVY.id);
+                }
+                this.umlRootQueriesDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.ROOT_QUERIES.label, Tuml.AccordionEnum.ROOT_QUERIES.id);
+            }
         }
 
         function addAccordionMenu(accordionDiv, open, label, id) {
@@ -137,10 +144,10 @@
                     var propertiesMenu = $('#classQueryMenu');
                     propertiesMenu.focus();
                     break;
-                case Tuml.AccordionEnum.INSTANCE_GROOVY.index:
-                    break;
-                case Tuml.AccordionEnum.CLASS_GROOVY.index:
-                    break;
+//                case Tuml.AccordionEnum.INSTANCE_GROOVY.index:
+//                    break;
+//                case Tuml.AccordionEnum.CLASS_GROOVY.index:
+//                    break;
                 case Tuml.AccordionEnum.DIAGRAMS.index:
                     break;
                 default:
@@ -349,13 +356,11 @@
             this.queryToHighlightId = queryToHighLightId;
             //Add query tree
             //Fetch the query data
-            if (this.contextVertexId !== null) {
-                var classQueryUri = "/" + tumlModelName + "/classquery/" + encodeURIComponent(this.contextVertexId) + "/query";
-
+            if (this.contextMetaDataTo.name !== tumlModelName) {
+                var classQueryUri = "/" + tumlModelName + "/classquery?qualifiedName=" + this.contextMetaDataTo.qualifiedName;
                 Umlg.ClassQuery.Cache.get(classQueryUri, function(response) {
                     retrieveMetaDataIfNotInCache(classQueryUri, null, response, self.continueCreateClassQueryMenu);
                 })
-
             }
         }
 
@@ -474,19 +479,19 @@
                         rootQueriesAccordion.collapse('show');
                     }
 
-                } else if (leftAccordionIndex == Tuml.AccordionEnum.CLASS_GROOVY.index) {
-                    //Check if it is already open, if so do not call show as that closes it, eish
-                    var classGroovyAccordion = this.umlClassGroovyDiv.parent();
-                    if (!classGroovyAccordion.hasClass('in')) {
-                        classGroovyAccordion.collapse('show');
-                    }
-
-                } else if (leftAccordionIndex == Tuml.AccordionEnum.INSTANCE_GROOVY.index) {
-                    //Check if it is already open, if so do not call show as that closes it, eish
-                    var instanceGroovyAccordion = this.umlInstanceGroovyDiv.parent();
-                    if (!instanceGroovyAccordion.hasClass('in')) {
-                        instanceGroovyAccordion.collapse('show');
-                    }
+//                } else if (leftAccordionIndex == Tuml.AccordionEnum.CLASS_GROOVY.index) {
+//                    //Check if it is already open, if so do not call show as that closes it, eish
+//                    var classGroovyAccordion = this.umlClassGroovyDiv.parent();
+//                    if (!classGroovyAccordion.hasClass('in')) {
+//                        classGroovyAccordion.collapse('show');
+//                    }
+//
+//                } else if (leftAccordionIndex == Tuml.AccordionEnum.INSTANCE_GROOVY.index) {
+//                    //Check if it is already open, if so do not call show as that closes it, eish
+//                    var instanceGroovyAccordion = this.umlInstanceGroovyDiv.parent();
+//                    if (!instanceGroovyAccordion.hasClass('in')) {
+//                        instanceGroovyAccordion.collapse('show');
+//                    }
 
                 } else {
                     throw 'Unknown accordion index!'
@@ -538,19 +543,19 @@
                         rootQueriesAccordion.collapse('show');
                     }
 
-                } else if (leftAccordionIndex == Tuml.AccordionEnum.CLASS_GROOVY.index) {
-                    //Check if it is already open, if so do not call show as that closes it, eish
-                    var classGroovyAccordion = this.umlClassGroovyDiv.parent();
-                    if (!classGroovyAccordion.hasClass('in')) {
-                        classGroovyAccordion.collapse('show');
-                    }
-
-                } else if (leftAccordionIndex == Tuml.AccordionEnum.INSTANCE_GROOVY.index) {
-                    //Check if it is already open, if so do not call show as that closes it, eish
-                    var instanceGroovyAccordion = this.umlInstanceGroovyDiv.parent();
-                    if (!instanceGroovyAccordion.hasClass('in')) {
-                        instanceGroovyAccordion.collapse('show');
-                    }
+//                } else if (leftAccordionIndex == Tuml.AccordionEnum.CLASS_GROOVY.index) {
+//                    //Check if it is already open, if so do not call show as that closes it, eish
+//                    var classGroovyAccordion = this.umlClassGroovyDiv.parent();
+//                    if (!classGroovyAccordion.hasClass('in')) {
+//                        classGroovyAccordion.collapse('show');
+//                    }
+//
+//                } else if (leftAccordionIndex == Tuml.AccordionEnum.INSTANCE_GROOVY.index) {
+//                    //Check if it is already open, if so do not call show as that closes it, eish
+//                    var instanceGroovyAccordion = this.umlInstanceGroovyDiv.parent();
+//                    if (!instanceGroovyAccordion.hasClass('in')) {
+//                        instanceGroovyAccordion.collapse('show');
+//                    }
 
                 } else if (leftAccordionIndex == Tuml.AccordionEnum.DIAGRAMS.index) {
                     //Check if it is already open, if so do not call show as that closes it, eish

@@ -22,7 +22,7 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
 		addToRouterEnum("QUERY_EXECUTE", "\"/{contextId}/oclExecuteQuery\"");
         addToRouterEnum("QUERY_EXECUTE_STATIC", "\"/oclExecuteQuery\"");
         addOclInsightResourceToRouterEnum("OCL_CODE_INSIGHT", "\"/oclCodeInsight\"");
-        addToClassQueryRouterEnum(model, UmlgRestletGenerationUtil.UmlgMetaQueryServerResourceImpl, "CLASS_QUERY", "\"/classquery/{contextId}/query\"");
+        addToClassQueryRouterEnum(model, UmlgRestletGenerationUtil.UmlgMetaQueryServerResourceImpl, "CLASS_QUERY", "\"/classquery\"");
 	}
 
     protected void addToClassQueryRouterEnum(Model model, OJPathName ojPathName, String name, String path) {

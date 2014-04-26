@@ -5,9 +5,12 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.lang.StringUtils;
 import org.umlg.runtime.collection.memory.UmlgLazyList;
 import org.umlg.runtime.domain.PersistentObject;
+import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.domain.UmlgNode;
+import org.umlg.runtime.util.UmlgProperties;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -22,9 +25,10 @@ import java.util.logging.Logger;
  */
 public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
 
+    private static final Logger logger = Logger.getLogger(UmlgOrientDbGraph.class.getPackage().getName());
     private static final String VERTEX_ID_COUNT = "vertexIdCount";
     private UmlgTransactionEventHandler transactionEventHandler;
-    private static final Logger logger = Logger.getLogger(UmlgOrientDbGraph.class.getPackage().getName());
+    private Class<UmlgApplicationNode> umlgApplicationNodeClass;
 
     public UmlgOrientDbGraph(Configuration configuration) {
         super(configuration);
@@ -146,6 +150,22 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
         final Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
         List<PersistentObject> lazy = new UmlgLazyList(iterator);
         return lazy;
+    }
+
+    @Override
+    public UmlgApplicationNode getUmlgApplicationNode() {
+        try {
+            if (this.umlgApplicationNodeClass == null) {
+                this.umlgApplicationNodeClass = (Class<UmlgApplicationNode>) Thread.currentThread().getContextClassLoader().loadClass(UmlgProperties.INSTANCE.getModelJavaName());
+            }
+            return (UmlgApplicationNode) this.umlgApplicationNodeClass.getField("INSTANCE").get(null);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /** Generic for all graphs end */

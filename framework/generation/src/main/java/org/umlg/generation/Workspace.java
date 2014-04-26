@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 import org.eclipse.uml2.uml.Model;
@@ -22,9 +23,11 @@ public class Workspace {
     public static final String META_SOURCE_FOLDER = "src/main/generated-java-meta";
     public static final String GROOVY_SOURCE_FOLDER = "src/main/generated-groovy";
 
+    public final static String GENERATED_RESOURCE_FOLDER = "src/main/generated-resources";
     public final static String RESOURCE_FOLDER = "src/main/resources";
 	private final Map<ModelPrinter.Source, OJAnnotatedClass> javaClassMap = new HashMap<ModelPrinter.Source, OJAnnotatedClass>();
     private final Map<ModelPrinter.Source, String> groovyClassMap = new HashMap<ModelPrinter.Source, String>();
+    private final Map<ModelPrinter.Source, Properties> propertiesMap = new HashMap<ModelPrinter.Source, Properties>();
     private File entitiesRoot;
     private File restletRoot;
     private File modelFile;
@@ -32,6 +35,8 @@ public class Workspace {
 	private List<Visitor<?>> visitors;
 	private ModelPrinter javaModelPrinter = new ModelPrinter(ModelPrinter.SOURCE_TYPE.JAVA);
     private ModelPrinter groovyModelPrinter = new ModelPrinter(ModelPrinter.SOURCE_TYPE.GROOVY);
+    private ModelPrinter propertiesModelPrinter = new ModelPrinter(ModelPrinter.SOURCE_TYPE.PROPERTIES);
+    private Properties properties = new Properties();
 
 	public final static Workspace INSTANCE = new Workspace();
 
@@ -55,6 +60,11 @@ public class Workspace {
 
     public void addToGroovyMap(String qualifiedName, String source, String sourceDir) {
         this.groovyClassMap.put(new ModelPrinter.Source(qualifiedName, sourceDir), source);
+    }
+
+    public void addToProperties(String key, String value, String generatedResourceDir) {
+        this.properties.setProperty(key, value);
+        this.propertiesMap.put(new ModelPrinter.Source("umlg.internal.properties", generatedResourceDir), properties);
     }
 
     public void generate(File entitiesRoot, File restletRoot, File modelFile, List<Visitor<?>> visitors) {
@@ -84,7 +94,7 @@ public class Workspace {
 		this.javaModelPrinter.toText(this.entitiesRoot);
         this.javaModelPrinter.clear();
 
-        //reslet next
+        //restlet next
         for (Map.Entry<ModelPrinter.Source, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
             if (entry.getKey().sourceDir.equals(RESTLET_SOURCE_FOLDER)) {
                 this.javaModelPrinter.addToSource(entry.getKey().qualifiedName, entry.getKey().sourceDir, entry.getValue().toJavaString());
@@ -100,6 +110,14 @@ public class Workspace {
             }
         }
         this.groovyModelPrinter.toText(this.entitiesRoot);
+
+        //properties next
+        for (Map.Entry<ModelPrinter.Source, Properties> entry : this.propertiesMap.entrySet()) {
+            if (entry.getKey().sourceDir.equals(GENERATED_RESOURCE_FOLDER)) {
+                this.propertiesModelPrinter.addToSource(entry.getKey().qualifiedName, entry.getKey().sourceDir, entry.getValue());
+            }
+        }
+        this.propertiesModelPrinter.toText(this.entitiesRoot);
 
     }
 

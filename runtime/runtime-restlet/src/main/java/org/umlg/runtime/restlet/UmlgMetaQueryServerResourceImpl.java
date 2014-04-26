@@ -5,7 +5,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ServerResource;
 import org.umlg.runtime.adaptor.UMLG;
-import org.umlg.runtime.domain.UmlgNode;
+import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.restlet.util.UmlgURLDecoder;
 
 import java.io.IOException;
@@ -19,9 +19,9 @@ public class UmlgMetaQueryServerResourceImpl extends ServerResource {
     @Override
     public Representation get() {
         try {
-            String id = UmlgURLDecoder.decode((String) getRequestAttributes().get("contextId"));
-            UmlgNode parentResource = UMLG.get().instantiateClassifier(id);
-            Object metaNodeId = parentResource.getMetaNode().getId();
+            String qualifiedName = UmlgURLDecoder.decode(getQueryValue("qualifiedName"));
+            UmlgMetaNode umlgMetaNode = UMLG.get().getUmlgApplicationNode().getMetaClassForQualifiedName(qualifiedName);
+            Object metaNodeId = umlgMetaNode.getId();
             String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
             ClientResource service = new ClientResource(metaQueryUri);
             service.setNext(getContext().getServerDispatcher());
@@ -39,9 +39,9 @@ public class UmlgMetaQueryServerResourceImpl extends ServerResource {
     @Override
     public Representation options() {
         try {
-            String id = UmlgURLDecoder.decode((String) getRequestAttributes().get("contextId"));
-            UmlgNode parentResource = UMLG.get().instantiateClassifier(id);
-            Object metaNodeId = parentResource.getMetaNode().getId();
+            String qualifiedName = UmlgURLDecoder.decode(getQueryValue("qualifiedName"));
+            UmlgMetaNode umlgMetaNode = UMLG.get().getUmlgApplicationNode().getMetaClassForQualifiedName(qualifiedName);
+            Object metaNodeId = umlgMetaNode.getId();
             String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
             ClientResource service = new ClientResource(metaQueryUri);
             service.setNext(getContext().getServerDispatcher());
@@ -58,9 +58,9 @@ public class UmlgMetaQueryServerResourceImpl extends ServerResource {
 
     @Override
     public Representation post(Representation entity) {
-        String id = UmlgURLDecoder.decode((String) getRequestAttributes().get("contextId"));
-        UmlgNode parentResource = UMLG.get().instantiateClassifier(id);
-        Object metaNodeId = parentResource.getMetaNode().getId();
+        String qualifiedName = UmlgURLDecoder.decode(getQueryValue("qualifiedName"));
+        UmlgMetaNode umlgMetaNode = UMLG.get().getUmlgApplicationNode().getMetaClassForQualifiedName(qualifiedName);
+        Object metaNodeId = umlgMetaNode.getId();
         String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
         ClientResource service = new ClientResource(metaQueryUri);
         service.setNext(getContext().getServerDispatcher());
@@ -69,9 +69,9 @@ public class UmlgMetaQueryServerResourceImpl extends ServerResource {
 
     @Override
     public Representation put(Representation entity) {
-        String id = UmlgURLDecoder.decode((String) getRequestAttributes().get("contextId"));
-        UmlgNode parentResource = UMLG.get().instantiateClassifier(id);
-        Object metaNodeId = parentResource.getMetaNode().getId();
+        String qualifiedName = UmlgURLDecoder.decode(getQueryValue("qualifiedName"));
+        UmlgMetaNode umlgMetaNode = UMLG.get().getUmlgApplicationNode().getMetaClassForQualifiedName(qualifiedName);
+        Object metaNodeId = umlgMetaNode.getId();
         String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
         ClientResource service = new ClientResource(metaQueryUri);
         service.setNext(getContext().getServerDispatcher());
