@@ -69,7 +69,7 @@ public class GroovyExecutor {
         stopWatch.start();
         Object pipe = executeGroovy(contextId, groovy);
         ToStringPipe toStringPipe = new ToStringPipe();
-        toStringPipe.setStarts(new SingleIterator<Object>(pipe));
+        toStringPipe.setStarts(new SingleIterator<>(pipe));
         StringBuilder result = new StringBuilder();
         while (toStringPipe.hasNext()) {
             result.append(toStringPipe.next());

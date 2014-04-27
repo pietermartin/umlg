@@ -27,7 +27,7 @@ public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassN
         if (super.add(e)) {
             associationClass.internalAdder(this.umlgRuntimeProperty, true, this.owner);
             associationClass.internalAdder(this.umlgRuntimeProperty, false, (UmlgNode) e);
-            this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
+            this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId().toString());
             this.edge.setProperty("className", associationClass.getClass().getName());
             return true;
         } else {

@@ -29,7 +29,7 @@
 
             var ulUMLGMenuHolder = $('<ul />', {class: 'dropdown-menu'}).appendTo(liUMLGMenu);
             var liDocumentationMenu = $('<li />').appendTo(ulUMLGMenuHolder);
-            $('<a/>', {href: 'http://www.umlg.org/documentation.html', target: '_blank'}).text('Documentation').appendTo(liDocumentationMenu);
+            $('<a/>', {href: 'http://www.umlg.org/doc_home.html', target: '_blank'}).text('Documentation').appendTo(liDocumentationMenu);
             var liSourceMenu = $('<li />').appendTo(ulUMLGMenuHolder);
             $('<a/>', {href: 'https://github.com/pietermartin/umlg', target: '_blank'}).text('Source').appendTo(liSourceMenu);
 

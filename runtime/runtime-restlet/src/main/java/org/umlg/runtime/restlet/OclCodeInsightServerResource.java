@@ -52,8 +52,8 @@ public class OclCodeInsightServerResource extends ServerResource {
             sb.append("\", \"displayText\":\"");
             sb.append(choice.getKind().name());
             sb.append(", ");
-//            sb.append(choice.getName());
-//            sb.append(", ");
+            sb.append(choice.getName());
+            sb.append(", ");
             sb.append(choice.getDescription());
             sb.append("\"}");
             if (count++ < insights.size()) {

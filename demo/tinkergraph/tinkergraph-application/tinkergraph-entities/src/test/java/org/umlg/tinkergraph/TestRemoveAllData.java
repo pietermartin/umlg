@@ -39,14 +39,14 @@ public class TestRemoveAllData {
         db.drop();
     }
 
-//    @Test
+    @Test
     public void testRemoveAllData() {
         System.out.println(db.countVertices());
         for (BaseModelUmlg a : BaseModelUmlg.allInstances()) {
             a.delete();
         }
         db.commit();
-        Assert.assertEquals(11, db.countVertices());
+        Assert.assertEquals(14, db.countVertices());
     }
 
 }
