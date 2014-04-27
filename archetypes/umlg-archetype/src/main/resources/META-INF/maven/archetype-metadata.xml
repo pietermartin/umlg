@@ -56,6 +56,12 @@
                       <include>**/*.properties</include>
                   </includes>
               </fileSet>
+              <fileSet filtered="false" encoding="UTF-8">
+                  <directory>src/main/generated-resources</directory>
+                  <includes>
+                      <include>**/*.properties</include>
+                  </includes>
+              </fileSet>
               <fileSet encoding="UTF-8">
                   <directory>src/main/model</directory>
                   <includes>

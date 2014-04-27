@@ -15,12 +15,6 @@
     <windows>
       <children xsi:type="di:TabFolder">
         <children>
-          <emfPageIdentifier href="umlg-demo1.notation#_JKldMHzeEeOYhpiy1kqM8Q"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-demo1.notation#_ujU10H1NEeOYhpiy1kqM8Q"/>
-        </children>
-        <children>
           <emfPageIdentifier href="umlg-demo1.notation#_xE9sIH1NEeOYhpiy1kqM8Q"/>
         </children>
       </children>

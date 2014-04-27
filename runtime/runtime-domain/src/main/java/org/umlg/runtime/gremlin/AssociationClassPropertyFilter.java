@@ -30,7 +30,7 @@ public class AssociationClassPropertyFilter <S extends Element, T> extends Abstr
         while (true) {
             final S element = this.starts.next();
             //Find the association class
-            Long associationClassVertexId = element.getProperty("associationClassVertexId");
+            Object associationClassVertexId = element.getProperty("associationClassVertexId");
             if (associationClassVertexId != null) {
                 Vertex associationClassVertex = this.graph.getVertex(associationClassVertexId);
                 if (this.predicate.evaluate(associationClassVertex.getProperty(this.key), this.value)) {
