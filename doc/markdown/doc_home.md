@@ -1,4 +1,6 @@
-<!-- Quick Preview -->
+<!-- UMLG Documentation -->
+
+##Quick Preview
 
 Here is a simple uml class diagram.
 

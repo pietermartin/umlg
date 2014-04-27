@@ -65,7 +65,7 @@ public class UmlgGenerateDocumentation {
     }
 
     private static boolean hasMenu(File md) {
-        return !md.getName().equals("quick_preview.md") && !md.getName().equals("introduction.md");
+        return !md.getName().equals("doc_home.md") && !md.getName().equals("introduction.md");
     }
 
     private static List<Menu> parseMd(File md) throws IOException {
