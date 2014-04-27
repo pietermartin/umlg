@@ -18,7 +18,7 @@
         <module>test-restlet</module>
         <module>test-restlet-minimal</module>
         <module>test-neo4j-blueprints</module>
-        <module>test-orientdb-blueprints</module>
+        <!--<module>test-orientdb-blueprints</module>-->
         <module>test-titan</module>
         <module>test-bitsy</module>
         <module>blueprints</module>
