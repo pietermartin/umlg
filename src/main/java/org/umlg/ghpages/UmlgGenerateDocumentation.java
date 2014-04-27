@@ -147,18 +147,23 @@ public class UmlgGenerateDocumentation {
 
         public String toHtml() throws IOException {
             StringBuilder html = new StringBuilder();
-            toHtml(html, false, false);
+            toHtml(html, true, false, false);
             return html.toString();
         }
 
-        private void toHtml(StringBuilder html, boolean printUlStart, boolean printUlEnd) {
+        private void toHtml(StringBuilder html, boolean first, boolean printUlStart, boolean printUlEnd) {
             if (printUlStart) {
                 html.append("<ul class=\"nav\">\n");
             }
-            html.append("<li><a href=\"#" + this.getId() + "\">" + this.name.replace("#", "") + "</a>");
+            if (first) {
+                html.append("<li class=\"active\">");
+            } else {
+                html.append("<li>");
+            }
+            html.append("<a href=\"#" + this.getId() + "\">" + this.name.replace("#", "") + "</a>");
             int count = 1;
             for (Menu child : this.children) {
-                child.toHtml(html, count == 1, count == this.children.size());
+                child.toHtml(html, false, count == 1, count == this.children.size());
                 count++;
             }
             html.append("</li>");

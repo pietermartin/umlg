@@ -18,29 +18,22 @@ To generate a sample project, type in the following at your project's root direc
 
     mvn archetype:generate -DarchetypeCatalog=local
 
-You will be prompted to select the type of project you which to generate. UMLG can generate three types of sample projects.
+You will be prompted to select the project you which to generate. Choose `org.umlg:umlg-archetype-full`
 
-* A minimalist project containing a sample uml model but no additional UMLG uml libraries.
-* A sample uml model with UMLG's uml validation profile and data types library preloaded.
-* A sample uml model with UMLG's uml validation profile, data types library preloaded and UMLG's rest interface and gui.
+Follow the prompts to select your maven groupId, artifactId, version, java package and underlying graph database.
+A sample uml model with UMLG's uml validation profile and
+data types library will be preloaded. The archetype will create a fully functional UMLG application.
 
-For the purpose of this getting started guide, choose the **full** option.
+`cd artifactId` into the application you just generated and run `maven install`
 
-The archetype will create a fully functional UMLG application. Go into the application and run
+Before compiling the application, maven will generate the entities and a rest interface to the entities from the sample model.
 
-    maven install
-
-Before compiling the application, maven will generate entities and a rest interface to the entities from the sample model.
-
-To startup the rest server and use the web interface `cd` to the **application** module and run
-
-    mvn exec:exec
-
-and now go to [http://localhost:8111/demo/ui2](http://localhost:8111/demo/ui2) to view and use the application.
+For the impatient to start the rest server and use the web interface `cd artifactId-application/artifactId-jetty` and run `mvn exec:exec`
+You can view and use the application at [http://localhost:8080/demo/ui2](http://localhost:8111/demo/ui2).
 
 Lastly there is a sample junit test `org.umlg.test.TestDemo` in `src/test/java`. You can execute it to see UMLG in action.
 
-###How the build works
+##How the build works
 
 The archetype will generate a maven project with 2 sub modules. The 2 modules are,
 
@@ -48,7 +41,7 @@ The archetype will generate a maven project with 2 sub modules. The 2 modules ar
 * **application** - This is where the generated entities and optional rest interface will go.
 
 <br />
-####generator module
+###generator module
 <br />
 
 In the `generator` module there is only one java class `DemoGenerator`. Running this class' `main` method  will load
@@ -72,7 +65,8 @@ and the code to generate the code.
             JavaGenerator javaGenerator = new JavaGenerator();
             javaGenerator.generate(
                     new File(args[0] + "/application/src/main/model/umlg-demo1.uml"),
-                    new File(args[0] + "/application"), RestletVisitors.getDefaultJavaVisitors());
+                    new File(args[0] + "/application"),
+                    RestletVisitors.getDefaultJavaVisitors());
 
         }
     }
@@ -85,26 +79,17 @@ UMLG generates code via a sequential list of visitors to the UML model. Each vis
 It is possible to add custom visitors to customize the entities. This is explained [here //TODO](http://localhost/todo).
 
 <br />
-####application module
-<br />
+###application module
 
-The **application** module has 3 java source folders.
+The **application** module has 4 sub modules.
 
-* **generated-java** - This is where the generated entities go.
-* **generated-java-meta** - Each UML class has a corresponding singleton.
-* **generated-java-restlet** - This is where the rest resources go.
+####entities
 
-And a resources folder,
+This is where the generated entities are. It also contains a resources folder with `umlg.env.properties`.<br />
+It contains the commented out property `umlg.db.location=/tmp`. UMLG defaults to the systems tmp directory. Change this
+property to point the db to a location of your choice.<br />
 
-* **resources** - A resources folder that contains `umlg.env.properties`.<br />
-It contains the property, `umlg.db.location=/tmp/demo-quick-preview`<br />
-Change this to point the graph database to a location of your choosing.
-
-And a test java source folder
-
-* **test** This contains a sample junit test class `org.umlg.test.TestDemo`. Run it to see UMLG in action.
-
-<br />
+A sample junit test class `org.umlg.test.TestDemo` is provided. Run it to see UMLG in action.
 
 To compile the entities the following dependency is required. Replace the artifact with the underlying blueprints graph db of your choice.
 This dependency will bring in the underlying graph db and everything the UMLG entities need.
@@ -113,7 +98,6 @@ This dependency will bring in the underlying graph db and everything the UMLG en
         <groupId>org.umlg</groupId>
         <artifactId>runtime-domain-bitsy</artifactId>
         <!--
-        <artifactId>runtime-domain-orientdb</artifactId>
         <artifactId>runtime-domain-neo4j</artifactId>
         <artifactId>runtime-domain-titan</artifactId>
         -->
@@ -121,6 +105,14 @@ This dependency will bring in the underlying graph db and everything the UMLG en
     </dependency>
 
 <br />
+
+####jetty
+
+This contains the jetty code to start the rest application in Jetty
+
+####restlet
+
+This is where the generated restlet resources go.
 
 To compile and execute the rest resources the following dependency is required
 This brings in [Restlet](http://restlet.org/). Restlet is the rest framework used by UMLG to expose the entities as rest resources.
@@ -131,7 +123,6 @@ This brings in [Restlet](http://restlet.org/). Restlet is the rest framework use
              <version>0.0.1-SNAPSHOT</version>
          </dependency>
 
-<br />
 And lastly to use the web ui add the following dependency This makes available web resources. The javascript, html and
 css files needed for the UMLG admin gui.
 
@@ -141,8 +132,14 @@ css files needed for the UMLG admin gui.
              <version>0.0.1-SNAPSHOT</version>
          </dependency>
 
+####war
+
+This packages the application as a war.
+
 <br />
-###The entities
+
+##The entities
+
 <br />
 
 The generated demo's model models a simple One to Many relationship.
@@ -163,7 +160,7 @@ For each property a standard setter and getter is generated.
 
 
 For each property with a multiplicity greater than 1 an adder method is generated. This is different to the setter in
-that it appends to the collection. The setter replaces the collection.
+that it appends to the collection as opposed to the setter that replaces the collection.
 
     one.addToMany(many);
 
@@ -181,14 +178,15 @@ or use the standard java collection 'remove' method
 
 and lastly to persist the entities call,
 
-    GraphDb.getDb().commit()
+    UMLG.get().commit()
 
 or rollback the transaction
 
-    GraphDb.getDb().rollback()
+    UMLG.get().rollback()
 
-`GraphDb.getDb()` returns an instance of `UMLGGraph`. `UMLGGraph` wraps the underlying blueprints graph. It is a
-singleton and is always available on the current thread via `GraphDb.getDb()`
+`UMLG.get()` returns an instance of `org.umlg.runtime.adaptor.UmlgGraph`. `UmlgGraph` wraps the underlying blueprints graph and implements
+'com.tinkerpop.blueprints.TransactionalGraph' and 'com.tinkerpop.blueprints.KeyIndexableGraph' It is a singleton and is
+always available on the current thread via `UMLG.get()`
 
 
 
