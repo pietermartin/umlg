@@ -1,7 +1,7 @@
 package org.umlg.tests.mvel;
 
-import junit.framework.Assert;
 import org.joda.time.DateTime;
+import org.junit.Assert;
 import org.junit.Test;
 import org.mvel2.MVEL;
 import org.umlg.collectiontest.Hand;
