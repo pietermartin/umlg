@@ -2,33 +2,31 @@
 
 ##UmlgGraph interface
 
-Say something meaningful.
+`UmlgGraph` is UMLG's primary interface to the underlying graph db. It extends both `com.tinkerpop.blueprints.TransactionalGraph` and `com.tinkerpop.blueprints.KeyIndexableGraph`.
+Some important additional methods on it are,
 
-##UMLG Set Semantics
+    <T extends PersistentObject> T instantiateClassifier(Object id);
 
-Set, List, OrderedSet, Bag
+    <T extends PersistentObject> T getFromUniqueIndex(String key, Object value);
 
-##Data Types
+    <T extends PersistentObject> List<T> getFromIndex(String key, Object value);
 
-##Associations
+    String executeQueryToString(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
 
-##Multiplicity
+    Object executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
 
-##Inheritence
+`instantiateClassifier` retrieves an entity from the db given its vertex id.
 
-##Interfaces
+`getFromUniqueIndex` retrieves an entity that has been uniquely indexed for a key and value of one of is properties.
+The key is the qualified name of the property.
 
-##Enumeration
+`getFromIndex` is the same as `getFromUniqueIndex` except that the index is not unique and thus returns a List
 
-##Constraints
+`executeQueryToString` executes a query and returns the result as a `String`. UmlgQueryEnum can be OCL, GROOVY or NATIVE,
+UmlgQueryEnum.GROOVY includes Gremlin queries.
 
-##Qualifiers
+`executeQuery` executes a query returning the raw result. In the case of OCL the raw result will be your entities.
 
-##Validation Profile
-
-##Subsetting
-
-##Redefinitions
 
 ##Indexing
 

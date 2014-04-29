@@ -16,6 +16,9 @@
     <!-- UMLG doc style -->
     <link href="stylesheets/umlg-doc.css" rel="stylesheet">
 
+    <!-- Syntax Highlighter -->
+    <link href="stylesheets/prettify.css" rel="stylesheet">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -73,7 +76,7 @@
         <div class="col-md-3" id="leftcol">
             <div class="bs-docs-sidebar hidden-print" role="complementary">
                 <ul class="nav bs-docs-sidebar" id="sidebar">
-                    <li class="active"><a href="#UmlgGraphinterfaceID">UmlgGraph interface</a></li><li class="active"><a href="#UMLGSetSemanticsID">UMLG Set Semantics</a></li><li class="active"><a href="#DataTypesID">Data Types</a></li><li class="active"><a href="#AssociationsID">Associations</a></li><li class="active"><a href="#MultiplicityID">Multiplicity</a></li><li class="active"><a href="#InheritenceID">Inheritence</a></li><li class="active"><a href="#InterfacesID">Interfaces</a></li><li class="active"><a href="#EnumerationID">Enumeration</a></li><li class="active"><a href="#ConstraintsID">Constraints</a></li><li class="active"><a href="#QualifiersID">Qualifiers</a></li><li class="active"><a href="#ValidationProfileID">Validation Profile</a></li><li class="active"><a href="#SubsettingID">Subsetting</a></li><li class="active"><a href="#RedefinitionsID">Redefinitions</a></li><li class="active"><a href="#IndexingID">Indexing</a></li><li class="active"><a href="#OCLID">OCL</a></li><li class="active"><a href="#GremlinID">Gremlin</a></li><li class="active"><a href="#CypherID">Cypher</a></li>
+                    <li class="active"><a href="#UmlgGraphinterfaceID">UmlgGraph interface</a></li><li><a href="#IndexingID">Indexing</a></li><li><a href="#OCLID">OCL</a></li><li><a href="#GremlinID">Gremlin</a></li><li><a href="#CypherID">Cypher</a></li>
                 </ul>
             </div>
         </div>
@@ -86,33 +89,31 @@
 
 <h2 id="UmlgGraphinterfaceID">UmlgGraph interface</h2>
 
-<p>Say something meaningful.</p>
+<p><code class="language-java">UmlgGraph</code> is UMLG's primary interface to the underlying graph db. It extends both <code class="language-java">com.tinkerpop.blueprints.TransactionalGraph</code> and <code class="language-java">com.tinkerpop.blueprints.KeyIndexableGraph</code>.
+Some important additional methods on it are,</p>
 
-<h2 id="UMLGSetSemanticsID">UMLG Set Semantics</h2>
+<pre class="prettyprint"><code class="language-java">&lt;T extends PersistentObject&gt; T instantiateClassifier(Object id);
 
-<p>Set, List, OrderedSet, Bag</p>
+&lt;T extends PersistentObject&gt; T getFromUniqueIndex(String key, Object value);
 
-<h2 id="DataTypesID">Data Types</h2>
+&lt;T extends PersistentObject&gt; List&lt;T&gt; getFromIndex(String key, Object value);
 
-<h2 id="AssociationsID">Associations</h2>
+String executeQueryToString(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
 
-<h2 id="MultiplicityID">Multiplicity</h2>
+Object executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
+</code></pre>
 
-<h2 id="InheritenceID">Inheritence</h2>
+<p><code class="language-java">instantiateClassifier</code> retrieves an entity from the db given its vertex id.</p>
 
-<h2 id="InterfacesID">Interfaces</h2>
+<p><code class="language-java">getFromUniqueIndex</code> retrieves an entity that has been uniquely indexed for a key and value of one of is properties.
+The key is the qualified name of the property.</p>
 
-<h2 id="EnumerationID">Enumeration</h2>
+<p><code class="language-java">getFromIndex</code> is the same as <code class="language-java">getFromUniqueIndex</code> except that the index is not unique and thus returns a List</p>
 
-<h2 id="ConstraintsID">Constraints</h2>
+<p><code class="language-java">executeQueryToString</code> executes a query and returns the result as a <code class="language-java">String</code>. UmlgQueryEnum can be OCL, GROOVY or NATIVE,
+UmlgQueryEnum.GROOVY includes Gremlin queries.</p>
 
-<h2 id="QualifiersID">Qualifiers</h2>
-
-<h2 id="ValidationProfileID">Validation Profile</h2>
-
-<h2 id="SubsettingID">Subsetting</h2>
-
-<h2 id="RedefinitionsID">Redefinitions</h2>
+<p><code class="language-java">executeQuery</code> executes a query returning the raw result. In the case of OCL the raw result will be your entities.</p>
 
 <h2 id="IndexingID">Indexing</h2>
 
@@ -138,6 +139,7 @@
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="javascripts/offcanvas.js"></script>
+<script src="javascripts/prettify.js"></script>
 
 <script type='text/javascript'>
 
@@ -174,6 +176,8 @@
         });
 
     });
+
+    prettyPrint();
 
 </script>
 

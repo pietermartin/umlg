@@ -16,6 +16,9 @@
     <!-- UMLG doc style -->
     <link href="stylesheets/umlg-doc.css" rel="stylesheet">
 
+    <!-- Syntax Highlighter -->
+    <link href="stylesheets/prettify.css" rel="stylesheet">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -106,23 +109,23 @@
 
 <p>To generate a sample project, type in the following at your project's root directory.</p>
 
-<pre><code>mvn archetype:generate -DarchetypeCatalog=local
+<pre class="prettyprint"><code class="language-java">mvn archetype:generate -DarchetypeCatalog=local
 </code></pre>
 
-<p>You will be prompted to select the project you which to generate. Choose <code>org.umlg:umlg-archetype-full</code></p>
+<p>You will be prompted to select the project you which to generate. Choose <code class="language-java">org.umlg:umlg-archetype-full</code></p>
 
 <p>Follow the prompts to select your maven groupId, artifactId, version, java package and underlying graph database.
 A sample uml model with UMLG's uml validation profile and
 data types library will be preloaded. The archetype will create a fully functional UMLG application.</p>
 
-<p><code>cd artifactId</code> into the application you just generated and run <code>maven install</code></p>
+<p><code class="language-java">cd artifactId</code> into the application you just generated and run <code class="language-java">maven install</code></p>
 
 <p>Before compiling the application, maven will generate the entities and a rest interface to the entities from the sample model.</p>
 
-<p>For the impatient to start the rest server and use the web interface <code>cd artifactId-application/artifactId-jetty</code> and run <code>mvn exec:exec</code>
+<p>For the impatient to start the rest server and use the web interface <code class="language-java">cd artifactId-application/artifactId-jetty</code> and run <code class="language-java">mvn exec:exec</code>
 You can view and use the application at <a href="http://localhost:8111/demo/ui2">http://localhost:8080/demo/ui2</a>.</p>
 
-<p>Lastly there is a sample junit test <code>org.umlg.test.TestDemo</code> in <code>src/test/java</code>. You can execute it to see UMLG in action.</p>
+<p>Lastly there is a sample junit test <code class="language-java">org.umlg.test.TestDemo</code> in <code class="language-java">src/test/java</code>. You can execute it to see UMLG in action.</p>
 
 <h2 id="HowthebuildworksID">How the build works</h2>
 
@@ -139,12 +142,12 @@ You can view and use the application at <a href="http://localhost:8111/demo/ui2"
 
 <p><br /></p>
 
-<p>In the <code>generator</code> module there is only one java class <code>DemoGenerator</code>. Running this class' <code>main</code> method  will load
+<p>In the <code class="language-java">generator</code> module there is only one java class <code class="language-java">DemoGenerator</code>. Running this class' <code class="language-java">main</code> method  will load
 the sample model and generate the corresponding entities into the <strong>application</strong> module.</p>
 
-<p>For <code>DemoGenerator</code> to compile and be able to generate code the following maven dependency is required.</p>
+<p>For <code class="language-java">DemoGenerator</code> to compile and be able to generate code the following maven dependency is required.</p>
 
-<pre><code>&lt;dependency&gt;
+<pre class="prettyprint"><code class="language-java">&lt;dependency&gt;
     &lt;groupId&gt;org.umlg&lt;/groupId&gt;
     &lt;artifactId&gt;java-generation&lt;/artifactId&gt;
     &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
@@ -153,7 +156,7 @@ the sample model and generate the corresponding entities into the <strong>applic
 
 <p>and the code to generate the code.</p>
 
-<pre><code>public class DemoGenerator {
+<pre class="prettyprint"><code class="language-java">public class DemoGenerator {
     public static void main(String[] args) throws URISyntaxException {
         if (args.length == 0) {
             args = new String[]{"."};
@@ -168,7 +171,7 @@ the sample model and generate the corresponding entities into the <strong>applic
 }
 </code></pre>
 
-<p><code>org.umlg.generation.JavaGenerator</code> is the entry point to generating code in UMLG from UML. <code>JavaGenerator.main</code> takes 3 parameters.
+<p><code class="language-java">org.umlg.generation.JavaGenerator</code> is the entry point to generating code in UMLG from UML. <code class="language-java">JavaGenerator.main</code> takes 3 parameters.
 The first is the uml model, the second is the output location of the generated source and the 3rd is the generation visitors.
 UMLG generates code via a sequential list of visitors to the UML model. Each visitor implements some feature of the model in java.</p>
 
@@ -182,16 +185,16 @@ UMLG generates code via a sequential list of visitors to the UML model. Each vis
 
 <h4 id="entitiesID">entities</h4>
 
-<p>This is where the generated entities are. It also contains a resources folder with <code>umlg.env.properties</code>.<br />
-It contains the commented out property <code>umlg.db.location=/tmp</code>. UMLG defaults to the systems tmp directory. Change this
+<p>This is where the generated entities are. It also contains a resources folder with <code class="language-java">umlg.env.properties</code>.<br />
+It contains the commented out property <code class="language-java">umlg.db.location=/tmp</code>. UMLG defaults to the systems tmp directory. Change this
 property to point the db to a location of your choice.<br /></p>
 
-<p>A sample junit test class <code>org.umlg.test.TestDemo</code> is provided. Run it to see UMLG in action.</p>
+<p>A sample junit test class <code class="language-java">org.umlg.test.TestDemo</code> is provided. Run it to see UMLG in action.</p>
 
 <p>To compile the entities the following dependency is required. Replace the artifact with the underlying blueprints graph db of your choice.
 This dependency will bring in the underlying graph db and everything the UMLG entities need.</p>
 
-<pre><code>&lt;dependency&gt;
+<pre class="prettyprint"><code class="language-java">&lt;dependency&gt;
     &lt;groupId&gt;org.umlg&lt;/groupId&gt;
     &lt;artifactId&gt;runtime-domain-bitsy&lt;/artifactId&gt;
     &lt;!--
@@ -215,7 +218,7 @@ This dependency will bring in the underlying graph db and everything the UMLG en
 <p>To compile and execute the rest resources the following dependency is required
 This brings in <a href="http://restlet.org/">Restlet</a>. Restlet is the rest framework used by UMLG to expose the entities as rest resources.</p>
 
-<pre><code>     &lt;dependency&gt;
+<pre class="prettyprint"><code class="language-java">     &lt;dependency&gt;
          &lt;groupId&gt;org.umlg&lt;/groupId&gt;
          &lt;artifactId&gt;runtime-restlet&lt;/artifactId&gt;
          &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
@@ -225,7 +228,7 @@ This brings in <a href="http://restlet.org/">Restlet</a>. Restlet is the rest fr
 <p>And lastly to use the web ui add the following dependency This makes available web resources. The javascript, html and
 css files needed for the UMLG admin gui.</p>
 
-<pre><code>     &lt;dependency&gt;
+<pre class="prettyprint"><code class="language-java">     &lt;dependency&gt;
          &lt;groupId&gt;org.umlg&lt;/groupId&gt;
          &lt;artifactId&gt;runtime-ui&lt;/artifactId&gt;
          &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
@@ -246,16 +249,16 @@ css files needed for the UMLG admin gui.</p>
 
 <p><img src="images/uml/Package_umlg_demo1ClassDiagram.PNG" alt="One to Many" title="" /></p>
 
-<p>Each class in the uml model have a respective java entity. To create a company and a person just instantiate <code>Company</code>
-and <code>Person</code>.</p>
+<p>Each class in the uml model have a respective java entity. To create a company and a person just instantiate <code class="language-java">Company</code>
+and <code class="language-java">Person</code>.</p>
 
-<pre><code>One one = new One();
+<pre class="prettyprint"><code class="language-java">One one = new One();
 Many many = new Many();
 </code></pre>
 
 <p>For each property a standard setter and getter is generated.</p>
 
-<pre><code>one.setName("Coolraid");
+<pre class="prettyprint"><code class="language-java">one.setName("Coolraid");
 many.setName("Joe");
 one.setMany(many);
 </code></pre>
@@ -263,37 +266,37 @@ one.setMany(many);
 <p>For each property with a multiplicity greater than 1 an adder method is generated. This is different to the setter in
 that it appends to the collection as opposed to the setter that replaces the collection.</p>
 
-<pre><code>one.addToMany(many);
+<pre class="prettyprint"><code class="language-java">one.addToMany(many);
 </code></pre>
 
 <p>or just use the standard java collection 'add' method</p>
 
-<pre><code>one.getMany().add(many);
+<pre class="prettyprint"><code class="language-java">one.getMany().add(many);
 </code></pre>
 
 <p>Similarly a remover is generated</p>
 
-<pre><code>one.removeFromMany(many);
+<pre class="prettyprint"><code class="language-java">one.removeFromMany(many);
 </code></pre>
 
 <p>or use the standard java collection 'remove' method</p>
 
-<pre><code>one.getMany().remove(many);
+<pre class="prettyprint"><code class="language-java">one.getMany().remove(many);
 </code></pre>
 
 <p>and lastly to persist the entities call,</p>
 
-<pre><code>UMLG.get().commit()
+<pre class="prettyprint"><code class="language-java">UMLG.get().commit()
 </code></pre>
 
 <p>or rollback the transaction</p>
 
-<pre><code>UMLG.get().rollback()
+<pre class="prettyprint"><code class="language-java">UMLG.get().rollback()
 </code></pre>
 
-<p><code>UMLG.get()</code> returns an instance of <code>org.umlg.runtime.adaptor.UmlgGraph</code>. <code>UmlgGraph</code> wraps the underlying blueprints graph and implements
+<p><code class="language-java">UMLG.get()</code> returns an instance of <code class="language-java">org.umlg.runtime.adaptor.UmlgGraph</code>. <code class="language-java">UmlgGraph</code> wraps the underlying blueprints graph and implements
 'com.tinkerpop.blueprints.TransactionalGraph' and 'com.tinkerpop.blueprints.KeyIndexableGraph' It is a singleton and is
-always available on the current thread via <code>UMLG.get()</code></p>
+always available on the current thread via <code class="language-java">UMLG.get()</code></p>
 
 
         </div>
@@ -311,6 +314,7 @@ always available on the current thread via <code>UMLG.get()</code></p>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="javascripts/offcanvas.js"></script>
+<script src="javascripts/prettify.js"></script>
 
 <script type='text/javascript'>
 
@@ -347,6 +351,8 @@ always available on the current thread via <code>UMLG.get()</code></p>
         });
 
     });
+
+    prettyPrint();
 
 </script>
 

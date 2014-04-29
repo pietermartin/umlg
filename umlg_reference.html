@@ -16,6 +16,9 @@
     <!-- UMLG doc style -->
     <link href="stylesheets/umlg-doc.css" rel="stylesheet">
 
+    <!-- Syntax Highlighter -->
+    <link href="stylesheets/prettify.css" rel="stylesheet">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -73,19 +76,11 @@
         <div class="col-md-3" id="leftcol">
             <div class="bs-docs-sidebar hidden-print" role="complementary">
                 <ul class="nav bs-docs-sidebar" id="sidebar">
-                    <li class="active"><a href="#OneLevel1ID">One Level 1</a></li><li class="active"><a href="#OneLevel2ID">One Level 2</a><ul class="nav">
-<li><a href="#TwoLevel21ID">Two Level 21</a></li><li><a href="#TwoLevel22ID">Two Level 22</a></li></ul>
-</li><li class="active"><a href="#TwoLevel3ID">Two Level 3</a><ul class="nav">
-<li><a href="#TwoLevel31ID">Two Level 31</a></li><li><a href="#TwoLevel32ID">Two Level 32</a><ul class="nav">
-<li><a href="#TwoLevel321ID">Two Level 321</a></li></ul>
-</li></ul>
-</li><li class="active"><a href="#TwoLevel4ID">Two Level 4</a><ul class="nav">
-<li><a href="#TwoLevel41ID">Two Level 41</a><ul class="nav">
-<li><a href="#TwoLevel411ID">Two Level 411</a><ul class="nav">
-<li><a href="#TwoLevel4111ID">Two Level 4111</a></li></ul>
-</li></ul>
-</li></ul>
-</li>
+                    <li class="active"><a href="#UMLGCollectionSemanticsID">UMLG Collection Semantics</a><ul class="nav">
+<li><a href="#AnexampleID">An example</a></li></ul>
+</li><li><a href="#UMLGTypesID">UMLG Types</a><ul class="nav">
+<li><a href="#UMLGDataTypesID">UMLG Data Types</a></li></ul>
+</li><li><a href="#AssociationsID">Associations</a></li><li><a href="#MultiplicityID">Multiplicity</a></li><li><a href="#InheritenceID">Inheritence</a></li><li><a href="#InterfacesID">Interfaces</a></li><li><a href="#EnumerationID">Enumeration</a></li><li><a href="#AssociationClassesID">Association Classes</a></li><li><a href="#ConstraintsID">Constraints</a></li><li><a href="#QualifiersID">Qualifiers</a></li><li><a href="#ValidationProfileID">Validation Profile</a></li><li><a href="#SubsettingID">Subsetting</a></li><li><a href="#RedefinitionsID">Redefinitions</a></li>
                 </ul>
             </div>
         </div>
@@ -96,383 +91,174 @@
             </p>
             <!-- UMLG Reference Manual -->
 
-<h1 id="OneLevel1ID">One Level 1</h1>
+<h2 id="UMLGCollectionSemanticsID">UMLG Collection Semantics</h2>
+
+<p>UML has 2 boolean properties that specifies the collection semantics of a property. They are,</p>
+
+<ul>
+<li>uniqueness</li>
+<li>ordering</li>
+</ul>
+
+<p>These properties only make sense when the property has a upper multiplicity greater than 1. Together they specify whether
+a property will be one of the following,</p>
+
+<ul>
+<li><strong>Set</strong> (isUnique = true, isOrdered = false)</li>
+<li><strong>List</strong> (isUnique = false, isOrdered = true)</li>
+<li><strong>OrderedSet</strong> (isUnique = true, isOrdered = true)</li>
+<li><strong>Bag</strong> (isUnique = false, isOrdered = false)</li>
+</ul>
+
+<p>UMLG has 4 corresponding java interfaces to represent the 4 collections.</p>
+
+<ul>
+<li><code class="language-java">org.umlg.runtime.collection.UmlgSet</code></li>
+<li><code class="language-java">org.umlg.runtime.collection.UmlgSequence</code></li>
+<li><code class="language-java">org.umlg.runtime.collection.UmlgOrderedSet</code></li>
+<li><code class="language-java">org.umlg.runtime.collection.UmlgBag</code></li>
+</ul>
+
+<p>To implement <code class="language-java">UmlgSet</code> and <code class="language-java">UmlgSequence</code> the standard java Set and List collection classes are used.</p>
+
+<p>For <code class="language-java">UmlgBag</code> google guava's <a href="http://docs.guava-libraries.googlecode.com/git/javadoc/com/google/common/collect/Multiset.html">Multiset</a> is used</p>
+
+<p>For <code class="language-java">UmlgOrderedSet</code> apache collections' <a href="https://commons.apache.org/proper/commons-collections/apidocs/org/apache/commons/collections4/set/ListOrderedSet.html">ListOrderedSet</a> is used.</p>
+
+<p>This implies that for any property with a upper multiplicity greater than 1 the property will be one of the 4 given types.</p>
+
+<h3 id="AnexampleID">An example</h3>
+
+<p><img src="images/uml/quickpreview/org/umlg/setsemantics/Package_setsemantics_SetSemanticsClassDiagram.PNG" alt="image of set semantics" title="" /></p>
+
+<p>Illustrates {unique}</p>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testSet() {
+    Performance p = new Performance();
+    Reservation r1 = new Reservation();
+    Reservation r2 = new Reservation();
+    p.addToReservation(r1);
+    p.addToReservation(r2);
+    UMLG.get().commit();
+    Assert.assertTrue(p.getReservation() instanceof UmlgSet);
+    Assert.assertTrue(p.getReservation() instanceof Set);
+    Assert.assertEquals(2, p.getReservation().size());
+}
+</code></pre>
+
+<p>Illustrates {ordered}</p>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testList() {
+    Performance p = new Performance();
+    Request r1 = new Request();
+    Request r2 = new Request();
+    p.addToRequest(r1);
+    p.addToRequest(r2);
+    UMLG.get().commit();
+    Assert.assertTrue(p.getRequest() instanceof UmlgSequence);
+    Assert.assertTrue(p.getRequest() instanceof List);
+    Assert.assertEquals(2, p.getRequest().size());
+}
+</code></pre>
+
+<p>Illustrates {ordered, unique}</p>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testOrderedSet() {
+    Order o = new Order();
+    LineItem l1 = new LineItem();
+    LineItem l2 = new LineItem();
+    o.addToLineItem(l1);
+    o.addToLineItem(l2);
+    UMLG.get().commit();
+    Assert.assertTrue(o.getLineItem() instanceof UmlgOrderedSet);
+    Assert.assertTrue(o.getLineItem() instanceof Set);
+    Assert.assertTrue(o.getLineItem() instanceof List);
+    Assert.assertEquals(2, o.getLineItem().size());
+}
+</code></pre>
+
+<p>Illustrates {}</p>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testBag() {
+    Product p = new Product();
+    Complaint c1 = new Complaint();
+    Complaint c2 = new Complaint();
+    p.addToComplaint(c1);
+    p.addToComplaint(c2);
+    UMLG.get().commit();
+    Assert.assertTrue(p.getComplaint() instanceof UmlgBag);
+    Assert.assertTrue(p.getComplaint() instanceof Multiset);
+    Assert.assertEquals(2, p.getComplaint().size());
+}
+</code></pre>
 
-<p>some stuff</p>
+<h2 id="UMLGTypesID">UMLG Types</h2>
 
-<p>some stuff</p>
+<p>UMLG supports UML's basic primitive types. These are,</p>
 
-<p>some stuff</p>
+<ul>
+<li><strong>Boolean</strong>, translates to java's <code class="language-java">java.lang.Boolean</code></li>
+<li><strong>Integer</strong>, translates to java's <code class="language-java">java.lang.Integer</code></li>
+<li><strong>Real</strong>, translates to java's <code class="language-java">java.lang.Double</code></li>
+<li><strong>String</strong>, translates to java's <code class="language-java">java.lang.String</code></li>
+<li><strong>UnlimitedNatural</strong>, translates to java's <code class="language-java">java.lang.Long</code></li>
+</ul>
 
-<p>some stuff</p>
+<h3 id="UMLGDataTypesID">UMLG Data Types</h3>
 
-<p>some stuff</p>
+<p>From the UML specification.</p>
 
-<p>some stuff</p>
+<blockquote>
+  <p>A data type is a type whose instances are identified only by their value. A DataType may contain attributes to support the
+ modeling of structured data types.</p>
+</blockquote>
 
-<p>some stuff</p>
+<p>Further UMLG has its own library of data types. This is packaged in <strong>umlg-datatypes.uml</strong>. umlg-datatypes.uml is prepackaged with
+the application generated by the <a href="http://umlg.org/getting_started.html" title="UMLG maven archetype">UMLG maven archetype</a>.
+Otherwise copy umlg-datatypes.uml to the directory of your model and import the library into your model.</p>
 
-<p>some stuff</p>
+<p><strong>umlg-datatypes.uml</strong> contains the following data types,</p>
 
-<p>some stuff</p>
+<ul>
+<li><strong>Email</strong>, translates to <code class="language-java">java.lang.String</code></li>
+<li><strong>DateTime</strong>, translates to <code class="language-java">org.joda.time.DateTime</code></li>
+<li><strong>Date</strong>, translates to <code class="language-java">org.joda.time.LocalDate</code></li>
+<li><strong>Time</strong>, translates to <code class="language-java">org.joda.time.LocalTime</code></li>
+<li><strong>InternationalPhoneNumber</strong>, Not yet implemented</li>
+<li><strong>LocalPhoneNumber</strong>, Not yet implemented</li>
+<li><strong>Interval</strong>, Not yet implemented</li>
+<li><strong>Duration</strong>, Not yet implemented</li>
+<li><strong>CreditCardNumber</strong>, Not yet implemented</li>
+<li><strong>Video</strong>, Not yet implemented</li>
+<li><strong>Audio</strong>, Not yet implemented</li>
+<li><strong>Image</strong>, Not yet implemented</li>
+</ul>
 
-<p>some stuff</p>
+<h2 id="AssociationsID">Associations</h2>
 
-<p>some stuff</p>
+<h2 id="MultiplicityID">Multiplicity</h2>
 
-<h1 id="OneLevel2ID">One Level 2</h1>
+<h2 id="InheritenceID">Inheritence</h2>
 
-<p>some stuff</p>
+<h2 id="InterfacesID">Interfaces</h2>
 
-<p>some stuff</p>
+<h2 id="EnumerationID">Enumeration</h2>
 
-<p>some stuff</p>
+<h2 id="AssociationClassesID">Association Classes</h2>
 
-<p>some stuff</p>
+<h2 id="ConstraintsID">Constraints</h2>
 
-<p>some stuff</p>
+<h2 id="QualifiersID">Qualifiers</h2>
 
-<p>some stuff</p>
+<h2 id="ValidationProfileID">Validation Profile</h2>
 
-<p>some stuff</p>
+<h2 id="SubsettingID">Subsetting</h2>
 
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<h2 id="TwoLevel21ID">Two Level 21</h2>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff
-some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<h2 id="TwoLevel22ID">Two Level 22</h2>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff
-some stuff
-some stuff
-some stuff
-some stuff
-some stuff</p>
-
-<h1 id="TwoLevel3ID">Two Level 3</h1>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff
-some stuff
-some stuff
-some stuff
-some stuff
-some stuff</p>
-
-<h2 id="TwoLevel31ID">Two Level 31</h2>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff
-some stuff
-some stuff
-some stuff
-some stuff
-some stuff</p>
-
-<h2 id="TwoLevel32ID">Two Level 32</h2>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff
-some stuff
-some stuff
-some stuff
-some stuff
-some stuff</p>
-
-<h3 id="TwoLevel321ID">Two Level 321</h3>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff
-some stuff
-some stuff
-some stuff
-some stuff
-some stuff</p>
-
-<h1 id="TwoLevel4ID">Two Level 4</h1>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff
-some stuff
-some stuff
-some stuff
-some stuff
-some stuff</p>
-
-<h2 id="TwoLevel41ID">Two Level 41</h2>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff
-some stuff
-some stuff
-some stuff
-some stuff
-some stuff</p>
-
-<h3 id="TwoLevel411ID">Two Level 411</h3>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff
-some stuff
-some stuff
-some stuff
-some stuff
-some stuff</p>
-
-<h4 id="TwoLevel4111ID">Two Level 4111</h4>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff</p>
-
-<p>some stuff
-some stuff
-some stuff
-some stuff
-some stuff
-some stuff</p>
+<h2 id="RedefinitionsID">Redefinitions</h2>
 
 
         </div>
@@ -490,6 +276,7 @@ some stuff</p>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="javascripts/offcanvas.js"></script>
+<script src="javascripts/prettify.js"></script>
 
 <script type='text/javascript'>
 
@@ -526,6 +313,8 @@ some stuff</p>
         });
 
     });
+
+    prettyPrint();
 
 </script>
 

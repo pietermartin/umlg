@@ -36,8 +36,10 @@ public class UmlgGenerateDocumentation {
             } else {
                 template = FileUtils.readFileToString(new File("./doc/html_template/documentation_template.html"));
                 String completeMenu = "";
+                boolean first = true;
                 for (Menu rootMenu : rootMenus) {
-                    completeMenu += rootMenu.toHtml();
+                    completeMenu += rootMenu.toHtml(first);
+                    first = false;
                 }
                 template = template.replace("<!-- GENERATED MENU -->", completeMenu);
                 //            FileUtils.write(new File("./doc/documentation-template-with-menu/" + md.getName() + ".menu"), template);
@@ -51,7 +53,10 @@ public class UmlgGenerateDocumentation {
 
             //insert the md content into the template with menu
             String content = FileUtils.readFileToString(new File("./doc/markdown-parsed/" + md.getName() + ".parsed"));
+            content = content.replace("<pre>", "<pre class=\"prettyprint\">");
+            content = content.replace("<code>", "<code class=\"language-java\">");
             template = template.replace("<!-- GENERATED CONTENT -->", content);
+
 
             if (hasMenu(md)) {
                 //Insert the menu ids into the markdown produced html
@@ -145,9 +150,9 @@ public class UmlgGenerateDocumentation {
             }
         }
 
-        public String toHtml() throws IOException {
+        public String toHtml(boolean first) throws IOException {
             StringBuilder html = new StringBuilder();
-            toHtml(html, true, false, false);
+            toHtml(html, first, false, false);
             return html.toString();
         }
 
