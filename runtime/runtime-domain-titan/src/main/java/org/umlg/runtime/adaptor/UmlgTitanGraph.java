@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * Date: 2013/08/31
  * Time: 3:31 PM
  */
-public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
+public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph, UmlgAdminGraph {
 
     private static final Logger logger = Logger.getLogger(UmlgTitanGraph.class.getPackage().getName());
     private UmlgTransactionEventHandler transactionEventHandler;
@@ -99,7 +99,7 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
     }
 
     @Override
-    public <T> T instantiateClassifier(Object id) {
+    public <T extends PersistentObject> T instantiateClassifier(Object id) {
         try {
             Vertex v = this.getVertex(id);
             if (v == null) {

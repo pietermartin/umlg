@@ -43,6 +43,70 @@
           <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CBUaVn4kEeOYhpiy1kqM8Q" value="1"/>
         </ownedEnd>
       </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_ulxtAM7HEeOjlpjTZXDyqw" name="setsemantics">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_8fgF0M7bEeOjlpjTZXDyqw">
+          <body>The set of reservations is unordered.</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_EibacM7cEeOjlpjTZXDyqw">
+          <body>The list of requests is ordered.</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_4KBd4M7cEeOjlpjTZXDyqw">
+          <body>The ordered set of line items is both ordered and unique.</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_JybfAM7dEeOjlpjTZXDyqw">
+          <body>The bag of complaints is unordered and may contain duplicates.</body>
+        </ownedComment>
+        <packagedElement xmi:type="uml:Class" xmi:id="_yU6RMM7HEeOjlpjTZXDyqw" name="Performance">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_lu9GMM7bEeOjlpjTZXDyqw" name="reservation" type="_zFpxoM7HEeOjlpjTZXDyqw" association="_lu-UUM7bEeOjlpjTZXDyqw">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_lu9GMc7bEeOjlpjTZXDyqw"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_lu9GMs7bEeOjlpjTZXDyqw" value="*"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_l9wXMM7bEeOjlpjTZXDyqw" name="request" type="_B39vYM7IEeOjlpjTZXDyqw" isOrdered="true" isUnique="false" association="_l9w-QM7bEeOjlpjTZXDyqw">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_l9wXMc7bEeOjlpjTZXDyqw"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_l9wXMs7bEeOjlpjTZXDyqw" value="*"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_zFpxoM7HEeOjlpjTZXDyqw" name="Reservation"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_B39vYM7IEeOjlpjTZXDyqw" name="Request"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_WgKicM7IEeOjlpjTZXDyqw" name="LineItem"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_XpCPAM7IEeOjlpjTZXDyqw" name="Complaint"/>
+        <packagedElement xmi:type="uml:Association" xmi:id="_lu-UUM7bEeOjlpjTZXDyqw" name="performance_reservation_1" memberEnd="_lu-UUc7bEeOjlpjTZXDyqw _lu9GMM7bEeOjlpjTZXDyqw" navigableOwnedEnd="_lu-UUc7bEeOjlpjTZXDyqw">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_lu-UUc7bEeOjlpjTZXDyqw" name="performance" type="_yU6RMM7HEeOjlpjTZXDyqw" association="_lu-UUM7bEeOjlpjTZXDyqw">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_lu-UUs7bEeOjlpjTZXDyqw" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_lu-UU87bEeOjlpjTZXDyqw" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_l9w-QM7bEeOjlpjTZXDyqw" name="performance_request_1" memberEnd="_l9w-Qc7bEeOjlpjTZXDyqw _l9wXMM7bEeOjlpjTZXDyqw" navigableOwnedEnd="_l9w-Qc7bEeOjlpjTZXDyqw">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_l9w-Qc7bEeOjlpjTZXDyqw" name="performance" type="_yU6RMM7HEeOjlpjTZXDyqw" association="_l9w-QM7bEeOjlpjTZXDyqw">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_l9w-Qs7bEeOjlpjTZXDyqw" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_l9w-Q87bEeOjlpjTZXDyqw" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_kCnDsM7cEeOjlpjTZXDyqw" name="Order">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_mjdP0M7cEeOjlpjTZXDyqw" name="lineItem" type="_WgKicM7IEeOjlpjTZXDyqw" isOrdered="true" association="_mjd24M7cEeOjlpjTZXDyqw">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mjdP0c7cEeOjlpjTZXDyqw"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mjdP0s7cEeOjlpjTZXDyqw" value="*"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_mjd24M7cEeOjlpjTZXDyqw" name="order_lineItem_1" memberEnd="_mjd24c7cEeOjlpjTZXDyqw _mjdP0M7cEeOjlpjTZXDyqw" navigableOwnedEnd="_mjd24c7cEeOjlpjTZXDyqw">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_mjd24c7cEeOjlpjTZXDyqw" name="order" type="_kCnDsM7cEeOjlpjTZXDyqw" association="_mjd24M7cEeOjlpjTZXDyqw">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mjd24s7cEeOjlpjTZXDyqw" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mjd2487cEeOjlpjTZXDyqw" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_-doJ8M7cEeOjlpjTZXDyqw" name="Product">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_CtVEkM7dEeOjlpjTZXDyqw" name="complaint" type="_XpCPAM7IEeOjlpjTZXDyqw" isUnique="false" association="_CtVEk87dEeOjlpjTZXDyqw">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_CtVEkc7dEeOjlpjTZXDyqw"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CtVEks7dEeOjlpjTZXDyqw" value="*"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_CtVEk87dEeOjlpjTZXDyqw" name="product_complaint_1" memberEnd="_CtVElM7dEeOjlpjTZXDyqw _CtVEkM7dEeOjlpjTZXDyqw" navigableOwnedEnd="_CtVElM7dEeOjlpjTZXDyqw">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_CtVElM7dEeOjlpjTZXDyqw" name="product" type="_-doJ8M7cEeOjlpjTZXDyqw" association="_CtVEk87dEeOjlpjTZXDyqw">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_CtVElc7dEeOjlpjTZXDyqw" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CtVEls7dEeOjlpjTZXDyqw" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+      </packagedElement>
     </packagedElement>
   </packagedElement>
   <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_bk90UJ2MEeOdnJvRGBqhtw">

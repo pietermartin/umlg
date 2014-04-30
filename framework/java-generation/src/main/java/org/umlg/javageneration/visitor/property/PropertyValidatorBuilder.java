@@ -23,7 +23,7 @@ public class PropertyValidatorBuilder extends BaseVisitor implements Visitor<Pro
 	@Override
 	public void visitBefore(Property p) {
 		PropertyWrapper propertyWrapper = new PropertyWrapper(p);
-		if (propertyWrapper.isOne() && propertyWrapper.isDataType() && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier()) {
+		if (propertyWrapper.isDataType() && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier()) {
 			OJAnnotatedClass owner = findOJClass(p);
 			buildValidator(owner, propertyWrapper);
 		}
@@ -44,13 +44,18 @@ public class PropertyValidatorBuilder extends BaseVisitor implements Visitor<Pro
 		owner.addToImports(new OJPathName("java.util.ArrayList"));
 		validateProperty.getBody().addToLocals(result);
 
-        int count = 0;
+        //Validate UnlimitedNatural bigger or equal to zero
+        if (propertyWrapper.isUnlimitedNatural()) {
+            OJIfStatement ifSmallerThanZero = new OJIfStatement("!" + UmlgGenerationUtil.UmlgValidator.getLast() + ".validateValidUnlimitedNatural"  + "("
+                    + propertyWrapper.fieldname() + ")");
+            ifSmallerThanZero.addToThenPart("result.add(new " + UmlgGenerationUtil.UmlgConstraintViolation.getLast() + "(\"" + "UnlimitedNatural" + "\", \""
+                    + propertyWrapper.getQualifiedName() + "\", \" must be greater or equal to zero!\"))");
+            validateProperty.getBody().addToStatements(ifSmallerThanZero);
+            owner.addToImports(UmlgGenerationUtil.UmlgValidator);
+        }
+
 		for (UmlgValidationEnum e : UmlgValidationEnum.values()) {
 			if (propertyWrapper.hasValidation(e)) {
-                count++;
-                if (count == 2) {
-                    System.out.println("stop");
-                }
 				OJIfStatement ifValidate;
 				if (e.getAttributes().length > 0) {
 					ifValidate = new OJIfStatement("!" + UmlgGenerationUtil.UmlgValidator.getLast() + "." + e.getMethodName() + "("

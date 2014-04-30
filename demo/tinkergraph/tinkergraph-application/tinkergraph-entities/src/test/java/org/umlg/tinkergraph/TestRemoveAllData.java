@@ -6,9 +6,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.umlg.BaseModelUmlg;
-import org.umlg.meta.BaseClassUmlg;
-import org.umlg.model.Tinkergraph;
 import org.umlg.runtime.adaptor.UMLG;
+import org.umlg.runtime.adaptor.UmlgAdminGraph;
 import org.umlg.runtime.adaptor.UmlgGraph;
 import org.umlg.runtime.util.UmlgProperties;
 
@@ -41,12 +40,11 @@ public class TestRemoveAllData {
 
     @Test
     public void testRemoveAllData() {
-        System.out.println(db.countVertices());
         for (BaseModelUmlg a : BaseModelUmlg.allInstances()) {
             a.delete();
         }
         db.commit();
-        Assert.assertEquals(14, db.countVertices());
+        Assert.assertEquals(14, ((UmlgAdminGraph)db).countVertices());
     }
 
 }

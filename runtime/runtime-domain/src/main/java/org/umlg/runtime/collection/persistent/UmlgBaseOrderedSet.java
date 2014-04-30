@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
-import org.apache.commons.collections.set.ListOrderedSet;
+import org.apache.commons.collections4.set.ListOrderedSet;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.collection.UmlgSequence;
@@ -32,8 +32,8 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
     @SuppressWarnings("unchecked")
     public UmlgBaseOrderedSet(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
-        this.internalCollection = new ListOrderedSet();
-        this.oclStdLibOrderedSet = new OclStdLibOrderedSetImpl<E>((ListOrderedSet) this.internalCollection);
+        this.internalCollection = new ListOrderedSet<>();
+        this.oclStdLibOrderedSet = new OclStdLibOrderedSetImpl<>((ListOrderedSet) this.internalCollection);
         this.oclStdLibCollection = this.oclStdLibOrderedSet;
     }
 

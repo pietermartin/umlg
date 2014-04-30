@@ -317,7 +317,7 @@ public final class UmlgPropertyOperations extends PropertyOperations {
             } else if (primitiveType.getName().equals("Boolean")) {
                 return "Boolean";
             } else if (primitiveType.getName().equals("UnlimitedNatural")) {
-                return "Long";
+                return "Integer";
             } else if (primitiveType.getName().equals("Real")) {
                 return "Double";
             } else {

@@ -21,8 +21,4 @@ public class UMLG {
         dbVar.remove();
     }
 
-    public static void incrementTransactionCount() {
-        get().incrementTransactionCount();
-    }
-
 }

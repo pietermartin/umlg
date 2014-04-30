@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  * Date: 2013/01/09
  * Time: 8:09 PM
  */
-public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph {
+public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph , UmlgAdminGraph{
 
     private static final Logger logger = Logger.getLogger(UmlgBitsyGraph.class.getPackage().getName());
     private UmlgTransactionEventHandler transactionEventHandler;
@@ -101,7 +101,7 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
     }
 
     @Override
-    public <T> T instantiateClassifier(Object id) {
+    public <T extends PersistentObject> T instantiateClassifier(Object id) {
         try {
             Vertex v = this.getVertex(id);
             if (v == null) {

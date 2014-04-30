@@ -3,32 +3,32 @@ package org.umlg.javageneration.validation;
 import org.umlg.java.metamodel.OJPathName;
 
 
-public class Min implements Validation {
+public class MinInteger implements Validation {
 
-	private int min;
+	private Number min;
 
-	public int getMin() {
+	public Number getMin() {
 		return min;
 	}
 
-	public Min(int min) {
+	public MinInteger(Number min) {
 		super();
 		this.min = min;
 	}
 
 	@Override
 	public String toStringForMethod() {
-		return String.valueOf(getMin());
+		return getMin().toString();
 	}
 
 	@Override
 	public String toNewRuntimeTumlValidation() {
-		return "new Min(" + String.valueOf(min) + ")";
+		return "new MinInteger(" + min.toString() + ")";
 	}
 	
 	@Override
 	public OJPathName getPathName() {
-		return new OJPathName("org.umlg.runtime.validation.Min");
+		return new OJPathName("org.umlg.runtime.validation.MinInteger");
 	}
 	
 	@Override

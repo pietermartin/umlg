@@ -37,8 +37,8 @@ public class UmlgBitsyGraphFactory implements UmlgGraphFactory {
                 BitsyGraph bitsyGraph = new BitsyGraph(dbPath);
                 try {
                     this.umlgGraph = new UmlgBitsyGraph(bitsyGraph);
-                    this.umlgGraph.addRoot();
-                    this.umlgGraph.addDeletionNode();
+                    ((UmlgAdminGraph)this.umlgGraph).addRoot();
+                    ((UmlgAdminGraph)this.umlgGraph).addDeletionNode();
                     this.umlgGraph.commit();
                     UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
                     UmlGIndexFactory.getUmlgIndexManager().createIndexes();

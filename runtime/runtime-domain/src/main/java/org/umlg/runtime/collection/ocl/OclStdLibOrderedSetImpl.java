@@ -1,6 +1,6 @@
 package org.umlg.runtime.collection.ocl;
 
-import org.apache.commons.collections.set.ListOrderedSet;
+import org.apache.commons.collections4.set.ListOrderedSet;
 import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.collection.UmlgSequence;
@@ -19,7 +19,7 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	 * @return
 	 */
 	public static <E> OclStdLibOrderedSetImpl<E> get(Collection<E> collection) {
-		return new OclStdLibOrderedSetImpl<E>(ListOrderedSet.decorate(new ArrayList<E>(collection)));
+		return new OclStdLibOrderedSetImpl<E>(ListOrderedSet.listOrderedSet(new ArrayList<>(collection)));
 	}
 	
 	@SuppressWarnings("unchecked")

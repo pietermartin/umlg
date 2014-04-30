@@ -293,37 +293,37 @@ public class TestIndexing extends BaseLocalDbTest {
     }
 
     @Test
-    public void testIndexingLongNonUnique() {
+    public void testIndexingUnlimitedNaturalNonUnique() {
         for (int i = 0; i < 100; i++) {
             TopRoot topRoot = new TopRoot();
             topRoot.setName("asdasdasd");
             topRoot.setIndexedName(String.valueOf(i));
             if (i < 20) {
-                topRoot.setIndexNonUniqueLong(1L);
+                topRoot.setIndexNonUniqueUnlimitedNatural(1);
             } else if (i < 40) {
-                topRoot.setIndexNonUniqueLong(2L);
+                topRoot.setIndexNonUniqueUnlimitedNatural(2);
             } else if (i < 60) {
-                topRoot.setIndexNonUniqueLong(3L);
+                topRoot.setIndexNonUniqueUnlimitedNatural(3);
             } else if (i < 80) {
-                topRoot.setIndexNonUniqueLong(4L);
+                topRoot.setIndexNonUniqueUnlimitedNatural(4);
             } else {
-                topRoot.setIndexNonUniqueLong(5L);
+                topRoot.setIndexNonUniqueUnlimitedNatural(5);
             }
         }
         db.commit();
-        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueLong.getQualifiedName(), 1L);
+        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getQualifiedName(), 1);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueLong.getQualifiedName(), 2L);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getQualifiedName(), 2);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueLong.getQualifiedName(), 3L);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getQualifiedName(), 3);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueLong.getQualifiedName(), 4L);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getQualifiedName(), 4);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueLong.getQualifiedName(), 5L);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getQualifiedName(), 5);
         Assert.assertEquals(20, topRoots.size());
 
         topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getQualifiedName(), 6L);
@@ -332,76 +332,76 @@ public class TestIndexing extends BaseLocalDbTest {
     }
 
     @Test
-    public void testIndexingLongNonUniqueFromIndex() {
+    public void testIndexingUnlimitedNaturalNonUniqueFromIndex() {
         for (int i = 0; i < 100; i++) {
             TopRoot topRoot = new TopRoot();
             topRoot.setName("asdasdasd");
             topRoot.setIndexedName(String.valueOf(i));
             if (i < 20) {
-                topRoot.setIndexNonUniqueLong(1L);
+                topRoot.setIndexNonUniqueUnlimitedNatural(1);
             } else if (i < 40) {
-                topRoot.setIndexNonUniqueLong(2L);
+                topRoot.setIndexNonUniqueUnlimitedNatural(2);
             } else if (i < 60) {
-                topRoot.setIndexNonUniqueLong(3L);
+                topRoot.setIndexNonUniqueUnlimitedNatural(3);
             } else if (i < 80) {
-                topRoot.setIndexNonUniqueLong(4L);
+                topRoot.setIndexNonUniqueUnlimitedNatural(4);
             } else {
-                topRoot.setIndexNonUniqueLong(5L);
+                topRoot.setIndexNonUniqueUnlimitedNatural(5);
             }
         }
         db.commit();
-        List<TopRoot> topRoots = TopRoot.findByIndexNonUniqueLong(1L);
+        List<TopRoot> topRoots = TopRoot.findByIndexNonUniqueUnlimitedNatural(1);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueLong(2L);
+        topRoots = TopRoot.findByIndexNonUniqueUnlimitedNatural(2);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueLong(3L);
+        topRoots = TopRoot.findByIndexNonUniqueUnlimitedNatural(3);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueLong(4L);
+        topRoots = TopRoot.findByIndexNonUniqueUnlimitedNatural(4);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueLong(5L);
+        topRoots = TopRoot.findByIndexNonUniqueUnlimitedNatural(5);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueLong(6L);
+        topRoots = TopRoot.findByIndexNonUniqueUnlimitedNatural(6);
         Assert.assertEquals(0, topRoots.size());
 
     }
 
     @Test
-    public void testIndexingDoubleNonUnique() {
+    public void testIndexingRealNonUnique() {
         for (int i = 0; i < 100; i++) {
             TopRoot topRoot = new TopRoot();
             topRoot.setName("asdasdasd");
             topRoot.setIndexedName(String.valueOf(i));
             if (i < 20) {
-                topRoot.setIndexNonUniqueDouble(1D);
+                topRoot.setIndexNonUniqueReal(1D);
             } else if (i < 40) {
-                topRoot.setIndexNonUniqueDouble(2D);
+                topRoot.setIndexNonUniqueReal(2D);
             } else if (i < 60) {
-                topRoot.setIndexNonUniqueDouble(3D);
+                topRoot.setIndexNonUniqueReal(3D);
             } else if (i < 80) {
-                topRoot.setIndexNonUniqueDouble(4D);
+                topRoot.setIndexNonUniqueReal(4D);
             } else {
-                topRoot.setIndexNonUniqueDouble(5D);
+                topRoot.setIndexNonUniqueReal(5D);
             }
         }
         db.commit();
-        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueDouble.getQualifiedName(), 1D);
+        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getQualifiedName(), 1D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueDouble.getQualifiedName(), 2D);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getQualifiedName(), 2D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueDouble.getQualifiedName(), 3D);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getQualifiedName(), 3D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueDouble.getQualifiedName(), 4D);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getQualifiedName(), 4D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueDouble.getQualifiedName(), 5D);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getQualifiedName(), 5D);
         Assert.assertEquals(20, topRoots.size());
 
         topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getQualifiedName(), 6L);
@@ -416,31 +416,31 @@ public class TestIndexing extends BaseLocalDbTest {
             topRoot.setName("asdasdasd");
             topRoot.setIndexedName(String.valueOf(i));
             if (i < 20) {
-                topRoot.setIndexNonUniqueDouble(1D);
+                topRoot.setIndexNonUniqueReal(1D);
             } else if (i < 40) {
-                topRoot.setIndexNonUniqueDouble(2D);
+                topRoot.setIndexNonUniqueReal(2D);
             } else if (i < 60) {
-                topRoot.setIndexNonUniqueDouble(3D);
+                topRoot.setIndexNonUniqueReal(3D);
             } else if (i < 80) {
-                topRoot.setIndexNonUniqueDouble(4D);
+                topRoot.setIndexNonUniqueReal(4D);
             } else {
-                topRoot.setIndexNonUniqueDouble(5D);
+                topRoot.setIndexNonUniqueReal(5D);
             }
         }
         db.commit();
-        List<TopRoot> topRoots = TopRoot.findByIndexNonUniqueDouble(1D);
+        List<TopRoot> topRoots = TopRoot.findByIndexNonUniqueReal(1D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueDouble(2D);
+        topRoots = TopRoot.findByIndexNonUniqueReal(2D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueDouble(3D);
+        topRoots = TopRoot.findByIndexNonUniqueReal(3D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueDouble(4D);
+        topRoots = TopRoot.findByIndexNonUniqueReal(4D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueDouble(5D);
+        topRoots = TopRoot.findByIndexNonUniqueReal(5D);
         Assert.assertEquals(20, topRoots.size());
 
         topRoots = TopRoot.findByIndexNonUniqueInteger(6);

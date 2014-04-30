@@ -4,9 +4,15 @@ import org.eclipse.uml2.uml.DataType;
 import org.umlg.java.metamodel.OJPathName;
 
 public enum DataTypeEnum {
-    DateTime("org.joda.time.DateTime", "DataTypeEnum.DateTime"), Date("org.joda.time.LocalDate", "DataTypeEnum.Date"), Time("org.joda.time.LocalTime", "DataTypeEnum.Time"), InternationalPhoneNumber(
-			"java.lang.String", "DataTypeEnum.InternationalPhoneNumber"), LocalPhoneNumber("java.lang.String", "DataTypeEnum.LocalPhoneNumber"), Email("java.lang.String",
-			"DataTypeEnum.Email"), Video("byte[]", "DataTypeEnum.Video"), Audio("byte[]", "DataTypeEnum.Audio"), Image("byte[]", "DataTypeEnum.Image");
+    DateTime("org.joda.time.DateTime", "DataTypeEnum.DateTime"),
+    Date("org.joda.time.LocalDate", "DataTypeEnum.Date"),
+    Time("org.joda.time.LocalTime", "DataTypeEnum.Time"),
+    InternationalPhoneNumber("java.lang.String", "DataTypeEnum.InternationalPhoneNumber"),
+    LocalPhoneNumber("java.lang.String", "DataTypeEnum.LocalPhoneNumber"),
+    Email("java.lang.String", "DataTypeEnum.Email"),
+    Video("byte[]", "DataTypeEnum.Video"),
+    Audio("byte[]", "DataTypeEnum.Audio"),
+    Image("byte[]", "DataTypeEnum.Image");
 	private OJPathName pathName;
 	private String initExpression;
 

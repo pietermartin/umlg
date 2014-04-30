@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  * Date: 2013/01/09
  * Time: 8:09 PM
  */
-public class UmlgThunderGraph extends ThunderGraph implements UmlgGraph {
+public class UmlgThunderGraph extends ThunderGraph implements UmlgGraph, UmlgAdminGraph {
 
     private static final Logger logger = Logger.getLogger(UmlgThunderGraph.class.getPackage().getName());
     private UmlgTransactionEventHandler transactionEventHandler;
@@ -39,7 +39,9 @@ public class UmlgThunderGraph extends ThunderGraph implements UmlgGraph {
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
-    /** Generic for all graphs start */
+    /**
+     * Generic for all graphs start
+     */
     @Override
     public void incrementTransactionCount() {
         this.getRoot().setProperty("transactionCount", (Integer) this.getRoot().getProperty("transactionCount") + 1);
@@ -105,7 +107,7 @@ public class UmlgThunderGraph extends ThunderGraph implements UmlgGraph {
     }
 
     @Override
-    public <T> T instantiateClassifier(Object id) {
+    public <T extends PersistentObject> T instantiateClassifier(Object id) {
         try {
             Vertex v = this.getVertex(id);
             if (v == null) {
@@ -131,7 +133,7 @@ public class UmlgThunderGraph extends ThunderGraph implements UmlgGraph {
     @Override
     public PersistentObject getFromUniqueIndex(String indexKey, Object indexValue) {
         Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
-        if ( iterator.hasNext() ) {
+        if (iterator.hasNext()) {
             return instantiateClassifier(iterator.next());
         } else {
             return null;
@@ -161,7 +163,9 @@ public class UmlgThunderGraph extends ThunderGraph implements UmlgGraph {
         }
     }
 
-    /** Generic for all graphs end */
+    /**
+     * Generic for all graphs end
+     */
 
     @Override
     public String executeQueryToString(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
@@ -295,7 +299,8 @@ public class UmlgThunderGraph extends ThunderGraph implements UmlgGraph {
         for (Edge v : getEdges()) {
             count++;
         }
-        return count - 1 - countDeletedNodes;    }
+        return count - 1 - countDeletedNodes;
+    }
 
     @Override
     public boolean hasEdgeBeenDeleted(Edge edge) {

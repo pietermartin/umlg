@@ -26,9 +26,15 @@
                 "TumlManyNumber": TumlManyNumberValidator,
                 "TumlManyString": TumlManyStringValidator,
                 "TumlManyBoolean": TumlManyBooleanValidator,
-                "Range": RangeValidator,
-                "Max": MaxValidator,
-                "Min": MinValidator,
+                "RangeInteger": RangeIntegerValidator,
+                "MaxInteger": MaxIntegerValidator,
+                "MinInteger": MinIntegerValidator,
+                "RangeUnlimitedNatural": RangeUnlimitedNaturalValidator,
+                "MaxUnlimitedNatural": MaxUnlimitedNaturalValidator,
+                "MinUnlimitedNatural": MinUnlimitedNaturalValidator,
+                "RangeReal": RangeRealValidator,
+                "MaxReal": MaxRealValidator,
+                "MinReal": MinRealValidator,
                 "Required": RequiredValidator,
                 "Number": NumberValidator,
                 "TumlManyDateValidator": TumlManyDateValidator,
@@ -388,20 +394,54 @@
                     return result;
                 }
                 if (property.validations !== null) {
-                    if (property.validations.range !== undefined) {
-                        result = TumlSlick.Validators.Range(property, value);
-                    }
-                    if (!result.valid) {
-                        return result;
-                    }
-                    if (property.validations.max !== undefined) {
-                        result = TumlSlick.Validators.Max(property, value);
-                    }
-                    if (!result.valid) {
-                        return result;
-                    }
-                    if (property.validations.min !== undefined) {
-                        result = TumlSlick.Validators.Min(property, value);
+                    if (property.fieldType === 'Integer') {
+                        if (property.validations.range !== undefined) {
+                            result = TumlSlick.Validators.RangeInteger(property, value);
+                        }
+                        if (!result.valid) {
+                            return result;
+                        }
+                        if (property.validations.max !== undefined) {
+                            result = TumlSlick.Validators.MaxInteger(property, value);
+                        }
+                        if (!result.valid) {
+                            return result;
+                        }
+                        if (property.validations.min !== undefined) {
+                            result = TumlSlick.Validators.MinInteger(property, value);
+                        }
+                    } else if (property.fieldType === 'UnlimitedNatural') {
+                        if (property.validations.range !== undefined) {
+                            result = TumlSlick.Validators.RangeUnlimitedNatural(property, value);
+                        }
+                        if (!result.valid) {
+                            return result;
+                        }
+                        if (property.validations.max !== undefined) {
+                            result = TumlSlick.Validators.MaxUnlimitedNatural(property, value);
+                        }
+                        if (!result.valid) {
+                            return result;
+                        }
+                        if (property.validations.min !== undefined) {
+                            result = TumlSlick.Validators.MinUnlimitedNatural(property, value);
+                        }
+                    } else if (property.fieldType === 'Real') {
+                        if (property.validations.range !== undefined) {
+                            result = TumlSlick.Validators.RangeReal(property, value);
+                        }
+                        if (!result.valid) {
+                            return result;
+                        }
+                        if (property.validations.max !== undefined) {
+                            result = TumlSlick.Validators.MaxReal(property, value);
+                        }
+                        if (!result.valid) {
+                            return result;
+                        }
+                        if (property.validations.min !== undefined) {
+                            result = TumlSlick.Validators.MinReal(property, value);
+                        }
                     }
                     if (!result.valid) {
                         return result;
@@ -430,7 +470,7 @@
         if (value !== undefined && (value.length < property.validations.rangeLength.min || value.length > property.validations.rangeLength.max)) {
             return {
                 valid: false,
-                msg: "Value's length needs to be between " + property.validations.rangeLength.min + " and " + property.validations.rangeLength.max
+                msg: property.name + "'s value's length must be between " + property.validations.rangeLength.min + " and " + property.validations.rangeLength.max
             }
         } else {
             return {valid: true};
@@ -441,7 +481,7 @@
         if (value !== undefined && value.length > property.validations.maxLength) {
             return {
                 valid: false,
-                msg: "Value's length needs to be smaller than or equal to " + property.validations.maxLength
+                msg: property.name + "'s value's length must be smaller than or equal to " + property.validations.maxLength
             }
         } else {
             return {valid: true};
@@ -452,26 +492,26 @@
         if (value !== undefined && value.length < property.validations.minLength) {
             return {
                 valid: false,
-                msg: "Value's length needs to be greater than or equal to " + property.validations.minLength
+                msg: property.name + "'s value's length must be greater than or equal to " + property.validations.minLength
             }
         } else {
             return {valid: true};
         }
     }
 
-    function RangeValidator(property, value) {
+    function RangeIntegerValidator(property, value) {
         var intValue = parseInt(value, 10);
         if (intValue < property.validations.range.min || intValue > property.validations.range.max) {
             return {
                 valid: false,
-                msg: "Value need to be between " + property.validations.range.min + " and " + property.validations.range.max + " (including)"
+                msg: property.name + "'s value must be between " + property.validations.range.min + " and " + property.validations.range.max + " (including)"
             }
         } else {
             return {valid: true};
         }
     }
 
-    function MaxValidator(property, value) {
+    function MaxIntegerValidator(property, value) {
         if (isNaN(value)) {
             return {
                 valid: false,
@@ -482,7 +522,7 @@
             if (intValue > property.validations.max) {
                 return {
                     valid: false,
-                    msg: "Value needs to be smaller than or equal to " + property.validations.max
+                    msg: property.name + "'s value must be smaller than or equal to " + property.validations.max
                 }
             } else {
                 return {valid: true};
@@ -490,7 +530,7 @@
         }
     }
 
-    function MinValidator(property, value) {
+    function MinIntegerValidator(property, value) {
         if (isNaN(value)) {
             return {
                 valid: false,
@@ -501,13 +541,118 @@
             if (intValue < property.validations.min) {
                 return {
                     valid: false,
-                    msg: "Value needs to be greater than or equal to " + property.validations.min
+                    msg: property.name + "'s value must be greater than or equal to " + property.validations.min
                 }
             } else {
                 return {valid: true};
             }
         }
     }
+
+    //UnlimitedNatural may not be < 0
+    function RangeUnlimitedNaturalValidator(property, value) {
+        var intValue = parseInt(value, 10);
+        if (intValue < 0 ||intValue < property.validations.range.min || intValue > property.validations.range.max) {
+            return {
+                valid: false,
+                msg: "A UnlimitedNatural must be greater than or equal to zero. " + property.name + "'s value must be between " + property.validations.range.min + " and " + property.validations.range.max + " (including)"
+            }
+        } else {
+            return {valid: true};
+        }
+    }
+
+    //UnlimitedNatural may not be < 0
+    function MaxUnlimitedNaturalValidator(property, value) {
+        if (isNaN(value)) {
+            return {
+                valid: false,
+                msg: "Value must be a number"
+            }
+        } else {
+            var intValue = parseInt(value, 10);
+            if (intValue < 0 || intValue > property.validations.max) {
+                return {
+                    valid: false,
+                    msg: "A UnlimitedNatural must be greater or equal to 0. " + property.name + " must be greater or equal to " + property.validations.max
+                }
+            } else {
+                return {valid: true};
+            }
+        }
+    }
+
+    //UnlimitedNatural may not be < 0
+    function MinUnlimitedNaturalValidator(property, value) {
+        if (isNaN(value)) {
+            return {
+                valid: false,
+                msg: "Value must be a number"
+            }
+        } else {
+            var intValue = parseInt(value, 10);
+            if (intValue < 0 || intValue < property.validations.min) {
+                return {
+                    valid: false,
+                    msg: "A UnlimitedNatural must be greater than or equal to zero. " + property.name + "'s value must be greater than or equal to " + property.validations.min
+                }
+            } else {
+                return {valid: true};
+            }
+        }
+    }
+
+    function RangeRealValidator(property, value) {
+        var floatValue = parseFloat(value, 10);
+        if (floatValue < property.validations.range.min || floatValue > property.validations.range.max) {
+            return {
+                valid: false,
+                msg: property.name + "'s value must be between " + property.validations.range.min + " and " + property.validations.range.max + " (including)"
+            }
+        } else {
+            return {valid: true};
+        }
+    }
+
+    function MaxRealValidator(property, value) {
+        if (isNaN(value)) {
+            return {
+                valid: false,
+                msg: "Value must be anumber"
+            }
+        } else {
+            var floatValue = parseFloat(value, 10);
+            if (floatValue > property.validations.max) {
+                return {
+                    valid: false,
+                    msg: property.name + "'s value must be smaller than or equal to " + property.validations.max
+                }
+            } else {
+                return {valid: true};
+            }
+        }
+    }
+
+    function MinRealValidator(property, value) {
+        if (isNaN(value)) {
+            return {
+                valid: false,
+                msg: "Value must be a number"
+            }
+        } else {
+            var floatValue = parseFloat(value, 10);
+            if (floatValue < property.validations.min) {
+                return {
+                    valid: false,
+                    msg: property.name + "'s value must be greater than or equal to " + property.validations.min
+                }
+            } else {
+                return {valid: true};
+            }
+        }
+    }
+
+
 
     function UrlValidator(property, value) {
         return {valid: true};

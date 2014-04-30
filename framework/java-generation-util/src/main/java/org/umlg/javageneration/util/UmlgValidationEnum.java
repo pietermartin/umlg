@@ -3,27 +3,21 @@ package org.umlg.javageneration.util;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Stereotype;
-import org.umlg.javageneration.validation.Date;
-import org.umlg.javageneration.validation.DateTime;
-import org.umlg.javageneration.validation.Email;
-import org.umlg.javageneration.validation.Max;
-import org.umlg.javageneration.validation.MaxLength;
-import org.umlg.javageneration.validation.Min;
-import org.umlg.javageneration.validation.MinLength;
-import org.umlg.javageneration.validation.Range;
-import org.umlg.javageneration.validation.RangeLength;
-import org.umlg.javageneration.validation.Time;
-import org.umlg.javageneration.validation.Url;
-import org.umlg.javageneration.validation.Validation;
+import org.umlg.javageneration.validation.*;
 
 public enum UmlgValidationEnum {
     MinLength("validateMinLength", new String[]{"length"}),
     MaxLength("validateMaxLength", new String[]{"length"}),
     RangeLength("validateRangeLength", new String[]{"min", "max"}),
-    Min("validateMin", new String[]{"value"}),
-    Max("validateMax", new String[]{"value"}),
-    Range("validateRange", new String[]{"min", "max"}),
-    URL("validateUrl", new String[]{"protocol", "host", "port", "regexp", "flags"}),
+    MinInteger("validateMinInteger", new String[]{"value"}),
+    MaxInteger("validateMaxInteger", new String[]{"value"}),
+    RangeInteger("validateRangeInteger", new String[]{"min", "max"}),
+    MinUnlimitedNatural("validateMinUnlimitedNatural", new String[]{"value"}),
+    MaxUnlimitedNatural("validateMaxUnlimitedNatural", new String[]{"value"}),
+    RangeUnlimitedNatural("validateRangeUnlimitedNatural", new String[]{"min", "max"}),
+    MinReal("validateMinReal", new String[]{"value"}),
+    MaxReal("validateMaxReal", new String[]{"value"}),
+    RangeReal("validateRangeReal", new String[]{"min", "max"}),
     Email("validateEmail", new String[]{}),
     DateTime("validateDateTime", new String[]{}),
     Date("validateDate", new String[]{}),
@@ -51,16 +45,24 @@ public enum UmlgValidationEnum {
             return new MaxLength((Integer) p.getValue(stereotype, "length"));
         } else if (stereotype.getName().equals(RangeLength.name())) {
             return new RangeLength((Integer) p.getValue(stereotype, "min"), (Integer) p.getValue(stereotype, "max"));
-        } else if (stereotype.getName().equals(Max.name())) {
-            return new Max((Integer) p.getValue(stereotype, "value"));
-        } else if (stereotype.getName().equals(Min.name())) {
-            return new Min((Integer) p.getValue(stereotype, "value"));
-        } else if (stereotype.getName().equals(Range.name())) {
-            return new Range((Integer) p.getValue(stereotype, "min"), (Integer) p.getValue(stereotype, "max"));
-        } else if (stereotype.getName().equals(URL.name())) {
-            return new Url((String) p.getValue(stereotype, "protocol"), (String) p.getValue(stereotype, "host"), (Integer) p.getValue(stereotype, "port"),
-                    (String) p.getValue(stereotype, "regexp"), (String) p.getValue(stereotype, "flags"));
-
+        } else if (stereotype.getName().equals(MaxInteger.name())) {
+            return new MaxInteger((Number) p.getValue(stereotype, "value"));
+        } else if (stereotype.getName().equals(MinInteger.name())) {
+            return new MinInteger((Integer) p.getValue(stereotype, "value"));
+        } else if (stereotype.getName().equals(RangeInteger.name())) {
+            return new RangeInteger((Integer) p.getValue(stereotype, "min"), (Integer) p.getValue(stereotype, "max"));
+        } else if (stereotype.getName().equals(MaxUnlimitedNatural.name())) {
+            return new MaxUnlimitedNatural((Integer) p.getValue(stereotype, "value"));
+        } else if (stereotype.getName().equals(MinUnlimitedNatural.name())) {
+            return new MinUnlimitedNatural((Integer) p.getValue(stereotype, "value"));
+        } else if (stereotype.getName().equals(RangeUnlimitedNatural.name())) {
+            return new RangeUnlimitedNatural((Integer)p.getValue(stereotype, "min"), (Integer)p.getValue(stereotype, "max"));
+        } else if (stereotype.getName().equals(MaxReal.name())) {
+            return new MaxReal((Double) p.getValue(stereotype, "value"));
+        } else if (stereotype.getName().equals(MinReal.name())) {
+            return new MinReal((Double) p.getValue(stereotype, "value"));
+        } else if (stereotype.getName().equals(RangeReal.name())) {
+            return new RangeReal((Double) p.getValue(stereotype, "min"), (Double) p.getValue(stereotype, "max"));
         } else {
             throw new IllegalStateException("Unknown validation stereotype " + stereotype.getName());
         }

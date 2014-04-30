@@ -370,7 +370,7 @@
 					// Added by Peter Medeiros:
 					// - Figure out what the hour/minute/second max should be based on the step values.
 					// - Example: if stepMinute is 15, then minMax is 45.
-					max[litem] = parseInt((o[litem + 'Max'] - ((o[litem + 'Max'] - o[litem + 'Min']) % o['step' + uitem])), 10);
+					max[litem] = parseInt((o[litem + 'MaxInteger'] - ((o[litem + 'MaxInteger'] - o[litem + 'MinInteger']) % o['step' + uitem])), 10);
 					gridSize[litem] = 0;
 
 					html += '<dt class="ui_tpicker_' + litem + '_label"' + (show ? '' : noDisplay) + '>' + o[litem + 'Text'] + '</dt>' +
@@ -380,14 +380,14 @@
 						html += '<div style="padding-left: 1px"><table class="ui-tpicker-grid-label"><tr>';
 
 						if (litem === 'hour') {
-							for (var h = o[litem + 'Min']; h <= max[litem]; h += parseInt(o[litem + 'Grid'], 10)) {
+							for (var h = o[litem + 'MinInteger']; h <= max[litem]; h += parseInt(o[litem + 'Grid'], 10)) {
 								gridSize[litem]++;
 								var tmph = $.datepicker.formatTime(this.support.ampm ? 'hht' : 'HH', {hour: h}, o);
 								html += '<td data-for="' + litem + '">' + tmph + '</td>';
 							}
 						}
 						else {
-							for (var m = o[litem + 'Min']; m <= max[litem]; m += parseInt(o[litem + 'Grid'], 10)) {
+							for (var m = o[litem + 'MinInteger']; m <= max[litem]; m += parseInt(o[litem + 'Grid'], 10)) {
 								gridSize[litem]++;
 								html += '<td data-for="' + litem + '">' + ((m < 10) ? '0' : '') + m + '</td>';
 							}
@@ -420,11 +420,11 @@
 					show = o['show' + uitem] !== null ? o['show' + uitem] : this.support[litem];
 
 					// add the slider
-					tp_inst[litem + '_slider'] = tp_inst.control.create(tp_inst, $tp.find('.ui_tpicker_' + litem + '_slider'), litem, tp_inst[litem], o[litem + 'Min'], max[litem], o['step' + uitem]);
+					tp_inst[litem + '_slider'] = tp_inst.control.create(tp_inst, $tp.find('.ui_tpicker_' + litem + '_slider'), litem, tp_inst[litem], o[litem + 'MinInteger'], max[litem], o['step' + uitem]);
 
 					// adjust the grid and add click event
 					if (show && o[litem + 'Grid'] > 0) {
-						size = 100 * gridSize[litem] * o[litem + 'Grid'] / (max[litem] - o[litem + 'Min']);
+						size = 100 * gridSize[litem] * o[litem + 'Grid'] / (max[litem] - o[litem + 'MinInteger']);
 						$tp.find('.ui_tpicker_' + litem + ' table').css({
 							width: size + "%",
 							marginLeft: o.isRTL ? '0' : ((size / (-2 * gridSize[litem])) + "%"),

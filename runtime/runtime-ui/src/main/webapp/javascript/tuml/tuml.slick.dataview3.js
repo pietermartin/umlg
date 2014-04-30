@@ -6,8 +6,8 @@
                     DataView: DataView,
                     Aggregators: {
                         Avg: AvgAggregator,
-                        Min: MinAggregator,
-                        Max: MaxAggregator,
+                        MinInteger: MinAggregator,
+                        MaxInteger: MaxAggregator,
                         Sum: SumAggregator
                     }
                 }

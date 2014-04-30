@@ -65,7 +65,6 @@ public class AddFieldTypeFieldToRootRuntimeLiteral extends BaseVisitor implement
 		}
 		
 		addFieldTypePropertyToLiteral(ojEnum.findLiteral("id"));
-//		addFieldTypePropertyToLiteral(ojEnum.findLiteral("uri"));
 		addFieldTypePropertyToLiteral(ojEnum.findLiteral(model.getName()));
 		
 	}

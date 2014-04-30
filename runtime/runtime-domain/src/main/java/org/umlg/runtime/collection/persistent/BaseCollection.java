@@ -12,6 +12,7 @@ import org.joda.time.LocalTime;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
 import org.umlg.runtime.adaptor.TransactionThreadVar;
+import org.umlg.runtime.adaptor.UmlgAdminGraph;
 import org.umlg.runtime.collection.*;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
@@ -122,8 +123,8 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
      * This gets invoked from the opposite side in addInternal.
      * It is called before the edge is created so the new element will not be loaded by loadFromVertex
      *
-     * @param e
-     * @return
+     * @param e the element to add
+     * @return true if the element was succesfully added
      */
     @Override
     public boolean inverseAdder(E e) {
@@ -701,7 +702,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 Vertex auditVertex = UMLG.get().addVertex(null);
                 auditVertex.setProperty(getQualifiedName(), e);
                 TransactionThreadVar.putAuditVertexFalse(owner.getClass().getName() + e.getClass().getName() + e.toString(), auditVertex);
-                auditVertex.setProperty("transactionNo", UMLG.get().getTransactionCount());
+                auditVertex.setProperty("transactionNo", ((UmlgAdminGraph)UMLG.get()).getTransactionCount());
                 Edge auditEdge;
                 if (isControllingSide()) {
                     auditEdge = UMLG.get().addEdge(null, auditOwner.getAuditVertex(), auditVertex, this.getLabel());
@@ -713,7 +714,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     auditEdge.setProperty("outClass", e.getClass().getName() + "Audit");
                 }
                 if (deletion) {
-                    auditEdge.setProperty("transactionNo", UMLG.get().getTransactionCount());
+                    auditEdge.setProperty("transactionNo", ((UmlgAdminGraph)UMLG.get()).getTransactionCount());
                     auditEdge.setProperty("deletedOn", UmlgFormatter.format(new DateTime()));
                 }
             }

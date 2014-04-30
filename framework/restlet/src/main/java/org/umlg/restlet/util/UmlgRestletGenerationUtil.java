@@ -79,7 +79,7 @@ public class UmlgRestletGenerationUtil {
             } else if (primitiveType.getName().equals("Boolean")) {
                 return "FieldType.Boolean";
             } else if (primitiveType.getName().equals("UnlimitedNatural")) {
-                return "FieldType.Long";
+                return "FieldType.UnlimitedNatural";
             } else if (primitiveType.getName().equals("Real")) {
                 return "FieldType.Real";
             } else {

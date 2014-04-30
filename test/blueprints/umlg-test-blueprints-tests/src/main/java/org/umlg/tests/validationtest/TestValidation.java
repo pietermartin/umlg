@@ -13,7 +13,9 @@ import org.umlg.componenttest.ValidationTest;
 import org.umlg.concretetest.God;
 import org.umlg.concretetest.Universe;
 import org.umlg.runtime.test.BaseLocalDbTest;
+import org.umlg.runtime.validation.UmlgConstraintViolation;
 import org.umlg.runtime.validation.UmlgConstraintViolationException;
+import org.umlg.validation.TestManyValidation;
 
 public class TestValidation extends BaseLocalDbTest {
 
@@ -377,6 +379,287 @@ public class TestValidation extends BaseLocalDbTest {
             db.rollback();
         }
         Assert.assertEquals(6, countVertices());
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testMinIntegerFail() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setAMinInteger(4);
+    }
+
+    @Test
+    public void testMinIntegerPass() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setAMinInteger(6);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testMaxIntegerFail() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setAMaxInteger(6);
+    }
+
+    @Test
+    public void testMaxIntegerPass() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setAMaxInteger(4);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testRangeIntegerFail() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setARangeInteger(6);
+    }
+
+    @Test
+    public void testRangeIntegerPass() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setARangeInteger(4);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testMinUnlimitedNaturalFail() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setAMinUnlimitedNatural(2147483645);
+    }
+
+    @Test
+    public void testMinUnlimitedNaturalPass() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setAMinUnlimitedNatural(2147483647);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testMaxUnlimitedNaturalFail() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setAMaxUnlimitedNatural(2);
+    }
+
+    @Test
+    public void testMaxUnlimitedNaturalPass() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setAMaxUnlimitedNatural(0);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testRangeUnlimitedNaturalFail() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setARangeUnlimitedNatural(-2147483646);
+    }
+
+    @Test
+    public void testRangeUnlimitedNaturalPass() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setARangeUnlimitedNatural(1);
+        testValidation.setARangeUnlimitedNatural(2147483645);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testMinRealFail() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setAMinReal(5.122D);
+    }
+
+    @Test
+    public void testMinRealPass() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setAMinReal(5.124D);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testMaxRealFail() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setAMaxReal(5.124D);
+    }
+
+    @Test
+    public void testMaxRealPass() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setAMaxReal(5.123D);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testRangeRealFail() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setARangeReal(-1D);
+    }
+
+    @Test
+    public void testRangeRealPass() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setARangeReal(0.001D);
+        testValidation.setARangeReal(5.123D);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testUnlimitedNaturalIsBiggerOrEqualToZero() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setAMaxUnlimitedNatural(-1);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testUnlimitedNaturalIsBiggerOrEqualToZeroAgain() {
+        org.umlg.validation.TestValidation testValidation = new org.umlg.validation.TestValidation();
+        testValidation.setTestUnlimitedNatural(-1);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testManyMaxRealFail() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToAMaxRealMany(1D);
+        testManyValidation.addToAMaxRealMany(2D);
+        testManyValidation.addToAMaxRealMany(3D);
+        testManyValidation.addToAMaxRealMany(4D);
+        testManyValidation.addToAMaxRealMany(5D);
+        testManyValidation.addToAMaxRealMany(6D);
+        db.commit();
+    }
+
+    @Test
+    public void testManyMaxRealPass() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToAMaxRealMany(1D);
+        testManyValidation.addToAMaxRealMany(2D);
+        testManyValidation.addToAMaxRealMany(3D);
+        testManyValidation.addToAMaxRealMany(4D);
+        testManyValidation.addToAMaxRealMany(5D);
+        db.commit();
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testManyMinRealFail() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToAMinRealMany(1D);
+        db.commit();
+    }
+
+    @Test
+    public void testManyMinRealPass() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToAMinRealMany(6D);
+        testManyValidation.addToAMinRealMany(7D);
+        db.commit();
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testManyRangeRealFail() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToARangeRealMany(-5.124D);
+        db.commit();
+    }
+
+    @Test
+    public void testManyRangeRealPass() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToARangeRealMany(-5.123D);
+        testManyValidation.addToARangeRealMany(5.11D);
+        db.commit();
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testManyMaxUnlimitedNaturalFail() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToAMaxUnlimitedNaturalMany(1);
+        testManyValidation.addToAMaxUnlimitedNaturalMany(2);
+        testManyValidation.addToAMaxUnlimitedNaturalMany(3);
+        testManyValidation.addToAMaxUnlimitedNaturalMany(4);
+        testManyValidation.addToAMaxUnlimitedNaturalMany(5);
+        testManyValidation.addToAMaxUnlimitedNaturalMany(6);
+        db.commit();
+    }
+
+    @Test
+    public void testManyMaxUnlimitedNaturalPass() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToAMaxUnlimitedNaturalMany(1);
+        testManyValidation.addToAMaxUnlimitedNaturalMany(2);
+        testManyValidation.addToAMaxUnlimitedNaturalMany(3);
+        testManyValidation.addToAMaxUnlimitedNaturalMany(4);
+        testManyValidation.addToAMaxUnlimitedNaturalMany(5);
+        db.commit();
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testManyMinUnlimitedNaturalFail() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToAMinUnlimitedNaturalMany(1);
+        db.commit();
+    }
+
+    @Test
+    public void testManyMinUnlimitedNaturalPass() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToAMinUnlimitedNaturalMany(6);
+        testManyValidation.addToAMinUnlimitedNaturalMany(7);
+        db.commit();
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testManyRangeUnlimitedNaturalFail() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToARangeUnlimitedNaturalMany(0);
+        db.commit();
+    }
+
+    @Test
+    public void testManyRangeUnlimitedNaturalPass() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToARangeUnlimitedNaturalMany(1);
+        testManyValidation.addToARangeUnlimitedNaturalMany(4);
+        db.commit();
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testManyMaxIntegerFail() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToAMaxIntegerMany(1);
+        testManyValidation.addToAMaxIntegerMany(2);
+        testManyValidation.addToAMaxIntegerMany(3);
+        testManyValidation.addToAMaxIntegerMany(4);
+        testManyValidation.addToAMaxIntegerMany(5);
+        testManyValidation.addToAMaxIntegerMany(6);
+        db.commit();
+    }
+
+    @Test
+    public void testManyMaxIntegerPass() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToAMaxIntegerMany(1);
+        testManyValidation.addToAMaxIntegerMany(2);
+        testManyValidation.addToAMaxIntegerMany(3);
+        testManyValidation.addToAMaxIntegerMany(4);
+        testManyValidation.addToAMaxIntegerMany(5);
+        db.commit();
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testManyMinIntegerFail() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToAMinIntegerMany(1);
+        db.commit();
+    }
+
+    @Test
+    public void testManyMinIntegerPass() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToAMinIntegerMany(6);
+        testManyValidation.addToAMinIntegerMany(7);
+        db.commit();
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testManyRangeIntegerFail() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToARangeIntegerMany(-6);
+        db.commit();
+    }
+
+    @Test
+    public void testManyRangeIntegerPass() {
+        TestManyValidation testManyValidation = new TestManyValidation();
+        testManyValidation.addToARangeIntegerMany(1);
+        testManyValidation.addToARangeIntegerMany(4);
+        db.commit();
     }
 
 //    @Test

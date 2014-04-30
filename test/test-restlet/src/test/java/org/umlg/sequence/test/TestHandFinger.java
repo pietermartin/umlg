@@ -40,11 +40,11 @@ public class TestHandFinger extends BaseLocalDbTest {
         Hand hand1 = new Hand(h1);
         hand1.setName("hand1");
         hand1.setTestNumber(6);
-        hand1.setTestUnlimitedNatural(1L);
+        hand1.setTestUnlimitedNatural(1);
         Hand hand2 = new Hand(h1);
         hand2.setName("hand2");
         hand2.setTestNumber(6);
-        hand2.setTestUnlimitedNatural(1L);
+        hand2.setTestUnlimitedNatural(1);
 
         Finger finger1 = new Finger(hand1);
         finger1.setName("finger1");

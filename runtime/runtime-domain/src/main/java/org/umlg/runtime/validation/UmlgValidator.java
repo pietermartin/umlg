@@ -31,43 +31,77 @@ public class UmlgValidator {
 		return length >= min && length <= max;
 	}
 
-	public static boolean validateMin(Number value, long minValue) {
+	public static boolean validateMinInteger(Integer value, int minValue) {
 		if (value == null) {
 			return true;
-		} else if (value instanceof BigDecimal) {
-			return ((BigDecimal) value).compareTo(BigDecimal.valueOf(minValue)) != -1;
-		} else if (value instanceof BigInteger) {
-			return ((BigInteger) value).compareTo(BigInteger.valueOf(minValue)) != -1;
-		} else {
-			return value.longValue() >= minValue;
 		}
+    	return value.compareTo(minValue) != -1;
 	}
 
-	public static boolean validateMax(Number value, long max) {
+	public static boolean validateMaxInteger(Integer value, int max) {
         if (value == null) {
             return true;
-        } else if (value instanceof BigDecimal) {
-            return ((BigDecimal) value).compareTo(BigDecimal.valueOf(max)) != 1;
-        } else if (value instanceof BigInteger) {
-            return ((BigInteger) value).compareTo(BigInteger.valueOf(max)) != 1;
-        } else {
-            return value.longValue() <= max;
         }
+        return value.compareTo(max) != 1;
 	}
 
-	public static boolean validateRange(Number value, long min, long max) {
+	public static boolean validateRangeInteger(Integer value, int min, int max) {
         if (value == null) {
             return true;
-        } else if (value instanceof BigDecimal) {
-            return (((BigDecimal) value).compareTo(BigDecimal.valueOf(max)) != 1) && (((BigDecimal) value).compareTo(BigDecimal.valueOf(max)) != -1);
-        } else if (value instanceof BigInteger) {
-            return (((BigInteger) value).compareTo(BigInteger.valueOf(max)) != 1) && (((BigInteger) value).compareTo(BigInteger.valueOf(max)) != -1);
-        } else {
-            return value.longValue() <= max && value.longValue() >= min;
         }
+        return value <= max && value >= min;
 	}
-	
-	public static boolean validateUrl(String url, String protocol, String host, int port, String regexp, String flags) {
+
+    public static boolean validateMinUnlimitedNatural(Integer value, int minValue) {
+        if (value == null) {
+            return true;
+        }
+        return value.compareTo(minValue) != -1;
+    }
+
+    public static boolean validateMaxUnlimitedNatural(Integer value, int max) {
+        if (value == null) {
+            return true;
+        }
+        return value.compareTo(max) != 1;
+    }
+
+    public static boolean validateRangeUnlimitedNatural(Integer value, int min, int max) {
+        if (value == null) {
+            return true;
+        }
+        return value <= max && value >= min;
+    }
+
+    public static boolean validateValidUnlimitedNatural(Integer value) {
+        if (value == null) {
+            return true;
+        }
+        return value >= 0;
+    }
+
+    public static boolean validateMinReal(Double value, double minValue) {
+        if (value == null) {
+            return true;
+        }
+        return value.compareTo(minValue) != -1;
+    }
+
+    public static boolean validateMaxReal(Double value, double max) {
+        if (value == null) {
+            return true;
+        }
+        return value.compareTo(max) != 1;
+    }
+
+    public static boolean validateRangeReal(Double value, double min, double max) {
+        if (value == null) {
+            return true;
+        }
+        return value <= max && value >= min;
+    }
+
+    public static boolean validateUrl(String url, String protocol, String host, int port, String regexp, String flags) {
 		throw new RuntimeException("Not yet implemented!");
 	}
 	

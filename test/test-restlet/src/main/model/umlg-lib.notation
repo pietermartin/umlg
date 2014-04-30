@@ -425,7 +425,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_lmnpsshxEeOiQ-tGJXxh5A"/>
       </children>
       <element xmi:type="uml:Enumeration" href="umlg-lib.uml#_NOrSECQPEeKOmc56p_1Osg"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_NOx_wSQPEeKOmc56p_1Osg" x="780" y="72"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_NOx_wSQPEeKOmc56p_1Osg" x="795" y="75"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_gQ4-wCQPEeKzTel_Vwmhog" type="2008" fontName="Sans" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_gQ6M4CQPEeKzTel_Vwmhog" source="ShadowFigure">

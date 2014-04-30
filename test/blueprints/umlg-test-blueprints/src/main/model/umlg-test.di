@@ -103,6 +103,9 @@
     <availablePage>
       <emfPageIdentifier href="umlg-test.notation#_IJhwELj7EeORtvbQ18esMQ"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="umlg-test.notation#_h2jfMM8FEeOjlpjTZXDyqw"/>
+    </availablePage>
   </pageList>
   <sashModel xmi:id="_1dMZogAOEeKpVr_ntT6cLA" currentSelection="_1dMZoAAOEeKpVr_ntT6cLA">
     <windows xmi:id="_1dMZoQAOEeKpVr_ntT6cLA">
@@ -136,6 +139,12 @@
         </children>
         <children>
           <emfPageIdentifier href="umlg-test.notation#_KDar8KIoEeOn3tP_LveSqg"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#_h2jfMM8FEeOjlpjTZXDyqw"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#_1chrQAAOEeKpVr_ntT6cLA"/>
         </children>
       </children>
     </windows>

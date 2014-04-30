@@ -124,7 +124,7 @@
             var userCountP = $('#userCountId');
             umlgWebsocket.onmessage = function (event) {
                 console.log(event.data);
-                userCountP.text(tumlModelName + ' users = ' + event.data);
+                userCountP.text(tumlModelName + ' #users = ' + event.data);
             }
             umlgWebsocket.onclose = function (event) {
                 console.log(event.data);

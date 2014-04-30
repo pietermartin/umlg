@@ -1,9 +1,9 @@
 package org.umlg.runtime.validation;
 
-public class Max implements UmlgValidation {
+public class MaxInteger implements UmlgValidation {
 private int max;
 
-public Max(int max) {
+public MaxInteger(int max) {
 	super();
 	this.max = max;
 }

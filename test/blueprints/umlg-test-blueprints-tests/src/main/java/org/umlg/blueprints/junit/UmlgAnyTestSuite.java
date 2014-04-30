@@ -8,6 +8,7 @@ import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.collectiontest.*;
 import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.root.TestRootMethods;
+import org.umlg.tests.validationtest.TestValidation;
 
 /**
  * Date: 2013/10/19
@@ -35,7 +36,8 @@ import org.umlg.tests.root.TestRootMethods;
 //        ManyToManyToSelfSequenceTest.class
 //        TestIndexing.class,
 //        TestGroovyExecutor.class,
-        TestRootMethods.class
+//        TestRootMethods.class,
+        TestValidation.class
 
 
         })

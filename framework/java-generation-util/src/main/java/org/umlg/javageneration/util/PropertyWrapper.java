@@ -603,7 +603,8 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public OJPathName javaTumlMemoryTypePath() {
         OJPathName memoryCollectionPathName = UmlgCollectionKindEnum.from(this).getMemoryCollection();
-        memoryCollectionPathName.addToGenerics(UmlgClassOperations.getPathName(this.getType()));
+//        memoryCollectionPathName.addToGenerics(UmlgClassOperations.getPathName(this.getType()));
+        memoryCollectionPathName.addToGenerics(javaBaseTypePath());
         return memoryCollectionPathName;
     }
 
@@ -1331,6 +1332,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return this.property.isNavigable();
     }
 
+    public boolean isString() {
+        return getType() instanceof PrimitiveType && (getType().getName().equals("String"));
+    }
+
     public boolean isNumber() {
         return getType() instanceof PrimitiveType && (getType().getName().equals("Integer") || getType().getName().equals("UnlimitedNatural") || getType().getName().equals("Real"));
     }
@@ -1340,10 +1345,14 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public boolean isInteger() {
-        return getType() instanceof PrimitiveType && (getType().getName().equals("Integer"));
+        return getType() instanceof PrimitiveType && (getType().getName().equals("Integer") || getType().getName().equals("UnlimitedNatural"));
     }
 
     public boolean isLong() {
+        return getType() instanceof PrimitiveType && (getType().getName().equals("long"));
+    }
+
+    public boolean isUnlimitedNatural() {
         return getType() instanceof PrimitiveType && (getType().getName().equals("UnlimitedNatural"));
     }
 
@@ -1429,7 +1438,15 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public boolean hasMaxLength() {
         Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MaxLength.name());
-        return property.isStereotypeApplied(stereotype);
+        if (property.isStereotypeApplied(stereotype)) {
+            //Validate that max length is only applied to a String
+            if (!isString()) {
+                throw new IllegalStateException("The MaxLength stereotype may only be applied to properties of type String! property = " + getQualifiedName());
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean hasValidation(UmlgValidationEnum umlgValidationEnum) {
@@ -1440,14 +1457,24 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
                 return hasMinLength();
             case RangeLength:
                 return hasRangeLength();
-            case Min:
-                return hasMin();
-            case Max:
-                return hasMax();
-            case Range:
-                return hasRange();
-            case URL:
-                return hasUrl();
+            case MinInteger:
+                return hasMinInteger();
+            case MaxInteger:
+                return hasMaxInteger();
+            case RangeInteger:
+                return hasRangeInteger();
+            case MinUnlimitedNatural:
+                return hasMinUnlimitedNatural();
+            case MaxUnlimitedNatural:
+                return hasMaxUnlimitedNatural();
+            case RangeUnlimitedNatural:
+                return hasRangeUnlimitedNatural();
+            case MinReal:
+                return hasMinReal();
+            case MaxReal:
+                return hasMaxReal();
+            case RangeReal:
+                return hasRangeReal();
             case Email:
                 return isEmail();
             default:
@@ -1458,7 +1485,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public List<Validation> getValidations() {
-        List<Validation> result = new ArrayList<Validation>();
+        List<Validation> result = new ArrayList<>();
         List<Stereotype> stereoTypes = ModelLoader.INSTANCE.getValidationStereotypes();
         for (Stereotype stereotype : stereoTypes) {
             if (property.isStereotypeApplied(stereotype)) {
@@ -1482,14 +1509,24 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
                 return getMinLength();
             case RangeLength:
                 return getRangeLength();
-            case Min:
-                return getMin();
-            case Max:
-                return getMax();
-            case Range:
-                return getRange();
-            case URL:
-                return getUrl();
+            case MinInteger:
+                return getMinInteger();
+            case MaxInteger:
+                return getMaxInteger();
+            case RangeInteger:
+                return getRangeInteger();
+            case MinUnlimitedNatural:
+                return getMinUnlimitedNatural();
+            case MaxUnlimitedNatural:
+                return getMaxUnlimitedNatural();
+            case RangeUnlimitedNatural:
+                return getRangeUnlimitedNatural();
+            case MinReal:
+                return getMinReal();
+            case MaxReal:
+                return getMaxReal();
+            case RangeReal:
+                return getRangeReal();
             case Email:
                 return getEmail();
             default:
@@ -1518,25 +1555,49 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return new RangeLength((Integer) property.getValue(stereotype, "min"), (Integer) property.getValue(stereotype, "max"));
     }
 
-    public Max getMax() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.Max.name());
-        return new Max((Integer) property.getValue(stereotype, "value"));
+    public MaxInteger getMaxInteger() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MaxInteger.name());
+        return new MaxInteger((Integer) property.getValue(stereotype, "value"));
     }
 
-    public Min getMin() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.Min.name());
-        return new Min((Integer) property.getValue(stereotype, "value"));
+    public MinInteger getMinInteger() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MinInteger.name());
+        return new MinInteger((Integer) property.getValue(stereotype, "value"));
     }
 
-    public Range getRange() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.Range.name());
-        return new Range((Integer) property.getValue(stereotype, "min"), (Integer) property.getValue(stereotype, "max"));
+    public RangeInteger getRangeInteger() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.RangeInteger.name());
+        return new RangeInteger((Integer) property.getValue(stereotype, "min"), (Integer) property.getValue(stereotype, "max"));
     }
 
-    public Url getUrl() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.URL.name());
-        return new Url((String) property.getValue(stereotype, "protocol"), (String) property.getValue(stereotype, "host"), (Integer) property.getValue(stereotype, "port"),
-                (String) property.getValue(stereotype, "regexp"), (String) property.getValue(stereotype, "flags"));
+    public MaxUnlimitedNatural getMaxUnlimitedNatural() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MaxUnlimitedNatural.name());
+        return new MaxUnlimitedNatural((Integer) property.getValue(stereotype, "value"));
+    }
+
+    public MinUnlimitedNatural getMinUnlimitedNatural() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MinUnlimitedNatural.name());
+        return new MinUnlimitedNatural((Integer) property.getValue(stereotype, "value"));
+    }
+
+    public RangeUnlimitedNatural getRangeUnlimitedNatural() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.RangeUnlimitedNatural.name());
+        return new RangeUnlimitedNatural((Integer)property.getValue(stereotype, "min"), (Integer)property.getValue(stereotype, "max"));
+    }
+
+    public MaxReal getMaxReal() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MaxReal.name());
+        return new MaxReal((Double) property.getValue(stereotype, "value"));
+    }
+
+    public MinReal getMinReal() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MinReal.name());
+        return new MinReal((Double) property.getValue(stereotype, "value"));
+    }
+
+    public RangeReal getRangeReal() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.RangeReal.name());
+        return new RangeReal((Double) property.getValue(stereotype, "min"), (Double) property.getValue(stereotype, "max"));
     }
 
     public Email getEmail() {
@@ -1545,32 +1606,134 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public boolean hasMinLength() {
         Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MinLength.name());
-        return property.isStereotypeApplied(stereotype);
+        if (property.isStereotypeApplied(stereotype)) {
+            if (!isString()) {
+                throw new IllegalStateException("The MinLength stereotype may only be applied to properties of type String! property = " + getQualifiedName());
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean hasRangeLength() {
         Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.RangeLength.name());
-        return property.isStereotypeApplied(stereotype);
+        if (property.isStereotypeApplied(stereotype)) {
+            if (!isString()) {
+                throw new IllegalStateException("The RangeLength stereotype may only be applied to properties of type String! property = " + getQualifiedName());
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public boolean hasMin() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.Min.name());
-        return property.isStereotypeApplied(stereotype);
+    public boolean hasMinInteger() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MinInteger.name());
+        if (property.isStereotypeApplied(stereotype)) {
+            if (!isInteger()) {
+                throw new IllegalStateException("The MinInteger stereotype may only be applied to properties of type Integer! property = " + getQualifiedName());
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public boolean hasMax() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.Max.name());
-        return property.isStereotypeApplied(stereotype);
+    public boolean hasMaxInteger() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MaxInteger.name());
+        if (property.isStereotypeApplied(stereotype)) {
+            if (!isInteger()) {
+                throw new IllegalStateException("The MaxInteger stereotype may only be applied to properties of type Integer! property = " + getQualifiedName());
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public boolean hasRange() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.Range.name());
-        return property.isStereotypeApplied(stereotype);
+    public boolean hasRangeInteger() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.RangeInteger.name());
+        if (property.isStereotypeApplied(stereotype)) {
+            if (!isInteger()) {
+                throw new IllegalStateException("The RangeInteger stereotype may only be applied to properties of type Integer! property = " + getQualifiedName());
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public boolean hasUrl() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.URL.name());
-        return property.isStereotypeApplied(stereotype);
+    public boolean hasMinUnlimitedNatural() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MinUnlimitedNatural.name());
+        if (property.isStereotypeApplied(stereotype)) {
+            if (!isInteger()) {
+                throw new IllegalStateException("The MinUnlimitedNatural stereotype may only be applied to properties of type UnlimitedNatural! property = " + getQualifiedName());
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean hasMaxUnlimitedNatural() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MaxUnlimitedNatural.name());
+        if (property.isStereotypeApplied(stereotype)) {
+            if (!isInteger()) {
+                throw new IllegalStateException("The MaxUnlimitedNatural stereotype may only be applied to properties of type UnlimitedNatural! property = " + getQualifiedName());
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean hasRangeUnlimitedNatural() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.RangeUnlimitedNatural.name());
+        if (property.isStereotypeApplied(stereotype)) {
+            if (!isInteger()) {
+                throw new IllegalStateException("The RangeUnlimitedNatural stereotype may only be applied to properties of type UnlimitedNatural! property = " + getQualifiedName());
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean hasMinReal() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MinReal.name());
+        if (property.isStereotypeApplied(stereotype)) {
+            if (!isDouble()) {
+                throw new IllegalStateException("The MinReal stereotype may only be applied to properties of type Real! property = " + getQualifiedName());
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean hasMaxReal() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MaxReal.name());
+        if (property.isStereotypeApplied(stereotype)) {
+            if (!isDouble()) {
+                throw new IllegalStateException("The MaxInteger stereotype may only be applied to properties of type Real! property = " + getQualifiedName());
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean hasRangeReal() {
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.RangeReal.name());
+        if (property.isStereotypeApplied(stereotype)) {
+            if (!isDouble()) {
+                throw new IllegalStateException("The RangeInteger stereotype may only be applied to properties of type Real! property = " + getQualifiedName());
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

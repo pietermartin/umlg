@@ -72,7 +72,7 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
         </packagedElement>
         <packagedElement xmi:type="uml:Enumeration" xmi:id="_NOrSECQPEeKOmc56p_1Osg" name="QueryEnum">
           <ownedLiteral xmi:id="_OirQkCQPEeKOmc56p_1Osg" name="OCL"/>
-          <ownedLiteral xmi:id="_8_zeIIAZEeOYhpiy1kqM8Q" name="GREMLIN"/>
+          <ownedLiteral xmi:id="_8_zeIIAZEeOYhpiy1kqM8Q" name="GROOVY"/>
           <ownedLiteral xmi:id="_-W2JkIAZEeOYhpiy1kqM8Q" name="NATIVE"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_FAMz0CXHEeKbPYSfIbmXag" name="BaseUmlgWithQuery" isAbstract="true">

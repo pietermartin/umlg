@@ -1,6 +1,6 @@
 package org.umlg.runtime.collection.memory;
 
-import org.apache.commons.collections.set.ListOrderedSet;
+import org.apache.commons.collections4.set.ListOrderedSet;
 import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
@@ -20,16 +20,16 @@ public class UmlgMemoryOrderedSet<E> extends UmlgMemoryCollection<E> implements 
 	@SuppressWarnings("unchecked")
 	public UmlgMemoryOrderedSet() {
 		super();
-		this.internalCollection = new ListOrderedSet();
-		this.oclStdLibOrderedSet = new OclStdLibOrderedSetImpl<E>((ListOrderedSet) this.internalCollection);
+		this.internalCollection = new ListOrderedSet<>();
+		this.oclStdLibOrderedSet = new OclStdLibOrderedSetImpl<>((ListOrderedSet) this.internalCollection);
 		this.oclStdLibCollection = this.oclStdLibOrderedSet;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public UmlgMemoryOrderedSet(Collection<E> c) {
 		super();
-		this.internalCollection = ListOrderedSet.decorate(new ArrayList<E>(c));
-		this.oclStdLibOrderedSet = new OclStdLibOrderedSetImpl<E>((ListOrderedSet) this.internalCollection);
+		this.internalCollection = ListOrderedSet.listOrderedSet(new ArrayList<>(c));
+		this.oclStdLibOrderedSet = new OclStdLibOrderedSetImpl<>((ListOrderedSet) this.internalCollection);
 		this.oclStdLibCollection = this.oclStdLibOrderedSet;
 	}
 	

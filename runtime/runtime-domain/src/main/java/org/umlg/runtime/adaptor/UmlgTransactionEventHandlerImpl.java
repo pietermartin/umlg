@@ -1,6 +1,5 @@
 package org.umlg.runtime.adaptor;
 
-import org.joda.time.DateTime;
 import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.validation.UmlgConstraintViolation;
 import org.umlg.runtime.validation.UmlgConstraintViolationException;
@@ -26,7 +25,7 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
         try {
             if (UMLG.get() != null) {
                 TransactionThreadVar.clear();
-                UMLG.incrementTransactionCount();
+                ((UmlgAdminGraph) UMLG.get()).incrementTransactionCount();
                 List<UmlgNode> entities = TransactionThreadEntityVar.get();
                 for (UmlgNode umlgNode : entities) {
                     List<UmlgConstraintViolation> requiredConstraintViolations = umlgNode.validateMultiplicities();

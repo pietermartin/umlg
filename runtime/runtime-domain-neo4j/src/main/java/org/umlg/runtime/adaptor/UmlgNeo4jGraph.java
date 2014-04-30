@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  * Date: 2013/01/09
  * Time: 8:09 PM
  */
-public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
+public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph, UmlgAdminGraph {
 
     private UmlgTransactionEventHandler transactionEventHandler;
     private static final Logger logger = Logger.getLogger(UmlgNeo4jGraph.class.getPackage().getName());
@@ -105,7 +105,7 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
     }
 
     @Override
-    public <T> T instantiateClassifier(Object id) {
+    public <T extends PersistentObject> T instantiateClassifier(Object id) {
         try {
             Vertex v = this.getVertex(id);
             if (v == null) {

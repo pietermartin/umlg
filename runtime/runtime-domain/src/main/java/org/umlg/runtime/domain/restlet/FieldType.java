@@ -8,12 +8,10 @@ public enum FieldType {
     Object,
     Date,
 	DateTime,
-	ShortString,
-	LongString,
 	String,
 	Integer,
+    UnlimitedNatural,
 	Long,
-	Float,
 	Real,
 	Boolean,
     ByteArray;

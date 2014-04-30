@@ -74,7 +74,7 @@ public class TestRestletDefaultDataCreator implements DefaultDataCreator {
                     hand.setName("hand" + j);
                     hand.setTestNumber(50);
                     hand.setTestBoolean(false);
-                    hand.setTestUnlimitedNatural(1 + j * 10000000L);
+                    hand.setTestUnlimitedNatural(1 + j * 10000000);
 
                     AnotherOne1 anotherOne1 = new AnotherOne1(hand);
                     anotherOne1.setName("anotherOne1" + j);

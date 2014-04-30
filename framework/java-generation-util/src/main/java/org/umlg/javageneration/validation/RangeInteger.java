@@ -3,37 +3,37 @@ package org.umlg.javageneration.validation;
 import org.umlg.java.metamodel.OJPathName;
 
 
-public class Range implements Validation {
-	private int min;
-	private int max;
+public class RangeInteger implements Validation {
+	private Number min;
+	private Number max;
 
-	public Range(int min, int max) {
+	public RangeInteger(Number min, Number max) {
 		super();
 		this.min = min;
 		this.max = max;
 	}
 
-	public int getMin() {
+	public Number getMin() {
 		return min;
 	}
 
-	public int getMax() {
+	public Number getMax() {
 		return max;
 	}
 
 	@Override
 	public String toStringForMethod() {
-		return String.valueOf(getMin()) + ", " + String.valueOf(getMax());
+		return getMin().toString() + ", " + getMax().toString();
 	}
 
 	@Override
 	public String toNewRuntimeTumlValidation() {
-		return "new Range(" + String.valueOf(min) + ", " + String.valueOf(max) + ")";
+		return "new RangeInteger(" + min.toString() + ", " + max.toString() + ")";
 	}
 	
 	@Override
 	public OJPathName getPathName() {
-		return new OJPathName("org.umlg.runtime.validation.Range");
+		return new OJPathName("org.umlg.runtime.validation.RangeInteger");
 	}
 	
 	@Override

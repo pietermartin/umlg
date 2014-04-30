@@ -33,11 +33,11 @@ public class BaseLocalDbTest {
     }
 
 	protected long countVertices() {
-		return this.db.countVertices() - UmlgMetaNodeFactory.getUmlgMetaNodeManager().count();
+		return ((UmlgAdminGraph)this.db).countVertices() - UmlgMetaNodeFactory.getUmlgMetaNodeManager().count();
 	}
 
 	protected long countEdges() {
-		return this.db.countEdges() - UmlgMetaNodeFactory.getUmlgMetaNodeManager().count();
+		return ((UmlgAdminGraph)this.db).countEdges() - UmlgMetaNodeFactory.getUmlgMetaNodeManager().count();
 	}
 
 }

@@ -3,32 +3,32 @@ package org.umlg.javageneration.validation;
 import org.umlg.java.metamodel.OJPathName;
 
 
-public class Max implements Validation {
+public class MaxInteger implements Validation {
 
-	private int max;
+	private Number max;
 
-	public int getMax() {
+	public Number getMax() {
 		return max;
 	}
 
-	public Max(int max) {
+	public MaxInteger(Number max) {
 		super();
 		this.max = max;
 	}
 
 	@Override
 	public String toStringForMethod() {
-		return String.valueOf(getMax());
+		return getMax().toString();
 	}
 
 	@Override
 	public String toNewRuntimeTumlValidation() {
-		return "new Max(" + String.valueOf(max) + ")";
+		return "new MaxInteger(" + max.toString() + ")";
 	}
 
 	@Override
 	public OJPathName getPathName() {
-		return new OJPathName("org.umlg.runtime.validation.Max");
+		return new OJPathName("org.umlg.runtime.validation.MaxInteger");
 	}
 
 	@Override

@@ -17,8 +17,7 @@ import java.util.Set;
 public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>, OclStdLibBag<E> {
 
 	protected OclStdLibBag<E> oclStdLibBag;
-//	protected LinkedListMultimap<Object, Vertex> internalVertexMultiMap = LinkedListMultimap.create();
-	
+
 	public BaseBag(UmlgRuntimeProperty runtimeProperty) {
 		super(runtimeProperty);
 		this.internalCollection = HashMultiset.create();

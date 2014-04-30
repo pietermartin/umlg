@@ -6,9 +6,7 @@ import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
-import org.umlg.java.metamodel.OJForStatement;
-import org.umlg.java.metamodel.OJIfStatement;
-import org.umlg.java.metamodel.OJVisibilityKind;
+import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedField;
 import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
@@ -157,17 +155,34 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
                 singleAdder.getBody().addToStatements(ifNotNull2);
             }
             OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
+
+            //Add in validations
+
+            OJBlock block;
+            if (propertyWrapper.isDataType()) {
+                OJField failedConstraints = new OJField("violations", new OJPathName("java.util.List").addToGenerics(UmlgGenerationUtil.UmlgConstraintViolation));
+                failedConstraints.setInitExp(propertyWrapper.validator() + "(" + propertyWrapper.fieldname() + ")");
+                ifNotNull.getThenPart().addToLocals(failedConstraints);
+                OJIfStatement ifValidated = new OJIfStatement("violations.isEmpty()");
+                ifValidated.addToElsePart("throw new " + UmlgGenerationUtil.UmlgConstraintViolationException.getLast() + "(violations)");
+                owner.addToImports(UmlgGenerationUtil.UmlgConstraintViolationException);
+                ifNotNull.addToThenPart(ifValidated);
+                block = ifValidated.getThenPart();
+            } else {
+                block = ifNotNull.getThenPart();
+            }
+
             if (!propertyWrapper.isMemberOfAssociationClass()) {
                 if (!indexed) {
-                    ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+                    block.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
                 } else {
-                    ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(index, " + propertyWrapper.fieldname() + ")");
+                    block.addToStatements("this." + propertyWrapper.fieldname() + ".add(index, " + propertyWrapper.fieldname() + ")");
                 }
             } else {
                 if (!indexed) {
-                    ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
+                    block.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
                 } else {
-                    ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(index, " + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
+                    block.addToStatements("this." + propertyWrapper.fieldname() + ".add(index, " + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
                 }
             }
             singleAdder.getBody().addToStatements(ifNotNull);
