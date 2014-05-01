@@ -63,6 +63,18 @@ public class OJPathName extends OJPathNameGEN implements Comparable<OJPathName> 
 		return result;
 	}
 
+    public OJPathName replaceGeneric(int index, String ojPathName) {
+        this.generics.remove(index);
+        this.generics.add(index, new OJPathName(ojPathName));
+        return this;
+    }
+
+    public OJPathName replaceGeneric(int index, OJPathName ojPathName) {
+        this.generics.remove(index);
+        this.generics.add(index, ojPathName);
+        return this;
+    }
+
 	public OJPathName getHead() {
 		OJPathName result = new OJPathName();
 		if (getNames().size() > 0)
