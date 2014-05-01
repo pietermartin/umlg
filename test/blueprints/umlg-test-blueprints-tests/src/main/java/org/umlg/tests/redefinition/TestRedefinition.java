@@ -14,7 +14,7 @@ public class TestRedefinition extends BaseLocalDbTest {
     @Test
     public void testRedefinition() {
         Account account = new Account(true);
-        Assert.assertEquals(100D, account.getMinimum());
+        Assert.assertEquals(100D, account.getMinimum(), 0);
         Assert.assertEquals(null, account.getPriority());
         account.setBalance(1000D);
         account.setPriority(1);
@@ -66,7 +66,7 @@ public class TestRedefinition extends BaseLocalDbTest {
         Assert.assertTrue("Property with redefined name should not be able to invoke the old name.",redefinedPropertyWithOldNameNotCallable);
 
         CorporateAccount corporateAccount = new CorporateAccount(true);
-        Assert.assertEquals(2500D, corporateAccount.getMinimum());
+        Assert.assertEquals(2500D, corporateAccount.getMinimum(), 0);
 
         Company owner = new Company(true);
         owner.setName("owner");
