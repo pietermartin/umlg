@@ -1,6 +1,6 @@
 package org.nakeuml.tinker.concretetest;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 import org.umlg.test.tinker.BaseLocalDbTest;

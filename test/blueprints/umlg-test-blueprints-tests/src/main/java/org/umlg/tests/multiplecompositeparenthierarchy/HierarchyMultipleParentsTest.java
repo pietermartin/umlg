@@ -1,6 +1,6 @@
 package org.umlg.tests.multiplecompositeparenthierarchy;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.multiplecompositeparent.FolderX;
 import org.umlg.multiplecompositeparent.Root1;

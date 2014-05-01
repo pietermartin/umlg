@@ -1,6 +1,6 @@
 package org.umlg.tests.lookup;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.collectiontest.Nightmare;
 import org.umlg.concretetest.God;

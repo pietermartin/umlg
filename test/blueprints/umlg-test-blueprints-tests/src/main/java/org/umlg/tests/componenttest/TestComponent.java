@@ -1,6 +1,6 @@
 package org.umlg.tests.componenttest;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.componenttest.Space;
 import org.umlg.componenttest.SpaceTime;

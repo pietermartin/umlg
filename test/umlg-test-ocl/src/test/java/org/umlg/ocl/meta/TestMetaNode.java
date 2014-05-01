@@ -1,6 +1,6 @@
 package org.umlg.ocl.meta;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.qualifier.Bank;
 import org.umlg.qualifier.Employee;

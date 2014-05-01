@@ -1,6 +1,6 @@
 package org.umlg.tests.datatype;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.umlg.componenttest.Space;

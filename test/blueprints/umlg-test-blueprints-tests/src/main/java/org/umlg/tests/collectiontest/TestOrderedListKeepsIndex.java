@@ -1,6 +1,6 @@
 package org.umlg.tests.collectiontest;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.collectiontest.Finger;
 import org.umlg.collectiontest.Hand;

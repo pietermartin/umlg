@@ -1,6 +1,6 @@
 package org.umlg.tests.inheritencetest;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
 import org.umlg.inheritencetest.Mamal;

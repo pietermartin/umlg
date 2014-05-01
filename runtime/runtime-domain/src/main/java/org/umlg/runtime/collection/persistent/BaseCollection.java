@@ -255,7 +255,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             //Handle duplicates
             //Find hyper vertex
             Vertex vertexToRemove = v;
-            Vertex hyperVertex = getFirstHyperVertexInListForVertex(vertexToRemove);
+            Vertex hyperVertex = getFirstHyperVertexInListForVertex(vertexToRemove, direction);
 
             Edge edgeToVertexToRemove = hyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().next();
 
@@ -351,9 +351,10 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
      * Out of all the hyper vertexes find the earliest one in the list. To do that iterate to the beginning of the list looking to see which hyper vertex is before another.
      *
      * @param vertex
+     * @param direction
      * @return
      */
-    private Vertex getFirstHyperVertexInListForVertex(Vertex vertex) {
+    private Vertex getFirstHyperVertexInListForVertex(Vertex vertex, Direction direction) {
         Set<Vertex> hyperVertexes = new HashSet<Vertex>();
         for (Edge edge : vertex.getEdges(Direction.IN, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX)) {
             hyperVertexes.add(edge.getVertex(Direction.OUT));
@@ -362,16 +363,16 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         //Take any hyper vertex and start iterating to the beginning.
         Vertex firstHyperVertex = hyperVertexes.iterator().next();
         hyperVertexes.remove(firstHyperVertex);
-        Iterator<Edge> iterator = firstHyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX).iterator();
+        Iterator<Edge> iterator = firstHyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX + direction).iterator();
         while (iterator.hasNext()) {
             Edge edge = iterator.next();
             Vertex previousHyperVertex = edge.getVertex(Direction.OUT);
             if (hyperVertexes.contains(previousHyperVertex)) {
                 firstHyperVertex = previousHyperVertex;
-                iterator = firstHyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX).iterator();
+                iterator = firstHyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX + direction).iterator();
                 hyperVertexes.remove(previousHyperVertex);
             } else {
-                iterator = previousHyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX).iterator();
+                iterator = previousHyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX + direction).iterator();
             }
         }
 

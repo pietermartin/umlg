@@ -1,6 +1,6 @@
 package org.umlg.tests.query;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.collectiontest.Dream;
 import org.umlg.collectiontest.meta.DreamMeta;

@@ -1,6 +1,6 @@
 package org.test.restlet.ocl;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.test.restlet.TestRestletDefaultDataCreator;
 import org.umlg.model.RestAndJson;

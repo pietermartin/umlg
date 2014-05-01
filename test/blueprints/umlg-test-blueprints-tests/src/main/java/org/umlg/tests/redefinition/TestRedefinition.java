@@ -1,6 +1,6 @@
 package org.umlg.tests.redefinition;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.redefinition.*;
 import org.umlg.runtime.test.BaseLocalDbTest;

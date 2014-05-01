@@ -1,6 +1,6 @@
 package org.umlg.meta;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.Angel;
 import org.umlg.concretetest.God;

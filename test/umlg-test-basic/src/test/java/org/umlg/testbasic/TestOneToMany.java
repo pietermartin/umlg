@@ -1,6 +1,6 @@
 package org.umlg.testbasic;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.apache.commons.lang.time.StopWatch;
 import org.joda.time.DateTime;

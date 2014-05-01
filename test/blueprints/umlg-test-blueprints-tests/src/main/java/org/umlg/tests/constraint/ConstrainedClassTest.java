@@ -1,6 +1,6 @@
 package org.umlg.tests.constraint;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.constraints.ConstraintRoot;
 import org.umlg.runtime.test.BaseLocalDbTest;
