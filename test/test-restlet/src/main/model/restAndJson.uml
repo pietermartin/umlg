@@ -1193,6 +1193,42 @@ endif</body>
               </ownedAttribute>
             </packagedElement>
           </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_fGTN0NFlEeOjlpjTZXDyqw" name="associationclass">
+            <packagedElement xmi:type="uml:Class" xmi:id="_jXsxkNFlEeOjlpjTZXDyqw" name="Person">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_nAp1QNFlEeOjlpjTZXDyqw" name="knows" type="_jXsxkNFlEeOjlpjTZXDyqw" isOrdered="true" association="_nAqcUtFlEeOjlpjTZXDyqw">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nAqcUNFlEeOjlpjTZXDyqw"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nAqcUdFlEeOjlpjTZXDyqw" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_t23psNFmEeOjlpjTZXDyqw" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vFhOINFmEeOjlpjTZXDyqw" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vFhOIdFmEeOjlpjTZXDyqw" value="1"/>
+                <defaultValue xmi:type="uml:LiteralString" xmi:id="_vFh1MNFmEeOjlpjTZXDyqw">
+                  <value xsi:nil="true"/>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:AssociationClass" xmi:id="_nAqcUtFlEeOjlpjTZXDyqw" name="Friendship" memberEnd="_nAqcU9FlEeOjlpjTZXDyqw _nAp1QNFlEeOjlpjTZXDyqw" navigableOwnedEnd="_nAqcU9FlEeOjlpjTZXDyqw">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_FRBccNFmEeOjlpjTZXDyqw" name="relationship" type="_8dVZQNFlEeOjlpjTZXDyqw" association="_FRCDgNFmEeOjlpjTZXDyqw">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_FRBccdFmEeOjlpjTZXDyqw" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_FRBcctFmEeOjlpjTZXDyqw" value="1"/>
+              </ownedAttribute>
+              <ownedEnd xmi:type="uml:Property" xmi:id="_nAqcU9FlEeOjlpjTZXDyqw" name="knownBy" type="_jXsxkNFlEeOjlpjTZXDyqw" isOrdered="true" association="_nAqcUtFlEeOjlpjTZXDyqw">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nAqcVNFlEeOjlpjTZXDyqw"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nAqcVdFlEeOjlpjTZXDyqw" value="*"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Enumeration" xmi:id="_8dVZQNFlEeOjlpjTZXDyqw" name="Relationship">
+              <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_-Y8KUNFlEeOjlpjTZXDyqw" name="FRIENDSHIP"/>
+              <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_C5fkYNFmEeOjlpjTZXDyqw" name="COLLEQUE"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_FRCDgNFmEeOjlpjTZXDyqw" name="friendship_relationship_1" memberEnd="_FRCDgdFmEeOjlpjTZXDyqw _FRBccNFmEeOjlpjTZXDyqw">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_FRCDgdFmEeOjlpjTZXDyqw" name="friendship" type="_nAqcUtFlEeOjlpjTZXDyqw" association="_FRCDgNFmEeOjlpjTZXDyqw">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_FRCDgtFmEeOjlpjTZXDyqw"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_FRCDg9FmEeOjlpjTZXDyqw" value="*"/>
+              </ownedEnd>
+            </packagedElement>
+          </packagedElement>
         </packagedElement>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_9Ayn0IYHEeORFsmiMkZYdA" name="testDiagramTree">
