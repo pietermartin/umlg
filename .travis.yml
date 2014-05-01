@@ -1,3 +1,4 @@
 language: java
 jdk:
   - openjdk7
+script: "./run-tests.sh"
