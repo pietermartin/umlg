@@ -80,6 +80,69 @@ public class UmlgValidator {
         return value >= 0;
     }
 
+    public static boolean validateMinLong(Long value, long minValue) {
+        if (value == null) {
+            return true;
+        }
+        return value.compareTo(minValue) != -1;
+    }
+
+    public static boolean validateMaxLong(Long value, long max) {
+        if (value == null) {
+            return true;
+        }
+        return value.compareTo(max) != 1;
+    }
+
+    public static boolean validateRangeLong(Long value, long min, long max) {
+        if (value == null) {
+            return true;
+        }
+        return value <= max && value >= min;
+    }
+
+    public static boolean validateMinFloat(Float value, float minValue) {
+        if (value == null) {
+            return true;
+        }
+        return value.compareTo(minValue) != -1;
+    }
+
+    public static boolean validateMaxFloat(Float value, float max) {
+        if (value == null) {
+            return true;
+        }
+        return value.compareTo(max) != 1;
+    }
+
+    public static boolean validateRangeFloat(Float value, float min, float max) {
+        if (value == null) {
+            return true;
+        }
+        return value <= max && value >= min;
+    }
+
+    public static boolean validateMinDouble(Double value, double minValue) {
+        if (value == null) {
+            return true;
+        }
+        return value.compareTo(minValue) != -1;
+    }
+
+    public static boolean validateMaxDouble(Double value, double max) {
+        if (value == null) {
+            return true;
+        }
+        return value.compareTo(max) != 1;
+    }
+
+    public static boolean validateRangeDouble(Double value, double min, double max) {
+        if (value == null) {
+            return true;
+        }
+        return value <= max && value >= min;
+    }
+
     public static boolean validateMinReal(Double value, double minValue) {
         if (value == null) {
             return true;

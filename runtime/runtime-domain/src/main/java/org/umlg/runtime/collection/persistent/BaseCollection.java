@@ -1235,7 +1235,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     protected boolean validateElementType(E e) {
         if (this.umlgRuntimeProperty.isManyPrimitive() || this.umlgRuntimeProperty.isOnePrimitive()) {
-            if (!(e instanceof String) && !(e instanceof Boolean) && !(e instanceof Integer) && !(e instanceof Long) && !(e instanceof Double)) {
+            if (!(e instanceof String) && !(e instanceof Boolean) && !(e instanceof Integer) && !(e instanceof Long) && !(e instanceof Float) && !(e instanceof Double)) {
                 throw new IllegalStateException(String.format("Expected primitive got %s", e.getClass().getName()));
             }
         } else if (this.umlgRuntimeProperty.isManyEnumeration() || this.umlgRuntimeProperty.isOneEnumeration()) {

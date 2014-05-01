@@ -364,8 +364,12 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                                 field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".intValue() : null");
                             } else if (pWrap.isUnlimitedNatural()) {
                                 field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".intValue() : null");
+                            } else if (pWrap.isFloat()) {
+                                field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".floatValue() : null");
                             } else if (pWrap.isDouble()) {
                                 field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".doubleValue() : null");
+                            } else if (pWrap.isLong()) {
+                                field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".longValue() : null");
                             } else {
                                 throw new RuntimeException("Not yet implemented!");
                             }
@@ -520,8 +524,12 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                                 ojForStatement.getBody().addToStatements(pWrap.adder() + "(value.intValue())");
                             } else if (pWrap.isUnlimitedNatural()) {
                                 ojForStatement.getBody().addToStatements(pWrap.adder() + "(value.intValue())");
+                            } else if (pWrap.isFloat()) {
+                                ojForStatement.getBody().addToStatements(pWrap.adder() + "(value.floatValue())");
                             } else if (pWrap.isDouble()) {
                                 ojForStatement.getBody().addToStatements(pWrap.adder() + "(value.doubleValue())");
+                            } else if (pWrap.isLong()) {
+                                ojForStatement.getBody().addToStatements(pWrap.adder() + "(value.longValue())");
                             } else {
                                 throw new RuntimeException("Not yet implemented!");
                             }

@@ -58,11 +58,15 @@ public class PropertyValidatorBuilder extends BaseVisitor implements Visitor<Pro
 			if (propertyWrapper.hasValidation(e)) {
 				OJIfStatement ifValidate;
 				if (e.getAttributes().length > 0) {
-					ifValidate = new OJIfStatement("!" + UmlgGenerationUtil.UmlgValidator.getLast() + "." + e.getMethodName() + "("
-							+ propertyWrapper.fieldname() + ", " + propertyWrapper.getValidation(e).toStringForMethod() + ")");
+					ifValidate = new OJIfStatement("!" + UmlgGenerationUtil.UmlgValidator.getLast() + "."
+                            + e.getMethodName() + "("
+							+ propertyWrapper.fieldname() + ", "
+                            + propertyWrapper.getValidation(e).toStringForMethod() + ")");
 				} else {
-					ifValidate = new OJIfStatement("!" + UmlgGenerationUtil.UmlgValidator.getLast() + "." + e.getMethodName() + "("
-							+ propertyWrapper.fieldname() + propertyWrapper.getValidation(e).toStringForMethod() + ")");
+					ifValidate = new OJIfStatement("!" + UmlgGenerationUtil.UmlgValidator.getLast() + "."
+                            + e.getMethodName() + "("
+							+ propertyWrapper.fieldname()
+                            + propertyWrapper.getValidation(e).toStringForMethod() + ")");
 				}
 				ifValidate.addToThenPart("result.add(new " + UmlgGenerationUtil.UmlgConstraintViolation.getLast() + "(\"" + e.name() + "\", \""
 						+ propertyWrapper.getQualifiedName() + "\", \"" + e.name() + " does not pass validation!\"))");

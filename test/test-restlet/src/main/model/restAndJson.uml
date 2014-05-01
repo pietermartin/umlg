@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgValidation="http:///schemas/UmlgValidation/_ESYREPeoEeKXi9pM4yg14w/11" xmlns:UmlgValidation_1="http:///schemas/UmlgValidation/_LBXpYM_EEeOjlpjTZXDyqw/13" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgValidation/_ESYREPeoEeKXi9pM4yg14w/11 validation.profile.uml#_ESZfMPeoEeKXi9pM4yg14w http:///schemas/UmlgValidation/_LBXpYM_EEeOjlpjTZXDyqw/13 validation.profile.uml#_LBXpYc_EEeOjlpjTZXDyqw">
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgValidation="http:///schemas/UmlgValidation/_ESYREPeoEeKXi9pM4yg14w/11" xmlns:UmlgValidation_1="http:///schemas/UmlgValidation/__a3VoNFKEeOjlpjTZXDyqw/15" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgValidation/_ESYREPeoEeKXi9pM4yg14w/11 validation.profile.uml#_ESZfMPeoEeKXi9pM4yg14w http:///schemas/UmlgValidation/__a3VoNFKEeOjlpjTZXDyqw/15 validation.profile.uml#__a38sNFKEeOjlpjTZXDyqw">
   <uml:Model xmi:id="_qb8akM37EdqwVrslYOdUDA" name="restAndJson" URI="" viewpoint="">
     <ownedComment xmi:type="uml:Comment" xmi:id="_f7bO4FHfEeKwIp56YBZIxw">
       <body>Halo, I am your first comment.</body>
@@ -1219,7 +1219,7 @@ endif</body>
     </profileApplication>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_WCb5oMfuEeOiQ-tGJXxh5A">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_WDIdMMfuEeOiQ-tGJXxh5A" source="http://www.eclipse.org/uml2/2.0.0/UML">
-        <references xmi:type="ecore:EPackage" href="validation.profile.uml#_LBXpYc_EEeOjlpjTZXDyqw"/>
+        <references xmi:type="ecore:EPackage" href="validation.profile.uml#__a38sNFKEeOjlpjTZXDyqw"/>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="validation.profile.uml#_6Zdd4AV1EeK9oIwdQfC0-w"/>
     </profileApplication>
@@ -1232,18 +1232,18 @@ endif</body>
   <UmlgValidation_1:RangeLength xmi:id="_ZylKcMfuEeOiQ-tGJXxh5A" min="5" max="10" base_Property="_5DaPAAc4EeKnuck7rKo4mA"/>
   <UmlgValidation_1:MaxLength xmi:id="_cHo9UMfuEeOiQ-tGJXxh5A" length="5" base_Property="_w7hagAc7EeKnuck7rKo4mA"/>
   <UmlgValidation_1:MinLength xmi:id="_dhdP8MfuEeOiQ-tGJXxh5A" length="5" base_Property="_yH5HAAc7EeKnuck7rKo4mA"/>
-  <UmlgValidation_1:MaxInteger xmi:id="_fWEoMMfuEeOiQ-tGJXxh5A" value="5" base_Property="_zTf-gAc7EeKnuck7rKo4mA"/>
-  <UmlgValidation_1:MinInteger xmi:id="_g8vrEMfuEeOiQ-tGJXxh5A" value="5" base_Property="_0LHjAAc7EeKnuck7rKo4mA"/>
-  <UmlgValidation_1:MaxInteger xmi:id="_iw5s4M_cEeOjlpjTZXDyqw" value="5" base_Property="_IRM68M_cEeOjlpjTZXDyqw"/>
-  <UmlgValidation_1:MinInteger xmi:id="_kZsPoM_cEeOjlpjTZXDyqw" value="5" base_Property="_MdJ-AM_cEeOjlpjTZXDyqw"/>
+  <UmlgValidation_1:MaxInteger xmi:id="_fWEoMMfuEeOiQ-tGJXxh5A" base_Property="_zTf-gAc7EeKnuck7rKo4mA"/>
+  <UmlgValidation_1:MinInteger xmi:id="_g8vrEMfuEeOiQ-tGJXxh5A" base_Property="_0LHjAAc7EeKnuck7rKo4mA"/>
+  <UmlgValidation_1:MaxInteger xmi:id="_iw5s4M_cEeOjlpjTZXDyqw" base_Property="_IRM68M_cEeOjlpjTZXDyqw"/>
+  <UmlgValidation_1:MinInteger xmi:id="_kZsPoM_cEeOjlpjTZXDyqw" base_Property="_MdJ-AM_cEeOjlpjTZXDyqw"/>
   <UmlgValidation_1:RangeInteger xmi:id="_l4cFkM_cEeOjlpjTZXDyqw" max="5" base_Property="_OIbNAM_cEeOjlpjTZXDyqw"/>
-  <UmlgValidation_1:MaxUnlimitedNatural xmi:id="_oGxlYM_cEeOjlpjTZXDyqw" base_Property="_P25hAM_cEeOjlpjTZXDyqw" value="5"/>
-  <UmlgValidation_1:MinUnlimitedNatural xmi:id="_pzMD4M_cEeOjlpjTZXDyqw" value="5" base_Property="_SY8nAM_cEeOjlpjTZXDyqw"/>
+  <UmlgValidation_1:MaxUnlimitedNatural xmi:id="_oGxlYM_cEeOjlpjTZXDyqw" base_Property="_P25hAM_cEeOjlpjTZXDyqw"/>
+  <UmlgValidation_1:MinUnlimitedNatural xmi:id="_pzMD4M_cEeOjlpjTZXDyqw" base_Property="_SY8nAM_cEeOjlpjTZXDyqw"/>
   <UmlgValidation_1:RangeUnlimitedNatural xmi:id="_rEzcwM_cEeOjlpjTZXDyqw" base_Property="_X9P9EM_cEeOjlpjTZXDyqw" max="5"/>
-  <UmlgValidation_1:MaxReal xmi:id="_svWTAM_cEeOjlpjTZXDyqw" base_Property="_bLQKIM_cEeOjlpjTZXDyqw" value="5.123"/>
-  <UmlgValidation_1:MinReal xmi:id="_uXqUoM_cEeOjlpjTZXDyqw" base_Property="_dTDkIM_cEeOjlpjTZXDyqw" value="5.123"/>
+  <UmlgValidation_1:MaxReal xmi:id="_svWTAM_cEeOjlpjTZXDyqw" base_Property="_bLQKIM_cEeOjlpjTZXDyqw"/>
+  <UmlgValidation_1:MinReal xmi:id="_uXqUoM_cEeOjlpjTZXDyqw" base_Property="_dTDkIM_cEeOjlpjTZXDyqw"/>
   <UmlgValidation_1:RangeReal xmi:id="_vxOIkM_cEeOjlpjTZXDyqw" base_Property="_fJ6_IM_cEeOjlpjTZXDyqw" max="5.123"/>
-  <UmlgValidation_1:MaxInteger xmi:id="_ZUGawNEaEeOjlpjTZXDyqw" value="5" base_Property="_f4SRANCMEeOjlpjTZXDyqw"/>
-  <UmlgValidation_1:MaxUnlimitedNatural xmi:id="_MD8hYNEcEeOjlpjTZXDyqw" base_Property="_HXy7UNEcEeOjlpjTZXDyqw" value="5"/>
-  <UmlgValidation_1:MaxReal xmi:id="_QaK6wNEcEeOjlpjTZXDyqw" base_Property="_Nt6v4NEcEeOjlpjTZXDyqw" value="5.0"/>
+  <UmlgValidation_1:MaxInteger xmi:id="_ZUGawNEaEeOjlpjTZXDyqw" base_Property="_f4SRANCMEeOjlpjTZXDyqw"/>
+  <UmlgValidation_1:MaxUnlimitedNatural xmi:id="_MD8hYNEcEeOjlpjTZXDyqw" base_Property="_HXy7UNEcEeOjlpjTZXDyqw"/>
+  <UmlgValidation_1:MaxReal xmi:id="_QaK6wNEcEeOjlpjTZXDyqw" base_Property="_Nt6v4NEcEeOjlpjTZXDyqw"/>
 </xmi:XMI>

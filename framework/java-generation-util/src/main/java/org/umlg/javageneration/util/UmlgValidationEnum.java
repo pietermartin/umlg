@@ -18,6 +18,15 @@ public enum UmlgValidationEnum {
     MinReal("validateMinReal", new String[]{"value"}),
     MaxReal("validateMaxReal", new String[]{"value"}),
     RangeReal("validateRangeReal", new String[]{"min", "max"}),
+    MinLong("validateMinLong", new String[]{"value"}),
+    MaxLong("validateMaxLong", new String[]{"value"}),
+    RangeLong("validateRangeLong", new String[]{"min", "max"}),
+    MinFloat("validateMinFloat", new String[]{"value"}),
+    MaxFloat("validateMaxFloat", new String[]{"value"}),
+    RangeFloat("validateRangeFloat", new String[]{"min", "max"}),
+    MinDouble("validateMinDouble", new String[]{"value"}),
+    MaxDouble("validateMaxDouble", new String[]{"value"}),
+    RangeDouble("validateRangeDouble", new String[]{"min", "max"}),
     Email("validateEmail", new String[]{}),
     DateTime("validateDateTime", new String[]{}),
     Date("validateDate", new String[]{}),
@@ -46,23 +55,41 @@ public enum UmlgValidationEnum {
         } else if (stereotype.getName().equals(RangeLength.name())) {
             return new RangeLength((Integer) p.getValue(stereotype, "min"), (Integer) p.getValue(stereotype, "max"));
         } else if (stereotype.getName().equals(MaxInteger.name())) {
-            return new MaxInteger((Number) p.getValue(stereotype, "value"));
+            return new MaxInteger((Number) p.getValue(stereotype, "max"));
         } else if (stereotype.getName().equals(MinInteger.name())) {
-            return new MinInteger((Integer) p.getValue(stereotype, "value"));
+            return new MinInteger((Integer) p.getValue(stereotype, "min"));
         } else if (stereotype.getName().equals(RangeInteger.name())) {
             return new RangeInteger((Integer) p.getValue(stereotype, "min"), (Integer) p.getValue(stereotype, "max"));
         } else if (stereotype.getName().equals(MaxUnlimitedNatural.name())) {
-            return new MaxUnlimitedNatural((Integer) p.getValue(stereotype, "value"));
+            return new MaxUnlimitedNatural((Integer) p.getValue(stereotype, "max"));
         } else if (stereotype.getName().equals(MinUnlimitedNatural.name())) {
-            return new MinUnlimitedNatural((Integer) p.getValue(stereotype, "value"));
+            return new MinUnlimitedNatural((Integer) p.getValue(stereotype, "min"));
         } else if (stereotype.getName().equals(RangeUnlimitedNatural.name())) {
             return new RangeUnlimitedNatural((Integer)p.getValue(stereotype, "min"), (Integer)p.getValue(stereotype, "max"));
         } else if (stereotype.getName().equals(MaxReal.name())) {
-            return new MaxReal((Double) p.getValue(stereotype, "value"));
+            return new MaxReal((Double) p.getValue(stereotype, "max"));
         } else if (stereotype.getName().equals(MinReal.name())) {
-            return new MinReal((Double) p.getValue(stereotype, "value"));
+            return new MinReal((Double) p.getValue(stereotype, "min"));
         } else if (stereotype.getName().equals(RangeReal.name())) {
             return new RangeReal((Double) p.getValue(stereotype, "min"), (Double) p.getValue(stereotype, "max"));
+        } else if (stereotype.getName().equals(MaxLong.name())) {
+            return new MaxLong((Long) p.getValue(stereotype, "max"));
+        } else if (stereotype.getName().equals(MinLong.name())) {
+            return new MinLong((Long) p.getValue(stereotype, "min"));
+        } else if (stereotype.getName().equals(RangeLong.name())) {
+            return new RangeLong((Long) p.getValue(stereotype, "min"), (Long) p.getValue(stereotype, "max"));
+        } else if (stereotype.getName().equals(MaxFloat.name())) {
+            return new MaxFloat((Float) p.getValue(stereotype, "max"));
+        } else if (stereotype.getName().equals(MinFloat.name())) {
+            return new MinFloat((Float) p.getValue(stereotype, "min"));
+        } else if (stereotype.getName().equals(RangeFloat.name())) {
+            return new RangeFloat((Float) p.getValue(stereotype, "min"), (Float) p.getValue(stereotype, "max"));
+        } else if (stereotype.getName().equals(MaxDouble.name())) {
+            return new MaxDouble((Double) p.getValue(stereotype, "max"));
+        } else if (stereotype.getName().equals(MinDouble.name())) {
+            return new MinDouble((Double) p.getValue(stereotype, "min"));
+        } else if (stereotype.getName().equals(RangeDouble.name())) {
+            return new RangeDouble((Double) p.getValue(stereotype, "min"), (Double) p.getValue(stereotype, "max"));
         } else {
             throw new IllegalStateException("Unknown validation stereotype " + stereotype.getName());
         }

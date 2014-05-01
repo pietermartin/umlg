@@ -23,6 +23,9 @@ import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.inheritencetest.TestInheritence;
 import org.umlg.tests.interfacetest.ManyToManyInverseTest;
 import org.umlg.tests.interfacetest.TestOneToManyInterface;
+import org.umlg.tests.javaprimitivetypes.TestJavaManyPrimitiveTypesWithValidation;
+import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypes;
+import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypesWithValidation;
 import org.umlg.tests.json.JsonTest;
 import org.umlg.tests.lookup.TestOneLookup;
 import org.umlg.tests.multiplecompositeparenthierarchy.HierarchyMultipleParentsTest;
@@ -102,7 +105,10 @@ import org.umlg.tests.validationtest.TestValidation;
         ManyToManyOrderedSetTest.class,
         ManyToManySequenceTest.class,
         ManyToManyToSelfSequenceTest.class,
-        TestRootMethods.class
+        TestRootMethods.class,
+        TestJavaPrimitiveTypes.class,
+        TestJavaPrimitiveTypesWithValidation.class,
+        TestJavaManyPrimitiveTypesWithValidation.class
 })
 public class UmlgAllTestSuite {
 }

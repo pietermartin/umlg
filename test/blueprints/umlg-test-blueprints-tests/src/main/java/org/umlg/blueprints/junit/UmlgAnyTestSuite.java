@@ -7,6 +7,9 @@ import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.collectiontest.*;
 import org.umlg.tests.indexing.TestIndexing;
+import org.umlg.tests.javaprimitivetypes.TestJavaManyPrimitiveTypesWithValidation;
+import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypes;
+import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypesWithValidation;
 import org.umlg.tests.root.TestRootMethods;
 import org.umlg.tests.validationtest.TestValidation;
 
@@ -37,9 +40,10 @@ import org.umlg.tests.validationtest.TestValidation;
 //        TestIndexing.class,
 //        TestGroovyExecutor.class,
 //        TestRootMethods.class,
-        TestValidation.class
-
-
-        })
+//        TestValidation.class
+//        TestJavaPrimitiveTypes.class
+//        TestJavaPrimitiveTypesWithValidation.class,
+        TestJavaManyPrimitiveTypesWithValidation.class
+})
 public class UmlgAnyTestSuite {
 }

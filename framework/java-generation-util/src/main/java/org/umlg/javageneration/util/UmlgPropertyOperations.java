@@ -312,13 +312,17 @@ public final class UmlgPropertyOperations extends PropertyOperations {
             PrimitiveType primitiveType = (PrimitiveType) type;
             if (primitiveType.getName().equals("String")) {
                 return "String";
-            } else if (primitiveType.getName().equals("Integer")) {
+            } else if (primitiveType.getName().equals("Integer") || primitiveType.getName().equals("int")) {
                 return "Integer";
-            } else if (primitiveType.getName().equals("Boolean")) {
+            } else if (primitiveType.getName().equals("Boolean") || primitiveType.getName().equals("boolean")) {
                 return "Boolean";
             } else if (primitiveType.getName().equals("UnlimitedNatural")) {
                 return "Integer";
-            } else if (primitiveType.getName().equals("Real")) {
+            } else if (primitiveType.getName().equals("long")) {
+                return "Long";
+            } else if (primitiveType.getName().equals("float")) {
+                return "Float";
+            } else if (primitiveType.getName().equals("Real") || primitiveType.getName().equals("double")) {
                 return "Double";
             } else {
                 throw new IllegalStateException("unknown primitive " + primitiveType.getName());
