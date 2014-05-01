@@ -393,6 +393,12 @@
                 if (!result.valid) {
                     return result;
                 }
+                if (property.fieldType === 'UnlimitedNatural' && value < 0) {
+                    return {
+                        valid: false,
+                        msg: property.name + " is an UnlimitedNatural, it must be greater or equal to 0."
+                    }
+                }
                 if (property.validations !== null) {
                     if (property.fieldType === 'Integer') {
                         if (property.validations.range !== undefined) {
