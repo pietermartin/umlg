@@ -103,7 +103,8 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         }
         tryStatement.getTryPart().addToStatements(
                 "this." + parentPathName.getLast().toLowerCase() + "Id = " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+                        + parentPathName.getLast().toLowerCase() + "Id\"))"
+        );
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
         tryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
@@ -132,7 +133,8 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         }
         tryStatement.getTryPart().addToStatements(
                 "this." + parentPathName.getLast().toLowerCase() + "Id = " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+                        + parentPathName.getLast().toLowerCase() + "Id\"))"
+        );
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
         tryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
@@ -634,7 +636,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
 
         OJField uri = new OJField();
         uri.setType(new OJPathName("String"));
-        uri.setInitExp("\""+UmlgRestletGenerationUtil.restletContext+"/" + pWrap.getAssociationClassPathName().getLast().toLowerCase() + "s/{"
+        uri.setInitExp("\"" + "/" + pWrap.getAssociationClassPathName().getLast().toLowerCase() + "s/{"
                 + pWrap.getAssociationClassPathName().getLast().toLowerCase() + "Id}/" + pWrap.fieldname() + "\"");
         ojLiteral.addToAttributeValues(uri);
 

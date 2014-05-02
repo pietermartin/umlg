@@ -64,10 +64,12 @@
                 this.createInstanceQueryMenu(-1);
             }
             //TODO check, only if not root
-            if (this.contextMetaDataTo.name !== tumlModelName) {
+            if (isUmlgLib && this.contextMetaDataTo.name !== tumlModelName) {
                 this.createClassQueryMenu(-1);
             }
-            this.createRootQueryMenu(-1);
+            if (isUmlgLib) {
+                this.createRootQueryMenu(-1);
+            }
             var windowHeight = calculateBodyHeight(this) + 45;
             leftMenuPaneBody.height(windowHeight);
         }

@@ -609,13 +609,25 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_5AULEO6gEeKXi9pM4yg14w" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_5AULEe6gEeKXi9pM4yg14w" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_2P7HEe6gEeKXi9pM4yg14w" y="-20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_vBnPYNIzEeOCt7XMZfn16w" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_2P7HEe6gEeKXi9pM4yg14w" x="-18" y="-19"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_2P7HEu6gEeKXi9pM4yg14w" type="6032">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_4O-NsO6gEeKXi9pM4yg14w" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4O-Nse6gEeKXi9pM4yg14w" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_2P7HE-6gEeKXi9pM4yg14w" y="20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_uC7ZkNIzEeOCt7XMZfn16w" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_2P7HE-6gEeKXi9pM4yg14w" x="22" y="16"/>
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_2P548e6gEeKXi9pM4yg14w" fontName="Sans"/>
       <element xmi:type="uml:AssociationClass" href="test-restlet-minimal.uml#_pLU1QN2-EeK7O_6WBh_v7w"/>
@@ -632,13 +644,25 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_WtZfAO6hEeKXi9pM4yg14w" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_WtZfAe6hEeKXi9pM4yg14w" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_-ZVeMe6gEeKXi9pM4yg14w" y="-20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_s3PCgNIzEeOCt7XMZfn16w" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_-ZVeMe6gEeKXi9pM4yg14w" x="-23" y="-13"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_-ZVeMu6gEeKXi9pM4yg14w" type="6032">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_XHVpAO6hEeKXi9pM4yg14w" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XHVpAe6hEeKXi9pM4yg14w" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_-ZVeM-6gEeKXi9pM4yg14w" y="20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_sANT4NIzEeOCt7XMZfn16w" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_-ZVeM-6gEeKXi9pM4yg14w" x="33" y="17"/>
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_-ZU3Ie6gEeKXi9pM4yg14w" fontName="Sans"/>
       <element xmi:type="uml:AssociationClass" href="test-restlet-minimal.uml#_-YBPkO6gEeKXi9pM4yg14w"/>
@@ -656,13 +680,25 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_3QCCoPxpEeKXi9pM4yg14w" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3QCCofxpEeKXi9pM4yg14w" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_DDBlAfxpEeKXi9pM4yg14w" y="-20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_4OdZcNIzEeOCt7XMZfn16w" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_DDBlAfxpEeKXi9pM4yg14w" x="-22" y="-15"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_DDBlAvxpEeKXi9pM4yg14w" type="6032">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_24hhkPxpEeKXi9pM4yg14w" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_24iIoPxpEeKXi9pM4yg14w" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_DDBlA_xpEeKXi9pM4yg14w" y="20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_3gv-4NIzEeOCt7XMZfn16w" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_DDBlA_xpEeKXi9pM4yg14w" x="35" y="20"/>
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_DDA98fxpEeKXi9pM4yg14w" fontName="Sans"/>
       <element xmi:type="uml:AssociationClass" href="test-restlet-minimal.uml#_DC8FcPxpEeKXi9pM4yg14w"/>
@@ -679,19 +715,31 @@
       <children xmi:type="notation:DecorationNode" xmi:id="_5sInEAJbEeO9bYUowtpiHA" type="6001">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_5sJOIAJbEeO9bYUowtpiHA" y="-20"/>
       </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_5sJOIQJbEeO9bYUowtpiHA" type="6002">
+      <children xmi:type="notation:DecorationNode" xmi:id="_5sJOIQJbEeO9bYUowtpiHA" visible="false" type="6002">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_5sJOIgJbEeO9bYUowtpiHA" y="20"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_5sJOIwJbEeO9bYUowtpiHA" type="6003">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_5sJOJAJbEeO9bYUowtpiHA" y="-20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_2DG8MNIzEeOCt7XMZfn16w" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_5sJOJAJbEeO9bYUowtpiHA" x="27" y="-13"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_5sJOJQJbEeO9bYUowtpiHA" type="6005">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_5sJOJgJbEeO9bYUowtpiHA" y="20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_2_V68NIzEeOCt7XMZfn16w" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_5sJOJgJbEeO9bYUowtpiHA" x="-10" y="12"/>
       </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_5sJOJwJbEeO9bYUowtpiHA" type="6033">
+      <children xmi:type="notation:DecorationNode" xmi:id="_5sJOJwJbEeO9bYUowtpiHA" visible="false" type="6033">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_5sJOKAJbEeO9bYUowtpiHA" y="20"/>
       </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_5sJOKQJbEeO9bYUowtpiHA" type="6034">
+      <children xmi:type="notation:DecorationNode" xmi:id="_5sJOKQJbEeO9bYUowtpiHA" visible="false" type="6034">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_5sJOKgJbEeO9bYUowtpiHA" y="-20"/>
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_5sIAAQJbEeO9bYUowtpiHA" fontName="Sans"/>
@@ -704,19 +752,31 @@
       <children xmi:type="notation:DecorationNode" xmi:id="_q3WagAMTEeO9bYUowtpiHA" type="6001">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_q3XBkAMTEeO9bYUowtpiHA" y="-20"/>
       </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_q3XBkQMTEeO9bYUowtpiHA" type="6002">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_q3XBkgMTEeO9bYUowtpiHA" y="20"/>
+      <children xmi:type="notation:DecorationNode" xmi:id="_q3XBkQMTEeO9bYUowtpiHA" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_q3XBkgMTEeO9bYUowtpiHA" x="7" y="16"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_q3XBkwMTEeO9bYUowtpiHA" type="6003">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_q3XBlAMTEeO9bYUowtpiHA" y="-20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_zBqkcNIzEeOCt7XMZfn16w" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_q3XBlAMTEeO9bYUowtpiHA" x="8" y="-19"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_q3XBlQMTEeO9bYUowtpiHA" type="6005">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_q3XBlgMTEeO9bYUowtpiHA" y="20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_xb4SYNIzEeOCt7XMZfn16w" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_q3XBlgMTEeO9bYUowtpiHA" x="-52" y="-19"/>
       </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_q3XBlwMTEeO9bYUowtpiHA" type="6033">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_q3XBmAMTEeO9bYUowtpiHA" y="20"/>
+      <children xmi:type="notation:DecorationNode" xmi:id="_q3XBlwMTEeO9bYUowtpiHA" visible="false" type="6033">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_q3XBmAMTEeO9bYUowtpiHA" x="-4" y="16"/>
       </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_q3XBmQMTEeO9bYUowtpiHA" type="6034">
+      <children xmi:type="notation:DecorationNode" xmi:id="_q3XBmQMTEeO9bYUowtpiHA" visible="false" type="6034">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_q3XBmgMTEeO9bYUowtpiHA" y="-20"/>
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_q3VzcQMTEeO9bYUowtpiHA" fontName="Sans"/>
@@ -765,7 +825,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ag67sqrlEeOPt7R4er8hcg"/>
       </children>
       <element xmi:type="uml:Class" href="test-restlet-minimal.uml#_Np0usAaoEeO9bYUowtpiHA"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Np8DcQaoEeO9bYUowtpiHA" x="129" y="176"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Np8DcQaoEeO9bYUowtpiHA" x="180" y="260"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_pe3i8AaoEeO9bYUowtpiHA" type="2008" fontName="Sans" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_pe3i8gaoEeO9bYUowtpiHA" source="ShadowFigure">
@@ -845,16 +905,28 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ag8w4qrlEeOPt7R4er8hcg"/>
       </children>
       <element xmi:type="uml:AssociationClass" href="test-restlet-minimal.uml#_rR3xoAaoEeO9bYUowtpiHA"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_rSFNAQaoEeO9bYUowtpiHA" x="424" y="72"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_rSFNAQaoEeO9bYUowtpiHA" x="415" y="85"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_MSuY4QaoEeO9bYUowtpiHA"/>
     <element xmi:type="uml:Package" href="test-restlet-minimal.uml#_riWxIO6gEeKXi9pM4yg14w"/>
     <edges xmi:type="notation:Connector" xmi:id="_rR_GYAaoEeO9bYUowtpiHA" type="4017" source="_Np8DcAaoEeO9bYUowtpiHA" target="_pe3i8AaoEeO9bYUowtpiHA" lineColor="0">
       <children xmi:type="notation:DecorationNode" xmi:id="_rR_GYwaoEeO9bYUowtpiHA" type="6031">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_rR_tcAaoEeO9bYUowtpiHA" y="-20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_9KKecNIzEeOCt7XMZfn16w" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_rR_tcAaoEeO9bYUowtpiHA" x="-18" y="-13"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_rR_tcQaoEeO9bYUowtpiHA" type="6032">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_rR_tcgaoEeO9bYUowtpiHA" y="20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_7xNugNIzEeOCt7XMZfn16w" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_rR_tcgaoEeO9bYUowtpiHA" x="25" y="17"/>
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_rR_GYQaoEeO9bYUowtpiHA" fontName="Sans"/>
       <element xmi:type="uml:AssociationClass" href="test-restlet-minimal.uml#_rR3xoAaoEeO9bYUowtpiHA"/>
