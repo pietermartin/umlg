@@ -16,7 +16,7 @@ The easiest way to get started is to generate a maven project using the UMLG Mav
 
 To generate a sample project, type in the following at your project's root directory.
 
-    mvn archetype:generate -DarchetypeCatalog=local
+<kbd>mvn archetype:generate -DarchetypeCatalog=local</kbd>
 
 You will be prompted to select the project you which to generate. Choose `org.umlg:umlg-archetype-full`
 
@@ -24,7 +24,7 @@ Follow the prompts to select your maven groupId, artifactId, version, java packa
 A sample uml model with UMLG's uml validation profile and
 data types library will be preloaded. The archetype will create a fully functional UMLG application.
 
-`cd artifactId` into the application you just generated and run `maven install`
+<kbd>cd artifactId</kbd> into the application you just generated and run <kbd>maven install</kbd>
 
 Before compiling the application, maven will generate the entities and a rest interface to the entities from the sample model.
 
