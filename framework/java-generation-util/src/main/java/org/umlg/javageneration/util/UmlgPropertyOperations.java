@@ -303,10 +303,6 @@ public final class UmlgPropertyOperations extends PropertyOperations {
         }
     }
 
-    public static boolean isPrimitiveString(Type type) {
-        return "String".equals(UmlgPropertyOperations.umlPrimitiveTypeToJava(type));
-    }
-
     public static String umlPrimitiveTypeToJava(Type type) {
         if (type instanceof PrimitiveType) {
             PrimitiveType primitiveType = (PrimitiveType) type;
