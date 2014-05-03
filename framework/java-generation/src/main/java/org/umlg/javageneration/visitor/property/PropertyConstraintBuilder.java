@@ -54,7 +54,7 @@ public class PropertyConstraintBuilder extends BaseVisitor implements Visitor<Pr
             checkConstraint.setComment(String.format("Implements the ocl statement for constraint '%s'\n<pre>\n%s\n</pre>", contraintWrapper.getName(), ocl));
             OCLExpression<Classifier> oclExp = UmlgOcl2Parser.INSTANCE.parseOcl(ocl);
 
-            ifConstraintFails.setCondition("(" + UmlgOcl2Java.oclToJava(owner, oclExp) + ") == false");
+            ifConstraintFails.setCondition("(" + UmlgOcl2Java.oclToJava(propertyWrapper, owner, oclExp) + ") == false");
             ifConstraintFails.addToThenPart("result.add(new " + UmlgGenerationUtil.UmlgConstraintViolation.getLast() + "(\"" + contraintWrapper.getName() + "\", \""
                     + propertyWrapper.getQualifiedName() + "\", \"ocl\\n" + ocl.replace("\n", "\\n") + "\\nfails!\"))");
 

@@ -1454,7 +1454,7 @@
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             </ownedAttribute>
           </packagedElement>
-          <packagedElement xmi:type="uml:Association" xmi:id="_-NM7QHK3EeGxONR_qFZ0Dg" name="A_&lt;universe>_&lt;nonNavigableMany>" memberEnd="_-NM7QXK3EeGxONR_qFZ0Dg _-NM7RHK3EeGxONR_qFZ0Dg" navigableOwnedEnd="_-NM7RHK3EeGxONR_qFZ0Dg">
+          <packagedElement xmi:type="uml:Association" xmi:id="_-NM7QHK3EeGxONR_qFZ0Dg" name="A_&lt;universe>_&lt;nonNavigableMany>" memberEnd="_-NM7QXK3EeGxONR_qFZ0Dg _-NM7RHK3EeGxONR_qFZ0Dg" navigableOwnedEnd="_-NM7RHK3EeGxONR_qFZ0Dg _-NM7QXK3EeGxONR_qFZ0Dg">
             <ownedEnd xmi:type="uml:Property" xmi:id="_-NM7QXK3EeGxONR_qFZ0Dg" name="universe" visibility="public" type="_FTxxYOzqEeCemKc79Sc_aw" association="_-NM7QHK3EeGxONR_qFZ0Dg">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-NM7Q3K3EeGxONR_qFZ0Dg"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-NM7QnK3EeGxONR_qFZ0Dg" value="1"/>

@@ -584,8 +584,9 @@
             var menuArray = [];
             for (var i = 0; i < contextMetaDataFrom.properties.length; i++) {
                 var metaProperty = contextMetaDataFrom.properties[i];
-                if (metaProperty.inverseComposite || !(
+                if (!(
                     (metaProperty.dataTypeEnum !== undefined && metaProperty.dataTypeEnum !== null) ||
+                        !metaProperty.navigable ||
                         metaProperty.onePrimitive ||
                         metaProperty.oneEnumeration ||
                         metaProperty.manyEnumeration ||

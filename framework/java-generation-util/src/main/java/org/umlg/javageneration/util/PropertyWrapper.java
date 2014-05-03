@@ -39,13 +39,13 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public boolean needsLookup() {
-        return !isComposite() && isNavigable() && !(getType() instanceof Enumeration)
+        return !isComposite() && !(getType() instanceof Enumeration)
                 && !isDerived() && !isQualifier() && getOtherEnd() != null
                 && !(getOtherEnd().getType() instanceof Enumeration) && !getOtherEnd().isComposite();
     }
 
     public boolean hasLookup() {
-        if (!isComposite() && isNavigable() && !(getType() instanceof Enumeration) && !isDerived() && !isQualifier() && getOtherEnd() != null && !(getOtherEnd().getType() instanceof Enumeration)
+        if (!isComposite() && !(getType() instanceof Enumeration) && !isDerived() && !isQualifier() && getOtherEnd() != null && !(getOtherEnd().getType() instanceof Enumeration)
                 && !getOtherEnd().isComposite()) {
             return true;
         } else {
@@ -154,10 +154,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         if (pWrap.isMany()) {
             sb.append(UmlgGenerationUtil.getCollectionInterface(pWrap));
             sb.append("(");
-            sb.append(pWrap.getType().getName());
+            sb.append(pWrap.getType().getQualifiedName());
             sb.append(")");
         } else {
-            sb.append(pWrap.getType().getName());
+            sb.append(pWrap.getType().getQualifiedName());
         }
 
         sb.append("\n");
@@ -358,11 +358,11 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public String setter() {
-        if (!isDerived() && !isPrimitive() && !isDataType() && !isNavigable()) {
-            return UmlgPropertyOperations.internalSetter(this.property);
-        } else {
+//        if (!isDerived() && !isPrimitive() && !isDataType() && !isNavigable()) {
+//            return UmlgPropertyOperations.internalSetter(this.property);
+//        } else {
             return UmlgPropertyOperations.setter(this.property);
-        }
+//        }
     }
 
     public String validator() {

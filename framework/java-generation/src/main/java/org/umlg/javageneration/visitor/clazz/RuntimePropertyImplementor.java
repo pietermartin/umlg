@@ -200,6 +200,11 @@ public class RuntimePropertyImplementor {
         derivedField.setName("_derived");
         ojEnum.addToFields(derivedField);
 
+        OJField navigabilityField = new OJField();
+        navigabilityField.setType(new OJPathName("boolean"));
+        navigabilityField.setName("_navigability");
+        ojEnum.addToFields(navigabilityField);
+
         OJField jsonField = new OJField();
         jsonField.setType(new OJPathName("String"));
         jsonField.setName("_json");
@@ -260,7 +265,6 @@ public class RuntimePropertyImplementor {
 
         for (Property p : allOwnedProperties) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-//            if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 
                 int inverseUpper = 1;
                 if (pWrap.getOtherEnd() != null) {
@@ -279,7 +283,7 @@ public class RuntimePropertyImplementor {
                             pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                             pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
                             pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
-                            pWrap.isDerived(), UmlgGenerationUtil.getEdgeName(pWrap.getProperty())
+                            pWrap.isDerived(), pWrap.isNavigable(), UmlgGenerationUtil.getEdgeName(pWrap.getProperty())
                     );
                 } else {
                     //This is for properties of the association class itself
@@ -298,6 +302,7 @@ public class RuntimePropertyImplementor {
                                 /*manyToMany*/pWrap.isACManyToMany(), /*upper*/1, /*lower*/1, inverseUpper, pWrap.isQualified(),
                                 pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isACUnique(), pWrap.isInverseUnique(),
                                 pWrap.isDerived(),
+                                pWrap.isNavigable(),
                                 UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_" + pWrap.getName() + "_AC"
                         );
                     } else {
@@ -313,6 +318,7 @@ public class RuntimePropertyImplementor {
                                 pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
                                 pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
                                 false/*derived*/,
+                                true,/*navigable*/
                                 UmlgGenerationUtil.getEdgeName(pWrap.getProperty())
                         );
                     }
@@ -332,6 +338,7 @@ public class RuntimePropertyImplementor {
                             pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
                             pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
                             false/*derived*/,
+                            true,/*navigable*/
                             UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_AC");
                 }
             }
@@ -340,7 +347,7 @@ public class RuntimePropertyImplementor {
         if (!hasCompositeOwner) {
             // Add in fake property to root
             addEnumLiteral(false, false, null, null, false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, modelName, modelName, "inverseOf" + modelName, "inverseOf" + modelName, false, false, null,
-                    Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, 1, false, false, false, false, false, false,false,
+                    Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, 1, false, false, false, false, false, false,false,false,
                     "root" + className.getName());
         }
         asJson.getBody().addToStatements("sb.append(\"]}\")");
@@ -391,6 +398,7 @@ public class RuntimePropertyImplementor {
             boolean isUnique,
             boolean isInverseUnique,
             boolean isDerived,
+            boolean isNavigable,
             String edgeName) {
 
         OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
@@ -626,6 +634,12 @@ public class RuntimePropertyImplementor {
         derivedAttribute.setInitExp(Boolean.toString(isDerived));
         ojLiteral.addToAttributeValues(derivedAttribute);
 
+        OJField navigableAttribute = new OJField();
+        navigableAttribute.setName("isNavigable");
+        navigableAttribute.setType(new OJPathName("boolean"));
+        navigableAttribute.setInitExp(Boolean.toString(isNavigable));
+        ojLiteral.addToAttributeValues(navigableAttribute);
+
         OJField jsonAttribute = new OJField();
         jsonAttribute.setName("json");
         jsonAttribute.setType(new OJPathName("String"));
@@ -764,6 +778,9 @@ public class RuntimePropertyImplementor {
         sb.append(", ");
         sb.append("\\\"derived\\\": ");
         sb.append(derivedAttribute.getInitExp());
+        sb.append(", ");
+        sb.append("\\\"navigable\\\": ");
+        sb.append(navigableAttribute.getInitExp());
         sb.append("}");
         jsonAttribute.setInitExp("\"" + sb.toString() + "\"");
         ojLiteral.addToAttributeValues(jsonAttribute);

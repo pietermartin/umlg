@@ -583,7 +583,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
             checkClassConstraint.setComment(String.format("Implements the ocl statement for constraint '%s'\n<pre>\n%s\n</pre>", constraintWrapper.getName(), ocl));
             OCLExpression<Classifier> oclExp = UmlgOcl2Parser.INSTANCE.parseOcl(ocl);
 
-            ifConstraintFails.setCondition("(" + UmlgOcl2Java.oclToJava(annotatedClass, oclExp) + ") == false");
+            ifConstraintFails.setCondition("(" + UmlgOcl2Java.oclToJava(clazz, annotatedClass, oclExp) + ") == false");
             ifConstraintFails.addToThenPart("result.add(new " + UmlgGenerationUtil.UmlgConstraintViolation.getLast() + "(\"" + constraintWrapper.getName() + "\", \""
                     + clazz.getQualifiedName() + "\", \"ocl\\n" + ocl.replace("\n", "\\n") + "\\nfails!\"))");
 

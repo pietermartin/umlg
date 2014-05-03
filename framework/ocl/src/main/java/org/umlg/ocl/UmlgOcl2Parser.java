@@ -68,7 +68,7 @@ public class UmlgOcl2Parser implements ModelLoadedEvent {
         return insights;
     }
 
-    public void addAssociationMemberEnds(List<Choice> choices) {
+    private void addAssociationMemberEnds(List<Choice> choices) {
         Set<Type> contextElements = new HashSet<Type>();
         List<Choice> ownedMemberEnds = new ArrayList<Choice>();
         for (Choice choice : choices) {

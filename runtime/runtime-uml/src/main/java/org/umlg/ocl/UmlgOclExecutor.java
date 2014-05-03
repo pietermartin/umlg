@@ -53,7 +53,7 @@ public class UmlgOclExecutor {
             OJAnnotatedOperation getter = new OJAnnotatedOperation("execute");
             getter.setStatic(true);
             getter.setReturnType(UmlgOcl2Java.calcReturnType(expr));
-            getter.getBody().addToStatements(getter.getReturnType().getLast() + " result = " + UmlgOcl2Java.oclToJava(oclClass, expr));
+            getter.getBody().addToStatements(getter.getReturnType().getLast() + " result = " + UmlgOcl2Java.oclToJava(contextClassifier, oclClass, expr));
             getter.getBody().addToStatements("return result");
             oclClass.addToOperations(getter);
         } catch (ParserException e) {
@@ -87,7 +87,7 @@ public class UmlgOclExecutor {
             OCLExpression<Classifier> expr = UmlgOcl2Parser.INSTANCE.getHelper().createQuery(query);
             OJAnnotatedOperation getter = new OJAnnotatedOperation("execute");
             getter.setReturnType(UmlgOcl2Java.calcReturnType(expr));
-            getter.getBody().addToStatements(getter.getReturnType().getLast() + " result = " + UmlgOcl2Java.oclToJava(oclClass, expr));
+            getter.getBody().addToStatements(getter.getReturnType().getLast() + " result = " + UmlgOcl2Java.oclToJava(contextClassifier, oclClass, expr));
             getter.getBody().addToStatements("return result");
             oclClass.addToOperations(getter);
         } catch (ParserException e) {

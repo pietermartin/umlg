@@ -1262,7 +1262,12 @@
 
         for (var i = 0; i < sortedProperties.length; i++) {
             var property = sortedProperties[i];
-            if (property.inverseComposite || !((property.dataTypeEnum !== undefined && property.dataTypeEnum !== null) || property.onePrimitive || property.manyPrimitive || property.name == 'id' || property.name == 'uri')) {
+            if (!((property.dataTypeEnum !== undefined && property.dataTypeEnum !== null) ||
+                        property.onePrimitive ||
+                        property.manyPrimitive ||
+                        !property.navigable ||
+                        property.name == 'id' ||
+                        property.name == 'uri')) {
 
                 var text = null;
                 if (property.associationClassOne && !property.memberEndOfAssociationClass) {

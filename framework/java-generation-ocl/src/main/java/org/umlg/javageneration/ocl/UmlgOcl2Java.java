@@ -3,6 +3,7 @@ package org.umlg.javageneration.ocl;
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.ocl.uml.CollectionType;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.NamedElement;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.javageneration.ocl.visitor.UmlgJavaVisitor;
@@ -17,8 +18,8 @@ public class UmlgOcl2Java {
      * @param expr The ocl expression thats being visited
      * @return java code
      */
-    public static String oclToJava(OJAnnotatedClass ojClass, OCLExpression<Classifier> expr) {
-        return expr.accept(UmlgJavaVisitor.getInstance(ojClass, expr));
+    public static String oclToJava(NamedElement namedElement, OJAnnotatedClass ojClass, OCLExpression<Classifier> expr) {
+        return expr.accept(UmlgJavaVisitor.getInstance(ojClass, namedElement, expr));
     }
     
 	public final static OJPathName calcReturnType(OCLExpression<Classifier> expr) {

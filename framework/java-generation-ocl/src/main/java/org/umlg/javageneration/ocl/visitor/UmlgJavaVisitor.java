@@ -48,15 +48,7 @@ import org.eclipse.ocl.utilities.ExpressionInOCL;
 import org.eclipse.ocl.utilities.TypedElement;
 import org.eclipse.ocl.utilities.UMLReflection;
 import org.eclipse.ocl.utilities.Visitable;
-import org.eclipse.uml2.uml.CallOperationAction;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Constraint;
-import org.eclipse.uml2.uml.EnumerationLiteral;
-import org.eclipse.uml2.uml.Operation;
-import org.eclipse.uml2.uml.Parameter;
-import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.SendSignalAction;
-import org.eclipse.uml2.uml.State;
+import org.eclipse.uml2.uml.*;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.javageneration.ocl.visitor.tojava.OclIfExpToJava;
@@ -73,6 +65,7 @@ public class UmlgJavaVisitor extends
         AbstractVisitor<String, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint> {
 
     private OJAnnotatedClass ojClass;
+    private NamedElement element;
     private final Environment<?, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, ?, ?> env;
     private final UMLReflection<?, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint> uml;
 
@@ -89,9 +82,10 @@ public class UmlgJavaVisitor extends
      *
      * @param env my environment
      */
-    protected UmlgJavaVisitor(OJAnnotatedClass ojClass,
+    protected UmlgJavaVisitor(OJAnnotatedClass ojClass, NamedElement element,
                               Environment<?, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, ?, ?> env) {
         this.ojClass = ojClass;
+        this.element = element;
         this.env = env;
         this.uml = (env == null) ? null : env.getUMLReflection();
     }
@@ -103,10 +97,10 @@ public class UmlgJavaVisitor extends
      * @param env an OCL environment
      * @return the corresponding instance
      */
-    public static UmlgJavaVisitor getInstance(OJAnnotatedClass ojClass,
+    public static UmlgJavaVisitor getInstance(OJAnnotatedClass ojClass, NamedElement element,
                                               Environment<?, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, ?, ?> env) {
 
-        return new UmlgJavaVisitor(ojClass, env);
+        return new UmlgJavaVisitor(ojClass, element, env);
     }
 
     /**
@@ -117,8 +111,8 @@ public class UmlgJavaVisitor extends
      * @return the corresponding instance
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static UmlgJavaVisitor getInstance(OJAnnotatedClass ojClass, TypedElement<Classifier> element) {
-        return new UmlgJavaVisitor(ojClass, (Environment) Environment.Registry.INSTANCE.getEnvironmentFor(element));
+    public static UmlgJavaVisitor getInstance(OJAnnotatedClass ojClass, NamedElement namedElement, TypedElement<Classifier> element) {
+        return new UmlgJavaVisitor(ojClass, namedElement, (Environment) Environment.Registry.INSTANCE.getEnvironmentFor(element));
     }
 
     /**
@@ -204,6 +198,12 @@ public class UmlgJavaVisitor extends
     protected String handlePropertyCallExp(PropertyCallExp<Classifier, Property> pc, String sourceResult, List<String> qualifierResults) {
         Property property = pc.getReferredProperty();
         PropertyWrapper pWrap = new PropertyWrapper(property);
+
+        //Validate property is navigable
+        if (!pWrap.isNavigable()) {
+            throw new IllegalStateException(String.format("Property %s is not navigable! It can not be navigated in OCL from element %s", new String[]{pWrap.getQualifiedName(), this.element.getQualifiedName()}));
+        }
+
         //Bug in ocl parser. It uses the inc
         String getter;
         if (!qualifierResults.isEmpty()) {

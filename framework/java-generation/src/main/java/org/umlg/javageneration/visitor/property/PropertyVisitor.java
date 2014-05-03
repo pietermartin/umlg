@@ -58,9 +58,11 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
     private void validateProperty(PropertyWrapper propertyWrapper) {
         //non navigable properties may not be required.
         //This creates to many problems in capturing the data model, especially for the gui.
-        if (!propertyWrapper.isDerived() && !propertyWrapper.isPrimitive() && !propertyWrapper.isDataType() && !propertyWrapper.isNavigable() && propertyWrapper.getLower() > 0) {
-            throw new IllegalStateException(String.format("Property %s is not navigable and yet is required. its lower multiplicity is %d. This is not supported.", new Object[]{propertyWrapper.getQualifiedName(), propertyWrapper.getLower()}));
-        }
+
+        //TODO this needs more thought
+//        if (!propertyWrapper.isDerived() && !propertyWrapper.isPrimitive() && !propertyWrapper.isDataType() && propertyWrapper.getOtherEnd() != null && propertyWrapper.getOtherEnd().isComposite() && !propertyWrapper.isNavigable() && propertyWrapper.getLower() > 0) {
+//            throw new IllegalStateException(String.format("Property %s is composite not navigable and yet is required. its lower multiplicity is %d. This is not supported.", new Object[]{propertyWrapper.getQualifiedName(), propertyWrapper.getLower()}));
+//        }
 
     }
 
@@ -87,7 +89,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
             initVariables.setComment(String.format("Implements the ocl statement for initialization variable '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), ocl));
             logger.fine(String.format("About to parse ocl expression \n%s", new Object[]{ocl}));
             OCLExpression<Classifier> constraint = UmlgOcl2Parser.INSTANCE.parseOcl(ocl);
-            java = UmlgOcl2Java.oclToJava(owner, constraint);
+            java = UmlgOcl2Java.oclToJava(propertyWrapper, owner, constraint);
             if (propertyWrapper.isMany()) {
                 //This is used in the initial value
                 owner.addToImports("java.util.Arrays");

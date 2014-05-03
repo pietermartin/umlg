@@ -12,6 +12,7 @@ import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.util.UmlgProperties;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -175,7 +176,18 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException("UmlgOclExecutor is not on the class path.");
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    if (e instanceof RuntimeException) {
+                        throw (RuntimeException)e;
+                    } else if (e instanceof InvocationTargetException) {
+                        Throwable target = ((InvocationTargetException) e).getTargetException();
+                        if (target instanceof RuntimeException) {
+                            throw (RuntimeException)target;
+                        } else {
+                            throw new RuntimeException(target);
+                        }
+                    } else {
+                        throw new RuntimeException(e);
+                    }
                 }
             case GROOVY:
                 String result;
@@ -206,7 +218,18 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException("UmlgOclExecutor is not on the class path.");
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    if (e instanceof RuntimeException) {
+                        throw (RuntimeException)e;
+                    } else if (e instanceof InvocationTargetException) {
+                        Throwable target = ((InvocationTargetException) e).getTargetException();
+                        if (target instanceof RuntimeException) {
+                            throw (RuntimeException)target;
+                        } else {
+                            throw new RuntimeException(target);
+                        }
+                    } else {
+                        throw new RuntimeException(e);
+                    }
                 }
             case GROOVY:
                 Object result;
