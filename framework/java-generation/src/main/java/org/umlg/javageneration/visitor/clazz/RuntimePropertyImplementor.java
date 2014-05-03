@@ -22,7 +22,8 @@ import org.umlg.javageneration.validation.Validation;
 
 public class RuntimePropertyImplementor {
 
-    public static OJEnum addTumlRuntimePropertyEnum(OJAnnotatedClass annotatedClass, String enumName, NamedElement className, Set<Property> allOwnedProperties,
+    public static OJEnum addTumlRuntimePropertyEnum(OJAnnotatedClass annotatedClass, String enumName, NamedElement className,
+                                                    Set<Property> allOwnedProperties,
                                                     boolean hasCompositeOwner, String modelName) {
 
         annotatedClass.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);

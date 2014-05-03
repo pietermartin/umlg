@@ -1320,6 +1320,44 @@ endif</body>
               </ownedEnd>
             </packagedElement>
           </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_QhJUcNLoEeOCt7XMZfn16w" name="navigability">
+            <packagedElement xmi:type="uml:Class" xmi:id="_UZpQANLoEeOCt7XMZfn16w" name="NavigableRoot">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_aypZcNLoEeOCt7XMZfn16w" name="nonNavigableMany" type="_YZE6ANLoEeOCt7XMZfn16w" aggregation="composite" association="_ayqAgNLoEeOCt7XMZfn16w">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_aypZcdLoEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_aypZctLoEeOCt7XMZfn16w" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_mV-5wNLoEeOCt7XMZfn16w" name="nonNavigableOne" type="_WzYHgNLoEeOCt7XMZfn16w" aggregation="composite" association="_mV_g0NLoEeOCt7XMZfn16w">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mV-5wdLoEeOCt7XMZfn16w" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mV-5wtLoEeOCt7XMZfn16w" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_WzYHgNLoEeOCt7XMZfn16w" name="NonNavigableOne">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_q2X7wNLoEeOCt7XMZfn16w" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sYZvMNLoEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sYZvMdLoEeOCt7XMZfn16w" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_YZE6ANLoEeOCt7XMZfn16w" name="NonNavigableMany">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_ivetINLoEeOCt7XMZfn16w" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_lAIhINLoEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_lAJIMNLoEeOCt7XMZfn16w" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_ayqAgNLoEeOCt7XMZfn16w" name="navigableRoot_nonNavigableMany_1" memberEnd="_ayqAgdLoEeOCt7XMZfn16w _aypZcNLoEeOCt7XMZfn16w">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_ayqAgdLoEeOCt7XMZfn16w" name="navigableRoot" type="_UZpQANLoEeOCt7XMZfn16w" association="_ayqAgNLoEeOCt7XMZfn16w">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ayqAgtLoEeOCt7XMZfn16w" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ayqAg9LoEeOCt7XMZfn16w" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_mV_g0NLoEeOCt7XMZfn16w" name="navigableRoot_nonNavigableOne_1" memberEnd="_mV_g0dLoEeOCt7XMZfn16w _mV-5wNLoEeOCt7XMZfn16w">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_mV_g0dLoEeOCt7XMZfn16w" name="navigableRoot" type="_UZpQANLoEeOCt7XMZfn16w" association="_mV_g0NLoEeOCt7XMZfn16w">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mV_g0tLoEeOCt7XMZfn16w" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mV_g09LoEeOCt7XMZfn16w" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+          </packagedElement>
         </packagedElement>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_9Ayn0IYHEeORFsmiMkZYdA" name="testDiagramTree">

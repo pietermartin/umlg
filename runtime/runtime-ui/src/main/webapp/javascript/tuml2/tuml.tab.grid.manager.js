@@ -1196,21 +1196,6 @@
             link.attr('href', adjustedUri);
         }
 
-//        contextMenu.menu({
-//            select: function (e, ui) {
-//                //Find the link
-//                var a = ui.item.find('a');
-//                //The row gets saved into the contextMenuUl on right click show menu
-//                var row = a.parent().parent().data("row");
-//                self.handleContextMenuSelection(a, row);
-//                contextMenu.hide();
-//                e.preventDefault();
-//                e.stopImmediatePropagation();
-//            }
-//        });
-
-//        contextMenu.data("row", cell.row).css("top", y).css("left", x).show();
-
         contextMenu.data("row", cell.row).css({
             display: "block",
             left: x,
