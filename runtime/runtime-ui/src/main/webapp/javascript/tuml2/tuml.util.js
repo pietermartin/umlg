@@ -241,6 +241,18 @@ function selectFieldValidator(property) {
         return new TumlSlick.Validators.TumlNumber(property).validate;
     } else if (property.manyPrimitive && property.fieldType == 'Real') {
         return new TumlSlick.Validators.TumlManyNumber(property).validate;
+    } else if (!property.manyPrimitive && property.fieldType == 'Long') {
+        return new TumlSlick.Validators.TumlNumber(property).validate;
+    } else if (property.manyPrimitive && property.fieldType == 'Long') {
+        return new TumlSlick.Validators.TumlManyNumber(property).validate;
+    } else if (!property.manyPrimitive && property.fieldType == 'Float') {
+        return new TumlSlick.Validators.TumlNumber(property).validate;
+    } else if (property.manyPrimitive && property.fieldType == 'Float') {
+        return new TumlSlick.Validators.TumlManyNumber(property).validate;
+    } else if (!property.manyPrimitive && property.fieldType == 'Double') {
+        return new TumlSlick.Validators.TumlNumber(property).validate;
+    } else if (property.manyPrimitive && property.fieldType == 'Double') {
+        return new TumlSlick.Validators.TumlManyNumber(property).validate;
     } else if (!property.manyPrimitive && property.fieldType == 'Boolean') {
         return new TumlSlick.Validators.TumlBoolean(property).validate;
     } else if (property.manyPrimitive && property.fieldType == 'Boolean') {
@@ -325,7 +337,16 @@ function selectEditor(property) {
     } else if (property.manyPrimitive && property.fieldType === 'UnlimitedNatural') {
         return  Tuml.Slick.Editors.ManyIntegerPrimitiveEditor;
     } else if (property.manyPrimitive && property.fieldType === 'Real') {
+        return  Tuml.Slick.Editors.ManyDoublePrimitiveEditor;
+
+    } else if (property.manyPrimitive && property.fieldType === 'Long') {
         return  Tuml.Slick.Editors.ManyIntegerPrimitiveEditor;
+    } else if (property.manyPrimitive && property.fieldType === 'Float') {
+        return  Tuml.Slick.Editors.ManyDoublePrimitiveEditor;
+    } else if (property.manyPrimitive && property.fieldType === 'Double') {
+        return  Tuml.Slick.Editors.ManyDoublePrimitiveEditor;
+
+
     } else if (property.manyPrimitive && property.fieldType === 'Boolean') {
         return  Tuml.Slick.Editors.ManyBooleanPrimitiveEditor;
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && !property.associationClassOne && property.memberEndOfAssociationClass && (property.oneToOne || property.manyToOne)) {
@@ -343,6 +364,12 @@ function selectEditor(property) {
     } else if (property.fieldType == 'UnlimitedNatural') {
         return Tuml.Slick.Editors.Integer;
     } else if (property.fieldType == 'Real') {
+        return Tuml.Slick.Editors.Double;
+    } else if (property.fieldType == 'Long') {
+        return Tuml.Slick.Editors.Integer;
+    } else if (property.fieldType == 'Float') {
+        return Tuml.Slick.Editors.Double;
+    } else if (property.fieldType == 'Double') {
         return Tuml.Slick.Editors.Double;
     } else if (property.fieldType == 'Boolean') {
         return Tuml.Slick.Editors.Checkbox;

@@ -82,6 +82,15 @@ public class UmlgRestletGenerationUtil {
                 return "FieldType.UnlimitedNatural";
             } else if (primitiveType.getName().equals("Real")) {
                 return "FieldType.Real";
+
+            } else if (primitiveType.getName().equals("int")) {
+                return "FieldType.Integer";
+            } else if (primitiveType.getName().equals("long")) {
+                return "FieldType.Long";
+            } else if (primitiveType.getName().equals("float")) {
+                return "FieldType.Float";
+            } else if (primitiveType.getName().equals("double")) {
+                return "FieldType.Double";
             } else {
                 throw new IllegalStateException("unknown primitive " + primitiveType.getName());
             }

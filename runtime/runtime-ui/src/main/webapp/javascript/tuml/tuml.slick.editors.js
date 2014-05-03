@@ -20,6 +20,7 @@
                     "ManyStringPrimitiveEditor": ManyStringPrimitiveEditor,
                     "ManyEnumerationEditor": ManyEnumerationEditor,
                     "ManyIntegerPrimitiveEditor": ManyIntegerPrimitiveEditor,
+                    "ManyDoublePrimitiveEditor": ManyDoublePrimitiveEditor,
                     "ManyBooleanPrimitiveEditor": ManyBooleanPrimitiveEditor,
                     "Checkbox": CheckboxEditor,
                     "ManyDateEditor": ManyDateEditor,
@@ -437,6 +438,46 @@
         });
         return input;
     }
+
+
+
+
+    function ManyDoublePrimitiveEditor(args) {
+        this.args = args;
+        //Only the from the grid is init called
+        if (this.args !== undefined) {
+            this.init();
+        }
+    }
+
+    ManyDoublePrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor;
+    ManyDoublePrimitiveEditor.prototype.serializeEditorValue = function (value) {
+        return parseFloat(value, 10);
+    };
+    ManyDoublePrimitiveEditor.prototype.serializeValueForOne = function (table) {
+        var rowArray = table.find('.many-primitive-editor-row');
+        var arrayToSerialize = [];
+        for (var i = 0; i < rowArray.length; i++) {
+            var row = rowArray[i];
+            arrayToSerialize.push(parseFloat($(row).data('value'), 10));
+        }
+        return arrayToSerialize;
+    }
+    ManyDoublePrimitiveEditor.prototype.serializeValue = function () {
+        var rowArray = this.$table.find('.many-primitive-editor-row');
+        var arrayToSerialize = [];
+        for (var i = 0; i < rowArray.length; i++) {
+            var row = rowArray[i];
+            arrayToSerialize.push(parseFloat($(row).data('value'), 10));
+        }
+        return arrayToSerialize;
+    }
+
+
+
+
+
+
 
     function ManyIntegerPrimitiveEditor(args) {
         this.args = args;

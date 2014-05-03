@@ -393,6 +393,18 @@
                 if (!result.valid) {
                     return result;
                 }
+                if (property.fieldType === 'Integer' && parseFloat(value) % 1 !== 0) {
+                    return {
+                        valid: false,
+                        msg: property.name + " is an is not a valid Integer."
+                    }
+                }
+                if (property.fieldType === 'Long' && parseFloat(value) % 1 !== 0) {
+                    return {
+                        valid: false,
+                        msg: property.name + " is an is not a valid Long."
+                    }
+                }
                 if (property.fieldType === 'UnlimitedNatural' && value < 0) {
                     return {
                         valid: false,
@@ -400,7 +412,7 @@
                     }
                 }
                 if (property.validations !== null) {
-                    if (property.fieldType === 'Integer') {
+                    if (property.fieldType === 'Integer' || property.fieldType === 'Long') {
                         if (property.validations.range !== undefined) {
                             result = TumlSlick.Validators.RangeInteger(property, value);
                         }
@@ -432,7 +444,7 @@
                         if (property.validations.min !== undefined) {
                             result = TumlSlick.Validators.MinUnlimitedNatural(property, value);
                         }
-                    } else if (property.fieldType === 'Real') {
+                    } else if (property.fieldType === 'Real' || property.fieldType === 'Double' || property.fieldType === 'Float') {
                         if (property.validations.range !== undefined) {
                             result = TumlSlick.Validators.RangeReal(property, value);
                         }

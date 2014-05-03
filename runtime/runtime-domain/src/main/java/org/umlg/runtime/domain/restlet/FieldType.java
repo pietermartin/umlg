@@ -11,8 +11,10 @@ public enum FieldType {
 	String,
 	Integer,
     UnlimitedNatural,
-	Long,
 	Real,
+	Long,
+    Float,
+    Double,
 	Boolean,
     ByteArray;
 	

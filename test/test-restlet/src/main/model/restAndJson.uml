@@ -25,6 +25,9 @@
     <packageImport xmi:type="uml:PackageImport" xmi:id="_wll7ECS5EeKLnOYxvH_zlw">
       <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
     </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_Nb-DkNI1EeOCt7XMZfn16w">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
     <packagedElement xmi:type="uml:Package" xmi:id="_w8IxIM37EdqwVrslYOdUDA" name="org">
       <packagedElement xmi:type="uml:Package" xmi:id="_y-4osN4jEeGdB9TPHp60mw" name="umlg">
         <packagedElement xmi:type="uml:Package" xmi:id="_1nC9wN4jEeGdB9TPHp60mw" name="test">
@@ -1192,6 +1195,94 @@ endif</body>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_PA1wUdEcEeOjlpjTZXDyqw" value="*"/>
               </ownedAttribute>
             </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_F_-zINI1EeOCt7XMZfn16w" name="JavaPrimitiveType">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_JK0-gNI1EeOCt7XMZfn16w" name="aInteger" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_QIVjMNI1EeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_QIWxUNI1EeOCt7XMZfn16w" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_eEq7MNI1EeOCt7XMZfn16w" name="aLong" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_fd5X8NI1EeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_fd6mENI1EeOCt7XMZfn16w" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_gyP7wNI1EeOCt7XMZfn16w" name="aFloat" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#float"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_h7GaMNI1EeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_h7HoUNI1EeOCt7XMZfn16w" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_i5IvwNI1EeOCt7XMZfn16w" name="aDouble" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#double"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_kFJ28NI1EeOCt7XMZfn16w" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_kFKeANI1EeOCt7XMZfn16w" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_86jn0NLFEeOCt7XMZfn16w" name="JavaPrimitiveTypeMany">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_AEgbUNLGEeOCt7XMZfn16w" name="aInteger" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Bmjc4NLGEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BmkD8NLGEeOCt7XMZfn16w" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_B-Cv0NLGEeOCt7XMZfn16w" name="aLong" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_DlJ3kNLGEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_DlKeoNLGEeOCt7XMZfn16w" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_D8O60NLGEeOCt7XMZfn16w" name="aFloat" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#float"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_FPkK8NLGEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_FPkyANLGEeOCt7XMZfn16w" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_FiyB4NLGEeOCt7XMZfn16w" name="aDouble" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#double"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GtkaANLGEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GtlBENLGEeOCt7XMZfn16w" value="*"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_hbAloNLJEeOCt7XMZfn16w" name="JavaPrimitiveTypeValidation">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_kePtINLJEeOCt7XMZfn16w" name="aMaxInteger" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mzZmoNLJEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mzaNsNLJEeOCt7XMZfn16w" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_nInBoNLJEeOCt7XMZfn16w" name="aMaxLong" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ocd2MNLJEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ocedQNLJEeOCt7XMZfn16w" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_o03vINLJEeOCt7XMZfn16w" name="aMaxFloat" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#float"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_qAKdkNLJEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_qAMSwNLJEeOCt7XMZfn16w" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_qVxhMNLJEeOCt7XMZfn16w" name="aMaxDouble" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#double"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rhS5INLJEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rhTgMNLJEeOCt7XMZfn16w" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_rvVqQNLLEeOCt7XMZfn16w" name="JavaPrimitiveTypeValidationMany">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_uhQYQNLLEeOCt7XMZfn16w" name="aMaxInteger" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_weEDMNLLEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_weF4YNLLEeOCt7XMZfn16w" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_w2kCwNLLEeOCt7XMZfn16w" name="aMaxLong" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_yaWJsNLLEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_yaWwwNLLEeOCt7XMZfn16w" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_ypxFwNLLEeOCt7XMZfn16w" name="aMaxFloat" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#float"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0X7QsNLLEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0X73wNLLEeOCt7XMZfn16w" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_0rAkwNLLEeOCt7XMZfn16w" name="aMaxDouble" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#double"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2MC5sNLLEeOCt7XMZfn16w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2MEH0NLLEeOCt7XMZfn16w" value="*"/>
+              </ownedAttribute>
+            </packagedElement>
           </packagedElement>
           <packagedElement xmi:type="uml:Package" xmi:id="_fGTN0NFlEeOjlpjTZXDyqw" name="associationclass">
             <packagedElement xmi:type="uml:Class" xmi:id="_jXsxkNFlEeOjlpjTZXDyqw" name="Person">
@@ -1282,4 +1373,12 @@ endif</body>
   <UmlgValidation_1:MaxInteger xmi:id="_ZUGawNEaEeOjlpjTZXDyqw" base_Property="_f4SRANCMEeOjlpjTZXDyqw"/>
   <UmlgValidation_1:MaxUnlimitedNatural xmi:id="_MD8hYNEcEeOjlpjTZXDyqw" base_Property="_HXy7UNEcEeOjlpjTZXDyqw"/>
   <UmlgValidation_1:MaxReal xmi:id="_QaK6wNEcEeOjlpjTZXDyqw" base_Property="_Nt6v4NEcEeOjlpjTZXDyqw"/>
+  <UmlgValidation_1:MaxInteger xmi:id="_2YFcgNLJEeOCt7XMZfn16w" max="5" base_Property="_kePtINLJEeOCt7XMZfn16w"/>
+  <UmlgValidation_1:MaxLong xmi:id="_3qNLsNLJEeOCt7XMZfn16w" max="5" base_Property="_nInBoNLJEeOCt7XMZfn16w"/>
+  <UmlgValidation_1:MaxFloat xmi:id="_53T8cNLJEeOCt7XMZfn16w" max="5.123" base_Property="_o03vINLJEeOCt7XMZfn16w"/>
+  <UmlgValidation_1:MaxDouble xmi:id="_7MPIANLJEeOCt7XMZfn16w" max="5.123" base_Property="_qVxhMNLJEeOCt7XMZfn16w"/>
+  <UmlgValidation_1:MaxInteger xmi:id="_7AzpMNLLEeOCt7XMZfn16w" max="5" base_Property="_uhQYQNLLEeOCt7XMZfn16w"/>
+  <UmlgValidation_1:MaxLong xmi:id="_8OHJ0NLLEeOCt7XMZfn16w" max="5" base_Property="_w2kCwNLLEeOCt7XMZfn16w"/>
+  <UmlgValidation_1:MaxFloat xmi:id="_9jQX0NLLEeOCt7XMZfn16w" max="5.123" base_Property="_ypxFwNLLEeOCt7XMZfn16w"/>
+  <UmlgValidation_1:MaxDouble xmi:id="_-8D90NLLEeOCt7XMZfn16w" max="5.123" base_Property="_0rAkwNLLEeOCt7XMZfn16w"/>
 </xmi:XMI>
