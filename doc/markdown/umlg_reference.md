@@ -30,7 +30,7 @@ For `UmlgOrderedSet` apache collections' [ListOrderedSet](https://commons.apache
 
 This implies that for any property with a upper multiplicity greater than 1 the property will be one of the 4 given types.
 
-###An example
+###Collection Example
 
 ![image of set semantics](images/uml/quickpreview/org/umlg/setsemantics/Package_setsemantics_SetSemanticsClassDiagram.PNG)
 
@@ -95,9 +95,16 @@ Illustrates {}
         Assert.assertEquals(2, p.getComplaint().size());
     }
 
+<br />
 ##UMLG Types
 
+<br />
 ###UML Primitive Types
+
+From the UML specification.
+
+>A primitive type defines a predefined data type, without any relevant substructure (i.e., it has no parts in the context of
+ UML). A primitive datatype may have an algebra and operations defined outside of UML, for example, mathematically.
 
 UMLG supports UML's basic primitive types. These are,
 
@@ -106,6 +113,32 @@ UMLG supports UML's basic primitive types. These are,
 * **Real**, translates to java's `java.lang.Double`
 * **String**, translates to java's `java.lang.String`
 * **UnlimitedNatural**, translates to java's `java.lang.Integer` <em class="bg-danger">UnlimitedNatural is any integer >= 0</em>
+
+<br />
+####UML Primitive Type Example
+
+![image of example uml primitive type](images/uml/umlprimitivetype/umlPrimitiveType.png)
+
+    @Test
+    public void testUmlPrimitiveType() {
+        UmlPrimitiveType umlPrimitiveType = new UmlPrimitiveType();
+        umlPrimitiveType.setAString("This is a string");
+        umlPrimitiveType.setABoolean(true);
+        umlPrimitiveType.setAInteger(1);
+        umlPrimitiveType.setAUnlimitedNatural(1);
+        umlPrimitiveType.setAReal(1D);
+        db.commit();
+        //Ensure we are getting the values from the db, clearing any cached values in the object
+        umlPrimitiveType.reload();
+        Assert.assertEquals("This is a string", umlPrimitiveType.getAString());
+        Assert.assertEquals(true, umlPrimitiveType.getABoolean());
+        Assert.assertEquals(1, umlPrimitiveType.getAInteger(), 0);
+        Assert.assertEquals(1, umlPrimitiveType.getAUnlimitedNatural(), 0);
+        Assert.assertEquals(1D, umlPrimitiveType.getAReal(), 0);
+    }
+
+<br />
+###Java Primitive Types
 
 UMLG supports UML's java primitive types. These are,
 
@@ -118,6 +151,30 @@ UMLG supports UML's java primitive types. These are,
 * **short**, <em class="bg-danger">Not yet implemented</em>
 * **byte**, <em class="bg-danger">Not yet implemented</em>
 
+<br />
+####Java Primitive Type Example
+
+![image of example java primitive type](images/uml/javaprimitivetype/javaPrimitiveType.png)
+
+    @Test
+    public void testJavaPrimitiveType() {
+        JavaPrimitiveType javaPrimitiveType = new JavaPrimitiveType();
+        javaPrimitiveType.setABoolean(true);
+        javaPrimitiveType.setAInteger(1);
+        javaPrimitiveType.setALong(1L);
+        javaPrimitiveType.setAFloat(1F);
+        javaPrimitiveType.setADouble(1D);
+        db.commit();
+        //Ensure we are getting the values from the db, clearing any cached values in the object
+        javaPrimitiveType.reload();
+        Assert.assertEquals(true, javaPrimitiveType.getABoolean());
+        Assert.assertEquals(1, javaPrimitiveType.getAInteger(), 0);
+        Assert.assertEquals(1L, javaPrimitiveType.getALong(), 0);
+        Assert.assertEquals(1F, javaPrimitiveType.getAFloat(), 0);
+        Assert.assertEquals(1D, javaPrimitiveType.getADouble(), 0);
+    }
+
+<br />
 ###UMLG Data Types
 
 From the UML specification.
@@ -144,6 +201,28 @@ Otherwise copy umlg-datatypes.uml to the directory of your model and import the 
 * **Audio**, <em class="bg-danger">Not yet implemented</em>
 * **Image**, <em class="bg-danger">Not yet implemented</em>
 
+<br />
+####UMLG Data Type Example
+
+![image of umlg data type](images/uml/umlgdatatype/umlgDataType.png)
+
+    @Test
+    public void testUmlgDataType() {
+        UmlgDataType umlgDataType = new UmlgDataType();
+        umlgDataType.setEmail("john.smith@hero.com");
+        umlgDataType.setDatetime(new DateTime(UmlgFormatter.parseDateTime("2014-05-04 12:12:12")));
+        umlgDataType.setDate(new LocalDate(UmlgFormatter.parseDate("2014-05-04")));
+        umlgDataType.setTime(new LocalTime(UmlgFormatter.parseTime("12:12")));
+        db.commit();
+        //Ensure we are getting the values from the db, clearing any cached values in the object
+        umlgDataType.reload();
+        Assert.assertEquals("john.smith@hero.com", umlgDataType.getEmail());
+        Assert.assertEquals("2014-05-04 12:12:12", UmlgFormatter.format(umlgDataType.getDatetime()));
+        Assert.assertEquals("2014-05-04", UmlgFormatter.format(umlgDataType.getDate()));
+        Assert.assertEquals("12:12", UmlgFormatter.format(umlgDataType.getTime()));
+    }
+
+<br />
 ###UMLG Validation Stereotypes
 
 UMLG uses stereotypes to validate the data types. For most simple validations this is faster and easier than using ocl
@@ -191,13 +270,81 @@ to the directory of your model and imported the library into your model.
 * **MaxDouble**, validates that a Double is *smaller* or equal to the specified value.
 * **RangeDouble**, validates that a Double is in the the range specified.
 
-#### Apply a validation stereotype
+<br />
+####Apply a validation stereotype
 
 To use the a UMLG validation stereotype you need to apply the stereotype to a property and specify the max, min or range values.
 
 ![image of validation stereotype](images/uml/stereotype/validationStereotype.png)
 
+<br />
+####UMLG Validation Example
 
+![image of umlg validation](images/uml/validationprofile/umlgValidation.png)
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testUmlgMinLengthValidationFails() {
+        Validation validation = new Validation();
+        //The stereotype validation that the minimum length must be at least 5
+        validation.setMinLength("1234");
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testUmlgMinIntegerValidationFails() {
+        Validation validation = new Validation();
+        //The stereotype validation that the minimum value must be at least 5
+        validation.setMinInteger(4);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testUmlgMinUnlimitedNaturalValidationFails() {
+        Validation validation = new Validation();
+        //The stereotype validation that the minimum value must be at least 5
+        validation.setMinUnlimitedNatural(4);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testUmlgMinRealValidationFails() {
+        Validation validation = new Validation();
+        //The stereotype validation that the minimum value must be at least 5.123
+        validation.setMinReal(5.122D);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testUmlgMinLongValidationFails() {
+        Validation validation = new Validation();
+        //The stereotype validation that the minimum value must be at least 5
+        validation.setMinLong(4L);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testUmlgMinFloatValidationFails() {
+        Validation validation = new Validation();
+        //The stereotype validation that the minimum value must be at least 5.123
+        validation.setMinFloat(5.122F);
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testUmlgMinDoubleValidationFails() {
+        Validation validation = new Validation();
+        //The stereotype validation that the minimum value must be at least 5.123
+        validation.setMinDouble(5.122D);
+    }
+
+    @Test
+    public void testUmlgValidationPasses() {
+        Validation validation = new Validation();
+        //The stereotype validation that the minimum length must be at least 5
+        validation.setMinLength("12345");
+        validation.setMinInteger(5);
+        validation.setMinUnlimitedNatural(5);
+        validation.setMinReal(5.123D);
+        validation.setMinLong(5L);
+        validation.setMinFloat(5.123F);
+        validation.setMinDouble(5.123D);
+    }
+
+<br />
 ##Associations
 
 From the UML specification.
@@ -219,12 +366,323 @@ have the same type.
  Compositions may be linked in a directed acyclic graph with transitive deletion characteristics; that is, deleting an
  element in one part of the graph will also result in the deletion of all elements of the subgraph below that element.
  Composition is represented by the isComposite attribute on the part end of the association being set to true.
+>
+>Navigability means instances participating in links at runtime (instances of an association) can be accessed efficiently
+ from instances participating in links at the other ends of the association. The precise mechanism by which such access is
+ achieved is implementation specific. If an end is not navigable, access from the other ends may or may not be possible,
+ and if it is, it might not be efficient.
 
+UMLG implements aggregation `none` and `composite`.
+
+<br />
+###Composite Associations
+
+`composite` aggregation is represented in UML with a diamond at the other member end of the association.
+
+<br />
+####Composite Association Example
+
+The example below models the composite associations of a software window.
+
+![image of association composite](images/uml/association/composite/associationComposite.png)
+
+For entities with a composite parent UMLG generates an additional constructor that takes the parent as parameter.
+
+    /**
+     * Using the constructor with the composite parent as parameter
+     */
+    @Test
+    public void testAssociationCompositeWithCompositeConstructor() {
+        Window window = new Window();
+        Slider slider1 = new Slider(window);
+        Slider slider2 = new Slider(window);
+        Header header = new Header(window);
+        Panel panel = new Panel(window);
+        db.commit();
+        Assert.assertEquals(2, window.getScrollbar().size());
+        Assert.assertEquals(header, window.getTitle());
+        Assert.assertEquals(panel, window.getBody());
+    }
+
+    /**
+     * Using the default constructor
+     */
+    @Test
+    public void testAssociationCompositeWithDefaultConstructor() {
+        Window window = new Window();
+        Slider slider1 = new Slider();
+        window.addToScrollbar(slider1);
+        Slider slider2 = new Slider();
+        window.addToScrollbar(slider2);
+        Header header = new Header();
+        window.addToTitle(header);
+        Panel panel = new Panel();
+        window.addToBody(panel);
+        db.commit();
+        Assert.assertEquals(2, window.getScrollbar().size());
+        Assert.assertEquals(header, window.getTitle());
+        Assert.assertEquals(panel, window.getBody());
+    }
+
+<br />
+**Deleting the parent object also deletes its composite children!**
+
+This is because the semantics of a composite relationship implies a strong whole/part relationship.
+
+    @Test
+    public void testAssociationCompositeDeletion() {
+        Window window = new Window();
+        Slider slider1 = new Slider(window);
+        Slider slider2 = new Slider(window);
+        Header header = new Header(window);
+        Panel panel = new Panel(window);
+        db.commit();
+
+        Assert.assertEquals(2, window.getScrollbar().size());
+        Assert.assertEquals(header, window.getTitle());
+        Assert.assertEquals(panel, window.getBody());
+        Assert.assertEquals(1, Window.allInstances().size());
+        Assert.assertEquals(2, Slider.allInstances().size());
+        Assert.assertEquals(1, Header.allInstances().size());
+        Assert.assertEquals(1, Panel.allInstances().size());
+
+        window.delete();
+        db.commit();
+
+        Assert.assertEquals(0, Window.allInstances().size());
+        Assert.assertEquals(0, Slider.allInstances().size());
+        Assert.assertEquals(0, Header.allInstances().size());
+        Assert.assertEquals(0, Panel.allInstances().size());
+    }
+
+<br />
+###Normal Associations
+
+`none` aggregation is represented as an association with no adornment.
+
+<br />
+####Normal Association Example
+
+The example below models a many to many relationship between Company and Person.
+
+![image of normal composite](images/uml/association/normal/normalAssociation.png)
+
+    @Test
+    public void testNormalAssociation() {
+        Company microsoft = new Company();
+        microsoft.setName("microsoft");
+        Company apple = new Company();
+        apple.setName("apple");
+
+        Person john = new Person();
+        john.setName("john");
+        john.addToEmployer(microsoft);
+        john.addToEmployer(apple);
+
+        Person joe = new Person();
+        joe.setName("joe");
+        joe.addToEmployer(microsoft);
+
+        db.commit();
+
+        Assert.assertEquals(2, microsoft.getEmployee().size());
+        Assert.assertTrue(microsoft.getEmployee().contains(john));
+        Assert.assertTrue(microsoft.getEmployee().contains(joe));
+        Assert.assertTrue(apple.getEmployee().contains(john));
+
+        Assert.assertEquals(2, john.getEmployer().size());
+        Assert.assertTrue(john.getEmployer().contains(microsoft));
+        Assert.assertTrue(john.getEmployer().contains(apple));
+
+        Assert.assertEquals(1, joe.getEmployer().size());
+        Assert.assertTrue(joe.getEmployer().contains(microsoft));
+        Assert.assertTrue(!joe.getEmployer().contains(apple));
+    }
+
+
+<br />
 ##Multiplicity
 
-##Inheritence
+From the UML specification.
+
+>A multiplicity is a definition of an inclusive interval of non-negative integers beginning with a lower bound and ending
+ with a (possibly infinite) upper bound. A multiplicity element embeds this information to specify the allowable
+ cardinalities for an instantiation of this element.
+
+UMLG validates the multiplicities exactly as specified. If a property's multiplicity is [2..5] then the number of
+instances of that element must be between 2 and 5 inclusive. This can be quite restrictive if a property's lower
+multiplicity is modeled greater than zero. Having a lower multiplicity greater than zero implies that the entity will
+not be able to be persisted unless the property has been set.
+
+Upper multiplicity is also validated unless the upper multiplicity is set to `*`. `*` indicates that there is no upper
+limit specified.
+
+<br />
+####Multiplicity Example
+
+The example below models a one to many relationship between Customer and Purchase and Customer and Account.
+The customer must have at least one and not more than five accounts. The customer can have any number of Purchases
+including not having any at all.
+
+![image of multiplicities](images/uml/multiplicity/multiplicity.png)
+
+    //This will fail as the customer needs at least one account
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testCustomerNeedsAnAccount() {
+        Customer customer = new Customer();
+        db.commit();
+    }
+
+    //This will fail as the customer can not have more than 5 accounts
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testCustomerHasMoreThanFiveAccounts() {
+        Customer customer = new Customer();
+        Account account1 = new Account();
+        Account account2 = new Account();
+        Account account3 = new Account();
+        Account account4 = new Account();
+        Account account5 = new Account();
+        Account account6 = new Account();
+        customer.addToAccount(account1);
+        customer.addToAccount(account2);
+        customer.addToAccount(account3);
+        customer.addToAccount(account4);
+        customer.addToAccount(account5);
+        customer.addToAccount(account6);
+        db.commit();
+    }
+
+    //Test passes as the customer has 5 accounts and purchases are not required.
+    @Test
+    public void testCustomerHasAccounts() {
+        Customer customer = new Customer();
+        Account account1 = new Account();
+        Account account2 = new Account();
+        Account account3 = new Account();
+        Account account4 = new Account();
+        Account account5 = new Account();
+        customer.addToAccount(account1);
+        customer.addToAccount(account2);
+        customer.addToAccount(account3);
+        customer.addToAccount(account4);
+        customer.addToAccount(account5);
+        db.commit();
+    }
+
+    @Test
+    public void testCustomerCanHaveAnyNumberOfPurchases() {
+        Customer customer = new Customer();
+        //Add at least one account.
+        Account account = new Account();
+        customer.addToAccount(account);
+        Random randomGenerator = new Random();
+        int numberOfPurchases = randomGenerator.nextInt(10000);
+        for (int i = 0; i < numberOfPurchases; i++) {
+            Purchase purchase = new Purchase();
+            customer.addToPurchase(purchase);
+        }
+        db.commit();
+    }
+
+The example below illustrates multiplicities on primitive types.
+
+![image of multiplicities](images/uml/multiplicity/primitiveMultiplicity.png)
+
+    //This will fail as the customer needs to 5 top favourite numbers
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testPrimitiveMultiplicityFails() {
+
+        Customer customer = new Customer();
+        //Customer at least needs one account
+        Account account = new Account();
+        customer.addToAccount(account);
+
+        //Customer's name property has a multiplicity of [1]. It is a required property.
+        customer.setName("John");
+
+        customer.addToFavouriteNumbers(1);
+        customer.addToFavouriteNumbers(2);
+
+        customer.addToTop5FavouriteNumbers(1);
+        customer.addToTop5FavouriteNumbers(2);
+        customer.addToTop5FavouriteNumbers(3);
+        customer.addToTop5FavouriteNumbers(4);
+
+        db.commit();
+    }
+
+    @Test
+    public void testPrimitiveMultiplicity() {
+        Customer customer = new Customer();
+        //Customer at least needs one account
+        Account account = new Account();
+        customer.addToAccount(account);
+
+        //Customer's name property has a multiplicity of [1]. It is a required property.
+        customer.setName("John");
+
+        customer.addToFavouriteNumbers(1);
+        customer.addToFavouriteNumbers(2);
+
+        customer.addToTop5FavouriteNumbers(1);
+        customer.addToTop5FavouriteNumbers(2);
+        customer.addToTop5FavouriteNumbers(3);
+        customer.addToTop5FavouriteNumbers(4);
+        customer.addToTop5FavouriteNumbers(5);
+
+        db.commit();
+    }
+
+##Inheritance
+
+From the UML specification
+
+>A generalization is a taxonomic relationship between a more general classifier and a more specific classifier. Each
+ instance of the specific classifier is also an indirect instance of the general classifier. Thus, the specific classifier inherits
+ the features of the more general classifier.
+
+UML's term for inheritance is **generalization**.
+
+UMLG supports inheritance. <em class="bg-danger">UML's multiple inheritance is not supported.<em>
+
+
+UMLG supports abstract classes.
+
+The example below illustrates inheritance. The Shape class is abstract.
+
+![image of inheritance](images/uml/inheritance/inheritance.png)
+
+    @Test
+    public void testInheritance() {
+        Polygon polygon = new Polygon();
+        polygon.setName("polygon1");
+        Eclipse eclipse = new Eclipse();
+        eclipse.setName("eclipse1");
+        Spline spline = new Spline();
+        spline.setName("spline1");
+        db.commit();
+
+        Assert.assertTrue(polygon instanceof Shape);
+        Assert.assertTrue(eclipse instanceof Shape);
+        Assert.assertTrue(spline instanceof Shape);
+        Assert.assertEquals("polygon1", polygon.getName());
+        Assert.assertEquals("eclipse1", eclipse.getName());
+        Assert.assertEquals("spline1", spline.getName());
+    }
 
 ##Interfaces
+
+From the UML specification.
+
+>An interface is a kind of classifier that represents a declaration of a set of coherent public features and obligations. An
+ interface specifies a contract; any instance of a classifier that realizes the interface must fulfill that contract. The
+ obligations that may be associated with an interface are in the form of various kinds of constraints (such as pre- and post-
+ conditions) or protocol specifications, which may impose ordering restrictions on interactions through the interface.
+>
+>Since interfaces are declarations, they are not instantiable. Instead, an interface specification is implemented by an
+ instance of an instantiable classifier, which means that the instantiable classifier presents a public facade that conforms to
+ the interface specification. Note that a given classifier may implement more than one interface and that an interface may
+ be implemented by a number of different classifiers
 
 ##Enumeration
 
@@ -239,3 +697,76 @@ have the same type.
 ##Subsetting
 
 ##Redefinitions
+
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
+<p>a</p>
