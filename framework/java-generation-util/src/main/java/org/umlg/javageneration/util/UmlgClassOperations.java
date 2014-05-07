@@ -347,7 +347,15 @@ public class UmlgClassOperations extends ClassOperations {
         return result;
     }
 
-    public static Set<Classifier> getConcreteRealization(Interface inf) {
+    public static Set<Classifier> getConcreteRealization(Classifier classifier) {
+        if (classifier instanceof Interface) {
+            return  getConcreteRealizationForInterface((Interface)classifier);
+        } else {
+            return  getConcreteRealizationForClass((Class)classifier);
+        }
+    }
+
+    private static Set<Classifier> getConcreteRealizationForInterface(Interface inf) {
         Set<Classifier> result = new HashSet<Classifier>();
         List<InterfaceRealization> interfaceRealizations = ModelLoader.INSTANCE.getInterfaceRealization(inf);
         for (InterfaceRealization interfaceRealization : interfaceRealizations) {
@@ -355,6 +363,10 @@ public class UmlgClassOperations extends ClassOperations {
             result.add(c);
         }
         return result;
+    }
+
+    public static Set<Classifier> getConcreteRealizationForClass(Class clazz) {
+        return getSpecializations(clazz);
     }
 
     public static Set<Classifier> getRealizationWithoutCompositeOwner(Interface inf) {

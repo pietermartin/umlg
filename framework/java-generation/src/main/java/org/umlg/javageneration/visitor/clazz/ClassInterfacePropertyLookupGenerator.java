@@ -45,7 +45,7 @@ public class ClassInterfacePropertyLookupGenerator extends BaseVisitor implement
                 OJField result = new OJField("result", UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(pathName));
                 result.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(UmlgClassOperations.getPathName(propertyWrapper.getType()).getLast()).getLast() + "()");
                 lookupOnParent.getBody().addToLocals(result);
-                Set<Classifier> concreteImplementations = UmlgClassOperations.getConcreteRealization((Interface) propertyWrapper.getType());
+                Set<Classifier> concreteImplementations = UmlgClassOperations.getConcreteRealization((Classifier)propertyWrapper.getType());
                 int cnt = 1;
                 for (Classifier c : concreteImplementations) {
                     annotatedClass.addToImports(UmlgClassOperations.getPathName(c));

@@ -55,9 +55,6 @@ public class ModelLoader {
             location = "jar:file:///" + location + "!/";
             URI uri = URI.createURI(location);
             registerPathmaps(uri);
-//            File dir = modelFile.getParentFile();
-//            URI dirUri = URI.createFileURI(dir.getAbsolutePath());
-//            model = (Model) load(dirUri.appendSegment(modelFile.getName()));
             URI modelUri = URI.createURI(modelFile.toString());
             model = (Model) load(modelUri);
             umlgProfile = model.getAppliedProfile("Umlg::Profile");
@@ -264,15 +261,23 @@ public class ModelLoader {
 
     public List<InterfaceRealization> getInterfaceRealization(final Interface inf) {
         List<InterfaceRealization> results = new ArrayList<InterfaceRealization>();
-        filter(results, this.model, new Filter() {
+        getInterfaceRealization(results, inf);
+        return results;
+    }
 
+    private void getInterfaceRealization(List<InterfaceRealization> results, final Interface inf) {
+        filter(results, this.model, new Filter() {
             @Override
             public boolean filter(Element e) {
                 return e instanceof InterfaceRealization && ((InterfaceRealization) e).getContract() == inf;
             }
         });
-
-        return results;
+        //Check if interface is extended
+        List<Generalization> generalizations = getSpecifics(inf);
+        for (Generalization generalization : generalizations) {
+            Classifier specific = generalization.getSpecific();
+            getInterfaceRealization(results, (Interface)specific);
+        }
     }
 
     public List<Stereotype> getValidationStereotypes() {

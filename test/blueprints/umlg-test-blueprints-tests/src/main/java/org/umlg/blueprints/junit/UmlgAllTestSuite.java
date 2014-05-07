@@ -5,6 +5,8 @@ import org.junit.runners.Suite;
 import org.umlg.gremlin.TestGroovyExecutor;
 import org.umlg.meta.TestMetaClasses;
 import org.umlg.tests.allinstances.AllInstancesTest;
+import org.umlg.tests.allinstances.TestAllInstancesOnAbstractClass;
+import org.umlg.tests.allinstances.TestAllInstancesOnInterface;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.collectiontest.*;
 import org.umlg.tests.componenttest.TestComponent;
@@ -108,7 +110,9 @@ import org.umlg.tests.validationtest.TestValidation;
         TestRootMethods.class,
         TestJavaPrimitiveTypes.class,
         TestJavaPrimitiveTypesWithValidation.class,
-        TestJavaManyPrimitiveTypesWithValidation.class
+        TestJavaManyPrimitiveTypesWithValidation.class,
+        TestAllInstancesOnAbstractClass.class,
+        TestAllInstancesOnInterface.class
 })
 public class UmlgAllTestSuite {
 }

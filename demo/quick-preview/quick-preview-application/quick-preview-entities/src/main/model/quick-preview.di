@@ -16,16 +16,37 @@
     <availablePage>
       <emfPageIdentifier href="quick-preview.notation#_5tDD0NLiEeOCt7XMZfn16w"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="quick-preview.notation#_WvUlINNwEeOCt7XMZfn16w"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="quick-preview.notation#_0EIRENNyEeOCt7XMZfn16w"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="quick-preview.notation#_mFlLMNN1EeOCt7XMZfn16w"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="quick-preview.notation#_Wr_70NOmEeOCt7XMZfn16w"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="quick-preview.notation#_mKTMENSGEeOCt7XMZfn16w"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="quick-preview.notation#__fdAANSSEeOCt7XMZfn16w"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="quick-preview.notation#_AR9ToNSWEeOCt7XMZfn16w"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="quick-preview.notation#_GqQDoNVgEeOCt7XMZfn16w"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="quick-preview.notation#_5RY_INXuEeOCt7XMZfn16w"/>
+    </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
     <windows>
       <children xsi:type="di:TabFolder">
-        <children>
-          <emfPageIdentifier href="quick-preview.notation#_JKldMHzeEeOYhpiy1kqM8Q"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="quick-preview.notation#_ujU10H1NEeOYhpiy1kqM8Q"/>
-        </children>
         <children>
           <emfPageIdentifier href="quick-preview.notation#_xE9sIH1NEeOYhpiy1kqM8Q"/>
         </children>
@@ -34,6 +55,33 @@
         </children>
         <children>
           <emfPageIdentifier href="quick-preview.notation#_5tDD0NLiEeOCt7XMZfn16w"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="quick-preview.notation#_WvUlINNwEeOCt7XMZfn16w"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="quick-preview.notation#_0EIRENNyEeOCt7XMZfn16w"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="quick-preview.notation#_mFlLMNN1EeOCt7XMZfn16w"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="quick-preview.notation#_Wr_70NOmEeOCt7XMZfn16w"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="quick-preview.notation#_mKTMENSGEeOCt7XMZfn16w"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="quick-preview.notation#__fdAANSSEeOCt7XMZfn16w"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="quick-preview.notation#_AR9ToNSWEeOCt7XMZfn16w"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="quick-preview.notation#_GqQDoNVgEeOCt7XMZfn16w"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="quick-preview.notation#_5RY_INXuEeOCt7XMZfn16w"/>
         </children>
       </children>
     </windows>

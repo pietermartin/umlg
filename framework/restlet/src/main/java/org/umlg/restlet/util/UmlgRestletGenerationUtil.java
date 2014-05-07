@@ -74,23 +74,18 @@ public class UmlgRestletGenerationUtil {
             PrimitiveType primitiveType = (PrimitiveType) propertyWrapper.getType();
             if (primitiveType.getName().equals("String")) {
                 return "FieldType.String";
-            } else if (primitiveType.getName().equals("Integer")) {
+            } else if (primitiveType.getName().equals("Integer") || primitiveType.getName().equals("int")) {
                 return "FieldType.Integer";
-            } else if (primitiveType.getName().equals("Boolean")) {
+            } else if (primitiveType.getName().equals("Boolean") || primitiveType.getName().equals("boolean")) {
                 return "FieldType.Boolean";
             } else if (primitiveType.getName().equals("UnlimitedNatural")) {
                 return "FieldType.UnlimitedNatural";
-            } else if (primitiveType.getName().equals("Real")) {
+            } else if (primitiveType.getName().equals("Real") || primitiveType.getName().equals("double")) {
                 return "FieldType.Real";
-
-            } else if (primitiveType.getName().equals("int")) {
-                return "FieldType.Integer";
             } else if (primitiveType.getName().equals("long")) {
                 return "FieldType.Long";
             } else if (primitiveType.getName().equals("float")) {
                 return "FieldType.Float";
-            } else if (primitiveType.getName().equals("double")) {
-                return "FieldType.Double";
             } else {
                 throw new IllegalStateException("unknown primitive " + primitiveType.getName());
             }

@@ -3,6 +3,8 @@ package org.umlg.blueprints.junit;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.umlg.gremlin.TestGroovyExecutor;
+import org.umlg.tests.allinstances.TestAllInstancesOnAbstractClass;
+import org.umlg.tests.allinstances.TestAllInstancesOnInterface;
 import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.collectiontest.*;
@@ -43,7 +45,9 @@ import org.umlg.tests.validationtest.TestValidation;
 //        TestValidation.class
 //        TestJavaPrimitiveTypes.class
 //        TestJavaPrimitiveTypesWithValidation.class,
-        TestJavaManyPrimitiveTypesWithValidation.class
+//        TestJavaManyPrimitiveTypesWithValidation.class,
+//        TestAllInstancesOnAbstractClass.class,
+        TestAllInstancesOnInterface.class
 })
 public class UmlgAnyTestSuite {
 }

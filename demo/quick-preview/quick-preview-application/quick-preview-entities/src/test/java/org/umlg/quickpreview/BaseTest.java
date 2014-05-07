@@ -1,9 +1,9 @@
 package org.umlg.quickpreview;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.*;
-import org.umlg.Company;
-import org.umlg.Person;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgGraph;
@@ -13,12 +13,12 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Date: 2014/01/15
- * Time: 10:17 PM
+ * Date: 2014/05/04
+ * Time: 12:09 PM
  */
-public class TestDemo {
+public abstract class BaseTest {
 
-    private UmlgGraph db;
+    protected UmlgGraph db;
 
     @BeforeClass
     public static void beforeClass() {
@@ -39,18 +39,6 @@ public class TestDemo {
     @After
     public void after() {
         db.drop();
-    }
-
-    @Test
-    public void test() {
-        Company company = new Company();
-        company.setName("UMLG");
-        Person person = new Person();
-        person.setFirstname("Joe");
-        person.setLastname("Bloggs");
-        company.getEmployee().add(person);
-        UMLG.get().commit();
-        Assert.assertTrue(company.getEmployee().contains(person));
     }
 
 }

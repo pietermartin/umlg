@@ -14,5 +14,4 @@ public interface UmlgMetaNode<T> {
     Vertex getVertex();
     Object getId();
     String getUid();
-    Long getIdHigh();
 }

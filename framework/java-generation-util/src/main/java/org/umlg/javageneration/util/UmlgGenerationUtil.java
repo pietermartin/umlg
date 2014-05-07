@@ -1,7 +1,6 @@
 package org.umlg.javageneration.util;
 
-import org.eclipse.uml2.uml.MultiplicityElement;
-import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.*;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.annotation.OJAnnotationValue;
@@ -162,6 +161,10 @@ public class UmlgGenerationUtil {
 //    public static OJPathName UmlgIdUtilFactoryPathName = new OJPathName("org.umlg.runtime.adaptor.UmlgIdUtilFactory");
     public static OJPathName UmlgLabelConverterFactoryPathName = new OJPathName("org.umlg.runtime.adaptor.UmlgLabelConverterFactory");
     public static OJPathName UmlgQualifierIdFactory = new OJPathName("org.umlg.runtime.adaptor.UmlgQualifierIdFactory");
+
+    public static String getEdgeToRootLabelStrategyMeta(Classifier classifier) {
+        return "root" + UmlgClassOperations.getQualifiedName(classifier) + "Meta";
+    }
 
     public static String getEdgeToRootLabelStrategyMeta(org.eclipse.uml2.uml.Class clazz) {
         return "root" + UmlgClassOperations.getQualifiedName(clazz) + "Meta";

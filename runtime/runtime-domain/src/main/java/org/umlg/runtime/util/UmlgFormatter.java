@@ -28,7 +28,7 @@ public class UmlgFormatter {
 
 	public static DateTime parseDateTime(String dateTime) {
 		if (dateTime != null && !dateTime.isEmpty()) {
-            DateTimeFormatter fmt = DateTimeFormat.forPattern("yy-mm-dd HH:mm:ss");
+            DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 			return fmt.parseDateTime(dateTime);
 		} else {
 			return null;

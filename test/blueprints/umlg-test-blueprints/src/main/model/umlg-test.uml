@@ -132,6 +132,33 @@
           <packagedElement xmi:type="uml:Class" xmi:id="_vAT78IipEeKeSZB9UA6Gvw" clientDependency="_w4x5cIipEeKeSZB9UA6Gvw" name="ManyAA">
             <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_w4x5cIipEeKeSZB9UA6Gvw" name="InterfaceRealization1" client="_vAT78IipEeKeSZB9UA6Gvw" supplier="_p2UC0O6uEeCKZsw1ityolg" contract="_p2UC0O6uEeCKZsw1ityolg"/>
           </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_kjHuYNXwEeOCt7XMZfn16w" name="Creator">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_qPmJANXwEeOCt7XMZfn16w" name="i2" type="_oST88NXwEeOCt7XMZfn16w" aggregation="composite" association="_qPmJA9XwEeOCt7XMZfn16w">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_qPmJAdXwEeOCt7XMZfn16w"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_qPmJAtXwEeOCt7XMZfn16w" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_qqhxgNXwEeOCt7XMZfn16w" name="i1" type="_mQcy4NXwEeOCt7XMZfn16w" aggregation="composite" association="_qqhxg9XwEeOCt7XMZfn16w">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_qqhxgdXwEeOCt7XMZfn16w"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_qqhxgtXwEeOCt7XMZfn16w" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Interface" xmi:id="_mQcy4NXwEeOCt7XMZfn16w" name="I1"/>
+          <packagedElement xmi:type="uml:Interface" xmi:id="_oST88NXwEeOCt7XMZfn16w" name="I2"/>
+          <packagedElement xmi:type="uml:Association" xmi:id="_qPmJA9XwEeOCt7XMZfn16w" name="creator_i2_1" memberEnd="_qPmJBNXwEeOCt7XMZfn16w _qPmJANXwEeOCt7XMZfn16w" navigableOwnedEnd="_qPmJBNXwEeOCt7XMZfn16w">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_qPmJBNXwEeOCt7XMZfn16w" name="creator" type="_kjHuYNXwEeOCt7XMZfn16w" association="_qPmJA9XwEeOCt7XMZfn16w">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_qPmJBdXwEeOCt7XMZfn16w" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_qPmJBtXwEeOCt7XMZfn16w" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_qqhxg9XwEeOCt7XMZfn16w" name="creator_i1_1" memberEnd="_qqhxhNXwEeOCt7XMZfn16w _qqhxgNXwEeOCt7XMZfn16w" navigableOwnedEnd="_qqhxhNXwEeOCt7XMZfn16w">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_qqhxhNXwEeOCt7XMZfn16w" name="creator" type="_kjHuYNXwEeOCt7XMZfn16w" association="_qqhxg9XwEeOCt7XMZfn16w">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_qqhxhdXwEeOCt7XMZfn16w" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_qqhxhtXwEeOCt7XMZfn16w" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_z40GANXwEeOCt7XMZfn16w" clientDependency="_2T2lENXwEeOCt7XMZfn16w" name="C1">
+            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_2T2lENXwEeOCt7XMZfn16w" name="InterfaceRealization1" client="_z40GANXwEeOCt7XMZfn16w" supplier="_mQcy4NXwEeOCt7XMZfn16w" contract="_mQcy4NXwEeOCt7XMZfn16w"/>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_XSCqoOwiEeCSwqyeEHd1tw" name="concretetest">
           <packagedElement xmi:type="uml:Class" xmi:id="_YuD8sOwiEeCSwqyeEHd1tw" name="God">
