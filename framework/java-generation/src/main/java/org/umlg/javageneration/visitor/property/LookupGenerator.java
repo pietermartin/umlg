@@ -1,5 +1,6 @@
 package org.umlg.javageneration.visitor.property;
 
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Constraint;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.Visitor;
@@ -57,12 +58,13 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
                             otherEnd.getter() + "().contains(" + otherEnd.javaBaseTypePath().getLast() + ".this);\n    }\n}");
                 }
 
-                ojBlock1.addToStatements("result.addAll(" + UmlgClassOperations.getPathName(propertyWrapper.getType()).getLast() + ".allInstances(filter))");
+                ojBlock1.addToStatements("result.addAll(" + UmlgClassOperations.getMetaClassName((Classifier)propertyWrapper.getType()) + ".getInstance().getAllInstances(filter))");
 
             } else {
-                ojBlock1.addToStatements("result.addAll(" + UmlgClassOperations.getPathName(propertyWrapper.getType()).getLast() + ".allInstances())");
+                ojBlock1.addToStatements("result.addAll(" + UmlgClassOperations.getMetaClassName((Classifier) propertyWrapper.getType()) + ".getInstance().getAllInstances())");
             }
 
+            ojClass.addToImports(UmlgClassOperations.getMetaClassPathName((Classifier) propertyWrapper.getType()));
 
             List<Constraint> constraints = UmlgPropertyOperations.getConstraints(propertyWrapper.getProperty());
             if (!constraints.isEmpty()) {

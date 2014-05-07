@@ -13,7 +13,7 @@ import org.umlg.runtime.validation.UmlgConstraintViolationException;
  */
 public class TestPrimitiveTypeMultiplicity extends BaseTest {
 
-    //This will fail as the customer needs to 5 top favourite numbers
+    //This will fail as the child needs to 5 top favourite numbers
     @Test(expected = UmlgConstraintViolationException.class)
     public void testPrimitiveMultiplicityFails() {
         Child child = new Child();

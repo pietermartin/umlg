@@ -352,11 +352,11 @@
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_2qPWsNXuEeOCt7XMZfn16w" name="interfase">
           <packagedElement xmi:type="uml:Class" xmi:id="_5zAecNXuEeOCt7XMZfn16w" name="Creator">
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_9jlNENXuEeOCt7XMZfn16w" name="being" type="_7HoIANXuEeOCt7XMZfn16w" aggregation="composite" association="_9jl0INXuEeOCt7XMZfn16w">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_9jlNENXuEeOCt7XMZfn16w" name="being" type="_7HoIANXuEeOCt7XMZfn16w" association="_9jl0INXuEeOCt7XMZfn16w">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9jlNEdXuEeOCt7XMZfn16w"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9jlNEtXuEeOCt7XMZfn16w" value="*"/>
             </ownedAttribute>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_GouzsNXvEeOCt7XMZfn16w" name="spirit" type="_8ECs8NXuEeOCt7XMZfn16w" aggregation="composite" association="_Gouzs9XvEeOCt7XMZfn16w">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_GouzsNXvEeOCt7XMZfn16w" name="spirit" type="_8ECs8NXuEeOCt7XMZfn16w" association="_Gouzs9XvEeOCt7XMZfn16w">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GouzsdXvEeOCt7XMZfn16w"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GouzstXvEeOCt7XMZfn16w" value="*"/>
             </ownedAttribute>
