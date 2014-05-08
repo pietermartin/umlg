@@ -626,10 +626,13 @@ From the UML specification
 
 UML's term for inheritance is **generalization**.
 
-UMLG supports inheritance. <em class="bg-danger">UML's multiple inheritance is not supported.<em>
+UMLG supports inheritance. <em class="bg-danger">UML's multiple inheritance is not supported.</em>
 
 
 UMLG supports abstract classes.
+
+<br />
+###Inheritance Association Example
 
 The example below illustrates inheritance. The Shape class is abstract.
 
@@ -691,6 +694,9 @@ From the UML specification.
  the interface specification. Note that a given classifier may implement more than one interface and that an interface may
  be implemented by a number of different classifiers
 
+<br />
+###Interfaces Example
+
 The example below illustrates interfaces.
 
 ![image of interfaces](images/uml/interfase/interface.png)
@@ -716,7 +722,81 @@ The example below illustrates interfaces.
 
 ##Enumeration
 
+From the UML specification.
+
+>An enumeration is a data type whose values are enumerated in the model as enumeration literals.
+>
+>An enumeration literal is a user-defined data value for an enumeration.
+
+<br />
+###Enumeration Example
+
+The example below illustrates enumeration.
+
+![image of interfaces](images/uml/enumeration/enumeration.png)
+
+    @Test
+    public void testEnumeration() {
+        JvmClass javaClass = new JvmClass();
+        javaClass.setLanguage(Language.JAVA);
+        javaClass.setVisibility(VisibilityKind.PACKAGE);
+        JvmClass scalaClass = new JvmClass();
+        scalaClass.setLanguage(Language.SCALA);
+        scalaClass.setVisibility(VisibilityKind.PUBLIC);
+        db.commit();
+
+        javaClass.reload();
+        scalaClass.reload();
+        Assert.assertEquals(VisibilityKind.PACKAGE, javaClass.getVisibility());
+        Assert.assertEquals(Language.JAVA, javaClass.getLanguage());
+        Assert.assertEquals(VisibilityKind.PUBLIC, scalaClass.getVisibility());
+        Assert.assertEquals(Language.SCALA, scalaClass.getLanguage());
+    }
+
 ##Association Classes
+
+From the UML specification.
+
+>A model element that has both association and class properties. An AssociationClass can be seen as an association that
+ also has class properties, or as a class that also has association properties. It not only connects a set of classifiers but also
+ defines a set of features that belong to the relationship itself and not to any of the classifiers.
+
+<br />
+###Association Class Example
+
+The example below illustrates an association class.
+
+![image of interfaces](images/uml/associationclass/associationclass.png)
+
+    @Test
+    public void testAssociationClass() {
+        Student john = new Student();
+        Course math = new Course();
+        Enrollment enrollmentMath = new Enrollment();
+        enrollmentMath.setJoined(new LocalDate());
+        enrollmentMath.setSemester(Semester.FIRST);
+        john.addToCourse(math, enrollmentMath);
+
+        Course english = new Course();
+        Enrollment enrollmentEnglish = new Enrollment();
+        enrollmentEnglish.setJoined(new LocalDate());
+        enrollmentEnglish.setSemester(Semester.SECOND);
+        john.addToCourse(english, enrollmentEnglish);
+        db.commit();
+
+        Assert.assertEquals(2, john.getEnrollment().size());
+        Assert.assertTrue(john.getEnrollment().contains(enrollmentMath));
+        Assert.assertTrue(john.getEnrollment().contains(enrollmentEnglish));
+
+        //UMLG generates convenience methods to get the association class given the other end of the association
+        Assert.assertEquals(enrollmentMath, john.getEnrollment_course(math));
+        Assert.assertEquals(enrollmentEnglish, john.getEnrollment_course(english));
+
+        //The association class is a class like any other. Its properties can be navigated to.
+        Assert.assertEquals(math, enrollmentMath.getCourse());
+        Assert.assertEquals(english, enrollmentEnglish.getCourse());
+    }
+
 
 ##Constraints
 

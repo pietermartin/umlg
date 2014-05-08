@@ -96,7 +96,15 @@
 </li></ul>
 </li><li><a href="#MultiplicityID">Multiplicity</a><ul class="nav">
 <li><a href="#MultiplicityExampleID">Multiplicity Example</a></li></ul>
-</li><li><a href="#InheritanceID">Inheritance</a></li><li><a href="#InterfacesID">Interfaces</a></li><li><a href="#EnumerationID">Enumeration</a></li><li><a href="#AssociationClassesID">Association Classes</a></li><li><a href="#ConstraintsID">Constraints</a></li><li><a href="#QualifiersID">Qualifiers</a></li><li><a href="#SubsettingID">Subsetting</a></li><li><a href="#RedefinitionsID">Redefinitions</a></li>
+</li><li><a href="#InheritanceID">Inheritance</a><ul class="nav">
+<li><a href="#InheritanceAssociationExampleID">Inheritance Association Example</a></li></ul>
+</li><li><a href="#InterfacesID">Interfaces</a><ul class="nav">
+<li><a href="#InterfacesExampleID">Interfaces Example</a></li></ul>
+</li><li><a href="#EnumerationID">Enumeration</a><ul class="nav">
+<li><a href="#EnumerationExampleID">Enumeration Example</a></li></ul>
+</li><li><a href="#AssociationClassesID">Association Classes</a><ul class="nav">
+<li><a href="#AssociationClassExampleID">Association Class Example</a></li></ul>
+</li><li><a href="#ConstraintsID">Constraints</a></li><li><a href="#QualifiersID">Qualifiers</a></li><li><a href="#SubsettingID">Subsetting</a></li><li><a href="#RedefinitionsID">Redefinitions</a></li>
                 </ul>
             </div>
         </div>
@@ -788,9 +796,13 @@ public void testPrimitiveMultiplicity() {
 
 <p>UML's term for inheritance is <strong>generalization</strong>.</p>
 
-<p>UMLG supports inheritance. <em class="bg-danger">UML's multiple inheritance is not supported.<em></p>
+<p>UMLG supports inheritance. <em class="bg-danger">UML's multiple inheritance is not supported.</em></p>
 
 <p>UMLG supports abstract classes.</p>
+
+<p><br /></p>
+
+<h3 id="InheritanceAssociationExampleID">Inheritance Association Example</h3>
 
 <p>The example below illustrates inheritance. The Shape class is abstract.</p>
 
@@ -856,6 +868,10 @@ public void testPolymorphism() {
  be implemented by a number of different classifiers</p>
 </blockquote>
 
+<p><br /></p>
+
+<h3 id="InterfacesExampleID">Interfaces Example</h3>
+
 <p>The example below illustrates interfaces.</p>
 
 <p><img src="images/uml/interfase/interface.png" alt="image of interfaces" title="" /></p>
@@ -882,7 +898,88 @@ public void testInterfaces() {
 
 <h2 id="EnumerationID">Enumeration</h2>
 
+<p>From the UML specification.</p>
+
+<blockquote>
+  <p>An enumeration is a data type whose values are enumerated in the model as enumeration literals.</p>
+
+<p>An enumeration literal is a user-defined data value for an enumeration.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="EnumerationExampleID">Enumeration Example</h3>
+
+<p>The example below illustrates enumeration.</p>
+
+<p><img src="images/uml/enumeration/enumeration.png" alt="image of interfaces" title="" /></p>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testEnumeration() {
+    JvmClass javaClass = new JvmClass();
+    javaClass.setLanguage(Language.JAVA);
+    javaClass.setVisibility(VisibilityKind.PACKAGE);
+    JvmClass scalaClass = new JvmClass();
+    scalaClass.setLanguage(Language.SCALA);
+    scalaClass.setVisibility(VisibilityKind.PUBLIC);
+    db.commit();
+
+    javaClass.reload();
+    scalaClass.reload();
+    Assert.assertEquals(VisibilityKind.PACKAGE, javaClass.getVisibility());
+    Assert.assertEquals(Language.JAVA, javaClass.getLanguage());
+    Assert.assertEquals(VisibilityKind.PUBLIC, scalaClass.getVisibility());
+    Assert.assertEquals(Language.SCALA, scalaClass.getLanguage());
+}
+</code></pre>
+
 <h2 id="AssociationClassesID">Association Classes</h2>
+
+<p>From the UML specification.</p>
+
+<blockquote>
+  <p>A model element that has both association and class properties. An AssociationClass can be seen as an association that
+ also has class properties, or as a class that also has association properties. It not only connects a set of classifiers but also
+ defines a set of features that belong to the relationship itself and not to any of the classifiers.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="AssociationClassExampleID">Association Class Example</h3>
+
+<p>The example below illustrates an association class.</p>
+
+<p><img src="images/uml/associationclass/associationclass.png" alt="image of interfaces" title="" /></p>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testAssociationClass() {
+    Student john = new Student();
+    Course math = new Course();
+    Enrollment enrollmentMath = new Enrollment();
+    enrollmentMath.setJoined(new LocalDate());
+    enrollmentMath.setSemester(Semester.FIRST);
+    john.addToCourse(math, enrollmentMath);
+
+    Course english = new Course();
+    Enrollment enrollmentEnglish = new Enrollment();
+    enrollmentEnglish.setJoined(new LocalDate());
+    enrollmentEnglish.setSemester(Semester.SECOND);
+    john.addToCourse(english, enrollmentEnglish);
+    db.commit();
+
+    Assert.assertEquals(2, john.getEnrollment().size());
+    Assert.assertTrue(john.getEnrollment().contains(enrollmentMath));
+    Assert.assertTrue(john.getEnrollment().contains(enrollmentEnglish));
+
+    //UMLG generates convenience methods to get the Association class given the other end of the association
+    Assert.assertEquals(enrollmentMath, john.getEnrollment_course(math));
+    Assert.assertEquals(enrollmentEnglish, john.getEnrollment_course(english));
+
+    //The association class is a class like any other. Its properties can be navigated to.
+    Assert.assertEquals(math, enrollmentMath.getCourse());
+    Assert.assertEquals(english, enrollmentEnglish.getCourse());
+}
+</code></pre>
 
 <h2 id="ConstraintsID">Constraints</h2>
 
