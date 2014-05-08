@@ -96,7 +96,7 @@
 </li></ul>
 </li><li><a href="#MultiplicityID">Multiplicity</a><ul class="nav">
 <li><a href="#MultiplicityExampleID">Multiplicity Example</a></li></ul>
-</li><li><a href="#InheritanceID">Inheritance</a></li><li><a href="#InterfacesID">Interfaces</a></li><li><a href="#EnumerationID">Enumeration</a></li><li><a href="#AssociationClassesID">Association Classes</a></li><li><a href="#ConstraintsID">Constraints</a></li><li><a href="#QualifiersID">Qualifiers</a></li><li><a href="#ValidationProfileID">Validation Profile</a></li><li><a href="#SubsettingID">Subsetting</a></li><li><a href="#RedefinitionsID">Redefinitions</a></li>
+</li><li><a href="#InheritanceID">Inheritance</a></li><li><a href="#InterfacesID">Interfaces</a></li><li><a href="#EnumerationID">Enumeration</a></li><li><a href="#AssociationClassesID">Association Classes</a></li><li><a href="#ConstraintsID">Constraints</a></li><li><a href="#QualifiersID">Qualifiers</a></li><li><a href="#SubsettingID">Subsetting</a></li><li><a href="#RedefinitionsID">Redefinitions</a></li>
                 </ul>
             </div>
         </div>
@@ -747,48 +747,31 @@ public void testCustomerCanHaveAnyNumberOfPurchases() {
 
 <p><img src="images/uml/multiplicity/primitiveMultiplicity.png" alt="image of multiplicities" title="" /></p>
 
-<pre class="prettyprint"><code class="language-java">//This will fail as the customer needs to 5 top favourite numbers
+<pre class="prettyprint"><code class="language-java">//This will fail as the child needs to 5 top favourite numbers
 @Test(expected = UmlgConstraintViolationException.class)
 public void testPrimitiveMultiplicityFails() {
-
-    Customer customer = new Customer();
-    //Customer at least needs one account
-    Account account = new Account();
-    customer.addToAccount(account);
-
-    //Customer's name property has a multiplicity of [1]. It is a required property.
-    customer.setName("John");
-
-    customer.addToFavouriteNumbers(1);
-    customer.addToFavouriteNumbers(2);
-
-    customer.addToTop5FavouriteNumbers(1);
-    customer.addToTop5FavouriteNumbers(2);
-    customer.addToTop5FavouriteNumbers(3);
-    customer.addToTop5FavouriteNumbers(4);
-
+    Child child = new Child();
+    child.setName("John");
+    child.addToFavouriteNumbers(1);
+    child.addToFavouriteNumbers(2);
+    child.addToTop5FavouriteNumbers(1);
+    child.addToTop5FavouriteNumbers(2);
+    child.addToTop5FavouriteNumbers(3);
+    child.addToTop5FavouriteNumbers(4);
     db.commit();
 }
 
 @Test
 public void testPrimitiveMultiplicity() {
-    Customer customer = new Customer();
-    //Customer at least needs one account
-    Account account = new Account();
-    customer.addToAccount(account);
-
-    //Customer's name property has a multiplicity of [1]. It is a required property.
-    customer.setName("John");
-
-    customer.addToFavouriteNumbers(1);
-    customer.addToFavouriteNumbers(2);
-
-    customer.addToTop5FavouriteNumbers(1);
-    customer.addToTop5FavouriteNumbers(2);
-    customer.addToTop5FavouriteNumbers(3);
-    customer.addToTop5FavouriteNumbers(4);
-    customer.addToTop5FavouriteNumbers(5);
-
+    Child child = new Child();
+    child.setName("John");
+    child.addToFavouriteNumbers(1);
+    child.addToFavouriteNumbers(2);
+    child.addToTop5FavouriteNumbers(1);
+    child.addToTop5FavouriteNumbers(2);
+    child.addToTop5FavouriteNumbers(3);
+    child.addToTop5FavouriteNumbers(4);
+    child.addToTop5FavouriteNumbers(5);
     db.commit();
 }
 </code></pre>
@@ -815,11 +798,12 @@ public void testPrimitiveMultiplicity() {
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void testInheritance() {
-    Polygon polygon = new Polygon();
+    Drawing drawing = new Drawing();
+    Polygon polygon = new Polygon(drawing);
     polygon.setName("polygon1");
-    Eclipse eclipse = new Eclipse();
+    Eclipse eclipse = new Eclipse(drawing);
     eclipse.setName("eclipse1");
-    Spline spline = new Spline();
+    Spline spline = new Spline(drawing);
     spline.setName("spline1");
     db.commit();
 
@@ -829,6 +813,30 @@ public void testInheritance() {
     Assert.assertEquals("polygon1", polygon.getName());
     Assert.assertEquals("eclipse1", eclipse.getName());
     Assert.assertEquals("spline1", spline.getName());
+}
+</code></pre>
+
+<p>The example below illustrates polymorphism.</p>
+
+<p><img src="images/uml/inheritance/polymorphism.png" alt="image of polymorphism" title="" /></p>
+
+<p>The shapes can be accessed by index as the drawing &lt;-> shape association is ordered.</p>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testPolymorphism() {
+    Drawing drawing = new Drawing();
+    Polygon polygon = new Polygon();
+    Eclipse eclipse = new Eclipse();
+    Spline spline = new Spline();
+    drawing.addToShape(polygon);
+    drawing.addToShape(eclipse);
+    drawing.addToShape(spline);
+    db.commit();
+
+    Assert.assertEquals(3, drawing.getShape().size());
+    Assert.assertEquals(polygon, drawing.getShape().get(0));
+    Assert.assertEquals(eclipse, drawing.getShape().get(1));
+    Assert.assertEquals(spline, drawing.getShape().get(2));
 }
 </code></pre>
 
@@ -848,6 +856,30 @@ public void testInheritance() {
  be implemented by a number of different classifiers</p>
 </blockquote>
 
+<p>The example below illustrates interfaces.</p>
+
+<p><img src="images/uml/interfase/interface.png" alt="image of interfaces" title="" /></p>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testInterfaces() {
+    Creator creator = new Creator();
+    Ghost casper = new Ghost();
+    creator.addToCreation(casper);
+    Mamal simba = new Mamal();
+    creator.addToCreation(simba);
+    db.commit();
+
+    Assert.assertTrue(casper instanceof Spirit);
+    Assert.assertTrue(simba instanceof Spirit);
+    Assert.assertTrue(simba instanceof Being);
+
+    //For test purposes, ensure the creator is reloaded from the db.
+    creator.reload();
+    Assert.assertTrue(creator.getCreation().contains(casper));
+    Assert.assertTrue(creator.getCreation().contains(simba));
+}
+</code></pre>
+
 <h2 id="EnumerationID">Enumeration</h2>
 
 <h2 id="AssociationClassesID">Association Classes</h2>
@@ -855,8 +887,6 @@ public void testInheritance() {
 <h2 id="ConstraintsID">Constraints</h2>
 
 <h2 id="QualifiersID">Qualifiers</h2>
-
-<h2 id="ValidationProfileID">Validation Profile</h2>
 
 <h2 id="SubsettingID">Subsetting</h2>
 

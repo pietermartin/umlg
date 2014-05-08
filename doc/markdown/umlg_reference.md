@@ -588,48 +588,31 @@ The example below illustrates multiplicities on primitive types.
 
 ![image of multiplicities](images/uml/multiplicity/primitiveMultiplicity.png)
 
-    //This will fail as the customer needs to 5 top favourite numbers
+    //This will fail as the child needs to 5 top favourite numbers
     @Test(expected = UmlgConstraintViolationException.class)
     public void testPrimitiveMultiplicityFails() {
-
-        Customer customer = new Customer();
-        //Customer at least needs one account
-        Account account = new Account();
-        customer.addToAccount(account);
-
-        //Customer's name property has a multiplicity of [1]. It is a required property.
-        customer.setName("John");
-
-        customer.addToFavouriteNumbers(1);
-        customer.addToFavouriteNumbers(2);
-
-        customer.addToTop5FavouriteNumbers(1);
-        customer.addToTop5FavouriteNumbers(2);
-        customer.addToTop5FavouriteNumbers(3);
-        customer.addToTop5FavouriteNumbers(4);
-
+        Child child = new Child();
+        child.setName("John");
+        child.addToFavouriteNumbers(1);
+        child.addToFavouriteNumbers(2);
+        child.addToTop5FavouriteNumbers(1);
+        child.addToTop5FavouriteNumbers(2);
+        child.addToTop5FavouriteNumbers(3);
+        child.addToTop5FavouriteNumbers(4);
         db.commit();
     }
 
     @Test
     public void testPrimitiveMultiplicity() {
-        Customer customer = new Customer();
-        //Customer at least needs one account
-        Account account = new Account();
-        customer.addToAccount(account);
-
-        //Customer's name property has a multiplicity of [1]. It is a required property.
-        customer.setName("John");
-
-        customer.addToFavouriteNumbers(1);
-        customer.addToFavouriteNumbers(2);
-
-        customer.addToTop5FavouriteNumbers(1);
-        customer.addToTop5FavouriteNumbers(2);
-        customer.addToTop5FavouriteNumbers(3);
-        customer.addToTop5FavouriteNumbers(4);
-        customer.addToTop5FavouriteNumbers(5);
-
+        Child child = new Child();
+        child.setName("John");
+        child.addToFavouriteNumbers(1);
+        child.addToFavouriteNumbers(2);
+        child.addToTop5FavouriteNumbers(1);
+        child.addToTop5FavouriteNumbers(2);
+        child.addToTop5FavouriteNumbers(3);
+        child.addToTop5FavouriteNumbers(4);
+        child.addToTop5FavouriteNumbers(5);
         db.commit();
     }
 
@@ -654,11 +637,12 @@ The example below illustrates inheritance. The Shape class is abstract.
 
     @Test
     public void testInheritance() {
-        Polygon polygon = new Polygon();
+        Drawing drawing = new Drawing();
+        Polygon polygon = new Polygon(drawing);
         polygon.setName("polygon1");
-        Eclipse eclipse = new Eclipse();
+        Eclipse eclipse = new Eclipse(drawing);
         eclipse.setName("eclipse1");
-        Spline spline = new Spline();
+        Spline spline = new Spline(drawing);
         spline.setName("spline1");
         db.commit();
 
@@ -668,6 +652,29 @@ The example below illustrates inheritance. The Shape class is abstract.
         Assert.assertEquals("polygon1", polygon.getName());
         Assert.assertEquals("eclipse1", eclipse.getName());
         Assert.assertEquals("spline1", spline.getName());
+    }
+
+The example below illustrates polymorphism.
+
+![image of polymorphism](images/uml/inheritance/polymorphism.png)
+
+The shapes can be accessed by index as the drawing <-> shape association is ordered.
+
+    @Test
+    public void testPolymorphism() {
+        Drawing drawing = new Drawing();
+        Polygon polygon = new Polygon();
+        Eclipse eclipse = new Eclipse();
+        Spline spline = new Spline();
+        drawing.addToShape(polygon);
+        drawing.addToShape(eclipse);
+        drawing.addToShape(spline);
+        db.commit();
+
+        Assert.assertEquals(3, drawing.getShape().size());
+        Assert.assertEquals(polygon, drawing.getShape().get(0));
+        Assert.assertEquals(eclipse, drawing.getShape().get(1));
+        Assert.assertEquals(spline, drawing.getShape().get(2));
     }
 
 ##Interfaces
@@ -684,6 +691,29 @@ From the UML specification.
  the interface specification. Note that a given classifier may implement more than one interface and that an interface may
  be implemented by a number of different classifiers
 
+The example below illustrates interfaces.
+
+![image of interfaces](images/uml/interfase/interface.png)
+
+    @Test
+    public void testInterfaces() {
+        Creator creator = new Creator();
+        Ghost casper = new Ghost();
+        creator.addToCreation(casper);
+        Mamal simba = new Mamal();
+        creator.addToCreation(simba);
+        db.commit();
+
+        Assert.assertTrue(casper instanceof Spirit);
+        Assert.assertTrue(simba instanceof Spirit);
+        Assert.assertTrue(simba instanceof Being);
+
+        //For test purposes, ensure the creator is reloaded from the db.
+        creator.reload();
+        Assert.assertTrue(creator.getCreation().contains(casper));
+        Assert.assertTrue(creator.getCreation().contains(simba));
+    }
+
 ##Enumeration
 
 ##Association Classes
@@ -691,8 +721,6 @@ From the UML specification.
 ##Constraints
 
 ##Qualifiers
-
-##Validation Profile
 
 ##Subsetting
 
