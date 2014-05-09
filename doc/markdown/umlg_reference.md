@@ -800,6 +800,22 @@ The example below illustrates an association class.
 
 ##Constraints
 
+From the UML specification.
+
+>A constraint is a condition or restriction expressed in natural language text or in a machine readable language for the
+ purpose of declaring some of the semantics of an element.
+
+>...
+
+>A user-defined Constraint is described using a specified
+ language, whose syntax and interpretation is a tool responsibility. One predefined language for writing constraints is
+ OCL. In some situations, a programming language such as Java may be appropriate for expressing a constraint. In other
+ situations natural language may be used.
+ Constraint is a condition (a Boolean expression) that restricts the extension of the associated element beyond what is
+ imposed by the other language constructs applied to that element.
+
+UMLG supports constraints specified in OCL.
+
 ##Qualifiers
 
 ##Subsetting
