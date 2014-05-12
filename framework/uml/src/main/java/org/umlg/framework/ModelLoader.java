@@ -136,11 +136,11 @@ public class ModelLoader {
     }
 
     public List<Constraint> getConstraints(final Element element) {
-        List<Constraint> results = new ArrayList<Constraint>();
+        List<Constraint> results = new ArrayList<>();
         filter(results, this.model, new Filter() {
             @Override
             public boolean filter(Element e) {
-                return e instanceof Constraint && ((Constraint) e).getConstrainedElements().contains(element);
+                return e instanceof Constraint && ((Constraint) e).getContext().equals(element);
             }
         });
         return results;
@@ -259,6 +259,32 @@ public class ModelLoader {
         return results;
     }
 
+    public List<Abstraction> getRefinedAbstraction(final Association association) {
+        List<Abstraction> results = new ArrayList<>();
+        List<Abstraction> abstractions = getAbstractions();
+        for (Abstraction a : abstractions) {
+            for (NamedElement supplier : a.getClients()) {
+                if (supplier.equals(association)) {
+                    results.add(a);
+                }
+            }
+        }
+        return results;
+    }
+
+    public List<Abstraction> getAbstractions() {
+        List<Abstraction> results = new ArrayList<>();
+        filter(results, this.model, new Filter() {
+            @Override
+            public boolean filter(Element e) {
+                return e instanceof Abstraction;
+            }
+        });
+
+        return results;
+    }
+
+
     public List<InterfaceRealization> getInterfaceRealization(final Interface inf) {
         List<InterfaceRealization> results = new ArrayList<InterfaceRealization>();
         getInterfaceRealization(results, inf);
@@ -325,9 +351,12 @@ public class ModelLoader {
         if (element instanceof PackageImport) {
             PackageImport pi = (PackageImport) element;
             org.eclipse.uml2.uml.Package p = pi.getImportedPackage();
-            for (Element e : p.getOwnedElements()) {
-                filter(result, e, f);
+            if (!(p instanceof Profile)) {
+                for (Element e : p.getOwnedElements()) {
+                    filter(result, e, f);
+                }
             }
+
         } else {
             for (Element e : element.getOwnedElements()) {
                 filter(result, e, f);

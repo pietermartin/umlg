@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_L49CoKzbEeOnn8UJImpdOg/3" xmlns:UmlgValidation="http:///schemas/UmlgValidation/__a3VoNFKEeOjlpjTZXDyqw/15" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgProfile/_L49CoKzbEeOnn8UJImpdOg/3 umlg.profile.uml#_L49CoazbEeOnn8UJImpdOg http:///schemas/UmlgValidation/__a3VoNFKEeOjlpjTZXDyqw/15 validation.profile.uml#__a38sNFKEeOjlpjTZXDyqw">
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_xkZ6UNjYEeOEP64qykw2fg/5" xmlns:UmlgProfile_1="http:///schemas/UmlgProfile/_ZO3twNhzEeOEP64qykw2fg/4" xmlns:UmlgValidation="http:///schemas/UmlgValidation/__a3VoNFKEeOjlpjTZXDyqw/15" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:l2="http://www.eclipse.org/uml2/4.0.0/UML/Profile/L2" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgProfile/_xkZ6UNjYEeOEP64qykw2fg/5 umlg.profile.uml#_xkahYNjYEeOEP64qykw2fg http:///schemas/UmlgProfile/_ZO3twNhzEeOEP64qykw2fg/4 umlg.profile.uml#_ZO474NhzEeOEP64qykw2fg http:///schemas/UmlgValidation/__a3VoNFKEeOjlpjTZXDyqw/15 validation.profile.uml#__a38sNFKEeOjlpjTZXDyqw">
   <uml:Model xmi:id="_qb8akM37EdqwVrslYOdUDA" name="umlgtest">
     <elementImport xmi:type="uml:ElementImport" xmi:id="_vhWmcOYQEeCCXPbP2D6kZQ">
       <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
@@ -24,6 +24,9 @@
     </packageImport>
     <packageImport xmi:type="uml:PackageImport" xmi:id="_7gBLoM_UEeOjlpjTZXDyqw">
       <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_5fiXINjTEeOEP64qykw2fg">
+      <importedPackage xmi:type="uml:Profile" href="pathmap://UML_PROFILES/StandardL2.profile.uml#_0"/>
     </packageImport>
     <packagedElement xmi:type="uml:Package" xmi:id="_lvLY8MTDEeGJXus6eZqdyw" name="org">
       <packagedElement xmi:type="uml:Package" xmi:id="_w8IxIM37EdqwVrslYOdUDA" name="umlg">
@@ -338,6 +341,10 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0lrRcSpZEeOKybaUoQcxlg"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0lrRcipZEeOKybaUoQcxlg" value="*"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_Ye-3ANh1EeOEP64qykw2fg" name="nature" type="_F-NRMPJKEeCeFLHNTzV0LA" association="_Ye-3A9h1EeOEP64qykw2fg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Ye-3Adh1EeOEP64qykw2fg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Ye-3Ath1EeOEP64qykw2fg" value="*"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_FTxxYOzqEeCemKc79Sc_aw" name="Universe">
             <generalization xmi:type="uml:Generalization" xmi:id="_LJ6HkCXIEeKbPYSfIbmXag">
@@ -464,6 +471,13 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0lr4gypZEeOKybaUoQcxlg" value="1"/>
             </ownedEnd>
           </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_Ye-3A9h1EeOEP64qykw2fg" clientDependency="_qt1vUNjREeOEP64qykw2fg" name="god_nature_1" memberEnd="_Ye-3BNh1EeOEP64qykw2fg _Ye-3ANh1EeOEP64qykw2fg" navigableOwnedEnd="_Ye-3BNh1EeOEP64qykw2fg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_Ye-3BNh1EeOEP64qykw2fg" name="god" type="_YuD8sOwiEeCSwqyeEHd1tw" association="_Ye-3A9h1EeOEP64qykw2fg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Ye-3Bdh1EeOEP64qykw2fg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Ye-3Bth1EeOEP64qykw2fg" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_qt1vUNjREeOEP64qykw2fg" name="godNatureAbstraction" client="_Ye-3A9h1EeOEP64qykw2fg" supplier="_Yq2WivJKEeCeFLHNTzV0LA"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_YhQcgO6jEeCKZsw1ityolg" name="inheritencetest">
           <packagedElement xmi:type="uml:Class" xmi:id="_cikV0O6jEeCKZsw1ityolg" name="AbstractSpecies" isAbstract="true">
@@ -2649,9 +2663,15 @@
     </profileApplication>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_h4Q8kKeLEeOPt7R4er8hcg">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_h43ZgKeLEeOPt7R4er8hcg" source="http://www.eclipse.org/uml2/2.0.0/UML">
-        <references xmi:type="ecore:EPackage" href="umlg.profile.uml#_L49CoazbEeOnn8UJImpdOg"/>
+        <references xmi:type="ecore:EPackage" href="umlg.profile.uml#_xkahYNjYEeOEP64qykw2fg"/>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="umlg.profile.uml#_twUakKeJEeOPt7R4er8hcg"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_SkmXENjUEeOEP64qykw2fg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_SlmcoNjUEeOEP64qykw2fg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/uml2/4.0.0/UML/Profile/L2#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://UML_PROFILES/StandardL2.profile.uml#_0"/>
     </profileApplication>
   </uml:Model>
   <UmlgValidation:MaxLength xmi:id="_4NvsIJoqEeOZ3vCVvyLDGg" length="10" base_Property="_AI4d0AWBEeK9oIwdQfC0-w"/>
@@ -2715,4 +2735,6 @@
   <UmlgValidation:MaxDouble xmi:id="_iQju4NFbEeOjlpjTZXDyqw" max="5.123" base_Property="_ejQWsNFbEeOjlpjTZXDyqw"/>
   <UmlgValidation:MinDouble xmi:id="_naSBwNFbEeOjlpjTZXDyqw" min="5.123" base_Property="_jOL0wNFbEeOjlpjTZXDyqw"/>
   <UmlgValidation:RangeDouble xmi:id="_1bujQNFbEeOjlpjTZXDyqw" max="5.123" base_Property="_vTINUNFbEeOjlpjTZXDyqw"/>
+  <UmlgProfile_1:Redundant xmi:id="_blNoINh1EeOEP64qykw2fg" association="_Yq2WivJKEeCeFLHNTzV0LA" base_Association="_Ye-3A9h1EeOEP64qykw2fg"/>
+  <l2:Refine xmi:id="_xIVmMNjUEeOEP64qykw2fg" base_Abstraction="_qt1vUNjREeOEP64qykw2fg"/>
 </xmi:XMI>

@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.PackageImport;
+import org.eclipse.uml2.uml.Profile;
 
 public class ModelVisitor {
 
@@ -67,10 +68,12 @@ public class ModelVisitor {
 
 			if (element instanceof PackageImport) {
 				PackageImport pi = (PackageImport)element;
-				org.eclipse.uml2.uml.Package p = pi.getImportedPackage();
-				for (Element e : p.getOwnedElements()) {
-					visitModel(e, visitor);
-				}
+                if (!(pi.getImportedPackage() instanceof Profile)) {
+                    org.eclipse.uml2.uml.Package p = pi.getImportedPackage();
+                    for (Element e : p.getOwnedElements()) {
+                        visitModel(e, visitor);
+                    }
+                }
 			} else {
 				for (Element e : element.getOwnedElements()) {
 					visitModel(e, visitor);

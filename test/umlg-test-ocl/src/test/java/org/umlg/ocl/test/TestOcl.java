@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.runtime.domain.ocl.OclIsInvalidException;
 import org.umlg.runtime.test.BaseLocalDbTest;
+import org.umlg.runtime.validation.UmlgConstraintViolationException;
 import org.umlg.testocl.OclTest1;
 import org.umlg.testocl.OclTestCollection;
 import org.umlg.testocl.OclTestCollection2;
@@ -164,6 +165,15 @@ public class TestOcl extends BaseLocalDbTest {
         Assert.assertFalse(oclTest1.getTestSmallerThanOne());
         Assert.assertTrue(oclTest1.getTestSmallerThanEqualOne());
     }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testOclIncludes() {
+        OclTest1 oclTest1 = new OclTest1(true);
+        OclTestCollection oclTestCollection = new OclTestCollection(oclTest1);
+        oclTestCollection.setName("X");
+        db.commit();
+    }
+
 
 
 }

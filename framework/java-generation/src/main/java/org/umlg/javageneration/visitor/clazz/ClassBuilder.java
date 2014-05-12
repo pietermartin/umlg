@@ -123,7 +123,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         annotatedClass.addToOperations(initialiseProperties);
         for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
+            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !(pWrap.isRefined())) {
                 OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(clazz));
                 statement.setName(pWrap.fieldname());
                 initialiseProperties.getBody().addToStatements(statement);

@@ -436,6 +436,102 @@
             </ownedEnd>
           </packagedElement>
         </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_exC7wNeVEeOCt7XMZfn16w" name="constraint">
+          <packagedElement xmi:type="uml:Class" xmi:id="_6SoBcNeVEeOCt7XMZfn16w" name="ATMTransaction">
+            <ownedRule xmi:type="uml:Constraint" xmi:id="_s9UXwNeWEeOCt7XMZfn16w" name="Constraint" constrainedElement="_SJGuYNeWEeOCt7XMZfn16w _6SoBcNeVEeOCt7XMZfn16w">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_5o9j8NeWEeOCt7XMZfn16w" name="ATMValueConstraint">
+                <language>OCL</language>
+                <body>self.value >= 0</body>
+              </specification>
+            </ownedRule>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_SJGuYNeWEeOCt7XMZfn16w" name="value" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_TevroNeWEeOCt7XMZfn16w" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_TewSsNeWEeOCt7XMZfn16w" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_EISFsNebEeOEP64qykw2fg" name="Friend">
+            <ownedRule xmi:type="uml:Constraint" xmi:id="_X5zIYNebEeOEP64qykw2fg" name="Constraint" constrainedElement="_GzvmYNebEeOEP64qykw2fg _Gzw0gNebEeOEP64qykw2fg">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_i3mSsNebEeOEP64qykw2fg" name="kfriendKnowsNotSelf">
+                <language>OCL</language>
+                <body>not self.knows->includes(self)</body>
+              </specification>
+            </ownedRule>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_GzvmYNebEeOEP64qykw2fg" name="knows" type="_EISFsNebEeOEP64qykw2fg" association="_Gzw0gNebEeOEP64qykw2fg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GzvmYdebEeOEP64qykw2fg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GzvmYtebEeOEP64qykw2fg" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_Gzw0gNebEeOEP64qykw2fg" name="friend_friend_1" memberEnd="_Gzw0gdebEeOEP64qykw2fg _GzvmYNebEeOEP64qykw2fg" navigableOwnedEnd="_Gzw0gdebEeOEP64qykw2fg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_Gzw0gdebEeOEP64qykw2fg" name="knownBy" type="_EISFsNebEeOEP64qykw2fg" association="_Gzw0gNebEeOEP64qykw2fg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Gzw0gtebEeOEP64qykw2fg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Gzw0g9ebEeOEP64qykw2fg" value="*"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_bOgQkNguEeOEP64qykw2fg" name="qualifier">
+          <packagedElement xmi:type="uml:Class" xmi:id="_eA2cYNguEeOEP64qykw2fg" name="Bank">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_09syoNguEeOEP64qykw2fg" name="client" type="_iTbr4NguEeOEP64qykw2fg" association="_09tZsNguEeOEP64qykw2fg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_09syodguEeOEP64qykw2fg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_09syotguEeOEP64qykw2fg" value="1"/>
+              <qualifier xmi:type="uml:Property" xmi:id="_8TLycNguEeOEP64qykw2fg" name="idNumberQualifier">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              </qualifier>
+              <qualifier xmi:type="uml:Property" xmi:id="_MlO7QNhIEeOEP64qykw2fg" name="surnameQualifier">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              </qualifier>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_y-CboNhoEeOEP64qykw2fg" name="client" type="_iTbr4NguEeOEP64qykw2fg" association="_y-DCsNhoEeOEP64qykw2fg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_y-CbodhoEeOEP64qykw2fg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_y-CbothoEeOEP64qykw2fg" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_iTbr4NguEeOEP64qykw2fg" name="Client">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_wE4CgNguEeOEP64qykw2fg" name="idNumber" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_zoRQwNguEeOEP64qykw2fg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_zoR30NguEeOEP64qykw2fg" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_7QzAANg8EeOEP64qykw2fg" name="idNumberQualifier" visibility="public" isDerived="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__nWJgNg8EeOEP64qykw2fg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__nWwkNg8EeOEP64qykw2fg" value="1"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_F2o9UNg9EeOEP64qykw2fg" name="idNumberQualifierValue">
+                <language>OCL</language>
+                <body>self.idNumber</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_xg4oUNhAEeOEP64qykw2fg" name="surname" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_zIjJsNhAEeOEP64qykw2fg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_zIjwwNhAEeOEP64qykw2fg" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_zIll8NhAEeOEP64qykw2fg">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_SDvyYNhIEeOEP64qykw2fg" name="surnameQualifier" visibility="public" isDerived="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Ud7V0NhIEeOEP64qykw2fg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Ud9LANhIEeOEP64qykw2fg" value="1"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_YiZ34NhIEeOEP64qykw2fg" name="surnameQualifierOcl">
+                <language>OCL</language>
+                <body>self.surname</body>
+              </defaultValue>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_09tZsNguEeOEP64qykw2fg" name="bank_client_1" memberEnd="_09tZsdguEeOEP64qykw2fg _09syoNguEeOEP64qykw2fg" navigableOwnedEnd="_09tZsdguEeOEP64qykw2fg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_09tZsdguEeOEP64qykw2fg" name="bank" type="_eA2cYNguEeOEP64qykw2fg" association="_09tZsNguEeOEP64qykw2fg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_09tZstguEeOEP64qykw2fg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_09tZs9guEeOEP64qykw2fg" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_y-DCsNhoEeOEP64qykw2fg" name="bank_client_2" memberEnd="_y-DCsdhoEeOEP64qykw2fg _y-CboNhoEeOEP64qykw2fg" navigableOwnedEnd="_y-DCsdhoEeOEP64qykw2fg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_y-DCsdhoEeOEP64qykw2fg" name="bank" type="_eA2cYNguEeOEP64qykw2fg" association="_y-DCsNhoEeOEP64qykw2fg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_y-DCsthoEeOEP64qykw2fg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_y-DCs9hoEeOEP64qykw2fg" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_bk90UJ2MEeOdnJvRGBqhtw">

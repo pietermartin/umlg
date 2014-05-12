@@ -147,7 +147,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 
         for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && pWrap.getOtherEnd() != null && !pWrap.isEnumeration()) {
+            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && pWrap.getOtherEnd() != null && !pWrap.isEnumeration() && !pWrap.isRefined()) {
                 OJSwitchCase ojSwitchCase = new OJSwitchCase();
                 ojSwitchCase.setLabel(pWrap.fieldname());
                 OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".inverseAdder((" + pWrap.javaBaseTypePath().getLast() + ")umlgNode)");
@@ -205,7 +205,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 
         for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
+            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !pWrap.isRefined()) {
                 OJSwitchCase ojSwitchCase = new OJSwitchCase();
                 ojSwitchCase.setLabel(pWrap.fieldname());
                 OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(clazz));
@@ -284,7 +284,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         getQualifiers.setReturnType(new OJPathName("int"));
         annotatedClass.addToOperations(getQualifiers);
 
-        OJField result = null;
+        OJField result;
         if (!clazz.getGeneralizations().isEmpty()) {
             result = new OJField(getQualifiers.getBody(), "result", getQualifiers.getReturnType(), "super.getSize(tumlRuntimeProperty)");
         } else {
@@ -303,7 +303,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 
         for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (!pWrap.isDerived()) {
+            if (!pWrap.isDerived() && !pWrap.isRefined()) {
                 OJSwitchCase ojSwitchCase = new OJSwitchCase();
                 ojSwitchCase.setLabel(pWrap.fieldname());
                 OJSimpleStatement statement = new OJSimpleStatement("result = " + pWrap.fieldname() + ".size()");

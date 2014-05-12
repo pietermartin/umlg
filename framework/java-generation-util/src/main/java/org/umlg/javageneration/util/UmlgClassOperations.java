@@ -188,7 +188,7 @@ public class UmlgClassOperations extends ClassOperations {
             }
         }
         result.addAll(getPropertiesOnRealizedInterfaces(clazz));
-        return result;
+        return filterOutRefinedProperties(result);
     }
 
     /*
@@ -199,26 +199,39 @@ public class UmlgClassOperations extends ClassOperations {
         Set<Property> result = new HashSet<Property>(clazz.getAllAttributes());
         Set<Association> associations = getAllAssociations(clazz);
         for (Association association : associations) {
-            List<Property> memberEnds = association.getMemberEnds();
-            Property memberEnd1 = memberEnds.get(0);
-            Property memberEnd2 = memberEnds.get(1);
 
-            // This is for the case of hierarchies, i.e association to itself
-            if (isSpecializationOf(clazz, memberEnd1.getType()) && isSpecializationOf(clazz, memberEnd2.getType())) {
-                result.add(memberEnd1);
-                result.add(memberEnd2);
-            }
-            // This is to prevent getting the near side of an association
-            if (!isSpecializationOf(clazz, memberEnd1.getType())) {
-                result.add(memberEnd1);
-            }
-            // This is to prevent getting the near side of an association
-            if (!isSpecializationOf(clazz, memberEnd2.getType())) {
-                result.add(memberEnd2);
-            }
+                List<Property> memberEnds = association.getMemberEnds();
+                Property memberEnd1 = memberEnds.get(0);
+                Property memberEnd2 = memberEnds.get(1);
+
+                // This is for the case of hierarchies, i.e association to itself
+                if (isSpecializationOf(clazz, memberEnd1.getType()) && isSpecializationOf(clazz, memberEnd2.getType())) {
+                    result.add(memberEnd1);
+                    result.add(memberEnd2);
+                }
+                // This is to prevent getting the near side of an association
+                if (!isSpecializationOf(clazz, memberEnd1.getType())) {
+                    result.add(memberEnd1);
+                }
+                // This is to prevent getting the near side of an association
+                if (!isSpecializationOf(clazz, memberEnd2.getType())) {
+                    result.add(memberEnd2);
+                }
+
         }
         result.addAll(getPropertiesOnRealizedInterfaces(clazz));
-        return result;
+        return filterOutRefinedProperties(result);
+    }
+
+    private static Set<Property> filterOutRefinedProperties(Set<Property> result) {
+        Set<Property> properties = new HashSet<>();
+        //Ignore associations that are refined abstraction
+        for (Property p : result) {
+            if (!new PropertyWrapper(p).isRefined())  {
+                 properties.add(p);
+            }
+        }
+        return properties;
     }
 
     public static Set<Property> getPropertiesOnRealizedInterfaces(org.eclipse.uml2.uml.Class clazz) {
@@ -234,7 +247,7 @@ public class UmlgClassOperations extends ClassOperations {
     }
 
     public static Set<Property> getOtherEndToComposite(Classifier classifier) {
-        Set<Property> compositeOwners  = new HashSet<Property>();
+        Set<Property> compositeOwners = new HashSet<Property>();
         Set<Association> associations = getAllAssociations(classifier);
         for (Association association : associations) {
             List<Property> memberEnds = association.getMemberEnds();
@@ -349,9 +362,9 @@ public class UmlgClassOperations extends ClassOperations {
 
     public static Set<Classifier> getConcreteRealization(Classifier classifier) {
         if (classifier instanceof Interface) {
-            return  getConcreteRealizationForInterface((Interface)classifier);
+            return getConcreteRealizationForInterface((Interface) classifier);
         } else {
-            return  getConcreteRealizationForClass((Class)classifier);
+            return getConcreteRealizationForClass((Class) classifier);
         }
     }
 
@@ -412,6 +425,7 @@ public class UmlgClassOperations extends ClassOperations {
 
     /**
      * Returns all concrete implementations sorted by the clissifier's name
+     *
      * @param clazz
      * @return
      */

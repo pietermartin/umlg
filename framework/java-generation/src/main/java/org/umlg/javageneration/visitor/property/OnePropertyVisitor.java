@@ -28,7 +28,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
     public void visitBefore(Property p) {
         PropertyWrapper propertyWrapper = new PropertyWrapper(p);
         // TODO qualifiers
-        if (propertyWrapper.isOne() && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier()) {
+        if (propertyWrapper.isOne() && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier() && !propertyWrapper.isRefined()) {
             OJAnnotatedClass owner = findOJClass(p);
             buildGetter(owner, propertyWrapper);
 

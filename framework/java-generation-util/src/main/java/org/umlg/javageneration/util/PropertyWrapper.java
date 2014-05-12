@@ -20,6 +20,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     private Property property;
     private boolean recursive;
     private boolean indexed;
+    private boolean refined;
 
     public PropertyWrapper(Property property) {
         super(property);
@@ -41,7 +42,9 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     public boolean needsLookup() {
         return !isComposite() && !(getType() instanceof Enumeration)
                 && !isDerived() && !isQualifier() && getOtherEnd() != null
-                && !(getOtherEnd().getType() instanceof Enumeration) && !getOtherEnd().isComposite();
+                && !(getOtherEnd().getType() instanceof Enumeration)
+                && !getOtherEnd().isComposite()
+                && !isRefined();
     }
 
     public boolean hasLookup() {
@@ -2096,4 +2099,17 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return isStereotypeApplied(stereotype);
     }
 
+    /**
+     * This indicates that the property is a member end of an association that in turn is a <<Refine>>abstraction of another association.
+     * <<Refine>> abstraction is used on qualified associations to indicate multiple separate qualifiers.
+     * @return
+     */
+    public boolean isRefined() {
+        Association association = this.property.getAssociation();
+        if (association != null) {
+            return !ModelLoader.INSTANCE.getRefinedAbstraction(association).isEmpty();
+        } else {
+            return false;
+        }
+    }
 }

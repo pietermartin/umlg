@@ -16,7 +16,7 @@ public class OclIncludesExpToJava extends BaseHandleOperationExp {
         StringBuilder result = new StringBuilder();
         result.append(sourceResult);
         result.append(".includes(");
-        result.append(argumentResults.get(0));
+        result.append(argumentResults.get(0).replace("self", "this"));
         result.append(")");
         return result.toString();
     }

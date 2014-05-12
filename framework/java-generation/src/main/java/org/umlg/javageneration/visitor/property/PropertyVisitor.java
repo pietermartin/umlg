@@ -32,22 +32,24 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
     @Override
     public void visitBefore(Property p) {
         PropertyWrapper propertyWrapper = new PropertyWrapper(p);
-        OJAnnotatedClass owner = findOJClass(p);
-        validateProperty(propertyWrapper);
-        if (!propertyWrapper.isDerived() && !propertyWrapper.isQualifier() && !propertyWrapper.isForQualifier()) {
-            buildField(owner, propertyWrapper);
-            buildRemover(owner, propertyWrapper);
-            buildClearer(owner, propertyWrapper);
-        }
-        if (!propertyWrapper.isDerived() && propertyWrapper.getDefaultValue() != null) {
-            addInitialization(owner, propertyWrapper);
-        }
-        if (propertyWrapper.isMemberOfAssociationClass() && propertyWrapper.isOrdered()) {
-            //build a move method
-            //this is needed for association class as a move is more complex than a remove and add.
-            //A move needs to retain the original association class and just move it.
-            //in a move the association is not destroyed
-            buildMovePropertyInstanceForAssociationClass(owner, propertyWrapper);
+        if (!propertyWrapper.isRefined()) {
+            OJAnnotatedClass owner = findOJClass(p);
+            validateProperty(propertyWrapper);
+            if (!propertyWrapper.isDerived() && !propertyWrapper.isQualifier() && !propertyWrapper.isForQualifier()) {
+                buildField(owner, propertyWrapper);
+                buildRemover(owner, propertyWrapper);
+                buildClearer(owner, propertyWrapper);
+            }
+            if (!propertyWrapper.isDerived() && propertyWrapper.getDefaultValue() != null) {
+                addInitialization(owner, propertyWrapper);
+            }
+            if (propertyWrapper.isMemberOfAssociationClass() && propertyWrapper.isOrdered()) {
+                //build a move method
+                //this is needed for association class as a move is more complex than a remove and add.
+                //A move needs to retain the original association class and just move it.
+                //in a move the association is not destroyed
+                buildMovePropertyInstanceForAssociationClass(owner, propertyWrapper);
+            }
         }
     }
 
@@ -76,7 +78,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
                 initVariables = infOwner.findOperation(ClassBuilder.INIT_VARIABLES);
                 buildInitialization(propertyWrapper, initVariables, owner);
             }
-        }  else {
+        } else {
             initVariables = owner.findOperation(ClassBuilder.INIT_VARIABLES);
             buildInitialization(propertyWrapper, initVariables, owner);
         }
@@ -109,7 +111,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 
         OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
         ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".move(index, " + propertyWrapper.fieldname() + ", this." + propertyWrapper.associationClassGetterForProperty() + "(" + propertyWrapper.fieldname() + "))");
-        ifNotNull.addToThenPart("this." + propertyWrapper.getAssociationClassFakePropertyName() + " = " + propertyWrapper.javaDefaultInitialisationForAssociationClass((BehavioredClassifier)propertyWrapper.getOtherEnd().getType()));
+        ifNotNull.addToThenPart("this." + propertyWrapper.getAssociationClassFakePropertyName() + " = " + propertyWrapper.javaDefaultInitialisationForAssociationClass((BehavioredClassifier) propertyWrapper.getOtherEnd().getType()));
 
         mover.getBody().addToStatements(ifNotNull);
         owner.addToOperations(mover);
