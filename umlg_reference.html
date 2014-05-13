@@ -104,7 +104,9 @@
 <li><a href="#EnumerationExampleID">Enumeration Example</a></li></ul>
 </li><li><a href="#AssociationClassesID">Association Classes</a><ul class="nav">
 <li><a href="#AssociationClassExampleID">Association Class Example</a></li></ul>
-</li><li><a href="#ConstraintsID">Constraints</a></li><li><a href="#QualifiersID">Qualifiers</a></li><li><a href="#SubsettingID">Subsetting</a></li><li><a href="#RedefinitionsID">Redefinitions</a></li>
+</li><li><a href="#ConstraintsID">Constraints</a><ul class="nav">
+<li><a href="#ConstraintExampleID">Constraint Example</a></li></ul>
+</li><li><a href="#QualifiersID">Qualifiers</a></li><li><a href="#SubsettingID">Subsetting</a></li><li><a href="#RedefinitionsID">Redefinitions</a></li>
                 </ul>
             </div>
         </div>
@@ -1000,6 +1002,31 @@ public void testAssociationClass() {
 </blockquote>
 
 <p>UMLG supports constraints specified in OCL.</p>
+
+<p>All constraints are evaluated just before commit is executed.</p>
+
+<p><br /></p>
+
+<h3 id="ConstraintExampleID">Constraint Example</h3>
+
+<p>The example below illustrates constraints on a class.</p>
+
+<p><img src="images/uml/constraint/constraint.png" alt="image of interfaces" title="" /></p>
+
+<pre class="prettyprint"><code class="language-java">@Test(expected = UmlgConstraintViolationException.class)
+public void testConstraintValueFails() {
+    ATMTransaction atmTransaction = new ATMTransaction();
+    atmTransaction.setValue(-1);
+    db.commit();
+}
+
+@Test(expected = UmlgConstraintViolationException.class)
+public void testConstraintNotSelfFail() {
+    Friend john = new Friend();
+    john.addToKnows(john);
+    db.commit();
+}
+</code></pre>
 
 <h2 id="QualifiersID">Qualifiers</h2>
 

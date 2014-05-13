@@ -816,7 +816,72 @@ From the UML specification.
 
 UMLG supports constraints specified in OCL.
 
+Constraints are evaluated just before commit is executed.
+
+<br />
+###Constraint Example
+
+The example below illustrates constraints on a class.
+
+![image of interfaces](images/uml/constraint/constraint.png)
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testConstraintValueFails() {
+        ATMTransaction atmTransaction = new ATMTransaction();
+        atmTransaction.setValue(-1);
+        db.commit();
+    }
+
+    @Test(expected = UmlgConstraintViolationException.class)
+    public void testConstraintNotSelfFail() {
+        Friend john = new Friend();
+        john.addToKnows(john);
+        db.commit();
+    }
+
 ##Qualifiers
+
+From the UML specification.
+
+>A qualifier declares a partition of the set of associated instances with respect to an instance at the qualified end (the
+ qualified instance is at the end to which the qualifier is attached). A qualifier instance comprises one value for each
+ qualifier attribute. Given a qualified object and a qualifier instance, the number of objects at the other end of the
+ association is constrained by the declared multiplicity. In the common case in which the multiplicity is 0..1, the qualifier
+ value is unique with respect to the qualified object, and designates at most one associated object. In the general case of
+ multiplicity 0..*, the set of associated instances is partitioned into subsets, each selected by a given qualifier instance. In
+ the case of multiplicity 1 or 0..1, the qualifier has both semantic and implementation consequences. In the case of
+ multiplicity 0..*, it has no real semantic consequences but suggests an implementation that facilitates easy access of sets
+ of associated instances linked by a given qualifier value.
+
+    @Test(expected = IllegalStateException.class)
+    public void testQualifierEnsuresUniqueness() {
+        Bank bank = new Bank();
+        Client john = new Client();
+        john.setIdNumber("aaa1");
+        bank.addToClient(john);
+
+        Client joe = new Client();
+        joe.setIdNumber("aaa1");
+        bank.addToClient(joe);
+    }
+
+    @Test
+    public void testQualifierAsIndex() {
+        Bank bank = new Bank();
+        for (int i = 0; i < 10000; i++) {
+            Client client = new Client();
+            client.setIdNumber("aaa" + i);
+            bank.addToClient(client);
+        }
+        db.commit();
+
+        //This getters will hit the index.
+        //Finding qualified properties are efficient.
+        Assert.assertEquals("aaa1", bank.getClientForIdNumberQualifier("aaa1").getIdNumber());
+        Assert.assertEquals("aaa1111", bank.getClientForIdNumberQualifier("aaa1111").getIdNumber());
+        Assert.assertEquals("aaa9999", bank.getClientForIdNumberQualifier("aaa9999").getIdNumber());
+        Assert.assertNull(bank.getClientForIdNumberQualifier("aaa10001"));
+    }
 
 ##Subsetting
 
