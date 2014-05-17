@@ -185,6 +185,9 @@
         <children>
           <emfPageIdentifier href="umlg-test.notation#_4l0FoHjzEeOViYFNuR_VNg"/>
         </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#_Lm8mEHlpEeOViYFNuR_VNg"/>
+        </children>
       </children>
     </windows>
   </sashModel>
