@@ -853,15 +853,24 @@ From the UML specification.
  multiplicity 0..*, it has no real semantic consequences but suggests an implementation that facilitates easy access of sets
  of associated instances linked by a given qualifier value.
 
+<br />
+###Qualifer Example
+
+The example below illustrates qualifiers.
+
+![image of qualifers](images/uml/qualifier/qualifier.png)
+
     @Test(expected = IllegalStateException.class)
     public void testQualifierEnsuresUniqueness() {
         Bank bank = new Bank();
         Client john = new Client();
         john.setIdNumber("aaa1");
+        john.setSurname("Smith");
         bank.addToClient(john);
 
         Client joe = new Client();
         joe.setIdNumber("aaa1");
+        john.setSurname("Clark");
         bank.addToClient(joe);
     }
 
@@ -871,6 +880,11 @@ From the UML specification.
         for (int i = 0; i < 10000; i++) {
             Client client = new Client();
             client.setIdNumber("aaa" + i);
+            if (i % 2 == 0) {
+                client.setSurname("aaa");
+            } else {
+                client.setSurname("bbb");
+            }
             bank.addToClient(client);
         }
         db.commit();
@@ -881,81 +895,67 @@ From the UML specification.
         Assert.assertEquals("aaa1111", bank.getClientForIdNumberQualifier("aaa1111").getIdNumber());
         Assert.assertEquals("aaa9999", bank.getClientForIdNumberQualifier("aaa9999").getIdNumber());
         Assert.assertNull(bank.getClientForIdNumberQualifier("aaa10001"));
+
+        Assert.assertEquals(5000, bank.getClientForSurnameQualifier("aaa").size());
+        Assert.assertEquals(5000, bank.getClientForSurnameQualifier("bbb").size());
+        Assert.assertEquals("aaa", bank.getClientForSurnameQualifier("aaa").iterator().next().getSurname());
+        Assert.assertEquals("bbb", bank.getClientForSurnameQualifier("bbb").iterator().next().getSurname());
     }
 
 ##Subsetting
 
+From the UML specification.
+
+>Subsetting represents the familiar set-theoretic concept. It is applicable to the collections represented by association ends,
+ not to the association itself. It means that the subsetting association end is a collection that is either equal to the collection
+ that it is subsetting or a proper subset of that collection. (Proper subsetting implies that the superset is not empty and that
+ the subset has fewer members.) Subsetting is a relationship in the domain of extensional semantics.
+
+<br />
+###Subsetting Example
+
+The example below illustrates subsetting.
+
+![image of subsetting](images/uml/subsetting/subsetting.png)
+
+    @Test
+    public void testSubsetting() {
+        CarMart carMart = new CarMart();
+        Car toyota = new Car();
+        carMart.addToCar(toyota);
+        Car ford = new Car();
+        carMart.addToCar(ford);
+        Car mazda = new Car();
+        carMart.addToCar(mazda);
+
+        Bike yamaha = new Bike();
+        carMart.addToBike(yamaha);
+        Bike kawasaki = new Bike();
+        carMart.addToBike(kawasaki);
+        Bike honda = new Bike();
+        carMart.addToBike(honda);
+
+        Spare wheel = new Spare();
+        carMart.addToSpare(wheel);
+        Spare engine = new Spare();
+        carMart.addToSpare(engine);
+        Spare boot = new Spare();
+        carMart.addToSpare(boot);
+
+        db.commit();
+
+        Assert.assertEquals(3, carMart.getCar().size());
+        Assert.assertEquals(3, carMart.getBike().size());
+        Assert.assertEquals(3, carMart.getSpare().size());
+        //carMart.getStock() returns the union of the subsetting properties car, bike and spare.
+        Assert.assertEquals(9, carMart.getStock().size());
+    }
+
 ##Redefinitions
 
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
-<p>a</p>
+From the UML specification.
+
+>Redefinition is a relationship between features of classifiers within a specialization hierarchy. Redefinition may be used to
+ change the definition of a feature, and thereby introduce a specialized classifier in place of the original featuring
+ classifier, but this usage is incidental. The difference in domain (that redefinition applies to features) differentiates
+ redefinition from specialization.

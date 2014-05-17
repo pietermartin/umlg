@@ -106,7 +106,11 @@
 <li><a href="#AssociationClassExampleID">Association Class Example</a></li></ul>
 </li><li><a href="#ConstraintsID">Constraints</a><ul class="nav">
 <li><a href="#ConstraintExampleID">Constraint Example</a></li></ul>
-</li><li><a href="#QualifiersID">Qualifiers</a></li><li><a href="#SubsettingID">Subsetting</a></li><li><a href="#RedefinitionsID">Redefinitions</a></li>
+</li><li><a href="#QualifiersID">Qualifiers</a><ul class="nav">
+<li><a href="#QualiferExampleID">Qualifer Example</a></li></ul>
+</li><li><a href="#SubsettingID">Subsetting</a><ul class="nav">
+<li><a href="#SubsettingExampleID">Subsetting Example</a></li></ul>
+</li><li><a href="#RedefinitionsID">Redefinitions</a></li>
                 </ul>
             </div>
         </div>
@@ -1003,7 +1007,7 @@ public void testAssociationClass() {
 
 <p>UMLG supports constraints specified in OCL.</p>
 
-<p>All constraints are evaluated just before commit is executed.</p>
+<p>Constraints are evaluated just before commit is executed.</p>
 
 <p><br /></p>
 
@@ -1030,153 +1034,134 @@ public void testConstraintNotSelfFail() {
 
 <h2 id="QualifiersID">Qualifiers</h2>
 
+<p>From the UML specification.</p>
+
+<blockquote>
+  <p>A qualifier declares a partition of the set of associated instances with respect to an instance at the qualified end (the
+ qualified instance is at the end to which the qualifier is attached). A qualifier instance comprises one value for each
+ qualifier attribute. Given a qualified object and a qualifier instance, the number of objects at the other end of the
+ association is constrained by the declared multiplicity. In the common case in which the multiplicity is 0..1, the qualifier
+ value is unique with respect to the qualified object, and designates at most one associated object. In the general case of
+ multiplicity 0..<em>, the set of associated instances is partitioned into subsets, each selected by a given qualifier instance. In
+ the case of multiplicity 1 or 0..1, the qualifier has both semantic and implementation consequences. In the case of
+ multiplicity 0..</em>, it has no real semantic consequences but suggests an implementation that facilitates easy access of sets
+ of associated instances linked by a given qualifier value.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="QualiferExampleID">Qualifer Example</h3>
+
+<p>The example below illustrates qualifiers.</p>
+
+<p><img src="images/uml/qualifier/qualifier.png" alt="image of qualifers" title="" /></p>
+
+<pre class="prettyprint"><code class="language-java">@Test(expected = IllegalStateException.class)
+public void testQualifierEnsuresUniqueness() {
+    Bank bank = new Bank();
+    Client john = new Client();
+    john.setIdNumber("aaa1");
+    john.setSurname("Smith");
+    bank.addToClient(john);
+
+    Client joe = new Client();
+    joe.setIdNumber("aaa1");
+    john.setSurname("Clark");
+    bank.addToClient(joe);
+}
+
+@Test
+public void testQualifierAsIndex() {
+    Bank bank = new Bank();
+    for (int i = 0; i &lt; 10000; i++) {
+        Client client = new Client();
+        client.setIdNumber("aaa" + i);
+        if (i % 2 == 0) {
+            client.setSurname("aaa");
+        } else {
+            client.setSurname("bbb");
+        }
+        bank.addToClient(client);
+    }
+    db.commit();
+
+    //This getters will hit the index.
+    //Finding qualified properties are efficient.
+    Assert.assertEquals("aaa1", bank.getClientForIdNumberQualifier("aaa1").getIdNumber());
+    Assert.assertEquals("aaa1111", bank.getClientForIdNumberQualifier("aaa1111").getIdNumber());
+    Assert.assertEquals("aaa9999", bank.getClientForIdNumberQualifier("aaa9999").getIdNumber());
+    Assert.assertNull(bank.getClientForIdNumberQualifier("aaa10001"));
+
+    Assert.assertEquals(5000, bank.getClientForSurnameQualifier("aaa").size());
+    Assert.assertEquals(5000, bank.getClientForSurnameQualifier("bbb").size());
+    Assert.assertEquals("aaa", bank.getClientForSurnameQualifier("aaa").iterator().next().getSurname());
+    Assert.assertEquals("bbb", bank.getClientForSurnameQualifier("bbb").iterator().next().getSurname());
+}
+</code></pre>
+
 <h2 id="SubsettingID">Subsetting</h2>
+
+<p>From the UML specification.</p>
+
+<blockquote>
+  <p>Subsetting represents the familiar set-theoretic concept. It is applicable to the collections represented by association ends,
+ not to the association itself. It means that the subsetting association end is a collection that is either equal to the collection
+ that it is subsetting or a proper subset of that collection. (Proper subsetting implies that the superset is not empty and that
+ the subset has fewer members.) Subsetting is a relationship in the domain of extensional semantics.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="SubsettingExampleID">Subsetting Example</h3>
+
+<p>The example below illustrates subsetting.</p>
+
+<p><img src="images/uml/subsetting/subsetting.png" alt="image of subsetting" title="" /></p>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testSubsetting() {
+    CarMart carMart = new CarMart();
+    Car toyota = new Car();
+    carMart.addToCar(toyota);
+    Car ford = new Car();
+    carMart.addToCar(ford);
+    Car mazda = new Car();
+    carMart.addToCar(mazda);
+
+    Bike yamaha = new Bike();
+    carMart.addToBike(yamaha);
+    Bike kawasaki = new Bike();
+    carMart.addToBike(kawasaki);
+    Bike honda = new Bike();
+    carMart.addToBike(honda);
+
+    Spare wheel = new Spare();
+    carMart.addToSpare(wheel);
+    Spare engine = new Spare();
+    carMart.addToSpare(engine);
+    Spare boot = new Spare();
+    carMart.addToSpare(boot);
+
+    db.commit();
+
+    Assert.assertEquals(3, carMart.getCar().size());
+    Assert.assertEquals(3, carMart.getBike().size());
+    Assert.assertEquals(3, carMart.getSpare().size());
+    //carMart.getStock() returns the union of the subsetting properties car, bike and spare.
+    Assert.assertEquals(9, carMart.getStock().size());
+}
+</code></pre>
 
 <h2 id="RedefinitionsID">Redefinitions</h2>
 
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
-
-<p>a</p>
+<p>From the UML specification.</p>
+
+<blockquote>
+  <p>Redefinition is a relationship between features of classifiers within a specialization hierarchy. Redefinition may be used to
+ change the definition of a feature, and thereby introduce a specialized classifier in place of the original featuring
+ classifier, but this usage is incidental. The difference in domain (that redefinition applies to features) differentiates
+ redefinition from specialization.</p>
+</blockquote>
 
 
         </div>
