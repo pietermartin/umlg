@@ -171,6 +171,7 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		Nature nature = new Nature(true);
 		nature.setName1("name1_0");
 		nature.setName2("xxx");
+        nature.setNameUnique("a");
 		nature.addToGod(god);
         db.commit();
 
@@ -180,6 +181,7 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		nature = new Nature(true);
 		nature.setName1("name1_1");
 		nature.setName2("xxx");
+        nature.setNameUnique("b");
 		nature.addToGod(god);
         db.commit();
 
@@ -189,6 +191,7 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		nature = new Nature(true);
 		nature.setName1("name1_2");
 		nature.setName2("xxx");
+        nature.setNameUnique("c");
 		nature.addToGod(god);
         db.commit();
 
@@ -198,6 +201,7 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		nature = new Nature(true);
 		nature.setName1("name1_3");
 		nature.setName2("xxx");
+        nature.setNameUnique("d");
 		nature.addToGod(god);
         db.commit();
 
@@ -207,7 +211,8 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		nature = new Nature(true);
 		nature.setName1("name1_4");
 		nature.setName2("yyy");
-		nature.addToGod(god);
+        nature.setNameUnique("e");
+        nature.addToGod(god);
         db.commit();
 
 		Assert.assertEquals(6, countVertices());

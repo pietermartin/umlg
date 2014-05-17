@@ -138,24 +138,24 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             } else {
                 ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
             }
-            List<Constraint> constraints = UmlgPropertyOperations.getConstraints(propertyWrapper.getProperty());
-            if (!constraints.isEmpty()) {
-
-                //Check the constraints
-                OJField failedConstraints = new OJField("violations", new OJPathName("java.util.List").addToGenerics(UmlgGenerationUtil.UmlgConstraintViolation));
-                failedConstraints.setInitExp("new ArrayList<" + UmlgGenerationUtil.UmlgConstraintViolation.getLast() + ">()");
-                ojBlock2.addToLocals(failedConstraints);
-
-                for (Constraint constraint : constraints) {
-                    ojBlock2.addToStatements("violations.addAll(" + propertyWrapper.checkConstraint(constraint) + "())");
-                }
-
-                OJIfStatement ifConstraintsFail = new OJIfStatement("!violations.isEmpty()");
-                ifConstraintsFail.addToThenPart("this." + propertyWrapper.fieldname() + ".clear()");
-                ifConstraintsFail.addToThenPart("throw new UmlgConstraintViolationException(violations)");
-                ojBlock2.addToStatements(ifConstraintsFail);
-
-            }
+//            List<Constraint> constraints = UmlgPropertyOperations.getConstraints(propertyWrapper.getProperty());
+//            if (!constraints.isEmpty()) {
+//
+//                //Check the constraints
+//                OJField failedConstraints = new OJField("violations", new OJPathName("java.util.List").addToGenerics(UmlgGenerationUtil.UmlgConstraintViolation));
+//                failedConstraints.setInitExp("new ArrayList<" + UmlgGenerationUtil.UmlgConstraintViolation.getLast() + ">()");
+//                ojBlock2.addToLocals(failedConstraints);
+//
+//                for (Constraint constraint : constraints) {
+//                    ojBlock2.addToStatements("violations.addAll(" + propertyWrapper.checkConstraint(constraint) + "())");
+//                }
+//
+//                OJIfStatement ifConstraintsFail = new OJIfStatement("!violations.isEmpty()");
+//                ifConstraintsFail.addToThenPart("this." + propertyWrapper.fieldname() + ".clear()");
+//                ifConstraintsFail.addToThenPart("throw new UmlgConstraintViolationException(violations)");
+//                ojBlock2.addToStatements(ifConstraintsFail);
+//
+//            }
             singleAdder.getBody().addToStatements(ifNotNull);
         } else {
             //Check if already has a value
@@ -174,18 +174,18 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             //Set the new value
             ifValidated.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
 
-            //Check the constraints
-            List<Constraint> constraints = UmlgPropertyOperations.getConstraints(propertyWrapper.getProperty());
-            for (Constraint constraint : constraints) {
-                ifValidated.getThenPart().addToStatements("violations.addAll(" + propertyWrapper.checkConstraint(constraint) + "())");
-            }
-
-            if (!constraints.isEmpty()) {
-                OJIfStatement ifConstraintsFail = new OJIfStatement("!violations.isEmpty()");
-                ifConstraintsFail.addToThenPart("this." + propertyWrapper.fieldname() + ".clear()");
-                ifConstraintsFail.addToThenPart("throw new UmlgConstraintViolationException(violations)");
-                ifValidated.addToThenPart(ifConstraintsFail);
-            }
+//            //Check the constraints
+//            List<Constraint> constraints = UmlgPropertyOperations.getConstraints(propertyWrapper.getProperty());
+//            for (Constraint constraint : constraints) {
+//                ifValidated.getThenPart().addToStatements("violations.addAll(" + propertyWrapper.checkConstraint(constraint) + "())");
+//            }
+//
+//            if (!constraints.isEmpty()) {
+//                OJIfStatement ifConstraintsFail = new OJIfStatement("!violations.isEmpty()");
+//                ifConstraintsFail.addToThenPart("this." + propertyWrapper.fieldname() + ".clear()");
+//                ifConstraintsFail.addToThenPart("throw new UmlgConstraintViolationException(violations)");
+//                ifValidated.addToThenPart(ifConstraintsFail);
+//            }
 
             ifNotNull.addToThenPart(ifValidated);
 

@@ -79,11 +79,17 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
                 OJField next = new OJField(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
                 next.setInitExp("iter.next()");
                 ojWhileStatement.getBody().addToLocals(next);
-                OJTryStatement tryTumlConstraintException = new OJTryStatement();
-                tryTumlConstraintException.getTryPart().addToStatements(propertyWrapper.adder() + "(" + propertyWrapper.fieldname() + ")");
-                tryTumlConstraintException.setCatchParam(new OJParameter("e", UmlgGenerationUtil.UmlgConstraintViolationException));
-                tryTumlConstraintException.getCatchPart().addToStatements("iter.remove()");
-                ojWhileStatement.getBody().addToStatements(tryTumlConstraintException);
+
+                ojWhileStatement.getBody().addToStatements(propertyWrapper.adder() + "(" + propertyWrapper.fieldname() + ")");
+
+                for (Constraint c : constraints) {
+                    ojWhileStatement.getBody().addToStatements("List<UmlgConstraintViolation> violation" + c.getName() + " = " + UmlgClassOperations.checkClassConstraintName(c) + "()");
+                    OJIfStatement ifConstraintFails = new OJIfStatement();
+                    ifConstraintFails.setCondition("!violation" + c.getName() + ".isEmpty()");
+                    ifConstraintFails.getThenPart().addToStatements("iter.remove()");
+                    ojWhileStatement.getBody().addToStatements(ifConstraintFails);
+                }
+
                 ojWhileStatement.getBody().addToStatements(propertyWrapper.remover() + "(" + propertyWrapper.fieldname() + ")");
                 ojBlock2.addToStatements(ojWhileStatement);
             }

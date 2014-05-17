@@ -2725,6 +2725,13 @@
           <layoutConstraint xmi:type="notation:Location" xmi:id="_wE4pkdguEeOEP64qykw2fg"/>
         </children>
         <children xmi:type="notation:Shape" xmi:id="_7QznENg8EeOEP64qykw2fg" type="3012" fontName="Sans" fontHeight="10" lineColor="0">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_UJDWcNoTEeOEP64qykw2fg" source="Stereotype_Annotation">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XvSkMN2_EeOEP64qykw2fg" key="StereotypeWithQualifiedNameList" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XvSkMd2_EeOEP64qykw2fg" key="StereotypeList" value="Umlg::Profile::QualifierListener"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XvSkMt2_EeOEP64qykw2fg" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XvSkM92_EeOEP64qykw2fg" key="PropStereoDisplay" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XvSkNN2_EeOEP64qykw2fg" key="StereotypePropertyLocation" value="Compartment"/>
+          </eAnnotations>
           <element xmi:type="uml:Property" href="quick-preview.uml#_7QzAANg8EeOEP64qykw2fg"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_7QznEdg8EeOEP64qykw2fg"/>
         </children>
@@ -2733,6 +2740,13 @@
           <layoutConstraint xmi:type="notation:Location" xmi:id="_xg52cdhAEeOEP64qykw2fg"/>
         </children>
         <children xmi:type="notation:Shape" xmi:id="_SDxAgNhIEeOEP64qykw2fg" type="3012" fontName="Sans" fontHeight="10" lineColor="0">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Qe0gYNoTEeOEP64qykw2fg" source="Stereotype_Annotation">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_auk_0N2_EeOEP64qykw2fg" key="StereotypeWithQualifiedNameList" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_auk_0d2_EeOEP64qykw2fg" key="StereotypeList" value="Umlg::Profile::QualifierListener"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_auk_0t2_EeOEP64qykw2fg" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_aulm4N2_EeOEP64qykw2fg" key="PropStereoDisplay" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_aulm4d2_EeOEP64qykw2fg" key="StereotypePropertyLocation" value="Compartment"/>
+          </eAnnotations>
           <element xmi:type="uml:Property" href="quick-preview.uml#_SDvyYNhIEeOEP64qykw2fg"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_SDxAgdhIEeOEP64qykw2fg"/>
         </children>
@@ -2831,6 +2845,19 @@
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_y-EQ0thoEeOEP64qykw2fg" points="[16, -19, -367, 7]$[76, -89, -307, -63]$[305, -89, -78, -63]$[365, -40, -18, -14]"/>
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_y-Oo4NhoEeOEP64qykw2fg" id="(0.41,0.19)"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_y-Oo4dhoEeOEP64qykw2fg" id="(0.3425925925925926,0.10071942446043165)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_DZK4QN3CEeOEP64qykw2fg" type="4006" source="_y-EQ0NhoEeOEP64qykw2fg" target="_09uAwNguEeOEP64qykw2fg" lineColor="0">
+      <children xmi:type="notation:DecorationNode" xmi:id="_DZLfUN3CEeOEP64qykw2fg" visible="false" type="6014">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_DZLfUd3CEeOEP64qykw2fg" x="-22" y="33"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_DZLfUt3CEeOEP64qykw2fg" type="6015">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_DZLfU93CEeOEP64qykw2fg" x="-38" y="-56"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_DZK4Qd3CEeOEP64qykw2fg" fontName="Sans" fontHeight="10"/>
+      <element xmi:type="uml:Abstraction" href="quick-preview.uml#_DZJqIN3CEeOEP64qykw2fg"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_DZK4Qt3CEeOEP64qykw2fg" points="[-6, -14, -1, -121]$[-6, 107, -1, 0]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_DZPwwN3CEeOEP64qykw2fg" id="(0.4166666666666667,0.2037037037037037)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_DZPwwd3CEeOEP64qykw2fg" id="(0.4584837545126354,0.48148148148148145)"/>
     </edges>
   </notation:Diagram>
 </xmi:XMI>

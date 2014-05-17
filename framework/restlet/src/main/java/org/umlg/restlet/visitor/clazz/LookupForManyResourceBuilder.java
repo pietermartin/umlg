@@ -22,7 +22,7 @@ public class LookupForManyResourceBuilder extends BaseServerResourceBuilder impl
     @Override
     public void visitBefore(Property p) {
         PropertyWrapper pWrap = new PropertyWrapper(p);
-        if (pWrap.hasLookup() && pWrap.isMany()) {
+        if (pWrap.hasLookup() && pWrap.isMany() && !pWrap.isRefined()) {
             OJAnnotatedClass owner = findOJClass(p);
 
             OJPackage ojPackage = owner.getMyPackage();

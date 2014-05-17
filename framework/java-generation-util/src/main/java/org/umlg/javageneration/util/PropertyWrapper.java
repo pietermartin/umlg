@@ -6,14 +6,13 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Package;
 import org.umlg.framework.ModelLoader;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.javageneration.validation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
@@ -271,7 +270,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return UmlgClassOperations.propertyEnumName(getOwningType()) + "." + fieldname();
     }
 
-    public String getDefaultValueAsString() {
+    public String getDefaultValueAsJava() {
         ValueSpecification v = getDefaultValue();
         if (v instanceof OpaqueExpression) {
             if (hasOclDefaultValue()) {
@@ -287,7 +286,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             LiteralString expr = (LiteralString) v;
             String result = expr.getValue();
             if (result != null) {
-                return result.replaceAll("^\"|\"$", "");
+                return "\"" + result.replaceAll("^\"|\"$", "") + "\"";
             } else {
                 return "\"\"";
             }
@@ -2107,9 +2106,37 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     public boolean isRefined() {
         Association association = this.property.getAssociation();
         if (association != null) {
-            return !ModelLoader.INSTANCE.getRefinedAbstraction(association).isEmpty();
+            return !ModelLoader.INSTANCE.getOriginalAbstractionForRefinedAssociation(association).isEmpty();
         } else {
             return false;
         }
     }
+
+    public List<Property> getRefinedQualifieds() {
+        Association association = this.property.getAssociation();
+        if (association != null) {
+            List<Property> result = new ArrayList<>();
+            List<Abstraction> abstractions = ModelLoader.INSTANCE.getRefinedAbstraction(association);
+            for (Abstraction abstraction : abstractions) {
+                List<NamedElement> clients = abstraction.getClients();
+                for (NamedElement supplier : clients) {
+                    if (supplier instanceof Association) {
+                        Association refinedAssociation = (Association)supplier;
+                        List<Property> refinedMemberEnds = refinedAssociation.getMemberEnds();
+                        for (Property p : refinedMemberEnds) {
+                            PropertyWrapper propertyWrapper = new PropertyWrapper(p);
+                            if (propertyWrapper.hasQualifiers()) {
+                                result.add(propertyWrapper.getProperty());
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
 }

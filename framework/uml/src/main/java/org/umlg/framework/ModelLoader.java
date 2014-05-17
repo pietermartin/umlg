@@ -146,6 +146,17 @@ public class ModelLoader {
         return results;
     }
 
+    public List<Constraint> getConstraintsForConstrainedElement(final Element element) {
+        List<Constraint> results = new ArrayList<>();
+        filter(results, this.model, new Filter() {
+            @Override
+            public boolean filter(Element e) {
+                return e instanceof Constraint && ((Constraint) e).getConstrainedElements().contains(element);
+            }
+        });
+        return results;
+    }
+
     /**
      * Filter out Behaviors for now
      *
@@ -259,11 +270,36 @@ public class ModelLoader {
         return results;
     }
 
-    public List<Abstraction> getRefinedAbstraction(final Association association) {
+    public List<Abstraction> getOriginalAbstractionForRefinedAssociation(final Association association) {
         List<Abstraction> results = new ArrayList<>();
         List<Abstraction> abstractions = getAbstractions();
         for (Abstraction a : abstractions) {
             for (NamedElement supplier : a.getClients()) {
+                if (supplier.equals(association)) {
+                    results.add(a);
+                }
+            }
+        }
+        return results;
+    }
+
+    public boolean isRefinedAssociation(final Association association) {
+        List<Abstraction> abstractions = getAbstractions();
+        for (Abstraction a : abstractions) {
+            for (NamedElement supplier : a.getClients()) {
+                if (supplier.equals(association)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public List<Abstraction> getRefinedAbstraction(final Association association) {
+        List<Abstraction> results = new ArrayList<>();
+        List<Abstraction> abstractions = getAbstractions();
+        for (Abstraction a : abstractions) {
+            for (NamedElement supplier : a.getSuppliers()) {
                 if (supplier.equals(association)) {
                     results.add(a);
                 }

@@ -168,8 +168,17 @@ public class UmlgClassOperations extends ClassOperations {
     /*
      * These include all properties that are on the other end of an association.
      * It does not include inherited properties
+     * It does not include properties refined associations
      */
     public static Set<Property> getAllOwnedProperties(org.eclipse.uml2.uml.Class clazz) {
+        return filterOutRefinedProperties(getAllOwnedPropertiesIncludingRefinedAssociationMemberEnds(clazz));
+    }
+
+    /*
+     * These include all properties that are on the other end of an association.
+     * It does not include inherited properties
+     */
+    public static Set<Property> getAllOwnedPropertiesIncludingRefinedAssociationMemberEnds(org.eclipse.uml2.uml.Class clazz) {
 
         Set<Property> result = new HashSet<Property>(clazz.getAttributes());
         List<Association> associations = clazz.getAssociations();
@@ -188,7 +197,7 @@ public class UmlgClassOperations extends ClassOperations {
             }
         }
         result.addAll(getPropertiesOnRealizedInterfaces(clazz));
-        return filterOutRefinedProperties(result);
+        return result;
     }
 
     /*
@@ -232,6 +241,17 @@ public class UmlgClassOperations extends ClassOperations {
             }
         }
         return properties;
+    }
+
+    private static List<Association> filterOutRefinedAssociation(List<Association> result) {
+        List<Association> associations = new ArrayList<>();
+        //Ignore associations that are refined abstraction
+        for (Association a : result) {
+            if (!ModelLoader.INSTANCE.isRefinedAssociation(a))  {
+                associations.add(a);
+            }
+        }
+        return associations;
     }
 
     public static Set<Property> getPropertiesOnRealizedInterfaces(org.eclipse.uml2.uml.Class clazz) {
@@ -283,7 +303,7 @@ public class UmlgClassOperations extends ClassOperations {
         Set<Association> result = new HashSet<Association>();
         if (classifier instanceof Class) {
             for (Interface implementedInterface : ((Class) classifier).getAllImplementedInterfaces()) {
-                result.addAll(implementedInterface.getAssociations());
+                result.addAll(filterOutRefinedAssociation(implementedInterface.getAssociations()));
             }
         }
         getAllAssociationsFromGenerals(classifier, result);

@@ -126,7 +126,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
                     adder.getBody().addToStatements(associationClassPairs);
                 }
             } else {
-                String elementName = propertyWrapper.fieldname().substring(0, 1);
+                String elementName = "_" + propertyWrapper.fieldname().substring(0, 1);
                 OJForStatement forAll = new OJForStatement(elementName, propertyWrapper.javaBaseTypePath(), propertyWrapper.fieldname());
                 forAll.getBody().addToStatements("this." + propertyWrapper.adder() + "(" + elementName + ")");
                 adder.getBody().addToStatements(forAll);

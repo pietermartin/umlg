@@ -8,10 +8,14 @@ import org.umlg.tests.allinstances.TestAllInstancesOnInterface;
 import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.collectiontest.*;
+import org.umlg.tests.constraint.ConstrainedPropertyTest;
 import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.javaprimitivetypes.TestJavaManyPrimitiveTypesWithValidation;
 import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypes;
 import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypesWithValidation;
+import org.umlg.tests.lookup.TestOneLookup;
+import org.umlg.tests.qualifiertest.TestQualifiedDeletion;
+import org.umlg.tests.qualifiertest.TestQualifier;
 import org.umlg.tests.root.TestRootMethods;
 import org.umlg.tests.validationtest.TestValidation;
 
@@ -47,7 +51,11 @@ import org.umlg.tests.validationtest.TestValidation;
 //        TestJavaPrimitiveTypesWithValidation.class,
 //        TestJavaManyPrimitiveTypesWithValidation.class,
 //        TestAllInstancesOnAbstractClass.class,
-        TestAllInstancesOnInterface.class
+//        TestAllInstancesOnInterface.class,
+        ConstrainedPropertyTest.class
+//        TestOneLookup.class,
+//        TestQualifier.class
+//        TestQualifiedDeletion.class
 })
 public class UmlgAnyTestSuite {
 }

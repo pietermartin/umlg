@@ -46,7 +46,7 @@ public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Prope
                 OCLExpression<Classifier> oclExp = UmlgOcl2Parser.INSTANCE.parseOcl(defaulValue);
                 getter.getBody().addToStatements("return " + UmlgOcl2Java.oclToJava(p, owner, oclExp));
             } else {
-                defaulValue = propertyWrapper.getDefaultValueAsString();
+                defaulValue = propertyWrapper.getDefaultValueAsJava();
                 getter.setComment(String.format("The default value for derived property '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), defaulValue));
                 getter.getBody().addToStatements("return " + defaulValue);
             }

@@ -28,12 +28,13 @@ public class OclOclIsInvalidExpToJava extends BaseHandleOperationExp {
 		this.ojClass.addToOperations(oper);
 		oper.setVisibility(OJVisibilityKind.PRIVATE);
 		OJTryStatement ojTryStatement = new OJTryStatement();
-		ojTryStatement.getTryPart().addToStatements(sourceResult);
-		ojTryStatement.getTryPart().addToStatements("return false");
+		ojTryStatement.getTryPart().addToStatements("return " + sourceResult + " == null");
+//		ojTryStatement.getTryPart().addToStatements("return false");
 		ojTryStatement.setCatchParam(new OJParameter("e", UmlgGenerationUtil.umlgOclIsInvalidException.getCopy()));
 		this.ojClass.addToImports(UmlgGenerationUtil.umlgOclIsInvalidException.getCopy());
 		ojTryStatement.getCatchPart().addToStatements("return true");
 		oper.getBody().addToStatements(ojTryStatement);
 		return oper.getName() + "()";
+//        return ojTryStatement.toJavaString();
 	}
 }

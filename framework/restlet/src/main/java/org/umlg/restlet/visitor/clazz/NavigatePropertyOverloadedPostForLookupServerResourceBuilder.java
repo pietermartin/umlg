@@ -19,7 +19,7 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
     @Override
     public void visitBefore(Property p) {
         PropertyWrapper pWrap = new PropertyWrapper(p);
-        if (!pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable()) {
+        if (!pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable() && !pWrap.isRefined()) {
 
             OJAnnotatedClass owner = findOJClass(pWrap.getType());
             OJPackage ojPackage = owner.getMyPackage();

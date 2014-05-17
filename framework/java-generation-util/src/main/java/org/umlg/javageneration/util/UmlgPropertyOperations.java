@@ -17,7 +17,7 @@ import org.umlg.java.metamodel.OJSimpleStatement;
 public final class UmlgPropertyOperations extends PropertyOperations {
 
     public static List<Constraint> getConstraints(Property p) {
-        return ModelLoader.INSTANCE.getConstraints(p);
+        return ModelLoader.INSTANCE.getConstraintsForConstrainedElement(p);
     }
 
 //	public static Type findCompositeParent(PropertyWrapper propertyWrapper, PropertyWrapper otherEnd) {

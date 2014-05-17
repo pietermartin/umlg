@@ -7,6 +7,7 @@ import org.eclipse.ocl.expressions.Variable;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Parameter;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
+import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.javageneration.ocl.util.UmlgOclUtil;
 import org.umlg.javageneration.ocl.visitor.HandleIteratorExp;
 import org.umlg.javageneration.util.UmlgClassOperations;
@@ -42,7 +43,15 @@ public class OclSelectExpToJava implements HandleIteratorExp {
 		result.append(UmlgOclUtil.removeVariableInit(variableResults.get(0)));
 		result.append(") {\n");
 		result.append("        return ");
-		result.append(bodyResult);
+        //if the body result is an operation then it needs the variable passed in.
+        if (bodyResult.endsWith("()")) {
+            String bodyResultWithoutParenthises = bodyResult.substring(0, bodyResult.length() - 2);
+            OJAnnotatedOperation bodyOperation = ojClass.findOperation(bodyResultWithoutParenthises);
+            bodyOperation.addParam(variable.getName(), UmlgClassOperations.getPathName(variable.getType()));
+            result.append(bodyResultWithoutParenthises + "(" + variable.getName() + ")");
+        } else {
+		    result.append(bodyResult);
+        }
 		result.append(";\n    }");
 		result.append("\n})");
 		return result.toString();

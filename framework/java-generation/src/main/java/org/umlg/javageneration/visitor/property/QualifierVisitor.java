@@ -26,13 +26,21 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
     @Override
     public void visitBefore(Property p) {
         PropertyWrapper pWrap = new PropertyWrapper(p);
-        if (pWrap.hasQualifiers()) {
+        if (pWrap.hasQualifiers() && !pWrap.isRefined()) {
             //This generates the method that returns the umlg qualifier, i.e. org.umlg.runtime.collection.Qualifier
             generateQualifierGetter(findOJClass(pWrap), pWrap);
             //This generates the getter that takes qualifier value as input
-            generateQualifiedGetter(pWrap);
+            //In this case they are the same as the qualifier is not refined
+            generateQualifiedGetter(pWrap, pWrap);
             //update the index on setters of the properties as specified on the QualifierListener stereotype
             generateUpdateOfIndex(pWrap);
+
+            List<Property> refinedQualifieds = pWrap.getRefinedQualifieds();
+            for (Property refinedQualified : refinedQualifieds) {
+                generateQualifiedGetter(pWrap, new PropertyWrapper(refinedQualified));
+                generateUpdateOfIndex(new PropertyWrapper(refinedQualified));
+            }
+
         }
     }
 
@@ -60,7 +68,19 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         qualifierGetter.setReturnType(result.getType());
         qualifierGetter.getBody().addToLocals(result);
 
-        //TODO remove the List<Qualifier>, it always only has one element
+        buildUMLGQualifier(ojClass, qualified, qualifierGetter);
+        List<Property> refinedQualifiers = qualified.getRefinedQualifieds();
+        for (Property refinedQualifier : refinedQualifiers) {
+            buildUMLGQualifier(ojClass, new PropertyWrapper(refinedQualifier), qualifierGetter);
+        }
+
+        qualifierGetter.getBody().addToStatements("return result");
+        ojClass.addToImports(UmlgGenerationUtil.UmlgQualifierIdFactory);
+        ojClass.addToImports(UmlgGenerationUtil.UmlgQualifierPathName);
+        ojClass.addToImports(UmlgGenerationUtil.umlgMultiplicityPathName);
+    }
+
+    private void buildUMLGQualifier(OJAnnotatedClass ojClass, PropertyWrapper qualified, OJAnnotatedOperation qualifierGetter) {
         StringBuilder sb = new StringBuilder();
         sb.append("result.add(");
         sb.append("new ");
@@ -85,7 +105,6 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             sb.append("context.");
             sb.append(qWrap.getter());
             sb.append("() == null ? ");
-//            sb.append("getId() + \"___NULL___\" : getId() + ");
             sb.append(UmlgGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + \"___NULL___\" : " + UmlgGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + ");
             sb.append("context.");
             sb.append(qWrap.getter());
@@ -99,15 +118,10 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         sb.append(UmlgGenerationUtil.calculateMultiplcity(qualified));
         sb.append("))");
         qualifierGetter.getBody().addToStatements(sb.toString());
-
-        qualifierGetter.getBody().addToStatements("return result");
-        ojClass.addToImports(UmlgGenerationUtil.UmlgQualifierIdFactory);
-        ojClass.addToImports(UmlgGenerationUtil.UmlgQualifierPathName);
-        ojClass.addToImports(UmlgGenerationUtil.umlgMultiplicityPathName);
     }
 
-    private void generateQualifiedGetter(PropertyWrapper qualified) {
-        List<PropertyWrapper> qualifiers = qualified.getQualifiersAsPropertyWrappers();
+    private void generateQualifiedGetter(PropertyWrapper qualified, PropertyWrapper refinedQualifier) {
+        List<PropertyWrapper> qualifiers = refinedQualifier.getQualifiersAsPropertyWrappers();
         for (PropertyWrapper qualifier : qualifiers) {
             validateHasCorrespondingDerivedProperty(qualifier);
         }
@@ -116,14 +130,14 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         Type qualifiedClassifier = qualified.getOwningType();
         OJAnnotatedClass ojClass = findOJClass(qualifiedClassifier);
 
-        OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(qualified.getQualifiedNameFor(qualifiers));
-        if (qualified.isUnqualifiedOne()) {
-            qualifierValue.setReturnType(qualified.javaBaseTypePath());
+        OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(refinedQualifier.getQualifiedNameFor(qualifiers));
+        if (refinedQualifier.isUnqualifiedOne()) {
+            qualifierValue.setReturnType(refinedQualifier.javaBaseTypePath());
         } else {
             // This needs to only return a Set or Bag for now, not sorting the
             // result
             // by index as yet
-            qualifierValue.setReturnType(qualified.javaTypePath());
+            qualifierValue.setReturnType(refinedQualifier.javaTypePath());
         }
         for (PropertyWrapper qualifier : qualifiers) {
             qualifierValue.addParam(qualifier.fieldname(), qualifier.javaBaseTypePath());
@@ -165,7 +179,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         qualifierValue.getBody().addToStatements(elseBlock);
         ojClass.addToImports("java.util.Iterator");
         OJIfStatement ifHasNext = new OJIfStatement("iterator.hasNext()");
-        if (qualified.isUnqualifiedOne()) {
+        if (refinedQualifier.isUnqualifiedOne()) {
             OJIfStatement ifControllingSide = new OJIfStatement();
             ifControllingSide.setCondition(UmlgClassOperations.propertyEnumName(qualifiedClassifier) + "." + qualified.fieldname() + ".isControllingSide()");
             ifControllingSide.addToThenPart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next().getVertex("
@@ -218,6 +232,8 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
                     generateUpdateIndexMethodForQualifier(contextOJClass, qualified, qualifierPWrap, propertyToListenOn);
 
                 }
+            } else {
+                throw new IllegalStateException(String.format("Qualified property %s does not have a the QualifierListener stereotype applied on its corresponding derived property %s.", new String[]{qualified.getQualifiedName(), derivedQualifierProperty.getQualifiedName()}));
             }
         }
 

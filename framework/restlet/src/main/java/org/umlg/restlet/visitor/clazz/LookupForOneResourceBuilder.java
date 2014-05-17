@@ -22,7 +22,7 @@ public class LookupForOneResourceBuilder extends BaseServerResourceBuilder imple
     @Override
     public void visitBefore(Property p) {
         PropertyWrapper pWrap = new PropertyWrapper(p);
-        if (pWrap.hasLookup() && pWrap.isOne()) {
+        if (pWrap.hasLookup() && pWrap.isOne() && !pWrap.isRefined()) {
 
             OJAnnotatedClass owner = findOJClass(p);
             OJPackage ojPackage = owner.getMyPackage();
@@ -60,12 +60,14 @@ public class LookupForOneResourceBuilder extends BaseServerResourceBuilder imple
         OJPathName parentPathName = UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType());
         ojTryStatement.getTryPart().addToStatements(
                 "this." + parentPathName.getLast().toLowerCase() + "Id = " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+                        + parentPathName.getLast().toLowerCase() + "Id\"))"
+        );
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
 
         ojTryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " resource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(this." + parentPathName.getLast().toLowerCase() + "Id"
-                        + ")");
+                        + ")"
+        );
         annotatedClass.addToImports(parentPathName);
         buildToJson(pWrap, annotatedClass, ojTryStatement.getTryPart());
         ojTryStatement.setCatchPart(null);

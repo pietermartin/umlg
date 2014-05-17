@@ -96,7 +96,7 @@
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_aVWOoqx2EeOnn8UJImpdOg"/>
     </children>
     <element xmi:type="uml:Stereotype" href="umlg.profile.uml#_aVNrwKx2EeOnn8UJImpdOg"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_aVQvEax2EeOnn8UJImpdOg" x="400" y="76"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_aVQvEax2EeOnn8UJImpdOg" x="307" y="80"/>
   </children>
   <children xmi:type="notation:Shape" xmi:id="_tECEQKzXEeOnn8UJImpdOg" type="2006" fontName="Sans" fontHeight="10" lineColor="0">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_tECEQqzXEeOnn8UJImpdOg" source="ShadowFigure">
@@ -128,7 +128,7 @@
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_tEJZAqzXEeOnn8UJImpdOg"/>
     </children>
     <element xmi:type="uml:Enumeration" href="umlg.profile.uml#_tEA2IKzXEeOnn8UJImpdOg"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_tECEQazXEeOnn8UJImpdOg" x="667" y="72"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_tECEQazXEeOnn8UJImpdOg" x="489" y="80"/>
   </children>
   <styles xmi:type="notation:DiagramStyle" xmi:id="_twW20aeJEeOPt7R4er8hcg"/>
   <element xmi:type="uml:Profile" href="umlg.profile.uml#_twUakKeJEeOPt7R4er8hcg"/>

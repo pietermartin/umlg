@@ -166,7 +166,7 @@
         <packagedElement xmi:type="uml:Package" xmi:id="_XSCqoOwiEeCSwqyeEHd1tw" name="concretetest">
           <packagedElement xmi:type="uml:Class" xmi:id="_YuD8sOwiEeCSwqyeEHd1tw" name="God">
             <ownedRule xmi:type="uml:Constraint" xmi:id="_rT7BYIi3EeKeSZB9UA6Gvw" name="ConstraintCheckNameNoX" constrainedElement="_le4goIi3EeKeSZB9UA6Gvw">
-              <specification xmi:type="uml:LiteralString" xmi:id="_rT9doIi3EeKeSZB9UA6Gvw" name="constraintSpec" value="self.constraintTest.indexOf('X')=-1"/>
+              <specification xmi:type="uml:LiteralString" xmi:id="_rT9doIi3EeKeSZB9UA6Gvw" name="constraintSpec" value="if not self.constraintTest.oclIsUndefined() then&#xA;&#x9;self.constraintTest.indexOf('X')=-1&#xA;else&#xA;&#x9;true&#xA;endif "/>
             </ownedRule>
             <generalization xmi:type="uml:Generalization" xmi:id="__YWlECXHEeKbPYSfIbmXag">
               <general xmi:type="uml:Class" href="umlg-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
@@ -344,6 +344,16 @@
             <ownedAttribute xmi:type="uml:Property" xmi:id="_Ye-3ANh1EeOEP64qykw2fg" name="nature" type="_F-NRMPJKEeCeFLHNTzV0LA" association="_Ye-3A9h1EeOEP64qykw2fg">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Ye-3Adh1EeOEP64qykw2fg"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Ye-3Ath1EeOEP64qykw2fg" value="*"/>
+              <qualifier xmi:type="uml:Property" xmi:id="_gqZEsN3EEeOEP64qykw2fg" name="name1Qualifer">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              </qualifier>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_uKjiQN29EeOEP64qykw2fg" name="nature" type="_F-NRMPJKEeCeFLHNTzV0LA" association="_uKlXcN29EeOEP64qykw2fg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_uKjiQd29EeOEP64qykw2fg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_uKjiQt29EeOEP64qykw2fg" value="1"/>
+              <qualifier xmi:type="uml:Property" xmi:id="_8c7bsN29EeOEP64qykw2fg" name="nameUniqueQualifer">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              </qualifier>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_FTxxYOzqEeCemKc79Sc_aw" name="Universe">
@@ -478,6 +488,13 @@
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Abstraction" xmi:id="_qt1vUNjREeOEP64qykw2fg" name="godNatureAbstraction" client="_Ye-3A9h1EeOEP64qykw2fg" supplier="_Yq2WivJKEeCeFLHNTzV0LA"/>
+          <packagedElement xmi:type="uml:Association" xmi:id="_uKlXcN29EeOEP64qykw2fg" clientDependency="_3zBRUN29EeOEP64qykw2fg" name="god_nature_2" memberEnd="_uKlXcd29EeOEP64qykw2fg _uKjiQN29EeOEP64qykw2fg" navigableOwnedEnd="_uKlXcd29EeOEP64qykw2fg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_uKlXcd29EeOEP64qykw2fg" name="god" type="_YuD8sOwiEeCSwqyeEHd1tw" association="_uKlXcN29EeOEP64qykw2fg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_uKlXct29EeOEP64qykw2fg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_uKlXc929EeOEP64qykw2fg" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_3zBRUN29EeOEP64qykw2fg" name="Abstraction1" client="_uKlXcN29EeOEP64qykw2fg" supplier="_Yq2WivJKEeCeFLHNTzV0LA"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_YhQcgO6jEeCKZsw1ityolg" name="inheritencetest">
           <packagedElement xmi:type="uml:Class" xmi:id="_cikV0O6jEeCKZsw1ityolg" name="AbstractSpecies" isAbstract="true">
@@ -758,6 +775,32 @@
               <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_xe5KAMRjEeGr8dhiXoL-ZA" name="self.name2">
                 <language>ocl</language>
                 <body>self.name2</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_rEo6MN29EeOEP64qykw2fg" name="nameUnique" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_svWvkN29EeOEP64qykw2fg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_svXWoN29EeOEP64qykw2fg" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_svYkwN29EeOEP64qykw2fg">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_AjGm4N2-EeOEP64qykw2fg" name="nameUniqueQualifer" visibility="public" isDerived="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_DY-AwN2-EeOEP64qykw2fg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_DY-n0N2-EeOEP64qykw2fg" value="1"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_Iorm4N2-EeOEP64qykw2fg" name="nameUniqueQualiferOCL">
+                <language>OCL</language>
+                <body>self.nameUnique</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_uhv2EN3EEeOEP64qykw2fg" name="name1Qualifer" visibility="public" isDerived="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_w5LngN3EEeOEP64qykw2fg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_w5M1oN3EEeOEP64qykw2fg" value="1"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_2mkoIN3EEeOEP64qykw2fg" name="name1QualifierOCL">
+                <language>OCL</language>
+                <body>self.name1</body>
               </defaultValue>
             </ownedAttribute>
           </packagedElement>
@@ -1712,7 +1755,11 @@
             <ownedRule xmi:type="uml:Constraint" xmi:id="_865QIIlcEeKeSZB9UA6Gvw" name="Constraint1" constrainedElement="_2tbBQIlcEeKeSZB9UA6Gvw">
               <specification xmi:type="uml:OpaqueExpression" xmi:id="_RHoPMIldEeKeSZB9UA6Gvw" name="constraintForChild2">
                 <language>OCL</language>
-                <body>self.constraintRoot.constraintChild2->includes(self.constraintChild2)</body>
+                <body>if not self.constraintChild2.oclIsUndefined() then
+	self.constraintRoot.constraintChild2->includes(self.constraintChild2)
+else
+	true
+endif</body>
               </specification>
             </ownedRule>
             <ownedAttribute xmi:type="uml:Property" xmi:id="_aC8Z0IlcEeKeSZB9UA6Gvw" name="name" visibility="public">
@@ -2737,4 +2784,12 @@
   <UmlgValidation:RangeDouble xmi:id="_1bujQNFbEeOjlpjTZXDyqw" max="5.123" base_Property="_vTINUNFbEeOjlpjTZXDyqw"/>
   <UmlgProfile_1:Redundant xmi:id="_blNoINh1EeOEP64qykw2fg" association="_Yq2WivJKEeCeFLHNTzV0LA" base_Association="_Ye-3A9h1EeOEP64qykw2fg"/>
   <l2:Refine xmi:id="_xIVmMNjUEeOEP64qykw2fg" base_Abstraction="_qt1vUNjREeOEP64qykw2fg"/>
+  <UmlgProfile:QualifierListener xmi:id="__yCFYN20EeOEP64qykw2fg" base_Property="_uLKyoMRnEeGJXus6eZqdyw" property="_IKLEEBhKEeGoXdfOp4zUvw"/>
+  <UmlgProfile:QualifierListener xmi:id="_FNK4YN21EeOEP64qykw2fg" base_Property="_Qvap0MRoEeGJXus6eZqdyw" property="_8yErwBqsEeG2HY-TJLNivw"/>
+  <UmlgProfile:QualifierListener xmi:id="_JuBNYN21EeOEP64qykw2fg" base_Property="_bMVs4MUyEeGJ_K04GuAseA" property="_RCfXUBq1EeG2HY-TJLNivw"/>
+  <UmlgProfile:QualifierListener xmi:id="_OH5-wN21EeOEP64qykw2fg" base_Property="_6J9f4MRnEeGJXus6eZqdyw" property="_1fC9sBh1EeGyD6zYrs7NuQ"/>
+  <UmlgProfile:QualifierListener xmi:id="_Wiu2AN21EeOEP64qykw2fg" base_Property="_EcSnIMRvEeGJXus6eZqdyw" property="_6ZuK0BncEeGZfswubjlR9Q"/>
+  <UmlgProfile:QualifierListener xmi:id="_eGC2cN21EeOEP64qykw2fg" base_Property="_ugE2MMRoEeGJXus6eZqdyw" property="_5p0-8BncEeGZfswubjlR9Q"/>
+  <UmlgProfile:QualifierListener xmi:id="_KSrqkN2-EeOEP64qykw2fg" base_Property="_AjGm4N2-EeOEP64qykw2fg"/>
+  <UmlgProfile:QualifierListener xmi:id="_yI4U0N3EEeOEP64qykw2fg" base_Property="_uhv2EN3EEeOEP64qykw2fg" property="_zVLuUPJOEeCeFLHNTzV0LA"/>
 </xmi:XMI>

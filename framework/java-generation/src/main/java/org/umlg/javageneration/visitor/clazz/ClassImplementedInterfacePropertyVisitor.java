@@ -65,7 +65,7 @@ public class ClassImplementedInterfacePropertyVisitor extends BaseVisitor implem
 					OnePropertyVisitor.buildOneAdder(owner, propertyWrapper, false);
 					OnePropertyVisitor.buildSetter(owner, propertyWrapper);
 					PropertyValidatorBuilder.buildValidator(owner, propertyWrapper);
-                    PropertyConstraintBuilder.buildCheckConstaint(owner, propertyWrapper);
+//                    PropertyConstraintBuilder.buildCheckConstraint(owner, propertyWrapper);
 				}
 			}
 		}

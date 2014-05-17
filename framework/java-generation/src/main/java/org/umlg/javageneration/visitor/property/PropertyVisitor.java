@@ -99,7 +99,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 //			java = "//TODO " + constraint.toString();
             initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
         } else {
-            java = propertyWrapper.getDefaultValueAsString();
+            java = propertyWrapper.getDefaultValueAsJava();
             initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
         }
     }
