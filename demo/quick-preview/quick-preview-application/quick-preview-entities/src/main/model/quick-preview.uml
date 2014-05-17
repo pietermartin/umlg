@@ -470,6 +470,12 @@
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_bOgQkNguEeOEP64qykw2fg" name="qualifier">
+          <ownedComment xmi:type="uml:Comment" xmi:id="_4CDRMN3QEeOw_KKqlVf3Cw" annotatedElement="_09tZsNguEeOEP64qykw2fg">
+            <body>Qualified by idNumber</body>
+          </ownedComment>
+          <ownedComment xmi:type="uml:Comment" xmi:id="_-zV-0N3QEeOw_KKqlVf3Cw" annotatedElement="_y-DCsNhoEeOEP64qykw2fg">
+            <body>Qualified by surname</body>
+          </ownedComment>
           <packagedElement xmi:type="uml:Class" xmi:id="_eA2cYNguEeOEP64qykw2fg" name="Bank">
             <ownedAttribute xmi:type="uml:Property" xmi:id="_09syoNguEeOEP64qykw2fg" name="client" type="_iTbr4NguEeOEP64qykw2fg" association="_09tZsNguEeOEP64qykw2fg">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_09syodguEeOEP64qykw2fg"/>
@@ -532,6 +538,63 @@
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Abstraction" xmi:id="_DZJqIN3CEeOEP64qykw2fg" name="Abstraction1" client="_y-DCsNhoEeOEP64qykw2fg" supplier="_09tZsNguEeOEP64qykw2fg"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_ylV3QN3YEeOw_KKqlVf3Cw" name="subsetting">
+          <packagedElement xmi:type="uml:Class" xmi:id="_1j-LkN3YEeOw_KKqlVf3Cw" name="Shop" isAbstract="true">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_GeB48N3ZEeOw_KKqlVf3Cw" name="stock" type="_FHAboN3ZEeOw_KKqlVf3Cw" isDerived="true" isDerivedUnion="true" association="_GeCgAN3ZEeOw_KKqlVf3Cw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GeB48d3ZEeOw_KKqlVf3Cw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GeB48t3ZEeOw_KKqlVf3Cw" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_FHAboN3ZEeOw_KKqlVf3Cw" name="Stock"/>
+          <packagedElement xmi:type="uml:Association" xmi:id="_GeCgAN3ZEeOw_KKqlVf3Cw" name="shop_stock_1" memberEnd="_GeCgAd3ZEeOw_KKqlVf3Cw _GeB48N3ZEeOw_KKqlVf3Cw" navigableOwnedEnd="_GeCgAd3ZEeOw_KKqlVf3Cw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_GeCgAd3ZEeOw_KKqlVf3Cw" name="shop" type="_1j-LkN3YEeOw_KKqlVf3Cw" isDerived="true" isDerivedUnion="true" association="_GeCgAN3ZEeOw_KKqlVf3Cw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GeCgAt3ZEeOw_KKqlVf3Cw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GeCgA93ZEeOw_KKqlVf3Cw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_ZU-w0N3ZEeOw_KKqlVf3Cw" name="CarMart">
+            <generalization xmi:type="uml:Generalization" xmi:id="_0qy18N3aEeOw_KKqlVf3Cw" general="_1j-LkN3YEeOw_KKqlVf3Cw"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_2fOA8N3aEeOw_KKqlVf3Cw" name="car" type="_djIzUN3ZEeOw_KKqlVf3Cw" subsettedProperty="_GeB48N3ZEeOw_KKqlVf3Cw" association="_2fOoAN3aEeOw_KKqlVf3Cw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2fOA8d3aEeOw_KKqlVf3Cw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2fOA8t3aEeOw_KKqlVf3Cw" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_2sV28N3aEeOw_KKqlVf3Cw" name="bike" type="_vNvXYN3aEeOw_KKqlVf3Cw" subsettedProperty="_GeB48N3ZEeOw_KKqlVf3Cw" association="_2sV2893aEeOw_KKqlVf3Cw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2sV28d3aEeOw_KKqlVf3Cw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2sV28t3aEeOw_KKqlVf3Cw" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_27EPcN3aEeOw_KKqlVf3Cw" name="spare" type="_ldqZ4N3ZEeOw_KKqlVf3Cw" subsettedProperty="_GeB48N3ZEeOw_KKqlVf3Cw" association="_27EPc93aEeOw_KKqlVf3Cw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_27EPcd3aEeOw_KKqlVf3Cw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_27EPct3aEeOw_KKqlVf3Cw" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_djIzUN3ZEeOw_KKqlVf3Cw" name="Car">
+            <generalization xmi:type="uml:Generalization" xmi:id="_07pVYN3aEeOw_KKqlVf3Cw" general="_FHAboN3ZEeOw_KKqlVf3Cw"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_ldqZ4N3ZEeOw_KKqlVf3Cw" name="Spare">
+            <generalization xmi:type="uml:Generalization" xmi:id="_1dEncN3aEeOw_KKqlVf3Cw" general="_FHAboN3ZEeOw_KKqlVf3Cw"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_vNvXYN3aEeOw_KKqlVf3Cw" name="Bike">
+            <generalization xmi:type="uml:Generalization" xmi:id="_1K1A4N3aEeOw_KKqlVf3Cw" general="_FHAboN3ZEeOw_KKqlVf3Cw"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_2fOoAN3aEeOw_KKqlVf3Cw" name="carMart_car_1" memberEnd="_2fOoAd3aEeOw_KKqlVf3Cw _2fOA8N3aEeOw_KKqlVf3Cw" navigableOwnedEnd="_2fOoAd3aEeOw_KKqlVf3Cw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_2fOoAd3aEeOw_KKqlVf3Cw" name="carMart" type="_ZU-w0N3ZEeOw_KKqlVf3Cw" subsettedProperty="_GeCgAd3ZEeOw_KKqlVf3Cw" association="_2fOoAN3aEeOw_KKqlVf3Cw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2fOoAt3aEeOw_KKqlVf3Cw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2fOoA93aEeOw_KKqlVf3Cw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_2sV2893aEeOw_KKqlVf3Cw" name="carMart_bike_1" memberEnd="_2sV29N3aEeOw_KKqlVf3Cw _2sV28N3aEeOw_KKqlVf3Cw" navigableOwnedEnd="_2sV29N3aEeOw_KKqlVf3Cw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_2sV29N3aEeOw_KKqlVf3Cw" name="carMart" type="_ZU-w0N3ZEeOw_KKqlVf3Cw" subsettedProperty="_GeCgAd3ZEeOw_KKqlVf3Cw" association="_2sV2893aEeOw_KKqlVf3Cw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2sV29d3aEeOw_KKqlVf3Cw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2sV29t3aEeOw_KKqlVf3Cw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_27EPc93aEeOw_KKqlVf3Cw" name="carMart_spare_1" memberEnd="_27EPdN3aEeOw_KKqlVf3Cw _27EPcN3aEeOw_KKqlVf3Cw" navigableOwnedEnd="_27EPdN3aEeOw_KKqlVf3Cw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_27EPdN3aEeOw_KKqlVf3Cw" name="carMart" type="_ZU-w0N3ZEeOw_KKqlVf3Cw" subsettedProperty="_GeCgAd3ZEeOw_KKqlVf3Cw" association="_27EPc93aEeOw_KKqlVf3Cw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_27EPdd3aEeOw_KKqlVf3Cw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_27EPdt3aEeOw_KKqlVf3Cw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
         </packagedElement>
       </packagedElement>
     </packagedElement>

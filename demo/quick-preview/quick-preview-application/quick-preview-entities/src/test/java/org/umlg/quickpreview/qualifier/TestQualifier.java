@@ -17,10 +17,12 @@ public class TestQualifier extends BaseTest {
         Bank bank = new Bank();
         Client john = new Client();
         john.setIdNumber("aaa1");
+        john.setSurname("Smith");
         bank.addToClient(john);
 
         Client joe = new Client();
         joe.setIdNumber("aaa1");
+        john.setSurname("Clark");
         bank.addToClient(joe);
     }
 

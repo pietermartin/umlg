@@ -55,6 +55,9 @@
     <availablePage>
       <emfPageIdentifier href="quick-preview.notation#_dYzk8NguEeOEP64qykw2fg"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="quick-preview.notation#_0_Pt4N3YEeOw_KKqlVf3Cw"/>
+    </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
     <windows>
@@ -106,6 +109,12 @@
         </children>
         <children>
           <emfPageIdentifier href="quick-preview.notation#_dYzk8NguEeOEP64qykw2fg"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="quick-preview.notation#_ujU10H1NEeOYhpiy1kqM8Q"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="quick-preview.notation#_0_Pt4N3YEeOw_KKqlVf3Cw"/>
         </children>
       </children>
     </windows>
