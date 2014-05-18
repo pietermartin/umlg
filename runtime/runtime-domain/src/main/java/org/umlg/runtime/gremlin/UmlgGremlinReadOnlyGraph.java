@@ -2,7 +2,6 @@ package org.umlg.runtime.gremlin;
 
 import com.tinkerpop.blueprints.*;
 import com.tinkerpop.blueprints.util.StringFactory;
-import com.tinkerpop.blueprints.util.wrappers.WrappedGraphQuery;
 import com.tinkerpop.blueprints.util.wrappers.WrapperGraph;
 import com.tinkerpop.blueprints.util.wrappers.readonly.ReadOnlyTokens;
 
@@ -10,12 +9,12 @@ import com.tinkerpop.blueprints.util.wrappers.readonly.ReadOnlyTokens;
  * Date: 2014/03/21
  * Time: 2:48 PM
  */
-public class UmlgGremlinReadonlyGraph <T extends Graph> implements Graph, WrapperGraph<T> {
+public class UmlgGremlinReadOnlyGraph<T extends Graph> implements Graph, WrapperGraph<T> {
 
     protected final T baseGraph;
     private final Features features;
 
-    public UmlgGremlinReadonlyGraph(final T baseGraph) {
+    public UmlgGremlinReadOnlyGraph(final T baseGraph) {
         this.baseGraph = baseGraph;
         this.features = this.baseGraph.getFeatures().copyFeatures();
         this.features.isWrapper = true;
@@ -98,17 +97,18 @@ public class UmlgGremlinReadonlyGraph <T extends Graph> implements Graph, Wrappe
     }
 
     public GraphQuery query() {
-        return new WrappedGraphQuery(this.baseGraph.query()) {
-            @Override
-            public Iterable<Edge> edges() {
-                return new UmlgGremlinReadOnlyEdgeIterable(this.query.edges());
-            }
-
-            @Override
-            public Iterable<Vertex> vertices() {
-                return new UmlgGremlinReadOnlyVertexIterable(this.query.vertices());
-            }
-        };
+        return new UmlgReadOnlyGraphQuery(this.baseGraph);
+//        {
+//            @Override
+//            public Iterable<Edge> edges() {
+//                return new UmlgGremlinReadOnlyEdgeIterable(this.query.edges());
+//            }
+//
+//            @Override
+//            public Iterable<Vertex> vertices() {
+//                return new UmlgGremlinReadOnlyVertexIterable(this.query.vertices());
+//            }
+//        };
     }
 
     public Features getFeatures() {

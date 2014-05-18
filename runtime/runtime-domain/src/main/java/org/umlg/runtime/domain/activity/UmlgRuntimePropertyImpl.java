@@ -80,6 +80,11 @@ public class UmlgRuntimePropertyImpl implements UmlgRuntimeProperty {
     }
 
     @Override
+    public boolean isOnePrimitivePropertyOfAssociationClass() {
+        return false;
+    }
+
+    @Override
 	public boolean isOnePrimitive() {
 		return false;
 	}

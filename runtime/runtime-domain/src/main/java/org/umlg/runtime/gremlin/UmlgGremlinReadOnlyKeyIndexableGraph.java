@@ -1,7 +1,6 @@
 package org.umlg.runtime.gremlin;
 
 import com.tinkerpop.blueprints.Element;
-import com.tinkerpop.blueprints.IndexableGraph;
 import com.tinkerpop.blueprints.KeyIndexableGraph;
 import com.tinkerpop.blueprints.Parameter;
 import com.tinkerpop.blueprints.util.wrappers.readonly.ReadOnlyTokens;
@@ -12,7 +11,7 @@ import java.util.Set;
  * Date: 2014/03/21
  * Time: 3:17 PM
  */
-public class UmlgGremlinReadOnlyKeyIndexableGraph <T extends KeyIndexableGraph> extends UmlgGremlinReadonlyGraph<T> implements KeyIndexableGraph {
+public class UmlgGremlinReadOnlyKeyIndexableGraph <T extends KeyIndexableGraph> extends UmlgGremlinReadOnlyGraph<T> implements KeyIndexableGraph {
 
     public UmlgGremlinReadOnlyKeyIndexableGraph(final T baseKIGraph) {
         super(baseKIGraph);

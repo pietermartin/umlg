@@ -1,5 +1,7 @@
 package org.umlg.runtime.domain;
 
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 
 /**
@@ -9,5 +11,7 @@ import org.umlg.runtime.collection.UmlgRuntimeProperty;
 public interface AssociationClassNode extends PersistentObject {
 
     UmlgRuntimeProperty internalAdder(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse, UmlgNode umlgNode);
+    void z_internalCopyOnePrimitivePropertiesToEdge(Edge edge);
+    Vertex getVertex();
 
 }

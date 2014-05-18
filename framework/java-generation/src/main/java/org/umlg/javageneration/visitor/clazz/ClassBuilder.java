@@ -58,11 +58,20 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         addConstraints(annotatedClass, clazz);
         if (UmlgClassOperations.isAssociationClass(clazz)) {
             annotatedClass.addToImplementedInterfaces(UmlgGenerationUtil.AssociationClassNode);
+            createCopyOnePrimitivePropertiesToEdge(annotatedClass, clazz);
         }
     }
 
+
     @Override
     public void visitAfter(Class clazz) {
+    }
+
+    private void createCopyOnePrimitivePropertiesToEdge(OJAnnotatedClass annotatedClass, Class clazz) {
+        OJAnnotatedOperation copyOnePrimitivePropertiesToEdge = new OJAnnotatedOperation("z_internalCopyOnePrimitivePropertiesToEdge");
+        UmlgGenerationUtil.addOverrideAnnotation(copyOnePrimitivePropertiesToEdge);
+        copyOnePrimitivePropertiesToEdge.addToParameters(new OJParameter("edge", UmlgGenerationUtil.edgePathName));
+        annotatedClass.addToOperations(copyOnePrimitivePropertiesToEdge);
     }
 
     // TODO turn into proper value

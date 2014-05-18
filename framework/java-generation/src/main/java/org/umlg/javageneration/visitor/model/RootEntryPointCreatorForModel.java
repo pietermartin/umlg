@@ -114,7 +114,7 @@ public class RootEntryPointCreatorForModel extends BaseVisitor implements Visito
         // Add root entities as though they are fake properties to App root
         for (Class clazz : result) {
             count++;
-            RuntimePropertyImplementor.addEnumLiteral(false, false, null, null, false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName,
+            RuntimePropertyImplementor.addEnumLiteral(false, false, null, null, false, false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName,
                     StringUtils.uncapitalize(UmlgClassOperations.className(clazz)), clazz.getQualifiedName(), "inverseOf::" + clazz.getName(), "inverseOf::" + clazz.getQualifiedName(), false, false,
                     null, Collections.<Validation>emptyList(), true, false, false, false, true, false, false, true, false, -1, 0, 1, false, false, false/*ordered*/, false, true,
                     true, false, true, "root" + UmlgClassOperations.className(clazz));

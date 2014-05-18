@@ -37,7 +37,7 @@ public class AddIdLiteralsToRootRuntimeEnum extends BaseVisitor implements Visit
         OJAnnotatedOperation fromQualifiedName = ojEnum.findOperation("fromQualifiedName", new OJPathName("String"));
         OJAnnotatedOperation fromInverseQualifiedName = ojEnum.findOperation("fromInverseQualifiedName", new OJPathName("String"));
         RuntimePropertyImplementor
-                .addEnumLiteral(false, false, null, null, false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, fieldName, "not_applicable", "inverseO::not_applicable", "inverseO::not_applicable", true, true, null,
+                .addEnumLiteral(false, false, null, null, false, false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, fieldName, "not_applicable", "inverseO::not_applicable", "inverseO::not_applicable", true, true, null,
                         Collections.<Validation>emptyList(), false, false, false, false, false, false, false, false, false, 1, 1, 1, false, false, false, false, false,
                         true, false, true, "");
     }

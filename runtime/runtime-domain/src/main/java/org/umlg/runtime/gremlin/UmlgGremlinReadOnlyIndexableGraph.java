@@ -11,7 +11,7 @@ import com.tinkerpop.blueprints.util.wrappers.readonly.ReadOnlyTokens;
  * Date: 2014/03/21
  * Time: 3:12 PM
  */
-public class UmlgGremlinReadOnlyIndexableGraph <T extends IndexableGraph> extends UmlgGremlinReadonlyGraph<T> implements IndexableGraph, WrapperGraph<T> {
+public class UmlgGremlinReadOnlyIndexableGraph <T extends IndexableGraph> extends UmlgGremlinReadOnlyGraph<T> implements IndexableGraph, WrapperGraph<T> {
 
     public UmlgGremlinReadOnlyIndexableGraph(final T baseIndexableGraph) {
         super(baseIndexableGraph);

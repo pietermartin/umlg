@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 import org.umlg.gremlin.TestGroovyExecutor;
 import org.umlg.tests.allinstances.TestAllInstancesOnAbstractClass;
 import org.umlg.tests.allinstances.TestAllInstancesOnInterface;
+import org.umlg.tests.associationclass.TestAssociationClassCopiesOnePrimitivePropertiesToEdge;
 import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.collectiontest.*;
@@ -52,10 +53,12 @@ import org.umlg.tests.validationtest.TestValidation;
 //        TestJavaManyPrimitiveTypesWithValidation.class,
 //        TestAllInstancesOnAbstractClass.class,
 //        TestAllInstancesOnInterface.class,
-        ConstrainedPropertyTest.class
+//        ConstrainedPropertyTest.class,
 //        TestOneLookup.class,
 //        TestQualifier.class
-//        TestQualifiedDeletion.class
+//        TestQualifiedDeletion.class,
+//        TestAssociationClassMoveInList.class,
+        TestAssociationClassCopiesOnePrimitivePropertiesToEdge.class
 })
 public class UmlgAnyTestSuite {
 }

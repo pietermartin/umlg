@@ -5,6 +5,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -269,7 +270,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 //Check if it is the first in the linked list
                 if (hyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX + direction).iterator().hasNext()) {
                     //Not the first in the linked list
-                    Edge edgeToPreviousHyperVertex = hyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX  + direction).iterator().next();
+                    Edge edgeToPreviousHyperVertex = hyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX + direction).iterator().next();
                     Vertex previousHyperVertex = edgeToPreviousHyperVertex.getVertex(Direction.OUT);
 
                     if (hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX + direction).iterator().hasNext()) {
@@ -307,11 +308,11 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             //Check if it is first, i.e. see if it has a previous vertex
             if (vertexToRemove.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().hasNext()) {
                 //It is not first
-                Edge edgeToPrevious = vertexToRemove.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction  + this.vertex.getId()).iterator().next();
+                Edge edgeToPrevious = vertexToRemove.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().next();
                 Vertex previousVertex = edgeToPrevious.getVertex(Direction.OUT);
                 UMLG.get().removeEdge(edgeToPrevious);
                 //Check if it is last
-                if (vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel()+ direction  + this.vertex.getId()).iterator().hasNext()) {
+                if (vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().hasNext()) {
                     //Not last
                     Edge edgeToNext = vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().next();
                     Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
@@ -556,6 +557,13 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 UMLG.get().removeVertex(v);
             } else if (isOnePrimitive() && getDataTypeEnum() == null) {
                 this.vertex.removeProperty(getQualifiedName());
+                if (isOnePrimitivePropertyOfAssociationClass()) {
+                    Object edgeId = this.vertex.getProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
+                    //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
+                    if (edgeId != null) {
+                        UMLG.get().getEdge(edgeId).removeProperty(getQualifiedName());
+                    }
+                }
             } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
                 v = removeFromInternalMap(o.toString());
                 if (isOrdered()) {
@@ -610,6 +618,13 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             putToInternalMap(e, v);
         } else if (isOnePrimitive()) {
             this.vertex.setProperty(getQualifiedName(), e);
+            if (isOnePrimitivePropertyOfAssociationClass()) {
+                Object edgeId = this.vertex.getProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
+                //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
+                if (edgeId != null) {
+                    UMLG.get().getEdge(edgeId).setProperty(getQualifiedName(), e);
+                }
+            }
         } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
             v = UMLG.get().addVertex(null);
             v.setProperty("className", e.getClass().getName());
@@ -703,7 +718,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 Vertex auditVertex = UMLG.get().addVertex(null);
                 auditVertex.setProperty(getQualifiedName(), e);
                 TransactionThreadVar.putAuditVertexFalse(owner.getClass().getName() + e.getClass().getName() + e.toString(), auditVertex);
-                auditVertex.setProperty("transactionNo", ((UmlgAdminGraph)UMLG.get()).getTransactionCount());
+                auditVertex.setProperty("transactionNo", ((UmlgAdminGraph) UMLG.get()).getTransactionCount());
                 Edge auditEdge;
                 if (isControllingSide()) {
                     auditEdge = UMLG.get().addEdge(null, auditOwner.getAuditVertex(), auditVertex, this.getLabel());
@@ -715,7 +730,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     auditEdge.setProperty("outClass", e.getClass().getName() + "Audit");
                 }
                 if (deletion) {
-                    auditEdge.setProperty("transactionNo", ((UmlgAdminGraph)UMLG.get()).getTransactionCount());
+                    auditEdge.setProperty("transactionNo", ((UmlgAdminGraph) UMLG.get()).getTransactionCount());
                     auditEdge.setProperty("deletedOn", UmlgFormatter.format(new DateTime()));
                 }
             }
@@ -900,6 +915,11 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     @Override
     public boolean isAssociationClassProperty() {
         return this.umlgRuntimeProperty.isAssociationClassProperty();
+    }
+
+    @Override
+    public boolean isOnePrimitivePropertyOfAssociationClass() {
+        return this.umlgRuntimeProperty.isOnePrimitivePropertyOfAssociationClass();
     }
 
     @Override

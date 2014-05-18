@@ -3,7 +3,11 @@ package org.umlg.runtime.collection;
 import org.umlg.runtime.domain.DataTypeEnum;
 
 public interface UmlgRuntimeProperty {
+    /**
+     * This returns true for the fake property on the association class to its member ends.
+     */
     boolean isAssociationClassProperty();
+    boolean isOnePrimitivePropertyOfAssociationClass();
 	boolean isOnePrimitive();
 	DataTypeEnum getDataTypeEnum();
 	boolean isManyPrimitive();

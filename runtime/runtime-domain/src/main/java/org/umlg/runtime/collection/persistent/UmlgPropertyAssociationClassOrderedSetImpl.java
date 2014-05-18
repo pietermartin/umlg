@@ -28,6 +28,8 @@ public class UmlgPropertyAssociationClassOrderedSetImpl<E, AC extends Associatio
             associationClass.internalAdder(umlgRuntimeProperty, false, (UmlgNode) e);
             this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId().toString());
             this.edge.setProperty("className", associationClass.getClass().getName());
+            associationClass.z_internalCopyOnePrimitivePropertiesToEdge(this.edge);
+            associationClass.getVertex().setProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID, this.edge.getId());
             return true;
         } else {
             return false;
@@ -41,6 +43,8 @@ public class UmlgPropertyAssociationClassOrderedSetImpl<E, AC extends Associatio
         associationClass.internalAdder(umlgRuntimeProperty, false, (UmlgNode) e);
         this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId().toString());
         this.edge.setProperty("className", associationClass.getClass().getName());
+        associationClass.z_internalCopyOnePrimitivePropertiesToEdge(this.edge);
+        associationClass.getVertex().setProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID, this.edge.getId());
     }
 
     @Override

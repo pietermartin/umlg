@@ -2,9 +2,11 @@ package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.GraphQuery;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Edge;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
+import com.tinkerpop.blueprints.util.DefaultGraphQuery;
 import org.apache.commons.lang.StringUtils;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
