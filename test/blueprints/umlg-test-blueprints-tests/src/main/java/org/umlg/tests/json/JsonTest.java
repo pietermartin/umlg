@@ -271,7 +271,7 @@ public class JsonTest extends BaseLocalDbTest {
         db.commit();
 
 		God testG = new God(g1.getVertex());
-		Assert.assertEquals(beginning, testG.getBeginning());
+		Assert.assertTrue(beginning.isEqual(testG.getBeginning()));
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		@SuppressWarnings("unchecked")

@@ -59,7 +59,7 @@ public class TestAssociationClassCopiesOnePrimitivePropertiesToEdge extends Base
         associationClassAC.setName(null);
         //Check if the name property is on the edge
         result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').name");
-        Assert.assertEquals("null", ((Pipeline)result).next());
+        Assert.assertEquals(null, ((Pipeline)result).next());
         associationClassAC.setName("xxx");
         db.commit();
 

@@ -10,10 +10,12 @@ import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.collectiontest.*;
 import org.umlg.tests.constraint.ConstrainedPropertyTest;
+import org.umlg.tests.datatype.DataTypeTest;
 import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.javaprimitivetypes.TestJavaManyPrimitiveTypesWithValidation;
 import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypes;
 import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypesWithValidation;
+import org.umlg.tests.json.JsonTest;
 import org.umlg.tests.lookup.TestOneLookup;
 import org.umlg.tests.qualifiertest.TestQualifiedDeletion;
 import org.umlg.tests.qualifiertest.TestQualifier;
@@ -59,6 +61,10 @@ import org.umlg.tests.validationtest.TestValidation;
 //        TestQualifiedDeletion.class,
 //        TestAssociationClassMoveInList.class,
         TestAssociationClassCopiesOnePrimitivePropertiesToEdge.class
+//        JsonTest.class,
+//        DataTypeTest.class
+
 })
+
 public class UmlgAnyTestSuite {
 }

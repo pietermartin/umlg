@@ -1,20 +1,14 @@
 package org.umlg.javageneration.visitor.property;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.uml2.uml.AssociationClass;
-import org.eclipse.uml2.uml.Constraint;
-import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.*;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedField;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.UmlgGenerationUtil;
-import org.umlg.javageneration.util.UmlgClassOperations;
-import org.umlg.javageneration.util.UmlgPropertyOperations;
+import org.umlg.javageneration.util.*;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 import java.util.List;
@@ -46,7 +40,16 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
                 //Add the property to copyOnePrimitivePropertiesToEdge
                 OJAnnotatedOperation copyOnePrimitivePropertiesToEdge = owner.findOperation("z_internalCopyOnePrimitivePropertiesToEdge", UmlgGenerationUtil.edgePathName);
                 OJIfStatement ifPropertyNotNull = new OJIfStatement(propertyWrapper.getter() + "() != null");
-                ifPropertyNotNull.addToThenPart("edge.setProperty(\"" + propertyWrapper.getQualifiedName() + "\", " + propertyWrapper.getter() + "())");
+                if (propertyWrapper.isEnumeration()) {
+                    ifPropertyNotNull.addToThenPart("edge.setProperty(\"" + propertyWrapper.getQualifiedName() + "\", " + propertyWrapper.getter() + "().name())");
+                } else if (!propertyWrapper.isPrimitive()) {
+                    ifPropertyNotNull.addToThenPart("edge.setProperty(\"" + propertyWrapper.getQualifiedName() + "\", " +
+                            UmlgGenerationUtil.umlgFormatter.getLast() + ".format(" +
+                            UmlgGenerationUtil.DataTypeEnum.getLast() + "." + DataTypeEnum.fromDataType((DataType) p.getType()).name() + ", " +
+                            propertyWrapper.getter() + "()))");
+                } else {
+                    ifPropertyNotNull.addToThenPart("edge.setProperty(\"" + propertyWrapper.getQualifiedName() + "\", " + propertyWrapper.getter() + "())");
+                }
                 copyOnePrimitivePropertiesToEdge.getBody().addToStatements(ifPropertyNotNull);
             }
         }

@@ -561,7 +561,10 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     Object edgeId = this.vertex.getProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
                     //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
                     if (edgeId != null) {
-                        UMLG.get().getEdge(edgeId).removeProperty(getQualifiedName());
+                        Edge edge1 = UMLG.get().getEdge(edgeId);
+                        edge1.removeProperty(getQualifiedName());
+                        //This is here because Titan has the nasty habit of recreating edges and changing the id.
+                        this.vertex.setProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID, edge1.getId().toString());
                     }
                 }
             } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
@@ -1271,51 +1274,29 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     private void setDataTypeOnVertex(Vertex v, E e) {
-        if (getDataTypeEnum().isDateTime()) {
-            v.setProperty(getQualifiedName(), e.toString());
-        } else if (getDataTypeEnum().isDate()) {
-            v.setProperty(getQualifiedName(), e.toString());
-        } else if (getDataTypeEnum().isTime()) {
-            v.setProperty(getQualifiedName(), e.toString());
-        } else if (getDataTypeEnum().isInternationalPhoneNumber()) {
-            v.setProperty(getQualifiedName(), e);
-        } else if (getDataTypeEnum().isLocalPhoneNumber()) {
-            v.setProperty(getQualifiedName(), e);
-        } else if (getDataTypeEnum().isEmail()) {
-            v.setProperty(getQualifiedName(), e);
-        } else {
-            throw new IllegalStateException(String.format("Uncatered for DataType %s", new String[]{getDataTypeEnum().getClass().getName()}));
-        }
+        v.setProperty(getQualifiedName(), UmlgFormatter.format(getDataTypeEnum(), e));
+//        if (getDataTypeEnum().isDateTime()) {
+//            v.setProperty(getQualifiedName(), e.toString());
+//        } else if (getDataTypeEnum().isDate()) {
+//            v.setProperty(getQualifiedName(), e.toString());
+//        } else if (getDataTypeEnum().isTime()) {
+//            v.setProperty(getQualifiedName(), e.toString());
+//        } else if (getDataTypeEnum().isInternationalPhoneNumber()) {
+//            v.setProperty(getQualifiedName(), e);
+//        } else if (getDataTypeEnum().isLocalPhoneNumber()) {
+//            v.setProperty(getQualifiedName(), e);
+//        } else if (getDataTypeEnum().isEmail()) {
+//            v.setProperty(getQualifiedName(), e);
+//        } else {
+//            throw new IllegalStateException(String.format("Uncatered for DataType %s", new String[]{getDataTypeEnum().getClass().getName()}));
+//        }
     }
 
     private void loadOneDataType() {
-        switch (getDataTypeEnum()) {
-            case DateTime:
-                String s = this.vertex.getProperty(getQualifiedName());
-                if (s != null) {
-                    E property = (E) new DateTime(s);
-                    this.internalCollection.add(property);
-                }
-                break;
-            case Date:
-                s = this.vertex.getProperty(getQualifiedName());
-                if (s != null) {
-                    E property = (E) new LocalDate(s);
-                    this.internalCollection.add(property);
-                }
-                break;
-            case Time:
-                s = this.vertex.getProperty(getQualifiedName());
-                if (s != null) {
-                    E property = (E) new LocalTime(s);
-                    this.internalCollection.add(property);
-                }
-                break;
-            default:
-                E property = this.vertex.getProperty(getQualifiedName());
-                if (property != null) {
-                    this.internalCollection.add(property);
-                }
+        String s = this.vertex.getProperty(getQualifiedName());
+        if (s != null) {
+            E result = UmlgFormatter.parse(getDataTypeEnum(), s);
+            this.internalCollection.add(result);
         }
         this.loaded = true;
     }
@@ -1334,37 +1315,11 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     protected E loadDataTypeFromVertex(Vertex v) {
         E result = null;
-        switch (getDataTypeEnum()) {
-            case DateTime:
-                String s = v.getProperty(getQualifiedName());
-                if (s != null) {
-                    result = (E) new DateTime(s);
-                    putToInternalMap(result, v);
-                    this.internalCollection.add(result);
-                }
-                break;
-            case Date:
-                s = v.getProperty(getQualifiedName());
-                if (s != null) {
-                    result = (E) new LocalDate(s);
-                    putToInternalMap(result, v);
-                    this.internalCollection.add(result);
-                }
-                break;
-            case Time:
-                s = v.getProperty(getQualifiedName());
-                if (s != null) {
-                    result = (E) new LocalTime(s);
-                    putToInternalMap(result, v);
-                    this.internalCollection.add(result);
-                }
-                break;
-            default:
-                result = v.getProperty(getQualifiedName());
-                if (result != null) {
-                    putToInternalMap(result, v);
-                    this.internalCollection.add(result);
-                }
+        String s = v.getProperty(getQualifiedName());
+        if (s != null) {
+            result = UmlgFormatter.parse(getDataTypeEnum(), s);
+            putToInternalMap(result, v);
+            this.internalCollection.add(result);
         }
         return result;
     }

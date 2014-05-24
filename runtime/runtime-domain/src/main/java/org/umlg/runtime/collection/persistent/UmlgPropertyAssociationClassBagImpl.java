@@ -29,7 +29,7 @@ public class UmlgPropertyAssociationClassBagImpl<E, AC extends AssociationClassN
             this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
             this.edge.setProperty("className", associationClass.getClass().getName());
             associationClass.z_internalCopyOnePrimitivePropertiesToEdge(this.edge);
-            associationClass.getVertex().setProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID, this.edge.getId());
+            associationClass.getVertex().setProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID, this.edge.getId().toString());
             return true;
         } else {
             return false;
