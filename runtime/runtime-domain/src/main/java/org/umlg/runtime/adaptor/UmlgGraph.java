@@ -26,7 +26,7 @@ public interface UmlgGraph extends TransactionalGraph, KeyIndexableGraph {
      * @param <T> The class of the object to instantiate.
      * @return The entity that is represented by the vertex with id id.
      */
-    <T extends PersistentObject> T instantiateClassifier(Object id);
+    <T extends PersistentObject> T getEntity(Object id);
 
     /**
      * uml models that have applied the Umlg::Profile and applied the <<Index>> stereotype to a property of the class

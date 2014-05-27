@@ -54,13 +54,13 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         if (pWrap.isComposite()) {
             delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
             delete.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
-            delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+            delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
             delete.getBody().addToStatements("childResource.delete()");
         } else {
             delete.addToParameters(new OJParameter("parentResource", parentPathName));
             delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
             delete.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
-            delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+            delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
             delete.getBody().addToStatements("parentResource." + pWrap.remover() + "(childResource)");
         }
 
@@ -84,11 +84,12 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
         post.getBody().addToStatements(
                 "this." + parentPathName.getLast().toLowerCase() + "Id = " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+                        + parentPathName.getLast().toLowerCase() + "Id\"))"
+        );
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
 
         post.getBody().addToStatements(
-                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
+                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
 
         OJTryStatement ojTryStatement = new OJTryStatement();
         OJField mapper = new OJField("mapper", UmlgGenerationUtil.ObjectMapper);
@@ -225,7 +226,7 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
 
         OJBlock firstBlock = new OJBlock();
         firstBlock.addToStatements("Object id = propertyMap.get(\"id\")");
-        firstBlock.addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+        firstBlock.addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         firstBlock.addToStatements("childResource.fromJson(propertyMap)");
         put.getBody().addToStatements(firstBlock);
@@ -279,7 +280,7 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
             }
         } else {
             tryInstantiate.getTryPart().addToStatements("Object id = propertyMap.get(\"id\")");
-            tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+            tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
             if (!pWrap.isMemberOfAssociationClass()) {
                 tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
             } else {

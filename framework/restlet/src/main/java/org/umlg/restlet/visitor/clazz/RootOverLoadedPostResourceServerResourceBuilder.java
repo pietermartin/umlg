@@ -247,7 +247,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         annotatedClass.addToOperations(put);
         put.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
         put.getBody().addToStatements(
-                UmlgClassOperations.getPathName(classifier).getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+                UmlgClassOperations.getPathName(classifier).getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
         annotatedClass.addToImports(UmlgClassOperations.getPathName(classifier));
         put.getBody().addToStatements("childResource.fromJson(propertyMap)");
 //        put.getBody().addToStatements("return childResource.toJsonWithoutCompositeParent()");
@@ -262,7 +262,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         annotatedClass.addToOperations(delete);
         delete.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
         delete.getBody().addToStatements(
-                UmlgClassOperations.getPathName(classifier).getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+                UmlgClassOperations.getPathName(classifier).getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
         annotatedClass.addToImports(UmlgClassOperations.getPathName(classifier));
         delete.getBody().addToStatements("childResource.delete()");
 
@@ -300,7 +300,8 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
                         "json.append(ToJsonUtil.toJsonWithoutCompositeParent(resource.select(new "
                                 + UmlgGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)).getLast()
                                 + "() {\n			@Override\n			public Boolean evaluate(" + UmlgClassOperations.getPathName(clazz).getLast()
-                                + " e) {\n				return e.getClass() == " + UmlgClassOperations.getPathName(classifier).getLast() + ".class;\n			}\n		})))");
+                                + " e) {\n				return e.getClass() == " + UmlgClassOperations.getPathName(classifier).getLast() + ".class;\n			}\n		})))"
+                );
                 annotatedClass.addToImports(UmlgGenerationUtil.BooleanExpressionEvaluator);
                 annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz));
                 annotatedClass.addToImports(UmlgClassOperations.getPathName(classifier));

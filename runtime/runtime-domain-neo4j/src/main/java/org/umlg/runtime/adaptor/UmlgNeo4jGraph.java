@@ -2,12 +2,9 @@ package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.GraphQuery;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Edge;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
-import com.tinkerpop.blueprints.util.DefaultGraphQuery;
-import org.apache.commons.lang.StringUtils;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
 import org.neo4j.graphdb.Node;
@@ -108,7 +105,7 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph, UmlgAdminG
     }
 
     @Override
-    public <T extends PersistentObject> T instantiateClassifier(Object id) {
+    public <T extends PersistentObject> T getEntity(Object id) {
         try {
             Vertex v = this.getVertex(id);
             if (v == null) {
@@ -158,7 +155,7 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph, UmlgAdminG
                 try {
                     Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
                     Method method = umlgOclExecutor.getMethod("executeOclQueryAsJson", UmlgNode.class, String.class);
-                    UmlgNode context = UMLG.get().instantiateClassifier(contextId);
+                    UmlgNode context = UMLG.get().getEntity(contextId);
                     String json = (String) method.invoke(null, context, query);
                     return json;
                 } catch (ClassNotFoundException e) {
@@ -203,7 +200,7 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph, UmlgAdminG
                 try {
                     Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
                     Method method = umlgOclExecutor.getMethod("executeOclQuery", UmlgNode.class, String.class);
-                    UmlgNode context = UMLG.get().instantiateClassifier(contextId);
+                    UmlgNode context = UMLG.get().getEntity(contextId);
                     Object result = method.invoke(null, context, query);
                     return result;
                 } catch (ClassNotFoundException e) {

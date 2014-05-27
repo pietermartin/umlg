@@ -61,12 +61,14 @@ public class LookupForManyResourceBuilder extends BaseServerResourceBuilder impl
         OJPathName parentPathName = UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType());
         ojTryStatement.getTryPart().addToStatements(
                 "this." + parentPathName.getLast().toLowerCase() + "Id = " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+                        + parentPathName.getLast().toLowerCase() + "Id\"))"
+        );
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
 
         ojTryStatement.getTryPart().addToStatements(
-                parentPathName.getLast() + " resource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(this." + parentPathName.getLast().toLowerCase() + "Id"
-                        + ")");
+                parentPathName.getLast() + " resource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(this." + parentPathName.getLast().toLowerCase() + "Id"
+                        + ")"
+        );
         annotatedClass.addToImports(parentPathName);
         buildToJson(pWrap, annotatedClass, ojTryStatement.getTryPart());
         ojTryStatement.setCatchPart(null);

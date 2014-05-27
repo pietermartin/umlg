@@ -7,10 +7,11 @@ import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 
 public class UmlgGenerationUtil {
 
-    public static String Index = "Index";
-    public static String Index_UNIQUE = "UNIQUE";
-    public static String Index_NON_UNIQUE = "NON_UNIQUE";
-    public static String BaseClassUmlgQualifiedName = "org::umlg::meta::BaseClassUmlg";
+    public static final String getEntity = "getEntity";
+    public static final String Index = "Index";
+    public static final String Index_UNIQUE = "UNIQUE";
+    public static final String Index_NON_UNIQUE = "NON_UNIQUE";
+    public static final String BaseClassUmlgQualifiedName = "org::umlg::meta::BaseClassUmlg";
     public static OJPathName Parameter = new OJPathName("com.tinkerpop.blueprints.Parameter");
     public static OJPathName BASE_CLASS_UMLG = new OJPathName("org.umlg.meta.BaseClassUmlg");
 

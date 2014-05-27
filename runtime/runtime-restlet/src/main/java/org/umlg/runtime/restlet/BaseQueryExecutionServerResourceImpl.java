@@ -8,12 +8,8 @@ import org.restlet.resource.ServerResource;
 import org.umlg.ocl.UmlgOclExecutor;
 import org.umlg.runtime.adaptor.GroovyExecutor;
 import org.umlg.runtime.adaptor.UMLG;
-import org.umlg.runtime.adaptor.UmlgQueryEnum;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgNode;
-
-import java.util.Collection;
-import java.util.Map;
 
 public abstract class BaseQueryExecutionServerResourceImpl extends ServerResource {
 
@@ -22,7 +18,7 @@ public abstract class BaseQueryExecutionServerResourceImpl extends ServerResourc
 
     protected Representation execute(String query, Object contextId, String type) {
         if (type.equalsIgnoreCase("ocl")) {
-            UmlgNode context = UMLG.get().instantiateClassifier(contextId);
+            UmlgNode context = UMLG.get().getEntity(contextId);
 //            UMLG.get().executeQueryToString(UmlgQueryEnum.OCL, context.getId(), query);
             return new JsonRepresentation(UmlgOclExecutor.executeOclQueryAsJson(context, query));
         } else if (type.equalsIgnoreCase("groovy")) {

@@ -65,7 +65,7 @@ public class LookupForOneResourceBuilder extends BaseServerResourceBuilder imple
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
 
         ojTryStatement.getTryPart().addToStatements(
-                parentPathName.getLast() + " resource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(this." + parentPathName.getLast().toLowerCase() + "Id"
+                parentPathName.getLast() + " resource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(this." + parentPathName.getLast().toLowerCase() + "Id"
                         + ")"
         );
         annotatedClass.addToImports(parentPathName);

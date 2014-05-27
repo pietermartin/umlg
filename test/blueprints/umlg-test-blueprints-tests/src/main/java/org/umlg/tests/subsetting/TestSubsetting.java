@@ -22,13 +22,13 @@ public class TestSubsetting extends BaseLocalDbTest {
         horse.addToReins(new Reins(true));
         db.commit();
 
-        Vechile vechile = db.instantiateClassifier(car.getId());
+        Vechile vechile = db.getEntity(car.getId());
         Assert.assertNotNull(vechile.getSteeringControl());
 
-        SteeringWheel steeringWheel = db.instantiateClassifier(vechile.getSteeringControl().getId());
+        SteeringWheel steeringWheel = db.getEntity(vechile.getSteeringControl().getId());
         Assert.assertNotNull(steeringWheel.getCar());
 
-        SteeringControl steeringControl = db.instantiateClassifier(vechile.getSteeringControl().getId());
+        SteeringControl steeringControl = db.getEntity(vechile.getSteeringControl().getId());
         Assert.assertNotNull(steeringControl.getVechile());
 
     }

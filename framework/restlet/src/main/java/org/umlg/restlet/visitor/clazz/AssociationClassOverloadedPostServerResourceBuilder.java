@@ -107,7 +107,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         );
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
         tryStatement.getTryPart().addToStatements(
-                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
+                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
         annotatedClass.addToImports(parentPathName);
         buildToJson(pWrap, annotatedClass, tryStatement.getTryPart(), asAssociationClass);
         get.getBody().addToStatements(tryStatement);
@@ -137,7 +137,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         );
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
         tryStatement.getTryPart().addToStatements(
-                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
+                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
         annotatedClass.addToImports(parentPathName);
         buildToJsonForOptions(pWrap, annotatedClass, tryStatement.getTryPart(), asAssociationClass);
         get.getBody().addToStatements(tryStatement);
@@ -318,7 +318,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
 
         OJBlock firstBlock = new OJBlock();
         firstBlock.addToStatements("Object id = propertyMap.get(\"id\")");
-        firstBlock.addToStatements(pWrap.getAssociationClassPathName().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+        firstBlock.addToStatements(pWrap.getAssociationClassPathName().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         firstBlock.addToStatements("childResource.fromJson(propertyMap)");
         put.getBody().addToStatements(firstBlock);
@@ -388,7 +388,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
             tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
         } else {
             tryInstantiate.getTryPart().addToStatements("Object id = propertyMap.get(\"id\")");
-            tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+            tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
             if (!pWrap.isMemberOfAssociationClass() || asAssociationClass) {
                 tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
             } else {

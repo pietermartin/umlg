@@ -112,19 +112,19 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
     }
 
     @Override
-    public <T> T instantiateClassifier(Object id) {
+    public <T> T getEntity(Object id) {
         try {
             Vertex v = this.getVertex(id);
             if (v == null) {
                 throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{id}));
             }
-            return instantiateClassifier(v);
+            return getEntity(v);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private <T> T instantiateClassifier(Vertex v) {
+    private <T> T getEntity(Vertex v) {
         try {
             // TODO reimplement schemaHelper
             String className = v.getProperty("className");
@@ -139,7 +139,7 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
     public PersistentObject getFromUniqueIndex(String indexKey, Object indexValue) {
         Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
         if ( iterator.hasNext() ) {
-            return instantiateClassifier(iterator.next());
+            return getEntity(iterator.next());
         } else {
             return null;
         }
@@ -178,7 +178,7 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
                 try {
                     Class<?> umlgOclExecutor= Class.forName("org.umlg.ocl.UmlgOclExecutor");
                     Method method = umlgOclExecutor.getMethod("executeOclQueryAsJson", UmlgNode.class, String.class);
-                    UmlgNode context = (UmlgNode) UMLG.get().instantiateClassifier(contextId);
+                    UmlgNode context = (UmlgNode) UMLG.get().getEntity(contextId);
                     String json = (String) method.invoke(null, context, query);
                     return json;
                 } catch (ClassNotFoundException e) {
@@ -209,7 +209,7 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
                 try {
                     Class<?> umlgOclExecutor= Class.forName("org.umlg.ocl.UmlgOclExecutor");
                     Method method = umlgOclExecutor.getMethod("executeOclQuery", UmlgNode.class, String.class);
-                    UmlgNode context = (UmlgNode) UMLG.get().instantiateClassifier(contextId);
+                    UmlgNode context = (UmlgNode) UMLG.get().getEntity(contextId);
                     Object json = method.invoke(null, context, query);
                     return json;
                 } catch (ClassNotFoundException e) {

@@ -194,7 +194,7 @@ public class UmlgLazyList<PersistentObject> implements List {
 
         @Override
         public PersistentObject next() {
-            PersistentObject e = UMLG.get().instantiateClassifier(this.iterator.next().getId());
+            PersistentObject e = UMLG.get().getEntity(this.iterator.next().getId());
             UmlgLazyList.this.internal.add(e);
             UmlgLazyList.this.loadedUpTo++;
             return e;

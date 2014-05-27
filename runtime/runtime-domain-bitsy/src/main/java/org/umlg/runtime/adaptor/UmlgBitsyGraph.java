@@ -5,7 +5,6 @@ import com.lambdazen.bitsy.wrapper.BitsyAutoReloadingGraph;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
-import org.apache.commons.lang.StringUtils;
 import org.umlg.runtime.collection.memory.UmlgLazyList;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
@@ -102,7 +101,7 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
     }
 
     @Override
-    public <T extends PersistentObject> T instantiateClassifier(Object id) {
+    public <T extends PersistentObject> T getEntity(Object id) {
         try {
             Vertex v = this.getVertex(id);
             if (v == null) {
@@ -170,7 +169,7 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
                 try {
                     Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
                     Method method = umlgOclExecutor.getMethod("executeOclQueryAsJson", UmlgNode.class, String.class);
-                    UmlgNode context = (UmlgNode) UMLG.get().instantiateClassifier(contextId);
+                    UmlgNode context = (UmlgNode) UMLG.get().getEntity(contextId);
                     String json = (String) method.invoke(null, context, query);
                     return json;
                 } catch (ClassNotFoundException e) {
@@ -212,7 +211,7 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
                 try {
                     Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
                     Method method = umlgOclExecutor.getMethod("executeOclQuery", UmlgNode.class, String.class);
-                    UmlgNode context = (UmlgNode) UMLG.get().instantiateClassifier(contextId);
+                    UmlgNode context = (UmlgNode) UMLG.get().getEntity(contextId);
                     Object json = method.invoke(null, context, query);
                     return json;
                 } catch (ClassNotFoundException e) {

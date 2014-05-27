@@ -201,7 +201,7 @@ public class RootOverLoadedPostForLookupResourceServerResourceBuilder extends Ba
         annotatedClass.addToOperations(put);
         put.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
         put.getBody().addToStatements(
-                UmlgClassOperations.getPathName(classifier).getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+                UmlgClassOperations.getPathName(classifier).getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
         annotatedClass.addToImports(UmlgClassOperations.getPathName(classifier));
         put.getBody().addToStatements("childResource.fromJson(propertyMap)");
     }
@@ -214,7 +214,7 @@ public class RootOverLoadedPostForLookupResourceServerResourceBuilder extends Ba
         annotatedClass.addToOperations(delete);
         delete.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
         delete.getBody().addToStatements(
-                UmlgClassOperations.getPathName(classifier).getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+                UmlgClassOperations.getPathName(classifier).getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
         annotatedClass.addToImports(UmlgClassOperations.getPathName(classifier));
         delete.getBody().addToStatements("childResource.delete()");
 

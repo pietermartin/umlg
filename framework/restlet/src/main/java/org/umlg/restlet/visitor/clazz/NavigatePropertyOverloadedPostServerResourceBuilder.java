@@ -72,11 +72,12 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         }
         tryStatement.getTryPart().addToStatements(
                 "this." + parentPathName.getLast().toLowerCase() + "Id = " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+                        + parentPathName.getLast().toLowerCase() + "Id\"))"
+        );
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
 
         tryStatement.getTryPart().addToStatements(
-                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
+                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
         annotatedClass.addToImports(parentPathName);
         buildToJson(pWrap, annotatedClass, tryStatement.getTryPart());
         get.getBody().addToStatements(tryStatement);
@@ -102,11 +103,12 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         }
         tryStatement.getTryPart().addToStatements(
                 "this." + parentPathName.getLast().toLowerCase() + "Id = " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+                        + parentPathName.getLast().toLowerCase() + "Id\"))"
+        );
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
 
         tryStatement.getTryPart().addToStatements(
-                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
+                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
         annotatedClass.addToImports(parentPathName);
 
         //do the stuff here man
@@ -127,13 +129,13 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         if (pWrap.isComposite()) {
             delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
             delete.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
-            delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+            delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
             delete.getBody().addToStatements("childResource.delete()");
         } else {
             delete.addToParameters(new OJParameter("parentResource", parentPathName));
             delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
             delete.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
-            delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+            delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
             delete.getBody().addToStatements("parentResource." + pWrap.remover() + "(childResource)");
         }
 
@@ -153,11 +155,12 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
         post.getBody().addToStatements(
                 "this." + parentPathName.getLast().toLowerCase() + "Id = " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+                        + parentPathName.getLast().toLowerCase() + "Id\"))"
+        );
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
 
         post.getBody().addToStatements(
-                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
+                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
 
         OJTryStatement ojTryStatement = new OJTryStatement();
         OJField mapper = new OJField("mapper", UmlgGenerationUtil.ObjectMapper);
@@ -376,7 +379,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         OJBlock firstBlock = new OJBlock();
         firstBlock.addToStatements("Object id = propertyMap.get(\"id\")");
-        firstBlock.addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+        firstBlock.addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         firstBlock.addToStatements("childResource.fromJson(propertyMap)");
 
@@ -475,7 +478,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             //Need to remove the one from the map, otherwise the from will also add the one and create another association class
             PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
             tryInstantiate.getTryPart().addToStatements("propertyMap.remove(\"" + otherEndPWrap.fieldname() + "\")");
-            tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
+            tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(id)");
             if (!pWrap.isMemberOfAssociationClass()) {
 //                tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
                 tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");

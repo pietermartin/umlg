@@ -113,7 +113,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         allInstances.getBody().addToLocals(iter);
 
         OJForStatement forIter = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
-        forIter.getBody().addToStatements("result.add(" + UmlgGenerationUtil.UMLGAccess + ".<" + classPathName.getLast() + ">instantiateClassifier(edge.getVertex(Direction.IN).getId()))");
+        forIter.getBody().addToStatements("result.add(" + UmlgGenerationUtil.UMLGAccess + ".<" + classPathName.getLast() + ">" + UmlgGenerationUtil.getEntity + "(edge.getVertex(Direction.IN).getId()))");
         allInstances.getBody().addToStatements(forIter);
         allInstances.getBody().addToStatements("return result");
 
@@ -137,7 +137,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         allInstances.getBody().addToLocals(iter);
 
         OJForStatement forIter = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
-        forIter.getBody().addToStatements(classPathName.getLast() + " instance = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(edge.getVertex(Direction.IN).getId())");
+        forIter.getBody().addToStatements(classPathName.getLast() + " instance = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(edge.getVertex(Direction.IN).getId())");
         OJIfStatement ifFilter = new OJIfStatement("filter.filter(instance)");
         ifFilter.addToThenPart("result.add(instance)");
         forIter.getBody().addToStatements(ifFilter);
@@ -159,7 +159,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         resultField.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
         allInstances.getBody().addToLocals(resultField);
 
-        Set<Classifier> specializations =  UmlgClassOperations.getSpecializations(clazz);
+        Set<Classifier> specializations = UmlgClassOperations.getSpecializations(clazz);
         for (Classifier specialization : specializations) {
             allInstances.getBody().addToStatements("result.addAll(" + UmlgClassOperations.getMetaClassName(specialization) + ".getInstance().getAllInstances())");
             metaClass.addToImports(UmlgClassOperations.getMetaClassPathName(specialization));
@@ -182,7 +182,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         resultField.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
         allInstances.getBody().addToLocals(resultField);
 
-        Set<Classifier> specializations =  UmlgClassOperations.getSpecializations(clazz);
+        Set<Classifier> specializations = UmlgClassOperations.getSpecializations(clazz);
         for (Classifier specialization : specializations) {
             allInstances.getBody().addToStatements("result.addAll(" + UmlgClassOperations.getMetaClassName(specialization) + ".getInstance().getAllInstances())");
             metaClass.addToImports(UmlgClassOperations.getMetaClassPathName(specialization));

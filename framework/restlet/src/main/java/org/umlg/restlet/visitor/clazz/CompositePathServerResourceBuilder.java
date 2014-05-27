@@ -59,7 +59,7 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
                 "this." + getIdFieldName(clazz) + "= " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
         ojTryStatement.getTryPart().addToStatements(
-                UmlgClassOperations.className(clazz) + " c = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(this." + getIdFieldName(clazz) + ")");
+                UmlgClassOperations.className(clazz) + " c = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(this." + getIdFieldName(clazz) + ")");
         annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz));
 
         ojTryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
