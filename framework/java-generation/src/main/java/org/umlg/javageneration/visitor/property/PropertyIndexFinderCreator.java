@@ -56,8 +56,8 @@ public class PropertyIndexFinderCreator extends BaseVisitor implements Visitor<P
                     UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +
                     ".getUmlgLabelConverter().convert(\"" +
                     propertyWrapper.getQualifiedName() + "\"), " +
-                    propertyWrapper.fieldname() +
-                    ")");
+                    buildFormatter(propertyWrapper)
+            );
 
         } else if (enumerationLiteral.getName().equals(UmlgGenerationUtil.Index_NON_UNIQUE)) {
             finder.setReturnType(new OJPathName("java.util.List").addToGenerics(owner.getPathName()));
@@ -67,12 +67,26 @@ public class PropertyIndexFinderCreator extends BaseVisitor implements Visitor<P
                             UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +
                             ".getUmlgLabelConverter().convert(\"" +
                             propertyWrapper.getQualifiedName() + "\"), " +
-                            propertyWrapper.fieldname() +
-                            ")");
+                            buildFormatter(propertyWrapper)
+                    );
         } else {
             throw new IllegalStateException("Unknown Index literal " + enumerationLiteral.getName());
         }
         owner.addToOperations(finder);
+    }
+
+    private String buildFormatter(PropertyWrapper propertyWrapper) {
+        if (propertyWrapper.isEnumeration()) {
+            return propertyWrapper.fieldname() + ".name())";
+        } else if (propertyWrapper.isDataType() && !propertyWrapper.isPrimitive()) {
+            return UmlgGenerationUtil.umlgFormatter.getLast() + ".format(" +
+                    propertyWrapper.getDataTypeEnum().getInitExpression() +
+                    ", " +
+                    propertyWrapper.fieldname() +
+                    "))";
+        } else {
+            return propertyWrapper.fieldname() + ")";
+        }
     }
 
 }

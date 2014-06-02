@@ -697,6 +697,23 @@
             </ownedEnd>
           </packagedElement>
         </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_-NqBAOdWEeOx-IVkU1GnZg" name="indexing">
+          <packagedElement xmi:type="uml:Class" xmi:id="_Apa40OdXEeOx-IVkU1GnZg" name="Program">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_ZuF3MOdXEeOx-IVkU1GnZg" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bnaJQOdXEeOx-IVkU1GnZg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_bnawUOdXEeOx-IVkU1GnZg" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_bndzoOdXEeOx-IVkU1GnZg">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_iqyFYOdXEeOx-IVkU1GnZg" name="start" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mMw-YOdXEeOx-IVkU1GnZg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mMw-YedXEeOx-IVkU1GnZg" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_bk90UJ2MEeOdnJvRGBqhtw">
@@ -721,4 +738,6 @@
   <UmlgValidation:MinDouble xmi:id="_AmmkENN8EeOCt7XMZfn16w" min="5.123" base_Property="_9gUIkNN7EeOCt7XMZfn16w"/>
   <UmlgProfile:QualifierListener xmi:id="_XvQH8N2_EeOEP64qykw2fg" base_Property="_7QzAANg8EeOEP64qykw2fg" property="_wE4CgNguEeOEP64qykw2fg"/>
   <UmlgProfile:QualifierListener xmi:id="_auijkN2_EeOEP64qykw2fg" base_Property="_SDvyYNhIEeOEP64qykw2fg" property="_xg4oUNhAEeOEP64qykw2fg"/>
+  <UmlgProfile:Index xmi:id="_dmz1MOdXEeOx-IVkU1GnZg" base_Property="_ZuF3MOdXEeOx-IVkU1GnZg"/>
+  <UmlgProfile:Index xmi:id="_m-LNMOdXEeOx-IVkU1GnZg" base_Property="_iqyFYOdXEeOx-IVkU1GnZg" type="NON_UNIQUE"/>
 </xmi:XMI>

@@ -210,6 +210,11 @@ public class RuntimePropertyImplementor {
         navigabilityField.setName("_navigability");
         ojEnum.addToFields(navigabilityField);
 
+        OJField propertyType = new OJField();
+        propertyType.setType(new OJPathName("java.lang.Class"));
+        propertyType.setName("_propertyType");
+        ojEnum.addToFields(propertyType);
+
         OJField jsonField = new OJField();
         jsonField.setType(new OJPathName("String"));
         jsonField.setName("_json");
@@ -271,99 +276,109 @@ public class RuntimePropertyImplementor {
         for (Property p : allOwnedProperties) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
 
-                int inverseUpper = 1;
-                if (pWrap.getOtherEnd() != null) {
-                    inverseUpper = pWrap.getOtherEnd().getUpper();
-                }
+            annotatedClass.addToImports(pWrap.javaBaseTypePath());
 
-                if (!(className instanceof AssociationClass)) {
-                    addEnumLiteral(
-                            false,
-                            pWrap.isMemberOfAssociationClass(),
-                            pWrap.isMemberOfAssociationClass() ? pWrap.getAssociationClassFakePropertyName() : null,
-                            pWrap.isMemberOfAssociationClass() ? new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName() : null,
-                            false,
-                            false,
-                            ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
-                            pWrap.getInverseName(), pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
-                            pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
-                            pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
-                            pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
-                            pWrap.isDerived(), pWrap.isNavigable(), UmlgGenerationUtil.getEdgeName(pWrap.getProperty())
-                    );
-                } else {
-                    //This is for properties of the association class itself
-                    if (pWrap.isMemberOfAssociationClass()) {
-                        //These are fake properties, simulating navigating from the association class to its member ends
-                        addEnumLiteral(
-                                true,
-                                false,
-                                pWrap.getAssociationClassFakePropertyName(),
-                                new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName(),
-                                true,
-                                false,
-                                ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
-                                pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(),
-                                pWrap.getValidations(), pWrap.isEnumeration(), /*manyToOne*/pWrap.isACManyToOne(), /*many*/pWrap.isACMany(), pWrap.isControllingSide(),
-                                /*composite*/true, /*inverseComposite*/true, /*oneToOne*/pWrap.isACOneToOne(), /*oneToMany*/pWrap.isACOneToMany(),
-                                /*manyToMany*/pWrap.isACManyToMany(), /*upper*/1, /*lower*/1, inverseUpper, pWrap.isQualified(),
-                                pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isACUnique(), pWrap.isInverseUnique(),
-                                pWrap.isDerived(),
-                                pWrap.isNavigable(),
-                                UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_" + pWrap.getName() + "_AC"
-                        );
-                    } else {
-                        addEnumLiteral(
-                                false /*isAssociationClassOne*/,
-                                false/*isMemberEndOfAssociationClass*/,
-                                null/*associationClassPropertyName*/,
-                                null/*inverseAssociationClassPropertyName*/,
-                                false/*isAssociationClassProperty*/,
-                                (pWrap.isOne() && pWrap.isDataType()) ? true : false,
-                                ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
-                                pWrap.getInverseName(), pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
-                                pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
-                                pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
-                                pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
-                                false/*derived*/,
-                                true,/*navigable*/
-                                UmlgGenerationUtil.getEdgeName(pWrap.getProperty())
-                        );
-                    }
-                }
+            int inverseUpper = 1;
+            if (pWrap.getOtherEnd() != null) {
+                inverseUpper = pWrap.getOtherEnd().getUpper();
+            }
 
-                if (pWrap.isMemberOfAssociationClass() && !(className instanceof AssociationClass)) {
-                    //These are fake properties, simulating navigating from the member end's type to the association class itself
+            if (!(className instanceof AssociationClass)) {
+                addEnumLiteral(
+                        false,
+                        pWrap.isMemberOfAssociationClass(),
+                        pWrap.isMemberOfAssociationClass() ? pWrap.getAssociationClassFakePropertyName() : null,
+                        pWrap.isMemberOfAssociationClass() ? new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName() : null,
+                        false,
+                        false,
+                        ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
+                        pWrap.getInverseName(), pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
+                        pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
+                        pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
+                        pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
+                        pWrap.isDerived(),
+                        pWrap.isNavigable(),
+                        UmlgGenerationUtil.getEdgeName(pWrap.getProperty()),
+                        pWrap.javaBaseTypePath().getTypeName()
+                );
+            } else {
+                //This is for properties of the association class itself
+                if (pWrap.isMemberOfAssociationClass()) {
+                    //These are fake properties, simulating navigating from the association class to its member ends
                     addEnumLiteral(
                             true,
                             false,
                             pWrap.getAssociationClassFakePropertyName(),
                             new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName(),
+                            true,
                             false,
-                            false,
-                            ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.getAssociationClassFakePropertyName(), pWrap.getQualifiedName() + "AC",
-                            pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
+                            ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
+                            pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(),
+                            pWrap.getValidations(), pWrap.isEnumeration(), /*manyToOne*/pWrap.isACManyToOne(), /*many*/pWrap.isACMany(), pWrap.isControllingSide(),
+                                /*composite*/true, /*inverseComposite*/true, /*oneToOne*/pWrap.isACOneToOne(), /*oneToMany*/pWrap.isACOneToMany(),
+                                /*manyToMany*/pWrap.isACManyToMany(), /*upper*/1, /*lower*/1, inverseUpper, pWrap.isQualified(),
+                            pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isACUnique(), pWrap.isInverseUnique(),
+                            pWrap.isDerived(),
+                            pWrap.isNavigable(),
+                            UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_" + pWrap.getName() + "_AC",
+                            pWrap.javaBaseTypePath().getTypeName()
+                    );
+                } else {
+                    addEnumLiteral(
+                            false /*isAssociationClassOne*/,
+                            false/*isMemberEndOfAssociationClass*/,
+                            null/*associationClassPropertyName*/,
+                            null/*inverseAssociationClassPropertyName*/,
+                            false/*isAssociationClassProperty*/,
+                            (pWrap.isOne() && pWrap.isDataType()) ? true : false,
+                            ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
+                            pWrap.getInverseName(), pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
                             pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                             pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
                             pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
                             false/*derived*/,
                             true,/*navigable*/
-                            UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_AC");
+                            UmlgGenerationUtil.getEdgeName(pWrap.getProperty()),
+                            pWrap.javaBaseTypePath().getTypeName()
+                    );
                 }
             }
+
+            if (pWrap.isMemberOfAssociationClass() && !(className instanceof AssociationClass)) {
+                //These are fake properties, simulating navigating from the member end's type to the association class itself
+                addEnumLiteral(
+                        true,
+                        false,
+                        pWrap.getAssociationClassFakePropertyName(),
+                        new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName(),
+                        false,
+                        false,
+                        ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.getAssociationClassFakePropertyName(), pWrap.getQualifiedName() + "AC",
+                        pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
+                        pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
+                        pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
+                        pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
+                        false/*derived*/,
+                        true,/*navigable*/
+                        UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_AC",
+                        pWrap.javaBaseTypePath().getTypeName());
+            }
+        }
 //        }
 
         if (!hasCompositeOwner) {
             // Add in fake property to root
             addEnumLiteral(false, false, null, null, false, false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, modelName, modelName, "inverseOf" + modelName, "inverseOf" + modelName, false, false, null,
-                    Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, 1, false, false, false, false, false, false,false,false,
-                    "root" + className.getName());
+                    Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, 1, false, false, false, false, false, false, false, false,
+                    "root" + className.getName(),
+                    "Object");
         }
         asJson.getBody().addToStatements("sb.append(\"]}\")");
         asJson.getBody().addToStatements("return sb.toString()");
         fromLabel.getBody().addToStatements("return null");
         fromQualifiedName.getBody().addToStatements("return null");
         fromInverseQualifiedName.getBody().addToStatements("return null");
+
         return ojEnum;
     }
 
@@ -409,7 +424,8 @@ public class RuntimePropertyImplementor {
             boolean isInverseUnique,
             boolean isDerived,
             boolean isNavigable,
-            String edgeName) {
+            String edgeName,
+            String javaQualifiedClass) {
 
         OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
         // Do not make upper case, leave with java case sensitive
@@ -425,61 +441,61 @@ public class RuntimePropertyImplementor {
         ifLabelEqualsForInverseQualifiedName.addToThenPart("return " + fieldName);
         fromInverseQualifiedName.getBody().addToStatements(0, ifLabelEqualsForInverseQualifiedName);
 
-        OJEnumLiteral ojLiteral = new OJEnumLiteral(fieldName);
+        OJEnumLiteral ojEnumLiteral = new OJEnumLiteral(fieldName);
 
         OJField propertyQualifiedNameField = new OJField();
         propertyQualifiedNameField.setName("qualifiedName");
         propertyQualifiedNameField.setType(new OJPathName("String"));
         propertyQualifiedNameField.setInitExp("\"" + qualifiedName + "\"");
-        ojLiteral.addToAttributeValues(propertyQualifiedNameField);
+        ojEnumLiteral.addToAttributeValues(propertyQualifiedNameField);
 
         OJField propertyInverseNameField = new OJField();
         propertyInverseNameField.setName("inverseName");
         propertyInverseNameField.setType(new OJPathName("String"));
         propertyInverseNameField.setInitExp("\"" + inverseName + "\"");
-        ojLiteral.addToAttributeValues(propertyInverseNameField);
+        ojEnumLiteral.addToAttributeValues(propertyInverseNameField);
 
         OJField propertyInverseQualifiedNameField = new OJField();
         propertyInverseQualifiedNameField.setName("inverseQualifiedName");
         propertyInverseQualifiedNameField.setType(new OJPathName("String"));
         propertyInverseQualifiedNameField.setInitExp("\"" + inverseQualifiedName + "\"");
-        ojLiteral.addToAttributeValues(propertyInverseQualifiedNameField);
+        ojEnumLiteral.addToAttributeValues(propertyInverseQualifiedNameField);
 
         OJField isAssociationClassOneField = new OJField();
         isAssociationClassOneField.setName("isAssociationClassOne");
         isAssociationClassOneField.setType(new OJPathName("boolean"));
         isAssociationClassOneField.setInitExp(Boolean.toString(isAssociationClassOne));
-        ojLiteral.addToAttributeValues(isAssociationClassOneField);
+        ojEnumLiteral.addToAttributeValues(isAssociationClassOneField);
 
         OJField isMemberEndOfAssociationClassField = new OJField();
         isMemberEndOfAssociationClassField.setName("isMemberEndOfAssociationClass");
         isMemberEndOfAssociationClassField.setType(new OJPathName("boolean"));
         isMemberEndOfAssociationClassField.setInitExp(Boolean.toString(isMemberEndOfAssociationClass));
-        ojLiteral.addToAttributeValues(isMemberEndOfAssociationClassField);
+        ojEnumLiteral.addToAttributeValues(isMemberEndOfAssociationClassField);
 
         OJField propertyAssociationClassPropertyNameField = new OJField();
         propertyAssociationClassPropertyNameField.setName("associationClassPropertyNameField");
         propertyAssociationClassPropertyNameField.setType(new OJPathName("String"));
         propertyAssociationClassPropertyNameField.setInitExp("\"" + associationClassPropertyName + "\"");
-        ojLiteral.addToAttributeValues(propertyAssociationClassPropertyNameField);
+        ojEnumLiteral.addToAttributeValues(propertyAssociationClassPropertyNameField);
 
         OJField propertyInverseAssociationClassPropertyNameField = new OJField();
         propertyInverseAssociationClassPropertyNameField.setName("inverseAssociationClassPropertyNameField");
         propertyInverseAssociationClassPropertyNameField.setType(new OJPathName("String"));
         propertyInverseAssociationClassPropertyNameField.setInitExp("\"" + inverseAssociationClassPropertyName + "\"");
-        ojLiteral.addToAttributeValues(propertyInverseAssociationClassPropertyNameField);
+        ojEnumLiteral.addToAttributeValues(propertyInverseAssociationClassPropertyNameField);
 
         OJField isAssociationClassPropertyField = new OJField();
         isAssociationClassPropertyField.setName("isAssociationClassProperty");
         isAssociationClassPropertyField.setType(new OJPathName("boolean"));
         isAssociationClassPropertyField.setInitExp(Boolean.toString(isAssociationClassProperty));
-        ojLiteral.addToAttributeValues(isAssociationClassPropertyField);
+        ojEnumLiteral.addToAttributeValues(isAssociationClassPropertyField);
 
         OJField isOnePrimitivePropertyOfAssociationClassField = new OJField();
         isOnePrimitivePropertyOfAssociationClassField.setName("isOnePrimitivePropertyOfAssociationClass");
         isOnePrimitivePropertyOfAssociationClassField.setType(new OJPathName("boolean"));
         isOnePrimitivePropertyOfAssociationClassField.setInitExp(Boolean.toString(isOnePrimitivePropertyOfAssociationClass));
-        ojLiteral.addToAttributeValues(isOnePrimitivePropertyOfAssociationClassField);
+        ojEnumLiteral.addToAttributeValues(isOnePrimitivePropertyOfAssociationClassField);
 
         OJField propertyOnePrimitiveField = new OJField();
         propertyOnePrimitiveField.setName("isOnePrimitive");
@@ -487,13 +503,13 @@ public class RuntimePropertyImplementor {
         // A one primitive property is a isManyToOne. Seeing as the
         // opposite end is null it defaults to many
         propertyOnePrimitiveField.setInitExp(Boolean.toString(isPrimitive && isManyToOne));
-        ojLiteral.addToAttributeValues(propertyOnePrimitiveField);
+        ojEnumLiteral.addToAttributeValues(propertyOnePrimitiveField);
 
         OJField readOnlyField = new OJField();
         readOnlyField.setName("isReadOnly");
         readOnlyField.setType(new OJPathName("boolean"));
         readOnlyField.setInitExp(Boolean.toString(isReadOnly));
-        ojLiteral.addToAttributeValues(readOnlyField);
+        ojEnumLiteral.addToAttributeValues(readOnlyField);
 
         OJField propertyDataTypeEnumField = new OJField();
         propertyDataTypeEnumField.setName("dataTypeEnum");
@@ -503,7 +519,7 @@ public class RuntimePropertyImplementor {
         } else {
             propertyDataTypeEnumField.setInitExp("null");
         }
-        ojLiteral.addToAttributeValues(propertyDataTypeEnumField);
+        ojEnumLiteral.addToAttributeValues(propertyDataTypeEnumField);
 
         OJField propertyValidationsField = new OJField();
         propertyValidationsField.setName("validations");
@@ -520,13 +536,13 @@ public class RuntimePropertyImplementor {
             ojEnum.addToImports(new OJPathName("java.util.Arrays"));
             propertyValidationsField.setInitExp("Arrays.<UmlgValidation>asList(" + sb1.toString() + ")");
         }
-        ojLiteral.addToAttributeValues(propertyValidationsField);
+        ojEnumLiteral.addToAttributeValues(propertyValidationsField);
 
         OJField propertyManyPrimitiveField = new OJField();
         propertyManyPrimitiveField.setName("isManyPrimitive");
         propertyManyPrimitiveField.setType(new OJPathName("boolean"));
         propertyManyPrimitiveField.setInitExp(Boolean.toString(isPrimitive && isManyToMany));
-        ojLiteral.addToAttributeValues(propertyManyPrimitiveField);
+        ojEnumLiteral.addToAttributeValues(propertyManyPrimitiveField);
 
         OJField propertyOneEnumerationField = new OJField();
         propertyOneEnumerationField.setName("oneEnumeration");
@@ -534,127 +550,133 @@ public class RuntimePropertyImplementor {
         // A one primitive property is a isManyToOne. Seeing as the
         // opposite end is null it defaults to many
         propertyOneEnumerationField.setInitExp(Boolean.toString(isEnumeration && (isManyToOne || isOneToOne)));
-        ojLiteral.addToAttributeValues(propertyOneEnumerationField);
+        ojEnumLiteral.addToAttributeValues(propertyOneEnumerationField);
 
         OJField propertyManyEnumerationField = new OJField();
         propertyManyEnumerationField.setName("manyEnumeration");
         propertyManyEnumerationField.setType(new OJPathName("boolean"));
         propertyManyEnumerationField.setInitExp(Boolean.toString(isEnumeration && isMany));
-        ojLiteral.addToAttributeValues(propertyManyEnumerationField);
+        ojEnumLiteral.addToAttributeValues(propertyManyEnumerationField);
 
         OJField propertyControllingSideField = new OJField();
         propertyControllingSideField.setName("isControllingSide");
         propertyControllingSideField.setType(new OJPathName("boolean"));
         propertyControllingSideField.setInitExp(Boolean.toString(isControllingSide));
-        ojLiteral.addToAttributeValues(propertyControllingSideField);
+        ojEnumLiteral.addToAttributeValues(propertyControllingSideField);
 
         OJField compositeLabelField = new OJField();
         compositeLabelField.setName("isComposite");
         compositeLabelField.setType(new OJPathName("boolean"));
         compositeLabelField.setInitExp(Boolean.toString(isComposite));
-        ojLiteral.addToAttributeValues(compositeLabelField);
+        ojEnumLiteral.addToAttributeValues(compositeLabelField);
 
         OJField inverseCompositeLabelField = new OJField();
         inverseCompositeLabelField.setName("isInverseComposite");
         inverseCompositeLabelField.setType(new OJPathName("boolean"));
         inverseCompositeLabelField.setInitExp(Boolean.toString(isInverseComposite));
-        ojLiteral.addToAttributeValues(inverseCompositeLabelField);
+        ojEnumLiteral.addToAttributeValues(inverseCompositeLabelField);
 
         OJField propertyLabelField = new OJField();
         propertyLabelField.setName("label");
         propertyLabelField.setType(new OJPathName("String"));
         propertyLabelField.setInitExp(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + edgeName + "\")");
-        ojLiteral.addToAttributeValues(propertyLabelField);
+        ojEnumLiteral.addToAttributeValues(propertyLabelField);
 
         OJField isOneToOneAttribute = new OJField();
         isOneToOneAttribute.setName("isOneToOne");
         isOneToOneAttribute.setType(new OJPathName("boolean"));
         isOneToOneAttribute.setInitExp(Boolean.toString(isOneToOne));
-        ojLiteral.addToAttributeValues(isOneToOneAttribute);
+        ojEnumLiteral.addToAttributeValues(isOneToOneAttribute);
 
         OJField isOneToManyAttribute = new OJField();
         isOneToManyAttribute.setName("isOneToMany");
         isOneToManyAttribute.setType(new OJPathName("boolean"));
         isOneToManyAttribute.setInitExp(Boolean.toString(isOneToMany));
-        ojLiteral.addToAttributeValues(isOneToManyAttribute);
+        ojEnumLiteral.addToAttributeValues(isOneToManyAttribute);
 
         OJField isManyToOneAttribute = new OJField();
         isManyToOneAttribute.setName("isManyToOne");
         isManyToOneAttribute.setType(new OJPathName("boolean"));
         isManyToOneAttribute.setInitExp(Boolean.toString(isManyToOne));
-        ojLiteral.addToAttributeValues(isManyToOneAttribute);
+        ojEnumLiteral.addToAttributeValues(isManyToOneAttribute);
 
         OJField isManyToManyAttribute = new OJField();
         isManyToManyAttribute.setName("isManyToMany");
         isManyToManyAttribute.setType(new OJPathName("boolean"));
         isManyToManyAttribute.setInitExp(Boolean.toString(isManyToMany));
-        ojLiteral.addToAttributeValues(isManyToManyAttribute);
+        ojEnumLiteral.addToAttributeValues(isManyToManyAttribute);
 
         OJField upperAttribute = new OJField();
         upperAttribute.setName("upper");
         upperAttribute.setType(new OJPathName("int"));
         upperAttribute.setInitExp(Integer.toString(getUpper));
-        ojLiteral.addToAttributeValues(upperAttribute);
+        ojEnumLiteral.addToAttributeValues(upperAttribute);
 
         OJField lowerAttribute = new OJField();
         lowerAttribute.setName("lower");
         lowerAttribute.setType(new OJPathName("int"));
         lowerAttribute.setInitExp(Integer.toString(getLower));
-        ojLiteral.addToAttributeValues(lowerAttribute);
+        ojEnumLiteral.addToAttributeValues(lowerAttribute);
 
         OJField inverseUpperAttribute = new OJField();
         inverseUpperAttribute.setName("inverseUpper");
         inverseUpperAttribute.setType(new OJPathName("int"));
         inverseUpperAttribute.setInitExp(Integer.toString(getInverseUpper));
-        ojLiteral.addToAttributeValues(inverseUpperAttribute);
+        ojEnumLiteral.addToAttributeValues(inverseUpperAttribute);
 
         OJField qualifiedAttribute = new OJField();
         qualifiedAttribute.setName("isQualified");
         qualifiedAttribute.setType(new OJPathName("boolean"));
         qualifiedAttribute.setInitExp(Boolean.toString(isQualified));
-        ojLiteral.addToAttributeValues(qualifiedAttribute);
+        ojEnumLiteral.addToAttributeValues(qualifiedAttribute);
 
         OJField inverseQualifiedAttribute = new OJField();
         inverseQualifiedAttribute.setName("isInverseQualified");
         inverseQualifiedAttribute.setType(new OJPathName("boolean"));
         inverseQualifiedAttribute.setInitExp(Boolean.toString(isInverseQualified));
-        ojLiteral.addToAttributeValues(inverseQualifiedAttribute);
+        ojEnumLiteral.addToAttributeValues(inverseQualifiedAttribute);
 
         OJField orderedAttribute = new OJField();
         orderedAttribute.setName("isOrdered");
         orderedAttribute.setType(new OJPathName("boolean"));
         orderedAttribute.setInitExp(Boolean.toString(isOrdered));
-        ojLiteral.addToAttributeValues(orderedAttribute);
+        ojEnumLiteral.addToAttributeValues(orderedAttribute);
 
         OJField inverseOrderedAttribute = new OJField();
         inverseOrderedAttribute.setName("isInverseOrdered");
         inverseOrderedAttribute.setType(new OJPathName("boolean"));
         inverseOrderedAttribute.setInitExp(Boolean.toString(isInverseOrdered));
-        ojLiteral.addToAttributeValues(inverseOrderedAttribute);
+        ojEnumLiteral.addToAttributeValues(inverseOrderedAttribute);
 
         OJField uniqueAttribute = new OJField();
         uniqueAttribute.setName("isUnique");
         uniqueAttribute.setType(new OJPathName("boolean"));
         uniqueAttribute.setInitExp(Boolean.toString(isUnique));
-        ojLiteral.addToAttributeValues(uniqueAttribute);
+        ojEnumLiteral.addToAttributeValues(uniqueAttribute);
 
         OJField inverseUniqueAttribute = new OJField();
         inverseUniqueAttribute.setName("isInverseUnique");
         inverseUniqueAttribute.setType(new OJPathName("boolean"));
         inverseUniqueAttribute.setInitExp(Boolean.toString(isInverseUnique));
-        ojLiteral.addToAttributeValues(inverseUniqueAttribute);
+        ojEnumLiteral.addToAttributeValues(inverseUniqueAttribute);
 
         OJField derivedAttribute = new OJField();
         derivedAttribute.setName("isDerived");
         derivedAttribute.setType(new OJPathName("boolean"));
         derivedAttribute.setInitExp(Boolean.toString(isDerived));
-        ojLiteral.addToAttributeValues(derivedAttribute);
+        ojEnumLiteral.addToAttributeValues(derivedAttribute);
 
         OJField navigableAttribute = new OJField();
         navigableAttribute.setName("isNavigable");
         navigableAttribute.setType(new OJPathName("boolean"));
         navigableAttribute.setInitExp(Boolean.toString(isNavigable));
-        ojLiteral.addToAttributeValues(navigableAttribute);
+        ojEnumLiteral.addToAttributeValues(navigableAttribute);
+
+        OJField javaClassAttribute = new OJField();
+        javaClassAttribute.setName("propertyType");
+        javaClassAttribute.setType(new OJPathName("java.lang.Class"));
+        javaClassAttribute.setInitExp(javaQualifiedClass + ".class");
+        ojEnumLiteral.addToAttributeValues(javaClassAttribute);
 
         OJField jsonAttribute = new OJField();
         jsonAttribute.setName("json");
@@ -803,10 +825,10 @@ public class RuntimePropertyImplementor {
         sb.append(navigableAttribute.getInitExp());
         sb.append("}");
         jsonAttribute.setInitExp("\"" + sb.toString() + "\"");
-        ojLiteral.addToAttributeValues(jsonAttribute);
+        ojEnumLiteral.addToAttributeValues(jsonAttribute);
 
-        ojEnum.addToLiterals(ojLiteral);
-        return ojLiteral;
+        ojEnum.addToLiterals(ojEnumLiteral);
+        return ojEnumLiteral;
     }
 
 }

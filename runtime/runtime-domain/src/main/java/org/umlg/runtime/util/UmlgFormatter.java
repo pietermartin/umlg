@@ -76,19 +76,21 @@ public class UmlgFormatter {
         }
     }
 
-    public static String formatToPersist(DateTime dateTime) {
+    public static Long formatToPersist(DateTime dateTime) {
         if (dateTime != null) {
-            return ISODateTimeFormat.dateTime().print(dateTime);
+            return dateTime.getMillis();
+//            return ISODateTimeFormat.dateTime().print(dateTime);
         } else {
-            return "";
+            return 0L;
         }
     }
 
-    public static String formatToPersist(LocalDate date) {
+    public static Long formatToPersist(LocalDate date) {
         if (date != null) {
-            return ISODateTimeFormat.date().print(date);
+            return date.toDateTimeAtStartOfDay().getMillis();
+//            return ISODateTimeFormat.date().print(date);
         } else {
-            return "";
+            return 0L;
         }
     }
 
@@ -100,20 +102,12 @@ public class UmlgFormatter {
         }
     }
 
-    public static DateTime parseDateTimeFromPersist(String dateTime) {
-        if (dateTime != null && !dateTime.isEmpty()) {
-            return DateTime.parse(dateTime);
-        } else {
-            return null;
-        }
+    public static DateTime parseDateTimeFromPersist(long dateTime) {
+        return new DateTime(dateTime);
     }
 
-    public static LocalDate parseDateFromPersist(String date) {
-        if (date != null && !date.isEmpty()) {
-            return LocalDate.parse(date);
-        } else {
-            return null;
-        }
+    public static LocalDate parseDateFromPersist(long date) {
+        return new LocalDate(date);
     }
 
     public static LocalTime parseTimeFromPersist(String time) {
@@ -133,7 +127,7 @@ public class UmlgFormatter {
         return Base64.decodeBase64(base64String);
     }
 
-    public static String format(DataTypeEnum dataTypeEnum, Object o) {
+    public static Object format(DataTypeEnum dataTypeEnum, Object o) {
         switch (dataTypeEnum) {
             case DateTime:
                 return formatToPersist((DateTime) o);
@@ -158,14 +152,14 @@ public class UmlgFormatter {
         }
     }
 
-    public static <E> E parse(DataTypeEnum dataTypeEnum, String s) {
+    public static <E> E parse(DataTypeEnum dataTypeEnum, Object s) {
         switch (dataTypeEnum) {
             case DateTime:
-                return (E)parseDateTimeFromPersist(s);
+                return (E)parseDateTimeFromPersist((Long)s);
             case Date:
-                return (E)parseDateFromPersist(s);
+                return (E)parseDateFromPersist((Long)s);
             case Time:
-                return (E)parseTimeFromPersist(s);
+                return (E)parseTimeFromPersist((String)s);
             case InternationalPhoneNumber:
                 return (E)s;
             case LocalPhoneNumber:

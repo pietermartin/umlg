@@ -1,5 +1,6 @@
 package org.umlg.javageneration.visitor.property;
 
+import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Stereotype;
@@ -28,7 +29,7 @@ public class IndexValidator extends BaseVisitor implements Visitor<Property> {
             this.stereotype = ModelLoader.INSTANCE.findStereotype("Index");
         }
         PropertyWrapper pWrap = new PropertyWrapper(element);
-        if (element.isStereotypeApplied(this.stereotype) && (pWrap.isMany() || !(element.getType() instanceof PrimitiveType))) {
+        if (element.isStereotypeApplied(this.stereotype) && (pWrap.isMany() || !(element.getType() instanceof DataType))) {
             throw new IllegalStateException(String.format("Only PrimitiveType may be indexed currently! Current element %s is a %s", new String[]{element.getQualifiedName(), element.getType().getQualifiedName()}));
         }
     }

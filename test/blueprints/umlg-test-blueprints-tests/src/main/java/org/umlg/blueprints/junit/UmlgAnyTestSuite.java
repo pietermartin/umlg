@@ -12,6 +12,7 @@ import org.umlg.tests.collectiontest.*;
 import org.umlg.tests.constraint.ConstrainedPropertyTest;
 import org.umlg.tests.datatype.DataTypeTest;
 import org.umlg.tests.indexing.TestIndexing;
+import org.umlg.tests.indexing.TestIndexingDataType;
 import org.umlg.tests.javaprimitivetypes.TestJavaManyPrimitiveTypesWithValidation;
 import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypes;
 import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypesWithValidation;
@@ -60,9 +61,10 @@ import org.umlg.tests.validationtest.TestValidation;
 //        TestQualifier.class
 //        TestQualifiedDeletion.class,
 //        TestAssociationClassMoveInList.class,
-        TestAssociationClassCopiesOnePrimitivePropertiesToEdge.class
+//        TestAssociationClassCopiesOnePrimitivePropertiesToEdge.class
 //        JsonTest.class,
-//        DataTypeTest.class
+//        DataTypeTest.class,
+        TestIndexingDataType.class
 
 })
 

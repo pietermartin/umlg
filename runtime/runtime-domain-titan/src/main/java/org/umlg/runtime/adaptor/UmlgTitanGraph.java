@@ -4,6 +4,9 @@ import com.google.common.base.Preconditions;
 import com.thinkaurelius.titan.graphdb.configuration.GraphDatabaseConfiguration;
 import com.thinkaurelius.titan.graphdb.database.StandardTitanGraph;
 import com.tinkerpop.blueprints.*;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.umlg.runtime.collection.memory.UmlgLazyList;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
@@ -173,6 +176,30 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph, Uml
                 this.makeKey(key).dataType(Boolean.class).indexed(elementClass).unique().make();
             } else {
                 this.makeKey(key).dataType(Boolean.class).indexed(elementClass).make();
+            }
+        } else if (indexParameter.getValue() == DateTime.class) {
+            if (uniqueParameter.getValue()) {
+                this.makeKey(key).dataType(Long.class).indexed(elementClass).unique().make();
+            } else {
+                this.makeKey(key).dataType(Long.class).indexed(elementClass).make();
+            }
+        } else if (indexParameter.getValue() == LocalDate.class) {
+            if (uniqueParameter.getValue()) {
+                this.makeKey(key).dataType(Long.class).indexed(elementClass).unique().make();
+            } else {
+                this.makeKey(key).dataType(Long.class).indexed(elementClass).make();
+            }
+        } else if (indexParameter.getValue() == LocalTime.class) {
+            if (uniqueParameter.getValue()) {
+                this.makeKey(key).dataType(String.class).indexed(elementClass).unique().make();
+            } else {
+                this.makeKey(key).dataType(String.class).indexed(elementClass).make();
+            }
+        } else if (indexParameter.getValue().isEnum()) {
+            if (uniqueParameter.getValue()) {
+                this.makeKey(key).dataType(String.class).indexed(elementClass).unique().make();
+            } else {
+                this.makeKey(key).dataType(String.class).indexed(elementClass).make();
             }
         } else {
             throw new RuntimeException(String.format("Unsupport type for indexing!", new String[]{elementClass.getName()}));

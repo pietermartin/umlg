@@ -8,6 +8,7 @@ import org.umlg.java.metamodel.OJPackage;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.javageneration.util.PropertyWrapper;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgPropertyOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
@@ -66,10 +67,10 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
         for (Property indexedProperty : indexedProperties) {
 
             String type;
-            if (indexedProperty.getType() instanceof PrimitiveType) {
+            if (indexedProperty.getType() instanceof DataType) {
                 type = UmlgPropertyOperations.umlPrimitiveTypeToJava(indexedProperty.getType());
             } else {
-                throw new RuntimeException("Only PrimitiveType may be indexed currently!");
+                throw new RuntimeException("Only DataType may be indexed currently!");
             }
             String unique;
             EnumerationLiteral enumerationLiteral = (EnumerationLiteral) indexedProperty.getValue(stereotype, "type");
@@ -89,6 +90,8 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
 
             );
             indexCreator.addToImports(UmlgGenerationUtil.vertexPathName);
+            indexCreator.addToImports(new PropertyWrapper(indexedProperty).javaBaseTypePath());
+
 
         }
 

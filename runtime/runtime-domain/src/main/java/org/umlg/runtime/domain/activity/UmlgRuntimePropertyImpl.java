@@ -130,7 +130,12 @@ public class UmlgRuntimePropertyImpl implements UmlgRuntimeProperty {
 		return null;
 	}
 
-	@Override
+    @Override
+    public Class getPropertyType() {
+        return null;
+    }
+
+    @Override
 	public boolean isManyPrimitive() {
 		// TODO Auto-generated method stub
 		return false;

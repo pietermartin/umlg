@@ -43,7 +43,7 @@ public class AddIdLiteralsToRuntimeEnum extends BaseVisitor implements Visitor<C
                 "inverseOf::not_applicable", "inverseOf::not_applicable", true, true, null, Collections.<Validation>emptyList(), false, true,
                 false, false, false, false, true, false, false,
                 1, 1, 1, false, false, false, false,
-                false, true, false, true,  ""
+                false, true, false, true,  "", "Object"
         );
     }
 

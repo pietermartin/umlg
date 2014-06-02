@@ -117,7 +117,8 @@ public class RootEntryPointCreatorForModel extends BaseVisitor implements Visito
             RuntimePropertyImplementor.addEnumLiteral(false, false, null, null, false, false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName,
                     StringUtils.uncapitalize(UmlgClassOperations.className(clazz)), clazz.getQualifiedName(), "inverseOf::" + clazz.getName(), "inverseOf::" + clazz.getQualifiedName(), false, false,
                     null, Collections.<Validation>emptyList(), true, false, false, false, true, false, false, true, false, -1, 0, 1, false, false, false/*ordered*/, false, true,
-                    true, false, true, "root" + UmlgClassOperations.className(clazz));
+                    true, false, true, "root" + UmlgClassOperations.className(clazz),
+                    UmlgClassOperations.className(clazz));
 
             asJson.getBody().addToStatements(
                     "sb.append(" + ojEnum.getName() + "." + StringUtils.uncapitalize(UmlgClassOperations.className(clazz)) + ".toJson())");
@@ -164,6 +165,9 @@ public class RootEntryPointCreatorForModel extends BaseVisitor implements Visito
             @Override
             public boolean evaluateOn(Element e) {
                 if (!(e instanceof Class)) {
+                    return false;
+                }
+                if ((e instanceof OpaqueBehavior)) {
                     return false;
                 }
                 Class clazz = (Class) e;

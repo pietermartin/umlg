@@ -40,8 +40,8 @@ public class TestMetaQueries extends BaseLocalDbTest {
 
         db.commit();
         //One for the enum also
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(8 + 7, countEdges());
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(7 + 7, countEdges());
 
         ClassQuery q2 = new ClassQuery(true);
         q2.setName("q2");
@@ -52,8 +52,8 @@ public class TestMetaQueries extends BaseLocalDbTest {
 
         db.commit();
         //One for the enum also
-        Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(11 + 8, countEdges());
+        Assert.assertEquals(7, countVertices());
+        Assert.assertEquals(9 + 8, countEdges());
 
         Assert.assertEquals(2, DreamMeta.getInstance().getClassQuery().size());
 

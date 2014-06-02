@@ -323,6 +323,18 @@ public final class UmlgPropertyOperations extends PropertyOperations {
             } else {
                 throw new IllegalStateException("unknown primitive " + primitiveType.getName());
             }
+        } else if (type instanceof DataType) {
+            if (type instanceof Enumeration) {
+                return type.getName();
+            } else {
+                DataType dataType = (DataType) type;
+                OJPathName dataTypePathName = DataTypeEnum.getPathNameFromDataType(dataType);
+                if (dataTypePathName != null) {
+                    return dataTypePathName.getLast();
+                } else {
+                    throw new IllegalStateException("Unknown datatype " + type.getName());
+                }
+            }
         } else {
             return type.getName();
         }

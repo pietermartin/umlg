@@ -90,8 +90,8 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         god.setName("THEGOD");
         god.setReason(REASON.GOOD);
         db.commit();
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2 + 1, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1 + 1, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals(REASON.GOOD, g.getReason());
     }

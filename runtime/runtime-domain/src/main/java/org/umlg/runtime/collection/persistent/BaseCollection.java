@@ -65,16 +65,21 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected void loadFromVertex() {
-        if (!isOnePrimitive() && getDataTypeEnum() == null) {
+        if (!isOnePrimitive() && !isOneEnumeration() && getDataTypeEnum() == null) {
             loadManyNotPrimitiveNotDataType();
         } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
             loadManyDataType();
         } else if (getDataTypeEnum() != null) {
             loadOneDataType();
         } else {
-            E property = this.vertex.getProperty(getQualifiedName());
-            if (property != null) {
-                this.internalCollection.add(property);
+            E value = this.vertex.getProperty(getQualifiedName());
+            if (value != null) {
+                if (isOneEnumeration()) {
+                    Class<?> c = this.getPropertyType();
+                    this.internalCollection.add((E) Enum.valueOf((Class<? extends Enum>) c, (String) value));
+                } else {
+                    this.internalCollection.add(value);
+                }
             }
         }
         this.loaded = true;
@@ -151,7 +156,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             this.edge = addInternal(e);
 
             // Edge can only be null on a one primitive
-            if (this.edge == null && !isOnePrimitive() && getDataTypeEnum() == null) {
+            if (this.edge == null && !isOnePrimitive() && !isOneEnumeration() && getDataTypeEnum() == null) {
                 throw new IllegalStateException("Edge can only be null on isOne which is a String, Integer, Boolean or primitive");
             }
 
@@ -614,7 +619,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 this.handleInverseSide(node, umlgRuntimeProperty, true, this.owner);
             }
             this.handleInverseSide(node, umlgRuntimeProperty, true, this.owner);
-        } else if (e.getClass().isEnum()) {
+        } else if (e.getClass().isEnum()  && (isManyToMany() || isOneToMany())) {
             v = UMLG.get().addVertex(null);
             v.setProperty(getQualifiedName(), ((Enum<?>) e).name());
             v.setProperty("className", e.getClass().getName());
@@ -626,6 +631,15 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
                 if (edgeId != null) {
                     UMLG.get().getEdge(edgeId).setProperty(getQualifiedName(), e);
+                }
+            }
+        } else if (isOneEnumeration()) {
+            this.vertex.setProperty(getQualifiedName(), ((Enum<?>) e).name());
+            if (isOnePrimitivePropertyOfAssociationClass()) {
+                Object edgeId = this.vertex.getProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
+                //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
+                if (edgeId != null) {
+                    UMLG.get().getEdge(edgeId).setProperty(getQualifiedName(), ((Enum<?>) e).name());
                 }
             }
         } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
@@ -1059,6 +1073,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     @Override
+    public Class getPropertyType() {
+        return this.umlgRuntimeProperty.getPropertyType();
+    }
+
+
+    @Override
     public boolean equals(UmlgCollection<E> c) {
         maybeLoad();
         return this.oclStdLibCollection.equals(c);
@@ -1293,7 +1313,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     private void loadOneDataType() {
-        String s = this.vertex.getProperty(getQualifiedName());
+        Object s = this.vertex.getProperty(getQualifiedName());
         if (s != null) {
             E result = UmlgFormatter.parse(getDataTypeEnum(), s);
             this.internalCollection.add(result);
@@ -1315,7 +1335,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     protected E loadDataTypeFromVertex(Vertex v) {
         E result = null;
-        String s = v.getProperty(getQualifiedName());
+        Object s = v.getProperty(getQualifiedName());
         if (s != null) {
             result = UmlgFormatter.parse(getDataTypeEnum(), s);
             putToInternalMap(result, v);

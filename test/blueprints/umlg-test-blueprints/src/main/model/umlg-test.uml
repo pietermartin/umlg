@@ -2694,6 +2694,39 @@ endif</body>
             </ownedAttribute>
           </packagedElement>
         </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_Gqr64OdbEeOx-IVkU1GnZg" name="indexing">
+          <packagedElement xmi:type="uml:Class" xmi:id="_LNewoOdbEeOx-IVkU1GnZg" name="Product">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_M6RpoOdbEeOx-IVkU1GnZg" name="created" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_OcId8OdbEeOx-IVkU1GnZg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_OcJFAOdbEeOx-IVkU1GnZg" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_OBEmUOmPEeO5xohz8WLHnw" name="deleted" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Xy8JAOmPEeO5xohz8WLHnw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Xy8JAemPEeO5xohz8WLHnw" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_wjzakOmPEeO5xohz8WLHnw" name="time" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_eqPvMALgEeKtFpHFDhpFVA"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_yt898OmPEeO5xohz8WLHnw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_yt898emPEeO5xohz8WLHnw" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_-Dzb4OmPEeO5xohz8WLHnw" name="type" type="_2rz6oOmPEeO5xohz8WLHnw" association="_-D0C8OmPEeO5xohz8WLHnw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-Dzb4emPEeO5xohz8WLHnw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-Dzb4umPEeO5xohz8WLHnw" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_2rz6oOmPEeO5xohz8WLHnw" name="PTYPE">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_4_vsIOmPEeO5xohz8WLHnw" name="TOY"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_9UYxIOmPEeO5xohz8WLHnw" name="REAL"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_-D0C8OmPEeO5xohz8WLHnw" name="product_pTYPE_1" memberEnd="_-D0C8emPEeO5xohz8WLHnw _-Dzb4OmPEeO5xohz8WLHnw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_-D0C8emPEeO5xohz8WLHnw" name="product" type="_LNewoOdbEeOx-IVkU1GnZg" association="_-D0C8OmPEeO5xohz8WLHnw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-D0C8umPEeO5xohz8WLHnw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-D0C8-mPEeO5xohz8WLHnw" value="*"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_1clVoQAOEeKpVr_ntT6cLA">
@@ -2792,4 +2825,8 @@ endif</body>
   <UmlgProfile:QualifierListener xmi:id="_eGC2cN21EeOEP64qykw2fg" base_Property="_ugE2MMRoEeGJXus6eZqdyw" property="_5p0-8BncEeGZfswubjlR9Q"/>
   <UmlgProfile:QualifierListener xmi:id="_KSrqkN2-EeOEP64qykw2fg" base_Property="_AjGm4N2-EeOEP64qykw2fg"/>
   <UmlgProfile:QualifierListener xmi:id="_yI4U0N3EEeOEP64qykw2fg" base_Property="_uhv2EN3EEeOEP64qykw2fg" property="_zVLuUPJOEeCeFLHNTzV0LA"/>
+  <UmlgProfile:Index xmi:id="_eav2wOdbEeOx-IVkU1GnZg" base_Property="_M6RpoOdbEeOx-IVkU1GnZg" type="NON_UNIQUE"/>
+  <UmlgProfile:Index xmi:id="_aSwaYOmPEeO5xohz8WLHnw" base_Property="_OBEmUOmPEeO5xohz8WLHnw"/>
+  <UmlgProfile:Index xmi:id="_0bkWUOmPEeO5xohz8WLHnw" base_Property="_wjzakOmPEeO5xohz8WLHnw"/>
+  <UmlgProfile:Index xmi:id="_S7p54OmjEeO5xohz8WLHnw" base_Property="_-Dzb4OmPEeO5xohz8WLHnw" type="NON_UNIQUE"/>
 </xmi:XMI>

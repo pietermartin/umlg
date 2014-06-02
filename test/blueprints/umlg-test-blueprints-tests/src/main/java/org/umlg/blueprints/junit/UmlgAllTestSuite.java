@@ -23,6 +23,7 @@ import org.umlg.tests.embeddedtest.TestEmbeddedTest;
 import org.umlg.tests.enumeration.ManyEnumerationTest;
 import org.umlg.tests.hierarchytest.TestHierarchy;
 import org.umlg.tests.indexing.TestIndexing;
+import org.umlg.tests.indexing.TestIndexingDataType;
 import org.umlg.tests.inheritencetest.TestInheritence;
 import org.umlg.tests.interfacetest.ManyToManyInverseTest;
 import org.umlg.tests.interfacetest.TestOneToManyInterface;
@@ -114,7 +115,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestJavaManyPrimitiveTypesWithValidation.class,
         TestAllInstancesOnAbstractClass.class,
         TestAllInstancesOnInterface.class,
-        TestAssociationClassCopiesOnePrimitivePropertiesToEdge.class
+        TestAssociationClassCopiesOnePrimitivePropertiesToEdge.class,
+        TestIndexingDataType.class
 })
 public class UmlgAllTestSuite {
 }
