@@ -1018,3 +1018,15 @@ The example below illustrates redefinitions.
         db.commit();
     }
 
+##Default Value
+
+From the UML specification.
+
+>defaultValue: ValueSpecification [0..1]
+ A ValueSpecification that is evaluated to give a default value for the Property when an object of the owning Classifier
+ is instantiated. Subsets Element::ownedElement.
+ 
+<br />
+###Default Value Example
+ 
+The example below illustrates default values.

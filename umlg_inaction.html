@@ -76,7 +76,13 @@
         <div class="col-md-3" id="leftcol">
             <div class="bs-docs-sidebar hidden-print" role="complementary">
                 <ul class="nav bs-docs-sidebar" id="sidebar">
-                    <li class="active"><a href="#UmlgGraphinterfaceID">UmlgGraph interface</a></li><li><a href="#IndexingID">Indexing</a></li><li><a href="#OCLID">OCL</a></li><li><a href="#GremlinID">Gremlin</a></li><li><a href="#CypherID">Cypher</a></li>
+                    <li class="active"><a href="#UmlgGraphinterfaceID">UmlgGraph interface</a></li><li><a href="#AccessyourentitiesID">Access your entities</a><ul class="nav">
+<li><a href="#AccessingRootEntitiesID">Accessing Root Entities</a><ul class="nav">
+<li><a href="#AccessrootentitiesexampleID">Access root entities example</a></li></ul>
+</li><li><a href="#Accessingallinstancesofanyentity.ID">Accessing all instances of any entity.</a><ul class="nav">
+<li><a href="#AccessentitiesbyallInstancesID">Access entities by allInstances</a></li></ul>
+</li><li><a href="#Accessingallconcreteinstancesofaninterfacebyclass.ID">Accessing all concrete instances of an interface by class.</a></li></ul>
+</li><li><a href="#IndexingID">Indexing</a></li><li><a href="#OCLID">OCL</a></li><li><a href="#GremlinID">Gremlin</a></li><li><a href="#CypherID">Cypher</a></li>
                 </ul>
             </div>
         </div>
@@ -87,12 +93,17 @@
             </p>
             <!-- UMLG In Action -->
 
+<p>This section explains UMLG's primary interface <code class="language-java">org.umlg.runtime.adaptor.UmlgGraph</code>.</ br></p>
+
 <h2 id="UmlgGraphinterfaceID">UmlgGraph interface</h2>
 
-<p><code class="language-java">UmlgGraph</code> is UMLG's primary interface to the underlying graph db. It extends both <code class="language-java">com.tinkerpop.blueprints.TransactionalGraph</code> and <code class="language-java">com.tinkerpop.blueprints.KeyIndexableGraph</code>.
-Some important additional methods on it are,</p>
+<p><code class="language-java">UmlgGraph</code> extends both <code class="language-java">com.tinkerpop.blueprints.TransactionalGraph</code> and <code class="language-java">com.tinkerpop.blueprints.KeyIndexableGraph</code>.
+<code class="language-java">UmlgGraph</code> follows the singleton pattern and is always available on the current thread. To access it call the static 
+method <code class="language-java">org.umlg.runtime.adaptor.UMLG.get()</code>.</p>
 
-<pre class="prettyprint"><code class="language-java">&lt;T extends PersistentObject&gt; T instantiateClassifier(Object id);
+<p>Some important methods on <code class="language-java">UmlgGraph</code> are,</p>
+
+<pre class="prettyprint"><code class="language-java">&lt;T extends PersistentObject&gt; T getEntity(Object id);
 
 &lt;T extends PersistentObject&gt; T getFromUniqueIndex(String key, Object value);
 
@@ -103,7 +114,7 @@ String executeQueryToString(UmlgQueryEnum umlgQueryEnum, Object contextId, Strin
 Object executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
 </code></pre>
 
-<p><code class="language-java">instantiateClassifier</code> retrieves an entity from the db given its vertex id.</p>
+<p><code class="language-java">getEntity</code> retrieves an entity from the db given its vertex id.</p>
 
 <p><code class="language-java">getFromUniqueIndex</code> retrieves an entity that has been uniquely indexed for a key and value of one of is properties.
 The key is the qualified name of the property.</p>
@@ -115,7 +126,197 @@ UmlgQueryEnum.GROOVY includes Gremlin queries.</p>
 
 <p><code class="language-java">executeQuery</code> executes a query returning the raw result. In the case of OCL the raw result will be your entities.</p>
 
+<h2 id="AccessyourentitiesID">Access your entities</h2>
+
+<p>There are many ways to get access to your entities.</p>
+
+<h3 id="AccessingRootEntitiesID">Accessing Root Entities</h3>
+
+<p>UMLG generates a class that represents the model. It is a singleton and gives you access to the root objects of the model.
+Root objects are classes that have no composite parent. A composite parent is a class at the other end of a composite 
+association.</p>
+
+<p><img src="images/uml/umlggraph/compositeAssociation.png" alt="image of model" title="" /></p>
+
+<p>Window is a root object as it does not have a composite parent. As such it is accessible from the model class <code class="language-java">Quickpreview</code>.</p>
+
+<p>Slider, Header and Panel have Window as its composite parent.</p>
+
+<p><br /></p>
+
+<h4 id="AccessrootentitiesexampleID">Access root entities example</h4>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testRootEntities() {
+    Window window1 = new Window();
+    Slider slider1_1 = new Slider(window1);
+    Slider slider1_2 = new Slider(window1);
+    Header header1 = new Header(window1);
+    Panel panel1 = new Panel(window1);
+
+    Window window2 = new Window();
+    Slider slider2_1 = new Slider(window2);
+    Slider slider2_2 = new Slider(window2);
+    Header header2 = new Header(window2);
+    Panel panel2 = new Panel(window2);
+
+    db.commit();
+
+    //All root object are accessible from the class that represents the model.
+    Assert.assertEquals(2, Quickpreview.INSTANCE.getWindow().size());
+}
+</code></pre>
+
+<h3 id="Accessingallinstancesofanyentity.ID">Accessing all instances of any entity.</h3>
+
+<p>All concrete instances of an abstract or concrete entity can be accessed via the static <code class="language-java">allInstances</code> method on the class.</p>
+
+<p><img src="images/uml/umlggraph/allInstances.png" alt="image of model" title="" /></p>
+
+<p><br /></p>
+
+<h4 id="AccessentitiesbyallInstancesID">Access entities by allInstances</h4>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testAllInstances() {
+    Drawing drawing1 = new Drawing();
+    Polygon polygon1 = new Polygon();
+    polygon1.setDrawing(drawing1);
+    Polygon polygon2 = new Polygon();
+    polygon2.setDrawing(drawing1);
+    Eclipse eclipse1 = new Eclipse();
+    eclipse1.setDrawing(drawing1);
+    Spline spline1 = new Spline();
+    spline1.setDrawing(drawing1);
+    Spline spline2 = new Spline();
+    spline2.setDrawing(drawing1);
+    Spline spline3 = new Spline();
+    spline3.setDrawing(drawing1);
+
+    db.commit();
+
+    Assert.assertEquals(1, Drawing.allInstances().size());
+    Assert.assertEquals(6, Shape.allInstances().size());
+    Assert.assertEquals(2, Polygon.allInstances().size());
+    Assert.assertEquals(1, Eclipse.allInstances().size());
+    Assert.assertEquals(3, Spline.allInstances().size());
+}
+</code></pre>
+
+<h3 id="Accessingallconcreteinstancesofaninterfacebyclass.ID">Accessing all concrete instances of an interface by class.</h3>
+
+<p>All concrete instances of an interface can be accessed via the static <code class="language-java">getAllInstances</code> method on the class's metaclass.</p>
+
+<p>Every interface and class in the UML model has a corresponding meta class generated. The meta class's name is class's 
+name with 'meta appended' to it. The meta class is a singleton and access by its corresponding static <code class="language-java">getInstance</code> method.</p>
+
+<p><img src="images/uml/umlggraph/interfaceAllInstances.png" alt="image of model" title="" /></p>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testInterfaceAllInstances() {
+    Creator creator = new Creator();
+    Ghost ghost1 = new Ghost();
+    ghost1.setCreator(creator);
+    Ghost ghost2 = new Ghost();
+    ghost2.setCreator(creator);
+    Mamal mamal1 = new Mamal();
+    mamal1.setCreator(creator);
+    Mamal mamal2 = new Mamal();
+    mamal2.setCreator(creator);
+    Mamal mamal3 = new Mamal();
+    mamal3.setCreator(creator);
+
+    db.commit();
+    Assert.assertEquals(5, SpiritMeta.getInstance().getAllInstances().size());
+    Assert.assertEquals(3, BeingMeta.getInstance().getAllInstances().size());
+}
+</code></pre>
+
 <h2 id="IndexingID">Indexing</h2>
+
+<p>Umlg makes extensive use of blueprint's indexing mechanism to implement UML qualifiers. Qualifier's make use of 
+blueprints indexing mechanism but the indexed value is always in the context of an owning class. Have a look at the 
+<a href="/umlg-gh-pages/gh-pages/umlg_reference.html#QualifiersID">UMLG Reference</a> page for details.</p>
+
+<p>UMLG also supports global indexing. Global indexing is the standard blueprints indexing mechanism where any vertex or 
+edge property is indexed and can be retrieved via the index. This is a concept that is not present in UML.</p>
+
+<p>To do this UMLG uses a stereotype to mark any datatype (a primitive or one of UMLG's build in data types) property to be 
+indexed. The index stereotype has one property to specify whether the index is a unique index or not. A unique index
+will enforce that the value of the property is unique across the whole graph. A non-unique index may contain duplicates.</p>
+
+<p><img src="images/uml/index/uniqueOrNotIndex.png" alt="image of model" title="" /></p>
+
+<p>For every stereotype indexed property UMLG generates a corresponding static finder method in the owning class. 
+The finder method's name is <code class="language-java">finderByXXX</code> where XXX is the name of the property.</p>
+
+<p>The example below illustrates the finder methods on Program.</p>
+
+<pre class="prettyprint"><code class="language-java">@Test(expected = IllegalStateException.class)
+public void testUniqueIndexing() {
+    Program program1 = new Program();
+    program1.setName("Program1");
+    db.commit();
+
+    //This will fail as name has a unique index specified on it.
+    Program program2 = new Program();
+    program2.setName("Program1");
+    db.commit();
+}
+
+@Test
+public void testIndexing() {
+    for (int i = 0; i &lt; 1000; i++) {
+        Program program1 = new Program();
+        program1.setName("Program" + i);
+    }
+    db.commit();
+
+    Assert.assertNotNull(Program.findByName("Program1"));
+    Assert.assertNotNull(Program.findByName("Program500"));
+    Assert.assertNotNull(Program.findByName("Program999"));
+}
+
+@Test
+public void testNonUniqueIndexing() {
+    LocalDate now = LocalDate.now();
+    Program program1 = new Program();
+    program1.setStart(now);
+    Program program2 = new Program();
+    program2.setStart(now);
+    Program program3 = new Program();
+    program3.setStart(now);
+
+    LocalDate tomorrow = now.plusDays(1);
+    Program program4 = new Program();
+    program4.setStart(tomorrow);
+    Program program5 = new Program();
+    program5.setStart(tomorrow);
+    db.commit();
+
+    Assert.assertEquals(3, Program.findByStart(now).size());
+    Assert.assertEquals(2, Program.findByStart(tomorrow).size());
+}
+
+@Test
+public void testNonUniqueEnumIndex() {
+    Program program1 = new Program();
+    program1.setProgramType(ProgramType.NEWS);
+    Program program2 = new Program();
+    program2.setProgramType(ProgramType.NEWS);
+    Program program3 = new Program();
+    program3.setProgramType(ProgramType.NEWS);
+
+    Program program4 = new Program();
+    program4.setProgramType(ProgramType.SPORT);
+    Program program5 = new Program();
+    program5.setProgramType(ProgramType.SPORT);
+
+    db.commit();
+    Assert.assertEquals(3, Program.findByProgramType(ProgramType.NEWS).size());
+    Assert.assertEquals(2, Program.findByProgramType(ProgramType.SPORT).size());
+}
+</code></pre>
 
 <h2 id="OCLID">OCL</h2>
 

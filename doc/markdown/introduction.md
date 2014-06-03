@@ -1,8 +1,8 @@
 <!-- Introduction -->
 
 UMLG is a UML to java code generator. From class diagrams, persistent java entities are generated. The entities persist
-via an embedded [Blueprints](http://blueprints.tinkerpop.com) graph database. The semantics of a
-[Property Graph Model](https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model) is a natural fit to
+via an embedded graph database. For the graph db [Tinkerpop Blueprints](http://blueprints.tinkerpop.com) is used. The 
+semantics of a [Property Graph Model](https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model) is a natural fit to
 implement the rich semantics of UML class diagrams in java.
 
 One of the primary objectives of UMLG is to implement the [UML2](http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF)

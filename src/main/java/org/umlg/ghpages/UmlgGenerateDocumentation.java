@@ -103,7 +103,11 @@ public class UmlgGenerateDocumentation {
                     }
                 }
             }
-            indexOfHash = mdAsString.indexOf("#", indexOfNewLine);
+            indexOfHash = mdAsString.indexOf("\n#", indexOfNewLine);
+            if (indexOfHash != -1) {
+                indexOfHash = indexOfHash + 1;
+            }
+
         }
         return rootMenus;
 
