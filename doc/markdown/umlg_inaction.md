@@ -222,15 +222,73 @@ The example below illustrates the finder methods on Program.
 
 Queries can be executed in OCL, Gremlin and in the case of Neo4j, Cypher.
 
+All queries are executed via UMLG's primary graph interface. `UMLG.get().executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query)`
+
+`UmlgQueryEnum` is one of `OCL, GROOVY, NATIVE`
+
+The `contextId` can be either a UMLG entity, a vertex id or the fully qualified name of a entity.
+
+###OCL
+
 UMLG supports UML's OCL language. It can be used at design time in the model to specify constraints, default values, 
 derived properties and query operations.
 
 It can also be used runtime to query the graph in an object-oriented manner. Any ocl expression can be evaluated against 
 the system at runtime.
-  
-Please se the ocl reference guide for further details.
 
-###OCL
+![image of model](images/uml/query/query.png)
+
+    @Test
+    public void testOcl() {
+        Customer customer = new Customer();
+        customer.setName("john");
+
+        Purchase car1 = new Purchase();
+        car1.setName("bmw");
+        customer.addToPurchase(car1);
+
+        Purchase car2 = new Purchase();
+        car2.setName("merc");
+        customer.addToPurchase(car2);
+
+        Account account1 = new Account();
+        account1.setBalance(1000D);
+        customer.addToAccount(account1);
+
+        Account account2 = new Account();
+        account2.setBalance(10D);
+        customer.addToAccount(account2);
+
+        db.commit();
+
+        //derived property largeAccounts is generated as a getter on the entity
+        Assert.assertEquals(1, customer.getLargeAccounts().size());
+
+        Set<Purchase> cars = db.executeQuery(
+                UmlgQueryEnum.OCL,
+                customer,
+                "self.purchase"
+        );
+        Assert.assertEquals(2, cars.size());
+
+        Set<Account> large = db.executeQuery(
+                UmlgQueryEnum.OCL,
+                customer,
+                "self.account->select(balance > 100)"
+        );
+        Assert.assertEquals(1, large.size());
+        Assert.assertEquals(1000D, large.iterator().next().getBalance(), 0);
+
+        Set<Account> small = db.executeQuery(
+                UmlgQueryEnum.OCL,
+                customer,
+                "self.account->select(balance < 100)"
+        );
+        Assert.assertEquals(1, small.size());
+        Assert.assertEquals(10D, small.iterator().next().getBalance(), 0);
+    }
+
+Please see the [OCL Reference](/umlg-gh-pages/gh-pages/ocl_reference.html) guide for further details.
 
 ###Gremlin
 
