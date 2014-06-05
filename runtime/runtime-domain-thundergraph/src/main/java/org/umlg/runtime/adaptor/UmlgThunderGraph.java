@@ -210,16 +210,15 @@ public class UmlgThunderGraph extends ThunderGraph implements UmlgGraph, UmlgAdm
     }
 
     @Override
-    public Object executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
+    public <T> T executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
 
         switch (umlgQueryEnum) {
             case OCL:
                 try {
                     Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
-                    Method method = umlgOclExecutor.getMethod("executeOclQuery", UmlgNode.class, String.class);
-                    UmlgNode context = (UmlgNode) UMLG.get().getEntity(contextId);
-                    Object json = method.invoke(null, context, query);
-                    return json;
+                    Method method = umlgOclExecutor.getMethod("executeOclQuery", Object.class, String.class);
+                    Object result = method.invoke(null, contextId, query);
+                    return (T)result;
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException("UmlgOclExecutor is not on the class path.");
                 } catch (Exception e) {
@@ -243,7 +242,7 @@ public class UmlgThunderGraph extends ThunderGraph implements UmlgGraph, UmlgAdm
                 } else {
                     result = GroovyExecutor.INSTANCE.executeGroovy(null, query);
                 }
-                return result;
+                return (T)result;
             case NATIVE:
                 throw new IllegalStateException("ThunderGraph does not have a native query language!");
             default:

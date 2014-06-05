@@ -9,6 +9,8 @@ import org.umlg.associationclass.Job;
 import org.umlg.associationclass.Person;
 import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.ocl.UmlgOclExecutor;
+import org.umlg.runtime.adaptor.UMLG;
+import org.umlg.runtime.adaptor.UmlgQueryEnum;
 import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
@@ -47,11 +49,13 @@ public class TestRuntimeOclForAssociationClass extends BaseLocalDbTest {
         company1.addToPerson(person1, job1);
         db.commit();
 
-        Job job = UmlgOclExecutor.executeOclQuery(company1, "self.job->any(rate > 0)");
+        Job job = UMLG.get().executeQuery(UmlgQueryEnum.OCL, company1.getId(), "self.job->any(rate > 0)");
+//        Job job = UmlgOclExecutor.executeOclQuery(company1, "self.job->any(rate > 0)");
         Assert.assertNotNull(job);
         Assert.assertEquals(10, job.getRate().intValue());
 
-        job = UmlgOclExecutor.executeOclQuery(company1, "self.job->any(rate < 1)");
+//        job = UmlgOclExecutor.executeOclQuery(company1, "self.job->any(rate < 1)");
+        job = UMLG.get().executeQuery(UmlgQueryEnum.OCL, company1.getId(), "self.job->any(rate < 1)");
         Assert.assertNull(job);
 
     }

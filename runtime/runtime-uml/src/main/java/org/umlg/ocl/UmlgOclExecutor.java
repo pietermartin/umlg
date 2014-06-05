@@ -17,10 +17,29 @@ import org.umlg.javageneration.ocl.UmlgOcl2Java;
 import org.umlg.javageneration.util.Namer;
 import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgNode;
 
 public class UmlgOclExecutor {
+
+    /**
+     *
+     * @param context
+     * @param query
+     * @return
+     */
+    public static Object executeOclQuery(Object context, String query) {
+        if (context instanceof String && ((String) context).contains("::")) {
+            //static ocl
+            return executeOclQuery((String)context, query);
+        } else if (context instanceof UmlgNode) {
+            return executeOclQuery((UmlgNode)context, query);
+        } else {
+            UmlgNode umlgNode = UMLG.get().getEntity(context);
+            return executeOclQuery(umlgNode, query);
+        }
+    }
 
     /**
      * This is for static ocl, mostly allInstances
@@ -64,10 +83,6 @@ public class UmlgOclExecutor {
         return result;
     }
 
-    public static String executeOclQueryAsJson(String contextQualifiedName, String query) {
-        return toJson(executeOclQuery(contextQualifiedName, query));
-    }
-
     public static <T> T executeOclQuery(UmlgNode contextTumlNode, String query) {
         Classifier contextClassifier = (Classifier) ModelLoader.INSTANCE.findNamedElement(contextTumlNode.getQualifiedName());
         OJAnnotatedClass oclClass = new OJAnnotatedClass("OclQuery");
@@ -99,8 +114,13 @@ public class UmlgOclExecutor {
     }
 
     //This is called via reflection from UmlgGraph
+    public static String executeOclQueryAsJson(String contextQualifiedName, String query) {
+        return toJson(executeOclQuery(contextQualifiedName, query));
+    }
+
+    //This is called via reflection from UmlgGraph
     @SuppressWarnings("unchecked")
-    public static String executeOclQueryAsJson(UmlgNode contextTumlNode, String query) {
+    public static String executeOclQueryAsJson(Object contextTumlNode, String query) {
         Object result = executeOclQuery(contextTumlNode, query);
         return toJson(result);
     }

@@ -80,7 +80,7 @@ public interface UmlgGraph extends TransactionalGraph, KeyIndexableGraph {
      * @param query The text of the query.
      * @return The result of the query.
      */
-    Object executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
+    <T> T executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
 
     /**
      * @return The singleton root node of the application/model

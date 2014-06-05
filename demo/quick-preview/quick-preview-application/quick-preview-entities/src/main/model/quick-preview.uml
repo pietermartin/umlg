@@ -281,9 +281,34 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_fNdmsdSPEeOCt7XMZfn16w" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_fNdmstSPEeOCt7XMZfn16w" value="5"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_F-4n4OtYEeO_cMKBZrq8hg" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_HqrbUOtYEeO_cMKBZrq8hg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_HqspcOtYEeO_cMKBZrq8hg" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_kTmuIOtZEeO_cMKBZrq8hg" name="largeAccounts" visibility="public" type="_eEJOMNSPEeOCt7XMZfn16w" isDerived="true">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mhKx4OtZEeO_cMKBZrq8hg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mhLY8OtZEeO_cMKBZrq8hg" value="*"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_rhZxkOtZEeO_cMKBZrq8hg" name="largeAccountsOcl">
+                <language>OCL</language>
+                <body>self.account->select(balance > 100)</body>
+              </defaultValue>
+            </ownedAttribute>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_ZP7RQNSPEeOCt7XMZfn16w" name="Purchase"/>
-          <packagedElement xmi:type="uml:Class" xmi:id="_eEJOMNSPEeOCt7XMZfn16w" name="Account"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_ZP7RQNSPEeOCt7XMZfn16w" name="Purchase">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_OG534OtYEeO_cMKBZrq8hg" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_PrfQEOtYEeO_cMKBZrq8hg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Prf3IOtYEeO_cMKBZrq8hg" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_eEJOMNSPEeOCt7XMZfn16w" name="Account">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_Qgtn4OtYEeO_cMKBZrq8hg" name="balance" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UAm2MOtYEeO_cMKBZrq8hg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UAndQOtYEeO_cMKBZrq8hg" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_e_99QNSPEeOCt7XMZfn16w" name="customer_purchase_1" memberEnd="_e_99QdSPEeOCt7XMZfn16w _e_9WMNSPEeOCt7XMZfn16w" navigableOwnedEnd="_e_99QdSPEeOCt7XMZfn16w">
             <ownedEnd xmi:type="uml:Property" xmi:id="_e_99QdSPEeOCt7XMZfn16w" name="customer" type="_VuoUwNSPEeOCt7XMZfn16w" association="_e_99QNSPEeOCt7XMZfn16w">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_e_99QtSPEeOCt7XMZfn16w" value="1"/>
@@ -701,17 +726,28 @@
           <packagedElement xmi:type="uml:Class" xmi:id="_Apa40OdXEeOx-IVkU1GnZg" name="Program">
             <ownedAttribute xmi:type="uml:Property" xmi:id="_ZuF3MOdXEeOx-IVkU1GnZg" name="name" visibility="public">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bnaJQOdXEeOx-IVkU1GnZg" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bnaJQOdXEeOx-IVkU1GnZg"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_bnawUOdXEeOx-IVkU1GnZg" value="1"/>
-              <defaultValue xmi:type="uml:LiteralString" xmi:id="_bndzoOdXEeOx-IVkU1GnZg">
-                <value xsi:nil="true"/>
-              </defaultValue>
             </ownedAttribute>
             <ownedAttribute xmi:type="uml:Property" xmi:id="_iqyFYOdXEeOx-IVkU1GnZg" name="start" visibility="public">
               <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mMw-YOdXEeOx-IVkU1GnZg" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mMw-YOdXEeOx-IVkU1GnZg"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mMw-YedXEeOx-IVkU1GnZg" value="1"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_bmyt4Op7EeO2dpVUvVdK-g" name="programType" type="_YCA_kOp7EeO2dpVUvVdK-g" association="_bmzU8Op7EeO2dpVUvVdK-g">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bmyt4ep7EeO2dpVUvVdK-g"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_bmyt4up7EeO2dpVUvVdK-g" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_YCA_kOp7EeO2dpVUvVdK-g" name="ProgramType">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_ZHXeEOp7EeO2dpVUvVdK-g" name="NEWS"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_Z0d0oOp7EeO2dpVUvVdK-g" name="SPORT"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_bmzU8Op7EeO2dpVUvVdK-g" name="program_programType_1" memberEnd="_bmzU8ep7EeO2dpVUvVdK-g _bmyt4Op7EeO2dpVUvVdK-g">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_bmzU8ep7EeO2dpVUvVdK-g" name="program" type="_Apa40OdXEeOx-IVkU1GnZg" association="_bmzU8Op7EeO2dpVUvVdK-g">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bmzU8up7EeO2dpVUvVdK-g"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_bmzU8-p7EeO2dpVUvVdK-g" value="*"/>
+            </ownedEnd>
           </packagedElement>
         </packagedElement>
       </packagedElement>
@@ -740,4 +776,5 @@
   <UmlgProfile:QualifierListener xmi:id="_auijkN2_EeOEP64qykw2fg" base_Property="_SDvyYNhIEeOEP64qykw2fg" property="_xg4oUNhAEeOEP64qykw2fg"/>
   <UmlgProfile:Index xmi:id="_dmz1MOdXEeOx-IVkU1GnZg" base_Property="_ZuF3MOdXEeOx-IVkU1GnZg"/>
   <UmlgProfile:Index xmi:id="_m-LNMOdXEeOx-IVkU1GnZg" base_Property="_iqyFYOdXEeOx-IVkU1GnZg" type="NON_UNIQUE"/>
+  <UmlgProfile:Index xmi:id="_keIiAOp7EeO2dpVUvVdK-g" base_Property="_bmyt4Op7EeO2dpVUvVdK-g" type="NON_UNIQUE"/>
 </xmi:XMI>

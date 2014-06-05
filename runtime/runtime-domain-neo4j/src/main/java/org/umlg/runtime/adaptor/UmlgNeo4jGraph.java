@@ -154,10 +154,9 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph, UmlgAdminG
             case OCL:
                 try {
                     Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
-                    Method method = umlgOclExecutor.getMethod("executeOclQueryAsJson", UmlgNode.class, String.class);
-                    UmlgNode context = UMLG.get().getEntity(contextId);
-                    String json = (String) method.invoke(null, context, query);
-                    return json;
+                    Method method = umlgOclExecutor.getMethod("executeOclQueryAsJson", Object.class, String.class);
+                    String result = (String)method.invoke(null, contextId, query);
+                    return result;
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException("UmlgOclExecutor is not on the class path.");
                 } catch (Exception e) {
@@ -193,16 +192,15 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph, UmlgAdminG
     }
 
     @Override
-    public Object executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
+    public <T> T executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
 
         switch (umlgQueryEnum) {
             case OCL:
                 try {
                     Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
-                    Method method = umlgOclExecutor.getMethod("executeOclQuery", UmlgNode.class, String.class);
-                    UmlgNode context = UMLG.get().getEntity(contextId);
-                    Object result = method.invoke(null, context, query);
-                    return result;
+                    Method method = umlgOclExecutor.getMethod("executeOclQuery", Object.class, String.class);
+                    Object result = method.invoke(null, contextId, query);
+                    return (T)result;
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException("UmlgOclExecutor is not on the class path.");
                 } catch (Exception e) {
@@ -226,11 +224,11 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph, UmlgAdminG
                 } else {
                     result = GroovyExecutor.INSTANCE.executeGroovy(null, query);
                 }
-                return result;
+                return (T)result;
             case NATIVE:
                 ExecutionEngine engine = new ExecutionEngine(getRawGraph(), StringLogger.SYSTEM);
                 ExecutionResult executionResult = engine.execute(query);
-                return executionResult;
+                return (T)executionResult;
             default:
                 throw new RuntimeException("Unknown query enum");
         }

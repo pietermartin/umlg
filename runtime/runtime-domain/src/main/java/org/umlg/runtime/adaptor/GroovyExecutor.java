@@ -5,6 +5,7 @@ import com.tinkerpop.gremlin.groovy.jsr223.DefaultImportCustomizerProvider;
 import com.tinkerpop.pipes.transform.ToStringPipe;
 import com.tinkerpop.pipes.util.iterators.SingleIterator;
 import org.apache.commons.lang.time.StopWatch;
+import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.gremlin.UmlgGremlinReadOnlyKeyIndexableGraph;
 
 import javax.script.ScriptException;
@@ -81,13 +82,16 @@ public class GroovyExecutor {
         return result.toString();
     }
 
-    public Object executeGroovy(Object contextId, String groovy) {
+    public Object executeGroovy(Object context, String groovy) {
         groovy = groovy.replaceAll("::", "____");
-        if (contextId != null) {
-            if (!(contextId instanceof Long)) {
-                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.v(\"" + contextId.toString() + "\")");
+        if (context != null) {
+            if (context instanceof UmlgNode) {
+                Object id = ((UmlgNode) context).getId();
+                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.v(\"" + id.toString() + "\")");
+            } else if (!(context instanceof Long)) {
+                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.v(\"" + context.toString() + "\")");
             } else {
-                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.v(" + contextId + ")");
+                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.v(" + context + ")");
             }
         }
         Graph graph = new UmlgGremlinReadOnlyKeyIndexableGraph(UMLG.get());
@@ -111,9 +115,9 @@ public class GroovyExecutor {
 
     private void seperateOutDefFromGroovy(String groovy, StringBuilder groovyToIntercept, StringBuilder groovyDef) {
         while (groovy.indexOf("def") != -1) {
-            int indexOfdef = groovy.indexOf("def");
-            groovyToIntercept.append(groovy.substring(0, indexOfdef));
-            groovy = groovy.substring(indexOfdef, groovy.length());
+            int indexOfDef = groovy.indexOf("def");
+            groovyToIntercept.append(groovy.substring(0, indexOfDef));
+            groovy = groovy.substring(indexOfDef, groovy.length());
             int indexOfCurly = groovy.indexOf("}");
             groovyDef.append(groovy.substring(0, indexOfCurly + 1));
             groovy = groovy.substring(indexOfCurly + 1, groovy.length());
