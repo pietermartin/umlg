@@ -220,7 +220,7 @@ The example below illustrates the finder methods on Program.
 
 ##Queries
 
-Queries can be executed in OCL, Gremlin and in the case of Neo4j, Cypher.
+Queries can be executed in OCL, Gremlin/Groovy and in the case of Neo4j, Cypher.
 
 All queries are executed via UMLG's primary graph interface. `UMLG.get().executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query)`
 
@@ -290,6 +290,46 @@ the system at runtime.
 
 Please see the [OCL Reference](/umlg-gh-pages/gh-pages/ocl_reference.html) guide for further details.
 
-###Gremlin
+###Gremlin/Groovy
+
+UMLG supports the execution of groovy and gremlin scripts.
+
+    @Test
+    public void testGremlin() {
+        Customer customer = new Customer();
+        customer.setName("john");
+
+        Purchase car1 = new Purchase();
+        car1.setName("bmw");
+        customer.addToPurchase(car1);
+
+        Purchase car2 = new Purchase();
+        car2.setName("merc");
+        customer.addToPurchase(car2);
+
+        Account account1 = new Account();
+        account1.setBalance(1000D);
+        customer.addToAccount(account1);
+
+        Account account2 = new Account();
+        account2.setBalance(10D);
+        customer.addToAccount(account2);
+
+        db.commit();
+
+        //'self' translates to g.V(id) where id is the customers id
+        Assert.assertEquals("john", db.executeQuery(UmlgQueryEnum.GROOVY, customer, "self.name"));
+
+        Object result = db.executeQuery(UmlgQueryEnum.GROOVY, customer, "self.both.has('name').name");
+        Assert.assertTrue(result instanceof Pipeline);
+        List<String> names = new ArrayList();
+        for (String name : (Pipeline<Object, String>)result) {
+            names.add(name);
+        }
+        Assert.assertEquals(2, names.size());
+        Assert.assertTrue(names.contains("merc"));
+        Assert.assertTrue(names.contains("merc"));
+    }
+
 
 ###Cypher
