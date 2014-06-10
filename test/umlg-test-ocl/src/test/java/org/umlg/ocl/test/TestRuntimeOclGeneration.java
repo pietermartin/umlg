@@ -3,7 +3,6 @@ package org.umlg.ocl.test;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.umlg.ocl.UmlgOclExecutor;
 import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.qualifier.Bank;
 import org.umlg.qualifier.Employee;
@@ -92,7 +91,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-        String json = UMLG.get().executeQueryToString(UmlgQueryEnum.OCL, bank.getId(), "self.employee->select(name='employee3')");
+        String json = UMLG.get().executeQueryToJson(UmlgQueryEnum.OCL, bank.getId(), "self.employee->select(name='employee3')");
 		System.out.println(json);
 	}
 
@@ -136,7 +135,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-        String json = UMLG.get().executeQueryToString(UmlgQueryEnum.OCL, bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
+        String json = UMLG.get().executeQueryToJson(UmlgQueryEnum.OCL, bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
         Assert.assertEquals("{employeeSize=3, name=thebank}", json);
 	}
 
@@ -183,7 +182,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
         db.commit();
 
 		//The employee names should specify a Bag, bug in eclipse ocl
-        String json =db.executeQueryToString(UmlgQueryEnum.OCL, bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
+        String json =db.executeQueryToJson(UmlgQueryEnum.OCL, bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
 		System.out.println(json);
 	}
 

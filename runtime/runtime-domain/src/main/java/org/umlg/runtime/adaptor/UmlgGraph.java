@@ -67,7 +67,7 @@ public interface UmlgGraph extends TransactionalGraph, KeyIndexableGraph {
      * @param query The text of the query.
      * @return return a String representation of the result of the query.
      */
-    String executeQueryToString(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
+    String executeQueryToJson(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
 
     /**
      * Execute a query.

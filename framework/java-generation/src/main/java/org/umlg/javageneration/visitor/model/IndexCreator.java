@@ -42,7 +42,7 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
             PropertyWrapper qualifierWrap = new PropertyWrapper(q);
             createIndexes.getBody().addToStatements(UmlgGenerationUtil.UMLGAccess + ".createKeyIndex(" +
                     UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +
-                    ".getUmlgLabelConverter().convert(\"" + qualifierWrap.getQualifiedName() + "\"), " +
+                    ".getUmlgLabelConverter().convert(\"" + qualifierWrap.getPersistentName() + "\"), " +
                     UmlgGenerationUtil.edgePathName.getLast() + ".class, " +
                     "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Class<?>").getLast() + "(\"unusedIndexValueType\", String.class), " +
                     "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Boolean").getLast() + "(\"unusedUniqueorNot\", false))"
@@ -83,7 +83,7 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
                     UmlgGenerationUtil.UMLGAccess + ".createKeyIndex(" +
                             UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +
                             ".getUmlgLabelConverter().convert(\"" +
-                            indexedProperty.getQualifiedName() + "\"), " +
+                            new PropertyWrapper(indexedProperty).getPersistentName() + "\"), " +
                             UmlgGenerationUtil.vertexPathName.getLast() + ".class, " +
                             "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Class<?>").getLast() + "(\"unusedIndexValueType\", " + type + ".class), " +
                             "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Boolean").getLast() + "(\"unusedUniqueorNot\", " + unique + "))"

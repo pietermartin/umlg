@@ -171,7 +171,13 @@ public class UmlgRuntimePropertyImpl implements UmlgRuntimeProperty {
 		return null;
 	}
 
-	@Override
+    @Override
+    public String getPersistentName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
 	public String getInverseQualifiedName() {
 		// TODO Auto-generated method stub
 		return null;

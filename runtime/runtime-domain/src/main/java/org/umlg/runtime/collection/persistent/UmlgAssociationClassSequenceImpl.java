@@ -57,13 +57,13 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);
                         if (c.isEnum()) {
-                            Object value = this.getVertexForDirection(edge).getProperty(getQualifiedName());
+                            Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
                             node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                             putToInternalMap(node, this.getVertexForDirection(edge));
                         } else if (UmlgNode.class.isAssignableFrom(c)) {
                             node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                         } else {
-                            Object value = this.getVertexForDirection(edge).getProperty(getQualifiedName());
+                            Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
                             node = (AssociationClassNode) value;
                             putToInternalMap(value, this.getVertexForDirection(edge));
                         }
@@ -130,7 +130,7 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
                 c = this.getClassToInstantiate(edgeToElement);
             }
             if (c.isEnum()) {
-                Object value = vertexToLoad.getProperty(getQualifiedName());
+                Object value = vertexToLoad.getProperty(getPersistentName());
                 node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                 putToInternalMap(node, vertexToLoad);
             } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
@@ -139,7 +139,7 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
             } else if (UmlgNode.class.isAssignableFrom(c)) {
                 node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(associationClassVertex);
             } else {
-                Object value = vertexToLoad.getProperty(getQualifiedName());
+                Object value = vertexToLoad.getProperty(getPersistentName());
                 node = (AssociationClassNode) value;
                 putToInternalMap(value, vertexToLoad);
             }

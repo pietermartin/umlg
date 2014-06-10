@@ -2,9 +2,11 @@ package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Edge;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
+import org.apache.commons.lang.time.StopWatch;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
 import org.neo4j.graphdb.Node;
@@ -16,6 +18,7 @@ import org.umlg.runtime.collection.memory.UmlgLazyList;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.domain.UmlgNode;
+import org.umlg.runtime.gremlin.UmlgGremlinReadOnlyKeyIndexableGraph;
 import org.umlg.runtime.util.UmlgProperties;
 
 import java.lang.reflect.InvocationTargetException;
@@ -32,6 +35,7 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph, UmlgAdminG
     private UmlgTransactionEventHandler transactionEventHandler;
     private static final Logger logger = Logger.getLogger(UmlgNeo4jGraph.class.getPackage().getName());
     private Class<UmlgApplicationNode> umlgApplicationNodeClass;
+    private ExecutionEngine engine;
 
     public UmlgNeo4jGraph(String directory) {
         super(directory);
@@ -39,7 +43,9 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph, UmlgAdminG
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
-    /** Generic for all graphs start */
+    /**
+     * Generic for all graphs start
+     */
     @Override
     public void incrementTransactionCount() {
         this.getRoot().setProperty("transactionCount", (Integer) this.getRoot().getProperty("transactionCount") + 1);
@@ -131,7 +137,7 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph, UmlgAdminG
     @Override
     public PersistentObject getFromUniqueIndex(String indexKey, Object indexValue) {
         Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
-        if ( iterator.hasNext() ) {
+        if (iterator.hasNext()) {
             return instantiateClassifier(iterator.next());
         } else {
             return null;
@@ -148,89 +154,103 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph, UmlgAdminG
     /* Generic for all graphs end */
 
     @Override
-    public String executeQueryToString(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
-
-        switch (umlgQueryEnum) {
-            case OCL:
-                try {
-                    Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
-                    Method method = umlgOclExecutor.getMethod("executeOclQueryAsJson", Object.class, String.class);
-                    String result = (String)method.invoke(null, contextId, query);
-                    return result;
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException("UmlgOclExecutor is not on the class path.");
-                } catch (Exception e) {
-                    if (e instanceof RuntimeException) {
-                        throw (RuntimeException)e;
-                    } else if (e instanceof InvocationTargetException) {
-                        Throwable target = ((InvocationTargetException) e).getTargetException();
-                        if (target instanceof RuntimeException) {
-                            throw (RuntimeException)target;
+    public String executeQueryToJson(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
+        try {
+            switch (umlgQueryEnum) {
+                case OCL:
+                    try {
+                        Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
+                        Method method = umlgOclExecutor.getMethod("executeOclQueryAsJson", Object.class, String.class);
+                        String result = (String) method.invoke(null, contextId, query);
+                        return result;
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException("UmlgOclExecutor is not on the class path.");
+                    } catch (Exception e) {
+                        if (e instanceof RuntimeException) {
+                            throw (RuntimeException) e;
+                        } else if (e instanceof InvocationTargetException) {
+                            Throwable target = ((InvocationTargetException) e).getTargetException();
+                            if (target instanceof RuntimeException) {
+                                throw (RuntimeException) target;
+                            } else {
+                                throw new RuntimeException(target);
+                            }
                         } else {
-                            throw new RuntimeException(target);
+                            throw new RuntimeException(e);
                         }
-                    } else {
-                        throw new RuntimeException(e);
                     }
-                }
-            case GROOVY:
-                String result;
-                if (contextId != null) {
-                    result = GroovyExecutor.INSTANCE.executeGroovyAsString(contextId, query);
-                } else {
-                    result = GroovyExecutor.INSTANCE.executeGroovyAsString(null, query);
-                }
-                return result;
-            case NATIVE:
-                ExecutionEngine engine = new ExecutionEngine(getRawGraph(), StringLogger.SYSTEM);
-                ExecutionResult executionResult = engine.execute(query);
-                result = executionResult.dumpToString();
-                return result;
-            default:
-                throw new RuntimeException("Unknown query enum");
+                case GROOVY:
+                    String result;
+                    if (contextId != null) {
+                        result = GroovyExecutor.INSTANCE.executeGroovyAsString(contextId, query);
+                    } else {
+                        result = GroovyExecutor.INSTANCE.executeGroovyAsString(null, query);
+                    }
+                    return result;
+                case NATIVE:
+                    StopWatch stopWatch = new StopWatch();
+                    stopWatch.start();
+                    if (this.engine == null) {
+                        this.engine = new ExecutionEngine(getRawGraph(), StringLogger.SYSTEM);
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    ExecutionResult executionResult = engine.execute(query);
+                    sb.append(executionResult.dumpToString());
+                    stopWatch.stop();
+                    sb.append("Time to execute query = ");
+                    sb.append(stopWatch.toString());
+                    return sb.toString();
+                default:
+                    throw new RuntimeException("Unknown query enum");
+            }
+        } finally {
+            this.rollback();
         }
     }
 
     @Override
     public <T> T executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
-
-        switch (umlgQueryEnum) {
-            case OCL:
-                try {
-                    Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
-                    Method method = umlgOclExecutor.getMethod("executeOclQuery", Object.class, String.class);
-                    Object result = method.invoke(null, contextId, query);
-                    return (T)result;
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException("UmlgOclExecutor is not on the class path.");
-                } catch (Exception e) {
-                    if (e instanceof RuntimeException) {
-                        throw (RuntimeException)e;
-                    } else if (e instanceof InvocationTargetException) {
-                        Throwable target = ((InvocationTargetException) e).getTargetException();
-                        if (target instanceof RuntimeException) {
-                            throw (RuntimeException)target;
+        try {
+            switch (umlgQueryEnum) {
+                case OCL:
+                    try {
+                        Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
+                        Method method = umlgOclExecutor.getMethod("executeOclQuery", Object.class, String.class);
+                        Object result = method.invoke(null, contextId, query);
+                        return (T) result;
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException("UmlgOclExecutor is not on the class path.");
+                    } catch (Exception e) {
+                        if (e instanceof RuntimeException) {
+                            throw (RuntimeException) e;
+                        } else if (e instanceof InvocationTargetException) {
+                            Throwable target = ((InvocationTargetException) e).getTargetException();
+                            if (target instanceof RuntimeException) {
+                                throw (RuntimeException) target;
+                            } else {
+                                throw new RuntimeException(target);
+                            }
                         } else {
-                            throw new RuntimeException(target);
+                            throw new RuntimeException(e);
                         }
-                    } else {
-                        throw new RuntimeException(e);
                     }
-                }
-            case GROOVY:
-                Object result;
-                if (contextId != null) {
-                    result = GroovyExecutor.INSTANCE.executeGroovy(contextId, query);
-                } else {
-                    result = GroovyExecutor.INSTANCE.executeGroovy(null, query);
-                }
-                return (T)result;
-            case NATIVE:
-                ExecutionEngine engine = new ExecutionEngine(getRawGraph(), StringLogger.SYSTEM);
-                ExecutionResult executionResult = engine.execute(query);
-                return (T)executionResult;
-            default:
-                throw new RuntimeException("Unknown query enum");
+                case GROOVY:
+                    Object result;
+                    if (contextId != null) {
+                        result = GroovyExecutor.INSTANCE.executeGroovy(contextId, query);
+                    } else {
+                        result = GroovyExecutor.INSTANCE.executeGroovy(null, query);
+                    }
+                    return (T) result;
+                case NATIVE:
+                    ExecutionEngine engine = new ExecutionEngine(getRawGraph(), StringLogger.SYSTEM);
+                    ExecutionResult executionResult = engine.execute(query);
+                    return (T) executionResult;
+                default:
+                    throw new RuntimeException("Unknown query enum");
+            }
+        } finally {
+            this.rollback();
         }
     }
 
@@ -346,7 +366,7 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph, UmlgAdminG
 
     @Override
     public boolean isTransactionActive() {
-        return  (tx.get() != null);
+        return (tx.get() != null);
     }
 
     @Override

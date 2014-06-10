@@ -25,6 +25,7 @@ public interface UmlgRuntimeProperty {
 	int getLower();
 	String getLabel();
 	String getQualifiedName();
+    String getPersistentName();
 	String getInverseQualifiedName();
 	boolean isValid(int elementCount);
 	boolean isQualified();

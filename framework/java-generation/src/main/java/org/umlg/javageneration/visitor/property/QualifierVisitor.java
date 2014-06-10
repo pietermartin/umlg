@@ -92,7 +92,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             sb.append(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast());
             sb.append(".getUmlgLabelConverter().convert(");
             sb.append("\"");
-            sb.append(qWrap.getQualifiedName());
+            sb.append(qWrap.getPersistentName());
             sb.append("\")");
             if (iterator.hasNext()) {
                 sb.append(", ");
@@ -155,7 +155,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             count++;
             init.append(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast());
             init.append(".getUmlgLabelConverter().convert(");
-            init.append("\"" + qualifier.getQualifiedName() + "\")");
+            init.append("\"" + qualifier.getPersistentName() + "\")");
             if (count != qualifiers.size()) {
                 init.append(" + ");
             }
@@ -256,7 +256,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         sb.append("(new String[]{");
         sb.append(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast());
         sb.append(".getUmlgLabelConverter().convert(\"");
-        sb.append(qualifier.getQualifiedName());
+        sb.append(qualifier.getPersistentName());
         sb.append("\")}, new String[]{");
         sb.append(qualifier.getter());
         sb.append("() == null ? ");

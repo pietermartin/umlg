@@ -11,6 +11,8 @@ import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.collectiontest.*;
 import org.umlg.tests.constraint.ConstrainedPropertyTest;
 import org.umlg.tests.datatype.DataTypeTest;
+import org.umlg.tests.deletiontest.EmbeddedSetDeletionTest;
+import org.umlg.tests.enumeration.OneEnumerationTest;
 import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.indexing.TestIndexingDataType;
 import org.umlg.tests.javaprimitivetypes.TestJavaManyPrimitiveTypesWithValidation;
@@ -29,44 +31,8 @@ import org.umlg.tests.validationtest.TestValidation;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-//        BagTestTest.class,
-//        OclStdLibBagTest.class,
-//        OclStdLibCollectionTest.class
-//        OclStdLibOrderedSetTest.class,
-//        OclStdLibSequenceTest.class,
-//        OclStdLibSetTest.class,
-//        OrderedSetTestTest.class
-//        QualifiedBagTest.class,
-//        QualifiedOrderedSetTest.class,
-//        QualifiedSequenceTest.class,
-//        SequenceTest.class
-//        TestInitCalled.class,
-//        TestOrderedListKeepsIndex.class
-//        ManyToManyOrderedSetTest.class
-//        OneToManyOrderedSetTest.class ,
-//        TestAssociationToSelf.class,
-//        ManyToManySequenceTest.class,
-//        ManyToManyToSelfSequenceTest.class
-//        TestIndexing.class,
-//        TestGroovyExecutor.class,
-//        TestRootMethods.class,
-//        TestValidation.class
-//        TestJavaPrimitiveTypes.class
-//        TestJavaPrimitiveTypesWithValidation.class,
-//        TestJavaManyPrimitiveTypesWithValidation.class,
-//        TestAllInstancesOnAbstractClass.class,
-//        TestAllInstancesOnInterface.class,
-//        ConstrainedPropertyTest.class,
-//        TestOneLookup.class,
-//        TestQualifier.class
-//        TestQualifiedDeletion.class,
-//        TestAssociationClassMoveInList.class,
-//        TestAssociationClassCopiesOnePrimitivePropertiesToEdge.class
-//        JsonTest.class,
-//        DataTypeTest.class,
-        TestIndexingDataType.class
+        TestGroovyExecutor.class
 
 })
-
 public class UmlgAnyTestSuite {
 }

@@ -64,8 +64,6 @@ public class UmlgOclExecutor {
         oclClass.addToConstructors(constructor);
         oclClass.addToImports(UmlgClassOperations.getPathName(contextClassifier));
 
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
         UmlgOcl2Parser.INSTANCE.getHelper().setContext(contextClassifier);
         try {
             OCLExpression<Classifier> expr = UmlgOcl2Parser.INSTANCE.getHelper().createQuery(query);
@@ -95,8 +93,6 @@ public class UmlgOclExecutor {
         oclClass.addToConstructors(constructor);
         oclClass.addToImports("org.joda.time.*");
 
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
         UmlgOcl2Parser.INSTANCE.getHelper().setContext(contextClassifier);
         try {
             OCLExpression<Classifier> expr = UmlgOcl2Parser.INSTANCE.getHelper().createQuery(query);
@@ -115,7 +111,8 @@ public class UmlgOclExecutor {
 
     //This is called via reflection from UmlgGraph
     public static String executeOclQueryAsJson(String contextQualifiedName, String query) {
-        return toJson(executeOclQuery(contextQualifiedName, query));
+        Object result = executeOclQuery(contextQualifiedName, query);
+        return toJson(result);
     }
 
     //This is called via reflection from UmlgGraph

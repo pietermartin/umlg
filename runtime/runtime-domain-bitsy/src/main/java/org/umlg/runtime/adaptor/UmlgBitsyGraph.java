@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  * Date: 2013/01/09
  * Time: 8:09 PM
  */
-public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph , UmlgAdminGraph{
+public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph, UmlgAdminGraph {
 
     private static final Logger logger = Logger.getLogger(UmlgBitsyGraph.class.getPackage().getName());
     private UmlgTransactionEventHandler transactionEventHandler;
@@ -34,7 +34,9 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
-    /** Generic for all graphs start */
+    /**
+     * Generic for all graphs start
+     */
     @Override
     public void incrementTransactionCount() {
         this.getRoot().setProperty("transactionCount", (Integer) this.getRoot().getProperty("transactionCount") + 1);
@@ -128,7 +130,7 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
     @Override
     public PersistentObject getFromUniqueIndex(String indexKey, Object indexValue) {
         Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
-        if ( iterator.hasNext() ) {
+        if (iterator.hasNext()) {
             return instantiateClassifier(iterator.next());
         } else {
             return null;
@@ -159,88 +161,95 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
     }
 
 
-    /** Generic for all graphs end */
+    /**
+     * Generic for all graphs end
+     */
 
     @Override
-    public String executeQueryToString(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
-
-        switch (umlgQueryEnum) {
-            case OCL:
-                try {
-                    Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
-                    Method method = umlgOclExecutor.getMethod("executeOclQueryAsJson", UmlgNode.class, String.class);
-                    UmlgNode context = (UmlgNode) UMLG.get().getEntity(contextId);
-                    String json = (String) method.invoke(null, context, query);
-                    return json;
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException("UmlgOclExecutor is not on the class path.");
-                } catch (Exception e) {
-                    if (e instanceof RuntimeException) {
-                        throw (RuntimeException)e;
-                    } else if (e instanceof InvocationTargetException) {
-                        Throwable target = ((InvocationTargetException) e).getTargetException();
-                        if (target instanceof RuntimeException) {
-                            throw (RuntimeException)target;
+    public String executeQueryToJson(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
+        try {
+            switch (umlgQueryEnum) {
+                case OCL:
+                    try {
+                        Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
+                        Method method = umlgOclExecutor.getMethod("executeOclQueryAsJson", Object.class, String.class);
+                        String result = (String) method.invoke(null, contextId, query);
+                        return result;
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException("UmlgOclExecutor is not on the class path.");
+                    } catch (Exception e) {
+                        if (e instanceof RuntimeException) {
+                            throw (RuntimeException) e;
+                        } else if (e instanceof InvocationTargetException) {
+                            Throwable target = ((InvocationTargetException) e).getTargetException();
+                            if (target instanceof RuntimeException) {
+                                throw (RuntimeException) target;
+                            } else {
+                                throw new RuntimeException(target);
+                            }
                         } else {
-                            throw new RuntimeException(target);
+                            throw new RuntimeException(e);
                         }
-                    } else {
-                        throw new RuntimeException(e);
                     }
-                }
-            case GROOVY:
-                String result;
-                if (contextId != null) {
-                    result = GroovyExecutor.INSTANCE.executeGroovyAsString(contextId, query);
-                } else {
-                    result = GroovyExecutor.INSTANCE.executeGroovyAsString(null, query);
-                }
-                return result;
-            case NATIVE:
-                throw new IllegalStateException("Bitsy does not have a native query language!");
-            default:
-                throw new RuntimeException("Unknown query enum");
+                case GROOVY:
+                    String result;
+                    if (contextId != null) {
+                        result = GroovyExecutor.INSTANCE.executeGroovyAsString(contextId, query);
+                    } else {
+                        result = GroovyExecutor.INSTANCE.executeGroovyAsString(null, query);
+                    }
+                    return result;
+                case NATIVE:
+                    throw new IllegalStateException("Bitsy does not have a native query language!");
+                default:
+                    throw new RuntimeException("Unknown query enum");
+            }
+        } finally {
+            this.rollback();
         }
     }
 
     @Override
     public <T> T executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
-
-        switch (umlgQueryEnum) {
-            case OCL:
-                try {
-                    Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
-                    Method method = umlgOclExecutor.getMethod("executeOclQuery", Object.class, String.class);
-                    Object result = method.invoke(null, contextId, query);
-                    return (T)result;
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException("UmlgOclExecutor is not on the class path.");
-                } catch (Exception e) {
-                    if (e instanceof RuntimeException) {
-                        throw (RuntimeException)e;
-                    } else if (e instanceof InvocationTargetException) {
-                        Throwable target = ((InvocationTargetException) e).getTargetException();
-                        if (target instanceof RuntimeException) {
-                            throw (RuntimeException)target;
+        try {
+            switch (umlgQueryEnum) {
+                case OCL:
+                    try {
+                        Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
+                        Method method = umlgOclExecutor.getMethod("executeOclQuery", Object.class, String.class);
+                        Object result = method.invoke(null, contextId, query);
+                        return (T) result;
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException("UmlgOclExecutor is not on the class path.");
+                    } catch (Exception e) {
+                        if (e instanceof RuntimeException) {
+                            throw (RuntimeException) e;
+                        } else if (e instanceof InvocationTargetException) {
+                            Throwable target = ((InvocationTargetException) e).getTargetException();
+                            if (target instanceof RuntimeException) {
+                                throw (RuntimeException) target;
+                            } else {
+                                throw new RuntimeException(target);
+                            }
                         } else {
-                            throw new RuntimeException(target);
+                            throw new RuntimeException(e);
                         }
-                    } else {
-                        throw new RuntimeException(e);
                     }
-                }
-            case GROOVY:
-                Object result;
-                if (contextId != null) {
-                    result = GroovyExecutor.INSTANCE.executeGroovy(contextId, query);
-                } else {
-                    result = GroovyExecutor.INSTANCE.executeGroovy(null, query);
-                }
-                return (T)result;
-            case NATIVE:
-                throw new IllegalStateException("Bitsy does not have a native query language!");
-            default:
-                throw new RuntimeException("Unknown query enum");
+                case GROOVY:
+                    Object result;
+                    if (contextId != null) {
+                        result = GroovyExecutor.INSTANCE.executeGroovy(contextId, query);
+                    } else {
+                        result = GroovyExecutor.INSTANCE.executeGroovy(null, query);
+                    }
+                    return (T) result;
+                case NATIVE:
+                    throw new IllegalStateException("Bitsy does not have a native query language!");
+                default:
+                    throw new RuntimeException("Unknown query enum");
+            }
+        } finally {
+            this.rollback();
         }
     }
 

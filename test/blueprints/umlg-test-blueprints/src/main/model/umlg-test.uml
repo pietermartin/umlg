@@ -2337,11 +2337,8 @@ endif</body>
           <packagedElement xmi:type="uml:AssociationClass" xmi:id="_SOlyUbKqEeOR4f3Enm7Mow" name="AssociationClassAC" memberEnd="_SOlyUrKqEeOR4f3Enm7Mow _SOlLQLKqEeOR4f3Enm7Mow" navigableOwnedEnd="_SOlyUrKqEeOR4f3Enm7Mow">
             <ownedAttribute xmi:type="uml:Property" xmi:id="_jrj7ULKxEeOR4f3Enm7Mow" name="name" visibility="public">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_kwtlgLKxEeOR4f3Enm7Mow" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_kwtlgLKxEeOR4f3Enm7Mow"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_kwuMkLKxEeOR4f3Enm7Mow" value="1"/>
-              <defaultValue xmi:type="uml:LiteralString" xmi:id="_kwwo0LKxEeOR4f3Enm7Mow">
-                <value xsi:nil="true"/>
-              </defaultValue>
             </ownedAttribute>
             <ownedEnd xmi:type="uml:Property" xmi:id="_SOlyUrKqEeOR4f3Enm7Mow" name="associationclass1" type="_Mt6_ELKqEeOR4f3Enm7Mow" isOrdered="true" association="_SOlyUbKqEeOR4f3Enm7Mow">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_SOlyU7KqEeOR4f3Enm7Mow"/>
@@ -2724,6 +2721,29 @@ endif</body>
             <ownedEnd xmi:type="uml:Property" xmi:id="_-D0C8emPEeO5xohz8WLHnw" name="product" type="_LNewoOdbEeOx-IVkU1GnZg" association="_-D0C8OmPEeO5xohz8WLHnw">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-D0C8umPEeO5xohz8WLHnw"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-D0C8-mPEeO5xohz8WLHnw" value="*"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_-E93EO8BEeOCtvMnpL9cwg" name="enumeration">
+          <packagedElement xmi:type="uml:Class" xmi:id="_A3Ag4O8CEeOCtvMnpL9cwg" name="Human">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_CTCaAO8CEeOCtvMnpL9cwg" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_FJnlkO8CEeOCtvMnpL9cwg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_FJwIcO8CEeOCtvMnpL9cwg" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_UH1RUO8CEeOCtvMnpL9cwg" name="gender" type="_RWnG4O8CEeOCtvMnpL9cwg" association="_UH-bQO8CEeOCtvMnpL9cwg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UH1RUe8CEeOCtvMnpL9cwg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UH1RUu8CEeOCtvMnpL9cwg" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_RWnG4O8CEeOCtvMnpL9cwg" name="Gender">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_R-u20O8CEeOCtvMnpL9cwg" name="MALE"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_TIIu4O8CEeOCtvMnpL9cwg" name="FEMALE"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_UH-bQO8CEeOCtvMnpL9cwg" name="human_gender_1" memberEnd="_UH-bQe8CEeOCtvMnpL9cwg _UH1RUO8CEeOCtvMnpL9cwg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_UH-bQe8CEeOCtvMnpL9cwg" name="human" type="_A3Ag4O8CEeOCtvMnpL9cwg" association="_UH-bQO8CEeOCtvMnpL9cwg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UH-bQu8CEeOCtvMnpL9cwg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UH-bQ-8CEeOCtvMnpL9cwg" value="*"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>

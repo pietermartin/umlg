@@ -24,7 +24,7 @@ public class RestAndJsonJetty {
         }
         ModelLoader.INSTANCE.loadModel(modelFileURL.toURI());
 
-        Server server = new Server(8111);
+        Server server = new Server(8080);
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/restAndJson");
         server.setHandler(context);

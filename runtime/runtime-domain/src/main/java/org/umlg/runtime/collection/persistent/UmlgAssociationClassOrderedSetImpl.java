@@ -56,13 +56,13 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Um
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);
                         if (c.isEnum()) {
-                            Object value = this.getVertexForDirection(edge).getProperty(getQualifiedName());
+                            Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
                             node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                             putToInternalMap(node, this.getVertexForDirection(edge));
                         } else if (UmlgNode.class.isAssignableFrom(c)) {
                             node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                         } else {
-                            Object value = this.getVertexForDirection(edge).getProperty(getQualifiedName());
+                            Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
                             node = (AssociationClassNode) value;
                             putToInternalMap(value, this.getVertexForDirection(edge));
                         }
@@ -120,7 +120,7 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Um
 
             Class<?> c = Class.forName((String) associationClassVertex.getProperty("className"));
             if (c.isEnum()) {
-                Object value = associationClassVertex.getProperty(getQualifiedName());
+                Object value = associationClassVertex.getProperty(getPersistentName());
                 node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                 putToInternalMap(node, associationClassVertex);
             } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
@@ -129,7 +129,7 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Um
             } else if (UmlgNode.class.isAssignableFrom(c)) {
                 node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(associationClassVertex);
             } else {
-                Object value = associationClassVertex.getProperty(getQualifiedName());
+                Object value = associationClassVertex.getProperty(getPersistentName());
                 node = (AssociationClassNode) value;
                 putToInternalMap(value, associationClassVertex);
             }

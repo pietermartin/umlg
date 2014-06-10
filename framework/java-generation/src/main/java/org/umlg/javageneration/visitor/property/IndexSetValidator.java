@@ -44,7 +44,7 @@ public class IndexSetValidator extends BaseVisitor implements Visitor<Property> 
                         UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getFromUniqueIndex + "(" +
                         UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +
                         ".getUmlgLabelConverter().convert(\"" +
-                        pWrap.getQualifiedName() + "\"), " +
+                        pWrap.getPersistentName() + "\"), " +
                         pWrap.fieldname() +
                         ") != null"
                 );

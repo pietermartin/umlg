@@ -39,7 +39,13 @@ public class AddIdLiteralsToRuntimeEnum extends BaseVisitor implements Visitor<C
         OJAnnotatedOperation fromQualifiedName = ojEnum.findOperation("fromQualifiedName", new OJPathName("String"));
         OJAnnotatedOperation fromInverseQualifiedName = ojEnum.findOperation("fromInverseQualifiedName", new OJPathName("String"));
         RuntimePropertyImplementor.addEnumLiteral(false, false, null, null, false, false,
-                ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, fieldName, "not_applicable",
+                ojEnum,
+                fromLabel,
+                fromQualifiedName,
+                fromInverseQualifiedName,
+                fieldName,
+                "not_applicable",
+                "not_applicable",
                 "inverseOf::not_applicable", "inverseOf::not_applicable", true, true, null, Collections.<Validation>emptyList(), false, true,
                 false, false, false, false, true, false, false,
                 1, 1, 1, false, false, false, false,

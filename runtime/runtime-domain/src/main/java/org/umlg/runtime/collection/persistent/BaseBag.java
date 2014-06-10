@@ -37,22 +37,6 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>
         throw new RuntimeException("addToLinkedList and manageLinkedListInverse should never be called for a BaseSet!");
     }
 	
-//	protected Vertex removeFromInternalMap(Object o) {
-//		List<Vertex> vertexList = this.internalVertexMultiMap.get(o);
-//		if (!vertexList.isEmpty()) {
-//			Vertex vertex = vertexList.get(0);
-//			this.internalVertexMultiMap.remove(o, vertex);
-//			return vertex;
-//		} else {
-//			return null;
-//		}
-//	}
-//
-//	@Override
-//	protected void putToInternalMap(Object key, Vertex vertex) {
-//		this.internalVertexMultiMap.put(key, vertex);
-//	}
-
 	protected Multiset<E> getInternalBag() {
 		return (Multiset<E>) this.internalCollection;
 	}

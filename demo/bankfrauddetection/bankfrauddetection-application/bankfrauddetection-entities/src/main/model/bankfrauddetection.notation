@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML">
+  <notation:Diagram xmi:id="_JKldMHzeEeOYhpiy1kqM8Q" type="PapyrusUMLClassDiagram" name="rootDiagram" measurementUnit="Pixel">
+    <children xmi:type="notation:Shape" xmi:id="_slMVMH1NEeOYhpiy1kqM8Q" type="2007" fontName="Sans" fontHeight="10" lineColor="0">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_slMVMn1NEeOYhpiy1kqM8Q" source="ShadowFigure">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_slMVM31NEeOYhpiy1kqM8Q" key="ShadowFigure_Value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_slM8QH1NEeOYhpiy1kqM8Q" source="displayNameLabelIcon">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_slM8QX1NEeOYhpiy1kqM8Q" key="displayNameLabelIcon_value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_slM8Qn1NEeOYhpiy1kqM8Q" source="QualifiedName">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_slM8Q31NEeOYhpiy1kqM8Q" key="QualifiedNameDepth" value="1000"/>
+      </eAnnotations>
+      <children xmi:type="notation:DecorationNode" xmi:id="_slM8RH1NEeOYhpiy1kqM8Q" type="5026"/>
+      <children xmi:type="notation:DecorationNode" xmi:id="_slM8RX1NEeOYhpiy1kqM8Q" type="7016">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_slM8Rn1NEeOYhpiy1kqM8Q"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_slM8R31NEeOYhpiy1kqM8Q"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_QnZIMK4OEeOR4f3Enm7Mow" visible="false" type="compartment_shape_display">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_QnZIMa4OEeOR4f3Enm7Mow"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_QnZIMq4OEeOR4f3Enm7Mow"/>
+      </children>
+      <element xmi:type="uml:Package" href="bankfrauddetection.uml#_slLHEH1NEeOYhpiy1kqM8Q"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_slMVMX1NEeOYhpiy1kqM8Q" x="150" y="87"/>
+    </children>
+    <styles xmi:type="notation:DiagramStyle" xmi:id="_JKldMXzeEeOYhpiy1kqM8Q"/>
+    <element xmi:type="uml:Model" href="bankfrauddetection.uml#_JKkPEHzeEeOYhpiy1kqM8Q"/>
+  </notation:Diagram>
+  <notation:Diagram xmi:id="_ujU10H1NEeOYhpiy1kqM8Q" type="Package" name="orgPackageDiagram" measurementUnit="Pixel">
+    <children xmi:type="notation:Shape" xmi:id="_u-d5sH1NEeOYhpiy1kqM8Q" type="2007" fontName="Sans" fontHeight="10" lineColor="0">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_u-d5sn1NEeOYhpiy1kqM8Q" source="ShadowFigure">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_u-d5s31NEeOYhpiy1kqM8Q" key="ShadowFigure_Value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_u-d5tH1NEeOYhpiy1kqM8Q" source="displayNameLabelIcon">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_u-d5tX1NEeOYhpiy1kqM8Q" key="displayNameLabelIcon_value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_u-d5tn1NEeOYhpiy1kqM8Q" source="QualifiedName">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_u-d5t31NEeOYhpiy1kqM8Q" key="QualifiedNameDepth" value="1000"/>
+      </eAnnotations>
+      <children xmi:type="notation:DecorationNode" xmi:id="_u-d5uH1NEeOYhpiy1kqM8Q" type="5026"/>
+      <children xmi:type="notation:DecorationNode" xmi:id="_u-d5uX1NEeOYhpiy1kqM8Q" type="7016">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_u-d5un1NEeOYhpiy1kqM8Q"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_u-d5u31NEeOYhpiy1kqM8Q"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_QopscK4OEeOR4f3Enm7Mow" visible="false" type="compartment_shape_display">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_Qopsca4OEeOR4f3Enm7Mow"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Qopscq4OEeOR4f3Enm7Mow"/>
+      </children>
+      <element xmi:type="uml:Package" href="bankfrauddetection.uml#_u-dSoH1NEeOYhpiy1kqM8Q"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_u-d5sX1NEeOYhpiy1kqM8Q" x="217" y="71"/>
+    </children>
+    <styles xmi:type="notation:DiagramStyle" xmi:id="_ujU10X1NEeOYhpiy1kqM8Q"/>
+    <element xmi:type="uml:Package" href="bankfrauddetection.uml#_slLHEH1NEeOYhpiy1kqM8Q"/>
+  </notation:Diagram>
+  <notation:Diagram xmi:id="_xE9sIH1NEeOYhpiy1kqM8Q" type="PapyrusUMLClassDiagram" name="demo1ClassDiagram" measurementUnit="Pixel">
+    <children xmi:type="notation:Shape" xmi:id="_xc7gMH1NEeOYhpiy1kqM8Q" type="2008" fontName="Sans" fontHeight="10" lineColor="0">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_xc8HQH1NEeOYhpiy1kqM8Q" source="ShadowFigure">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xc8HQX1NEeOYhpiy1kqM8Q" key="ShadowFigure_Value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_xc8HQn1NEeOYhpiy1kqM8Q" source="displayNameLabelIcon">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xc8HQ31NEeOYhpiy1kqM8Q" key="displayNameLabelIcon_value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_xc8HRH1NEeOYhpiy1kqM8Q" source="QualifiedName">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xc8HRX1NEeOYhpiy1kqM8Q" key="QualifiedNameDepth" value="1000"/>
+      </eAnnotations>
+      <children xmi:type="notation:DecorationNode" xmi:id="_xc8uUH1NEeOYhpiy1kqM8Q" type="5029"/>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_xc8uUX1NEeOYhpiy1kqM8Q" type="7017">
+        <children xmi:type="notation:Shape" xmi:id="_ydvIkO4tEeO6i6L7_ynJGQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_ydhGIO4tEeO6i6L7_ynJGQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_ydvIke4tEeO6i6L7_ynJGQ"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_2e7GEO4tEeO6i6L7_ynJGQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_2ezxUO4tEeO6i6L7_ynJGQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_2e7GEe4tEeO6i6L7_ynJGQ"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_R6OAwO4yEeO6i6L7_ynJGQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_R6JIQO4yEeO6i6L7_ynJGQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_R6OAwe4yEeO6i6L7_ynJGQ"/>
+        </children>
+        <styles xmi:type="notation:TitleStyle" xmi:id="_xc8uUn1NEeOYhpiy1kqM8Q"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_xc8uU31NEeOYhpiy1kqM8Q"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_xc8uVH1NEeOYhpiy1kqM8Q"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_xc8uVX1NEeOYhpiy1kqM8Q"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_xc8uVn1NEeOYhpiy1kqM8Q" type="7018">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_xc8uV31NEeOYhpiy1kqM8Q"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_xc8uWH1NEeOYhpiy1kqM8Q"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_xc8uWX1NEeOYhpiy1kqM8Q"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_xc8uWn1NEeOYhpiy1kqM8Q"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_xc8uW31NEeOYhpiy1kqM8Q" type="7019">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_xc8uXH1NEeOYhpiy1kqM8Q"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_xc8uXX1NEeOYhpiy1kqM8Q"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_xc8uXn1NEeOYhpiy1kqM8Q"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_xc8uX31NEeOYhpiy1kqM8Q"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_QqbOEK4OEeOR4f3Enm7Mow" visible="false" type="compartment_shape_display">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_QqbOEa4OEeOR4f3Enm7Mow"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_QqbOEq4OEeOR4f3Enm7Mow"/>
+      </children>
+      <element xmi:type="uml:Class" href="bankfrauddetection.uml#_xc65IH1NEeOYhpiy1kqM8Q"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_xc7gMX1NEeOYhpiy1kqM8Q" x="185" y="35" width="191"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="__F6ZIH4jEeOYhpiy1kqM8Q" type="2008" fontName="Sans" fontHeight="10" lineColor="0">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__F6ZIn4jEeOYhpiy1kqM8Q" source="ShadowFigure">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__F6ZI34jEeOYhpiy1kqM8Q" key="ShadowFigure_Value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__F6ZJH4jEeOYhpiy1kqM8Q" source="displayNameLabelIcon">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__F6ZJX4jEeOYhpiy1kqM8Q" key="displayNameLabelIcon_value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__F7AMH4jEeOYhpiy1kqM8Q" source="QualifiedName">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__F7AMX4jEeOYhpiy1kqM8Q" key="QualifiedNameDepth" value="1000"/>
+      </eAnnotations>
+      <children xmi:type="notation:DecorationNode" xmi:id="__F7AMn4jEeOYhpiy1kqM8Q" type="5029"/>
+      <children xmi:type="notation:BasicCompartment" xmi:id="__F7AM34jEeOYhpiy1kqM8Q" type="7017">
+        <children xmi:type="notation:Shape" xmi:id="_4eWd0O5GEeO5g76PBnuDCA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_4dosIO5GEeO5g76PBnuDCA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_4eWd0e5GEeO5g76PBnuDCA"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_7JX5oO5GEeO5g76PBnuDCA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_7JRL8O5GEeO5g76PBnuDCA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_7JX5oe5GEeO5g76PBnuDCA"/>
+        </children>
+        <styles xmi:type="notation:TitleStyle" xmi:id="__F7ANH4jEeOYhpiy1kqM8Q"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="__F7ANX4jEeOYhpiy1kqM8Q"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="__F7ANn4jEeOYhpiy1kqM8Q"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="__F7AN34jEeOYhpiy1kqM8Q"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="__F7AOH4jEeOYhpiy1kqM8Q" type="7018">
+        <styles xmi:type="notation:TitleStyle" xmi:id="__F7AOX4jEeOYhpiy1kqM8Q"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="__F7AOn4jEeOYhpiy1kqM8Q"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="__F7AO34jEeOYhpiy1kqM8Q"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="__F7APH4jEeOYhpiy1kqM8Q"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="__F7APX4jEeOYhpiy1kqM8Q" type="7019">
+        <styles xmi:type="notation:TitleStyle" xmi:id="__F7APn4jEeOYhpiy1kqM8Q"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="__F7AP34jEeOYhpiy1kqM8Q"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="__F7AQH4jEeOYhpiy1kqM8Q"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="__F7AQX4jEeOYhpiy1kqM8Q"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_QqccMK4OEeOR4f3Enm7Mow" visible="false" type="compartment_shape_display">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_QqccMa4OEeOR4f3Enm7Mow"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_QqccMq4OEeOR4f3Enm7Mow"/>
+      </children>
+      <element xmi:type="uml:Class" href="bankfrauddetection.uml#__F5yEH4jEeOYhpiy1kqM8Q"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="__F6ZIX4jEeOYhpiy1kqM8Q" x="500" y="355"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_gE-okO4tEeO6i6L7_ynJGQ" type="2008" fontName="Sans" lineColor="0">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_gE_2sO4tEeO6i6L7_ynJGQ" source="ShadowFigure">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_gE_2se4tEeO6i6L7_ynJGQ" key="ShadowFigure_Value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_gE_2su4tEeO6i6L7_ynJGQ" source="displayNameLabelIcon">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_gE_2s-4tEeO6i6L7_ynJGQ" key="displayNameLabelIcon_value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_gE_2tO4tEeO6i6L7_ynJGQ" source="QualifiedName">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_gE_2te4tEeO6i6L7_ynJGQ" key="QualifiedNameDepth" value="1000"/>
+      </eAnnotations>
+      <children xmi:type="notation:DecorationNode" xmi:id="_gE_2tu4tEeO6i6L7_ynJGQ" type="5029"/>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_gE_2t-4tEeO6i6L7_ynJGQ" type="7017">
+        <children xmi:type="notation:Shape" xmi:id="_-L-vAO5GEeO5g76PBnuDCA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_-L5PcO5GEeO5g76PBnuDCA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_-L-vAe5GEeO5g76PBnuDCA"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_Aqn7sO5HEeO5g76PBnuDCA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_Aqgm8O5HEeO5g76PBnuDCA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_Aqn7se5HEeO5g76PBnuDCA"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_DTzkcO5HEeO5g76PBnuDCA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_DTur8O5HEeO5g76PBnuDCA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_DT0LgO5HEeO5g76PBnuDCA"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_GUl04O5HEeO5g76PBnuDCA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_GUdSAO5HEeO5g76PBnuDCA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_GUl04e5HEeO5g76PBnuDCA"/>
+        </children>
+        <styles xmi:type="notation:TitleStyle" xmi:id="_gE_2uO4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_gE_2ue4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_gE_2uu4tEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gE_2u-4tEeO6i6L7_ynJGQ"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_gFAdwO4tEeO6i6L7_ynJGQ" type="7018">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_gFAdwe4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_gFAdwu4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_gFAdw-4tEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gFAdxO4tEeO6i6L7_ynJGQ"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_gFAdxe4tEeO6i6L7_ynJGQ" type="7019">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_gFAdxu4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_gFAdx-4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_gFAdyO4tEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gFAdye4tEeO6i6L7_ynJGQ"/>
+      </children>
+      <element xmi:type="uml:Class" href="bankfrauddetection.uml#_gEfgYO4tEeO6i6L7_ynJGQ"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gE-oke4tEeO6i6L7_ynJGQ" x="245" y="355"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_hXxGIO4tEeO6i6L7_ynJGQ" type="2008" fontName="Sans" lineColor="0">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_hXxGIu4tEeO6i6L7_ynJGQ" source="ShadowFigure">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_hXxGI-4tEeO6i6L7_ynJGQ" key="ShadowFigure_Value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_hXxGJO4tEeO6i6L7_ynJGQ" source="displayNameLabelIcon">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_hXxtMO4tEeO6i6L7_ynJGQ" key="displayNameLabelIcon_value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_hXxtMe4tEeO6i6L7_ynJGQ" source="QualifiedName">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_hXxtMu4tEeO6i6L7_ynJGQ" key="QualifiedNameDepth" value="1000"/>
+      </eAnnotations>
+      <children xmi:type="notation:DecorationNode" xmi:id="_hXxtM-4tEeO6i6L7_ynJGQ" type="5029"/>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_hXxtNO4tEeO6i6L7_ynJGQ" type="7017">
+        <children xmi:type="notation:Shape" xmi:id="_LHZckO5HEeO5g76PBnuDCA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_LHJk8O5HEeO5g76PBnuDCA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_LHZcke5HEeO5g76PBnuDCA"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_Oc8cEO5HEeO5g76PBnuDCA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_OczSIO5HEeO5g76PBnuDCA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_Oc8cEe5HEeO5g76PBnuDCA"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_Quu4gO5HEeO5g76PBnuDCA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_QupY8O5HEeO5g76PBnuDCA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_Quu4ge5HEeO5g76PBnuDCA"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_Td0U8O5HEeO5g76PBnuDCA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_TdvccO5HEeO5g76PBnuDCA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_Td0U8e5HEeO5g76PBnuDCA"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_QO3PMO5TEeO5g76PBnuDCA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_QOwhgO5TEeO5g76PBnuDCA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_QO3PMe5TEeO5g76PBnuDCA"/>
+        </children>
+        <styles xmi:type="notation:TitleStyle" xmi:id="_hXxtNe4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_hXxtNu4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_hXxtN-4tEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_hXxtOO4tEeO6i6L7_ynJGQ"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_hXxtOe4tEeO6i6L7_ynJGQ" type="7018">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_hXxtOu4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_hXxtO-4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_hXxtPO4tEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_hXxtPe4tEeO6i6L7_ynJGQ"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_hXxtPu4tEeO6i6L7_ynJGQ" type="7019">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_hXxtP-4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_hXxtQO4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_hXxtQe4tEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_hXxtQu4tEeO6i6L7_ynJGQ"/>
+      </children>
+      <element xmi:type="uml:Class" href="bankfrauddetection.uml#_hXsNoO4tEeO6i6L7_ynJGQ"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_hXxGIe4tEeO6i6L7_ynJGQ" x="715" y="275"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_isEmoO4tEeO6i6L7_ynJGQ" type="2008" fontName="Sans" lineColor="0">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_isEmou4tEeO6i6L7_ynJGQ" source="ShadowFigure">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_isEmo-4tEeO6i6L7_ynJGQ" key="ShadowFigure_Value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_isFNsO4tEeO6i6L7_ynJGQ" source="displayNameLabelIcon">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_isFNse4tEeO6i6L7_ynJGQ" key="displayNameLabelIcon_value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_isFNsu4tEeO6i6L7_ynJGQ" source="QualifiedName">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_isFNs-4tEeO6i6L7_ynJGQ" key="QualifiedNameDepth" value="1000"/>
+      </eAnnotations>
+      <children xmi:type="notation:DecorationNode" xmi:id="_isFNtO4tEeO6i6L7_ynJGQ" type="5029"/>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_isFNte4tEeO6i6L7_ynJGQ" type="7017">
+        <children xmi:type="notation:Shape" xmi:id="_YaYVkO5HEeO5g76PBnuDCA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_YaPLoO5HEeO5g76PBnuDCA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_YaYVke5HEeO5g76PBnuDCA"/>
+        </children>
+        <styles xmi:type="notation:TitleStyle" xmi:id="_isFNtu4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_isFNt-4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_isFNuO4tEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_isFNue4tEeO6i6L7_ynJGQ"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_isFNuu4tEeO6i6L7_ynJGQ" type="7018">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_isFNu-4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_isFNvO4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_isFNve4tEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_isFNvu4tEeO6i6L7_ynJGQ"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_isFNv-4tEeO6i6L7_ynJGQ" type="7019">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_isFNwO4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_isFNwe4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_isFNwu4tEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_isFNw-4tEeO6i6L7_ynJGQ"/>
+      </children>
+      <element xmi:type="uml:Class" href="bankfrauddetection.uml#_isAVMO4tEeO6i6L7_ynJGQ"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_isEmoe4tEeO6i6L7_ynJGQ" x="715" y="155"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_wB5YQO4tEeO6i6L7_ynJGQ" type="2008" fontName="Sans" lineColor="0">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_wB5_UO4tEeO6i6L7_ynJGQ" source="ShadowFigure">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_wB5_Ue4tEeO6i6L7_ynJGQ" key="ShadowFigure_Value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_wB5_Uu4tEeO6i6L7_ynJGQ" source="displayNameLabelIcon">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_wB5_U-4tEeO6i6L7_ynJGQ" key="displayNameLabelIcon_value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_wB5_VO4tEeO6i6L7_ynJGQ" source="QualifiedName">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_wB5_Ve4tEeO6i6L7_ynJGQ" key="QualifiedNameDepth" value="1000"/>
+      </eAnnotations>
+      <children xmi:type="notation:DecorationNode" xmi:id="_wB5_Vu4tEeO6i6L7_ynJGQ" type="5029"/>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_wB5_V-4tEeO6i6L7_ynJGQ" type="7017">
+        <children xmi:type="notation:Shape" xmi:id="_kzyu0O4yEeO6i6L7_ynJGQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_kzpk4O4yEeO6i6L7_ynJGQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_kzyu0e4yEeO6i6L7_ynJGQ"/>
+        </children>
+        <styles xmi:type="notation:TitleStyle" xmi:id="_wB5_WO4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_wB5_We4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_wB5_Wu4tEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_wB5_W-4tEeO6i6L7_ynJGQ"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_wB5_XO4tEeO6i6L7_ynJGQ" type="7018">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_wB5_Xe4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_wB5_Xu4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_wB5_X-4tEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_wB5_YO4tEeO6i6L7_ynJGQ"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_wB5_Ye4tEeO6i6L7_ynJGQ" type="7019">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_wB5_Yu4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_wB5_Y-4tEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_wB5_ZO4tEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_wB5_Ze4tEeO6i6L7_ynJGQ"/>
+      </children>
+      <element xmi:type="uml:Class" href="bankfrauddetection.uml#_wBwOUO4tEeO6i6L7_ynJGQ"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_wB5YQe4tEeO6i6L7_ynJGQ" x="715" y="30"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_WoMLwO4yEeO6i6L7_ynJGQ" type="2008" fontName="Sans" lineColor="0">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_WoMy0O4yEeO6i6L7_ynJGQ" source="ShadowFigure">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_WoMy0e4yEeO6i6L7_ynJGQ" key="ShadowFigure_Value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_WoMy0u4yEeO6i6L7_ynJGQ" source="displayNameLabelIcon">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_WoMy0-4yEeO6i6L7_ynJGQ" key="displayNameLabelIcon_value" value="false"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_WoMy1O4yEeO6i6L7_ynJGQ" source="QualifiedName">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_WoMy1e4yEeO6i6L7_ynJGQ" key="QualifiedNameDepth" value="1000"/>
+      </eAnnotations>
+      <children xmi:type="notation:DecorationNode" xmi:id="_WoMy1u4yEeO6i6L7_ynJGQ" type="5029"/>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_WoMy1-4yEeO6i6L7_ynJGQ" type="7017">
+        <children xmi:type="notation:Shape" xmi:id="_YwTHwO4yEeO6i6L7_ynJGQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_YwOPQO4yEeO6i6L7_ynJGQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_YwTHwe4yEeO6i6L7_ynJGQ"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_a6ZAwO4yEeO6i6L7_ynJGQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_a6UIQO4yEeO6i6L7_ynJGQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_a6ZAwe4yEeO6i6L7_ynJGQ"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_cm1UcO4yEeO6i6L7_ynJGQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_cmq8YO4yEeO6i6L7_ynJGQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_cm1Uce4yEeO6i6L7_ynJGQ"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_f2qGcO4yEeO6i6L7_ynJGQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="bankfrauddetection.uml#_f2fuYO4yEeO6i6L7_ynJGQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_f2qGce4yEeO6i6L7_ynJGQ"/>
+        </children>
+        <styles xmi:type="notation:TitleStyle" xmi:id="_WoMy2O4yEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_WoMy2e4yEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_WoMy2u4yEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WoMy2-4yEeO6i6L7_ynJGQ"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_WoMy3O4yEeO6i6L7_ynJGQ" type="7018">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_WoMy3e4yEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_WoMy3u4yEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_WoMy3-4yEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WoMy4O4yEeO6i6L7_ynJGQ"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_WoNZ4O4yEeO6i6L7_ynJGQ" type="7019">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_WoNZ4e4yEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_WoNZ4u4yEeO6i6L7_ynJGQ"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_WoNZ4-4yEeO6i6L7_ynJGQ"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WoNZ5O4yEeO6i6L7_ynJGQ"/>
+      </children>
+      <element xmi:type="uml:Class" href="bankfrauddetection.uml#_WoHTQO4yEeO6i6L7_ynJGQ"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WoMLwe4yEeO6i6L7_ynJGQ" x="40" y="310"/>
+    </children>
+    <styles xmi:type="notation:DiagramStyle" xmi:id="_xE9sIX1NEeOYhpiy1kqM8Q"/>
+    <element xmi:type="uml:Package" href="bankfrauddetection.uml#_u-dSoH1NEeOYhpiy1kqM8Q"/>
+    <edges xmi:type="notation:Connector" xmi:id="_iZe7oO5KEeO5g76PBnuDCA" type="4001" source="_xc7gMH1NEeOYhpiy1kqM8Q" target="_hXxGIO4tEeO6i6L7_ynJGQ" lineColor="0">
+      <children xmi:type="notation:DecorationNode" xmi:id="_iZfisO5KEeO5g76PBnuDCA" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_iZfise5KEeO5g76PBnuDCA" y="-20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_iZfisu5KEeO5g76PBnuDCA" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_iZfis-5KEeO5g76PBnuDCA" y="20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_iZfitO5KEeO5g76PBnuDCA" visible="false" type="6003">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_m--gEO5KEeO5g76PBnuDCA" source="CustomAppearance_Annotation">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_nDyHkO5KEeO5g76PBnuDCA" key="CustomAppearance_MaskValue" value="44"/>
+        </eAnnotations>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_iZfite5KEeO5g76PBnuDCA" x="-19" y="35"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_iZfitu5KEeO5g76PBnuDCA" type="6005">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_nWKRAO5KEeO5g76PBnuDCA" source="CustomAppearance_Annotation">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ndMtIO5KEeO5g76PBnuDCA" key="CustomAppearance_MaskValue" value="44"/>
+        </eAnnotations>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_iZfit-5KEeO5g76PBnuDCA" x="-44" y="39"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_iZfiuO5KEeO5g76PBnuDCA" visible="false" type="6033">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_iZfiue5KEeO5g76PBnuDCA" y="20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_iZfiuu5KEeO5g76PBnuDCA" visible="false" type="6034">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_iZfiu-5KEeO5g76PBnuDCA" y="-20"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_iZe7oe5KEeO5g76PBnuDCA" fontName="Sans"/>
+      <element xmi:type="uml:Association" href="bankfrauddetection.uml#_iZXm4O5KEeO5g76PBnuDCA"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_iZe7ou5KEeO5g76PBnuDCA" points="[27, 19, -378, -223]$[309, 270, -96, 28]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_iZpTsO5KEeO5g76PBnuDCA" id="(0.7382198952879581,0.8492063492063492)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_2hP7IO5KEeO5g76PBnuDCA" type="4001" source="_xc7gMH1NEeOYhpiy1kqM8Q" target="__F6ZIH4jEeOYhpiy1kqM8Q" lineColor="0">
+      <children xmi:type="notation:DecorationNode" xmi:id="_2hQiMO5KEeO5g76PBnuDCA" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_2hQiMe5KEeO5g76PBnuDCA" y="-20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_2hQiMu5KEeO5g76PBnuDCA" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_2hQiM-5KEeO5g76PBnuDCA" y="20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_2hQiNO5KEeO5g76PBnuDCA" visible="false" type="6003">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_SsAgsO5LEeO5g76PBnuDCA" source="CustomAppearance_Annotation">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S0oRMO5LEeO5g76PBnuDCA" key="CustomAppearance_MaskValue" value="44"/>
+        </eAnnotations>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_2hQiNe5KEeO5g76PBnuDCA" x="32" y="38"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_2hQiNu5KEeO5g76PBnuDCA" type="6005">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_TGYvkO5LEeO5g76PBnuDCA" source="CustomAppearance_Annotation">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_TYyuMO5LEeO5g76PBnuDCA" key="CustomAppearance_MaskValue" value="44"/>
+        </eAnnotations>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_2hQiN-5KEeO5g76PBnuDCA" x="-36" y="42"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_2hQiOO5KEeO5g76PBnuDCA" visible="false" type="6033">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_2hQiOe5KEeO5g76PBnuDCA" x="-3" y="69"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_2hQiOu5KEeO5g76PBnuDCA" visible="false" type="6034">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_2hRJQO5KEeO5g76PBnuDCA" y="-20"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_2hP7Ie5KEeO5g76PBnuDCA" fontName="Sans"/>
+      <element xmi:type="uml:Association" href="bankfrauddetection.uml#_2hJNcO5KEeO5g76PBnuDCA"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_2hP7Iu5KEeO5g76PBnuDCA" points="[14, 29, -204, -349]$[122, 384, -96, 6]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_2hZsIO5KEeO5g76PBnuDCA" id="(0.5916230366492147,0.7698412698412699)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_fWPXoO5LEeO5g76PBnuDCA" type="4001" source="_xc7gMH1NEeOYhpiy1kqM8Q" target="_gE-okO4tEeO6i6L7_ynJGQ" lineColor="0">
+      <children xmi:type="notation:DecorationNode" xmi:id="_fWP-sO5LEeO5g76PBnuDCA" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fWP-se5LEeO5g76PBnuDCA" y="-20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_fWP-su5LEeO5g76PBnuDCA" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fWP-s-5LEeO5g76PBnuDCA" y="20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_fWP-tO5LEeO5g76PBnuDCA" visible="false" type="6003">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ebyaMO5OEeO5g76PBnuDCA" source="CustomAppearance_Annotation">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_egXYMO5OEeO5g76PBnuDCA" key="CustomAppearance_MaskValue" value="44"/>
+        </eAnnotations>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fWP-te5LEeO5g76PBnuDCA" x="94" y="23"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_fWP-tu5LEeO5g76PBnuDCA" type="6005">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_eETHQO5OEeO5g76PBnuDCA" source="CustomAppearance_Annotation">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_eIo0sO5OEeO5g76PBnuDCA" key="CustomAppearance_MaskValue" value="44"/>
+        </eAnnotations>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fWP-t-5LEeO5g76PBnuDCA" x="-18" y="63"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_fWP-uO5LEeO5g76PBnuDCA" visible="false" type="6033">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fWP-ue5LEeO5g76PBnuDCA" y="20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_fWP-uu5LEeO5g76PBnuDCA" visible="false" type="6034">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fWP-u-5LEeO5g76PBnuDCA" y="-20"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_fWPXoe5LEeO5g76PBnuDCA" fontName="Sans"/>
+      <element xmi:type="uml:Association" href="bankfrauddetection.uml#_fWIp8O5LEeO5g76PBnuDCA"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_fWPXou5LEeO5g76PBnuDCA" points="[0, 22, -15, -348]$[9, 336, -6, -34]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fWXTcO5LEeO5g76PBnuDCA" id="(0.5026178010471204,0.8253968253968254)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fWXTce5LEeO5g76PBnuDCA" id="(0.47150259067357514,0.2446043165467626)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_XDXeUO5SEeO5g76PBnuDCA" type="4001" source="_xc7gMH1NEeOYhpiy1kqM8Q" target="_isEmoO4tEeO6i6L7_ynJGQ" lineColor="0">
+      <children xmi:type="notation:DecorationNode" xmi:id="_XDYscO5SEeO5g76PBnuDCA" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_XDZTgO5SEeO5g76PBnuDCA" y="-20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_XDZTge5SEeO5g76PBnuDCA" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_XDZTgu5SEeO5g76PBnuDCA" y="20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_XDZ6kO5SEeO5g76PBnuDCA" type="6003">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bKz00O5SEeO5g76PBnuDCA" source="CustomAppearance_Annotation">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_bRrR0O5SEeO5g76PBnuDCA" key="CustomAppearance_MaskValue" value="44"/>
+        </eAnnotations>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_XDZ6ke5SEeO5g76PBnuDCA" x="47" y="-21"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_XDZ6ku5SEeO5g76PBnuDCA" type="6005">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_c-tbYO5SEeO5g76PBnuDCA" source="CustomAppearance_Annotation">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_dDIBUO5SEeO5g76PBnuDCA" key="CustomAppearance_MaskValue" value="44"/>
+        </eAnnotations>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_XDZ6k-5SEeO5g76PBnuDCA" x="12" y="-20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_XDZ6lO5SEeO5g76PBnuDCA" visible="false" type="6033">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_XDahoO5SEeO5g76PBnuDCA" y="20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_XDahoe5SEeO5g76PBnuDCA" visible="false" type="6034">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_XDahou5SEeO5g76PBnuDCA" y="-20"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_XDXeUe5SEeO5g76PBnuDCA" fontName="Sans"/>
+      <element xmi:type="uml:Association" href="bankfrauddetection.uml#_WxZeMO5KEeO5g76PBnuDCA"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_XDXeUu5SEeO5g76PBnuDCA" points="[96, 20, -398, -87]$[435, 94, -59, -13]"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_zgoJIO5SEeO5g76PBnuDCA" type="4001" source="_xc7gMH1NEeOYhpiy1kqM8Q" target="_WoMLwO4yEeO6i6L7_ynJGQ" lineColor="0">
+      <children xmi:type="notation:DecorationNode" xmi:id="_zgp-UO5SEeO5g76PBnuDCA" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_zgp-Ue5SEeO5g76PBnuDCA" y="-20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_zgqlYO5SEeO5g76PBnuDCA" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_zgqlYe5SEeO5g76PBnuDCA" y="20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_zgqlYu5SEeO5g76PBnuDCA" type="6003">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1lHwcO5SEeO5g76PBnuDCA" source="CustomAppearance_Annotation">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1pCAEO5SEeO5g76PBnuDCA" key="CustomAppearance_MaskValue" value="44"/>
+        </eAnnotations>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_zgqlY-5SEeO5g76PBnuDCA" x="33" y="56"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_zgqlZO5SEeO5g76PBnuDCA" type="6005">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1K3dYO5SEeO5g76PBnuDCA" source="CustomAppearance_Annotation">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1P0O0O5SEeO5g76PBnuDCA" key="CustomAppearance_MaskValue" value="44"/>
+        </eAnnotations>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_zgrMcO5SEeO5g76PBnuDCA" x="17" y="38"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_zgrMce5SEeO5g76PBnuDCA" visible="false" type="6033">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_zgrMcu5SEeO5g76PBnuDCA" y="20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_zgrMc-5SEeO5g76PBnuDCA" visible="false" type="6034">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_zgrzgO5SEeO5g76PBnuDCA" y="-20"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_zgoJIe5SEeO5g76PBnuDCA" fontName="Sans"/>
+      <element xmi:type="uml:Association" href="bankfrauddetection.uml#_Ao5WAO5KEeO5g76PBnuDCA"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_zgoJIu5SEeO5g76PBnuDCA" points="[-38, 63, 131, -218]$[-128, 212, 41, -69]"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_76QtkO5SEeO5g76PBnuDCA" type="4001" source="_xc7gMH1NEeOYhpiy1kqM8Q" target="_wB5YQO4tEeO6i6L7_ynJGQ" lineColor="0">
+      <children xmi:type="notation:DecorationNode" xmi:id="_76RUoO5SEeO5g76PBnuDCA" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_76RUoe5SEeO5g76PBnuDCA" y="-20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_76RUou5SEeO5g76PBnuDCA" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_76RUo-5SEeO5g76PBnuDCA" y="20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_76RUpO5SEeO5g76PBnuDCA" type="6003">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9zOaUO5SEeO5g76PBnuDCA" source="CustomAppearance_Annotation">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_922WEO5SEeO5g76PBnuDCA" key="CustomAppearance_MaskValue" value="44"/>
+        </eAnnotations>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_76RUpe5SEeO5g76PBnuDCA" x="28" y="-18"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_76RUpu5SEeO5g76PBnuDCA" type="6005">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-Irs8O5SEeO5g76PBnuDCA" source="CustomAppearance_Annotation">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-MjgUO5SEeO5g76PBnuDCA" key="CustomAppearance_MaskValue" value="44"/>
+        </eAnnotations>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_76RUp-5SEeO5g76PBnuDCA" x="-16" y="-17"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_76RUqO5SEeO5g76PBnuDCA" visible="false" type="6033">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_76RUqe5SEeO5g76PBnuDCA" y="20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_76RUqu5SEeO5g76PBnuDCA" visible="false" type="6034">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_76RUq-5SEeO5g76PBnuDCA" y="-20"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_76Qtke5SEeO5g76PBnuDCA" fontName="Sans"/>
+      <element xmi:type="uml:Association" href="bankfrauddetection.uml#_NpFO0O5KEeO5g76PBnuDCA"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_76Qtku5SEeO5g76PBnuDCA" points="[96, -4, -430, 14]$[435, -15, -91, 3]"/>
+    </edges>
+  </notation:Diagram>
+</xmi:XMI>

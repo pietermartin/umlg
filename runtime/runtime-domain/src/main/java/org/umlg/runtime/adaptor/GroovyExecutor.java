@@ -99,13 +99,13 @@ public class GroovyExecutor {
         this.scriptEngine.put("g", graph);
         Object result;
         try {
-            if (this.isNeo4j) {
-                StringBuilder groovyToIntercept = new StringBuilder();
-                StringBuilder groovyDef = new StringBuilder();
-                this.seperateOutDefFromGroovy(groovy, groovyToIntercept, groovyDef);
-                groovy = "useInterceptor( GremlinGroovyPipeline, GremlinGroovyPipelineInterceptor) {" + groovyToIntercept.toString() + "}";
-                groovy = groovyDef.toString() + groovy;
-            }
+//            if (this.isNeo4j) {
+//                StringBuilder groovyToIntercept = new StringBuilder();
+//                StringBuilder groovyDef = new StringBuilder();
+//                this.seperateOutDefFromGroovy(groovy, groovyToIntercept, groovyDef);
+//                groovy = "useInterceptor( GremlinGroovyPipeline, GremlinGroovyPipelineInterceptor) {" + groovyToIntercept.toString() + "}";
+//                groovy = groovyDef.toString() + groovy;
+//            }
             result = this.scriptEngine.eval(groovy);
         } catch (ScriptException e) {
             throw UmlgExceptionUtilFactory.getTumlExceptionUtil().handle(e);

@@ -24,7 +24,7 @@ public class TestOcl extends BaseLocalDbTest  {
     public void testocl1() {
         TestRestletDefaultDataCreator testRestletDefaultDataCreator = new TestRestletDefaultDataCreator();
         testRestletDefaultDataCreator.createData();
-        Human human = RestAndJson.INSTANCE.getHuman().get(0);
+        Human human = RestAndJson.INSTANCE.getHuman().asSequence().get(0);
         UmlgBag<Human> humans = execute(human);
         Assert.assertEquals(10, humans.size());
 
@@ -54,7 +54,7 @@ public class TestOcl extends BaseLocalDbTest  {
     public void testocl2() {
         TestRestletDefaultDataCreator testRestletDefaultDataCreator = new TestRestletDefaultDataCreator();
         testRestletDefaultDataCreator.createData();
-        Human human = RestAndJson.INSTANCE.getHuman().get(0);
+        Human human = RestAndJson.INSTANCE.getHuman().asSequence().get(0);
         Hand hand = human.getHand().iterator().next();
         UmlgSequence<Ring> rings = execute(hand);
         Assert.assertEquals(5, rings.size());

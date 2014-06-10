@@ -42,8 +42,7 @@ public class UmlgGremlinReadOnlyElement implements Element {
      */
     public <T> T getProperty(final String key) {
         //Turn key back into umlg namespacing
-        String properKey = key.replaceAll("____", "::");
-        properKey = findMatchingKey(properKey);
+        String properKey = findMatchingKey(key);
         if (properKey != null) {
             return this.baseElement.getProperty(properKey);
         } else {
@@ -53,7 +52,7 @@ public class UmlgGremlinReadOnlyElement implements Element {
 
     private String findMatchingKey(String key) {
         for (String properKey : this.baseElement.getPropertyKeys()) {
-            if (properKey.equals(key) || properKey.endsWith("::" + key)) {
+            if (properKey.equals(key) || properKey.endsWith("_" + key)) {
                 return properKey;
             }
         }

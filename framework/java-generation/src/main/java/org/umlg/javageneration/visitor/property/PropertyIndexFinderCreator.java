@@ -55,7 +55,7 @@ public class PropertyIndexFinderCreator extends BaseVisitor implements Visitor<P
                     UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getFromUniqueIndex + "(" +
                     UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +
                     ".getUmlgLabelConverter().convert(\"" +
-                    propertyWrapper.getQualifiedName() + "\"), " +
+                    propertyWrapper.getPersistentName() + "\"), " +
                     buildFormatter(propertyWrapper)
             );
 
@@ -66,7 +66,7 @@ public class PropertyIndexFinderCreator extends BaseVisitor implements Visitor<P
                             UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getFromNonUniqueIndex + "(" +
                             UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +
                             ".getUmlgLabelConverter().convert(\"" +
-                            propertyWrapper.getQualifiedName() + "\"), " +
+                            propertyWrapper.getPersistentName() + "\"), " +
                             buildFormatter(propertyWrapper)
                     );
         } else {

@@ -33,7 +33,7 @@ public class UmlgBagClosableIterableImpl<E> extends BaseBag<E> implements UmlgBa
 			try {
 				Class<?> c = this.getClassToInstantiate(edge);
 				if (c.isEnum()) {
-					Object value = this.getVertexForDirection(edge).getProperty(getQualifiedName());
+					Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
 					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                     putToInternalMap(node, this.getVertexForDirection(edge));
                 } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
@@ -42,7 +42,7 @@ public class UmlgBagClosableIterableImpl<E> extends BaseBag<E> implements UmlgBa
 				} else if (UmlgNode.class.isAssignableFrom(c)) {
 					node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
 				} else {
-					Object value = this.getVertexForDirection(edge).getProperty(getQualifiedName());
+					Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
 					node = (E) value;
                     putToInternalMap(value, this.getVertexForDirection(edge));
 				}

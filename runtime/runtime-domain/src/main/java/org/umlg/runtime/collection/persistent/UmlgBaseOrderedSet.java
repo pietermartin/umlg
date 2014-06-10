@@ -308,15 +308,15 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
             UmlgNode node = (UmlgNode) previous;
             previousVertex = node.getVertex();
         } else if (e.getClass().isEnum()) {
-            List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + previous.toString());
+            List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + previous.toString());
             Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
             previousVertex = vertexes.get(0);
         } else if (getDataTypeEnum() != null) {
-            List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + e.toString());
+            List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + e.toString());
             Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
             previousVertex = vertexes.get(0);
         } else {
-            List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + previous.toString());
+            List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + previous.toString());
             Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
             previousVertex = vertexes.get(0);
         }
@@ -328,7 +328,7 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
         try {
             Class<?> c = Class.forName((String) vertex.getProperty("className"));
             if (c.isEnum()) {
-                Object value = vertex.getProperty(getQualifiedName());
+                Object value = vertex.getProperty(getPersistentName());
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                 putToInternalMap(node, vertex);
                 this.getInternalListOrderedSet().add(node);
@@ -342,7 +342,7 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
             } else if (getDataTypeEnum() != null) {
                 loadDataTypeFromVertex(vertex);
             } else {
-                Object value = vertex.getProperty(getQualifiedName());
+                Object value = vertex.getProperty(getPersistentName());
                 node = (E) value;
                 putToInternalMap(node, vertex);
                 this.getInternalListOrderedSet().add(node);

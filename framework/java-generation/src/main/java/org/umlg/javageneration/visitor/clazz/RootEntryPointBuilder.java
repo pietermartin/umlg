@@ -42,34 +42,14 @@ public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class>
         annotatedClass.addToImports(UmlgGenerationUtil.umlgMemorySequence);
         annotatedClass.addToImports(new OJPathName("java.util.ArrayList"));
         annotatedClass.addToImports(UmlgClassOperations.getMetaClassPathName(clazz));
-
-        OJField result = new OJField("result", UmlgGenerationUtil.umlgSequence.getCopy().addToGenerics(UmlgClassOperations.getMetaClassPathName(clazz)));
-        result.setInitExp("new " + UmlgGenerationUtil.umlgMemorySequence.getCopy().getLast() + "<" + UmlgClassOperations.getMetaClassPathName(clazz).getLast() + ">()");
-        getter.getBody().addToLocals(result);
-        OJField iter = new OJField("iter", new OJPathName("java.util.Iterator").addToGenerics(UmlgGenerationUtil.edgePathName));
-        iter.setInitExp("getRootVertex().getEdges(Direction.OUT, "+ UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz)  + "\")).iterator()");
-        getter.getBody().addToLocals(iter);
-        getter.getBody().addToStatements("return new " + UmlgClassOperations.getMetaClassPathName(clazz).getLast() + "(iter.next().getVertex(Direction.IN))");
+        getter.getBody().addToStatements("return " + UmlgClassOperations.getMetaClassPathName(clazz) + ".getInstance()");
     }
 
     private void addGetterToAppRootForRootEntity(Class clazz, OJAnnotatedClass root) {
 		OJAnnotatedOperation getter = new OJAnnotatedOperation("get" + UmlgClassOperations.className(clazz),
-				UmlgGenerationUtil.umlgSequence.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
+				UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
 		root.addToOperations(getter);
-		OJField result = new OJField("result", UmlgGenerationUtil.umlgSequence.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
-		result.setInitExp("new " + UmlgGenerationUtil.umlgMemorySequence.getCopy().getLast() + "<" + UmlgClassOperations.getPathName(clazz).getLast() + ">()");
-		root.addToImports(UmlgGenerationUtil.umlgMemorySequence);
-		root.addToImports(new OJPathName("java.util.ArrayList"));
-		getter.getBody().addToLocals(result);
-		OJField iter = new OJField("iter", new OJPathName("java.util.Iterator").addToGenerics(UmlgGenerationUtil.edgePathName));
-		iter.setInitExp("getRootVertex().getEdges(Direction.OUT, "+ UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +".getUmlgLabelConverter().convert(\"root" + UmlgClassOperations.getQualifiedName(clazz) + "\")).iterator()");
-		getter.getBody().addToLocals(iter);
-		OJWhileStatement ojWhileStatement = new OJWhileStatement();
-		ojWhileStatement.setCondition("iter.hasNext()");
-		ojWhileStatement.getBody().addToStatements(UmlgGenerationUtil.edgePathName.getLast() + " edge = iter.next()");
-		ojWhileStatement.getBody().addToStatements("result.add(new " + UmlgClassOperations.className(clazz) + "(edge.getVertex(Direction.IN)));");
-		getter.getBody().addToStatements(ojWhileStatement);
-		getter.getBody().addToStatements("return result");
+		getter.getBody().addToStatements("return " + UmlgClassOperations.getMetaClassPathName(clazz) + ".getInstance().getAllInstances()");
 		root.addToImports(UmlgGenerationUtil.tinkerDirection);
         root.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);
 	}

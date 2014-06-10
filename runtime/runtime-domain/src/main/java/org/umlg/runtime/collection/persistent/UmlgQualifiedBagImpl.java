@@ -31,46 +31,21 @@ public class UmlgQualifiedBagImpl<E> extends BaseBag<E> implements UmlgQualified
 				v = node.getVertex();
 				Set<Edge> edges = UMLG.get().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
-//					removeEdgefromIndex(edge);
 					UMLG.get().removeEdge(edge);
 				}
 			} else if (o.getClass().isEnum()) {
-                List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + o.toString());
+                List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + o.toString());
                 Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
                 v = vertexes.get(0);
-//				v = this.internalVertexMap.get(((Enum<?>) o).name());
-//				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
 				UMLG.get().removeVertex(v);
 			} else {
-                List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + o.toString());
+                List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + o.toString());
                 Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
                 v = vertexes.get(0);
-//				v = this.internalVertexMap.get(o);
-//				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
 				UMLG.get().removeVertex(v);
 			}
 		}
 		return result;
 	}
-
-//	private void removeEdgefromIndex(Edge edge) {
-//		for (String key : edge.getPropertyKeys()) {
-//			if (key.startsWith("index")) {
-//				this.index.remove(key, edge.getProperty(key), edge);
-//			}
-//		}
-//	}
-
-//	protected void validateQualifiedMultiplicity(List<Qualifier> qualifiers) {
-//		for (Qualifier qualifier : qualifiers) {
-//			if (qualifier.isOne()) {
-//				long count = this.index.count(qualifier.getKey(), qualifier.getValue());
-//				if (count > 0) {
-//					// Add info to exception
-//					throw new IllegalStateException("qualifier fails, entry for qualifier already exist");
-//				}
-//			}
-//		}
-//	}
 
 }

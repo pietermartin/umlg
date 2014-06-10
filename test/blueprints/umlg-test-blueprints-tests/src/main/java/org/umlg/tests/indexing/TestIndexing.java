@@ -19,7 +19,7 @@ public class TestIndexing extends BaseLocalDbTest {
         topRoot.setName("asdasdasd");
         topRoot.setIndexedName("a");
         db.commit();
-        topRoot = db.getFromUniqueIndex(TopRoot.TopRootRuntimePropertyEnum.indexedName.getQualifiedName(), "a");
+        topRoot = db.getFromUniqueIndex(TopRoot.TopRootRuntimePropertyEnum.indexedName.getPersistentName(), "a");
         Assert.assertNotNull(topRoot);
         Assert.assertEquals("a", topRoot.getIndexedName());
 
@@ -36,15 +36,15 @@ public class TestIndexing extends BaseLocalDbTest {
             topRoot.setIndexedName(String.valueOf(i));
         }
         db.commit();
-        TopRoot topRoot = db.getFromUniqueIndex(TopRoot.TopRootRuntimePropertyEnum.indexedName.getQualifiedName(), "0");
+        TopRoot topRoot = db.getFromUniqueIndex(TopRoot.TopRootRuntimePropertyEnum.indexedName.getPersistentName(), "0");
         Assert.assertNotNull(topRoot);
         Assert.assertEquals("0", topRoot.getIndexedName());
 
-        topRoot = db.getFromUniqueIndex(TopRoot.TopRootRuntimePropertyEnum.indexedName.getQualifiedName(), "50");
+        topRoot = db.getFromUniqueIndex(TopRoot.TopRootRuntimePropertyEnum.indexedName.getPersistentName(), "50");
         Assert.assertNotNull(topRoot);
         Assert.assertEquals("50", topRoot.getIndexedName());
 
-        topRoot = db.getFromUniqueIndex(TopRoot.TopRootRuntimePropertyEnum.indexedName.getQualifiedName(), "99");
+        topRoot = db.getFromUniqueIndex(TopRoot.TopRootRuntimePropertyEnum.indexedName.getPersistentName(), "99");
         Assert.assertNotNull(topRoot);
         Assert.assertEquals("99", topRoot.getIndexedName());
     }
@@ -90,22 +90,22 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexedNonUniqueName.getQualifiedName(), "aaaa");
+        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexedNonUniqueName.getPersistentName(), "aaaa");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexedNonUniqueName.getQualifiedName(), "bbbb");
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexedNonUniqueName.getPersistentName(), "bbbb");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexedNonUniqueName.getQualifiedName(), "cccc");
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexedNonUniqueName.getPersistentName(), "cccc");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexedNonUniqueName.getQualifiedName(), "dddd");
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexedNonUniqueName.getPersistentName(), "dddd");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexedNonUniqueName.getQualifiedName(), "eeee");
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexedNonUniqueName.getPersistentName(), "eeee");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexedNonUniqueName.getQualifiedName(), "ffff");
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexedNonUniqueName.getPersistentName(), "ffff");
         Assert.assertEquals(0, topRoots.size());
 
     }
@@ -233,22 +233,22 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getQualifiedName(), 1);
+        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getPersistentName(), 1);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getQualifiedName(), 2);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getPersistentName(), 2);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getQualifiedName(), 3);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getPersistentName(), 3);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getQualifiedName(), 4);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getPersistentName(), 4);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getQualifiedName(), 5);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getPersistentName(), 5);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getQualifiedName(), 6);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getPersistentName(), 6);
         Assert.assertEquals(0, topRoots.size());
 
     }
@@ -311,22 +311,22 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getQualifiedName(), 1);
+        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getPersistentName(), 1);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getQualifiedName(), 2);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getPersistentName(), 2);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getQualifiedName(), 3);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getPersistentName(), 3);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getQualifiedName(), 4);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getPersistentName(), 4);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getQualifiedName(), 5);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueUnlimitedNatural.getPersistentName(), 5);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getQualifiedName(), 6L);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getPersistentName(), 6L);
         Assert.assertEquals(0, topRoots.size());
 
     }
@@ -389,22 +389,22 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getQualifiedName(), 1D);
+        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getPersistentName(), 1D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getQualifiedName(), 2D);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getPersistentName(), 2D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getQualifiedName(), 3D);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getPersistentName(), 3D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getQualifiedName(), 4D);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getPersistentName(), 4D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getQualifiedName(), 5D);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueReal.getPersistentName(), 5D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getQualifiedName(), 6L);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueInteger.getPersistentName(), 6L);
         Assert.assertEquals(0, topRoots.size());
 
     }
@@ -461,10 +461,10 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueBoolean.getQualifiedName(), true);
+        List<TopRoot> topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueBoolean.getPersistentName(), true);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueBoolean.getQualifiedName(), false);
+        topRoots = db.getFromIndex(TopRoot.TopRootRuntimePropertyEnum.indexNonUniqueBoolean.getPersistentName(), false);
         Assert.assertEquals(80, topRoots.size());
     }
 

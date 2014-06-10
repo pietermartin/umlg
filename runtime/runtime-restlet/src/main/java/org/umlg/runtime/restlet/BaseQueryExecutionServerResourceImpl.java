@@ -19,7 +19,7 @@ public abstract class BaseQueryExecutionServerResourceImpl extends ServerResourc
     protected Representation execute(String query, Object contextId, String type) {
         if (type.equalsIgnoreCase("ocl")) {
             UmlgNode context = UMLG.get().getEntity(contextId);
-//            UMLG.get().executeQueryToString(UmlgQueryEnum.OCL, context.getId(), query);
+//            UMLG.get().executeQueryToJson(UmlgQueryEnum.OCL, context.getId(), query);
             return new JsonRepresentation(UmlgOclExecutor.executeOclQueryAsJson(context, query));
         } else if (type.equalsIgnoreCase("groovy")) {
             String result = GroovyExecutor.INSTANCE.executeGroovyAsString(contextId, query);

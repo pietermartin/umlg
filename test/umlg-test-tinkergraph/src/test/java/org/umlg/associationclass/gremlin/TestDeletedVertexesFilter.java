@@ -35,7 +35,7 @@ public class TestDeletedVertexesFilter extends BaseLocalDbTest {
         human4.delete();
         db.commit();
 
-        vertexes = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, null, "g.V");
+        vertexes = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, null, "g.V.hasNot('deleted', true)");
         Assert.assertTrue(vertexes instanceof Pipeline);
         pipe = (Pipeline<Object, Vertex>) vertexes;
         Assert.assertEquals(16, pipe.count());

@@ -72,7 +72,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         } else if (getDataTypeEnum() != null) {
             loadOneDataType();
         } else {
-            E value = this.vertex.getProperty(getQualifiedName());
+            E value = this.vertex.getProperty(getPersistentName());
             if (value != null) {
                 if (isOneEnumeration()) {
                     Class<?> c = this.getPropertyType();
@@ -86,15 +86,15 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     protected Vertex removeFromInternalMap(Object key) {
-        List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + key.toString());
+        List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + key.toString());
         Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
         Vertex vertex = vertexes.get(0);
-        this.internalVertexMap.remove(getQualifiedName() + key.toString(), vertex);
+        this.internalVertexMap.remove(getPersistentName() + key.toString(), vertex);
         return vertex;
     }
 
     protected void putToInternalMap(Object key, Vertex vertex) {
-        this.internalVertexMap.put(getQualifiedName() + key.toString(), vertex);
+        this.internalVertexMap.put(getPersistentName() + key.toString(), vertex);
     }
 
     protected Iterator<Edge> getEdges() {
@@ -551,7 +551,10 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     //Need to break here for bag logic. There will only be more than one edge in the case of the collection being a bag.
                     break;
                 }
-            } else if (o.getClass().isEnum()) {
+
+
+
+            } else if (e.getClass().isEnum()  && (isManyToMany() || isOneToMany())) {
                 v = removeFromInternalMap(o);
                 if (isOrdered()) {
                     removeFromLinkedList(v);
@@ -560,14 +563,14 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     removeFromInverseLinkedList(v);
                 }
                 UMLG.get().removeVertex(v);
-            } else if (isOnePrimitive() && getDataTypeEnum() == null) {
-                this.vertex.removeProperty(getQualifiedName());
+            } else if ((isOneEnumeration() || isOnePrimitive()) && getDataTypeEnum() == null) {
+                this.vertex.removeProperty(getPersistentName());
                 if (isOnePrimitivePropertyOfAssociationClass()) {
                     Object edgeId = this.vertex.getProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
                     //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
                     if (edgeId != null) {
                         Edge edge1 = UMLG.get().getEdge(edgeId);
-                        edge1.removeProperty(getQualifiedName());
+                        edge1.removeProperty(getPersistentName());
                         //This is here because Titan has the nasty habit of recreating edges and changing the id.
                         this.vertex.setProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID, edge1.getId().toString());
                     }
@@ -582,7 +585,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 }
                 UMLG.get().removeVertex(v);
             } else if (getDataTypeEnum() != null) {
-                this.vertex.removeProperty(getQualifiedName());
+                this.vertex.removeProperty(getPersistentName());
             } else {
                 v = removeFromInternalMap(o);
                 if (this.owner instanceof TinkerAuditableNode) {
@@ -621,25 +624,25 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             this.handleInverseSide(node, umlgRuntimeProperty, true, this.owner);
         } else if (e.getClass().isEnum()  && (isManyToMany() || isOneToMany())) {
             v = UMLG.get().addVertex(null);
-            v.setProperty(getQualifiedName(), ((Enum<?>) e).name());
+            v.setProperty(getPersistentName(), ((Enum<?>) e).name());
             v.setProperty("className", e.getClass().getName());
             putToInternalMap(e, v);
         } else if (isOnePrimitive()) {
-            this.vertex.setProperty(getQualifiedName(), e);
+            this.vertex.setProperty(getPersistentName(), e);
             if (isOnePrimitivePropertyOfAssociationClass()) {
                 Object edgeId = this.vertex.getProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
                 //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
                 if (edgeId != null) {
-                    UMLG.get().getEdge(edgeId).setProperty(getQualifiedName(), e);
+                    UMLG.get().getEdge(edgeId).setProperty(getPersistentName(), e);
                 }
             }
         } else if (isOneEnumeration()) {
-            this.vertex.setProperty(getQualifiedName(), ((Enum<?>) e).name());
+            this.vertex.setProperty(getPersistentName(), ((Enum<?>) e).name());
             if (isOnePrimitivePropertyOfAssociationClass()) {
                 Object edgeId = this.vertex.getProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
                 //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
                 if (edgeId != null) {
-                    UMLG.get().getEdge(edgeId).setProperty(getQualifiedName(), ((Enum<?>) e).name());
+                    UMLG.get().getEdge(edgeId).setProperty(getPersistentName(), ((Enum<?>) e).name());
                 }
             }
         } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
@@ -651,7 +654,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             setDataTypeOnVertex(this.vertex, e);
         } else {
             v = UMLG.get().addVertex(null);
-            v.setProperty(getQualifiedName(), e);
+            v.setProperty(getPersistentName(), e);
             v.setProperty("className", e.getClass().getName());
             putToInternalMap(e, v);
         }
@@ -726,14 +729,14 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             }
         } else if (e.getClass().isEnum()) {
             Vertex v = UMLG.get().addVertex(null);
-            v.setProperty(getQualifiedName(), ((Enum<?>) e).name());
+            v.setProperty(getPersistentName(), ((Enum<?>) e).name());
             Edge auditEdge = UMLG.get().addEdge(null, auditOwner.getAuditVertex(), v, this.getLabel());
             auditEdge.setProperty("outClass", auditOwner.getClass().getName() + "Audit");
             auditEdge.setProperty("inClass", e.getClass().getName());
         } else {
             if (TransactionThreadVar.hasNoAuditEntry(owner.getClass().getName() + e.getClass().getName() + e.toString())) {
                 Vertex auditVertex = UMLG.get().addVertex(null);
-                auditVertex.setProperty(getQualifiedName(), e);
+                auditVertex.setProperty(getPersistentName(), e);
                 TransactionThreadVar.putAuditVertexFalse(owner.getClass().getName() + e.getClass().getName() + e.toString(), auditVertex);
                 auditVertex.setProperty("transactionNo", ((UmlgAdminGraph) UMLG.get()).getTransactionCount());
                 Edge auditEdge;
@@ -972,6 +975,11 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     @Override
     public String getQualifiedName() {
         return this.umlgRuntimeProperty.getQualifiedName();
+    }
+
+    @Override
+    public String getPersistentName() {
+        return this.umlgRuntimeProperty.getPersistentName();
     }
 
     @Override
@@ -1294,26 +1302,11 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     private void setDataTypeOnVertex(Vertex v, E e) {
-        v.setProperty(getQualifiedName(), UmlgFormatter.format(getDataTypeEnum(), e));
-//        if (getDataTypeEnum().isDateTime()) {
-//            v.setProperty(getQualifiedName(), e.toString());
-//        } else if (getDataTypeEnum().isDate()) {
-//            v.setProperty(getQualifiedName(), e.toString());
-//        } else if (getDataTypeEnum().isTime()) {
-//            v.setProperty(getQualifiedName(), e.toString());
-//        } else if (getDataTypeEnum().isInternationalPhoneNumber()) {
-//            v.setProperty(getQualifiedName(), e);
-//        } else if (getDataTypeEnum().isLocalPhoneNumber()) {
-//            v.setProperty(getQualifiedName(), e);
-//        } else if (getDataTypeEnum().isEmail()) {
-//            v.setProperty(getQualifiedName(), e);
-//        } else {
-//            throw new IllegalStateException(String.format("Uncatered for DataType %s", new String[]{getDataTypeEnum().getClass().getName()}));
-//        }
+        v.setProperty(getPersistentName(), UmlgFormatter.format(getDataTypeEnum(), e));
     }
 
     private void loadOneDataType() {
-        Object s = this.vertex.getProperty(getQualifiedName());
+        Object s = this.vertex.getProperty(getPersistentName());
         if (s != null) {
             E result = UmlgFormatter.parse(getDataTypeEnum(), s);
             this.internalCollection.add(result);
@@ -1335,7 +1328,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     protected E loadDataTypeFromVertex(Vertex v) {
         E result = null;
-        Object s = v.getProperty(getQualifiedName());
+        Object s = v.getProperty(getPersistentName());
         if (s != null) {
             result = UmlgFormatter.parse(getDataTypeEnum(), s);
             putToInternalMap(result, v);
@@ -1351,7 +1344,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             try {
                 Class<?> c = this.getClassToInstantiate(edge);
                 if (c.isEnum()) {
-                    Object value = this.getVertexForDirection(edge).getProperty(getQualifiedName());
+                    Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
                     node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                     putToInternalMap(node, this.getVertexForDirection(edge));
                 } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
@@ -1360,7 +1353,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 } else if (UmlgNode.class.isAssignableFrom(c)) {
                     node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                 } else {
-                    Object value = this.getVertexForDirection(edge).getProperty(getQualifiedName());
+                    Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
                     node = (E) value;
                     putToInternalMap(value, this.getVertexForDirection(edge));
                 }

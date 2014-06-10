@@ -38,6 +38,11 @@ public class RuntimePropertyImplementor {
         qualifiedName.setName("_qualifiedName");
         ojEnum.addToFields(qualifiedName);
 
+        OJField persistentName = new OJField();
+        persistentName.setType(new OJPathName("String"));
+        persistentName.setName("_persistentName");
+        ojEnum.addToFields(persistentName);
+
         OJField inverseName = new OJField();
         inverseName.setType(new OJPathName("String"));
         inverseName.setName("_inverseName");
@@ -291,7 +296,13 @@ public class RuntimePropertyImplementor {
                         pWrap.isMemberOfAssociationClass() ? new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName() : null,
                         false,
                         false,
-                        ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
+                        ojEnum,
+                        fromLabel,
+                        fromQualifiedName,
+                        fromInverseQualifiedName,
+                        pWrap.fieldname(),
+                        pWrap.getQualifiedName(),
+                        pWrap.getQualifiedName().replace("::", "_"),
                         pWrap.getInverseName(), pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
                         pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                         pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
@@ -312,7 +323,12 @@ public class RuntimePropertyImplementor {
                             new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName(),
                             true,
                             false,
-                            ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
+                            ojEnum, fromLabel,
+                            fromQualifiedName,
+                            fromInverseQualifiedName,
+                            pWrap.fieldname(),
+                            pWrap.getQualifiedName(),
+                            pWrap.getQualifiedName().replace("::", "_"),
                             pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(),
                             pWrap.getValidations(), pWrap.isEnumeration(), /*manyToOne*/pWrap.isACManyToOne(), /*many*/pWrap.isACMany(), pWrap.isControllingSide(),
                                 /*composite*/true, /*inverseComposite*/true, /*oneToOne*/pWrap.isACOneToOne(), /*oneToMany*/pWrap.isACOneToMany(),
@@ -331,7 +347,10 @@ public class RuntimePropertyImplementor {
                             null/*inverseAssociationClassPropertyName*/,
                             false/*isAssociationClassProperty*/,
                             (pWrap.isOne() && pWrap.isDataType()) ? true : false,
-                            ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
+                            ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName,
+                            pWrap.fieldname(),
+                            pWrap.getQualifiedName(),
+                            pWrap.getQualifiedName().replace("::", "_"),
                             pWrap.getInverseName(), pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
                             pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                             pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
@@ -353,7 +372,12 @@ public class RuntimePropertyImplementor {
                         new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName(),
                         false,
                         false,
-                        ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.getAssociationClassFakePropertyName(), pWrap.getQualifiedName() + "AC",
+                        ojEnum, fromLabel,
+                        fromQualifiedName,
+                        fromInverseQualifiedName,
+                        pWrap.getAssociationClassFakePropertyName(),
+                        pWrap.getQualifiedName() + "AC",
+                        pWrap.getQualifiedName().replace("::", "_") + "AC",
                         pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
                         pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                         pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
@@ -368,7 +392,13 @@ public class RuntimePropertyImplementor {
 
         if (!hasCompositeOwner) {
             // Add in fake property to root
-            addEnumLiteral(false, false, null, null, false, false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, modelName, modelName, "inverseOf" + modelName, "inverseOf" + modelName, false, false, null,
+            addEnumLiteral(false, false, null, null, false, false, ojEnum, fromLabel,
+                    fromQualifiedName,
+                    fromInverseQualifiedName,
+                    modelName,
+                    modelName.replace("::", "_"),
+                    modelName,
+                    "inverseOf" + modelName, "inverseOf" + modelName, false, false, null,
                     Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, 1, false, false, false, false, false, false, false, false,
                     "root" + className.getName(),
                     "Object");
@@ -398,6 +428,7 @@ public class RuntimePropertyImplementor {
             OJAnnotatedOperation fromInverseQualifiedName,
             String fieldName,
             String qualifiedName,
+            String persistentName,
             String inverseName,
             String inverseQualifiedName,
             boolean isReadOnly,
@@ -448,6 +479,12 @@ public class RuntimePropertyImplementor {
         propertyQualifiedNameField.setType(new OJPathName("String"));
         propertyQualifiedNameField.setInitExp("\"" + qualifiedName + "\"");
         ojEnumLiteral.addToAttributeValues(propertyQualifiedNameField);
+
+        OJField propertyPersistentNameField = new OJField();
+        propertyPersistentNameField.setName("persistentName");
+        propertyPersistentNameField.setType(new OJPathName("String"));
+        propertyPersistentNameField.setInitExp("\"" + persistentName + "\"");
+        ojEnumLiteral.addToAttributeValues(propertyPersistentNameField);
 
         OJField propertyInverseNameField = new OJField();
         propertyInverseNameField.setName("inverseName");
@@ -748,6 +785,10 @@ public class RuntimePropertyImplementor {
 
         sb.append("\\\"qualifiedName\\\": \\");
         sb.append(propertyQualifiedNameField.getInitExp().subSequence(0, propertyQualifiedNameField.getInitExp().length() - 1));
+        sb.append("\\\", ");
+
+        sb.append("\\\"persistentName\\\": \\");
+        sb.append(propertyPersistentNameField.getInitExp().subSequence(0, propertyPersistentNameField.getInitExp().length() - 1));
         sb.append("\\\", ");
 
         sb.append("\\\"inverseName\\\": \\");

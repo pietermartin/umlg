@@ -35,7 +35,7 @@ public class TestGroovyExecutor extends BaseLocalDbTest {
         db.commit();
         Assert.assertNotNull(universe1.getGod());
 
-        String result = db.executeQueryToString(UmlgQueryEnum.GROOVY, god.getId(), "self.out");
+        String result = db.executeQueryToJson(UmlgQueryEnum.GROOVY, god.getId(), "self.out");
         Assert.assertTrue(result.startsWith("v["));
 
         String idAsString;
@@ -75,13 +75,13 @@ public class TestGroovyExecutor extends BaseLocalDbTest {
         db.commit();
         Assert.assertNotNull(universe1.getGod());
 
-        String result = db.executeQueryToString(UmlgQueryEnum.GROOVY, god.getId(), "self.umlgtest::org::umlg::concretetest::God::name");
+        String result = db.executeQueryToJson(UmlgQueryEnum.GROOVY, god.getId(), "self.umlgtest_org_umlg_concretetest_God_name");
         Assert.assertTrue(result.startsWith("THEGOD"));
 
-        result = db.executeQueryToString(UmlgQueryEnum.GROOVY, god.getId(), "self.has('umlgtest::org::umlg::concretetest::God::name')");
+        result = db.executeQueryToJson(UmlgQueryEnum.GROOVY, god.getId(), "self.has('umlgtest_org_umlg_concretetest_God_name')");
         Assert.assertTrue(result.startsWith("v["));
 
-        result = db.executeQueryToString(UmlgQueryEnum.GROOVY, god.getId(), "self.has('name')");
+        result = db.executeQueryToJson(UmlgQueryEnum.GROOVY, god.getId(), "self.has('name')");
         Assert.assertTrue(result.startsWith("v["));
 
     }
@@ -112,8 +112,9 @@ public class TestGroovyExecutor extends BaseLocalDbTest {
         sb.append("new Space(stNew);");
         sb.append("new Time(stNew);");
         sb.append("newGod.addToUniverse(universeNew);");
+        sb.append("UMLG.get().commit();");
 
-        String result = db.executeQueryToString(UmlgQueryEnum.GROOVY, null, sb.toString());
+        String result = db.executeQueryToJson(UmlgQueryEnum.GROOVY, null, sb.toString());
         db.commit();
 
         Assert.assertEquals(2, GodMeta.getInstance().getAllInstances().size());
@@ -133,11 +134,11 @@ public class TestGroovyExecutor extends BaseLocalDbTest {
         db.commit();
         Assert.assertNotNull(universe1.getGod());
 
-        Object result = db.executeQuery(UmlgQueryEnum.GROOVY, god.getId(), "self.umlgtest::org::umlg::concretetest::God::name");
+        Object result = db.executeQuery(UmlgQueryEnum.GROOVY, god.getId(), "self.umlgtest_org_umlg_concretetest_God_name");
         Assert.assertTrue(result instanceof String);
         Assert.assertTrue(((String)result).startsWith("THEGOD"));
 
-        result = db.executeQuery(UmlgQueryEnum.GROOVY, god.getId(), "self.has('umlgtest::org::umlg::concretetest::God::name')");
+        result = db.executeQuery(UmlgQueryEnum.GROOVY, god.getId(), "self.has('umlgtest_org_umlg_concretetest_God_name')");
         Assert.assertTrue(result instanceof Pipeline);
         Assert.assertEquals(god.getId(), ((Pipeline<Object, Vertex>) result).next().getId());
 
