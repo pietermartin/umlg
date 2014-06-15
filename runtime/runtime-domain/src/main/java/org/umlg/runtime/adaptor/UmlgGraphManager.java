@@ -38,7 +38,11 @@ public class UmlgGraphManager {
             UmlgGraph umlgGraph = nakedGraphFactory.getTumlGraph(dbUrl);
             return umlgGraph;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException)e;
+            } else {
+                throw new RuntimeException(e);
+            }
         }
     }
 

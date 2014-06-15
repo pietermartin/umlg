@@ -1,8 +1,7 @@
 package org.umlg.runtime.collection.persistent;
 
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.structure.Edge;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -22,10 +21,6 @@ import java.util.Set;
  * Time: 10:08 AM
  */
 public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends UmlgSequenceImpl<AssociationClassNode> {
-
-    public UmlgAssociationClassSequenceImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
-        super(owner, runtimeProperty);
-    }
 
     /**
      * This gets invoked from the opposite side in addInternal.
@@ -52,18 +47,18 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
         if (!isOnePrimitive() && getDataTypeEnum() == null) {
             for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
                 Edge edge = iter.next();
-                if (edge.getPropertyKeys().contains(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
+                if (edge.properties().containsKey(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
                     AssociationClassNode node;
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);
                         if (c.isEnum()) {
-                            Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
+                            Object value = this.getVertexForDirection(edge).value(getPersistentName());
                             node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                             putToInternalMap(node, this.getVertexForDirection(edge));
                         } else if (UmlgNode.class.isAssignableFrom(c)) {
                             node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                         } else {
-                            Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
+                            Object value = this.getVertexForDirection(edge).value(getPersistentName());
                             node = (AssociationClassNode) value;
                             putToInternalMap(value, this.getVertexForDirection(edge));
                         }
@@ -74,30 +69,34 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
                 }
             }
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isDateTime()) {
-            String s = this.vertex.getProperty(getLabel());
+            String s = this.vertex.value(getLabel());
             if (s != null) {
                 AssociationClassNode property = (AssociationClassNode) new DateTime(s);
                 this.internalCollection.add(property);
             }
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isDate()) {
-            String s = this.vertex.getProperty(getLabel());
+            String s = this.vertex.value(getLabel());
             if (s != null) {
                 AssociationClassNode property = (AssociationClassNode) new LocalDate(s);
                 this.internalCollection.add(property);
             }
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isTime()) {
-            String s = this.vertex.getProperty(getLabel());
+            String s = this.vertex.value(getLabel());
             if (s != null) {
                 AssociationClassNode property = (AssociationClassNode) new LocalTime(s);
                 this.internalCollection.add(property);
             }
         } else {
-            AssociationClassNode property = this.vertex.getProperty(getLabel());
+            AssociationClassNode property = this.vertex.value(getLabel());
             if (property != null) {
                 this.internalCollection.add(property);
             }
         }
         this.loaded = true;
+    }
+
+    public UmlgAssociationClassSequenceImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
+        super(owner, runtimeProperty);
     }
 
     @Override
@@ -114,15 +113,15 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
             }
             Vertex associationClassVertex = null;
             for (Edge edge : edges) {
-                associationClassVertex = UMLG.get().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
+                associationClassVertex = UMLG.get().v(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
             }
 
             Class<?> c;
             if (hyperVertexEdge) {
-                c = Class.forName((String) associationClassVertex.getProperty("className"));
+                c = Class.forName((String) associationClassVertex.value("className"));
                 //This is a debug check
                 //TODO optimize
-                Vertex debugVertex = edgeToElement.getVertex(Direction.IN);
+                Vertex debugVertex = edgeToElement.inV().next();
                 if (!debugVertex.equals(vertexToLoad)) {
                     throw new IllegalStateException("Vertexes should be the same, what is going on?");
                 }
@@ -130,7 +129,7 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
                 c = this.getClassToInstantiate(edgeToElement);
             }
             if (c.isEnum()) {
-                Object value = vertexToLoad.getProperty(getPersistentName());
+                Object value = vertexToLoad.value(getPersistentName());
                 node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                 putToInternalMap(node, vertexToLoad);
             } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
@@ -139,7 +138,7 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
             } else if (UmlgNode.class.isAssignableFrom(c)) {
                 node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(associationClassVertex);
             } else {
-                Object value = vertexToLoad.getProperty(getPersistentName());
+                Object value = vertexToLoad.value(getPersistentName());
                 node = (AssociationClassNode) value;
                 putToInternalMap(value, vertexToLoad);
             }

@@ -1,18 +1,22 @@
 package org.umlg.runtime.adaptor;
 
-import com.tinkerpop.blueprints.*;
+import com.tinkerpop.gremlin.structure.Edge;
+import com.tinkerpop.gremlin.structure.Graph;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public interface UmlgGraph extends TransactionalGraph, KeyIndexableGraph {
+public interface UmlgGraph extends Graph {
     static final String ROOT_VERTEX = "UmlgRootVertex";
     static final String DELETION_VERTEX = "deletionVertex";
     static final String DELETED_VERTEX_EDGE = "deletedVertexEdgeToRoot";
     static final String ROOT_CLASS_NAME = "org.umlg.root.Root";
+
+    void commit();
+    void rollback();
 
     /**
      * returns the singleton Entity that represents the model.
@@ -108,6 +112,16 @@ public interface UmlgGraph extends TransactionalGraph, KeyIndexableGraph {
      * Remove this instance from the threadvar
      */
     void drop();
+
+    public static class Exceptions {
+        public static IllegalArgumentException classForElementCannotBeNull() {
+            return new IllegalArgumentException("elementClass argument cannot be null.");
+        }
+
+        public static IllegalArgumentException classIsNotIndexable(final Class clazz) {
+            return new IllegalArgumentException("Class is not indexable: " + clazz);
+        }
+    }
 
 
 }

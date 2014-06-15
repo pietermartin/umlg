@@ -22,11 +22,6 @@
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>com.tinkerpop.blueprints</groupId>
-            <artifactId>blueprints-neo4j2-graph</artifactId>
-            <version>2.5.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-test-neo4j</artifactId>
             <version>${umlg.version}</version>

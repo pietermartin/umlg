@@ -1,8 +1,8 @@
 package org.umlg.runtime.collection.persistent;
 
 import com.google.common.base.Preconditions;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.structure.Edge;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgQualifiedBag;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
@@ -31,18 +31,18 @@ public class UmlgQualifiedBagImpl<E> extends BaseBag<E> implements UmlgQualified
 				v = node.getVertex();
 				Set<Edge> edges = UMLG.get().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
-					UMLG.get().removeEdge(edge);
+                    edge.remove();
 				}
 			} else if (o.getClass().isEnum()) {
                 List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + o.toString());
                 Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
                 v = vertexes.get(0);
-				UMLG.get().removeVertex(v);
+                v.remove();
 			} else {
                 List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + o.toString());
                 Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
                 v = vertexes.get(0);
-				UMLG.get().removeVertex(v);
+                v.remove();
 			}
 		}
 		return result;

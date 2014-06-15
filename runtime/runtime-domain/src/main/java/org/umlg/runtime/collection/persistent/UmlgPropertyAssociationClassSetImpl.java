@@ -1,11 +1,11 @@
 package org.umlg.runtime.collection.persistent;
 
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.structure.Edge;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgCollection;
-import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgPropertyAssociationClassSet;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.AssociationClassNode;
 import org.umlg.runtime.domain.UmlgNode;
 
@@ -27,10 +27,10 @@ public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassN
         if (super.add(e)) {
             associationClass.internalAdder(this.umlgRuntimeProperty, true, this.owner);
             associationClass.internalAdder(this.umlgRuntimeProperty, false, (UmlgNode) e);
-            this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId().toString());
-            this.edge.setProperty("className", associationClass.getClass().getName());
+            this.edge.property(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId().toString());
+            this.edge.property("className", associationClass.getClass().getName());
             associationClass.z_internalCopyOnePrimitivePropertiesToEdge(this.edge);
-            associationClass.getVertex().setProperty(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID, this.edge.getId().toString());
+            associationClass.getVertex().property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID, this.edge.id().toString());
             return true;
         } else {
             return false;
@@ -53,13 +53,13 @@ public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassN
         } else if (o.getClass().isEnum()) {
             v = removeFromInternalMap(o);
             removeEdge(v);
-            UMLG.get().removeVertex(v);
+            v.remove();
         } else if (isOnePrimitive() || getDataTypeEnum() != null) {
             throw new IllegalStateException("one primitive or data type can not have an association class.");
         } else {
             v = removeFromInternalMap(o);
             removeEdge(v);
-            UMLG.get().removeVertex(v);
+            v.remove();
         }
 
         return super.remove(o);
@@ -68,9 +68,9 @@ public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassN
     private void removeEdge(Vertex v) {
         Set<Edge> edges = UMLG.get().getEdgesBetween(this.vertex, v, this.getLabel());
         for (Edge edge : edges) {
-            Vertex associationClassVertex = UMLG.get().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
+            Vertex associationClassVertex = UMLG.get().v(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
             //The remove code will delete all in and out edges
-            UMLG.get().removeVertex(associationClassVertex);
+            associationClassVertex.remove();
         }
     }
 

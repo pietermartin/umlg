@@ -1,9 +1,9 @@
 package org.umlg.runtime.domain;
 
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.collection.Qualifier;
-import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.domain.ocl.OclAny;
 import org.umlg.runtime.validation.UmlgConstraintViolation;
 

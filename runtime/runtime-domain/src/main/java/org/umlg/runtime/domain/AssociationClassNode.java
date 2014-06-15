@@ -1,7 +1,7 @@
 package org.umlg.runtime.domain;
 
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.structure.Edge;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 
 /**

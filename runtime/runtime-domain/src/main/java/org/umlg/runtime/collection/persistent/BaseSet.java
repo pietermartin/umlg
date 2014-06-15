@@ -1,10 +1,9 @@
 package org.umlg.runtime.collection.persistent;
 
-import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.gremlin.structure.Edge;
 import org.umlg.runtime.collection.UmlgBag;
-import org.umlg.runtime.collection.UmlgCollection;
-import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibSet;

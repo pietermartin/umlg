@@ -1,7 +1,7 @@
 package org.umlg.runtime.collection.persistent;
 
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.structure.Edge;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -48,18 +48,18 @@ public class UmlgAssociationClassBagImpl<AssociationClassNode> extends UmlgBagIm
         if (!isOnePrimitive() && getDataTypeEnum() == null) {
             for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
                 Edge edge = iter.next();
-                if (edge.getPropertyKeys().contains(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
+                if (edge.properties().containsKey(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
                     AssociationClassNode node;
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);
                         if (c.isEnum()) {
-                            Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
+                            Object value = this.getVertexForDirection(edge).value(getPersistentName());
                             node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                             putToInternalMap(node, this.getVertexForDirection(edge));
                         } else if (UmlgNode.class.isAssignableFrom(c)) {
                             node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                         } else {
-                            Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
+                            Object value = this.getVertexForDirection(edge).value(getPersistentName());
                             node = (AssociationClassNode) value;
                             putToInternalMap(value, this.getVertexForDirection(edge));
                         }
@@ -70,25 +70,25 @@ public class UmlgAssociationClassBagImpl<AssociationClassNode> extends UmlgBagIm
                 }
             }
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isDateTime()) {
-            String s = this.vertex.getProperty(getLabel());
+            String s = this.vertex.value(getLabel());
             if (s != null) {
                 AssociationClassNode property = (AssociationClassNode) new DateTime(s);
                 this.internalCollection.add(property);
             }
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isDate()) {
-            String s = this.vertex.getProperty(getLabel());
+            String s = this.vertex.value(getLabel());
             if (s != null) {
                 AssociationClassNode property = (AssociationClassNode) new LocalDate(s);
                 this.internalCollection.add(property);
             }
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isTime()) {
-            String s = this.vertex.getProperty(getLabel());
+            String s = this.vertex.value(getLabel());
             if (s != null) {
                 AssociationClassNode property = (AssociationClassNode) new LocalTime(s);
                 this.internalCollection.add(property);
             }
         } else {
-            AssociationClassNode property = this.vertex.getProperty(getLabel());
+            AssociationClassNode property = this.vertex.value(getLabel());
             if (property != null) {
                 this.internalCollection.add(property);
             }
@@ -99,8 +99,8 @@ public class UmlgAssociationClassBagImpl<AssociationClassNode> extends UmlgBagIm
     @Override
     protected Class<?> getClassToInstantiate(Edge edge) {
         try {
-            Vertex associationClassVertex = UMLG.get().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
-            return Class.forName((String) associationClassVertex.getProperty("className"));
+            Vertex associationClassVertex = UMLG.get().v(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
+            return Class.forName((String) associationClassVertex.value("className"));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -108,7 +108,7 @@ public class UmlgAssociationClassBagImpl<AssociationClassNode> extends UmlgBagIm
 
     @Override
     protected Vertex getVertexForDirection(Edge edge) {
-        Vertex associationClassVertex = UMLG.get().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
+        Vertex associationClassVertex = UMLG.get().v(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
         return associationClassVertex;
     }
 

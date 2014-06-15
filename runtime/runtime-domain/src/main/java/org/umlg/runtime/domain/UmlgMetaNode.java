@@ -1,6 +1,6 @@
 package org.umlg.runtime.domain;
 
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.collection.UmlgSet;
 

@@ -1,11 +1,11 @@
 package org.umlg.runtime.collection.persistent;
 
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
-import org.apache.commons.collections.set.ListOrderedSet;
-import org.umlg.runtime.adaptor.UMLG;
-import org.umlg.runtime.collection.*;
+import com.tinkerpop.gremlin.structure.Edge;
+import com.tinkerpop.gremlin.structure.Vertex;
+import org.apache.commons.collections4.set.ListOrderedSet;
+import org.umlg.runtime.collection.UmlgOrderedSet;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibOrderedSet;
@@ -38,21 +38,20 @@ public class UmlgOrderedSetClosableIterableImpl<E> extends BaseCollection<E> imp
     protected void addToLinkedList(Edge edge) {
         //Get the new vertex for the element
         Vertex newElementVertex = getVertexForDirection(edge);
-        if (this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().hasNext()) {
-            Edge edgeToLastVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
-            Vertex lastVertex = edgeToLastVertex.getVertex(Direction.IN);
+        if (this.vertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).hasNext()) {
+            Edge edgeToLastVertex = this.vertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).next();
+            Vertex lastVertex = edgeToLastVertex.inV().next();
 
             //move the edge to the last vertex
-            UMLG.get().removeEdge(edgeToLastVertex);
-            UMLG.get().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+            edgeToLastVertex.remove();
+            this.vertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel(), newElementVertex);
 
             //add the element to the linked list
-            UMLG.get().addEdge(null, lastVertex, newElementVertex, LABEL_TO_NEXT_IN_SEQUENCE);
-
+            lastVertex.addEdge(LABEL_TO_NEXT_IN_SEQUENCE, newElementVertex);
         } else {
             //its the first element in the list
-            UMLG.get().addEdge(null, this.vertex, newElementVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
-            UMLG.get().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+            this.vertex.addEdge(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel(), newElementVertex);
+            this.vertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel(), newElementVertex);
         }
     }
 
@@ -219,7 +218,7 @@ public class UmlgOrderedSetClosableIterableImpl<E> extends BaseCollection<E> imp
             try {
                 Class<?> c = this.getClassToInstantiate(edge);
                 if (c.isEnum()) {
-                    Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
+                    Object value = this.getVertexForDirection(edge).value(getPersistentName());
                     node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                     putToInternalMap(node, this.getVertexForDirection(edge));
                 } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
@@ -228,7 +227,7 @@ public class UmlgOrderedSetClosableIterableImpl<E> extends BaseCollection<E> imp
                 } else if (UmlgNode.class.isAssignableFrom(c)) {
                     node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                 } else {
-                    Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
+                    Object value = this.getVertexForDirection(edge).value(getPersistentName());
                     node = (E) value;
                     putToInternalMap(value, this.getVertexForDirection(edge));
                 }

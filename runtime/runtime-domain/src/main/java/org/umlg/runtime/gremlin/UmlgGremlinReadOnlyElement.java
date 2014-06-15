@@ -1,8 +1,7 @@
 package org.umlg.runtime.gremlin;
 
-import com.tinkerpop.blueprints.Element;
-import com.tinkerpop.blueprints.util.ElementHelper;
-import com.tinkerpop.blueprints.util.wrappers.readonly.ReadOnlyTokens;
+
+import com.tinkerpop.gremlin.structure.Element;
 
 import java.util.Set;
 

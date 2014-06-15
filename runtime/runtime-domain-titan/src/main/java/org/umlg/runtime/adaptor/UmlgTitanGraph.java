@@ -146,7 +146,7 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph, Uml
 
     @Override
     public <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final Parameter... indexParameters) {
-        Preconditions.checkState(indexParameters.length == 2, "UmlgGraph.createKeyIndex must have indexParameters of length 2, One for the type and one for uniqueness.");
+        Preconditions.checkState(indexParameters.length > 1, "UmlgGraph.createKeyIndex must have indexParameters of length at least 2, One for the type and one for uniqueness.");
         Parameter<String, Class<?>> indexParameter = indexParameters[0];
         Parameter<String, Boolean> uniqueParameter = indexParameters[1];
         if (indexParameter.getValue() == String.class) {

@@ -1,10 +1,10 @@
 package org.umlg.runtime.domain;
 
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgExceptionUtilFactory;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
@@ -25,7 +25,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     public BaseUmlg(Vertex vertex) {
         super();
         //check if it has been deleted
-        Boolean deleted = vertex.getProperty("deleted");
+        Boolean deleted = vertex.value("deleted");
         if (deleted != null && deleted) {
             throw new IllegalStateException("Vertex has been deleted!");
         }
@@ -37,8 +37,8 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     public BaseUmlg(Object id) {
         super();
         //check if it has been deleted
-        this.vertex = UMLG.get().getVertex(id);
-        Boolean deleted = this.vertex.getProperty("deleted");
+        this.vertex = UMLG.get().v(id);
+        Boolean deleted = this.vertex.value("deleted");
         if (deleted != null && deleted) {
             throw new IllegalStateException("Vertex has been deleted!");
         }
@@ -49,7 +49,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     public BaseUmlg(Boolean persistent) {
         super();
         this.vertex = UMLG.get().addVertex(this.getClass().getName());
-        this.vertex.setProperty("className", getClass().getName());
+        this.vertex.property("className", getClass().getName());
         addToThreadEntityVar();
         addEdgeToMetaNode();
         defaultCreate();
@@ -63,7 +63,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     }
 
     public BaseUmlg reload() {
-        this.vertex = UMLG.get().getVertex(this.vertex.getId());
+        this.vertex = UMLG.get().v(this.vertex.id());
         initialiseProperties();
         return this;
     }
@@ -74,7 +74,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
 
     @Override
     public final Object getId() {
-        return this.vertex.getId();
+        return this.vertex.id();
     }
 
     public Vertex getVertex() {

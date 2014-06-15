@@ -1,6 +1,6 @@
 package org.umlg.runtime.domain;
 
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.structure.Vertex;
 
 
 public interface TinkerAuditNode extends PersistentObject {

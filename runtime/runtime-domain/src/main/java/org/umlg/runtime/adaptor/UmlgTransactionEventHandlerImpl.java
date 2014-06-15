@@ -15,6 +15,10 @@ import java.util.List;
  */
 public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHandler {
 
+    //This is needed in Neo4j when starting up the graph.
+    //In Particular when creating indexes and doing schema updates the transaction count should not be updated as updates
+    // are not allowed when doing schema updates.
+    private boolean bypass = false;
 
     public UmlgTransactionEventHandlerImpl() {
         super();
@@ -23,7 +27,7 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
     @Override
     public void beforeCommit() {
         try {
-            if (UMLG.get() != null) {
+            if (!this.bypass && UMLG.get() != null) {
                 TransactionThreadVar.clear();
                 ((UmlgAdminGraph) UMLG.get()).incrementTransactionCount();
                 List<UmlgNode> entities = TransactionThreadEntityVar.get();
@@ -33,14 +37,9 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
                     if (!requiredConstraintViolations.isEmpty()) {
                         throw new UmlgConstraintViolationException(requiredConstraintViolations);
                     }
-
-                    if (!umlgNode.isTinkerRoot() && /*tumlNode instanceof CompositionNode &&*/ (!umlgNode.hasOnlyOneCompositeParent() || umlgNode.getOwningObject() == null)) {
-//                            if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
-//                                return null;
-//                            }
+                    if (!umlgNode.isTinkerRoot() && (!umlgNode.hasOnlyOneCompositeParent() || umlgNode.getOwningObject() == null)) {
                         throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", umlgNode.getClass().getSimpleName(), umlgNode.getId()));
                     }
-
                     umlgNode.doBeforeCommit();
                 }
             }
@@ -48,6 +47,10 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
         }
+    }
+
+    public void setBypass(boolean bypass) {
+        this.bypass = bypass;
     }
 
 }

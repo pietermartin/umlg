@@ -11,7 +11,7 @@ public class UmlgNeo4jGraphFactory implements UmlgGraphFactory {
 
     private static final Logger logger = Logger.getLogger(UmlgNeo4jGraphFactory.class.getPackage().getName());
     public static UmlgNeo4jGraphFactory INSTANCE = new UmlgNeo4jGraphFactory();
-    private UmlgGraph umlgGraph;
+    private UmlgNeo4jGraph umlgGraph;
 
     private UmlgNeo4jGraphFactory() {
     }
@@ -28,14 +28,18 @@ public class UmlgNeo4jGraphFactory implements UmlgGraphFactory {
             if (!f.exists()) {
                 try {
                     this.umlgGraph = new UmlgNeo4jGraph(f.getAbsolutePath());
-                    ((UmlgAdminGraph)this.umlgGraph).addRoot();
-                    ((UmlgAdminGraph)this.umlgGraph).addDeletionNode();
+                    this.umlgGraph.addRoot();
+                    this.umlgGraph.addDeletionNode();
                     this.umlgGraph.commit();
                     UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
+                    this.umlgGraph.commit();
+                    //This is to bypass the beforeCommit
+                    this.umlgGraph.setBypass(true);
                     UmlGIndexFactory.getUmlgIndexManager().createIndexes();
+                    this.umlgGraph.setBypass(true);
                     this.umlgGraph.commit();
                 } catch (Exception e) {
-                    logger.log(Level.SEVERE, "Could not start titan db!", e);
+                    logger.log(Level.SEVERE, "Could not start neo4j db!", e);
                     if (this.umlgGraph != null) {
                         this.umlgGraph.rollback();
                     }

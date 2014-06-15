@@ -1,8 +1,8 @@
 package org.umlg.runtime.collection.persistent;
 
-import com.tinkerpop.blueprints.Edge;
-import org.umlg.runtime.collection.UmlgSet;
+import com.tinkerpop.gremlin.structure.Edge;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
+import org.umlg.runtime.collection.UmlgSet;
 
 import java.util.Iterator;
 

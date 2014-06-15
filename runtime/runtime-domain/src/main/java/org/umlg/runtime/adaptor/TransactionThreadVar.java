@@ -1,6 +1,6 @@
 package org.umlg.runtime.adaptor;
 
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.structure.Vertex;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,6 @@
 package org.umlg.runtime.domain;
 
-import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.gremlin.structure.Edge;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.domain.activity.AbstractActivity;
@@ -37,8 +37,8 @@ public abstract class BaseTinkerBehavioredClassifier extends BaseUmlgAudit imple
 	}
 	
 	protected void attachToRoot() {
-		Edge edge = UMLG.get().addEdge(null, UMLG.get().getRoot(), this.vertex, "classifierBehavior");
-		edge.setProperty("inClass", this.getClass().getName());
+        Edge edge = UMLG.get().getRoot().addEdge("classifierBehavior", this.vertex);
+		edge.property("inClass", this.getClass().getName());
 	}
 
 	public List<IEvent> getEventPool() {

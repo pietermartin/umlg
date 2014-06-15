@@ -24,7 +24,7 @@
                             <goal>java</goal>
                         </goals>
                         <configuration>
-                            <mainClass>org.umlg.quickpreview.UmlgDemoGenerator</mainClass>
+                            <mainClass>org.umlg.quickpreview.QuickPreviewGenerator</mainClass>
                             <arguments>
                                 <argument>${session.executionRootDirectory}</argument>
                             </arguments>
