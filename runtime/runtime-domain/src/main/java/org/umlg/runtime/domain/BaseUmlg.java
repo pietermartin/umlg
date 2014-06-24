@@ -25,10 +25,13 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     public BaseUmlg(Vertex vertex) {
         super();
         //check if it has been deleted
-        Boolean deleted = vertex.value("deleted");
-        if (deleted != null && deleted) {
-            throw new IllegalStateException("Vertex has been deleted!");
-        }
+        vertex.<Boolean>property("deleted").ifPresent(
+                deleted -> {
+                    if (deleted) {
+                        throw new IllegalStateException("Vertex has been deleted!");
+                    }
+                }
+        );
         this.vertex = vertex;
         TransactionThreadEntityVar.setNewEntity(this);
         initialiseProperties();

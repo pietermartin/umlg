@@ -45,7 +45,7 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
                     UmlgGenerationUtil.edgePathName.getLast() + ".class, " +
                     "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Class<?>").getLast() + "(\"unusedIndexValueType\", String.class), " +
                     "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Boolean").getLast() + "(\"unusedUniqueorNot\", false), " +
-                    "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("String").getLast() + "(\"unusedLabel\", \"" + qualifierWrap.javaBaseTypePath().getLast() + "\"))"
+                    "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("String").getLast() + "(\"unusedLabel\", \"" + qualifierWrap.getPersistentName() + "\"))"
             );
             indexCreator.addToImports(UmlgGenerationUtil.edgePathName);
         }
@@ -85,7 +85,7 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
                             UmlgGenerationUtil.vertexPathName.getLast() + ".class, " +
                             "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Class<?>").getLast() + "(\"unusedIndexValueType\", " + type + ".class), " +
                             "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Boolean").getLast() + "(\"unusedUniqueorNot\", " + unique + "), " +
-                            "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("String").getLast() + "(\"unusedLabel\", \"" + indexedPWrap.javaBaseTypePath().getLast() + "\"))"
+                            "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("String").getLast() + "(\"unusedLabel\", \"" + indexedPWrap.getOwningType().getName() + "\"))"
 
             );
             indexCreator.addToImports(UmlgGenerationUtil.vertexPathName);

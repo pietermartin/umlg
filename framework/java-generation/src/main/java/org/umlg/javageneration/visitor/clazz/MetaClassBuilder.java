@@ -11,6 +11,7 @@ import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.generated.OJVisibilityKindGEN;
+import org.umlg.java.metamodel.java8.ForEachStatement;
 import org.umlg.javageneration.util.Namer;
 import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
@@ -87,7 +88,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
 
     private void addDefaultConstructorStandAlone(OJAnnotatedClass metaClass, Class clazz) {
         metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex = " + UmlgGenerationUtil.UMLGAccess + ".addVertex(this.getClass().getName())");
-        metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
+        metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex.property(\"className\", getClass().getName())");
         metaClass.getDefaultConstructor().getBody().addToStatements("defaultCreate()");
         metaClass.getDefaultConstructor().getBody().addToStatements(UmlgGenerationUtil.UMLGAccess + ".addEdge(null, " + UmlgGenerationUtil.UMLGAccess + ".getRoot(), this.vertex, getEdgeToRootLabel())");
     }
@@ -106,16 +107,24 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(classPathName));
 
         OJField resultField = new OJField("result", UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName));
-        resultField.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
+        resultField.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().getLast() + "()");
         allInstances.getBody().addToLocals(resultField);
-        OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(UmlgGenerationUtil.edgePathName));
-        iter.setInitExp("this.vertex.getEdges(Direction.OUT, " + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
-        allInstances.getBody().addToLocals(iter);
 
-        OJForStatement forIter = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
-        forIter.getBody().addToStatements("result.add(" + UmlgGenerationUtil.UMLGAccess + ".<" + classPathName.getLast() + ">" + UmlgGenerationUtil.getEntity + "(edge.getVertex(Direction.IN).getId()))");
-        allInstances.getBody().addToStatements(forIter);
+        ForEachStatement forEachStatement = new ForEachStatement(
+                "this.vertex.outE(" + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)",
+                "edge"
+        );
+        forEachStatement.addStatement("result.add(" + UmlgGenerationUtil.UMLGAccess + ".<" + classPathName.getLast() + ">" + UmlgGenerationUtil.getEntity + "(edge.inV().next().id()))");
+        allInstances.getBody().addToStatements(forEachStatement);
         allInstances.getBody().addToStatements("return result");
+
+//        OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(UmlgGenerationUtil.edgePathName));
+//        iter.setInitExp("this.vertex.outE(" + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
+//        allInstances.getBody().addToLocals(iter);
+//        OJForStatement forIter = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
+//        forIter.getBody().addToStatements("result.add(" + UmlgGenerationUtil.UMLGAccess + ".<" + classPathName.getLast() + ">" + UmlgGenerationUtil.getEntity + "(edge.inV().next().id()))");
+//        allInstances.getBody().addToStatements(forIter);
+//        allInstances.getBody().addToStatements("return result");
 
         metaClass.addToImports(UmlgGenerationUtil.UMLG_NODE);
         metaClass.addToOperations(allInstances);
@@ -129,21 +138,30 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         OJPathName classPathName = UmlgClassOperations.getPathName(clazz);
         allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(classPathName));
 
+
         OJField resultField = new OJField("result", UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName));
         resultField.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
         allInstances.getBody().addToLocals(resultField);
-        OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(UmlgGenerationUtil.edgePathName));
-        iter.setInitExp("this.vertex.getEdges(Direction.OUT, " + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
-        allInstances.getBody().addToLocals(iter);
 
-        OJForStatement forIter = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
-        forIter.getBody().addToStatements(classPathName.getLast() + " instance = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(edge.getVertex(Direction.IN).getId())");
+        ForEachStatement forEachStatement = new ForEachStatement("this.vertex.outE(" + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)", "edge");
+        forEachStatement.addStatement(classPathName.getLast() + " instance = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(edge.inV().next().id())");
         OJIfStatement ifFilter = new OJIfStatement("filter.filter(instance)");
         ifFilter.addToThenPart("result.add(instance)");
-        forIter.getBody().addToStatements(ifFilter);
-
-        allInstances.getBody().addToStatements(forIter);
+        forEachStatement.addStatement(ifFilter);
+        allInstances.getBody().addToStatements(forEachStatement);
         allInstances.getBody().addToStatements("return result");
+
+//        OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(UmlgGenerationUtil.edgePathName));
+//        iter.setInitExp("this.vertex.outE(" + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
+//        allInstances.getBody().addToLocals(iter);
+//        OJForStatement forIter = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
+//        forIter.getBody().addToStatements(classPathName.getLast() + " instance = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(edge.inV().next().id())");
+//        OJIfStatement ifFilter = new OJIfStatement("filter.filter(instance)");
+//        ifFilter.addToThenPart("result.add(instance)");
+//        forIter.getBody().addToStatements(ifFilter);
+//
+//        allInstances.getBody().addToStatements(forIter);
+//        allInstances.getBody().addToStatements("return result");
 
         metaClass.addToImports(UmlgGenerationUtil.UMLG_NODE);
         metaClass.addToOperations(allInstances);
@@ -211,25 +229,23 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         OJField result = new OJField("result", metaClass.getPathName());
         INSTANCE.getBody().addToLocals(result);
 
-        INSTANCE.getBody().addToStatements("Iterator<Edge> iter = " + UmlgGenerationUtil.UMLGAccess + ".getRoot().getEdges(Direction.OUT, " + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\")).iterator()");
+        INSTANCE.getBody().addToStatements("Iterator<Edge> iter = " + UmlgGenerationUtil.UMLGAccess + ".getRoot().outE(" + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\"))");
         OJIfStatement ifHasNext = new OJIfStatement("iter.hasNext()");
-        ifHasNext.addToThenPart("result =  new " + UmlgClassOperations.getMetaClassName(clazz) + "(iter.next().getVertex(Direction.IN))");
+        ifHasNext.addToThenPart("result =  new " + UmlgClassOperations.getMetaClassName(clazz) + "(iter.next().inV().next())");
         INSTANCE.getBody().addToStatements(ifHasNext);
 
-        ifHasNext.addToElsePart("iter = " + UmlgGenerationUtil.UMLGAccess + ".getRoot().getEdges(Direction.OUT, " + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\")).iterator()");
+        ifHasNext.addToElsePart("iter = " + UmlgGenerationUtil.UMLGAccess + ".getRoot().outE(" + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\"))");
 
         OJIfStatement ifIter2 = new OJIfStatement("!iter.hasNext()");
         ifIter2.addToThenPart("result = new " + metaClass.getName() + "()");
 
-        ifIter2.addToElsePart("result = new " + metaClass.getName() + "(iter.next().getVertex(Direction.IN))");
+        ifIter2.addToElsePart("result = new " + metaClass.getName() + "(iter.next().inV().next())");
         ifHasNext.addToElsePart(ifIter2);
 
         INSTANCE.getBody().addToStatements("return result");
         metaClass.addToImports("java.util.Iterator");
 
-        metaClass.addToImports("com.tinkerpop.blueprints.Direction");
-        metaClass.addToImports("com.tinkerpop.blueprints.Direction");
-        metaClass.addToImports("com.tinkerpop.blueprints.Edge");
+        metaClass.addToImports(UmlgGenerationUtil.edgePathName);
         metaClass.addToImports(UmlgGenerationUtil.UMLGPathName);
 
     }

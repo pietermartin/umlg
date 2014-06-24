@@ -10,10 +10,10 @@ import org.eclipse.uml2.uml.Type;
 import org.umlg.framework.ModelLoader;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
-import org.umlg.java.metamodel.annotation.OJAnnotatedField;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
+import org.umlg.java.metamodel.java8.ForEachStatement;
 import org.umlg.javageneration.util.*;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
@@ -142,8 +142,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         for (PropertyWrapper qualifier : qualifiers) {
             qualifierValue.addParam(qualifier.fieldname(), qualifier.javaBaseTypePath());
         }
-        ojClass.addToImports(UmlgGenerationUtil.umlgCloseableIterablePathName);
-        ojClass.addToImports(UmlgGenerationUtil.tinkerDirection);
+//        ojClass.addToImports(UmlgGenerationUtil.tinkerDirection);
         ojClass.addToImports(UmlgGenerationUtil.edgePathName);
 
         OJBlock elseBlock = new OJBlock();
@@ -174,7 +173,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             }
         }
 
-        elseBlock.addToStatements("Iterator<Edge> iterator = " + UmlgGenerationUtil.UMLGAccess + ".query().has(indexKey, indexValue).edges().iterator()");
+        elseBlock.addToStatements("Iterator<Edge> iterator = " + UmlgGenerationUtil.UMLGAccess + ".V().has(indexKey, indexValue).bothE()");
 
         qualifierValue.getBody().addToStatements(elseBlock);
         ojClass.addToImports("java.util.Iterator");
@@ -182,10 +181,8 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         if (refinedQualifier.isUnqualifiedOne()) {
             OJIfStatement ifControllingSide = new OJIfStatement();
             ifControllingSide.setCondition(UmlgClassOperations.propertyEnumName(qualifiedClassifier) + "." + qualified.fieldname() + ".isControllingSide()");
-            ifControllingSide.addToThenPart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next().getVertex("
-                    + UmlgGenerationUtil.tinkerDirection.getLast() + ".IN))");
-            ifControllingSide.addToElsePart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next().getVertex("
-                    + UmlgGenerationUtil.tinkerDirection.getLast() + ".OUT))");
+            ifControllingSide.addToThenPart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next().inV().next())");
+            ifControllingSide.addToElsePart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next().outV().next())");
             ifHasNext.addToThenPart(ifControllingSide);
             ifHasNext.addToElsePart("return null");
         } else {
@@ -218,8 +215,8 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 
             Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgProfileEnum.QualifierListener.name());
             if (derivedQualifierProperty.isStereotypeApplied(stereotype)) {
-                List<Property> properties = (List<Property>)derivedQualifierProperty.getValue(stereotype, "property");
-                for (Property p: properties) {
+                List<Property> properties = (List<Property>) derivedQualifierProperty.getValue(stereotype, "property");
+                for (Property p : properties) {
                     PropertyWrapper propertyToListenOn = new PropertyWrapper(p);
                     OJAnnotatedOperation setter;
                     if (propertyToListenOn.isMany()) {
@@ -292,9 +289,8 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             updateIndexForQualifier.getBody().addToLocals(qualifierField);
         }
 
-        OJAnnotatedField edgesIter = new OJAnnotatedField("iter", new OJPathName("java.lang.Iterable").addToGenerics(UmlgGenerationUtil.edgePathName));
         sb = new StringBuilder();
-        sb.append("this.vertex.getEdges(");
+        sb.append("this.vertex.edgesFor(");
         sb.append(UmlgClassOperations.propertyEnumName(qualified.getType()));
         sb.append(".");
         sb.append(new PropertyWrapper(qualified.getOtherEnd()).fieldname());
@@ -307,15 +303,37 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         sb.append(".");
         sb.append(otherEnd.fieldname());
         sb.append(".getLabel())");
-        edgesIter.setInitExp(sb.toString());
-        updateIndexForQualifier.getBody().addToLocals(edgesIter);
-        OJForStatement forIndexedEdges = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
-        forIndexedEdges.getBody().addToStatements("edge.setProperty(qualifier.getKey(), qualifier.getValue())");
+
+        ForEachStatement forEachStatement = new ForEachStatement(sb.toString(), "edge");
+        OJSimpleStatement ojSimpleStatement = new OJSimpleStatement();
+        ojSimpleStatement.addToExpression("edge.property(qualifier.getKey(), qualifier.getValue())");
+        forEachStatement.addStatement(ojSimpleStatement);
+
+//        OJAnnotatedField edgesIter = new OJAnnotatedField("iter", new OJPathName("java.lang.Iterable").addToGenerics(UmlgGenerationUtil.edgePathName));
+//        sb = new StringBuilder();
+//        sb.append("this.vertex.getEdges(");
+//        sb.append(UmlgClassOperations.propertyEnumName(qualified.getType()));
+//        sb.append(".");
+//        sb.append(new PropertyWrapper(qualified.getOtherEnd()).fieldname());
+//        sb.append(".isControllingSide() ? ");
+//        sb.append(UmlgGenerationUtil.tinkerDirection.getLast());
+//        sb.append(".OUT : ");
+//        sb.append(UmlgGenerationUtil.tinkerDirection.getLast());
+//        sb.append(".IN, ");
+//        sb.append(UmlgClassOperations.propertyEnumName(qualified.getType()));
+//        sb.append(".");
+//        sb.append(otherEnd.fieldname());
+//        sb.append(".getLabel())");
+//        edgesIter.setInitExp(sb.toString());
+//        updateIndexForQualifier.getBody().addToLocals(edgesIter);
+//        OJForStatement forIndexedEdges = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
+//        forIndexedEdges.getBody().addToStatements("edge.setProperty(qualifier.getKey(), qualifier.getValue())");
+
         if (otherEnd.isMany()) {
-            forElementsOnOtherSide.getBody().addToStatements(forIndexedEdges);
+            forElementsOnOtherSide.getBody().addToStatements(forEachStatement);
             updateIndexForQualifier.getBody().addToStatements(forElementsOnOtherSide);
         } else {
-            updateIndexForQualifier.getBody().addToStatements(forIndexedEdges);
+            updateIndexForQualifier.getBody().addToStatements(forEachStatement);
         }
 
         contextOJClass.addToOperations(updateIndexForQualifier);

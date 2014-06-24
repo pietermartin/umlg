@@ -10,7 +10,6 @@ import org.umlg.concretetest.Universe;
 import org.umlg.navigability.NonNavigableMany;
 import org.umlg.navigability.NonNavigableOne;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.runtime.validation.UmlgConstraintViolationException;
 
 public class NonNavigableTest extends BaseLocalDbTest {
 

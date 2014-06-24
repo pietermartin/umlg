@@ -38,7 +38,13 @@ public class AddIdLiteralsToRuntimeEnum extends BaseVisitor implements Visitor<C
         OJAnnotatedOperation fromLabel = ojEnum.findOperation("fromLabel", new OJPathName("String"));
         OJAnnotatedOperation fromQualifiedName = ojEnum.findOperation("fromQualifiedName", new OJPathName("String"));
         OJAnnotatedOperation fromInverseQualifiedName = ojEnum.findOperation("fromInverseQualifiedName", new OJPathName("String"));
-        RuntimePropertyImplementor.addEnumLiteral(false, false, null, null, false, false,
+        RuntimePropertyImplementor.addEnumLiteral(
+                false,
+                false,
+                null,
+                null,
+                false,
+                false,
                 ojEnum,
                 fromLabel,
                 fromQualifiedName,

@@ -12,7 +12,7 @@ public class UmlgGenerationUtil {
     public static final String Index_UNIQUE = "UNIQUE";
     public static final String Index_NON_UNIQUE = "NON_UNIQUE";
     public static final String BaseClassUmlgQualifiedName = "org::umlg::meta::BaseClassUmlg";
-    public static OJPathName Parameter = new OJPathName("com.tinkerpop.blueprints.Parameter");
+    public static OJPathName Parameter = new OJPathName("org.umlg.runtime.adaptor.Parameter");
     public static OJPathName BASE_CLASS_UMLG = new OJPathName("org.umlg.meta.BaseClassUmlg");
 
     public static String umlgizeUmlName(String umlName) {
@@ -84,7 +84,6 @@ public class UmlgGenerationUtil {
     public static final OJPathName umlgRuntimePropertyPathName = new OJPathName("org.umlg.runtime.collection.UmlgRuntimeProperty");
     public static final OJPathName umlgTransactionalGraphPathName = new OJPathName("com.tinkerpop.blueprints.TransactionalGraph");
 //    public static final OJPathName tinkerIndexPathName = new OJPathName("com.tinkerpop.blueprints.Index");
-    public static final OJPathName umlgCloseableIterablePathName = new OJPathName("com.tinkerpop.blueprints.CloseableIterable");
 
     public static final OJPathName umlgBagCloseableIterablePathName = new OJPathName("org.umlg.runtime.collection.persistent.UmlgBagClosableIterableImpl");
     public static final OJPathName umlgSequenceCloseableIterablePathName = new OJPathName("org.umlg.runtime.collection.persistent.UmlgSequenceClosableIterableImpl");
@@ -92,7 +91,7 @@ public class UmlgGenerationUtil {
     public static final OJPathName umlgOrderedSetCloseableIterablePathName = new OJPathName("org.umlg.runtime.collection.persistent.UmlgOrderedSetClosableIterableImpl");
 
 
-    public static final OJPathName tinkerDirection = new OJPathName("com.tinkerpop.blueprints.Direction");
+    public static final OJPathName tinkerDirection = new OJPathName("com.tinkerpop.gremlin.structure.Direction");
     public static final OJPathName AssociationClassNode = new OJPathName("org.umlg.runtime.domain.AssociationClassNode");
     public static final OJPathName umlgCompositionNodePathName = new OJPathName("org.umlg.runtime.domain.CompositionNode");
     public static final OJPathName compositionNodePathName = new OJPathName("org.umlg.runtime.domain.CompositionNode");
@@ -106,7 +105,7 @@ public class UmlgGenerationUtil {
     public static final String PERSISTENT_CONSTRUCTOR_PARAM_NAME = "persistent";
 
     public static final String ORIGINAL_UID = "originalUid";
-    public static OJPathName vertexPathName = new OJPathName("com.tinkerpop.blueprints.Vertex");
+    public static OJPathName vertexPathName = new OJPathName("com.tinkerpop.gremlin.structure.Vertex");
     public static OJPathName umlgFormatter = new OJPathName("org.umlg.runtime.util.UmlgFormatter");
     public static OJPathName transactionThreadVar = new OJPathName("org.umlg.runtime.adaptor.TransactionThreadVar");
     public static OJPathName transactionThreadEntityVar = new OJPathName("org.umlg.runtime.adaptor.TransactionThreadEntityVar");
@@ -149,7 +148,7 @@ public class UmlgGenerationUtil {
     public static OJPathName umlgQualifiedBag = new OJPathName("org.umlg.runtime.collection.UmlgQualifiedBag");
     public static OJPathName umlgQualifiedBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgQualifiedBagImpl");
 
-    public static OJPathName edgePathName = new OJPathName("com.tinkerpop.blueprints.Edge");
+    public static OJPathName edgePathName = new OJPathName("com.tinkerpop.gremlin.structure.Edge");
     public static String UMLGAccess = "UMLG.get()";
     public static String getFromUniqueIndex = "getFromUniqueIndex";
     public static String getFromNonUniqueIndex = "getFromIndex";

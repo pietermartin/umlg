@@ -2,7 +2,9 @@ package org.umlg.tests.collectiontest;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.umlg.collectiontest.*;
+import org.umlg.collectiontest.SequenceRoot;
+import org.umlg.collectiontest.SequenceTestOrderedSet;
+import org.umlg.collectiontest.World;
 import org.umlg.concretetest.God;
 import org.umlg.embeddedtest.TestEmbedded;
 import org.umlg.runtime.collection.memory.UmlgMemorySequence;

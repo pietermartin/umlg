@@ -63,7 +63,15 @@ public class UmlgNeo4jGraphFactory implements UmlgGraphFactory {
     public void shutdown() {
         if (this.umlgGraph != null) {
             this.umlgGraph.rollback();
-            this.umlgGraph.shutdown();
+            try {
+                this.umlgGraph.close();
+            } catch (Exception e) {
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException)e;
+                } else {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 

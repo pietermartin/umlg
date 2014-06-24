@@ -1,6 +1,6 @@
 package org.umlg.runtime.collection.persistent;
 
-import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.gremlin.structure.Edge;
 import org.umlg.runtime.collection.UmlgQualifiedSequence;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.UmlgNode;

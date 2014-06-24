@@ -100,13 +100,15 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         getUid.setReturnType(new OJPathName("String"));
         getUid.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
         getUid.getBody().removeAllFromStatements();
-        getUid.getBody().addToStatements("String uid = this.vertex.getProperty(\"uid\")");
-        OJIfStatement ifStatement = new OJIfStatement("uid==null || uid.trim().length()==0");
-        ifStatement.setCondition("uid==null || uid.trim().length()==0");
-        ifStatement.addToThenPart("uid=UUID.randomUUID().toString()");
-        ifStatement.addToThenPart("this.vertex.setProperty(\"uid\", uid)");
-        getUid.getBody().addToStatements(ifStatement);
+
+        new OJField(getUid.getBody(), "uid", "String");
+        OJIfStatement ifUidNotPresent = new OJIfStatement("!this.vertex.property(\"uid\").isPresent()");
+        ifUidNotPresent.addToThenPart("uid=UUID.randomUUID().toString()");
+        ifUidNotPresent.addToThenPart("this.vertex.property(\"uid\", uid)");
+        ifUidNotPresent.addToElsePart("uid=this.vertex.value(\"uid\")");
+        getUid.getBody().addToStatements(ifUidNotPresent);
         getUid.getBody().addToStatements("return uid");
+
         ojClass.addToImports("java.util.UUID");
         ojClass.addToOperations(getUid);
     }
@@ -512,7 +514,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     private void addEdgeToMetaNode(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation addEdgeToMetaNode = new OJAnnotatedOperation("addEdgeToMetaNode");
         UmlgGenerationUtil.addOverrideAnnotation(addEdgeToMetaNode);
-        addEdgeToMetaNode.getBody().addToStatements(UmlgGenerationUtil.UMLGAccess + ".addEdge(null, getMetaNode().getVertex(), this.vertex, " + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
+        addEdgeToMetaNode.getBody().addToStatements("getMetaNode().getVertex().addEdge(" + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL, this.vertex)");
         annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
         annotatedClass.addToImports(UmlgGenerationUtil.UMLG_NODE);
         annotatedClass.addToOperations(addEdgeToMetaNode);

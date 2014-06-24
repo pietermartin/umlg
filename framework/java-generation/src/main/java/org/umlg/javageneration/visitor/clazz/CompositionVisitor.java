@@ -148,10 +148,13 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 
     private void addEdgeToRoot(OJAnnotatedClass annotatedClass, Class clazz) {
         OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
+//        constructor.getBody().addToStatements(
+//                UmlgGenerationUtil.edgePathName.getLast() + " edge = " + UmlgGenerationUtil.UMLGAccess + ".addEdge(null, " + UmlgGenerationUtil.UMLGAccess
+//                        + ".getRoot(), this.vertex, getEdgeToRootLabel())");
         constructor.getBody().addToStatements(
-                UmlgGenerationUtil.edgePathName.getLast() + " edge = " + UmlgGenerationUtil.UMLGAccess + ".addEdge(null, " + UmlgGenerationUtil.UMLGAccess
-                        + ".getRoot(), this.vertex, getEdgeToRootLabel())");
-        constructor.getBody().addToStatements("edge.setProperty(\"inClass\", this.getClass().getName())");
+                UmlgGenerationUtil.edgePathName.getLast() + " edge = " +
+                        UmlgGenerationUtil.UMLGAccess + ".getRoot().addEdge(getEdgeToRootLabel(), this.vertex)");
+        constructor.getBody().addToStatements("edge.property(\"inClass\", this.getClass().getName())");
         annotatedClass.addToImports(UmlgGenerationUtil.edgePathName.getCopy());
         annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName.getCopy());
     }
@@ -179,7 +182,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
         }
         if (clazz.getGenerals().isEmpty()) {
             delete.getBody().addToStatements(UmlgGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(this)");
-            delete.getBody().addToStatements(UmlgGenerationUtil.UMLGAccess + ".removeVertex(this.vertex)");
+            delete.getBody().addToStatements("this.vertex.remove()");
             annotatedClass.addToImports(UmlgGenerationUtil.transactionThreadEntityVar);
             annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName.getCopy());
         } else {

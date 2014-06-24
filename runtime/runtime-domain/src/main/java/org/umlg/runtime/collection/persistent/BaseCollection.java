@@ -69,15 +69,16 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         } else if (getDataTypeEnum() != null) {
             loadOneDataType();
         } else {
-            E value = this.vertex.value(getPersistentName());
-            if (value != null) {
-                if (isOneEnumeration()) {
-                    Class<?> c = this.getPropertyType();
-                    this.internalCollection.add((E) Enum.valueOf((Class<? extends Enum>) c, (String) value));
-                } else {
-                    this.internalCollection.add(value);
+            this.vertex.<E>property(getPersistentName()).ifPresent(
+                value -> {
+                    if (isOneEnumeration()) {
+                        Class<?> c = this.getPropertyType();
+                        this.internalCollection.add((E) Enum.valueOf((Class<? extends Enum>) c, (String) value));
+                    } else {
+                        this.internalCollection.add(value);
+                    }
                 }
-            }
+            );
         }
         this.loaded = true;
     }
@@ -617,7 +618,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             }
             this.handleInverseSide(node, umlgRuntimeProperty, true, this.owner);
         } else if (e.getClass().isEnum() && (isManyToMany() || isOneToMany())) {
-            v = UMLG.get().addVertex(null);
+            v = UMLG.get().addVertex();
             v.property(getPersistentName(), ((Enum<?>) e).name());
             v.property("className", e.getClass().getName());
             putToInternalMap(e, v);
@@ -640,14 +641,14 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 }
             }
         } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
-            v = UMLG.get().addVertex(null);
+            v = UMLG.get().addVertex();
             v.property("className", e.getClass().getName());
             setDataTypeOnVertex(v, e);
             putToInternalMap(e, v);
         } else if (getDataTypeEnum() != null) {
             setDataTypeOnVertex(this.vertex, e);
         } else {
-            v = UMLG.get().addVertex(null);
+            v = UMLG.get().addVertex();
             v.property(getPersistentName(), e);
             v.property("className", e.getClass().getName());
             putToInternalMap(e, v);
@@ -721,14 +722,14 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 auditEdge.property("deletedOn", UmlgFormatter.format(new DateTime()));
             }
         } else if (e.getClass().isEnum()) {
-            Vertex v = UMLG.get().addVertex(null);
+            Vertex v = UMLG.get().addVertex();
             v.property(getPersistentName(), ((Enum<?>) e).name());
             Edge auditEdge = auditOwner.getAuditVertex().addEdge(this.getLabel(), v);
             auditEdge.property("outClass", auditOwner.getClass().getName() + "Audit");
             auditEdge.property("inClass", e.getClass().getName());
         } else {
             if (TransactionThreadVar.hasNoAuditEntry(owner.getClass().getName() + e.getClass().getName() + e.toString())) {
-                Vertex auditVertex = UMLG.get().addVertex(null);
+                Vertex auditVertex = UMLG.get().addVertex();
                 auditVertex.property(getPersistentName(), e);
                 TransactionThreadVar.putAuditVertexFalse(owner.getClass().getName() + e.getClass().getName() + e.toString(), auditVertex);
                 auditVertex.property("transactionNo", ((UmlgAdminGraph) UMLG.get()).getTransactionCount());
@@ -856,11 +857,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     private void validateQualifiedMultiplicity(Qualifier qualifier) {
         if (qualifier.isOne()) {
-            Iterable<Edge> edgesToCount = UMLG.get().query().has(qualifier.getKey(), qualifier.getValue()).edges();
-            long count = 0;
-            for (final Edge edge : edgesToCount) {
-                count++;
-            }
+            long count = UMLG.get().V().has(qualifier.getKey(), qualifier.getValue()).count();
             if (count > 0) {
                 // Add info to exception
                 throw new IllegalStateException(String.format("Qualifier fails, qualifier multiplicity is one and an entry for key '%s' and value '%s' already exist",
@@ -1299,11 +1296,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     private void loadOneDataType() {
-        Object s = this.vertex.value(getPersistentName());
-        if (s != null) {
-            E result = UmlgFormatter.parse(getDataTypeEnum(), s);
-            this.internalCollection.add(result);
-        }
+        this.vertex.property(getPersistentName()).ifPresent(
+            s -> {
+                E result = UmlgFormatter.parse(getDataTypeEnum(), s);
+                this.internalCollection.add(result);
+            }
+        );
         this.loaded = true;
     }
 

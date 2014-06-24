@@ -16,7 +16,6 @@ import org.umlg.query.InstanceQuery;
 import org.umlg.query.QueryEnum;
 import org.umlg.rootallinstances.BaseRoot;
 import org.umlg.rootallinstances.TopRoot;
-import org.umlg.rootallinstances.meta.BaseRootMeta;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 public class AllInstancesTest extends BaseLocalDbTest {

@@ -1,7 +1,7 @@
 package org.umlg.tests.datatype;
 
-import org.junit.Assert;
 import org.joda.time.LocalDate;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.componenttest.Space;
 import org.umlg.componenttest.SpaceTime;

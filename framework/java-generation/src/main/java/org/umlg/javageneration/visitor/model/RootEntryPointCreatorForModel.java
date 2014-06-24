@@ -81,7 +81,7 @@ public class RootEntryPointCreatorForModel extends BaseVisitor implements Visito
         OJAnnotatedOperation getId = new OJAnnotatedOperation("getId");
         getId.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
         getId.setReturnType(new OJPathName("Object"));
-        getId.getBody().addToStatements("return getRootVertex().getId()");
+        getId.getBody().addToStatements("return getRootVertex().id()");
         root.addToOperations(getId);
 
         OJAnnotatedOperation toJson = new OJAnnotatedOperation("toJson");
@@ -120,7 +120,7 @@ public class RootEntryPointCreatorForModel extends BaseVisitor implements Visito
                     fromInverseQualifiedName,
                     StringUtils.uncapitalize(UmlgClassOperations.className(clazz)),
                     clazz.getQualifiedName(),
-                    clazz.getQualifiedName().replace(".", "_"),
+                    clazz.getName(),
                     "inverseOf::" + clazz.getName(),
                     "inverseOf::" + clazz.getQualifiedName(), false, false,
                     null, Collections.<Validation>emptyList(), true, false, false, false, true, false, false, true, false, -1, 0, 1, false, false, false/*ordered*/, false, true,

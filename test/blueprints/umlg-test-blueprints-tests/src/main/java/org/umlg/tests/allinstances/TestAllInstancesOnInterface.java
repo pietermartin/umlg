@@ -3,7 +3,6 @@ package org.umlg.tests.allinstances;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
-import org.umlg.interfacetest.IMany;
 import org.umlg.interfacetest.ManyA;
 import org.umlg.interfacetest.ManyB;
 import org.umlg.interfacetest.meta.IManyAMeta;

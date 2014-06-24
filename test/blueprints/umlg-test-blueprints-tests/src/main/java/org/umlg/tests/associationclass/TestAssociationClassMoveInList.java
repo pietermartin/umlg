@@ -1,12 +1,8 @@
 package org.umlg.tests.associationclass;
 
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.pipes.util.Pipeline;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.associationclass.*;
-import org.umlg.runtime.adaptor.UMLG;
-import org.umlg.runtime.adaptor.UmlgQueryEnum;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 /**

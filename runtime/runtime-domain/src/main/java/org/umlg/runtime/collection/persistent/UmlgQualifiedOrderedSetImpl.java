@@ -6,6 +6,8 @@ import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Collection;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 public class UmlgQualifiedOrderedSetImpl<E> extends UmlgBaseOrderedSet<E> implements UmlgQualifiedOrderedSet<E> {
 
@@ -40,6 +42,11 @@ public class UmlgQualifiedOrderedSetImpl<E> extends UmlgBaseOrderedSet<E> implem
     @Override
     public E set(int index, E element) {
         throw new IllegalStateException("This method can not be called on a qualified association. Call add(E, List<Qualifier>) instead");
+    }
+
+    @Override
+    public Spliterator<E> spliterator() {
+        return Spliterators.spliterator(this, Spliterator.DISTINCT);
     }
 
 }

@@ -1,7 +1,6 @@
 package org.umlg.tests.rollback;
 
 import org.junit.Assert;
-import org.junit.Test;
 import org.umlg.componenttest.Space;
 import org.umlg.componenttest.SpaceTime;
 import org.umlg.componenttest.Time;

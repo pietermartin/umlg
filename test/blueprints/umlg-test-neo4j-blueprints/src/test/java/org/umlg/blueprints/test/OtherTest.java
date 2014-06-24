@@ -16,9 +16,6 @@ public class OtherTest extends BaseLocalDbTest {
 
 	@Test
 	public void testQualifiedWithNull() {
-        if (db instanceof UmlgNeo4jGraph) {
-		    ((UmlgNeo4jGraph)db).setCheckElementsInTransaction(true);
-        }
 		God god = new God(true);
 		god.setName("THEGOD");
 

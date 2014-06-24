@@ -1,9 +1,9 @@
 package org.ruml.runtime.groovy;
 
+import com.tinkerpop.gremlin.structure.Vertex;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
-import com.tinkerpop.blueprints.Vertex;
 
 public class UmlgGroovyShell {
 

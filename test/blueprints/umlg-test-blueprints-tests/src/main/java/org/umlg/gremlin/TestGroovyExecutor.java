@@ -1,7 +1,7 @@
 package org.umlg.gremlin;
 
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.pipes.util.Pipeline;
+import com.tinkerpop.gremlin.process.Traversal;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.componenttest.Space;
@@ -57,7 +57,7 @@ public class TestGroovyExecutor extends BaseLocalDbTest {
 
         gremlinResult = GroovyExecutor.INSTANCE.executeGroovy(null, "def isGod(v){v.name=='THEGOD'};g.V.filter{isGod(it)}.next()");
         Assert.assertTrue(gremlinResult instanceof Vertex);
-        Assert.assertEquals(god.getId(), ((Vertex) gremlinResult).getId());
+        Assert.assertEquals(god.getId(), ((Vertex) gremlinResult).id());
 
     }
 
@@ -139,12 +139,12 @@ public class TestGroovyExecutor extends BaseLocalDbTest {
         Assert.assertTrue(((String)result).startsWith("THEGOD"));
 
         result = db.executeQuery(UmlgQueryEnum.GROOVY, god.getId(), "self.has('umlgtest_org_umlg_concretetest_God_name')");
-        Assert.assertTrue(result instanceof Pipeline);
-        Assert.assertEquals(god.getId(), ((Pipeline<Object, Vertex>) result).next().getId());
+        Assert.assertTrue(result instanceof Traversal);
+        Assert.assertEquals(god.getId(), ((Traversal<Object, Vertex>) result).next().id());
 
         result = db.executeQuery(UmlgQueryEnum.GROOVY, god.getId(), "self.has('name')");
-        Assert.assertTrue(result instanceof Pipeline);
-        Assert.assertEquals(god.getId(), ((Pipeline<Object, Vertex>) result).next().getId());
+        Assert.assertTrue(result instanceof Traversal);
+        Assert.assertEquals(god.getId(), ((Traversal<Object, Vertex>) result).next().id());
     }
 
     @Test(expected = RuntimeException.class)

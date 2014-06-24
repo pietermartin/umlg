@@ -5,8 +5,6 @@ import org.junit.Test;
 import org.umlg.rootallinstances.TopRoot;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
-import java.util.List;
-
 /**
  * Date: 2014/03/16
  * Time: 10:08 AM

@@ -855,7 +855,11 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public String getPersistentName() {
-            return this.getQualifiedName().replace("::", "_");
+        if (isQualifier()) {
+            return ((Property)this.getOwner()).getName() + "_" + getName();
+        }  else {
+            return this.getName();
+        }
     }
 
     public String getInverseName() {

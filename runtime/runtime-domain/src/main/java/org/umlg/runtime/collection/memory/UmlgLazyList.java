@@ -1,6 +1,6 @@
 package org.umlg.runtime.collection.memory;
 
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.UMLG;
 
 import java.util.*;
@@ -194,7 +194,7 @@ public class UmlgLazyList<PersistentObject> implements List {
 
         @Override
         public PersistentObject next() {
-            PersistentObject e = UMLG.get().getEntity(this.iterator.next().getId());
+            PersistentObject e = UMLG.get().getEntity(this.iterator.next().id());
             UmlgLazyList.this.internal.add(e);
             UmlgLazyList.this.loadedUpTo++;
             return e;

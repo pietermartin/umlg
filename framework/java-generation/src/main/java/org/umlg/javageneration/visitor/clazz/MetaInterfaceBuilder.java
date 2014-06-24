@@ -82,7 +82,7 @@ public class MetaInterfaceBuilder extends BaseVisitor implements Visitor<Interfa
 
     private void addDefaultConstructorStandAlone(OJAnnotatedClass metaClass, Classifier classifier) {
         metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex = " + UmlgGenerationUtil.UMLGAccess + ".addVertex(this.getClass().getName())");
-        metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
+        metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex.property(\"className\", getClass().getName())");
         metaClass.getDefaultConstructor().getBody().addToStatements("defaultCreate()");
         metaClass.getDefaultConstructor().getBody().addToStatements(UmlgGenerationUtil.UMLGAccess + ".addEdge(null, " + UmlgGenerationUtil.UMLGAccess + ".getRoot(), this.vertex, getEdgeToRootLabel())");
     }
@@ -154,25 +154,24 @@ public class MetaInterfaceBuilder extends BaseVisitor implements Visitor<Interfa
         OJField result = new OJField("result", metaClass.getPathName());
         INSTANCE.getBody().addToLocals(result);
 
-        INSTANCE.getBody().addToStatements("Iterator<Edge> iter = " + UmlgGenerationUtil.UMLGAccess + ".getRoot().getEdges(Direction.OUT, " + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(classifier) + "\")).iterator()");
+        INSTANCE.getBody().addToStatements("Iterator<Edge> iter = " + UmlgGenerationUtil.UMLGAccess + ".getRoot().outE(" + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(classifier) + "\"))");
         OJIfStatement ifHasNext = new OJIfStatement("iter.hasNext()");
-        ifHasNext.addToThenPart("result =  new " + UmlgClassOperations.getMetaClassName(classifier) + "(iter.next().getVertex(Direction.IN))");
+        ifHasNext.addToThenPart("result =  new " + UmlgClassOperations.getMetaClassName(classifier) + "(iter.next().inV().next())");
         INSTANCE.getBody().addToStatements(ifHasNext);
 
-        ifHasNext.addToElsePart("iter = " + UmlgGenerationUtil.UMLGAccess + ".getRoot().getEdges(Direction.OUT, " + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(classifier) + "\")).iterator()");
+        ifHasNext.addToElsePart("iter = " + UmlgGenerationUtil.UMLGAccess + ".getRoot().outE(" + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(classifier) + "\"))");
 
         OJIfStatement ifIter2 = new OJIfStatement("!iter.hasNext()");
         ifIter2.addToThenPart("result = new " + metaClass.getName() + "()");
 
-        ifIter2.addToElsePart("result = new " + metaClass.getName() + "(iter.next().getVertex(Direction.IN))");
+        ifIter2.addToElsePart("result = new " + metaClass.getName() + "(iter.next().inV().next())");
         ifHasNext.addToElsePart(ifIter2);
 
         INSTANCE.getBody().addToStatements("return result");
         metaClass.addToImports("java.util.Iterator");
 
-        metaClass.addToImports("com.tinkerpop.blueprints.Direction");
-        metaClass.addToImports("com.tinkerpop.blueprints.Direction");
-        metaClass.addToImports("com.tinkerpop.blueprints.Edge");
+        metaClass.addToImports(UmlgGenerationUtil.tinkerDirection);
+        metaClass.addToImports(UmlgGenerationUtil.edgePathName);
         metaClass.addToImports(UmlgGenerationUtil.UMLGPathName);
 
     }

@@ -1,8 +1,8 @@
 package org.umlg.tests.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
 import org.joda.time.DateTime;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
 import org.umlg.concretetest.Universe.UniverseRuntimePropertyEnum;

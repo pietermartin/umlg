@@ -13,7 +13,6 @@ import org.umlg.componenttest.ValidationTest;
 import org.umlg.concretetest.God;
 import org.umlg.concretetest.Universe;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.runtime.validation.UmlgConstraintViolation;
 import org.umlg.runtime.validation.UmlgConstraintViolationException;
 import org.umlg.validation.TestManyValidation;
 

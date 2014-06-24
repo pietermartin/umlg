@@ -1,6 +1,6 @@
 package org.umlg.tests.associationclass;
 
-import com.tinkerpop.pipes.util.Pipeline;
+import com.tinkerpop.gremlin.process.Traversal;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.associationclass.AssociationClass1;
@@ -30,7 +30,7 @@ public class TestAssociationClassCopiesOnePrimitivePropertiesToEdge extends Base
 
         //Check if the name property is on the edge
         Object result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').name");
-        Assert.assertEquals("ac1", ((Pipeline)result).next());
+        Assert.assertEquals("ac1", ((Traversal)result).next());
     }
 
     @Test
@@ -47,27 +47,27 @@ public class TestAssociationClassCopiesOnePrimitivePropertiesToEdge extends Base
 
         //Check if the name property is on the edge
         Object result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').name");
-        Assert.assertEquals("ac1", ((Pipeline)result).next());
+        Assert.assertEquals("ac1", ((Traversal)result).next());
 
         associationClassAC.setName("aacc1");
         db.commit();
 
         //Check if the name property is on the edge
         result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').name");
-        Assert.assertEquals("aacc1", ((Pipeline)result).next());
+        Assert.assertEquals("aacc1", ((Traversal)result).next());
 
         associationClassAC.setName(null);
         db.commit();
 
         //Check if the name property is on the edge
         result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').name");
-        Assert.assertEquals(null, ((Pipeline)result).next());
+        Assert.assertEquals(null, ((Traversal)result).next());
         associationClassAC.setName("xxx");
         db.commit();
 
         //Check if the name property is on the edge
         result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').name");
-        Assert.assertEquals("xxx", ((Pipeline)result).next());
+        Assert.assertEquals("xxx", ((Traversal)result).next());
 
 
     }

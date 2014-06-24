@@ -1,15 +1,18 @@
 package org.umlg.runtime.adaptor;
 
-import com.tinkerpop.blueprints.Graph;
-import com.tinkerpop.gremlin.groovy.jsr223.DefaultImportCustomizerProvider;
-import com.tinkerpop.pipes.transform.ToStringPipe;
-import com.tinkerpop.pipes.util.iterators.SingleIterator;
+import com.tinkerpop.gremlin.groovy.DefaultImportCustomizerProvider;
+import com.tinkerpop.gremlin.process.util.SingleIterator;
+import com.tinkerpop.gremlin.structure.Graph;
+import com.tinkerpop.gremlin.structure.strategy.ReadOnlyGraphStrategy;
+import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedGraph;
+import com.tinkerpop.gremlin.structure.util.GraphFactory;
+import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.lang.time.StopWatch;
 import org.umlg.runtime.domain.UmlgNode;
-import org.umlg.runtime.gremlin.UmlgGremlinReadOnlyKeyIndexableGraph;
 
 import javax.script.ScriptException;
 import java.lang.reflect.Field;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -69,13 +72,16 @@ public class GroovyExecutor {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Object pipe = executeGroovy(contextId, groovy);
-        ToStringPipe toStringPipe = new ToStringPipe();
-        toStringPipe.setStarts(new SingleIterator<>(pipe));
+//        ToStringPipe toStringPipe = new ToStringPipe();
+//        toStringPipe.setStarts(new SingleIterator<>(pipe));
         StringBuilder result = new StringBuilder();
-        while (toStringPipe.hasNext()) {
-            result.append(toStringPipe.next());
-            result.append("\n");
-        }
+//        while (toStringPipe.hasNext()) {
+//            result.append(toStringPipe.next());
+//            result.append("\n");
+//
+
+        result.append(pipe.toString());
+
         stopWatch.stop();
         result.append("Time to execute query = ");
         result.append(stopWatch.toString());
@@ -94,7 +100,11 @@ public class GroovyExecutor {
                 groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.v(" + context + ")");
             }
         }
-        Graph graph = new UmlgGremlinReadOnlyKeyIndexableGraph(UMLG.get());
+
+        final StrategyWrappedGraph graph = new StrategyWrappedGraph(UMLG.get());
+        graph.strategy().setGraphStrategy(new ReadOnlyGraphStrategy());
+
+
         GremlinExecutorBaseClass.load(graph);
         this.scriptEngine.put("g", graph);
         Object result;

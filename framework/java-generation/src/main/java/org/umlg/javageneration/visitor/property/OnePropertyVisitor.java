@@ -41,14 +41,14 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
                 OJAnnotatedOperation copyOnePrimitivePropertiesToEdge = owner.findOperation("z_internalCopyOnePrimitivePropertiesToEdge", UmlgGenerationUtil.edgePathName);
                 OJIfStatement ifPropertyNotNull = new OJIfStatement(propertyWrapper.getter() + "() != null");
                 if (propertyWrapper.isEnumeration()) {
-                    ifPropertyNotNull.addToThenPart("edge.setProperty(\"" + propertyWrapper.getPersistentName() + "\", " + propertyWrapper.getter() + "().name())");
+                    ifPropertyNotNull.addToThenPart("edge.property(\"" + propertyWrapper.getPersistentName() + "\", " + propertyWrapper.getter() + "().name())");
                 } else if (!propertyWrapper.isPrimitive()) {
-                    ifPropertyNotNull.addToThenPart("edge.setProperty(\"" + propertyWrapper.getPersistentName() + "\", " +
+                    ifPropertyNotNull.addToThenPart("edge.property(\"" + propertyWrapper.getPersistentName() + "\", " +
                             UmlgGenerationUtil.umlgFormatter.getLast() + ".format(" +
                             UmlgGenerationUtil.DataTypeEnum.getLast() + "." + DataTypeEnum.fromDataType((DataType) p.getType()).name() + ", " +
                             propertyWrapper.getter() + "()))");
                 } else {
-                    ifPropertyNotNull.addToThenPart("edge.setProperty(\"" + propertyWrapper.getPersistentName() + "\", " + propertyWrapper.getter() + "())");
+                    ifPropertyNotNull.addToThenPart("edge.property(\"" + propertyWrapper.getPersistentName() + "\", " + propertyWrapper.getter() + "())");
                 }
                 copyOnePrimitivePropertiesToEdge.getBody().addToStatements(ifPropertyNotNull);
             }

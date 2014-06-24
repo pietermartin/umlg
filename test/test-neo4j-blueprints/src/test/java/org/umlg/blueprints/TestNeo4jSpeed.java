@@ -1,9 +1,8 @@
 package org.umlg.blueprints;
 
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
+import com.tinkerpop.gremlin.neo4j.structure.Neo4jGraph;
+import com.tinkerpop.gremlin.structure.Edge;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,9 +18,9 @@ import java.util.concurrent.Executors;
  * Date: 2013/12/26
  * Time: 2:06 PM
  */
-public class TestBitsySpeed {
+public class TestNeo4jSpeed {
 
-    Neo4j2Graph graph;
+    Neo4jGraph graph;
     private Throwable toThrow;
     Random rand = new Random();
 
@@ -32,13 +31,13 @@ public class TestBitsySpeed {
             f.delete();
         }
         f.mkdir();
-        graph = new Neo4j2Graph(f.getAbsolutePath());
+        graph = Neo4jGraph.open(f.getAbsolutePath());
     }
 
 
     @After
-    public void after() {
-        graph.shutdown();
+    public void after() throws Exception {
+        graph.close();
     }
 
 //    @Test
@@ -64,14 +63,14 @@ public class TestBitsySpeed {
                         for (int j = 0; j < numVerticesPerThread; j++) {
                             Vertex v = graph.addVertex(null);
                             if (prevId == null) {
-                                startVertex[tid] = v.getId();
+                                startVertex[tid] = v.id();
                             } else {
-                                Vertex prevV = graph.getVertex(prevId);
-                                graph.addEdge(null, prevV, v, TEST_LABEL);
+                                Vertex prevV = graph.v(prevId);
+                                prevV.addEdge(TEST_LABEL, v);
                             }
-                            graph.commit();
+                            graph.tx().commit();
 
-                            prevId = v.getId();
+                            prevId = v.id();
                         }
 
                         System.out.println("Thread " + tid + " is done");
@@ -99,16 +98,16 @@ public class TestBitsySpeed {
                     public void run() {
                         for (int k = 0; k < 100; k++) {
                             int count = 0;
-                            Vertex v = graph.getVertex(startVertex[tid]);
+                            Vertex v = graph.v(startVertex[tid]);
 
                             Edge e;
                             do {
-                                Iterator<Edge> eIter = v.getEdges(Direction.OUT).iterator();
+                                Iterator<Edge> eIter = v.outE();
                                 if (!eIter.hasNext()) {
                                     break;
                                 } else {
                                     count++;
-                                    v = eIter.next().getVertex(Direction.IN);
+                                    v = eIter.next().inV().next();
                                 }
                             } while (true);
 
@@ -116,7 +115,7 @@ public class TestBitsySpeed {
                                 System.out.println("Mistmatch between " + numVerticesPerThread + " and " + count);
                             }
 
-                            graph.commit();
+                            graph.tx().commit();
                         }
 
                         System.out.println("Thread " + tid + " is done");
@@ -158,26 +157,26 @@ public class TestBitsySpeed {
 
         // Vertices
         for (int i=0; i < partSize; i++) {
-            outVertices[i] = graph.addVertex(null).getId();
-            inVertices[i] = graph.addVertex(null).getId();
+            outVertices[i] = graph.addVertex(null).id();
+            inVertices[i] = graph.addVertex(null).id();
 
             if (i % numPerCommit == 0) {
-                graph.commit();
+                graph.tx().commit();
             }
         }
 
         // Edges
         for (int i=0; i < partSize; i++) {
-            Vertex outVertex = graph.getVertex(outVertices[i]);
-            outVertex.addEdge(label, graph.getVertex(inVertices[(5 * i + 1) % partSize]));
-            outVertex.addEdge(label, graph.getVertex(inVertices[(5 * i + 4) % partSize]));
-            outVertex.addEdge(label, graph.getVertex(inVertices[(5 * i + 7) % partSize]));
+            Vertex outVertex = graph.v(outVertices[i]);
+            outVertex.addEdge(label, graph.v(inVertices[(5 * i + 1) % partSize]));
+            outVertex.addEdge(label, graph.v(inVertices[(5 * i + 4) % partSize]));
+            outVertex.addEdge(label, graph.v(inVertices[(5 * i + 7) % partSize]));
 
             if (i % numPerCommit == 0) {
-                graph.commit();
+                graph.tx().commit();
             }
         }
-        graph.commit();
+        graph.tx().commit();
 
         final int numRuns = 3;
         Map<Integer, String> calcStrMap = new HashMap<Integer, String>();
@@ -199,18 +198,18 @@ public class TestBitsySpeed {
                         @Override
                         public void run() {
                             try {
-                                Vertex v = graph.getVertex(outVertices[0]);
+                                Vertex v = graph.v(outVertices[0]);
                                 long startTime = System.currentTimeMillis();
 
                                 for (int k=0; k < 100 * numIters / numThreads; k++) {
                                     Assert.assertNotNull(v);
 
-                                    Vertex nextV = randomVertex(v.getVertices(Direction.OUT, label));
+                                    Vertex nextV = randomVertex(v.out(label).toList());
 
                                     Assert.assertNotNull(nextV);
 
                                     // Take a random edge back
-                                    Vertex backV = randomVertex(nextV.getVertices(Direction.IN));
+                                    Vertex backV = randomVertex(nextV.out().toList());
                                     if (backV != null) {
                                         v = backV;
                                     }

@@ -1,9 +1,9 @@
 package org.umlg.runtime.collection.persistent;
 
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.collection.UmlgSequence;
+import com.tinkerpop.gremlin.structure.Edge;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
 
@@ -49,7 +49,7 @@ public class UmlgSequenceClosableIterableImpl<E> extends BaseSequence<E> impleme
 			try {
 				Class<?> c = this.getClassToInstantiate(edge);
 				if (c.isEnum()) {
-					Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
+					Object value = this.getVertexForDirection(edge).value(getPersistentName());
 					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                     putToInternalMap(node, this.getVertexForDirection(edge));
                 } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
@@ -58,7 +58,7 @@ public class UmlgSequenceClosableIterableImpl<E> extends BaseSequence<E> impleme
 				} else if (UmlgNode.class.isAssignableFrom(c)) {
 					node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
 				} else {
-					Object value = this.getVertexForDirection(edge).getProperty(getPersistentName());
+					Object value = this.getVertexForDirection(edge).value(getPersistentName());
 					node = (E) value;
                     putToInternalMap(value, this.getVertexForDirection(edge));
 				}

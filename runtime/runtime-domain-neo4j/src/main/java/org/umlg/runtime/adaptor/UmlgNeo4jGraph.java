@@ -17,6 +17,7 @@ import org.neo4j.graphdb.schema.Schema;
 import org.neo4j.kernel.GraphDatabaseAPI;
 import org.neo4j.kernel.impl.core.NodeManager;
 import org.neo4j.kernel.impl.util.StringLogger;
+import org.umlg.runtime.collection.memory.UmlgLazyList;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.util.UmlgProperties;
@@ -24,6 +25,7 @@ import org.umlg.runtime.util.UmlgProperties;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -168,21 +170,19 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public PersistentObject getFromUniqueIndex(String indexKey, Object indexValue) {
-//        Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
-//        if (iterator.hasNext()) {
-//            return instantiateClassifier(iterator.next());
-//        } else {
-//            return null;
-//        }
-        return null;
+        Iterator<Vertex> iterator = this.V().has(indexKey, indexValue);
+        if (iterator.hasNext()) {
+            return instantiateClassifier(iterator.next());
+        } else {
+            return null;
+        }
     }
 
     @Override
     public List<PersistentObject> getFromIndex(String indexKey, Object indexValue) {
-//        final Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
-//        List<PersistentObject> lazy = new UmlgLazyList(iterator);
-//        return lazy;
-        return null;
+        final Iterator<Vertex> iterator = this.V().has(indexKey, indexValue);
+        List<PersistentObject> lazy = new UmlgLazyList<>(iterator);
+        return lazy;
     }
 
     /* Generic for all graphs end */
@@ -394,7 +394,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public boolean isTransactionActive() {
-        return (tx() != null);
+        return tx().isOpen();
     }
 
     @Override
@@ -418,31 +418,31 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public GraphTraversal<Vertex, Vertex> V() {
-        return null;
+        return this.neo4jGraph.V();
     }
 
     @Override
     public GraphTraversal<Edge, Edge> E() {
-        return null;
+        return this.neo4jGraph.E();
     }
 
     @Override
     public <C extends GraphComputer> C compute(Class<C>... graphComputerClass) {
-        return null;
+        return this.neo4jGraph.compute(graphComputerClass);
     }
 
     @Override
     public Transaction tx() {
-        return null;
+        return this.neo4jGraph.tx();
     }
 
     @Override
     public <V extends Variables> V variables() {
-        return null;
+        return this.neo4jGraph.variables();
     }
 
     @Override
     public void close() throws Exception {
-
+        this.neo4jGraph.close();
     }
 }

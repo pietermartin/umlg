@@ -19,7 +19,7 @@ public abstract class BaseTinkerAuditable extends BaseUmlgAudit implements Tinke
 		if ( TransactionThreadVar.hasNoAuditEntry(getClass().getName() + getUid()) ) {
 			createAuditVertex(false);
 		}
-		getAuditVertex().setProperty("deletedOn", UmlgFormatter.format(deletedOn));
+		getAuditVertex().property("deletedOn", UmlgFormatter.format(deletedOn));
 
 	}
 

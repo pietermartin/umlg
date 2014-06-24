@@ -1,6 +1,7 @@
 package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.gremlin.structure.Edge;
+import com.tinkerpop.gremlin.structure.Element;
 import com.tinkerpop.gremlin.structure.Graph;
 import com.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.domain.PersistentObject;
@@ -23,6 +24,8 @@ public interface UmlgGraph extends Graph {
      * @return
      */
     UmlgApplicationNode getUmlgApplicationNode();
+
+    <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final Parameter... indexParameters);
 
     /**
      * Instantiate any concrete classifier with its vertex id.
