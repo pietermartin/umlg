@@ -290,7 +290,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         }
 
         sb = new StringBuilder();
-        sb.append("this.vertex.edgesFor(");
+        sb.append("this.vertex.to(");
         sb.append(UmlgClassOperations.propertyEnumName(qualified.getType()));
         sb.append(".");
         sb.append(new PropertyWrapper(qualified.getOtherEnd()).fieldname());

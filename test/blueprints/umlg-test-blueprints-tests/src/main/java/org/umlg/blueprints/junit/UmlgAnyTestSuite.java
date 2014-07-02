@@ -2,6 +2,8 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.umlg.tests.collectiontest.OclStdLibCollectionTest;
+import org.umlg.tests.concretetest.TestOneToMany;
 import org.umlg.tests.indexing.TestIndexing;
 
 /**
@@ -10,7 +12,7 @@ import org.umlg.tests.indexing.TestIndexing;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestIndexing.class
+        TestOneToMany.class
 
 })
 public class UmlgAnyTestSuite {

@@ -6,6 +6,10 @@ import com.tinkerpop.gremlin.neo4j.structure.Neo4jVertex;
 import com.tinkerpop.gremlin.process.computer.GraphComputer;
 import com.tinkerpop.gremlin.process.graph.GraphTraversal;
 import com.tinkerpop.gremlin.structure.*;
+import com.tinkerpop.gremlin.structure.strategy.ReadOnlyGraphStrategy;
+import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedGraph;
+import com.tinkerpop.gremlin.structure.util.GraphFactory;
+import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.lang.time.StopWatch;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
@@ -24,10 +28,7 @@ import org.umlg.runtime.util.UmlgProperties;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Date: 2013/01/09
@@ -38,10 +39,14 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     private UmlgTransactionEventHandlerImpl transactionEventHandler;
     private Class<UmlgApplicationNode> umlgApplicationNodeClass;
     private ExecutionEngine engine;
-    private Neo4jGraph neo4jGraph;
+    private StrategyWrappedGraph neo4jGraph;
 
     public UmlgNeo4jGraph(String directory) {
-        this.neo4jGraph = Neo4jGraph.open(directory);
+        BaseConfiguration conf = new BaseConfiguration();
+        conf.setProperty("gremlin.graph","com.tinkerpop.gremlin.neo4j.structure.Neo4jGraph");
+        conf.setProperty(Neo4jGraph.CONFIG_DIRECTORY, directory);
+        this.neo4jGraph = (StrategyWrappedGraph)GraphFactory.open(conf, new UmlgNeo4jGraphStrategy());
+//        this.neo4jGraph = Neo4jGraph.open(directory);
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
@@ -60,11 +65,15 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
         if (Vertex.class.isAssignableFrom(elementClass)) {
             this.tx().readWrite();
-            Schema schema = this.neo4jGraph.getRawGraph().schema();
-            IndexDefinition indexDefinition = schema.indexFor(
-                    DynamicLabel.label(labelParameter.getValue())).on(key).create();
+            if (uniqueParameter.getValue()) {
+                ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).createUniqueConstraint(labelParameter.getValue(), key);
+            } else {
+                ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).createIndex(labelParameter.getValue(), key);
+
+            }
         } else if (Edge.class.isAssignableFrom(elementClass)) {
             this.tx().readWrite();
+            ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).createIndex(elementClass, key);
         } else {
             throw UmlgGraph.Exceptions.classIsNotIndexable(elementClass);
         }
@@ -114,20 +123,18 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Vertex addVertex(String className) {
-        this.tx().readWrite();
-        Vertex v;
+        String label;
         if (className != null) {
             int lastIndexOfDot = className.lastIndexOf(".");
             if (lastIndexOfDot != -1) {
-                v = new Neo4jVertex(this.neo4jGraph.getRawGraph().createNode(DynamicLabel.label(className.substring(lastIndexOfDot + 1))), this.neo4jGraph);
+                label = className.substring(lastIndexOfDot + 1);
             } else {
-                v = new Neo4jVertex(this.neo4jGraph.getRawGraph().createNode(DynamicLabel.label(className)), this.neo4jGraph);
+                label = className;
             }
-            v.property("className", className);
+            return this.neo4jGraph.addVertex(Element.LABEL, label);
         } else {
-            v = new Neo4jVertex(this.neo4jGraph.getRawGraph().createNode(), this.neo4jGraph);
+            return this.neo4jGraph.addVertex();
         }
-        return v;
     }
 
     @Override
@@ -181,8 +188,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     @Override
     public List<PersistentObject> getFromIndex(String indexKey, Object indexValue) {
         final Iterator<Vertex> iterator = this.V().has(indexKey, indexValue);
-        List<PersistentObject> lazy = new UmlgLazyList<>(iterator);
-        return lazy;
+        return new UmlgLazyList<PersistentObject>(iterator);
     }
 
     /* Generic for all graphs end */
@@ -225,7 +231,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
                     StopWatch stopWatch = new StopWatch();
                     stopWatch.start();
                     if (this.engine == null) {
-                        this.engine = new ExecutionEngine(this.neo4jGraph.getRawGraph(), StringLogger.SYSTEM);
+                        this.engine = new ExecutionEngine(((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getRawGraph(), StringLogger.SYSTEM);
                     }
                     StringBuilder sb = new StringBuilder();
                     ExecutionResult executionResult = engine.execute(query);
@@ -277,7 +283,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
                     }
                     return (T) result;
                 case NATIVE:
-                    ExecutionEngine engine = new ExecutionEngine(this.neo4jGraph.getRawGraph(), StringLogger.SYSTEM);
+                    ExecutionEngine engine = new ExecutionEngine(((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getRawGraph(), StringLogger.SYSTEM);
                     ExecutionResult executionResult = engine.execute(query);
                     return (T) executionResult;
                 default:
@@ -369,7 +375,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         for (Edge edge : getDeletionVertex().outE(DELETION_VERTEX).toList()) {
             countDeletedNodes++;
         }
-        return ((GraphDatabaseAPI) this.neo4jGraph.getRawGraph()).getDependencyResolver().resolveDependency(NodeManager.class).getNumberOfIdsInUse(Node.class) - 2 - countDeletedNodes;
+        return ((GraphDatabaseAPI) ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getRawGraph()).getDependencyResolver().resolveDependency(NodeManager.class).getNumberOfIdsInUse(Node.class) - 2 - countDeletedNodes;
     }
 
     @Override
@@ -378,7 +384,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         for (Edge edge : getDeletionVertex().outE(DELETION_VERTEX).toList()) {
             countDeletedNodes++;
         }
-        return ((GraphDatabaseAPI) this.neo4jGraph.getRawGraph()).getDependencyResolver().resolveDependency(NodeManager.class).getNumberOfIdsInUse(Relationship.class) - 1 - countDeletedNodes;
+        return ((GraphDatabaseAPI) ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getRawGraph()).getDependencyResolver().resolveDependency(NodeManager.class).getNumberOfIdsInUse(Relationship.class) - 1 - countDeletedNodes;
     }
 
     @Override
@@ -428,7 +434,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public <C extends GraphComputer> C compute(Class<C>... graphComputerClass) {
-        return this.neo4jGraph.compute(graphComputerClass);
+        return ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).compute(graphComputerClass);
     }
 
     @Override
@@ -438,7 +444,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public <V extends Variables> V variables() {
-        return this.neo4jGraph.variables();
+        return ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).variables();
     }
 
     @Override
