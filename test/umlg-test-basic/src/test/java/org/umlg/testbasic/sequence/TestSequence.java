@@ -258,6 +258,8 @@ public class TestSequence extends BaseLocalDbTest {
         Assert.assertEquals("sequenceNotUniqueTest3", sequenceNotUniqueRoot.getSequenceNotUniqueTest().get(8).getName());
 
         db.commit();
+        Assert.assertEquals(9, countVertices());
+        Assert.assertEquals(25 + 4, countEdges());
 
         sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
         sequenceNotUniqueTest1 = new SequenceNotUniqueTest(sequenceNotUniqueTest1.getVertex());

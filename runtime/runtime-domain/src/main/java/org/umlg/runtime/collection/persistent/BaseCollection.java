@@ -5,6 +5,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.tinkerpop.gremlin.structure.Direction;
 import com.tinkerpop.gremlin.structure.Edge;
+import com.tinkerpop.gremlin.structure.Property;
 import com.tinkerpop.gremlin.structure.Vertex;
 import org.joda.time.DateTime;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
@@ -70,14 +71,14 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             loadOneDataType();
         } else {
             this.vertex.<E>property(getPersistentName()).ifPresent(
-                value -> {
-                    if (isOneEnumeration()) {
-                        Class<?> c = this.getPropertyType();
-                        this.internalCollection.add((E) Enum.valueOf((Class<? extends Enum>) c, (String) value));
-                    } else {
-                        this.internalCollection.add(value);
+                    value -> {
+                        if (isOneEnumeration()) {
+                            Class<?> c = this.getPropertyType();
+                            this.internalCollection.add((E) Enum.valueOf((Class<? extends Enum>) c, (String) value));
+                        } else {
+                            this.internalCollection.add(value);
+                        }
                     }
-                }
             );
         }
         this.loaded = true;
@@ -209,7 +210,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     Vertex newHyperVertex = UMLG.get().addVertex("hyperVertex");
                     edgeToLastHyperVertex.remove();
                     newElementVertex.addEdge(LABEL_TO_LAST_HYPER_VERTEX + getLabel() + inverseDirection, newHyperVertex);
-                    newHyperVertex.addEdge(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX, newHyperVertex);
+                    newHyperVertex.addEdge(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX, this.vertex);
                     //add to the linked list
                     lastHyperVertex.addEdge(LABEL_TO_NEXT_HYPER_VERTEX + inverseDirection, newHyperVertex);
                 }
@@ -256,6 +257,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             inverseDirection = Direction.OUT;
         }
         if (!isUnique()) {
+
             //Handle duplicates
             //Find hyper vertex
             Vertex vertexToRemove = v;
@@ -359,10 +361,10 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
      * @return
      */
     private Vertex getFirstHyperVertexInListForVertex(Vertex vertex, Direction direction) {
-        Set<Vertex> hyperVertexes = new HashSet<Vertex>();
-        vertex.inE(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).forEach(e -> {
-            hyperVertexes.add(e.outV().next());
-        });
+        Set<Vertex> hyperVertexes = new HashSet<>();
+        vertex.inE(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).forEach(
+                e -> hyperVertexes.add(e.outV().next())
+        );
         //Take any hyper vertex and start iterating to the beginning.
         Vertex firstHyperVertex = hyperVertexes.iterator().next();
         hyperVertexes.remove(firstHyperVertex);
@@ -378,7 +380,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 iterator = previousHyperVertex.inE(LABEL_TO_NEXT_HYPER_VERTEX + direction);
             }
         }
-
         return firstHyperVertex;
     }
 
@@ -561,10 +562,10 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             } else if ((isOneEnumeration() || isOnePrimitive()) && getDataTypeEnum() == null) {
                 this.vertex.property(getPersistentName()).remove();
                 if (isOnePrimitivePropertyOfAssociationClass()) {
-                    Object edgeId = this.vertex.value(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
                     //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
-                    if (edgeId != null) {
-                        Edge edge1 = UMLG.get().e(edgeId);
+                    Property edgeIdProperty = this.vertex.property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
+                    if (edgeIdProperty.isPresent()) {
+                        Edge edge1 = UMLG.get().e(edgeIdProperty.value());
                         edge1.property(getPersistentName()).remove();
                         //This is here because Titan has the nasty habit of recreating edges and changing the id.
                         this.vertex.property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID, edge1.id().toString());
@@ -625,19 +626,19 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         } else if (isOnePrimitive()) {
             this.vertex.property(getPersistentName(), e);
             if (isOnePrimitivePropertyOfAssociationClass()) {
-                Object edgeId = this.vertex.value(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
+                Property edgeIdProperty = this.vertex.property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
                 //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
-                if (edgeId != null) {
-                    UMLG.get().e(edgeId).property(getPersistentName(), e);
+                if (edgeIdProperty.isPresent()) {
+                    UMLG.get().e(edgeIdProperty.value()).property(getPersistentName(), e);
                 }
             }
         } else if (isOneEnumeration()) {
             this.vertex.property(getPersistentName(), ((Enum<?>) e).name());
             if (isOnePrimitivePropertyOfAssociationClass()) {
-                Object edgeId = this.vertex.value(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
                 //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
-                if (edgeId != null) {
-                    UMLG.get().e(edgeId).property(getPersistentName(), ((Enum<?>) e).name());
+                Property edgeIdProperty = this.vertex.property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
+                if (edgeIdProperty.isPresent()) {
+                    UMLG.get().e(edgeIdProperty.value()).property(getPersistentName(), ((Enum<?>) e).name());
                 }
             }
         } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
@@ -857,7 +858,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     private void validateQualifiedMultiplicity(Qualifier qualifier) {
         if (qualifier.isOne()) {
-            long count = UMLG.get().V().has(qualifier.getKey(), qualifier.getValue()).count();
+            long count = UMLG.get().E().has(qualifier.getKey(), qualifier.getValue()).count();
             if (count > 0) {
                 // Add info to exception
                 throw new IllegalStateException(String.format("Qualifier fails, qualifier multiplicity is one and an entry for key '%s' and value '%s' already exist",
@@ -1297,10 +1298,10 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     private void loadOneDataType() {
         this.vertex.property(getPersistentName()).ifPresent(
-            s -> {
-                E result = UmlgFormatter.parse(getDataTypeEnum(), s);
-                this.internalCollection.add(result);
-            }
+                s -> {
+                    E result = UmlgFormatter.parse(getDataTypeEnum(), s);
+                    this.internalCollection.add(result);
+                }
         );
         this.loaded = true;
     }

@@ -53,7 +53,7 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
                 "this." + getIdFieldName(clazz) + "= " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
         put.getBody().addToStatements(
-                UmlgClassOperations.className(clazz) + " c = new " + UmlgClassOperations.className(clazz) + "(" + UmlgGenerationUtil.UMLGAccess + ".getVertex(this."
+                UmlgClassOperations.className(clazz) + " c = new " + UmlgClassOperations.className(clazz) + "(" + UmlgGenerationUtil.UMLGAccess + ".v(this."
                         + getIdFieldName(clazz) + "))");
         annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz));
         OJTryStatement ojTry = new OJTryStatement();

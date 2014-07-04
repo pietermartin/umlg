@@ -95,7 +95,7 @@ public class TestNeo4jBlueprints {
         System.out.println(stopWatch.toString());
     }
 
-    @Test
+//    @Test
     public void testRollbackExceptionOnBeforeTxCommit() throws Exception {
         final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "blueprintstest2";
         File dir = new File(url);

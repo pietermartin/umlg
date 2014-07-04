@@ -12,7 +12,7 @@ abstract class GremlinExecutorBaseClass extends Script {
     public static void load(Graph graph) {
         GremlinLoader.load();
 //        Class.forName("org.umlg.gremlin.groovy.UmlgGremlinGroovyGraphPropertyNames").definePropertyNames();
-        Class.forName("org.umlg.runtime.gremlin.UmlgGremlinAddon").defineUmlgSteps(graph);
+//        Class.forName("org.umlg.runtime.gremlin.UmlgGremlinAddon").defineUmlgSteps(graph);
     }
 
     def useInterceptor= { Class theClass, Class theInterceptor, Closure theCode->

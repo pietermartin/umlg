@@ -36,8 +36,8 @@ public class UmlgNeo4jGraphFactory implements UmlgGraphFactory {
                     //This is to bypass the beforeCommit
                     this.umlgGraph.setBypass(true);
                     UmlGIndexFactory.getUmlgIndexManager().createIndexes();
-                    this.umlgGraph.setBypass(true);
                     this.umlgGraph.commit();
+                    this.umlgGraph.setBypass(false);
                 } catch (Exception e) {
                     logger.log(Level.SEVERE, "Could not start neo4j db!", e);
                     if (this.umlgGraph != null) {

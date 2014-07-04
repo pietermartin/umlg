@@ -7,6 +7,7 @@ import com.tinkerpop.gremlin.process.computer.GraphComputer;
 import com.tinkerpop.gremlin.process.graph.GraphTraversal;
 import com.tinkerpop.gremlin.structure.*;
 import com.tinkerpop.gremlin.structure.strategy.ReadOnlyGraphStrategy;
+import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedEdge;
 import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedGraph;
 import com.tinkerpop.gremlin.structure.util.GraphFactory;
 import org.apache.commons.configuration.BaseConfiguration;
@@ -43,11 +44,18 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     public UmlgNeo4jGraph(String directory) {
         BaseConfiguration conf = new BaseConfiguration();
-        conf.setProperty("gremlin.graph","com.tinkerpop.gremlin.neo4j.structure.Neo4jGraph");
+        conf.setProperty("gremlin.graph", "com.tinkerpop.gremlin.neo4j.structure.Neo4jGraph");
         conf.setProperty(Neo4jGraph.CONFIG_DIRECTORY, directory);
-        this.neo4jGraph = (StrategyWrappedGraph)GraphFactory.open(conf, new UmlgNeo4jGraphStrategy());
-//        this.neo4jGraph = Neo4jGraph.open(directory);
+        this.neo4jGraph = (StrategyWrappedGraph) GraphFactory.open(conf, new UmlgNeo4jGraphStrategy());
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
+    }
+
+    @Override
+    public Graph getReadOnlyGraph() {
+        Neo4jGraph rawNeo4jGraph = (Neo4jGraph) this.neo4jGraph.getBaseGraph();
+        final StrategyWrappedGraph swg = new StrategyWrappedGraph(rawNeo4jGraph);
+        swg.strategy().setGraphStrategy(new ReadOnlyGraphStrategy());
+        return swg;
     }
 
     void setBypass(boolean bypasss) {
@@ -66,14 +74,14 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         if (Vertex.class.isAssignableFrom(elementClass)) {
             this.tx().readWrite();
             if (uniqueParameter.getValue()) {
-                ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).createUniqueConstraint(labelParameter.getValue(), key);
+                ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).createUniqueConstraint(labelParameter.getValue(), key);
             } else {
-                ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).createIndex(labelParameter.getValue(), key);
+                ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).createIndex(labelParameter.getValue(), key);
 
             }
         } else if (Edge.class.isAssignableFrom(elementClass)) {
             this.tx().readWrite();
-            ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).createIndex(elementClass, key);
+            ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).createIndex(elementClass, key);
         } else {
             throw UmlgGraph.Exceptions.classIsNotIndexable(elementClass);
         }
@@ -231,7 +239,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
                     StopWatch stopWatch = new StopWatch();
                     stopWatch.start();
                     if (this.engine == null) {
-                        this.engine = new ExecutionEngine(((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getRawGraph(), StringLogger.SYSTEM);
+                        this.engine = new ExecutionEngine(((Neo4jGraph) this.neo4jGraph.getBaseGraph()).getRawGraph(), StringLogger.SYSTEM);
                     }
                     StringBuilder sb = new StringBuilder();
                     ExecutionResult executionResult = engine.execute(query);
@@ -250,47 +258,43 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public <T> T executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
-        try {
-            switch (umlgQueryEnum) {
-                case OCL:
-                    try {
-                        Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
-                        Method method = umlgOclExecutor.getMethod("executeOclQuery", Object.class, String.class);
-                        Object result = method.invoke(null, contextId, query);
-                        return (T) result;
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException("UmlgOclExecutor is not on the class path.");
-                    } catch (Exception e) {
-                        if (e instanceof RuntimeException) {
-                            throw (RuntimeException) e;
-                        } else if (e instanceof InvocationTargetException) {
-                            Throwable target = ((InvocationTargetException) e).getTargetException();
-                            if (target instanceof RuntimeException) {
-                                throw (RuntimeException) target;
-                            } else {
-                                throw new RuntimeException(target);
-                            }
-                        } else {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                case GROOVY:
-                    Object result;
-                    if (contextId != null) {
-                        result = GroovyExecutor.INSTANCE.executeGroovy(contextId, query);
-                    } else {
-                        result = GroovyExecutor.INSTANCE.executeGroovy(null, query);
-                    }
+        switch (umlgQueryEnum) {
+            case OCL:
+                try {
+                    Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
+                    Method method = umlgOclExecutor.getMethod("executeOclQuery", Object.class, String.class);
+                    Object result = method.invoke(null, contextId, query);
                     return (T) result;
-                case NATIVE:
-                    ExecutionEngine engine = new ExecutionEngine(((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getRawGraph(), StringLogger.SYSTEM);
-                    ExecutionResult executionResult = engine.execute(query);
-                    return (T) executionResult;
-                default:
-                    throw new RuntimeException("Unknown query enum");
-            }
-        } finally {
-            this.rollback();
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException("UmlgOclExecutor is not on the class path.");
+                } catch (Exception e) {
+                    if (e instanceof RuntimeException) {
+                        throw (RuntimeException) e;
+                    } else if (e instanceof InvocationTargetException) {
+                        Throwable target = ((InvocationTargetException) e).getTargetException();
+                        if (target instanceof RuntimeException) {
+                            throw (RuntimeException) target;
+                        } else {
+                            throw new RuntimeException(target);
+                        }
+                    } else {
+                        throw new RuntimeException(e);
+                    }
+                }
+            case GROOVY:
+                Object result;
+                if (contextId != null) {
+                    result = GroovyExecutor.INSTANCE.executeGroovy(contextId, query);
+                } else {
+                    result = GroovyExecutor.INSTANCE.executeGroovy(null, query);
+                }
+                return (T) result;
+            case NATIVE:
+                ExecutionEngine engine = new ExecutionEngine(((Neo4jGraph) this.neo4jGraph.getBaseGraph()).getRawGraph(), StringLogger.SYSTEM);
+                ExecutionResult executionResult = engine.execute(query);
+                return (T) executionResult;
+            default:
+                throw new RuntimeException("Unknown query enum");
         }
     }
 
@@ -320,24 +324,6 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         }
     }
 
-//    @Override
-//    public void removeVertex(final Vertex vertex) {
-//        this.autoStartTransaction(true);
-//        Iterable<Edge> edges = vertex.edgesForDirection(Direction.BOTH);
-//        for (final Edge edge : edges) {
-//            edge.remove();
-//        }
-//        if (!vertex.getId().equals(new Long(0))) {
-//            getDeletionVertex().addEdge(DELETION_VERTEX, vertex);
-//            for (String key : vertex.getPropertyKeys()) {
-//                vertex.removeProperty(key);
-//            }
-//            vertex.setProperty("deleted", true);
-//        } else {
-//            super.removeVertex(vertex);
-//        }
-//    }
-
     @Override
     public Set<Edge> getEdgesBetween(Vertex v1, Vertex v2, String... labels) {
 
@@ -347,21 +333,21 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         if (!v1.equals(v2)) {
 
             edges.forEach(
-                edge -> {
-                    if (edge.inV().equals(v2) || edge.outV().equals(v2)) {
-                        result.add(edge);
+                    edge -> {
+                        if (edge.inV().next().equals(v2) || edge.outV().next().equals(v2)) {
+                            result.add(edge);
+                        }
                     }
-                }
             );
 
         } else {
 
             edges.forEach(
-                edge -> {
-                    if (edge.inV().equals(v2) && edge.outV().equals(v2)) {
-                        result.add(edge);
+                    edge -> {
+                        if (edge.inV().next().equals(v2) && edge.outV().next().equals(v2)) {
+                            result.add(edge);
+                        }
                     }
-                }
             );
 
         }
@@ -375,7 +361,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         for (Edge edge : getDeletionVertex().outE(DELETION_VERTEX).toList()) {
             countDeletedNodes++;
         }
-        return ((GraphDatabaseAPI) ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getRawGraph()).getDependencyResolver().resolveDependency(NodeManager.class).getNumberOfIdsInUse(Node.class) - 2 - countDeletedNodes;
+        return ((GraphDatabaseAPI) ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).getRawGraph()).getDependencyResolver().resolveDependency(NodeManager.class).getNumberOfIdsInUse(Node.class) - 2 - countDeletedNodes;
     }
 
     @Override
@@ -384,12 +370,12 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         for (Edge edge : getDeletionVertex().outE(DELETION_VERTEX).toList()) {
             countDeletedNodes++;
         }
-        return ((GraphDatabaseAPI) ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getRawGraph()).getDependencyResolver().resolveDependency(NodeManager.class).getNumberOfIdsInUse(Relationship.class) - 1 - countDeletedNodes;
+        return ((GraphDatabaseAPI) ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).getRawGraph()).getDependencyResolver().resolveDependency(NodeManager.class).getNumberOfIdsInUse(Relationship.class) - 1 - countDeletedNodes;
     }
 
     @Override
     public boolean hasEdgeBeenDeleted(Edge edge) {
-        Neo4jEdge neo4jEdge = (Neo4jEdge) edge;
+        Neo4jEdge neo4jEdge = (Neo4jEdge) ((StrategyWrappedEdge) edge).getBaseEdge();
         try {
             neo4jEdge.getRawElement().hasProperty("asd");
             return false;
@@ -428,13 +414,23 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
+    public Vertex v(final Object id) {
+        return this.neo4jGraph.v(id);
+    }
+
+    @Override
+    public Edge e(final Object id) {
+        return this.neo4jGraph.e(id);
+    }
+
+    @Override
     public GraphTraversal<Edge, Edge> E() {
         return this.neo4jGraph.E();
     }
 
     @Override
     public <C extends GraphComputer> C compute(Class<C>... graphComputerClass) {
-        return ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).compute(graphComputerClass);
+        return ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).compute(graphComputerClass);
     }
 
     @Override
@@ -444,7 +440,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public <V extends Variables> V variables() {
-        return ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).variables();
+        return ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).variables();
     }
 
     @Override

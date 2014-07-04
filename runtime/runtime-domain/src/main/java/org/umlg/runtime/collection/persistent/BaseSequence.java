@@ -1,6 +1,7 @@
 package org.umlg.runtime.collection.persistent;
 
 import com.google.common.base.Preconditions;
+import com.tinkerpop.gremlin.process.graph.GraphTraversal;
 import com.tinkerpop.gremlin.structure.Direction;
 import com.tinkerpop.gremlin.structure.Edge;
 import com.tinkerpop.gremlin.structure.Vertex;
@@ -75,7 +76,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
                 Vertex newHyperVertex = UMLG.get().addVertex("hyperVertex");
                 newHyperVertex.addEdge(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX, newElementVertex);
                 //Put the new hyper vertex in the linked list
-                lastHyperVertex.addEdge(LABEL_TO_NEXT_HYPER_VERTEX + direction, lastHyperVertex);
+                lastHyperVertex.addEdge(LABEL_TO_NEXT_HYPER_VERTEX + direction, newHyperVertex);
                 //remove the lastHyperVertex edge to parent, add it to new last hyper vertex
                 edgeToLastHyperVertex.remove();
                 this.vertex.addEdge(LABEL_TO_LAST_HYPER_VERTEX + getLabel() + direction, newHyperVertex);
@@ -83,7 +84,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
         } else {
             //Is the first element being added, create the hyper vertex
             Vertex newHyperVertex = UMLG.get().addVertex("hyperVertex");
-            newHyperVertex.addEdge(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX, newHyperVertex);
+            newHyperVertex.addEdge(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX, newElementVertex);
             //Put the new hyper vertex in the linked list
             this.vertex.addEdge(LABEL_TO_FIRST_HYPER_VERTEX + getLabel() + direction, newHyperVertex);
             //remove the lastHyperVertex edge to parent, add it to new last hyper vertex
@@ -302,8 +303,9 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
 
     private Triad getHyperVertexForIndex(int indexOfNewElement, Vertex hyperVertex, int count, Direction direction) {
 
-        while (hyperVertex.outE(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).hasNext()) {
-            Edge edgeToElementVertex = hyperVertex.outE(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).next();
+        GraphTraversal<Vertex, Edge> vertexEdgeGraphTraversal = hyperVertex.outE(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+        while (vertexEdgeGraphTraversal.hasNext()) {
+            Edge edgeToElementVertex = vertexEdgeGraphTraversal.next();
             Vertex elementVertex = edgeToElementVertex.inV().next();
             if (indexOfNewElement == count++) {
                 return new Triad(hyperVertex, elementVertex, count);

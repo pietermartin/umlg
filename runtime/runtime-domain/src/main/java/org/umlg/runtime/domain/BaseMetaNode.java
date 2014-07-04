@@ -1,6 +1,7 @@
 package org.umlg.runtime.domain;
 
 
+import com.tinkerpop.gremlin.structure.Property;
 import com.tinkerpop.gremlin.structure.Vertex;
 
 import java.util.UUID;
@@ -28,12 +29,14 @@ public abstract class BaseMetaNode implements UmlgMetaNode {
 
     @Override
     public String getUid() {
-        String uid = this.vertex.value("uid");
-        if ( uid==null || uid.trim().length()==0 ) {
-            uid=UUID.randomUUID().toString();
+        Property<String> uidProperty = this.vertex.property("uid");
+        if ( !uidProperty.isPresent() || uidProperty.value().trim().length()==0 ) {
+            String uid = UUID.randomUUID().toString();
             this.vertex.property("uid", uid);
+            return uid;
+        } else {
+            return uidProperty.value();
         }
-        return uid;
     }
 
     public void defaultCreate() {

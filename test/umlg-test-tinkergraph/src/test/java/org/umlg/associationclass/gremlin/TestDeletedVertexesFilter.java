@@ -1,7 +1,7 @@
 package org.umlg.associationclass.gremlin;
 
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.pipes.util.Pipeline;
+import com.tinkerpop.gremlin.process.graph.GraphTraversal;
+import com.tinkerpop.gremlin.structure.Vertex;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.runtime.adaptor.UMLG;
@@ -27,18 +27,14 @@ public class TestDeletedVertexesFilter extends BaseLocalDbTest {
         human4.setName("human4");
         db.commit();
 
-        Object vertexes = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, null, "g.V");
-        Assert.assertTrue(vertexes instanceof Pipeline);
-        Pipeline<Object, Vertex> pipe = (Pipeline<Object, Vertex>) vertexes;
-        Assert.assertEquals(17, pipe.count());
+        GraphTraversal<Vertex, Vertex> vertexes = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, null, "g.V");
+        Assert.assertEquals(17, vertexes.count());
 
         human4.delete();
         db.commit();
 
-        vertexes = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, null, "g.V.hasNot('deleted', true)");
-        Assert.assertTrue(vertexes instanceof Pipeline);
-        pipe = (Pipeline<Object, Vertex>) vertexes;
-        Assert.assertEquals(16, pipe.count());
+        vertexes = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, null, "g.V.hasNot('_deleted')");
+        Assert.assertEquals(16, vertexes.count());
 
     }
 }

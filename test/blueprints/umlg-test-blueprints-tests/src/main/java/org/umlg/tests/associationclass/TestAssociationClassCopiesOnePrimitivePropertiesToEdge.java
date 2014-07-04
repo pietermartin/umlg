@@ -29,7 +29,7 @@ public class TestAssociationClassCopiesOnePrimitivePropertiesToEdge extends Base
         db.commit();
 
         //Check if the name property is on the edge
-        Object result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').name");
+        Object result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').value('name')");
         Assert.assertEquals("ac1", ((Traversal)result).next());
     }
 
@@ -46,27 +46,27 @@ public class TestAssociationClassCopiesOnePrimitivePropertiesToEdge extends Base
         db.commit();
 
         //Check if the name property is on the edge
-        Object result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').name");
+        Object result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').value('name')");
         Assert.assertEquals("ac1", ((Traversal)result).next());
 
         associationClassAC.setName("aacc1");
         db.commit();
 
         //Check if the name property is on the edge
-        result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').name");
+        result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').value('name')");
         Assert.assertEquals("aacc1", ((Traversal)result).next());
 
         associationClassAC.setName(null);
         db.commit();
 
         //Check if the name property is on the edge
-        result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').name");
-        Assert.assertEquals(null, ((Traversal)result).next());
+        result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').has('name')");
+        Assert.assertEquals(false, ((Traversal)result).hasNext());
         associationClassAC.setName("xxx");
         db.commit();
 
         //Check if the name property is on the edge
-        result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').name");
+        result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').value('name')");
         Assert.assertEquals("xxx", ((Traversal)result).next());
 
 

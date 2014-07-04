@@ -1,9 +1,13 @@
 package org.umlg.runtime.adaptor;
 
+import com.tinkerpop.gremlin.structure.Graph;
+
 /**
  * Created by pieter on 2014/04/28.
  */
 public interface UmlgAdminGraph {
+
+    Graph getReadOnlyGraph();
 
     /**
      * Adds in a singleton super duper node. Represents the application/model.

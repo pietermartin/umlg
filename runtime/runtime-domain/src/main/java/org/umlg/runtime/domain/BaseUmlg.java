@@ -1,5 +1,6 @@
 package org.umlg.runtime.domain;
 
+import com.tinkerpop.gremlin.structure.Property;
 import com.tinkerpop.gremlin.structure.Vertex;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -25,7 +26,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     public BaseUmlg(Vertex vertex) {
         super();
         //check if it has been deleted
-        vertex.<Boolean>property("deleted").ifPresent(
+        vertex.<Boolean>property("_deleted").ifPresent(
                 deleted -> {
                     if (deleted) {
                         throw new IllegalStateException("Vertex has been deleted!");
@@ -41,8 +42,8 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         super();
         //check if it has been deleted
         this.vertex = UMLG.get().v(id);
-        Boolean deleted = this.vertex.value("deleted");
-        if (deleted != null && deleted) {
+        Property<Boolean> deletedProperty = this.vertex.property("deleted");
+        if (deletedProperty.isPresent() && deletedProperty.value()) {
             throw new IllegalStateException("Vertex has been deleted!");
         }
         TransactionThreadEntityVar.setNewEntity(this);

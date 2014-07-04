@@ -64,9 +64,6 @@ public class DiagramPackageResourceBuilder extends BaseServerResourceBuilder imp
     }
 
     private void addGetRepresentation(OJAnnotatedClass queryExecute) {
-        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", UmlgRestletGenerationUtil.Representation);
-        queryExecute.addToOperations(getInf);
-        getInf.addAnnotationIfNew(new OJAnnotationValue(UmlgRestletGenerationUtil.Get, "json"));
 
         OJAnnotatedOperation get = new OJAnnotatedOperation("get", UmlgRestletGenerationUtil.Representation);
         get.addToThrows(UmlgRestletGenerationUtil.ResourceException);

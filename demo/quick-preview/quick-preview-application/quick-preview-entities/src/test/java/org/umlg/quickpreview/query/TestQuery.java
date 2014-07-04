@@ -1,7 +1,6 @@
 package org.umlg.quickpreview.query;
 
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.pipes.util.Pipeline;
+import com.tinkerpop.gremlin.process.graph.GraphTraversal;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.multiplicity.Account;
@@ -94,14 +93,11 @@ public class TestQuery extends BaseTest {
         db.commit();
 
         //'self' translates to g.V(id) where id is the customers id
-        Assert.assertEquals("john", db.executeQuery(UmlgQueryEnum.GROOVY, customer, "self.name"));
+        Assert.assertEquals("john", db.executeQuery(UmlgQueryEnum.GROOVY, customer, "self.value('name')"));
 
-        Object result = db.executeQuery(UmlgQueryEnum.GROOVY, customer, "self.both.has('name').name");
-        Assert.assertTrue(result instanceof Pipeline);
+        GraphTraversal result = db.executeQuery(UmlgQueryEnum.GROOVY, customer, "self.both.has('name').value('name')");
         List<String> names = new ArrayList();
-        for (String name : (Pipeline<Object, String>)result) {
-            names.add(name);
-        }
+        result.fill(names);
         Assert.assertEquals(2, names.size());
         Assert.assertTrue(names.contains("merc"));
         Assert.assertTrue(names.contains("merc"));

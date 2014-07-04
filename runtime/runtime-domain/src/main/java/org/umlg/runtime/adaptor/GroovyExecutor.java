@@ -1,18 +1,15 @@
 package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.gremlin.groovy.DefaultImportCustomizerProvider;
-import com.tinkerpop.gremlin.process.util.SingleIterator;
 import com.tinkerpop.gremlin.structure.Graph;
-import com.tinkerpop.gremlin.structure.strategy.ReadOnlyGraphStrategy;
-import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedGraph;
-import com.tinkerpop.gremlin.structure.util.GraphFactory;
-import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.lang.time.StopWatch;
 import org.umlg.runtime.domain.UmlgNode;
 
 import javax.script.ScriptException;
 import java.lang.reflect.Field;
-import java.util.Optional;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -71,21 +68,46 @@ public class GroovyExecutor {
     public String executeGroovyAsString(Object contextId, String groovy) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        Object pipe = executeGroovy(contextId, groovy);
-//        ToStringPipe toStringPipe = new ToStringPipe();
-//        toStringPipe.setStarts(new SingleIterator<>(pipe));
-        StringBuilder result = new StringBuilder();
-//        while (toStringPipe.hasNext()) {
-//            result.append(toStringPipe.next());
-//            result.append("\n");
-//
+        Object result = executeGroovy(contextId, groovy);
 
-        result.append(pipe.toString());
+        Iterator tempIterator = Collections.emptyIterator();
+        StringBuilder sb = new StringBuilder();
+
+        while (true) {
+            if (tempIterator.hasNext()) {
+                while (tempIterator.hasNext()) {
+                    final Object object = tempIterator.next();
+                    sb.append(((null == object) ? null : object.toString()));
+                }
+                break;
+            } else {
+                try {
+                    if (result instanceof Iterator) {
+                        tempIterator = (Iterator) result;
+                        if (!tempIterator.hasNext()) break;
+                    } else if (result instanceof Iterable) {
+                        tempIterator = ((Iterable) result).iterator();
+                        if (!tempIterator.hasNext()) break;
+                    } else if (result instanceof Object[]) {
+                        tempIterator = new ArrayIterator((Object[]) result);
+                        if (!tempIterator.hasNext()) break;
+                    } else if (result instanceof Map) {
+                        tempIterator = ((Map) result).entrySet().iterator();
+                        if (!tempIterator.hasNext()) break;
+                    } else {
+                        sb.append(((null == result) ? null : result.toString()));
+                        break;
+                    }
+                } catch (final Exception e) {
+                    throw e;
+                }
+            }
+        }
 
         stopWatch.stop();
-        result.append("Time to execute query = ");
-        result.append(stopWatch.toString());
-        return result.toString();
+        sb.append("Time to execute query = ");
+        sb.append(stopWatch.toString());
+        return sb.toString();
     }
 
     public Object executeGroovy(Object context, String groovy) {
@@ -100,11 +122,7 @@ public class GroovyExecutor {
                 groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.v(" + context + ")");
             }
         }
-
-        final StrategyWrappedGraph graph = new StrategyWrappedGraph(UMLG.get());
-        graph.strategy().setGraphStrategy(new ReadOnlyGraphStrategy());
-
-
+        Graph graph = ((UmlgAdminGraph)UMLG.get()).getReadOnlyGraph();
         GremlinExecutorBaseClass.load(graph);
         this.scriptEngine.put("g", graph);
         Object result;

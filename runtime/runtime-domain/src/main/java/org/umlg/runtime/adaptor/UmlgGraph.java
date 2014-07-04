@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface UmlgGraph extends Graph {
+
     static final String ROOT_VERTEX = "UmlgRootVertex";
     static final String DELETION_VERTEX = "deletionVertex";
     static final String DELETED_VERTEX_EDGE = "deletedVertexEdgeToRoot";
