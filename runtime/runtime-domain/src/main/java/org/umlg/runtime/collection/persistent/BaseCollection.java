@@ -858,7 +858,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     private void validateQualifiedMultiplicity(Qualifier qualifier) {
         if (qualifier.isOne()) {
-            long count = UMLG.get().E().has(qualifier.getKey(), qualifier.getValue()).count();
+            long count = UMLG.get().E().has(qualifier.getKey(), qualifier.getValue()).count().next();
             if (count > 0) {
                 // Add info to exception
                 throw new IllegalStateException(String.format("Qualifier fails, qualifier multiplicity is one and an entry for key '%s' and value '%s' already exist",

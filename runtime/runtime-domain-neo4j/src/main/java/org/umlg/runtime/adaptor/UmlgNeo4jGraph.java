@@ -76,12 +76,12 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
             if (uniqueParameter.getValue()) {
                 ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).createUniqueConstraint(labelParameter.getValue(), key);
             } else {
-                ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).createIndex(labelParameter.getValue(), key);
+                ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).createLabeledIndex(labelParameter.getValue(), key);
 
             }
         } else if (Edge.class.isAssignableFrom(elementClass)) {
             this.tx().readWrite();
-            ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).createIndex(elementClass, key);
+            ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).createLegacyIndex(elementClass, key);
         } else {
             throw UmlgGraph.Exceptions.classIsNotIndexable(elementClass);
         }

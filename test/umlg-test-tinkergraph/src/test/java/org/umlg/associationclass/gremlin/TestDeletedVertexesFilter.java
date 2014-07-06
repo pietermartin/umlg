@@ -28,13 +28,13 @@ public class TestDeletedVertexesFilter extends BaseLocalDbTest {
         db.commit();
 
         GraphTraversal<Vertex, Vertex> vertexes = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, null, "g.V");
-        Assert.assertEquals(17, vertexes.count());
+        Assert.assertEquals(17, vertexes.count().next(), 0);
 
         human4.delete();
         db.commit();
 
         vertexes = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, null, "g.V.hasNot('_deleted')");
-        Assert.assertEquals(16, vertexes.count());
+        Assert.assertEquals(16, vertexes.count().next(), 0);
 
     }
 }
