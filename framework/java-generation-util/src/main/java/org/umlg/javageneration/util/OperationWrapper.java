@@ -143,7 +143,12 @@ public class OperationWrapper implements Operation {
 		throw new RuntimeException("Not yet implemented");
 	}
 
-	@Override
+    @Override
+    public boolean validateAbstractNoMethod(DiagnosticChain diagnosticChain, Map<Object, Object> objectObjectMap) {
+        return false;
+    }
+
+    @Override
 	public EList<ParameterSet> getOwnedParameterSets() {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("Not yet implemented");
@@ -173,7 +178,17 @@ public class OperationWrapper implements Operation {
 		throw new RuntimeException("Not yet implemented");
 	}
 
-	@Override
+    @Override
+    public EList<Parameter> inputParameters() {
+        return null;
+    }
+
+    @Override
+    public EList<Parameter> outputParameters() {
+        return null;
+    }
+
+    @Override
 	public EList<ElementImport> getElementImports() {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("Not yet implemented");
@@ -311,7 +326,17 @@ public class OperationWrapper implements Operation {
 		throw new RuntimeException("Not yet implemented");
 	}
 
-	@Override
+    @Override
+    public boolean validateCannotImportSelf(DiagnosticChain diagnosticChain, Map<Object, Object> objectObjectMap) {
+        return false;
+    }
+
+    @Override
+    public boolean validateCannotImportOwnedMembers(DiagnosticChain diagnosticChain, Map<Object, Object> objectObjectMap) {
+        return false;
+    }
+
+    @Override
 	public ElementImport createElementImport(PackageableElement element, VisibilityKind visibility) {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("Not yet implemented");

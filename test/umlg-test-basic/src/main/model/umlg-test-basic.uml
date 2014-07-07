@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_xkZ6UNjYEeOEP64qykw2fg/5" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgProfile/_xkZ6UNjYEeOEP64qykw2fg/5 umlg.profile.uml#_xkahYNjYEeOEP64qykw2fg">
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_TsqiAAUsEeSLIPXdtbyv6Q/6" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgProfile/_TsqiAAUsEeSLIPXdtbyv6Q/6 umlg.profile.uml#_Tss-QAUsEeSLIPXdtbyv6Q">
   <uml:Model xmi:id="_qb8akM37EdqwVrslYOdUDA" name="basicmodel">
     <elementImport xmi:type="uml:ElementImport" xmi:id="_hZz7UK1CEeG4sJlJhTM52A">
       <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
@@ -83,10 +83,10 @@
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
           </ownedAttribute>
         </packagedElement>
-        <packagedElement xmi:type="uml:Class" xmi:id="_Aqu6sK5uEeG2vYtMbkVHmA" clientDependency="_CNuXc65uEeG2vYtMbkVHmA" name="InterfaceRealization1">
+        <packagedElement xmi:type="uml:Class" xmi:id="_Aqu6sK5uEeG2vYtMbkVHmA" name="InterfaceRealization1">
           <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_CNuXc65uEeG2vYtMbkVHmA" name="InterfaceRealization1" client="_Aqu6sK5uEeG2vYtMbkVHmA" supplier="__p5v0K5tEeG2vYtMbkVHmA" contract="__p5v0K5tEeG2vYtMbkVHmA"/>
         </packagedElement>
-        <packagedElement xmi:type="uml:Class" xmi:id="_DHa_kK5uEeG2vYtMbkVHmA" clientDependency="_Kp0aAK5uEeG2vYtMbkVHmA" name="InterfaceRealization2">
+        <packagedElement xmi:type="uml:Class" xmi:id="_DHa_kK5uEeG2vYtMbkVHmA" name="InterfaceRealization2">
           <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_Kp0aAK5uEeG2vYtMbkVHmA" name="InterfaceRealization1" client="_DHa_kK5uEeG2vYtMbkVHmA" supplier="_IaifAK5uEeG2vYtMbkVHmA" contract="_IaifAK5uEeG2vYtMbkVHmA"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Interface" xmi:id="_IaifAK5uEeG2vYtMbkVHmA" name="Interface2">
@@ -264,7 +264,7 @@
     </profileApplication>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_rgP08N25EeOEP64qykw2fg">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_rga0EN25EeOEP64qykw2fg" source="http://www.eclipse.org/uml2/2.0.0/UML">
-        <references xmi:type="ecore:EPackage" href="umlg.profile.uml#_xkahYNjYEeOEP64qykw2fg"/>
+        <references xmi:type="ecore:EPackage" href="umlg.profile.uml#_Tss-QAUsEeSLIPXdtbyv6Q"/>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="umlg.profile.uml#_twUakKeJEeOPt7R4er8hcg"/>
     </profileApplication>

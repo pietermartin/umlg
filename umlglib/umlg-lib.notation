@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML">
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
   <notation:Diagram xmi:id="_mdWGkCM2EeK-Trh8Ll0qUQ" type="PapyrusUMLClassDiagram" name="NewDiagram" measurementUnit="Pixel">
     <children xmi:type="notation:Shape" xmi:id="_YOsSsCM6EeK-Trh8Ll0qUQ" type="2007" fontName="Sans" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_YOs5wCM6EeK-Trh8Ll0qUQ" source="ShadowFigure">
@@ -209,7 +209,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_lj3QoshxEeOiQ-tGJXxh5A"/>
       </children>
       <element xmi:type="uml:Interface" href="umlg-lib.uml#_o0lDsCM2EeK-Trh8Ll0qUQ"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_lbHQsSM6EeK-Trh8Ll0qUQ" x="131" y="188"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_lbHQsSM6EeK-Trh8Ll0qUQ" x="136" y="196"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_GlZS8CP5EeKOmc56p_1Osg" type="2012" fontName="Sans" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GlZ6ACP5EeKOmc56p_1Osg" source="ShadowFigure">

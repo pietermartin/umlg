@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_L49CoKzbEeOnn8UJImpdOg/3" xmlns:UmlgValidation="http:///schemas/UmlgValidation/__a3VoNFKEeOjlpjTZXDyqw/15" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgProfile/_L49CoKzbEeOnn8UJImpdOg/3 umlg.profile.uml#_L49CoazbEeOnn8UJImpdOg http:///schemas/UmlgValidation/__a3VoNFKEeOjlpjTZXDyqw/15 validation.profile.uml#__a38sNFKEeOjlpjTZXDyqw">
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_TsqiAAUsEeSLIPXdtbyv6Q/6" xmlns:UmlgValidation="http:///schemas/UmlgValidation/_VpQKgAUsEeSLIPXdtbyv6Q/16" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgProfile/_TsqiAAUsEeSLIPXdtbyv6Q/6 umlg.profile.uml#_Tss-QAUsEeSLIPXdtbyv6Q http:///schemas/UmlgValidation/_VpQKgAUsEeSLIPXdtbyv6Q/16 validation.profile.uml#_VpQxkAUsEeSLIPXdtbyv6Q">
   <uml:Model xmi:id="_JKkPEHzeEeOYhpiy1kqM8Q" name="quickpreview">
     <packageImport xmi:type="uml:PackageImport" xmi:id="_JKkPEXzeEeOYhpiy1kqM8Q">
       <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
@@ -392,10 +392,10 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GouzttXvEeOCt7XMZfn16w" value="1"/>
             </ownedEnd>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_OKcRoNXvEeOCt7XMZfn16w" clientDependency="_X4VTQNXvEeOCt7XMZfn16w" name="Ghost">
+          <packagedElement xmi:type="uml:Class" xmi:id="_OKcRoNXvEeOCt7XMZfn16w" name="Ghost">
             <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_X4VTQNXvEeOCt7XMZfn16w" name="InterfaceRealization1" client="_OKcRoNXvEeOCt7XMZfn16w" supplier="_8ECs8NXuEeOCt7XMZfn16w" contract="_8ECs8NXuEeOCt7XMZfn16w"/>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_QNXLoNXvEeOCt7XMZfn16w" clientDependency="_XfJ-QNXvEeOCt7XMZfn16w" name="Mamal">
+          <packagedElement xmi:type="uml:Class" xmi:id="_QNXLoNXvEeOCt7XMZfn16w" name="Mamal">
             <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_XfJ-QNXvEeOCt7XMZfn16w" name="InterfaceRealization1" client="_QNXLoNXvEeOCt7XMZfn16w" supplier="_7HoIANXuEeOCt7XMZfn16w" contract="_7HoIANXuEeOCt7XMZfn16w"/>
           </packagedElement>
         </packagedElement>
@@ -556,7 +556,7 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_09tZs9guEeOEP64qykw2fg" value="1"/>
             </ownedEnd>
           </packagedElement>
-          <packagedElement xmi:type="uml:Association" xmi:id="_y-DCsNhoEeOEP64qykw2fg" clientDependency="_DZJqIN3CEeOEP64qykw2fg" name="bank_client_2" memberEnd="_y-DCsdhoEeOEP64qykw2fg _y-CboNhoEeOEP64qykw2fg" navigableOwnedEnd="_y-DCsdhoEeOEP64qykw2fg">
+          <packagedElement xmi:type="uml:Association" xmi:id="_y-DCsNhoEeOEP64qykw2fg" name="bank_client_2" memberEnd="_y-DCsdhoEeOEP64qykw2fg _y-CboNhoEeOEP64qykw2fg" navigableOwnedEnd="_y-DCsdhoEeOEP64qykw2fg">
             <ownedEnd xmi:type="uml:Property" xmi:id="_y-DCsdhoEeOEP64qykw2fg" name="bank" type="_eA2cYNguEeOEP64qykw2fg" association="_y-DCsNhoEeOEP64qykw2fg">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_y-DCsthoEeOEP64qykw2fg" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_y-DCs9hoEeOEP64qykw2fg" value="1"/>
@@ -754,13 +754,13 @@
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_bk90UJ2MEeOdnJvRGBqhtw">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_blMd0J2MEeOdnJvRGBqhtw" source="http://www.eclipse.org/uml2/2.0.0/UML">
-        <references xmi:type="ecore:EPackage" href="validation.profile.uml#__a38sNFKEeOjlpjTZXDyqw"/>
+        <references xmi:type="ecore:EPackage" href="validation.profile.uml#_VpQxkAUsEeSLIPXdtbyv6Q"/>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="validation.profile.uml#_6Zdd4AV1EeK9oIwdQfC0-w"/>
     </profileApplication>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_tGK18K4OEeOR4f3Enm7Mow">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_tGpXEK4OEeOR4f3Enm7Mow" source="http://www.eclipse.org/uml2/2.0.0/UML">
-        <references xmi:type="ecore:EPackage" href="umlg.profile.uml#_L49CoazbEeOnn8UJImpdOg"/>
+        <references xmi:type="ecore:EPackage" href="umlg.profile.uml#_Tss-QAUsEeSLIPXdtbyv6Q"/>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="umlg.profile.uml#_twUakKeJEeOPt7R4er8hcg"/>
     </profileApplication>

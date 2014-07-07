@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_xkZ6UNjYEeOEP64qykw2fg/5" xmlns:UmlgProfile_1="http:///schemas/UmlgProfile/_ZO3twNhzEeOEP64qykw2fg/4" xmlns:UmlgValidation="http:///schemas/UmlgValidation/__a3VoNFKEeOjlpjTZXDyqw/15" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:l2="http://www.eclipse.org/uml2/4.0.0/UML/Profile/L2" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgProfile/_xkZ6UNjYEeOEP64qykw2fg/5 umlg.profile.uml#_xkahYNjYEeOEP64qykw2fg http:///schemas/UmlgProfile/_ZO3twNhzEeOEP64qykw2fg/4 umlg.profile.uml#_ZO474NhzEeOEP64qykw2fg http:///schemas/UmlgValidation/__a3VoNFKEeOjlpjTZXDyqw/15 validation.profile.uml#__a38sNFKEeOjlpjTZXDyqw">
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_TsqiAAUsEeSLIPXdtbyv6Q/6" xmlns:UmlgValidation="http:///schemas/UmlgValidation/_VpQKgAUsEeSLIPXdtbyv6Q/16" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:standard="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgProfile/_TsqiAAUsEeSLIPXdtbyv6Q/6 umlg.profile.uml#_Tss-QAUsEeSLIPXdtbyv6Q http:///schemas/UmlgValidation/_VpQKgAUsEeSLIPXdtbyv6Q/16 validation.profile.uml#_VpQxkAUsEeSLIPXdtbyv6Q">
   <uml:Model xmi:id="_qb8akM37EdqwVrslYOdUDA" name="umlgtest">
     <elementImport xmi:type="uml:ElementImport" xmi:id="_vhWmcOYQEeCCXPbP2D6kZQ">
       <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
@@ -33,7 +33,7 @@
         <packagedElement xmi:type="uml:Package" xmi:id="_osC40OwhEeCSwqyeEHd1tw" name="interfacetest">
           <packagedElement xmi:type="uml:Interface" xmi:id="_CV5IcO3xEeCrW8ilxB8BWA" name="Spirit"/>
           <packagedElement xmi:type="uml:Interface" xmi:id="_CoqTcO3xEeCrW8ilxB8BWA" name="Being"/>
-          <packagedElement xmi:type="uml:Class" xmi:id="_EfTsAO3xEeCrW8ilxB8BWA" clientDependency="_KhgfAO3xEeCrW8ilxB8BWA" name="Spook">
+          <packagedElement xmi:type="uml:Class" xmi:id="_EfTsAO3xEeCrW8ilxB8BWA" name="Spook">
             <generalization xmi:type="uml:Generalization" xmi:id="__zqoECXHEeKbPYSfIbmXag">
               <general xmi:type="uml:Class" href="umlg-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
@@ -44,7 +44,7 @@
             </ownedAttribute>
             <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_KhgfAO3xEeCrW8ilxB8BWA" name="InterfaceRealization1" client="_EfTsAO3xEeCrW8ilxB8BWA" supplier="_CV5IcO3xEeCrW8ilxB8BWA" contract="_CV5IcO3xEeCrW8ilxB8BWA"/>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_Fv38AO3xEeCrW8ilxB8BWA" clientDependency="_KsSLoO3xEeCrW8ilxB8BWA" name="Creature">
+          <packagedElement xmi:type="uml:Class" xmi:id="_Fv38AO3xEeCrW8ilxB8BWA" name="Creature">
             <generalization xmi:type="uml:Generalization" xmi:id="__lx9ECXHEeKbPYSfIbmXag">
               <general xmi:type="uml:Class" href="umlg-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
@@ -67,7 +67,7 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_HgNRMu3xEeCrW8ilxB8BWA" value="1"/>
             </ownedEnd>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="__qfnQO3yEeCrW8ilxB8BWA" clientDependency="_FVgCQO3zEeCrW8ilxB8BWA" name="Phantom">
+          <packagedElement xmi:type="uml:Class" xmi:id="__qfnQO3yEeCrW8ilxB8BWA" name="Phantom">
             <generalization xmi:type="uml:Generalization" xmi:id="_ADw5kCXIEeKbPYSfIbmXag">
               <general xmi:type="uml:Class" href="umlg-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
@@ -104,13 +104,13 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vx0_Be6uEeCKZsw1ityolg" value="*"/>
             </ownedEnd>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_zJO_sO6uEeCKZsw1ityolg" clientDependency="_5JLI4O6uEeCKZsw1ityolg" name="ManyB">
+          <packagedElement xmi:type="uml:Class" xmi:id="_zJO_sO6uEeCKZsw1ityolg" name="ManyB">
             <generalization xmi:type="uml:Generalization" xmi:id="_GIomECXIEeKbPYSfIbmXag">
               <general xmi:type="uml:Class" href="umlg-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
             <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_5JLI4O6uEeCKZsw1ityolg" name="InterfaceRealization1" client="_zJO_sO6uEeCKZsw1ityolg" supplier="_q8BtsO6uEeCKZsw1ityolg" contract="_q8BtsO6uEeCKZsw1ityolg"/>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_1NkO8O6uEeCKZsw1ityolg" clientDependency="_47n1EO6uEeCKZsw1ityolg" name="ManyA">
+          <packagedElement xmi:type="uml:Class" xmi:id="_1NkO8O6uEeCKZsw1ityolg" name="ManyA">
             <generalization xmi:type="uml:Generalization" xmi:id="_F9zPECXIEeKbPYSfIbmXag">
               <general xmi:type="uml:Class" href="umlg-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
@@ -132,7 +132,7 @@
           <packagedElement xmi:type="uml:Class" xmi:id="_FFef4CQbEeKzTel_Vwmhog" name="SpecialCreature">
             <generalization xmi:type="uml:Generalization" xmi:id="_GrBhYCQbEeKzTel_Vwmhog" general="_Fv38AO3xEeCrW8ilxB8BWA"/>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_vAT78IipEeKeSZB9UA6Gvw" clientDependency="_w4x5cIipEeKeSZB9UA6Gvw" name="ManyAA">
+          <packagedElement xmi:type="uml:Class" xmi:id="_vAT78IipEeKeSZB9UA6Gvw" name="ManyAA">
             <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_w4x5cIipEeKeSZB9UA6Gvw" name="InterfaceRealization1" client="_vAT78IipEeKeSZB9UA6Gvw" supplier="_p2UC0O6uEeCKZsw1ityolg" contract="_p2UC0O6uEeCKZsw1ityolg"/>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_kjHuYNXwEeOCt7XMZfn16w" name="Creator">
@@ -159,7 +159,7 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_qqhxhtXwEeOCt7XMZfn16w" value="1"/>
             </ownedEnd>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_z40GANXwEeOCt7XMZfn16w" clientDependency="_2T2lENXwEeOCt7XMZfn16w" name="C1">
+          <packagedElement xmi:type="uml:Class" xmi:id="_z40GANXwEeOCt7XMZfn16w" name="C1">
             <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_2T2lENXwEeOCt7XMZfn16w" name="InterfaceRealization1" client="_z40GANXwEeOCt7XMZfn16w" supplier="_mQcy4NXwEeOCt7XMZfn16w" contract="_mQcy4NXwEeOCt7XMZfn16w"/>
           </packagedElement>
         </packagedElement>
@@ -481,14 +481,14 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0lr4gypZEeOKybaUoQcxlg" value="1"/>
             </ownedEnd>
           </packagedElement>
-          <packagedElement xmi:type="uml:Association" xmi:id="_Ye-3A9h1EeOEP64qykw2fg" clientDependency="_qt1vUNjREeOEP64qykw2fg" name="god_nature_1" memberEnd="_Ye-3BNh1EeOEP64qykw2fg _Ye-3ANh1EeOEP64qykw2fg" navigableOwnedEnd="_Ye-3BNh1EeOEP64qykw2fg">
+          <packagedElement xmi:type="uml:Association" xmi:id="_Ye-3A9h1EeOEP64qykw2fg" name="god_nature_1" memberEnd="_Ye-3BNh1EeOEP64qykw2fg _Ye-3ANh1EeOEP64qykw2fg" navigableOwnedEnd="_Ye-3BNh1EeOEP64qykw2fg">
             <ownedEnd xmi:type="uml:Property" xmi:id="_Ye-3BNh1EeOEP64qykw2fg" name="god" type="_YuD8sOwiEeCSwqyeEHd1tw" association="_Ye-3A9h1EeOEP64qykw2fg">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Ye-3Bdh1EeOEP64qykw2fg" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Ye-3Bth1EeOEP64qykw2fg" value="1"/>
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Abstraction" xmi:id="_qt1vUNjREeOEP64qykw2fg" name="godNatureAbstraction" client="_Ye-3A9h1EeOEP64qykw2fg" supplier="_Yq2WivJKEeCeFLHNTzV0LA"/>
-          <packagedElement xmi:type="uml:Association" xmi:id="_uKlXcN29EeOEP64qykw2fg" clientDependency="_3zBRUN29EeOEP64qykw2fg" name="god_nature_2" memberEnd="_uKlXcd29EeOEP64qykw2fg _uKjiQN29EeOEP64qykw2fg" navigableOwnedEnd="_uKlXcd29EeOEP64qykw2fg">
+          <packagedElement xmi:type="uml:Association" xmi:id="_uKlXcN29EeOEP64qykw2fg" name="god_nature_2" memberEnd="_uKlXcd29EeOEP64qykw2fg _uKjiQN29EeOEP64qykw2fg" navigableOwnedEnd="_uKlXcd29EeOEP64qykw2fg">
             <ownedEnd xmi:type="uml:Property" xmi:id="_uKlXcd29EeOEP64qykw2fg" name="god" type="_YuD8sOwiEeCSwqyeEHd1tw" association="_uKlXcN29EeOEP64qykw2fg">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_uKlXct29EeOEP64qykw2fg" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_uKlXc929EeOEP64qykw2fg" value="1"/>
@@ -706,7 +706,7 @@
               </ownedParameter>
             </ownedOperation>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_vA8U8CNaEeKXA8fV9fB29w" clientDependency="_xdCj8CNaEeKXA8fV9fB29w" name="AbstractFolder" isAbstract="true">
+          <packagedElement xmi:type="uml:Class" xmi:id="_vA8U8CNaEeKXA8fV9fB29w" name="AbstractFolder" isAbstract="true">
             <generalization xmi:type="uml:Generalization" xmi:id="_WxcycCXIEeKbPYSfIbmXag">
               <general xmi:type="uml:Class" href="umlg-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
@@ -2019,7 +2019,7 @@ endif</body>
               </defaultValue>
             </ownedAttribute>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_o-T88HlOEeOViYFNuR_VNg" clientDependency="_7remsHlOEeOViYFNuR_VNg" name="Bsc">
+          <packagedElement xmi:type="uml:Class" xmi:id="_o-T88HlOEeOViYFNuR_VNg" name="Bsc">
             <ownedAttribute xmi:type="uml:Property" xmi:id="_9OhGwHlOEeOViYFNuR_VNg" name="bts" type="_qVOFgHlOEeOViYFNuR_VNg" subsettedProperty="_xvdpgHlOEeOViYFNuR_VNg" association="_9Oht0HlOEeOViYFNuR_VNg">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9OhGwXlOEeOViYFNuR_VNg"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9OhGwnlOEeOViYFNuR_VNg" value="*"/>
@@ -2030,7 +2030,7 @@ endif</body>
             </ownedAttribute>
             <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_7remsHlOEeOViYFNuR_VNg" name="InterfaceRealization1" client="_o-T88HlOEeOViYFNuR_VNg" supplier="_l8OE8HlOEeOViYFNuR_VNg" contract="_l8OE8HlOEeOViYFNuR_VNg"/>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_qVOFgHlOEeOViYFNuR_VNg" clientDependency="_7_1tIHlOEeOViYFNuR_VNg" name="Bts">
+          <packagedElement xmi:type="uml:Class" xmi:id="_qVOFgHlOEeOViYFNuR_VNg" name="Bts">
             <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_7_1tIHlOEeOViYFNuR_VNg" name="InterfaceRealization1" client="_qVOFgHlOEeOViYFNuR_VNg" supplier="_l8OE8HlOEeOViYFNuR_VNg" contract="_l8OE8HlOEeOViYFNuR_VNg"/>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_9Oht0HlOEeOViYFNuR_VNg" name="bcs_bts_1" memberEnd="_9Oht0XlOEeOViYFNuR_VNg _9OhGwHlOEeOViYFNuR_VNg" navigableOwnedEnd="_9Oht0XlOEeOViYFNuR_VNg">
@@ -2039,7 +2039,7 @@ endif</body>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9Oht03lOEeOViYFNuR_VNg" value="1"/>
             </ownedEnd>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_LdPPQHlPEeOViYFNuR_VNg" clientDependency="_M_SQ0HlPEeOViYFNuR_VNg" name="Cell">
+          <packagedElement xmi:type="uml:Class" xmi:id="_LdPPQHlPEeOViYFNuR_VNg" name="Cell">
             <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_M_SQ0HlPEeOViYFNuR_VNg" name="InterfaceRealization1" client="_LdPPQHlPEeOViYFNuR_VNg" supplier="_l8OE8HlOEeOViYFNuR_VNg" contract="_l8OE8HlOEeOViYFNuR_VNg"/>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_OZdv03lPEeOViYFNuR_VNg" name="bcs_cell_1" memberEnd="_OZdv1HlPEeOViYFNuR_VNg _OZdv0HlPEeOViYFNuR_VNg" navigableOwnedEnd="_OZdv1HlPEeOViYFNuR_VNg">
@@ -2757,19 +2757,19 @@ endif</body>
     </profileApplication>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_36wbQAV_EeK9oIwdQfC0-w">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_36wbQQV_EeK9oIwdQfC0-w" source="http://www.eclipse.org/uml2/2.0.0/UML">
-        <references xmi:type="ecore:EPackage" href="validation.profile.uml#__a38sNFKEeOjlpjTZXDyqw"/>
+        <references xmi:type="ecore:EPackage" href="validation.profile.uml#_VpQxkAUsEeSLIPXdtbyv6Q"/>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="validation.profile.uml#_6Zdd4AV1EeK9oIwdQfC0-w"/>
     </profileApplication>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_h4Q8kKeLEeOPt7R4er8hcg">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_h43ZgKeLEeOPt7R4er8hcg" source="http://www.eclipse.org/uml2/2.0.0/UML">
-        <references xmi:type="ecore:EPackage" href="umlg.profile.uml#_xkahYNjYEeOEP64qykw2fg"/>
+        <references xmi:type="ecore:EPackage" href="umlg.profile.uml#_Tss-QAUsEeSLIPXdtbyv6Q"/>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="umlg.profile.uml#_twUakKeJEeOPt7R4er8hcg"/>
     </profileApplication>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_SkmXENjUEeOEP64qykw2fg">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_SlmcoNjUEeOEP64qykw2fg" source="http://www.eclipse.org/uml2/2.0.0/UML">
-        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/uml2/4.0.0/UML/Profile/L2#/"/>
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard#/"/>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="pathmap://UML_PROFILES/StandardL2.profile.uml#_0"/>
     </profileApplication>
@@ -2835,8 +2835,7 @@ endif</body>
   <UmlgValidation:MaxDouble xmi:id="_iQju4NFbEeOjlpjTZXDyqw" max="5.123" base_Property="_ejQWsNFbEeOjlpjTZXDyqw"/>
   <UmlgValidation:MinDouble xmi:id="_naSBwNFbEeOjlpjTZXDyqw" min="5.123" base_Property="_jOL0wNFbEeOjlpjTZXDyqw"/>
   <UmlgValidation:RangeDouble xmi:id="_1bujQNFbEeOjlpjTZXDyqw" max="5.123" base_Property="_vTINUNFbEeOjlpjTZXDyqw"/>
-  <UmlgProfile_1:Redundant xmi:id="_blNoINh1EeOEP64qykw2fg" association="_Yq2WivJKEeCeFLHNTzV0LA" base_Association="_Ye-3A9h1EeOEP64qykw2fg"/>
-  <l2:Refine xmi:id="_xIVmMNjUEeOEP64qykw2fg" base_Abstraction="_qt1vUNjREeOEP64qykw2fg"/>
+  <standard:Refine xmi:id="_xIVmMNjUEeOEP64qykw2fg" base_Abstraction="_qt1vUNjREeOEP64qykw2fg"/>
   <UmlgProfile:QualifierListener xmi:id="__yCFYN20EeOEP64qykw2fg" base_Property="_uLKyoMRnEeGJXus6eZqdyw" property="_IKLEEBhKEeGoXdfOp4zUvw"/>
   <UmlgProfile:QualifierListener xmi:id="_FNK4YN21EeOEP64qykw2fg" base_Property="_Qvap0MRoEeGJXus6eZqdyw" property="_8yErwBqsEeG2HY-TJLNivw"/>
   <UmlgProfile:QualifierListener xmi:id="_JuBNYN21EeOEP64qykw2fg" base_Property="_bMVs4MUyEeGJ_K04GuAseA" property="_RCfXUBq1EeG2HY-TJLNivw"/>

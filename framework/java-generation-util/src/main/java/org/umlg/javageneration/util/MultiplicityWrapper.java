@@ -438,14 +438,19 @@ public class MultiplicityWrapper implements MultiplicityElement {
 		return this.multiplicityElement.validateValueSpecificationConstant(diagnostics, context);
 	}
 
-	@Override
+    @Override
+    public boolean validateLowerIsInteger(DiagnosticChain diagnosticChain, Map<Object, Object> objectObjectMap) {
+        return false;
+    }
+
+    @Override
+    public boolean validateUpperIsUnlimitedNatural(DiagnosticChain diagnosticChain, Map<Object, Object> objectObjectMap) {
+        return false;
+    }
+
+    @Override
 	public boolean isMultivalued() {
 		return this.multiplicityElement.isMultivalued();
-	}
-
-	@Override
-	public boolean includesCardinality(int C) {
-		return this.multiplicityElement.includesCardinality(C);
 	}
 
 	@Override

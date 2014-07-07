@@ -9,30 +9,6 @@
 	</parent>
 	<artifactId>ocl</artifactId>
 	<dependencies>
-		<!--<dependency>-->
-			<!--<groupId>org.eclipse.uml2</groupId>-->
-			<!--<artifactId>uml</artifactId>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>org.eclipse.uml2</groupId>-->
-			<!--<artifactId>common</artifactId>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>org.eclipse.uml2.uml</groupId>-->
-			<!--<artifactId>resources</artifactId>-->
-		<!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.eclipse.emf</groupId>-->
-            <!--<artifactId>org.eclipse.emf.ecore</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.eclipse.emf</groupId>-->
-            <!--<artifactId>org.eclipse.emf.ecore.xmi</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.eclipse.emf</groupId>-->
-            <!--<artifactId>org.eclipse.emf.common</artifactId>-->
-        <!--</dependency>-->
 		<dependency>
 			<groupId>org.umlg</groupId>
 			<artifactId>uml</artifactId>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_xkZ6UNjYEeOEP64qykw2fg/5" xmlns:UmlgProfile_1="http:///schemas/UmlgProfile/_pBuIAKeKEeOPt7R4er8hcg/0" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgProfile/_xkZ6UNjYEeOEP64qykw2fg/5 umlg.profile.uml#_xkahYNjYEeOEP64qykw2fg http:///schemas/UmlgProfile/_pBuIAKeKEeOPt7R4er8hcg/0 umlg.profile.uml#_pBvWIaeKEeOPt7R4er8hcg">
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_TsqiAAUsEeSLIPXdtbyv6Q/6" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgProfile/_TsqiAAUsEeSLIPXdtbyv6Q/6 umlg.profile.uml#_Tss-QAUsEeSLIPXdtbyv6Q">
   <uml:Model xmi:id="_qb8akM37EdqwVrslYOdUDA" name="testoclmodel">
     <elementImport xmi:type="uml:ElementImport" xmi:id="_vH2KoL7zEeG5Bt_b3EGOQQ">
       <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
@@ -600,20 +600,15 @@
     </profileApplication>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_AKGY0KeLEeOPt7R4er8hcg">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AKW3gKeLEeOPt7R4er8hcg" source="http://www.eclipse.org/uml2/2.0.0/UML">
-        <references xmi:type="ecore:EPackage" href="umlg.profile.uml#_pBvWIaeKEeOPt7R4er8hcg"/>
+        <references xmi:type="ecore:EPackage" href="umlg.profile.uml#_Tss-QAUsEeSLIPXdtbyv6Q"/>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="umlg.profile.uml#_twUakKeJEeOPt7R4er8hcg"/>
     </profileApplication>
   </uml:Model>
-  <UmlgProfile:QualifierListener xmi:id="_lkbvkNoQEeOEP64qykw2fg" base_Property="_e4poAM5xEeG36cJ3v-Rmsg" property="_RvBUwM5wEeG36cJ3v-Rmsg"/>
-  <UmlgProfile:QualifierListener xmi:id="_qErAkNoQEeOEP64qykw2fg" base_Property="_41VsUM6ZEeGe--xVhMWeOw" property="_FeHj0M5wEeG36cJ3v-Rmsg"/>
-  <UmlgProfile:QualifierListener xmi:id="_ZPEf0NuZEeOEP64qykw2fg" base_Property="_IJ_DoNuYEeOEP64qykw2fg" property="_y4kUcNuXEeOEP64qykw2fg"/>
-  <UmlgProfile:QualifierListener xmi:id="_dGvU8NuZEeOEP64qykw2fg" base_Property="_SuHJsNuYEeOEP64qykw2fg" property="_0is7ANuXEeOEP64qykw2fg"/>
-  <UmlgProfile:QualifierListener xmi:id="_ftiYENuZEeOEP64qykw2fg" base_Property="_Yx2NwNuYEeOEP64qykw2fg" property="_15g88NuXEeOEP64qykw2fg"/>
-  <UmlgProfile_1:QualifierListener xmi:id="_UWAtgN26EeOEP64qykw2fg" base_Property="_e4poAM5xEeG36cJ3v-Rmsg" property="_RvBUwM5wEeG36cJ3v-Rmsg"/>
-  <UmlgProfile_1:QualifierListener xmi:id="_Z1nw0N26EeOEP64qykw2fg" base_Property="_41VsUM6ZEeGe--xVhMWeOw" property="_FeHj0M5wEeG36cJ3v-Rmsg"/>
-  <UmlgProfile_1:QualifierListener xmi:id="_gyElkN26EeOEP64qykw2fg" base_Property="_osFL8M6oEeGvubEk1n1G9w" property="_efKE8M6oEeGvubEk1n1G9w"/>
-  <UmlgProfile_1:QualifierListener xmi:id="_Pxye8N27EeOEP64qykw2fg" base_Property="_IJ_DoNuYEeOEP64qykw2fg" property="_y4kUcNuXEeOEP64qykw2fg"/>
-  <UmlgProfile_1:QualifierListener xmi:id="_TRxz4N27EeOEP64qykw2fg" base_Property="_SuHJsNuYEeOEP64qykw2fg" property="_0is7ANuXEeOEP64qykw2fg"/>
-  <UmlgProfile_1:QualifierListener xmi:id="_VlwBoN27EeOEP64qykw2fg" base_Property="_Yx2NwNuYEeOEP64qykw2fg" property="_15g88NuXEeOEP64qykw2fg"/>
+  <UmlgProfile:QualifierListener xmi:id="_UWAtgN26EeOEP64qykw2fg" base_Property="_e4poAM5xEeG36cJ3v-Rmsg" property="_RvBUwM5wEeG36cJ3v-Rmsg"/>
+  <UmlgProfile:QualifierListener xmi:id="_Z1nw0N26EeOEP64qykw2fg" base_Property="_41VsUM6ZEeGe--xVhMWeOw" property="_FeHj0M5wEeG36cJ3v-Rmsg"/>
+  <UmlgProfile:QualifierListener xmi:id="_gyElkN26EeOEP64qykw2fg" base_Property="_osFL8M6oEeGvubEk1n1G9w" property="_efKE8M6oEeGvubEk1n1G9w"/>
+  <UmlgProfile:QualifierListener xmi:id="_Pxye8N27EeOEP64qykw2fg" base_Property="_IJ_DoNuYEeOEP64qykw2fg" property="_y4kUcNuXEeOEP64qykw2fg"/>
+  <UmlgProfile:QualifierListener xmi:id="_TRxz4N27EeOEP64qykw2fg" base_Property="_SuHJsNuYEeOEP64qykw2fg" property="_0is7ANuXEeOEP64qykw2fg"/>
+  <UmlgProfile:QualifierListener xmi:id="_VlwBoN27EeOEP64qykw2fg" base_Property="_Yx2NwNuYEeOEP64qykw2fg" property="_15g88NuXEeOEP64qykw2fg"/>
 </xmi:XMI>

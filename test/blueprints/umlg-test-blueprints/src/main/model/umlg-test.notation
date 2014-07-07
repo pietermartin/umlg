@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML">
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:configuration="http://www.eclipse.org/papyrus/infra/viewpoints/configuration" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:style="http://www.eclipse.org/papyrus/infra/viewpoints/policy/style" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
   <notation:Diagram xmi:id="_1chEMAAOEeKpVr_ntT6cLA" type="PapyrusUMLClassDiagram" name="org" measurementUnit="Pixel">
     <children xmi:type="notation:Shape" xmi:id="_1aK60AAOEeKpVr_ntT6cLA" type="2007" fontName="Sans" fontHeight="10" fillColor="6333684" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1dQrEQAOEeKpVr_ntT6cLA" source="QualifiedName">
@@ -5146,7 +5146,7 @@
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_LmjxwIaIEeKeSZB9UA6Gvw" id="(0.7751937984496124,0.54)"/>
     </edges>
   </notation:Diagram>
-  <notation:Diagram xmi:id="_HkiPsIlaEeKeSZB9UA6Gvw" type="Package" name="TumlPkgDiagram" measurementUnit="Pixel">
+  <notation:Diagram xmi:id="_HkiPsIlaEeKeSZB9UA6Gvw" type="PapyrusUMLClassDiagram" name="TumlPkgDiagram" measurementUnit="Pixel">
     <children xmi:type="notation:Shape" xmi:id="_I--NYIlaEeKeSZB9UA6Gvw" type="2007" fontName="Sans" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_I--0cIlaEeKeSZB9UA6Gvw" source="ShadowFigure">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_I--0cYlaEeKeSZB9UA6Gvw" key="ShadowFigure_Value" value="false"/>
@@ -5588,6 +5588,9 @@
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GuU0IbKqEeOR4f3Enm7Mow" x="745" y="530"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_HkiPsYlaEeKeSZB9UA6Gvw"/>
+    <styles xmi:type="style:PapyrusViewStyle" xmi:id="_nE4T4AUsEeSLIPXdtbyv6Q">
+      <configuration xmi:type="configuration:PapyrusDiagram" href="platform:/plugin/org.eclipse.papyrus.infra.viewpoints.policy/builtin/default.configuration#_7wLmpNxhEeOqHvRyiN87hA"/>
+    </styles>
     <element xmi:type="uml:Package" href="umlg-test.uml#_w8IxIM37EdqwVrslYOdUDA"/>
   </notation:Diagram>
   <notation:Diagram xmi:id="_rs5lAIlaEeKeSZB9UA6Gvw" type="PapyrusUMLClassDiagram" name="ConstraintClassDiagram" measurementUnit="Pixel">
@@ -8677,7 +8680,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_mOwaArdVEeORtvbQ18esMQ"/>
       </children>
       <element xmi:type="uml:Class" href="umlg-test.uml#_mOmpALdVEeORtvbQ18esMQ"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_mOoeMbdVEeORtvbQ18esMQ" x="163" y="108"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_mOoeMbdVEeORtvbQ18esMQ" x="123" y="106"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_m39vELdVEeORtvbQ18esMQ" type="2008" fontName="Sans" fontHeight="10" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_m39vErdVEeORtvbQ18esMQ" source="ShadowFigure">
@@ -8738,7 +8741,7 @@
           <stringListValue>multiplicity</stringListValue>
           <stringListValue>modifiers</stringListValue>
         </styles>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_sWnJErdVEeORtvbQ18esMQ" x="-2" y="-22"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_sWnJErdVEeORtvbQ18esMQ" x="48" y="-20"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_sWnJE7dVEeORtvbQ18esMQ" type="6005">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_316T0O8BEeOCtvMnpL9cwg" source="CustomAppearance_Annotation">
@@ -8750,7 +8753,7 @@
           <stringListValue>multiplicity</stringListValue>
           <stringListValue>modifiers</stringListValue>
         </styles>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_sWnJFLdVEeORtvbQ18esMQ" x="-4" y="23"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_sWnJFLdVEeORtvbQ18esMQ" x="-52" y="21"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_sWnJFbdVEeORtvbQ18esMQ" visible="false" type="6033">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_sWnJFrdVEeORtvbQ18esMQ" y="20"/>
@@ -8761,7 +8764,8 @@
       <styles xmi:type="notation:FontStyle" xmi:id="_sWl68bdVEeORtvbQ18esMQ" fontName="Sans" fontHeight="10"/>
       <element xmi:type="uml:Association" href="umlg-test.uml#_sWkFwLdVEeORtvbQ18esMQ"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_sWl68rdVEeORtvbQ18esMQ" points="[33, -3, -410, 5]$[376, -3, -67, 5]"/>
-      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_sWxhILdVEeORtvbQ18esMQ" id="(0.753731343283582,0.55)"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_sWxhILdVEeORtvbQ18esMQ" id="(1.0,0.49)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_5TOToAUsEeSLIPXdtbyv6Q" id="(0.0,0.5)"/>
     </edges>
   </notation:Diagram>
   <notation:Diagram xmi:id="_kQkYkLdhEeORtvbQ18esMQ" type="PapyrusUMLClassDiagram" name="OneToManyOrderedSetClassDiagram" measurementUnit="Pixel">

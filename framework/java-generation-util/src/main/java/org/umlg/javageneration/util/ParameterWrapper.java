@@ -408,7 +408,12 @@ public class ParameterWrapper extends MultiplicityWrapper implements Parameter {
 		return false;
 	}
 
-	@Override
+    @Override
+    public boolean validateObjectEffect(DiagnosticChain diagnosticChain, Map<Object, Object> objectObjectMap) {
+        return false;
+    }
+
+    @Override
 	public boolean validateNotException(DiagnosticChain diagnostics, Map<Object, Object> context) {
 		// TODO Auto-generated method stub
 		return false;

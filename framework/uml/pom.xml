@@ -10,112 +10,23 @@
 	<artifactId>uml</artifactId>
 	<name>uml</name>
 	<dependencies>
-        <dependency>
-            <groupId>org.eclipse.core</groupId>
-            <artifactId>contenttype</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.core</groupId>
-            <artifactId>jobs</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse</groupId>
-            <artifactId>osgi</artifactId>
-        </dependency>
-		<dependency>
-			<groupId>org.eclipse.core</groupId>
-			<artifactId>runtime</artifactId>
-		</dependency>
-        <dependency>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>preferences</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>registry</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>app</artifactId>
-        </dependency>
-
-        <!-- EMF -->
-        <dependency>
-            <groupId>org.eclipse.emf</groupId>
-            <artifactId>org.eclipse.emf.ecore</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.emf</groupId>
-            <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.emf</groupId>
-            <artifactId>org.eclipse.emf.common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.emf</groupId>
-            <artifactId>org.eclipse.emf.mapping.ecore2xml</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.emf</groupId>
-                    <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
         <!-- UML2 -->
-		<dependency>
-			<groupId>org.eclipse.uml2</groupId>
-			<artifactId>uml</artifactId>
-		</dependency>
-        <dependency>
-            <groupId>org.eclipse.uml2</groupId>
-            <artifactId>common</artifactId>
-        </dependency>
-		<dependency>
-			<groupId>org.eclipse.uml2</groupId>
-			<artifactId>types</artifactId>
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.eclipse.emf</groupId>-->
-                    <!--<artifactId>org.eclipse.emf.ecore</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
-		</dependency>
         <dependency>
             <groupId>org.eclipse.uml2.uml</groupId>
             <artifactId>resources</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.equinox</groupId>
+                    <artifactId>app</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-		<dependency>
-			<groupId>org.eclipse.uml2.uml.profile</groupId>
-			<artifactId>l2</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.uml2.uml.profile</groupId>
-			<artifactId>l3</artifactId>
-		</dependency>
-
         <!-- OCL -->
-		<dependency>
-			<groupId>org.eclipse.ocl</groupId>
-			<artifactId>uml</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.ocl</groupId>
-			<artifactId>ecore</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>ocl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.ocl</groupId>
-			<artifactId>common</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.eclipse.ocl</groupId>
+            <artifactId>uml</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>lpg.runtime</groupId>

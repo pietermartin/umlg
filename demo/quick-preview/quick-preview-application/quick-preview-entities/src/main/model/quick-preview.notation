@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML">
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:configuration="http://www.eclipse.org/papyrus/infra/viewpoints/configuration" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:style="http://www.eclipse.org/papyrus/infra/viewpoints/policy/style" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
   <notation:Diagram xmi:id="_JKldMHzeEeOYhpiy1kqM8Q" type="PapyrusUMLClassDiagram" name="rootDiagram" measurementUnit="Pixel">
     <children xmi:type="notation:Shape" xmi:id="_slMVMH1NEeOYhpiy1kqM8Q" type="2007" fontName="Sans" fontHeight="10" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_slMVMn1NEeOYhpiy1kqM8Q" source="ShadowFigure">
@@ -26,7 +26,7 @@
     <styles xmi:type="notation:DiagramStyle" xmi:id="_JKldMXzeEeOYhpiy1kqM8Q"/>
     <element xmi:type="uml:Model" href="quick-preview.uml#_JKkPEHzeEeOYhpiy1kqM8Q"/>
   </notation:Diagram>
-  <notation:Diagram xmi:id="_ujU10H1NEeOYhpiy1kqM8Q" type="Package" name="orgPackageDiagram" measurementUnit="Pixel">
+  <notation:Diagram xmi:id="_ujU10H1NEeOYhpiy1kqM8Q" type="PapyrusUMLClassDiagram" name="orgPackageDiagram" measurementUnit="Pixel">
     <children xmi:type="notation:Shape" xmi:id="_u-d5sH1NEeOYhpiy1kqM8Q" type="2007" fontName="Sans" fontHeight="10" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_u-d5sn1NEeOYhpiy1kqM8Q" source="ShadowFigure">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_u-d5s31NEeOYhpiy1kqM8Q" key="ShadowFigure_Value" value="false"/>
@@ -50,6 +50,9 @@
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_u-d5sX1NEeOYhpiy1kqM8Q" x="217" y="71"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_ujU10X1NEeOYhpiy1kqM8Q"/>
+    <styles xmi:type="style:PapyrusViewStyle" xmi:id="_raqZoAUyEeSLIPXdtbyv6Q">
+      <configuration xmi:type="configuration:PapyrusDiagram" href="platform:/plugin/org.eclipse.papyrus.infra.viewpoints.policy/builtin/default.configuration#_7wLmpNxhEeOqHvRyiN87hA"/>
+    </styles>
     <element xmi:type="uml:Package" href="quick-preview.uml#_slLHEH1NEeOYhpiy1kqM8Q"/>
   </notation:Diagram>
   <notation:Diagram xmi:id="_xE9sIH1NEeOYhpiy1kqM8Q" type="PapyrusUMLClassDiagram" name="multiplicityClassDiagram" measurementUnit="Pixel">

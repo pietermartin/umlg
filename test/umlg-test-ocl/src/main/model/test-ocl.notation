@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML">
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
   <notation:Diagram xmi:id="_PX4aBAAPEeKpVr_ntT6cLA" type="PapyrusUMLClassDiagram" name="testoclmodel" measurementUnit="Pixel">
     <children xmi:type="notation:Shape" xmi:id="_PXnUQAAPEeKpVr_ntT6cLA" type="2007" fontName="Sans" fontHeight="10" fillColor="6333684" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_PYA84AAPEeKpVr_ntT6cLA" source="QualifiedName">

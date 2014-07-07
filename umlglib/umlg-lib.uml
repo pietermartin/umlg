@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_mdTDQCM2EeK-Trh8Ll0qUQ" name="umlglib">
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_mdTDQCM2EeK-Trh8Ll0qUQ" name="umlglib">
   <packageImport xmi:type="uml:PackageImport" xmi:id="_LYfHMCM4EeK-Trh8Ll0qUQ">
     <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
   </packageImport>
@@ -66,7 +66,7 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
         <ownedComment xmi:type="uml:Comment" xmi:id="_2jmRUH-5EeOYhpiy1kqM8Q" annotatedElement="_2GNhsCQOEeKOmc56p_1Osg">
           <body>If you which to have createdOn and updatedOn automatically saved add BaseModelTuml to the root of your inheritence hierarchy</body>
         </ownedComment>
-        <packagedElement xmi:type="uml:Class" xmi:id="_JkrskCQPEeKOmc56p_1Osg" clientDependency="_wK4jIE6JEeK4HckrDYI0ug" name="InstanceQuery">
+        <packagedElement xmi:type="uml:Class" xmi:id="_JkrskCQPEeKOmc56p_1Osg" name="InstanceQuery">
           <generalization xmi:type="uml:Generalization" xmi:id="_4cJHkCRsEeKzTel_Vwmhog" general="_2GNhsCQOEeKOmc56p_1Osg"/>
           <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_wK4jIE6JEeK4HckrDYI0ug" name="InterfaceRealization1" client="_JkrskCQPEeKOmc56p_1Osg" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
         </packagedElement>
@@ -144,7 +144,7 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__iH-wk-NEeKwIp56YBZIxw" value="*"/>
           </ownedAttribute>
         </packagedElement>
-        <packagedElement xmi:type="uml:Class" xmi:id="_1o2LME6KEeK4HckrDYI0ug" clientDependency="_9zji0E6KEeK4HckrDYI0ug" name="ClassQuery">
+        <packagedElement xmi:type="uml:Class" xmi:id="_1o2LME6KEeK4HckrDYI0ug" name="ClassQuery">
           <generalization xmi:type="uml:Generalization" xmi:id="_QdOMoE6LEeK4HckrDYI0ug" general="_2GNhsCQOEeKOmc56p_1Osg"/>
           <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_9zji0E6KEeK4HckrDYI0ug" name="InterfaceRealization1" client="_1o2LME6KEeK4HckrDYI0ug" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
         </packagedElement>
@@ -154,7 +154,7 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__iJM40-NEeKwIp56YBZIxw" value="1"/>
           </ownedEnd>
         </packagedElement>
-        <packagedElement xmi:type="uml:Class" xmi:id="_-m6csJFuEeOfTrD4sy-PQQ" clientDependency="_bifbMJFvEeOfTrD4sy-PQQ" name="RootQuery">
+        <packagedElement xmi:type="uml:Class" xmi:id="_-m6csJFuEeOfTrD4sy-PQQ" name="RootQuery">
           <generalization xmi:type="uml:Generalization" xmi:id="_IGJ-UJFvEeOfTrD4sy-PQQ" general="_2GNhsCQOEeKOmc56p_1Osg"/>
           <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_bifbMJFvEeOfTrD4sy-PQQ" name="InterfaceRealization1" client="_-m6csJFuEeOfTrD4sy-PQQ" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
         </packagedElement>

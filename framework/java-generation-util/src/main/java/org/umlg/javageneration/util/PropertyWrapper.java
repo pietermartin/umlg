@@ -1102,16 +1102,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     @Override
-    public void unsetDefault() {
-        throw new RuntimeException("Not supported");
-    }
-
-    @Override
-    public boolean isSetDefault() {
-        return this.property.isSetDefault();
-    }
-
-    @Override
     public AggregationKind getAggregation() {
         return this.property.getAggregation();
     }
@@ -1282,6 +1272,16 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     @Override
+    public boolean validateTypeOfOppositeEnd(DiagnosticChain diagnosticChain, Map<Object, Object> objectObjectMap) {
+        return false;
+    }
+
+    @Override
+    public boolean validateQualifiedIsAssociationEnd(DiagnosticChain diagnosticChain, Map<Object, Object> objectObjectMap) {
+        return false;
+    }
+
+    @Override
     public boolean validateDeploymentTarget(DiagnosticChain diagnostics, Map<Object, Object> context) {
         throw new RuntimeException("Not supported");
     }
@@ -1322,13 +1322,13 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     @Override
-    public void setNullDefaultValue() {
-        throw new RuntimeException("Not supported");
+    public boolean isAttribute() {
+        return this.property.isAttribute();
     }
 
     @Override
-    public boolean isAttribute(Property p) {
-        return this.property.isAttribute(p);
+    public void setNullDefaultValue() {
+        throw new RuntimeException("Not supported");
     }
 
     @Override

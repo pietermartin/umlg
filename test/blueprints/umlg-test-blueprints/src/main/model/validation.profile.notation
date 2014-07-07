@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:l2="http://www.eclipse.org/uml2/4.0.0/UML/Profile/L2" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML">
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:standard="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
   <notation:Diagram xmi:id="_6ZeE8AV1EeK9oIwdQfC0-w" type="PapyrusUMLProfileDiagram" name="NewDiagram" measurementUnit="Pixel">
     <children xmi:type="notation:Shape" xmi:id="_fLALsAV5EeK9oIwdQfC0-w" type="1031" fontName="Sans" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_fLAywAV5EeK9oIwdQfC0-w" source="ShadowFigure">
@@ -21,7 +21,7 @@
       <children xmi:type="notation:DecorationNode" xmi:id="_fLAyxgV5EeK9oIwdQfC0-w" type="1084"/>
       <children xmi:type="notation:BasicCompartment" xmi:id="_UgtbQM8MEeOjlpjTZXDyqw" visible="false" type="AppliedStereotypeCompartement">
         <styles xmi:type="notation:TitleStyle" xmi:id="_UgtbQc8MEeOjlpjTZXDyqw" showTitle="true"/>
-        <element xmi:type="l2:Metaclass" href="pathmap://UML_METAMODELS/UML.metamodel.uml#_SlSMEKtKEeGF4uwJob34Mw"/>
+        <element xmi:type="standard:Metaclass" href="pathmap://UML_METAMODELS/UML.metamodel.uml#_SlSMEKtKEeGF4uwJob34Mw"/>
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_UgtbQs8MEeOjlpjTZXDyqw"/>
       </children>
       <children xmi:type="notation:BasicCompartment" xmi:id="_UgtbQ88MEeOjlpjTZXDyqw" visible="false" type="compartment_shape_display">
@@ -569,16 +569,16 @@
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_LWCyY9FEEeOjlpjTZXDyqw" key="QualifiedNameDepth" value="1000"/>
       </eAnnotations>
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_LWCyZtFEEeOjlpjTZXDyqw" source="Stereotype_Annotation">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_LWDZcNFEEeOjlpjTZXDyqw" key="StereotypeWithQualifiedNameList" value=""/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_LWDZcdFEEeOjlpjTZXDyqw" key="StereotypeList" value="StandardProfileL2::Metaclass"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_LWDZctFEEeOjlpjTZXDyqw" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_LWDZc9FEEeOjlpjTZXDyqw" key="PropStereoDisplay" value=""/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_LWDZdNFEEeOjlpjTZXDyqw" key="StereotypePropertyLocation" value="Compartment"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_UziDcAUsEeSLIPXdtbyv6Q" key="StereotypeWithQualifiedNameList" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_UziDcQUsEeSLIPXdtbyv6Q" key="StereotypeList" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_UziDcgUsEeSLIPXdtbyv6Q" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_UziqgAUsEeSLIPXdtbyv6Q" key="PropStereoDisplay" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_UziqgQUsEeSLIPXdtbyv6Q" key="StereotypePropertyLocation" value="Compartment"/>
       </eAnnotations>
       <children xmi:type="notation:DecorationNode" xmi:id="_LWCyZNFEEeOjlpjTZXDyqw" type="1084"/>
       <children xmi:type="notation:BasicCompartment" xmi:id="_LWF1sNFEEeOjlpjTZXDyqw" visible="false" type="AppliedStereotypeCompartement">
         <styles xmi:type="notation:TitleStyle" xmi:id="_LWF1sdFEEeOjlpjTZXDyqw" showTitle="true"/>
-        <element xmi:type="l2:Metaclass" href="pathmap://UML_METAMODELS/UML.metamodel.uml#_SlSMEKtKEeGF4uwJob34Mw"/>
+        <element xmi:type="standard:Metaclass" href="pathmap://UML_METAMODELS/UML.metamodel.uml#_SlSMEKtKEeGF4uwJob34Mw"/>
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_LWF1stFEEeOjlpjTZXDyqw"/>
       </children>
       <children xmi:type="notation:BasicCompartment" xmi:id="_LWGcwNFEEeOjlpjTZXDyqw" visible="false" type="compartment_shape_display">
