@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_rKj7gAYLEeSp-Y1SJtheqQ" name="model">
+  <packagedElement xmi:type="uml:Class" xmi:id="_snsA0AYLEeSp-Y1SJtheqQ" name="Class1">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_uDgekAYLEeSp-Y1SJtheqQ" name="property1" visibility="public" type="_snsA0AYLEeSp-Y1SJtheqQ">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_wjbdoAYLEeSp-Y1SJtheqQ" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_wjdS0AYLEeSp-Y1SJtheqQ" value="1"/>
+    </ownedAttribute>
+  </packagedElement>
+</uml:Model>
