@@ -14,12 +14,14 @@
         <module>runtime-domain</module>
         <module>runtime-test</module>
         <module>runtime-test-neo4j</module>
+        <module>runtime-test-sqlg</module>
         <!--<module>runtime-test-orientdb</module>-->
         <!--<module>runtime-test-titan</module>-->
         <!--<module>runtime-test-bitsy</module>-->
         <!--<module>runtime-test-thundergraph</module>-->
         <module>runtime-test-restlet</module>
         <module>runtime-domain-neo4j</module>
+        <module>runtime-domain-sqlg</module>
         <!--<module>runtime-domain-orientdb</module>-->
         <!--<module>runtime-domain-titan</module>-->
         <!--<module>runtime-domain-bitsy</module>-->

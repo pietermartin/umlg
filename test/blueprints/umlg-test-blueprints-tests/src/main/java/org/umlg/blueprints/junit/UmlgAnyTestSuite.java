@@ -18,7 +18,7 @@ import org.umlg.tests.qualifiertest.TestQualifierOnManyToMany;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestAssociationClassCopiesOnePrimitivePropertiesToEdge.class
+        TestOneToMany.class
 })
 public class UmlgAnyTestSuite {
 }

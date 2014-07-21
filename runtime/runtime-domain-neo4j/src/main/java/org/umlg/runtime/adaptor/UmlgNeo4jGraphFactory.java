@@ -76,6 +76,11 @@ public class UmlgNeo4jGraphFactory implements UmlgGraphFactory {
     }
 
     @Override
+    public void drop() {
+        shutdown();
+    }
+
+    @Override
     public void clear() {
         this.umlgGraph = null;
     }

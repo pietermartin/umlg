@@ -1,6 +1,6 @@
 package org.umlg.runtime.adaptor
 
-import com.tinkerpop.gremlin.groovy.GremlinLoader
+import com.tinkerpop.gremlin.groovy.loaders.GremlinLoader
 import com.tinkerpop.gremlin.structure.Graph
 
 /**

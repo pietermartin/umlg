@@ -62,6 +62,11 @@ public class UmlgUtil {
                             Class.forName("org.umlg.runtime.adaptor.UmlgThunderGraph");
                             poweredBy = "ThunderGraph";
                         } catch (ClassNotFoundException eeeee) {
+                            try {
+                                Class.forName("org.umlg.runtime.adaptor.UmlgSqlgGraph");
+                                poweredBy = "Sqlg";
+                            } catch (ClassNotFoundException eeeeee) {
+                            }
                         }
                     }
                 }

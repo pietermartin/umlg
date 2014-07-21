@@ -113,14 +113,16 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
 
             //move the edge to the last vertex
             edgeToLastVertex.remove();
-            this.vertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.id(), newElementVertex);
+            Edge edgeToLast = this.vertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.id(), newElementVertex);
             //add the element to the linked list
             //last here is the previous last
-            lastVertex.addEdge(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.id(), newElementVertex);
+            Edge edgeToNext = lastVertex.addEdge(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.id(), newElementVertex);
+            System.out.println("");
         } else {
             //its the first element in the list
-            this.vertex.addEdge(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.id(), newElementVertex);
-            this.vertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.id(), newElementVertex);
+            Edge edgeToFirst = this.vertex.addEdge(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.id(), newElementVertex);
+            Edge edgeToLast = this.vertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.id(), newElementVertex);
+            System.out.println("");
         }
     }
 

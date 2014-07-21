@@ -12,6 +12,13 @@ public enum UmlgAdaptorImplementation {
             "org.umlg.runtime.adaptor.UmlgDefaultLabelConverter",
             "org.umlg.runtime.adaptor.UmlgDefaultQualifierId",
             "org.umlg.runtime.adaptor.Neo4jAdminApp"),
+    SQLG(
+            "org.umlg.runtime.adaptor.UmlgSqlgGraphFactory",
+            "org.umlg.runtime.adaptor.UmlgSqlgExceptionUtilIml",
+            "//unsed",
+            "org.umlg.runtime.adaptor.UmlgDefaultLabelConverter",
+            "org.umlg.runtime.adaptor.UmlgDefaultQualifierId",
+            "//Pgadmin"),
     ORIENTDB(
             "org.umlg.runtime.adaptor.UmlgOrientDbGraphFactory",
             "org.umlg.runtime.adaptor.UmlgDefaultDbExceptionUtilImpl",
@@ -84,12 +91,16 @@ public enum UmlgAdaptorImplementation {
     public static UmlgAdaptorImplementation fromName(String name) {
         if (name.equalsIgnoreCase(NEO4J.name())) {
             return NEO4J;
+        } else if (name.equalsIgnoreCase(SQLG.name())) {
+            return SQLG;
         } else if (name.equalsIgnoreCase(ORIENTDB.name())) {
             return ORIENTDB;
         } else if (name.equalsIgnoreCase(TITAN.name())) {
             return TITAN;
         } else if (name.equalsIgnoreCase(BITSY.name())) {
             return BITSY;
+        } else if (name.equalsIgnoreCase(THUNDERGRAPH.name())) {
+            return THUNDERGRAPH;
         } else if (name.equalsIgnoreCase(THUNDERGRAPH.name())) {
             return THUNDERGRAPH;
         } else {

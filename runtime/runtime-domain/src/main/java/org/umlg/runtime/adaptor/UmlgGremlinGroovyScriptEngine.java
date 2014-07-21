@@ -1,9 +1,9 @@
 package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.gremlin.groovy.DefaultImportCustomizerProvider;
-import com.tinkerpop.gremlin.groovy.GremlinLoader;
 import com.tinkerpop.gremlin.groovy.ImportCustomizerProvider;
 import com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngineFactory;
+import com.tinkerpop.gremlin.groovy.loaders.GremlinLoader;
 import groovy.lang.*;
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
@@ -61,14 +61,14 @@ public class UmlgGremlinGroovyScriptEngine extends GroovyScriptEngineImpl {
         GremlinLoader.load();
         final CompilerConfiguration conf = new CompilerConfiguration();
         conf.setScriptBaseClass(scriptBaseClass);
-        conf.addCompilationCustomizers(importCustomizerProvider.getImportCustomizer());
+        conf.addCompilationCustomizers(importCustomizerProvider.getCompilationCustomizer());
         this.loader = new GroovyClassLoader(getParentLoader(), conf);
     }
 
     public UmlgGremlinGroovyScriptEngine(final ImportCustomizerProvider importCustomizerProvider) {
         GremlinLoader.load();
         final CompilerConfiguration conf = new CompilerConfiguration();
-        conf.addCompilationCustomizers(importCustomizerProvider.getImportCustomizer());
+        conf.addCompilationCustomizers(importCustomizerProvider.getCompilationCustomizer());
         this.loader = new GroovyClassLoader(getParentLoader(), conf);
     }
 

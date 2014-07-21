@@ -102,7 +102,7 @@ public class TestNeo4jBlueprints {
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
         Neo4jGraph graph = Neo4jGraph.open(f.getAbsolutePath());
-        GraphDatabaseService rawGraph = graph.getRawGraph();
+        GraphDatabaseService rawGraph = graph.getBaseGraph();
         rawGraph.registerTransactionEventHandler(new TransactionEventHandler<Object>() {
             @Override
             public Object beforeCommit(TransactionData data) throws Exception {
@@ -166,7 +166,7 @@ public class TestNeo4jBlueprints {
         graph.tx().commit();
 
         graph.addVertex();
-        Iterator<Node> iterator = GlobalGraphOperations.at(graph.getRawGraph()).getAllNodes().iterator();
+        Iterator<Node> iterator = GlobalGraphOperations.at(graph.getBaseGraph()).getAllNodes().iterator();
         Assert.assertTrue(iterator.hasNext());
         iterator.next();
         Assert.assertTrue(iterator.hasNext());

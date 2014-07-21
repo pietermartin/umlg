@@ -20,16 +20,13 @@
       <importedPackage xmi:type="uml:Model" href="umlg-lib.uml#_mdTDQCM2EeK-Trh8Ll0qUQ"/>
     </packageImport>
     <packageImport xmi:type="uml:PackageImport" xmi:id="_r9MzoCS5EeKLnOYxvH_zlw">
-      <importedPackage xmi:type="uml:Model" href="umlgdatatypes.uml#_K8N1MAD6EeKS1vh1F4YVWQ"/>
+      <importedPackage xmi:type="uml:Model" href="umlg-datatypes.uml#_K8N1MAD6EeKS1vh1F4YVWQ"/>
     </packageImport>
     <packageImport xmi:type="uml:PackageImport" xmi:id="_wll7ECS5EeKLnOYxvH_zlw">
       <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
     </packageImport>
     <packageImport xmi:type="uml:PackageImport" xmi:id="_Nb-DkNI1EeOCt7XMZfn16w">
       <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#_0"/>
-    </packageImport>
-    <packageImport xmi:type="uml:PackageImport" xmi:id="_JgME4AYGEeSp-Y1SJtheqQ">
-      <importedPackage xmi:type="uml:Profile" href="pathmap://UML_PROFILES/Standard.profile.uml#_0"/>
     </packageImport>
     <packagedElement xmi:type="uml:Package" xmi:id="_w8IxIM37EdqwVrslYOdUDA" name="org">
       <packagedElement xmi:type="uml:Package" xmi:id="_y-4osN4jEeGdB9TPHp60mw" name="umlg">
@@ -178,37 +175,37 @@
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3sYEsBB6EeK9VbCsxPP0zw" value="1"/>
               </ownedAttribute>
               <ownedAttribute xmi:type="uml:Property" xmi:id="_vxhccAIgEeKS1vh1F4YVWQ" name="birthDateTime">
-                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_22p9oBB6EeK9VbCsxPP0zw"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_22qksBB6EeK9VbCsxPP0zw" value="1"/>
               </ownedAttribute>
               <ownedAttribute xmi:type="uml:Property" xmi:id="_k-waMALgEeKtFpHFDhpFVA" name="birthDate">
-                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2TQVoBB6EeK9VbCsxPP0zw" value="1"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2TQ8sBB6EeK9VbCsxPP0zw" value="1"/>
               </ownedAttribute>
               <ownedAttribute xmi:type="uml:Property" xmi:id="_q43BIALgEeKtFpHFDhpFVA" name="birthTime">
-                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_eqPvMALgEeKtFpHFDhpFVA"/>
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_eqPvMALgEeKtFpHFDhpFVA"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1rM3IBB6EeK9VbCsxPP0zw"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1rNeMBB6EeK9VbCsxPP0zw" value="1"/>
               </ownedAttribute>
               <ownedAttribute xmi:type="uml:Property" xmi:id="_2HA7oALgEeKtFpHFDhpFVA" name="internationalNumber">
-                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_Q1ofoAD6EeKS1vh1F4YVWQ"/>
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_Q1ofoAD6EeKS1vh1F4YVWQ"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_zsZoIBB6EeK9VbCsxPP0zw"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_zsaPMBB6EeK9VbCsxPP0zw" value="1"/>
               </ownedAttribute>
               <ownedAttribute xmi:type="uml:Property" xmi:id="_7Nbb0ALgEeKtFpHFDhpFVA" name="localNumber">
-                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_UFUuwAD6EeKS1vh1F4YVWQ"/>
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_UFUuwAD6EeKS1vh1F4YVWQ"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_zHs_oBB6EeK9VbCsxPP0zw"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_zHtmsBB6EeK9VbCsxPP0zw" value="1"/>
               </ownedAttribute>
               <ownedAttribute xmi:type="uml:Property" xmi:id="_8PTvkALgEeKtFpHFDhpFVA" name="email">
-                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_yQK6sBB6EeK9VbCsxPP0zw"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_yQNW8BB6EeK9VbCsxPP0zw" value="1"/>
               </ownedAttribute>
               <ownedAttribute xmi:type="uml:Property" xmi:id="_-_xsEALgEeKtFpHFDhpFVA" name="image">
-                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_8vAG0ALhEeKtFpHFDhpFVA"/>
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_8vAG0ALhEeKtFpHFDhpFVA"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0ld-IBB6EeK9VbCsxPP0zw"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0lelMBB6EeK9VbCsxPP0zw" value="1"/>
               </ownedAttribute>
@@ -485,7 +482,7 @@ endif</body>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xCmaErbbEeKeCuai9f99dw" name="unnamed" value="5"/>
               </ownedAttribute>
               <ownedAttribute xmi:type="uml:Property" xmi:id="_sDJBQL2QEeKLQYi7y_IX-w" name="email" visibility="public">
-                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ucca8L2QEeKLQYi7y_IX-w" value="1"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_uceQIL2QEeKLQYi7y_IX-w" value="1"/>
               </ownedAttribute>
@@ -520,7 +517,7 @@ endif</body>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GpoDEkI_EeKpM48zLjI12Q" value="*"/>
               </ownedAttribute>
               <ownedAttribute xmi:type="uml:Property" xmi:id="_b8dmsL2SEeKLQYi7y_IX-w" name="email" visibility="public">
-                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_d4XSsL2SEeKLQYi7y_IX-w" value="1"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_d4X5wL2SEeKLQYi7y_IX-w" value="1"/>
               </ownedAttribute>
@@ -950,17 +947,17 @@ endif</body>
           <packagedElement xmi:type="uml:Package" xmi:id="_4cMQEDXKEeOAlanvceIpiA" name="embedded">
             <packagedElement xmi:type="uml:Class" xmi:id="_9kGlEDXKEeOAlanvceIpiA" name="DataTypeTest">
               <ownedAttribute xmi:type="uml:Property" xmi:id="__f7YkDXKEeOAlanvceIpiA" name="dates" visibility="public" isOrdered="true" isUnique="false">
-                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_CnSyIDXLEeOAlanvceIpiA"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CnTZMDXLEeOAlanvceIpiA" value="*"/>
               </ownedAttribute>
               <ownedAttribute xmi:type="uml:Property" xmi:id="_jKdCkDdQEeOAlanvceIpiA" name="time" visibility="public" isOrdered="true" isUnique="false">
-                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_eqPvMALgEeKtFpHFDhpFVA"/>
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_eqPvMALgEeKtFpHFDhpFVA"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mU3JEDdQEeOAlanvceIpiA"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mU3wIDdQEeOAlanvceIpiA" value="*"/>
               </ownedAttribute>
               <ownedAttribute xmi:type="uml:Property" xmi:id="_pnD5oDdQEeOAlanvceIpiA" name="dateTime" visibility="public" isOrdered="true" isUnique="false">
-                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sBy2sDdQEeOAlanvceIpiA"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sBzdwDdQEeOAlanvceIpiA" value="*"/>
               </ownedAttribute>

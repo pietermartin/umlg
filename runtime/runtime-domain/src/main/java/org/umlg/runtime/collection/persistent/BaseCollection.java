@@ -226,6 +226,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         } else {
             //Get the new vertex for the element
             Vertex newElementVertex = getVertexForDirection(edge);
+            System.out.println("About to call outE " + LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id());
             if (newElementVertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id()).hasNext()) {
                 Edge edgeToLastVertex = newElementVertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id()).next();
                 Vertex lastVertex = edgeToLastVertex.inV().next();
@@ -239,9 +240,9 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 lastVertex.addEdge(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id(), this.vertex);
             } else {
                 //its the first element in the list
-                newElementVertex.addEdge(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id(), this.vertex);
-                newElementVertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id(), this.vertex);
-
+                Edge edgeToFirst = newElementVertex.addEdge(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id(), this.vertex);
+                Edge edgeToLast = newElementVertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id(), this.vertex);
+                System.out.println("");
             }
         }
     }

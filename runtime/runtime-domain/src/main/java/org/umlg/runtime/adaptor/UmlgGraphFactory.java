@@ -10,5 +10,6 @@ public interface UmlgGraphFactory {
      * Calling commit might throw validation exception which we would then have to deal with.
      */
     void shutdown();
+    void drop();
     void clear();
 }
