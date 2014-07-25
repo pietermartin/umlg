@@ -3,6 +3,7 @@ package org.umlg.tests.allinstances;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
+import org.umlg.inheritencetest.AbstractSpecies;
 import org.umlg.inheritencetest.Biped;
 import org.umlg.inheritencetest.Mamal;
 import org.umlg.inheritencetest.Quadped;
@@ -32,6 +33,6 @@ public class TestAllInstancesOnAbstractClass extends BaseLocalDbTest {
         biped2.setName("biped2");
         db.commit();
 
-        Assert.assertEquals(6, AbstractSpeciesMeta.getInstance().getAllInstances().size());
+        Assert.assertEquals(6, AbstractSpecies.allInstances().size());
     }
 }

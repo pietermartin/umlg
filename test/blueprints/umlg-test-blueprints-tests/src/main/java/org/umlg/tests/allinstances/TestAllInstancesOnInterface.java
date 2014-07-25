@@ -3,8 +3,7 @@ package org.umlg.tests.allinstances;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
-import org.umlg.interfacetest.ManyA;
-import org.umlg.interfacetest.ManyB;
+import org.umlg.interfacetest.*;
 import org.umlg.interfacetest.meta.IManyAMeta;
 import org.umlg.interfacetest.meta.IManyBMeta;
 import org.umlg.interfacetest.meta.IManyMeta;
@@ -36,9 +35,9 @@ public class TestAllInstancesOnInterface extends BaseLocalDbTest {
         manyA3.addToIManyB(manyB3);
         db.commit();
 
-        Assert.assertEquals(6, IManyMeta.getInstance().getAllInstances().size());
-        Assert.assertEquals(3, IManyAMeta.getInstance().getAllInstances().size());
-        Assert.assertEquals(3, IManyBMeta.getInstance().getAllInstances().size());
+        Assert.assertEquals(6, IMany.allInstances().size());
+        Assert.assertEquals(3, IManyA.allInstances().size());
+        Assert.assertEquals(3, IManyB.allInstances().size());
 
     }
 }

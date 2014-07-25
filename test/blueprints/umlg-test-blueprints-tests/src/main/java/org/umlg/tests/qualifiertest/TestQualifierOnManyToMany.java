@@ -68,7 +68,7 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 
         db.commit();
 		Assert.assertEquals(9, countVertices());
-		Assert.assertEquals(25 + 9, countEdges());
+		Assert.assertEquals(25, countEdges());
 
 		Many1 m = new Many1(many1_1.getVertex());
 		Assert.assertNotNull(m.getMany2ForQualifier1("many2_1"));
@@ -148,7 +148,7 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(41, countVertices());
-        Assert.assertEquals(97 + 9, countEdges());
+        Assert.assertEquals(97, countEdges());
 
 		Many1 m = new Many1(many1_1.getVertex());
 		Assert.assertEquals(1, m.getMany2ListForListQualifier2("many2_1").size());

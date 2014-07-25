@@ -3,13 +3,11 @@ package org.umlg.runtime.adaptor;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.umlg.sqlgraph.sql.dialect.SqlGraphDialect;
+import org.umlg.sqlgraph.sql.dialect.SqlDialect;
 import org.umlg.sqlgraph.structure.SchemaManager;
 import org.umlg.sqlgraph.structure.SqlGraphDataSource;
-import org.umlg.sqlgraph.test.JDBC;
 
 import java.beans.PropertyVetoException;
-import java.io.File;
 import java.net.URL;
 import java.sql.*;
 import java.util.logging.Level;
@@ -23,7 +21,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
     private static final Logger logger = Logger.getLogger(UmlgSqlgGraphFactory.class.getPackage().getName());
     public static UmlgSqlgGraphFactory INSTANCE = new UmlgSqlgGraphFactory();
     private UmlgSqlgGraph umlgGraph;
-    private Configuration config;
+    private Configuration configuration;
 
     private UmlgSqlgGraphFactory() {
     }
@@ -36,34 +34,37 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
     public UmlgGraph getTumlGraph(String url) {
         URL sqlProperties = Thread.currentThread().getContextClassLoader().getResource("sqlgraph.properties");
         try {
-            this.config = new PropertiesConfiguration(sqlProperties);
+            this.configuration = new PropertiesConfiguration(sqlProperties);
         } catch (ConfigurationException e) {
             throw new RuntimeException(e);
         }
+        SqlDialect sqlDialect;
         try {
-            Class.forName(SqlGraphDialect.POSTGRES.getJdbcDriver());
-            SqlGraphDialect sqlGraphDialect = SqlGraphDialect.POSTGRES;
-            SqlGraphDataSource.INSTANCE.setupDataSource(
-                    sqlGraphDialect.getJdbcDriver(),
-                    this.config.getString("jdbc.url"),
-                    this.config.getString("jdbc.username"),
-                    this.config.getString("jdbc.password"));
-        } catch (PropertyVetoException e) {
+            Class<?> sqlDialectClass = Class.forName(configuration.getString("sql.dialect"));
+            sqlDialect = (SqlDialect)sqlDialectClass.newInstance();
+        } catch (Exception e) {
             throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        }
+        try {
+            SqlGraphDataSource.INSTANCE.setupDataSource(
+                    sqlDialect.getJdbcDriver(),
+                    configuration.getString("jdbc.url"),
+                    configuration.getString("jdbc.username"),
+                    configuration.getString("jdbc.password"));
+        } catch (PropertyVetoException e) {
             throw new RuntimeException(e);
         }
         if (this.umlgGraph == null) {
             TransactionThreadEntityVar.remove();
-            try (Connection conn = SqlGraphDataSource.INSTANCE.get(config.getString("jdbc.url")).getConnection()) {
+            try (Connection conn = SqlGraphDataSource.INSTANCE.get(configuration.getString("jdbc.url")).getConnection()) {
                 if (!tableExist(conn, SchemaManager.VERTICES)) {
                     try {
-                        this.umlgGraph = new UmlgSqlgGraph(config);
+                        this.umlgGraph = new UmlgSqlgGraph(configuration);
                         this.umlgGraph.addRoot();
-                        this.umlgGraph.addDeletionNode();
+//                        this.umlgGraph.addDeletionNode();
                         this.umlgGraph.commit();
-                        UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
-                        this.umlgGraph.commit();
+//                        UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
+//                        this.umlgGraph.commit();
                         //This is to bypass the beforeCommit
                         this.umlgGraph.setBypass(true);
                         UmlGIndexFactory.getUmlgIndexManager().createIndexes();
@@ -81,7 +82,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
                         }
                     }
                 } else {
-                    this.umlgGraph = new UmlgSqlgGraph(config);
+                    this.umlgGraph = new UmlgSqlgGraph(configuration);
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -112,7 +113,14 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
     @Override
     public void drop() {
         this.umlgGraph.rollback();
-        try (Connection conn = SqlGraphDataSource.INSTANCE.get(this.config.getString("jdbc.url")).getConnection()) {
+        SqlDialect sqlDialect;
+        try {
+            Class<?> sqlDialectClass = Class.forName(configuration.getString("sql.dialect"));
+            sqlDialect = (SqlDialect)sqlDialectClass.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        try (Connection conn = SqlGraphDataSource.INSTANCE.get(this.configuration.getString("jdbc.url")).getConnection()) {
             DatabaseMetaData metadata = conn.getMetaData();
             String catalog = "sqlgraphdb";
             String schemaPattern = null;
@@ -121,9 +129,9 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
             ResultSet result = metadata.getTables(catalog, schemaPattern, tableNamePattern, types);
             while (result.next()) {
                 StringBuilder sql = new StringBuilder("DROP TABLE ");
-                sql.append(SqlGraphDialect.POSTGRES.getSqlDialect().maybeWrapInQoutes(result.getString(3)));
+                sql.append(sqlDialect.maybeWrapInQoutes(result.getString(3)));
                 sql.append(" CASCADE");
-                if (SqlGraphDialect.POSTGRES.getSqlDialect().needsSemicolon()) {
+                if (sqlDialect.needsSemicolon()) {
                     sql.append(";");
                 }
                 try (PreparedStatement preparedStatement = conn.prepareStatement(sql.toString())) {

@@ -4,6 +4,8 @@ import com.tinkerpop.gremlin.structure.Edge;
 import com.tinkerpop.gremlin.structure.Element;
 import com.tinkerpop.gremlin.structure.Graph;
 import com.tinkerpop.gremlin.structure.Vertex;
+import org.umlg.runtime.collection.Filter;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 
@@ -19,6 +21,9 @@ public interface UmlgGraph extends Graph {
 
     void commit();
     void rollback();
+
+    <T extends PersistentObject> UmlgSet<T> allInstances(String className);
+    <T extends PersistentObject> UmlgSet<T> allInstances(String className, Filter filter);
 
     /**
      * returns the singleton Entity that represents the model.
@@ -110,12 +115,6 @@ public interface UmlgGraph extends Graph {
      * For OrientDb this is where the graph will be shutdown.
      */
     void afterThreadContext();
-
-    /**
-     * Shutdown the db and delete the data files.
-     * Remove this instance from the threadvar
-     */
-    void drop();
 
     public static class Exceptions {
         public static IllegalArgumentException classForElementCannotBeNull() {

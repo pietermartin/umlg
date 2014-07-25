@@ -163,15 +163,15 @@ public class UmlgGenerationUtil {
     public static OJPathName UmlgQualifierIdFactory = new OJPathName("org.umlg.runtime.adaptor.UmlgQualifierIdFactory");
 
     public static String getEdgeToRootLabelStrategyMeta(Classifier classifier) {
-        return "root" + UmlgClassOperations.getQualifiedName(classifier) + "Meta";
+        return "root" + UmlgClassOperations.getPathName(classifier).getLast() + "Meta";
     }
 
     public static String getEdgeToRootLabelStrategyMeta(org.eclipse.uml2.uml.Class clazz) {
-        return "root" + UmlgClassOperations.getQualifiedName(clazz) + "Meta";
+        return "root" + UmlgClassOperations.getPathName(clazz).getLast() + "Meta";
     }
 
     public static String getEdgeToRootLabelStrategy(org.eclipse.uml2.uml.Class clazz) {
-        return "root" + UmlgClassOperations.getQualifiedName(clazz);
+        return "root" + UmlgClassOperations.getPathName(clazz).getLast();
     }
 
     public static String calculateMultiplcity(MultiplicityElement multiplicityKind) {

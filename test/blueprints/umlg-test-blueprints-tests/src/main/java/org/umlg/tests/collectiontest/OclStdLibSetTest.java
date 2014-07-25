@@ -41,14 +41,14 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(10 + 10, countEdges());
+        Assert.assertEquals(10, countEdges());
 
         Assert.assertEquals(8, setRoot1.getSetTest().union(setRoot2.getSetTest()).union(setRoot1.getSetTest()).size());
 
         db.commit();
 
         Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(10 + 10, countEdges());
+        Assert.assertEquals(10, countEdges());
     }
 
     @Test
@@ -66,14 +66,14 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5 + 5, countEdges());
+        Assert.assertEquals(5, countEdges());
 
         Assert.assertEquals(8, setRoot1.getSetTest().union(setRoot1.getSetTest().asBag()).size());
 
         db.commit();
 
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5 + 5, countEdges());
+        Assert.assertEquals(5, countEdges());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         other.add(setTest4);
 
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5 + 5, countEdges());
+        Assert.assertEquals(5, countEdges());
 
         Assert.assertTrue(setRoot1.getSetTest().equals(other));
 
@@ -109,7 +109,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         Assert.assertFalse(setRoot1.getSetTest().equals(other));
 
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5 + 5, countEdges());
+        Assert.assertEquals(5, countEdges());
     }
 
     @Test
@@ -132,14 +132,14 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         other.add(setTest2);
 
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5 + 5, countEdges());
+        Assert.assertEquals(5, countEdges());
 
         Assert.assertEquals(2, setRoot1.getSetTest().intersection(other).size());
 
         db.commit();
 
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5 + 5, countEdges());
+        Assert.assertEquals(5, countEdges());
     }
 
     @Test
@@ -175,7 +175,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         other.add(setTest22);
 
         Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(10 + 10, countEdges());
+        Assert.assertEquals(10, countEdges());
 
         UmlgSet<SetTest> subtract = setRoot1.getSetTest().union(setRoot2.getSetTest()).subtract(other);
         Assert.assertEquals(4, subtract.size());
@@ -183,7 +183,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(10 + 10, countEdges());
+        Assert.assertEquals(10, countEdges());
     }
 
     @Test
@@ -219,7 +219,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         other.add(setTest22);
 
         Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(10 + 10, countEdges());
+        Assert.assertEquals(10, countEdges());
 
         UmlgSet<SetTest> including = setRoot1.getSetTest().including(setTest21);
         Assert.assertEquals(5, including.size());
@@ -227,7 +227,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(10 + 10, countEdges());
+        Assert.assertEquals(10, countEdges());
     }
 
     @Test
@@ -263,7 +263,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         other.add(setTest22);
 
         Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(10 + 10, countEdges());
+        Assert.assertEquals(10, countEdges());
 
         UmlgSet<SetTest> excluding = setRoot1.getSetTest().excluding(setTest2);
         Assert.assertEquals(3, excluding.size());
@@ -271,7 +271,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(10 + 10, countEdges());
+        Assert.assertEquals(10, countEdges());
     }
 
     @Test
@@ -307,7 +307,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         other.add(setTest22);
 
         Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(10 + 10, countEdges());
+        Assert.assertEquals(10, countEdges());
 
         UmlgSet<SetTest> symmetricDifference = setRoot1.getSetTest().symmetricDifference(other);
         Assert.assertEquals(4, symmetricDifference.size());
@@ -336,7 +336,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(10 + 10, countEdges());
+        Assert.assertEquals(10, countEdges());
     }
 
 }

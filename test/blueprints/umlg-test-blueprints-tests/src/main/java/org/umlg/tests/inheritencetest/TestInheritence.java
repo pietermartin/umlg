@@ -18,7 +18,7 @@ public class TestInheritence extends BaseLocalDbTest {
 		mamal2.setName("mamal2");
         db.commit();
 		Assert.assertEquals(3, countVertices());
-		Assert.assertEquals(3 + 3, countEdges());
+		Assert.assertEquals(3, countEdges());
 		God g = new God(god.getVertex());
 		Assert.assertEquals(2, g.getAbstractSpecies().size());
 	}

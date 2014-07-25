@@ -7,6 +7,8 @@ import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.domain.ocl.OclAny;
 import org.umlg.runtime.validation.UmlgConstraintViolation;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
@@ -26,6 +28,5 @@ public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
 	UmlgNode getOwningObject();
     boolean hasOnlyOneCompositeParent();
 	<T extends UmlgNode> List<T> getPathToCompositionalRoot();
-    void addEdgeToMetaNode();
     UmlgMetaNode getMetaNode();
 }

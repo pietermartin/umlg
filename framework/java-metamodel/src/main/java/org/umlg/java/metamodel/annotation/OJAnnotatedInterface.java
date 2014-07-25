@@ -1,13 +1,13 @@
 package org.umlg.java.metamodel.annotation;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
+import org.umlg.java.metamodel.OJOperation;
 import org.umlg.java.metamodel.OJPackage;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.utilities.JavaStringHelpers;
 import org.umlg.java.metamodel.utilities.JavaUtil;
+import org.umlg.java.metamodel.utilities.OJOperationComparator;
 
 
 public class OJAnnotatedInterface extends OJAnnotatedClass {
@@ -62,9 +62,13 @@ public class OJAnnotatedInterface extends OJAnnotatedClass {
 	}
 
 	@Override
-	public StringBuilder operations() {
-		return super.operations();
-	}
+    public StringBuilder operations() {
+        List<OJOperation> temp = new ArrayList<OJOperation>(this.getOperations());
+        Collections.sort(temp, new OJOperationComparator());
+        StringBuilder result = new StringBuilder();
+        result.append(JavaUtil.collectionToJavaString(temp, "\n"));
+        return result;
+    }
 
 	public Set<OJPathName> getSuperInterfaces() {
 		return superInterfaces;

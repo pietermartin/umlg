@@ -30,4 +30,15 @@ public interface UmlgAdminGraph {
     long countVertices();
 
     long countEdges();
+
+    /**
+     * Shutdown the db and delete the data files.
+     * Remove this instance from the threadvar
+     */
+    void drop();
+
+    /**
+     * Removes all vertices and edges.
+     */
+    void clear();
 }

@@ -58,13 +58,13 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
                             otherEnd.getter() + "().contains(" + otherEnd.javaBaseTypePath().getLast() + ".this);\n    }\n}");
                 }
 
-                ojBlock1.addToStatements("result.addAll(" + UmlgClassOperations.getMetaClassName((Classifier)propertyWrapper.getType()) + ".getInstance().getAllInstances(filter))");
+                ojBlock1.addToStatements("result.addAll(" + UmlgClassOperations.getPathName(propertyWrapper.getType()) + ".allInstances(filter))");
 
             } else {
-                ojBlock1.addToStatements("result.addAll(" + UmlgClassOperations.getMetaClassName((Classifier) propertyWrapper.getType()) + ".getInstance().getAllInstances())");
+                ojBlock1.addToStatements("result.addAll(" + UmlgClassOperations.getPathName(propertyWrapper.getType()) + ".allInstances())");
             }
 
-            ojClass.addToImports(UmlgClassOperations.getMetaClassPathName((Classifier) propertyWrapper.getType()));
+            ojClass.addToImports(UmlgClassOperations.getPathName(propertyWrapper.getType()));
 
             List<Constraint> constraints = UmlgPropertyOperations.getConstraints(propertyWrapper.getProperty());
             if (!constraints.isEmpty()) {

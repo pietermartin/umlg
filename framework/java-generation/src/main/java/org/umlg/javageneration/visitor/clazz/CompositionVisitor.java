@@ -148,9 +148,6 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 
     private void addEdgeToRoot(OJAnnotatedClass annotatedClass, Class clazz) {
         OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
-//        constructor.getBody().addToStatements(
-//                UmlgGenerationUtil.edgePathName.getLast() + " edge = " + UmlgGenerationUtil.UMLGAccess + ".addEdge(null, " + UmlgGenerationUtil.UMLGAccess
-//                        + ".getRoot(), this.vertex, getEdgeToRootLabel())");
         constructor.getBody().addToStatements(
                 UmlgGenerationUtil.edgePathName.getLast() + " edge = " +
                         UmlgGenerationUtil.UMLGAccess + ".getRoot().addEdge(getEdgeToRootLabel(), this.vertex)");

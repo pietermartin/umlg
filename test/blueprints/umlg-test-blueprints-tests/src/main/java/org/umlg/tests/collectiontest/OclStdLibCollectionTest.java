@@ -48,12 +48,12 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(14 + 5, countEdges());
+        Assert.assertEquals(14, countEdges());
 
         Assert.assertTrue(sequenceRoot.getSequenceTestListMany().includes(sequenceTestListMany2));
 
         Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(14 + 5, countEdges());
+        Assert.assertEquals(14, countEdges());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(14 + 5, countEdges());
+        Assert.assertEquals(14, countEdges());
 
         SequenceTestListMany sequenceTestListMany5 = new SequenceTestListMany(true);
         sequenceTestListMany5.setName("sequenceTestListMany5");
@@ -93,13 +93,13 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(14 + 5, countEdges());
+        Assert.assertEquals(14, countEdges());
 
 
         Assert.assertEquals(1, sequenceRoot.getSequenceTestListMany().count(sequenceTestListMany2));
 
         Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(14 + 5, countEdges());
+        Assert.assertEquals(14, countEdges());
     }
 
     @Test
@@ -122,13 +122,13 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(14 + 5, countEdges());
+        Assert.assertEquals(14, countEdges());
 
 
         Assert.assertTrue(sequenceRoot.getSequenceTestListMany().includesAll(test));
 
         Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(14 + 5, countEdges());
+        Assert.assertEquals(14, countEdges());
 
         sequenceTestListMany3.delete();
         db.commit();
@@ -137,7 +137,7 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
 //        Assert.assertFalse(sequenceRoot.getSequenceTestListMany().includesAll(test));
 
         Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(11 + 4, countEdges());
+        Assert.assertEquals(11, countEdges());
     }
 
     @Test
@@ -160,13 +160,13 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(14 + 5, countEdges());
+        Assert.assertEquals(14, countEdges());
 
 
         Assert.assertFalse(sequenceRoot.getSequenceTestListMany().excludesAll(test));
 
         Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(14 + 5, countEdges());
+        Assert.assertEquals(14, countEdges());
 
         test.remove(3);
         Assert.assertFalse(sequenceRoot.getSequenceTestListMany().excludesAll(test));

@@ -92,13 +92,13 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(4 + 2, countEdges());
+        Assert.assertEquals(4, countEdges());
 
         sequenceRoot.getSequenceTestOrderedSet().remove(0);
         sequenceTestOrderedSet1.delete();
         db.commit();
         Assert.assertEquals(1, countVertices());
-        Assert.assertEquals(1 + 1, countEdges());
+        Assert.assertEquals(1, countEdges());
     }
 
     @Test
@@ -116,13 +116,13 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(10 + 5, countEdges());
+        Assert.assertEquals(10, countEdges());
 
         sequenceRoot.getSequenceTestOrderedSet().remove(0);
         sequenceTestOrderedSet1.delete();
         db.commit();
         Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(8 + 4, countEdges());
+        Assert.assertEquals(8, countEdges());
     }
 
     @Test
@@ -140,13 +140,13 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(10 + 5, countEdges());
+        Assert.assertEquals(10, countEdges());
 
         sequenceRoot.getSequenceTestOrderedSet().remove(1);
         sequenceTestOrderedSet2.delete();
         db.commit();
         Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(8 + 4, countEdges());
+        Assert.assertEquals(8, countEdges());
     }
 
     @Test
@@ -164,13 +164,13 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(10 + 5, countEdges());
+        Assert.assertEquals(10, countEdges());
 
         sequenceRoot.getSequenceTestOrderedSet().remove(3);
         sequenceTestOrderedSet4.delete();
         db.commit();
         Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(8 + 4, countEdges());
+        Assert.assertEquals(8, countEdges());
     }
 
     @Test
@@ -188,7 +188,7 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         sequenceRoot.getSequenceTestOrderedSet().add(2, sequenceTestOrderedSet3);
         db.commit();
         Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(8 + 4, countEdges());
+        Assert.assertEquals(8, countEdges());
         Assert.assertEquals("sequenceTestOrderedSet2", sequenceRoot.getSequenceTestOrderedSet().get(0).getName());
         Assert.assertEquals("sequenceTestOrderedSet1", sequenceRoot.getSequenceTestOrderedSet().get(1).getName());
         Assert.assertEquals("sequenceTestOrderedSet3", sequenceRoot.getSequenceTestOrderedSet().get(2).getName());
@@ -214,7 +214,7 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         sequenceRoot.getSequenceTestOrderedSet().add(2, sequenceTestOrderedSet3);
         db.commit();
         Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(8 + 4, countEdges());
+        Assert.assertEquals(8, countEdges());
         Assert.assertEquals("sequenceTestOrderedSet1", sequenceRoot.getSequenceTestOrderedSet().get(0).getName());
         Assert.assertEquals("sequenceTestOrderedSet2", sequenceRoot.getSequenceTestOrderedSet().get(1).getName());
         Assert.assertEquals("sequenceTestOrderedSet3", sequenceRoot.getSequenceTestOrderedSet().get(2).getName());
@@ -231,7 +231,7 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(8 + 4, countEdges());
+        Assert.assertEquals(8, countEdges());
         Assert.assertEquals("sequenceTestOrderedSet1", sequenceRoot.getSequenceTestOrderedSet().get(0).getName());
         Assert.assertEquals("sequenceTestOrderedSet4", sequenceRoot.getSequenceTestOrderedSet().get(1).getName());
         Assert.assertEquals("sequenceTestOrderedSet3", sequenceRoot.getSequenceTestOrderedSet().get(2).getName());

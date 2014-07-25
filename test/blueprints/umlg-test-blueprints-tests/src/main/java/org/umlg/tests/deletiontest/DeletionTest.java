@@ -30,13 +30,13 @@ public class DeletionTest extends BaseLocalDbTest {
 
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(5 + 5, countEdges());
+		Assert.assertEquals(5, countEdges());
 		God godTest = new God(god.getVertex());
 		Universe testDeletion = godTest.getUniverse().iterator().next();
 		testDeletion.delete();
         db.commit();
 		Assert.assertEquals(1, countVertices());
-		Assert.assertEquals(1 + 1, countEdges());
+		Assert.assertEquals(1, countEdges());
 	}
 
 	@SuppressWarnings("unused")
@@ -91,14 +91,14 @@ public class DeletionTest extends BaseLocalDbTest {
 
         db.commit();
 		Assert.assertEquals(13, countVertices());
-		Assert.assertEquals(29 + 13, countEdges());
+		Assert.assertEquals(29, countEdges());
 		ManyB manyBTest = new ManyB(manyB1.getVertex());
 		Assert.assertEquals(4, manyBTest.getIManyA().size());
 		ManyA testDeletion = new ManyA(manyA1.getVertex());
 		testDeletion.delete();
         db.commit();
 		Assert.assertEquals(12, countVertices());
-		Assert.assertEquals(24 + 12, countEdges());
+		Assert.assertEquals(24, countEdges());
 		manyBTest = new ManyB(manyB1.getVertex());
 		Assert.assertEquals(3, manyBTest.getIManyA().size());
 
@@ -106,7 +106,7 @@ public class DeletionTest extends BaseLocalDbTest {
 		testDeletion.delete();
         db.commit();
 		Assert.assertEquals(11, countVertices());
-		Assert.assertEquals(19 + 11, countEdges());
+		Assert.assertEquals(19, countEdges());
 		manyBTest = new ManyB(manyB1.getVertex());
 		Assert.assertEquals(2, manyBTest.getIManyA().size());
 
@@ -114,7 +114,7 @@ public class DeletionTest extends BaseLocalDbTest {
 		testDeletion.delete();
         db.commit();
 		Assert.assertEquals(10, countVertices());
-		Assert.assertEquals(14 + 10, countEdges());
+		Assert.assertEquals(14, countEdges());
 		manyBTest = new ManyB(manyB1.getVertex());
 		Assert.assertEquals(1, manyBTest.getIManyA().size());
 
@@ -122,7 +122,7 @@ public class DeletionTest extends BaseLocalDbTest {
 		testDeletion.delete();
         db.commit();
 		Assert.assertEquals(9, countVertices());
-		Assert.assertEquals(9 + 9, countEdges());
+		Assert.assertEquals(9, countEdges());
 		God testGod = new God(god.getVertex());
 		Assert.assertEquals(4, testGod.getIMany().size());
 
@@ -138,7 +138,7 @@ public class DeletionTest extends BaseLocalDbTest {
 
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(5 + 5, countEdges());
+		Assert.assertEquals(5, countEdges());
 
 	}
 
@@ -153,11 +153,11 @@ public class DeletionTest extends BaseLocalDbTest {
 		oneOne1.setOneTwo(oneTwo1);
         db.commit();
 		Assert.assertEquals(3, countVertices());
-		Assert.assertEquals(4 + 3, countEdges());
+		Assert.assertEquals(4, countEdges());
 		oneOne1.delete();
         db.commit();
 		Assert.assertEquals(2, countVertices());
-		Assert.assertEquals(2 + 2, countEdges());
+		Assert.assertEquals(2, countEdges());
 		Assert.assertNull(oneTwo1.getOneOne());
 	}
 
@@ -172,11 +172,11 @@ public class DeletionTest extends BaseLocalDbTest {
 		oneOne1.setOneTwo(oneTwo1);
         db.commit();
 		Assert.assertEquals(3, countVertices());
-		Assert.assertEquals(4 + 3, countEdges());
+		Assert.assertEquals(4, countEdges());
 		oneTwo1.delete();
         db.commit();
 		Assert.assertEquals(2, countVertices());
-		Assert.assertEquals(2 + 2, countEdges());
+		Assert.assertEquals(2, countEdges());
 		OneOne testOneOne1 = new OneOne(oneOne1.getVertex());
 		Assert.assertNull(testOneOne1.getOneTwo());
 	}
@@ -190,7 +190,7 @@ public class DeletionTest extends BaseLocalDbTest {
         Assert.assertEquals(2, TransactionThreadEntityVar.get().size());
         db.commit();
         Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2 + 2, countEdges());
+        Assert.assertEquals(2, countEdges());
         Assert.assertEquals(0, TransactionThreadEntityVar.get().size());
 
         god.removeFromDream(dream);
@@ -202,7 +202,7 @@ public class DeletionTest extends BaseLocalDbTest {
         Assert.assertFalse(TransactionThreadEntityVar.get().contains(dream));
         db.commit();
         Assert.assertEquals(1, countVertices());
-        Assert.assertEquals(1 + 1, countEdges());
+        Assert.assertEquals(1, countEdges());
         Assert.assertEquals(0, TransactionThreadEntityVar.get().size());
     }
 

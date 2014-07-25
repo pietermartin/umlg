@@ -24,7 +24,7 @@ public class TestComponent extends BaseLocalDbTest {
 
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(5 + 5, countEdges());
+		Assert.assertEquals(5, countEdges());
 	}
 	
 }

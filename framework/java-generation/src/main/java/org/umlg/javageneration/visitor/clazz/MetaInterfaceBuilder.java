@@ -38,7 +38,6 @@ public class MetaInterfaceBuilder extends BaseVisitor implements Visitor<Interfa
             addDefaultConstructor(metaClass, clazz);
             addContructorWithVertex(metaClass, clazz);
             //Ensure the meta class instance does not also try to create a edge to a meta class as it is also a normal entity
-            addEmptyAddEdgeToMetaNode(metaClass);
             addAddToThreadEntityVar(metaClass);
         } else {
             metaClass.setSuperclass(UmlgGenerationUtil.BASE_META_NODE);
@@ -50,8 +49,8 @@ public class MetaInterfaceBuilder extends BaseVisitor implements Visitor<Interfa
         addImplementsTumlMetaNode(metaClass);
         addMetaClassGetterToRoot(clazz, metaClass);
         addDefaultCreate(metaClass);
-        addGetAllInstancesForAbstractClass(clazz, metaClass);
-        addGetAllInstancesWithFilterForAbstractClass(clazz, metaClass);
+//        addGetAllInstancesForAbstractClass(clazz, metaClass);
+//        addGetAllInstancesWithFilterForAbstractClass(clazz, metaClass);
     }
 
     @Override

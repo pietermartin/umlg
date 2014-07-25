@@ -58,6 +58,7 @@ import org.umlg.tests.validationtest.TestValidation;
 @Suite.SuiteClasses({
         TestGroovyExecutor.class,
         TestMetaClasses.class,
+
         AllInstancesTest.class,
         BagTestTest.class,
         OclStdLibBagTest.class,
@@ -97,7 +98,7 @@ import org.umlg.tests.validationtest.TestValidation;
         TestPrimitiveRemoval.class,
         TestQualifiedDeletion.class,
         TestQualifier.class,
-        //Fails::TestQualifierChangeEvent.class,
+//        //Fails::TestQualifierChangeEvent.class,
         TestQualifierOnManyToMany.class,
         TestMetaQueries.class,
         TestQueryBaseModelUmlgAssociation.class,

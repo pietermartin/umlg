@@ -47,9 +47,10 @@ public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class>
 
     private void addGetterToAppRootForRootEntity(Class clazz, OJAnnotatedClass root) {
 		OJAnnotatedOperation getter = new OJAnnotatedOperation("get" + UmlgClassOperations.className(clazz),
-				UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
+				UmlgGenerationUtil.umlgSet.getCopy().addToGenerics("? extends " + UmlgClassOperations.getPathName(clazz).getLast()));
 		root.addToOperations(getter);
-		getter.getBody().addToStatements("return " + UmlgClassOperations.getMetaClassPathName(clazz) + ".getInstance().getAllInstances()");
+		getter.getBody().addToStatements("return " + UmlgClassOperations.getPathName(clazz) + ".allInstances()");
+        root.addToImports(UmlgClassOperations.getPathName(clazz));
 		root.addToImports(UmlgGenerationUtil.tinkerDirection);
         root.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);
 	}

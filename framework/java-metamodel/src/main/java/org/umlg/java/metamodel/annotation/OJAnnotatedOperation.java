@@ -16,6 +16,7 @@ public class OJAnnotatedOperation extends OJOperation implements OJAnnotatedElem
     public static final String RESULT = "result";
     Map<OJPathName, OJAnnotationValue> f_annotations = new TreeMap<OJPathName, OJAnnotationValue>();
     private OJAnnotatedField resultVariable;
+    private boolean interfaceDefault;
 
     public OJAnnotatedOperation(String string, String returnPathName) {
         this(string);
@@ -31,6 +32,14 @@ public class OJAnnotatedOperation extends OJOperation implements OJAnnotatedElem
     public OJAnnotatedOperation(String string) {
         super();
         setName(string);
+    }
+
+    public boolean isInterfaceDefault() {
+        return interfaceDefault;
+    }
+
+    public void setInterfaceDefault(boolean interfaceDefault) {
+        this.interfaceDefault = interfaceDefault;
     }
 
     @Override
@@ -86,6 +95,9 @@ public class OJAnnotatedOperation extends OJOperation implements OJAnnotatedElem
         if (this.isAbstract()) {
             result.append("abstract ");
         }
+        if (this.isInterfaceDefault()) {
+            result.append("default ");
+        }
         result.append(visToJava(this) + " ");
         if (this.getGenericTypeParam() != null) {
             result.append("<" + this.getGenericTypeParam().getLast() + "> ");
@@ -97,7 +109,9 @@ public class OJAnnotatedOperation extends OJOperation implements OJAnnotatedElem
         if (!getThrows().isEmpty()) {
             result.append(" throws " + exceptionsToJava(this));
         }
-        if (getOwner() instanceof OJAnnotatedInterface || getOwner() instanceof OJInterface || this.isAbstract()) {
+        if ((getOwner() instanceof OJAnnotatedInterface && !isStatic() && !isInterfaceDefault())
+                ||getOwner() instanceof OJInterface
+                || this.isAbstract()) {
             result.append(";\n");
         } else {
             result.append(" {\n");

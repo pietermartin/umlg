@@ -63,10 +63,10 @@ public class ClassInterfacePropertyLookupGenerator extends BaseVisitor implement
                                     propertyWrapper.javaBaseTypePath().getLast() + " entity){\n        return !entity." +
                                     otherEnd.getter() + "().contains(" + UmlgClassOperations.getPathName(clazz).getLast() + ".this);\n    }\n}");
                         }
-                        lookupOnParent.getBody().addToStatements("result.addAll(" + UmlgClassOperations.getMetaClassName(c) + ".getInstance().getAllInstances(filter" + cnt++ + "))");
+                        lookupOnParent.getBody().addToStatements("result.addAll(" + UmlgClassOperations.getPathName(c) + ".allInstances(filter" + cnt++ + "))");
 
                     } else {
-                        lookupOnParent.getBody().addToStatements("result.addAll(" + UmlgClassOperations.getMetaClassName(c) + ".getInstance().getAllInstances())");
+                        lookupOnParent.getBody().addToStatements("result.addAll(" + UmlgClassOperations.getPathName(c) + ".allInstances())");
                     }
 
                     annotatedClass.addToImports(UmlgClassOperations.getMetaClassPathName(c));

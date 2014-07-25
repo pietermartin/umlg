@@ -31,7 +31,7 @@ public class UmlgNeo4jGraphFactory implements UmlgGraphFactory {
                     this.umlgGraph.addRoot();
                     this.umlgGraph.addDeletionNode();
                     this.umlgGraph.commit();
-                    UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
+//                    UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
                     this.umlgGraph.commit();
                     //This is to bypass the beforeCommit
                     this.umlgGraph.setBypass(true);

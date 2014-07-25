@@ -19,12 +19,12 @@ public class DeletionInheritenceTest extends BaseLocalDbTest {
 		biped.setName("biped1");
         db.commit();
 		Assert.assertEquals(3, countVertices());
-		Assert.assertEquals(3 + 3, countEdges());
+		Assert.assertEquals(3, countEdges());
 		biped.delete();
 		mamal.delete();
         db.commit();
 		Assert.assertEquals(1, countVertices());
-		Assert.assertEquals(1 + 1, countEdges());
+		Assert.assertEquals(1, countEdges());
 	}
 
 }

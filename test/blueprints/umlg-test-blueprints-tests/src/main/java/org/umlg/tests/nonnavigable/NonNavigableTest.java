@@ -31,7 +31,7 @@ public class NonNavigableTest extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(7 + 6, countEdges());
+        Assert.assertEquals(7, countEdges());
         Universe testUniverse = new Universe(universe1.getVertex());
         Assert.assertNotNull(testUniverse.getNonNavigableOne());
 
@@ -40,7 +40,7 @@ public class NonNavigableTest extends BaseLocalDbTest {
         Assert.assertNull(testUniverse.getNonNavigableOne());
         db.rollback();
         Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(7 + 6, countEdges());
+        Assert.assertEquals(7, countEdges());
     }
 
 	@SuppressWarnings("unused")
@@ -62,7 +62,7 @@ public class NonNavigableTest extends BaseLocalDbTest {
 		universe1.addToNonNavigableMany(nonNavigableMany2);
         db.commit();
 		Assert.assertEquals(7, countVertices());
-		Assert.assertEquals(9 + 7, countEdges());
+		Assert.assertEquals(9, countEdges());
 		Universe testUniverse = new Universe(universe1.getVertex());
 		Assert.assertEquals(2, testUniverse.getNonNavigableMany().size());
 	}

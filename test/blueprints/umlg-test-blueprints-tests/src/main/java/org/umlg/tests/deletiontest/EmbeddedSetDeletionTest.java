@@ -18,19 +18,19 @@ public class EmbeddedSetDeletionTest extends BaseLocalDbTest {
 		god.addToEmbeddedString("s4");
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(5 + 1, countEdges());
+		Assert.assertEquals(5, countEdges());
 		God godTest = new God(god.getVertex());
 		godTest.removeFromEmbeddedString("s1");
 		godTest.removeFromEmbeddedString("s1");
         db.commit();
 		Assert.assertEquals(4, countVertices());
-		Assert.assertEquals(4 + 1, countEdges());
+		Assert.assertEquals(4, countEdges());
 
 		godTest = new God(god.getVertex());
 		godTest.removeFromEmbeddedString("s4");
         db.commit();
 		Assert.assertEquals(3, countVertices());
-		Assert.assertEquals(3 + 1, countEdges());
+		Assert.assertEquals(3, countEdges());
 
 	}
 
@@ -44,19 +44,19 @@ public class EmbeddedSetDeletionTest extends BaseLocalDbTest {
 		god.addToEmbeddedInteger(4);
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(5 + 1, countEdges());
+		Assert.assertEquals(5, countEdges());
 		God godTest = new God(god.getVertex());
 		godTest.removeFromEmbeddedInteger(1);
 		godTest.removeFromEmbeddedInteger(1);
         db.commit();
 		Assert.assertEquals(4, countVertices());
-		Assert.assertEquals(4 + 1, countEdges());
+		Assert.assertEquals(4, countEdges());
 
 		godTest = new God(god.getVertex());
 		godTest.removeFromEmbeddedInteger(4);
         db.commit();
 		Assert.assertEquals(3, countVertices());
-		Assert.assertEquals(3 + 1, countEdges());
+		Assert.assertEquals(3, countEdges());
 	}
 
 	@Test
@@ -78,7 +78,7 @@ public class EmbeddedSetDeletionTest extends BaseLocalDbTest {
 		god.addToAnimalFarm(mamal4);
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(9 + 5, countEdges());
+		Assert.assertEquals(9, countEdges());
 		God godTest = new God(god.getVertex());
 		for (Mamal animal : godTest.getAnimalFarm()) {
 			System.out.println(animal.getVertex().toString());
@@ -86,7 +86,7 @@ public class EmbeddedSetDeletionTest extends BaseLocalDbTest {
 		godTest.removeFromAnimalFarm(mamal3);
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(8 + 5, countEdges());
+		Assert.assertEquals(8, countEdges());
 	}
 
 }

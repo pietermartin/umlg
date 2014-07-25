@@ -55,7 +55,6 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         this.vertex = UMLG.get().addVertex(this.getClass().getName());
         this.vertex.property("className", getClass().getName());
         addToThreadEntityVar();
-        addEdgeToMetaNode();
         defaultCreate();
         initialiseProperties();
         initVariables();

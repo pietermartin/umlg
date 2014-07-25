@@ -11,87 +11,87 @@ import org.umlg.runtime.test.BaseLocalDbTest;
  */
 public class ManyToManyToSelfSequenceTest extends BaseLocalDbTest {
 
-    @Test
-    public void testManyToManySequenceToSelf() {
-        H h1 = new H();
-        H h2 = new H();
-        H h3 = new H();
-
-        h1.addToTo(h2);
-        h1.addToTo(h3);
-        db.commit();
-
-        h1.reload();
-        h2.reload();
-        h3.reload();
-
-        Assert.assertEquals(2, h1.getTo().size());
-        Assert.assertEquals(1, h2.getFrom().size());
-        Assert.assertEquals(0, h1.getFrom().size());
-
-        H h4 = new H();
-        h2.addToFrom(h4);
-        db.commit();
-
-        Assert.assertEquals(2, h1.getTo().size());
-        Assert.assertEquals(2, h2.getFrom().size());
-        Assert.assertEquals(1, h4.getTo().size());
-
-        h1.reload();
-        h2.reload();
-        h3.reload();
-        h4.reload();
-        Assert.assertEquals(2, h1.getTo().size());
-        Assert.assertEquals(2, h2.getFrom().size());
-        Assert.assertEquals(1, h4.getTo().size());
-
-    }
-
-    @Test
-    public void testManyToManySequenceToSelfIndex() {
-        H h1 = new H();
-        H h2 = new H();
-        H h3 = new H();
-
-        h1.addToTo(h2);
-        h1.addToTo(h3);
-        db.commit();
-
-        h1.reload();
-        h2.reload();
-        h3.reload();
-
-        Assert.assertEquals(2, h1.getTo().size());
-        Assert.assertEquals(h2, h1.getTo().get(0));
-        Assert.assertEquals(h3, h1.getTo().get(1));
-        Assert.assertEquals(1, h2.getFrom().size());
-        Assert.assertEquals(0, h1.getFrom().size());
-
-        h1.reload();
-        h2.reload();
-        h3.reload();
-        Assert.assertEquals(2, h1.getTo().size());
-        Assert.assertEquals(1, h2.getFrom().size());
-        Assert.assertEquals(1, h3.getFrom().size());
-        Assert.assertEquals(0, h2.getTo().size());
-        Assert.assertEquals(0, h3.getTo().size());
-
-        h1.removeFromTo(h2);
-        h1.addToTo(1, h2);
-        db.commit();
-
-        Assert.assertEquals(2, h1.getTo().size());
-        Assert.assertEquals(h3, h1.getTo().get(0));
-        Assert.assertEquals(h2, h1.getTo().get(1));
-
-        h1.reload();
-        h2.reload();
-        h3.reload();
-
-        Assert.assertEquals(2, h1.getTo().size());
-        Assert.assertEquals(h3, h1.getTo().get(0));
-        Assert.assertEquals(h2, h1.getTo().get(1));
-    }
+//    @Test
+//    public void testManyToManySequenceToSelf() {
+//        H h1 = new H();
+//        H h2 = new H();
+//        H h3 = new H();
+//
+//        h1.addToTo(h2);
+//        h1.addToTo(h3);
+//        db.commit();
+//
+//        h1.reload();
+//        h2.reload();
+//        h3.reload();
+//
+//        Assert.assertEquals(2, h1.getTo().size());
+//        Assert.assertEquals(1, h2.getFrom().size());
+//        Assert.assertEquals(0, h1.getFrom().size());
+//
+//        H h4 = new H();
+//        h2.addToFrom(h4);
+//        db.commit();
+//
+//        Assert.assertEquals(2, h1.getTo().size());
+//        Assert.assertEquals(2, h2.getFrom().size());
+//        Assert.assertEquals(1, h4.getTo().size());
+//
+//        h1.reload();
+//        h2.reload();
+//        h3.reload();
+//        h4.reload();
+//        Assert.assertEquals(2, h1.getTo().size());
+//        Assert.assertEquals(2, h2.getFrom().size());
+//        Assert.assertEquals(1, h4.getTo().size());
+//
+//    }
+//
+//    @Test
+//    public void testManyToManySequenceToSelfIndex() {
+//        H h1 = new H();
+//        H h2 = new H();
+//        H h3 = new H();
+//
+//        h1.addToTo(h2);
+//        h1.addToTo(h3);
+//        db.commit();
+//
+//        h1.reload();
+//        h2.reload();
+//        h3.reload();
+//
+//        Assert.assertEquals(2, h1.getTo().size());
+//        Assert.assertEquals(h2, h1.getTo().get(0));
+//        Assert.assertEquals(h3, h1.getTo().get(1));
+//        Assert.assertEquals(1, h2.getFrom().size());
+//        Assert.assertEquals(0, h1.getFrom().size());
+//
+//        h1.reload();
+//        h2.reload();
+//        h3.reload();
+//        Assert.assertEquals(2, h1.getTo().size());
+//        Assert.assertEquals(1, h2.getFrom().size());
+//        Assert.assertEquals(1, h3.getFrom().size());
+//        Assert.assertEquals(0, h2.getTo().size());
+//        Assert.assertEquals(0, h3.getTo().size());
+//
+//        h1.removeFromTo(h2);
+//        h1.addToTo(1, h2);
+//        db.commit();
+//
+//        Assert.assertEquals(2, h1.getTo().size());
+//        Assert.assertEquals(h3, h1.getTo().get(0));
+//        Assert.assertEquals(h2, h1.getTo().get(1));
+//
+//        h1.reload();
+//        h2.reload();
+//        h3.reload();
+//
+//        Assert.assertEquals(2, h1.getTo().size());
+//        Assert.assertEquals(h3, h1.getTo().get(0));
+//        Assert.assertEquals(h2, h1.getTo().get(1));
+//    }
 
     @Test
     public void testManyToSelfWithDulicates() {

@@ -41,7 +41,6 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
             addDefaultConstructor(metaClass, clazz);
             addContructorWithVertex(metaClass, clazz);
             //Ensure the meta class instance does not also try to create a edge to a meta class as it is also a normal entity
-            addEmptyAddEdgeToMetaNode(metaClass);
             addAddToThreadEntityVar(metaClass);
         } else {
             metaClass.setSuperclass(UmlgGenerationUtil.BASE_META_NODE);
@@ -56,11 +55,11 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         addDefaultCreate(metaClass);
         if (!clazz.isAbstract()) {
             addAndImplementUmlgLibNodeOnOriginalClass(annotatedClass, clazz, metaClass.getPathName());
-            addGetAllInstances(clazz, metaClass);
-            addGetAllInstancesWithFilter(clazz, metaClass);
+//            addGetAllInstances(clazz, metaClass);
+//            addGetAllInstancesWithFilter(clazz, metaClass);
         } else {
-            addGetAllInstancesForAbstractClass(clazz, metaClass);
-            addGetAllInstancesWithFilterForAbstractClass(clazz, metaClass);
+//            addGetAllInstancesForAbstractClass(clazz, metaClass);
+//            addGetAllInstancesWithFilterForAbstractClass(clazz, metaClass);
         }
     }
 
@@ -90,126 +89,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex = " + UmlgGenerationUtil.UMLGAccess + ".addVertex(this.getClass().getName())");
         metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex.property(\"className\", getClass().getName())");
         metaClass.getDefaultConstructor().getBody().addToStatements("defaultCreate()");
-//        metaClass.getDefaultConstructor().getBody().addToStatements(UmlgGenerationUtil.UMLGAccess + ".addEdge(null, " + UmlgGenerationUtil.UMLGAccess + ".getRoot(), this.vertex, getEdgeToRootLabel())");
         metaClass.getDefaultConstructor().getBody().addToStatements(UmlgGenerationUtil.UMLGAccess + ".getRoot().addEdge(getEdgeToRootLabel(), this.vertex)");
-    }
-
-    private void addEmptyAddEdgeToMetaNode(OJAnnotatedClass metaClass) {
-        OJAnnotatedOperation addEdgeToMetaNode = new OJAnnotatedOperation("addEdgeToMetaNode");
-        UmlgGenerationUtil.addOverrideAnnotation(addEdgeToMetaNode);
-        metaClass.addToImports(UmlgGenerationUtil.UMLGPathName);
-        metaClass.addToOperations(addEdgeToMetaNode);
-    }
-
-    private void addGetAllInstances(Class clazz, OJAnnotatedClass metaClass) {
-        OJAnnotatedOperation allInstances = new OJAnnotatedOperation("getAllInstances");
-        UmlgGenerationUtil.addOverrideAnnotation(allInstances);
-        OJPathName classPathName = UmlgClassOperations.getPathName(clazz);
-        allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(classPathName));
-
-        OJField resultField = new OJField("result", UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName));
-        resultField.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().getLast() + "()");
-        allInstances.getBody().addToLocals(resultField);
-
-        ForEachStatement forEachStatement = new ForEachStatement(
-                "this.vertex.outE(" + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)",
-                "edge"
-        );
-        forEachStatement.addStatement("result.add(" + UmlgGenerationUtil.UMLGAccess + ".<" + classPathName.getLast() + ">" + UmlgGenerationUtil.getEntity + "(edge.inV().next().id()))");
-        allInstances.getBody().addToStatements(forEachStatement);
-        allInstances.getBody().addToStatements("return result");
-
-//        OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(UmlgGenerationUtil.edgePathName));
-//        iter.setInitExp("this.vertex.outE(" + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
-//        allInstances.getBody().addToLocals(iter);
-//        OJForStatement forIter = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
-//        forIter.getBody().addToStatements("result.add(" + UmlgGenerationUtil.UMLGAccess + ".<" + classPathName.getLast() + ">" + UmlgGenerationUtil.getEntity + "(edge.inV().next().id()))");
-//        allInstances.getBody().addToStatements(forIter);
-//        allInstances.getBody().addToStatements("return result");
-
-        metaClass.addToImports(UmlgGenerationUtil.UMLG_NODE);
-        metaClass.addToOperations(allInstances);
-    }
-
-    private void addGetAllInstancesWithFilter(Class clazz, OJAnnotatedClass metaClass) {
-        OJAnnotatedOperation allInstances = new OJAnnotatedOperation("getAllInstances");
-        allInstances.addToParameters(new OJParameter("filter", UmlgGenerationUtil.Filter));
-
-        UmlgGenerationUtil.addOverrideAnnotation(allInstances);
-        OJPathName classPathName = UmlgClassOperations.getPathName(clazz);
-        allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(classPathName));
-
-
-        OJField resultField = new OJField("result", UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName));
-        resultField.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
-        allInstances.getBody().addToLocals(resultField);
-
-        ForEachStatement forEachStatement = new ForEachStatement("this.vertex.outE(" + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)", "edge");
-        forEachStatement.addStatement(classPathName.getLast() + " instance = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(edge.inV().next().id())");
-        OJIfStatement ifFilter = new OJIfStatement("filter.filter(instance)");
-        ifFilter.addToThenPart("result.add(instance)");
-        forEachStatement.addStatement(ifFilter);
-        allInstances.getBody().addToStatements(forEachStatement);
-        allInstances.getBody().addToStatements("return result");
-
-//        OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(UmlgGenerationUtil.edgePathName));
-//        iter.setInitExp("this.vertex.outE(" + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
-//        allInstances.getBody().addToLocals(iter);
-//        OJForStatement forIter = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
-//        forIter.getBody().addToStatements(classPathName.getLast() + " instance = " + UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getEntity + "(edge.inV().next().id())");
-//        OJIfStatement ifFilter = new OJIfStatement("filter.filter(instance)");
-//        ifFilter.addToThenPart("result.add(instance)");
-//        forIter.getBody().addToStatements(ifFilter);
-//
-//        allInstances.getBody().addToStatements(forIter);
-//        allInstances.getBody().addToStatements("return result");
-
-        metaClass.addToImports(UmlgGenerationUtil.UMLG_NODE);
-        metaClass.addToOperations(allInstances);
-    }
-
-    private void addGetAllInstancesForAbstractClass(Class clazz, OJAnnotatedClass metaClass) {
-        OJAnnotatedOperation allInstances = new OJAnnotatedOperation("getAllInstances");
-        UmlgGenerationUtil.addOverrideAnnotation(allInstances);
-        OJPathName classPathName = UmlgClassOperations.getPathName(clazz);
-        allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(classPathName));
-
-        OJField resultField = new OJField("result", UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName));
-        resultField.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
-        allInstances.getBody().addToLocals(resultField);
-
-        Set<Classifier> specializations = UmlgClassOperations.getSpecializations(clazz);
-        for (Classifier specialization : specializations) {
-            allInstances.getBody().addToStatements("result.addAll(" + UmlgClassOperations.getMetaClassName(specialization) + ".getInstance().getAllInstances())");
-            metaClass.addToImports(UmlgClassOperations.getMetaClassPathName(specialization));
-        }
-        allInstances.getBody().addToStatements("return result");
-
-        metaClass.addToImports(UmlgGenerationUtil.UMLG_NODE);
-        metaClass.addToOperations(allInstances);
-    }
-
-    private void addGetAllInstancesWithFilterForAbstractClass(Class clazz, OJAnnotatedClass metaClass) {
-        OJAnnotatedOperation allInstances = new OJAnnotatedOperation("getAllInstances");
-        allInstances.addToParameters(new OJParameter("filter", UmlgGenerationUtil.Filter));
-
-        UmlgGenerationUtil.addOverrideAnnotation(allInstances);
-        OJPathName classPathName = UmlgClassOperations.getPathName(clazz);
-        allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(classPathName));
-
-        OJField resultField = new OJField("result", UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName));
-        resultField.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
-        allInstances.getBody().addToLocals(resultField);
-
-        Set<Classifier> specializations = UmlgClassOperations.getSpecializations(clazz);
-        for (Classifier specialization : specializations) {
-            allInstances.getBody().addToStatements("result.addAll(" + UmlgClassOperations.getMetaClassName(specialization) + ".getInstance().getAllInstances())");
-            metaClass.addToImports(UmlgClassOperations.getMetaClassPathName(specialization));
-        }
-        allInstances.getBody().addToStatements("return result");
-
-        metaClass.addToImports(UmlgGenerationUtil.UMLG_NODE);
-        metaClass.addToOperations(allInstances);
     }
 
     private void addGetEdgeToRootLabel(OJAnnotatedClass metaClass, Class clazz) {

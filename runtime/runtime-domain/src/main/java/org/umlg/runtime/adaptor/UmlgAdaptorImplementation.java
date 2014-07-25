@@ -14,7 +14,7 @@ public enum UmlgAdaptorImplementation {
             "org.umlg.runtime.adaptor.Neo4jAdminApp"),
     SQLG(
             "org.umlg.runtime.adaptor.UmlgSqlgGraphFactory",
-            "org.umlg.runtime.adaptor.UmlgSqlgExceptionUtilIml",
+            "org.umlg.runtime.adaptor.SqlgExceptionUtilIml",
             "//unsed",
             "org.umlg.runtime.adaptor.UmlgDefaultLabelConverter",
             "org.umlg.runtime.adaptor.UmlgDefaultQualifierId",

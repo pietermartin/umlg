@@ -9,8 +9,8 @@ import org.umlg.runtime.collection.UmlgSet;
  * Time: 12:16 PM
  */
 public interface UmlgMetaNode<T> {
-    UmlgSet<T> getAllInstances();
-    UmlgSet<T> getAllInstances(Filter<T> filter);
+//    UmlgSet<T> getAllInstances();
+//    UmlgSet<T> getAllInstances(Filter<T> filter);
     Vertex getVertex();
     Object getId();
     String getUid();

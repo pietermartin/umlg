@@ -3,16 +3,24 @@ package org.umlg.runtime.adaptor;
 import com.tinkerpop.gremlin.process.computer.GraphComputer;
 import com.tinkerpop.gremlin.process.graph.GraphTraversal;
 import com.tinkerpop.gremlin.structure.*;
+import com.tinkerpop.gremlin.structure.strategy.ReadOnlyGraphStrategy;
+import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedGraph;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.time.StopWatch;
+import org.umlg.runtime.collection.Filter;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgLazyList;
+import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.sqlgraph.structure.SqlGraph;
+import org.umlg.sqlgraph.structure.SqlGraphDataSource;
+import org.umlg.sqlgraph.test.JDBC;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.*;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -39,7 +47,9 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Graph getReadOnlyGraph() {
-        return null;
+        final StrategyWrappedGraph swg = new StrategyWrappedGraph(this.sqlGraph);
+        swg.strategy().setGraphStrategy(new ReadOnlyGraphStrategy());
+        return swg;
     }
 
     public <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final Parameter... indexParameters) {
@@ -110,18 +120,64 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
+    public <T extends PersistentObject> UmlgSet<T> allInstances(String className) {
+        UmlgMemorySet<T> result = new UmlgMemorySet();
+        String label;
+        int lastIndexOfDot = className.lastIndexOf(".");
+        if (lastIndexOfDot != -1) {
+            label = className.substring(lastIndexOfDot + 1);
+        } else {
+            label = className;
+        }
+        this.sqlGraph.V().<Vertex>has(Element.LABEL, label).forEach (
+                vertex -> result.add(UMLG.get().<T>getEntity(vertex.id()))
+        );
+        return result;
+    }
+
+    @Override
+    public <T extends PersistentObject> UmlgSet<T> allInstances(String className, Filter filter) {
+        UmlgMemorySet<T> result = new UmlgMemorySet();
+        String label;
+        int lastIndexOfDot = className.lastIndexOf(".");
+        if (lastIndexOfDot != -1) {
+            label = className.substring(lastIndexOfDot + 1);
+        } else {
+            label = className;
+        }
+        this.sqlGraph.V().<Vertex>has(Element.LABEL, label).forEach (
+                vertex -> {
+                    T entity = UMLG.get().<T>getEntity(vertex.id());
+                    if (filter.filter(entity)) {
+                        result.add(entity);
+                    }
+                }
+        );
+        return result;
+    }
+
+    @Override
     public Vertex addVertex(String className) {
         String label;
         if (className != null) {
-            int lastIndexOfDot = className.lastIndexOf(".");
-            if (lastIndexOfDot != -1) {
-                label = className.substring(lastIndexOfDot + 1);
-            } else {
-                label = className;
-            }
+            label = shortenClassName(className);
             return this.sqlGraph.addVertex(Element.LABEL, label);
         } else {
             return this.sqlGraph.addVertex();
+        }
+    }
+
+    private String shortenClassName(String className) {
+        int lastIndexOfDot = className.lastIndexOf(".");
+        if (lastIndexOfDot != -1) {
+            return className.substring(lastIndexOfDot + 1);
+        } else {
+            lastIndexOfDot = className.lastIndexOf(":");
+            if (lastIndexOfDot != -1) {
+                return className.substring(lastIndexOfDot + 1);
+            } else {
+                return className;
+            }
         }
     }
 
@@ -277,6 +333,11 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
+    public void clear() {
+        this.sqlGraph.getSchemaManager().clear();
+    }
+
+    @Override
     public Vertex getRoot() {
         return this.v(1L);
     }
@@ -330,7 +391,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public long countVertices() {
-        return this.sqlGraph.countVertices();
+        return this.sqlGraph.countVertices() - 1;
     }
 
     @Override

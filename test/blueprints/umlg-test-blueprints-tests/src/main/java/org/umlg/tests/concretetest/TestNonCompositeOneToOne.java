@@ -33,7 +33,7 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 		Assert.assertNotNull(universeTest.getAngel());
 		Angel angelTest = new Angel(angel.getVertex());
 		Assert.assertNotNull(angelTest.getUniverse());
-		Assert.assertEquals(7 + 6, countEdges());
+		Assert.assertEquals(7, countEdges());
 	}
 
 	@SuppressWarnings("unused")
@@ -55,7 +55,7 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 		Assert.assertNotNull(universeTest.getAngel());
 		Angel angelTest = new Angel(angel.getVertex());
 		Assert.assertNotNull(angelTest.getUniverse());
-		Assert.assertEquals(7 + 6, countEdges());
+		Assert.assertEquals(7, countEdges());
 	}
 
 	@SuppressWarnings("unused")
@@ -75,12 +75,12 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
         db.commit();
 		Universe universeTest = new Universe(universe1.getVertex());
 		Assert.assertNotNull(universeTest.getAngel());
-		Assert.assertEquals(7 + 6, countEdges());
+		Assert.assertEquals(7, countEdges());
 		universeTest.setAngel(null);
         db.commit();
 		Universe universeTest2 = new Universe(universe1.getVertex());
 		Assert.assertNull(universeTest2.getAngel());
-		Assert.assertEquals(6 + 6, countEdges());
+		Assert.assertEquals(6, countEdges());
 	}
 
 	@Test
@@ -101,12 +101,12 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(7 + 5, countEdges());
+		Assert.assertEquals(7, countEdges());
 
 		oneOne1.setOneTwo(oneTwo2);
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(6 + 5, countEdges());
+		Assert.assertEquals(6, countEdges());
 
 		oneOne2 = new OneOne(oneOne2.getVertex());
 		Assert.assertNull(oneOne2.getOneTwo());
@@ -118,7 +118,7 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 		oneOne2.setOneTwo(oneTwo1);
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(7 + 5, countEdges());
+		Assert.assertEquals(7, countEdges());
 
 	}
 
@@ -140,12 +140,12 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(7 + 5, countEdges());
+		Assert.assertEquals(7, countEdges());
 
 		oneOne1.setOneTwo(oneTwo2);
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(6 + 5, countEdges());
+		Assert.assertEquals(6, countEdges());
 
 		OneOne testOneOne2 = new OneOne(oneOne2.getVertex());
 		Assert.assertNull(testOneOne2.getOneTwo());
@@ -156,7 +156,7 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 		oneOne2.setOneTwo(oneTwo1);
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(7 + 5, countEdges());
+		Assert.assertEquals(7, countEdges());
 
 	}
 
@@ -178,19 +178,19 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(7 + 5, countEdges());
+		Assert.assertEquals(7, countEdges());
 
 		oneOne1.setOneTwo(null);
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(6 + 5, countEdges());
+		Assert.assertEquals(6, countEdges());
 		Assert.assertNull(oneOne1.getOneTwo());
 		Assert.assertNull(oneTwo1.getOneOne());
 
 		oneOne1.setOneTwo(oneTwo2);
         db.commit();
 		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(6 + 5, countEdges());
+		Assert.assertEquals(6, countEdges());
 		OneOne testOneOne2 = new OneOne(oneOne2.getVertex());
 		Assert.assertNull(testOneOne2.getOneTwo());
 
