@@ -15,7 +15,7 @@ public class TestRestletDefaultDataCreator implements DefaultDataCreator {
 
     public void createData() {
 
-        if (Root1Meta.getInstance().getAllInstances().isEmpty()) {
+        if (Root1.allInstances().isEmpty()) {
             Root1 root1 = new Root1(true);
             root1.setName("name");
             Class1 class1 = new Class1(root1);

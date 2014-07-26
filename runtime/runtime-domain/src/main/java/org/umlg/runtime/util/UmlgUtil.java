@@ -31,6 +31,12 @@ public class UmlgUtil {
                             poweredBy.setFirst("ThunderGraph");
                             poweredBy.setSecond("http://www.umlg.org/");
                         } catch (ClassNotFoundException eeeee) {
+                            try {
+                                Class.forName("org.umlg.runtime.adaptor.UmlgSqlgGraph");
+                                poweredBy.setFirst("SQLG");
+                                poweredBy.setSecond("http://www.umlg.org/");
+                            } catch (ClassNotFoundException eeeeee) {
+                            }
                         }
                     }
                 }

@@ -980,7 +980,7 @@
         };
 
         function serializeValueWithValue(select) {
-            return (select.attr("checked") == "checked");
+            return $select.is(':checked');
         }
 
         this.applyValue = function (item, state) {
@@ -988,9 +988,9 @@
         };
 
         this.isValueChanged = function () {
-            if (($select.attr("checked") == "checked") && defaultValue != true) {
+            if ($select.is(':checked') && defaultValue == false) {
                 return true;
-            } else if (($select.attr("checked") !== "checked") && defaultValue != false) {
+            } else if (!$select.is(':checked') && defaultValue == true) {
                 return true;
             } else {
                 return false;

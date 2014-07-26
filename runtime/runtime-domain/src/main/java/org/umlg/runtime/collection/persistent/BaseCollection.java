@@ -40,14 +40,14 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     //The internal map is used to store the vertex representing a primitive or an enumeration
     protected ListMultimap<Object, Vertex> internalVertexMap = ArrayListMultimap.create();
     protected UmlgRuntimeProperty umlgRuntimeProperty;
-    protected static final String LABEL_TO_FIRST_HYPER_VERTEX = "labelToFirstHyperVertex";
-    protected static final String LABEL_TO_LAST_HYPER_VERTEX = "labelToLastHyperVertex";
-    protected static final String LABEL_TO_NEXT_HYPER_VERTEX = "labelToNextHyperVertex";
-    protected static final String LABEL_TO_ELEMENT_FROM_HYPER_VERTEX = "labelToElementFromHyperVertex";
+    protected static final String LABEL_TO_FIRST_HYPER_VERTEX = "LTFHV";
+    protected static final String LABEL_TO_LAST_HYPER_VERTEX = "LTLHV";
+    protected static final String LABEL_TO_NEXT_HYPER_VERTEX = "LTNHV";
+    protected static final String LABEL_TO_ELEMENT_FROM_HYPER_VERTEX = "LTEFHV";
 
-    protected static final String LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE = "labelToFirstElementInSequence";
-    protected static final String LABEL_TO_NEXT_IN_SEQUENCE = "labelToNextElementInSequence";
-    protected static final String LABEL_TO_LAST_ELEMENT_IN_SEQUENCE = "labelToLastElementInSequence";
+    protected static final String LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE = "LTFEIS";
+    protected static final String LABEL_TO_NEXT_IN_SEQUENCE = "LTNEIS";
+    protected static final String LABEL_TO_LAST_ELEMENT_IN_SEQUENCE = "LTLEIS";
 
     public BaseCollection(UmlgRuntimeProperty runtimeProperty) {
         this.umlgRuntimeProperty = runtimeProperty;
@@ -781,7 +781,8 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     protected Class<?> getClassToInstantiateFromHyperVertexEdge(Edge hyperVertexEdge) {
         try {
-            return Class.forName((String) hyperVertexEdge.inV().next().value("className"));
+            final Vertex v = hyperVertexEdge.inV().next();
+            return Class.forName((String) v.value("className"));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

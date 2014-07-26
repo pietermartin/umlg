@@ -92,7 +92,8 @@
         </dependency>
         <dependency>
 			<groupId>org.umlg</groupId>
-			<artifactId>runtime-domain-neo4j</artifactId>
+            <artifactId>runtime-domain-sqlg</artifactId>
+			<!--<artifactId>runtime-domain-neo4j</artifactId>-->
             <!--<artifactId>runtime-domain-orientdb</artifactId>-->
             <!--<artifactId>runtime-domain-bitsy</artifactId>-->
             <!--<artifactId>runtime-domain-titan</artifactId>-->
