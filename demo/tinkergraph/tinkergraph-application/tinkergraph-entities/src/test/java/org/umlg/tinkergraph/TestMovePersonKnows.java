@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.umlg.runtime.adaptor.UMLG;
+import org.umlg.runtime.adaptor.UmlgAdminGraph;
 import org.umlg.runtime.adaptor.UmlgGraph;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.util.UmlgProperties;
@@ -35,7 +36,7 @@ public class TestMovePersonKnows {
 
     @After
     public void after() {
-        db.drop();
+        ((UmlgAdminGraph)db).drop();
     }
 
     @Test

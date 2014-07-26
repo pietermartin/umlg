@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.runtime.adaptor.UMLG;
+import org.umlg.runtime.adaptor.UmlgAdminGraph;
 import org.umlg.runtime.adaptor.UmlgGraph;
 import org.umlg.runtime.util.UmlgProperties;
 
@@ -38,7 +39,7 @@ public abstract class BaseTest {
 
     @After
     public void after() {
-        db.drop();
+        ((UmlgAdminGraph)db).drop();
     }
 
 }

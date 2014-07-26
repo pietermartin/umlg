@@ -7,9 +7,7 @@ import org.umlg.association.composite.Panel;
 import org.umlg.association.composite.Slider;
 import org.umlg.association.composite.Window;
 import org.umlg.inheritance.*;
-import org.umlg.interfase.Creator;
-import org.umlg.interfase.Ghost;
-import org.umlg.interfase.Mamal;
+import org.umlg.interfase.*;
 import org.umlg.interfase.meta.BeingMeta;
 import org.umlg.interfase.meta.SpiritMeta;
 import org.umlg.model.Quickpreview;
@@ -81,7 +79,7 @@ public class TestUmlgGraph extends BaseTest {
         mamal3.setCreator(creator);
 
         db.commit();
-        Assert.assertEquals(5, SpiritMeta.getInstance().getAllInstances().size());
-        Assert.assertEquals(3, BeingMeta.getInstance().getAllInstances().size());
+        Assert.assertEquals(5, Spirit.allInstances().size());
+        Assert.assertEquals(3, Being.allInstances().size());
     }
 }

@@ -1,7 +1,6 @@
 package org.umlg.graphofthegods;
 
 import org.umlg.*;
-import org.umlg.meta.TitanMeta;
 import org.umlg.runtime.adaptor.DefaultDataCreator;
 import org.umlg.runtime.adaptor.UMLG;
 
@@ -14,7 +13,7 @@ public class GraphOfTheGodsDefaultDataCreator implements DefaultDataCreator {
     @Override
     public void createData() {
 
-        if (TitanMeta.getInstance().getAllInstances().isEmpty()) {
+        if (Titan.allInstances().isEmpty()) {
             Titan saturn = new Titan();
             saturn.setName("Saturn");
             saturn.setAge(10000);

@@ -35,7 +35,7 @@ public class TestRemoveAllData {
 
     @After
     public void after() {
-        db.drop();
+        ((UmlgAdminGraph)db).drop();
     }
 
     @Test

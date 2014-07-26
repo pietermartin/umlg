@@ -6,6 +6,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.*;
 import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.runtime.adaptor.UMLG;
+import org.umlg.runtime.adaptor.UmlgAdminGraph;
 import org.umlg.runtime.adaptor.UmlgGraph;
 import org.umlg.runtime.collection.UmlgBag;
 import org.umlg.runtime.collection.UmlgOrderedSet;
@@ -45,7 +46,7 @@ public class TestSetSemantics {
 
     @After
     public void after() {
-        db.drop();
+        ((UmlgAdminGraph)db).drop();
     }
 
     @Test
