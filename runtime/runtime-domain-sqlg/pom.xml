@@ -41,7 +41,7 @@
         </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
-            <artifactId>sqlgraph-postgres</artifactId>
+            <artifactId>sqlg-postgres</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

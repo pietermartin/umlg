@@ -22,7 +22,6 @@
             <groupId>org.umlg</groupId>
             <artifactId>umlg-test-blueprints-tests</artifactId>
             <version>${umlg.version}</version>
-            <!--<classifier>tests</classifier>-->
             <scope>test</scope>
         </dependency>
     </dependencies>
