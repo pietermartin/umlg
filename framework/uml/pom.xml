@@ -91,6 +91,10 @@
                     <groupId>org.eclipse.equinox</groupId>
                     <artifactId>common</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.equinox</groupId>
+                    <artifactId>app</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
