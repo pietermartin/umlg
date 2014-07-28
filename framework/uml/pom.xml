@@ -92,6 +92,10 @@
                     <artifactId>common</artifactId>
                 </exclusion>
                 <exclusion>
+                    <groupId>org.eclipse.equinox</groupId>
+                    <artifactId>app</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>org.eclipse</groupId>
                     <artifactId>osgi</artifactId>
                 </exclusion>
@@ -120,10 +124,6 @@
                 <exclusion>
                     <groupId>org.eclipse.emf</groupId>
                     <artifactId>ecore</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.eclipse.core</groupId>
-                    <artifactId>runtime</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -170,20 +170,8 @@
                     <artifactId>ecore</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.eclipse.emf.ecore</groupId>
-                    <artifactId>xmi</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>org.eclipse.uml2.uml</groupId>
                     <artifactId>resources</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.eclipse</groupId>
-                    <artifactId>ocl</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.eclipse.ocl</groupId>
-                    <artifactId>common</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -211,20 +199,12 @@
             <version>3.4.0-v20140524-1358</version>
             <exclusions>
                 <exclusion>
-                    <groupId>lpg.runtime</groupId>
-                    <artifactId>java</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>org.eclipse.emf</groupId>
                     <artifactId>ecore</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.eclipse.emf.ecore</groupId>
                     <artifactId>xmi</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.eclipse.ocl</groupId>
-                    <artifactId>common</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -251,12 +231,6 @@
             <groupId>org.eclipse.core</groupId>
             <artifactId>jobs</artifactId>
             <version>3.6.0-v20140424-0053</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.equinox</groupId>
-                    <artifactId>common</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
