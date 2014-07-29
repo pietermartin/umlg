@@ -63,29 +63,24 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
     private void addConstructorWithOwnerAsParameter(OJAnnotatedClass annotatedClass, Class clazz) {
         Set<Property> otherEndsToComposite = UmlgClassOperations.getOtherEndToComposite(clazz);
         for (Property otherEndToComposite : otherEndsToComposite) {
-            OJConstructor constructor = new OJConstructor();
-            OJPathName otherEndToCompositePathName = UmlgClassOperations.getPathName(otherEndToComposite.getType());
-            constructor.addParam("compositeOwner", otherEndToCompositePathName);
-            PropertyWrapper otherEndToCompositePWrap = new PropertyWrapper(otherEndToComposite);
-            if (otherEndToCompositePWrap.isMemberOfAssociationClass()) {
-                constructor.addParam(StringUtils.uncapitalize(otherEndToCompositePWrap.getAssociationClass().getName()), otherEndToCompositePWrap.getAssociationClassPathName());
+            if (!otherEndToComposite.isDerivedUnion()) {
+                OJConstructor constructor = new OJConstructor();
+                OJPathName otherEndToCompositePathName = UmlgClassOperations.getPathName(otherEndToComposite.getType());
+                constructor.addParam("compositeOwner", otherEndToCompositePathName);
+                PropertyWrapper otherEndToCompositePWrap = new PropertyWrapper(otherEndToComposite);
+                if (otherEndToCompositePWrap.isMemberOfAssociationClass()) {
+                    constructor.addParam(StringUtils.uncapitalize(otherEndToCompositePWrap.getAssociationClass().getName()), otherEndToCompositePWrap.getAssociationClassPathName());
+                }
+                annotatedClass.addToConstructors(constructor);
+                constructor.getBody().addToStatements("super(true)");
+
+                PropertyWrapper compositeOwner = new PropertyWrapper(otherEndToCompositePWrap.getOtherEnd());
+                if (!otherEndToCompositePWrap.isMemberOfAssociationClass()) {
+                    constructor.getBody().addToStatements("compositeOwner." + compositeOwner.adder() + "(this)");
+                } else {
+                    constructor.getBody().addToStatements("compositeOwner." + compositeOwner.adder() + "(this, " + StringUtils.uncapitalize(compositeOwner.getAssociationClass().getName()) + ")");
+                }
             }
-            annotatedClass.addToConstructors(constructor);
-            constructor.getBody().addToStatements("super(true)");
-
-//            if (!pWrap.isMemberOfAssociationClass()) {
-//                constructor.getBody().addToStatements(otherEndToCompositePWrap.adder() + "(compositeOwner)");
-//            } else {
-//                constructor.getBody().addToStatements(otherEndToCompositePWrap.adder() + "(compositeOwner, " + StringUtils.uncapitalize(otherEndToCompositePWrap.getAssociationClass().getName()) + ")");
-//            }
-
-            PropertyWrapper compositeOwner = new PropertyWrapper(otherEndToCompositePWrap.getOtherEnd());
-            if (!otherEndToCompositePWrap.isMemberOfAssociationClass()) {
-                constructor.getBody().addToStatements("compositeOwner." + compositeOwner.adder() + "(this)");
-            } else {
-                constructor.getBody().addToStatements("compositeOwner." + compositeOwner.adder() + "(this, " + StringUtils.uncapitalize(compositeOwner.getAssociationClass().getName()) + ")");
-            }
-
         }
     }
 
@@ -139,7 +134,9 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
         if (UmlgClassOperations.hasCompositeOwner(clazz)) {
             Set<Property> otherEndsToComposite = UmlgClassOperations.getOtherEndToComposite(clazz);
             for (Property otherEndToComposite : otherEndsToComposite) {
-                hasOnlyOneCompositeParent.getBody().addToStatements("result = result + (" + new PropertyWrapper(otherEndToComposite).getter() + "() != null ? 1 : 0)");
+                if (!otherEndToComposite.isDerivedUnion()) {
+                    hasOnlyOneCompositeParent.getBody().addToStatements("result = result + (" + new PropertyWrapper(otherEndToComposite).getter() + "() != null ? 1 : 0)");
+                }
             }
         }
         hasOnlyOneCompositeParent.getBody().addToStatements("return result == 1");

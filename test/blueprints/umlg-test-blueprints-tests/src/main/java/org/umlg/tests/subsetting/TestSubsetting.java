@@ -2,6 +2,8 @@ package org.umlg.tests.subsetting;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.umlg.runtime.adaptor.UMLG;
+import org.umlg.runtime.adaptor.UmlgAdminGraph;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.subsetting.*;
 
@@ -16,7 +18,6 @@ public class TestSubsetting extends BaseLocalDbTest {
         Car car = new Car(true);
         Boat boat = new Boat(true);
         Horse horse = new Horse(true);
-
         car.addToSteeringWheel(new SteeringWheel(true));
         boat.addToTiller(new Tiller(true));
         horse.addToReins(new Reins(true));
@@ -24,18 +25,14 @@ public class TestSubsetting extends BaseLocalDbTest {
 
         Vechile vechile = db.getEntity(car.getId());
         Assert.assertNotNull(vechile.getSteeringControl());
-
         SteeringWheel steeringWheel = db.getEntity(vechile.getSteeringControl().getId());
         Assert.assertNotNull(steeringWheel.getCar());
-
         SteeringControl steeringControl = db.getEntity(vechile.getSteeringControl().getId());
         Assert.assertNotNull(steeringControl.getVechile());
-
     }
 
     @Test
     public void testSubsettingOnInterface() {
-
         Bsc bsc = new Bsc(true);
         Bts bts1 = new Bts(true);
         bsc.addToBts(bts1);
@@ -50,12 +47,20 @@ public class TestSubsetting extends BaseLocalDbTest {
         Cell cell3 = new Cell(true);
         bsc.addToCell(cell3);
         db.commit();
-
         bsc.reload();
         Assert.assertEquals(6, bsc.getChildren().size());
-
     }
 
-
+    @Test
+    public void testCompositeSubsetting() {
+        SubsetParent subsetParent = new SubsetParent();
+        subsetParent.setName("subsetParent");
+        SubsetChild subsetChild1 = new SubsetChild(subsetParent);
+        subsetChild1.setName("subsetChild1");
+        UMLG.get().commit();
+        subsetParent.reload();
+        Assert.assertEquals(1, subsetParent.getAbstractSubsetChild().size());
+        Assert.assertNotNull(subsetParent.getSubsetChild());
+    }
 
 }

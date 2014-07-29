@@ -64,7 +64,7 @@ public class DerivedUnionPropertyVisitor extends BaseVisitor implements Visitor<
 
         //Find all the interface's realization.
         //For each realization find its properties that are subsetting the subsetted property
-        //Add the subsetting property to its implemention of the derived union
+        //Add the subsetting property to its implementation of the derived union
         Interface subsettedPropertyType = (Interface)subsettedPropertyWrapper.getType();
         List<InterfaceRealization> interfaceRealizations = ModelLoader.INSTANCE.getInterfaceRealization(subsettedPropertyType);
         for (InterfaceRealization interfaceRealization : interfaceRealizations) {

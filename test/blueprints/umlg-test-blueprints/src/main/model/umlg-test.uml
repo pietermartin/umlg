@@ -1510,6 +1510,30 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jQK7RTeqEeGno_7imU4dBw" value="1"/>
             </ownedEnd>
           </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_TZ-AsBcNEeSY9_dKnpTX1Q" name="One1">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_Y26xkBcNEeSY9_dKnpTX1Q" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_aoOXIBcNEeSY9_dKnpTX1Q" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_aoQMUBcNEeSY9_dKnpTX1Q" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_dvFaYBcNEeSY9_dKnpTX1Q" name="one2" type="_UkViEBcNEeSY9_dKnpTX1Q" aggregation="composite" association="_dvGogBcNEeSY9_dKnpTX1Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dvFaYRcNEeSY9_dKnpTX1Q"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_dvFaYhcNEeSY9_dKnpTX1Q" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_UkViEBcNEeSY9_dKnpTX1Q" name="One2">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_bKn5kBcNEeSY9_dKnpTX1Q" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_czUVsBcNEeSY9_dKnpTX1Q" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_czVj0BcNEeSY9_dKnpTX1Q" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_dvGogBcNEeSY9_dKnpTX1Q" name="A_one1_one2_1" memberEnd="_dvGogRcNEeSY9_dKnpTX1Q _dvFaYBcNEeSY9_dKnpTX1Q" navigableOwnedEnd="_dvGogRcNEeSY9_dKnpTX1Q">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_dvGogRcNEeSY9_dKnpTX1Q" name="one1" type="_TZ-AsBcNEeSY9_dKnpTX1Q" association="_dvGogBcNEeSY9_dKnpTX1Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dvGoghcNEeSY9_dKnpTX1Q" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_dvGogxcNEeSY9_dKnpTX1Q" value="1"/>
+            </ownedEnd>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_duhCYHK3EeGxONR_qFZ0Dg" name="navigability">
           <packagedElement xmi:type="uml:Class" xmi:id="_lwwagHK3EeGxONR_qFZ0Dg" name="NonNavigableOne">
@@ -2046,6 +2070,43 @@ endif</body>
             <ownedEnd xmi:type="uml:Property" xmi:id="_OZdv1HlPEeOViYFNuR_VNg" name="bsc" type="_o-T88HlOEeOViYFNuR_VNg" subsettedProperty="_s4VigHlOEeOViYFNuR_VNg" association="_OZdv03lPEeOViYFNuR_VNg">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_OZdv1XlPEeOViYFNuR_VNg" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_OZdv1nlPEeOViYFNuR_VNg" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_s9rRABb4EeSY9_dKnpTX1Q" name="SubsetParent">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_bUySQBb5EeSY9_dKnpTX1Q" name="abstractSubsetChild" type="_uYXtYBb4EeSY9_dKnpTX1Q" aggregation="composite" isDerived="true" isDerivedUnion="true" association="_bUzgYBb5EeSY9_dKnpTX1Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bUySQRb5EeSY9_dKnpTX1Q"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_bUySQhb5EeSY9_dKnpTX1Q" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_lJDosBb5EeSY9_dKnpTX1Q" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nGMq0Bb5EeSY9_dKnpTX1Q" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nGOgABb5EeSY9_dKnpTX1Q" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_3XvmsBb5EeSY9_dKnpTX1Q" name="subsetChild" type="_isbOMBb5EeSY9_dKnpTX1Q" aggregation="composite" subsettedProperty="_bUySQBb5EeSY9_dKnpTX1Q" association="_3XwNwBb5EeSY9_dKnpTX1Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3XvmsRb5EeSY9_dKnpTX1Q" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3Xvmshb5EeSY9_dKnpTX1Q" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_uYXtYBb4EeSY9_dKnpTX1Q" name="AbstractSubsetChild">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_njRBUBb5EeSY9_dKnpTX1Q" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_o93XEBb5EeSY9_dKnpTX1Q" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_o94lMBb5EeSY9_dKnpTX1Q" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_bUzgYBb5EeSY9_dKnpTX1Q" name="A_subsetParent_abstractSubsetChild_1" memberEnd="_bUzgYRb5EeSY9_dKnpTX1Q _bUySQBb5EeSY9_dKnpTX1Q" navigableOwnedEnd="_bUzgYRb5EeSY9_dKnpTX1Q">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_bUzgYRb5EeSY9_dKnpTX1Q" name="abstractSubsetParent" type="_s9rRABb4EeSY9_dKnpTX1Q" isDerived="true" isDerivedUnion="true" association="_bUzgYBb5EeSY9_dKnpTX1Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bUzgYhb5EeSY9_dKnpTX1Q" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_bUzgYxb5EeSY9_dKnpTX1Q" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_isbOMBb5EeSY9_dKnpTX1Q" name="SubsetChild">
+            <generalization xmi:type="uml:Generalization" xmi:id="_qRb3wBb5EeSY9_dKnpTX1Q" general="_uYXtYBb4EeSY9_dKnpTX1Q"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_3XwNwBb5EeSY9_dKnpTX1Q" name="A_subsetParent_subsetChild_1" memberEnd="_3XwNwRb5EeSY9_dKnpTX1Q _3XvmsBb5EeSY9_dKnpTX1Q" navigableOwnedEnd="_3XwNwRb5EeSY9_dKnpTX1Q">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_3XwNwRb5EeSY9_dKnpTX1Q" name="subsetParent" type="_s9rRABb4EeSY9_dKnpTX1Q" subsettedProperty="_bUzgYRb5EeSY9_dKnpTX1Q" association="_3XwNwBb5EeSY9_dKnpTX1Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3XwNwhb5EeSY9_dKnpTX1Q" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3XwNwxb5EeSY9_dKnpTX1Q" value="1"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>

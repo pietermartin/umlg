@@ -200,6 +200,15 @@
         <children>
           <emfPageIdentifier href="umlg-test.notation#_AX1RkO8CEeOCtvMnpL9cwg"/>
         </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#_r8PCIBb4EeSY9_dKnpTX1Q"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#_1chrTAAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#_1chrTgAOEeKpVr_ntT6cLA"/>
+        </children>
       </children>
     </windows>
   </sashModel>

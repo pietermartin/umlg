@@ -64,7 +64,9 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         //The subsetted property's implementation will add an protected getter with the subsetting property's name
         if (!propertyWrapper.getSubsettedProperties().isEmpty()) {
             //if subsetted property is on an interface then there is no fake implementation, so no override
-            if (!(propertyWrapper.getSubsettedProperties().get(0).getType() instanceof Interface)) {
+            Property subsettedProperty = propertyWrapper.getSubsettedProperties().get(0);
+            PropertyWrapper subsettedPropertyWrapper = new PropertyWrapper(subsettedProperty);
+            if (!(subsettedProperty.getType() instanceof Interface) && subsettedPropertyWrapper.getOtherEnd().getType() != propertyWrapper.getOtherEnd().getType()) {
                 UmlgGenerationUtil.addOverrideAnnotation(getter);
             }
         }
