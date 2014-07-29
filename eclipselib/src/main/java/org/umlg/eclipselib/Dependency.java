@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class Dependency {
 
     private static Logger logger = Logger.getLogger(Dependency.class.getPackage().getName());
-    private static String GPG_COMMAND = "gpg2 --batch --yes --passphrase-file /home/pieter/Documents/gpgpassphrase/passphrase -ab ";
+    private static String GPG_COMMAND = "gpg --batch --yes --passphrase-file /home/pieter/Documents/gpgpassphrase/passphrase -ab ";
 
     private String groupId;
     private String artifactId;
