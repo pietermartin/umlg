@@ -104,6 +104,8 @@ public enum OclOperationExpEnum implements HandleOperationExp {
             return INDEX_OF;
         } else if (name.equals(PredefinedType.INCLUDES_NAME)) {
             return INCLUDES;
+        } else if (name.equals(PredefinedType.TO_STRING_NAME)) {
+            return TO_STRING;
         } else {
             logger.warning(String.format("Not yet implemented, '%s'", name));
             return DEFAULT;

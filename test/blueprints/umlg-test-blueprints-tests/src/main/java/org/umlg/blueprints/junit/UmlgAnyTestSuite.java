@@ -12,7 +12,6 @@ import org.umlg.tests.subsetting.TestSubsetting;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestOne2One.class
 //        TestSubsetting.class
 })
 public class UmlgAnyTestSuite {

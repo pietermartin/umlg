@@ -590,6 +590,38 @@
             </ownedAttribute>
           </packagedElement>
         </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_IjDAABdFEeSomtTyGDIZMQ" name="enumeration">
+          <packagedElement xmi:type="uml:Class" xmi:id="_NGR6oBdFEeSomtTyGDIZMQ" name="TestEnumeration">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_OktAcBdFEeSomtTyGDIZMQ" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_QJBS4BdFEeSomtTyGDIZMQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_QJDvIBdFEeSomtTyGDIZMQ" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_T4kt0BdFEeSomtTyGDIZMQ" name="eNUMX" type="_QwzroBdFEeSomtTyGDIZMQ" association="_T4lU4BdFEeSomtTyGDIZMQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_T4kt0RdFEeSomtTyGDIZMQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_T4kt0hdFEeSomtTyGDIZMQ" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_sgcbcBdFEeSomtTyGDIZMQ" name="enumName" visibility="public" isDerived="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_unfAcBdFEeSomtTyGDIZMQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_unfngBdFEeSomtTyGDIZMQ" value="1"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_0-oIsBdFEeSomtTyGDIZMQ" name="enumNameOcl">
+                <language>OCL</language>
+                <body>self.eNUMX.toString()</body>
+              </defaultValue>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_QwzroBdFEeSomtTyGDIZMQ" name="ENUMX">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_SYAS8BdFEeSomtTyGDIZMQ" name="X"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_TEtn8BdFEeSomtTyGDIZMQ" name="Y"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_T4lU4BdFEeSomtTyGDIZMQ" name="A_testEnumeration_eNUMX_1" memberEnd="_T4lU4RdFEeSomtTyGDIZMQ _T4kt0BdFEeSomtTyGDIZMQ">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_T4lU4RdFEeSomtTyGDIZMQ" name="testEnumeration" type="_NGR6oBdFEeSomtTyGDIZMQ" association="_T4lU4BdFEeSomtTyGDIZMQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_T4lU4hdFEeSomtTyGDIZMQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_T4lU4xdFEeSomtTyGDIZMQ" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_PX5oIQAPEeKpVr_ntT6cLA">

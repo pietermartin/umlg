@@ -56,6 +56,9 @@
         <children>
           <emfPageIdentifier href="test-ocl.notation#_o_w4wNuWEeOEP64qykw2fg"/>
         </children>
+        <children>
+          <emfPageIdentifier href="test-ocl.notation#_MhyGcBdFEeSomtTyGDIZMQ"/>
+        </children>
       </children>
     </windows>
   </sashModel>
