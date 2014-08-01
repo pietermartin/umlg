@@ -55,7 +55,7 @@ public class QueryExecuteServerResourceImpl extends BaseQueryExecutionServerReso
                 } else {
                     result = UMLG.get().executeQueryToJson(queryEnum, contextClassifierQualifiedName, query);
                 }
-                return new StringRepresentation(result);
+                return new JsonRepresentation(result);
             default:
                 throw new IllegalStateException("Unhandled UmlgQueryEnum " + queryEnum.name());
         }

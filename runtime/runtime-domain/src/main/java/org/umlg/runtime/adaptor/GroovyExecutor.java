@@ -78,6 +78,7 @@ public class GroovyExecutor {
                 while (tempIterator.hasNext()) {
                     final Object object = tempIterator.next();
                     sb.append(((null == object) ? null : object.toString()));
+                    sb.append("\n");
                 }
                 break;
             } else {

@@ -46,10 +46,6 @@ public class LookupForOneResourceBuilder extends BaseServerResourceBuilder imple
 
     private void addGetObjectRepresentation(PropertyWrapper pWrap/*, OJAnnotatedInterface annotatedInf*/, OJAnnotatedClass annotatedClass) {
 
-//        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", UmlgRestletGenerationUtil.Representation);
-//        annotatedInf.addToOperations(getInf);
-//        getInf.addAnnotationIfNew(new OJAnnotationValue(UmlgRestletGenerationUtil.Get, "json"));
-
         OJAnnotatedOperation get = new OJAnnotatedOperation("get", UmlgRestletGenerationUtil.Representation);
         get.addToThrows(UmlgRestletGenerationUtil.ResourceException);
         annotatedClass.addToImports(UmlgRestletGenerationUtil.ResourceException);

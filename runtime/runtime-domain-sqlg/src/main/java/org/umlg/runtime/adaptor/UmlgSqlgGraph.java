@@ -272,12 +272,13 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
                     }
                     return result;
                 case NATIVE:
-                    StopWatch stopWatch = new StopWatch();
-                    stopWatch.start();
+//                    StopWatch stopWatch = new StopWatch();
+//                    stopWatch.start();
                     StringBuilder sb = new StringBuilder();
-                    stopWatch.stop();
-                    sb.append("Time to execute query = ");
-                    sb.append(stopWatch.toString());
+                    sb.append(this.sqlGraph.query(query));
+//                    stopWatch.stop();
+//                    sb.append("Time to execute query = ");
+//                    sb.append(stopWatch.toString());
                     return sb.toString();
                 default:
                     throw new RuntimeException("Unknown query enum");

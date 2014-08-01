@@ -229,7 +229,7 @@ public class RuntimePropertyImplementor {
         ojEnum.createConstructorFromFields();
 
         OJAnnotatedOperation fromLabel = new OJAnnotatedOperation("fromLabel", new OJPathName(enumName));
-        fromLabel.addParam("label", new OJPathName("String"));
+        fromLabel.addParam("_label", new OJPathName("String"));
         fromLabel.setStatic(true);
         ojEnum.addToOperations(fromLabel);
 
@@ -469,7 +469,7 @@ public class RuntimePropertyImplementor {
             String edgeName,
             String javaQualifiedClass) {
 
-        OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
+        OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(_label)");
         // Do not make upper case, leave with java case sensitive
         // semantics
         ifLabelEquals.addToThenPart("return " + fieldName);

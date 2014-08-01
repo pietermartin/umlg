@@ -41,6 +41,7 @@
 
         this.afterExecuteQuery = function (data) {
             if (Array.isArray(data)) {
+                //ocl
                 if (data[0].data.length !== 0) {
                     tumlQueryGridManager.refresh(data[0], this.queryTabDivName + '_' + 'OclResult', true);
                 } else {
@@ -50,7 +51,45 @@
                     textAreaResult.text("no result").appendTo(outerDivForResults);
                     this.resultCodeMirror = CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-sh', readOnly: true});
                 }
+            } else if (data.data !== undefined && data.meta !== undefined) {
+                //sql
+                var outerDivForResults = $('#' + this.queryTabDivName + '_' + 'OclResult');
+                outerDivForResults.children().remove();
+                var sqlGridResult = $('<div />', {id: 'sqlQueryResultId', style: 'width:600px;height:500px;'});
+                sqlGridResult.appendTo(outerDivForResults);
+
+                var grid;
+                var columns = [
+                    {id: "title", name: "Title", field: "title"},
+                    {id: "duration", name: "Duration", field: "duration"},
+                    {id: "%", name: "% Complete", field: "percentComplete"},
+                    {id: "start", name: "Start", field: "start"},
+                    {id: "finish", name: "Finish", field: "finish"},
+                    {id: "effort-driven", name: "Effort Driven", field: "effortDriven"}
+                ];
+
+                var options = {
+                    enableCellNavigation: true,
+                    enableColumnReorder: false
+                };
+
+                var data = [];
+                for (var i = 0; i < 500; i++) {
+                    data[i] = {
+                        title: "Task " + i,
+                        duration: "5 days",
+                        percentComplete: Math.round(Math.random() * 100),
+                        start: "01/01/2009",
+                        finish: "01/05/2009",
+                        effortDriven: (i % 5 == 0)
+                    };
+                }
+
+                grid = new Slick.Grid('#sqlQueryResultId', data, columns, options);
+
+
             } else {
+                ///the rest
                 var outerDivForResults = $('#' + this.queryTabDivName + '_' + 'OclResult');
                 outerDivForResults.children().remove();
                 var textAreaResult = $('<textarea />', {id: 'queryResultId'});
@@ -365,7 +404,7 @@
                         });
                 };
 
-            }  else if (query.type === 'groovy') {
+            } else if (query.type === 'groovy') {
 
                 CodeMirror.commands.autocomplete = function (cm) {
                     CodeMirror.showHint(cm, CodeMirror.hint.gremlin,

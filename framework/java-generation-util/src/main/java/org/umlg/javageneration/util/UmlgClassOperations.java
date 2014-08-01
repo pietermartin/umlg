@@ -16,7 +16,7 @@ import org.umlg.framework.ModelLoader;
 public class UmlgClassOperations extends ClassOperations {
 
     public static boolean hasLookupProperty(org.eclipse.uml2.uml.Class clazz) {
-        Set<Property> properties = getAllOwnedProperties(clazz);
+        Set<Property> properties = getAllProperties(clazz);
         for (Property property : properties) {
             if (new PropertyWrapper(property).hasLookup()) {
                 return true;
@@ -26,7 +26,7 @@ public class UmlgClassOperations extends ClassOperations {
     }
 
     public static Set<Property> getChildPropertiesToDelete(org.eclipse.uml2.uml.Class clazz) {
-        Set<Property> result = new HashSet<Property>();
+        Set<Property> result = new HashSet<>();
         Set<Property> ownedProperties = getAllOwnedProperties(clazz);
         for (Property p : ownedProperties) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
@@ -38,7 +38,7 @@ public class UmlgClassOperations extends ClassOperations {
     }
 
     public static Set<Property> getPropertiesToClearOnDeletion(org.eclipse.uml2.uml.Class clazz) {
-        Set<Property> result = new HashSet<Property>();
+        Set<Property> result = new HashSet<>();
         Set<Property> ownedProperties = getAllOwnedProperties(clazz);
         for (Property p : ownedProperties) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
@@ -180,7 +180,7 @@ public class UmlgClassOperations extends ClassOperations {
      */
     public static Set<Property> getAllOwnedPropertiesIncludingRefinedAssociationMemberEnds(org.eclipse.uml2.uml.Class clazz) {
 
-        Set<Property> result = new HashSet<Property>(clazz.getAttributes());
+        Set<Property> result = new HashSet<>(clazz.getAttributes());
         List<Association> associations = clazz.getAssociations();
         for (Association association : associations) {
             List<Property> memberEnds = association.getMemberEnds();
@@ -205,7 +205,7 @@ public class UmlgClassOperations extends ClassOperations {
      * It includes inherited properties
      */
     public static Set<Property> getAllProperties(org.eclipse.uml2.uml.Class clazz) {
-        Set<Property> result = new HashSet<Property>(clazz.getAllAttributes());
+        Set<Property> result = new HashSet<>(clazz.getAllAttributes());
         Set<Association> associations = getAllAssociations(clazz);
         for (Association association : associations) {
 

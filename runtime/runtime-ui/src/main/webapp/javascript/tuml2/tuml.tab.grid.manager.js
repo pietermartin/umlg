@@ -825,12 +825,6 @@
                 return true;
             }
 
-//            $(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(function (e) {
-//                $(e.target).addClass("ui-state-hover")
-//            }).mouseout(function (e) {
-//                    $(e.target).removeClass("ui-state-hover")
-//                });
-
             this.grid.onValidationError.subscribe(function (e, args) {
                 e.stopImmediatePropagation();
                 alert(args.validationResults.msg);
