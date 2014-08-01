@@ -8,8 +8,15 @@
         <relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>runtime-servlet</artifactId>
-	<dependencies>
+    <repositories>
+        <repository>
+            <id>maven-restlet</id>
+            <name>Public online Restlet repository</name>
+            <url>http://maven.restlet.org</url>
+        </repository>
+    </repositories>
 
+    <dependencies>
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-domain</artifactId>
@@ -20,7 +27,6 @@
             <artifactId>ocl</artifactId>
             <version>${umlg.version}</version>
         </dependency>
-
         <!-- Add restlet servlet bridge -->
         <dependency>
             <groupId>org.restlet.jee</groupId>
@@ -32,12 +38,10 @@
             <artifactId>org.restlet</artifactId>
             <version>${restlet.version}</version>
         </dependency>
-
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
         </dependency>
-
     </dependencies>
 </project>

@@ -11,6 +11,13 @@
     <artifactId>demo</artifactId>
     <packaging>pom</packaging>
     <name>umlg demo pom</name>
+    <repositories>
+        <repository>
+            <id>maven-restlet</id>
+            <name>Public online Restlet repository</name>
+            <url>http://maven.restlet.org</url>
+        </repository>
+    </repositories>
     <modules>
         <module>tinkergraph</module>
         <module>graphofthegods</module>

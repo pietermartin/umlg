@@ -6,7 +6,6 @@ import com.tinkerpop.gremlin.structure.*;
 import com.tinkerpop.gremlin.structure.strategy.ReadOnlyGraphStrategy;
 import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedGraph;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.lang.time.StopWatch;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgLazyList;
@@ -15,12 +14,9 @@ import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.sqlgraph.structure.SqlGraph;
-import org.umlg.sqlgraph.structure.SqlGraphDataSource;
-import org.umlg.sqlgraph.test.JDBC;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.*;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -447,6 +443,11 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     @Override
     public GraphTraversal<Edge, Edge> E() {
         return this.sqlGraph.E();
+    }
+
+    @Override
+    public <S, E> GraphTraversal<S, E> of() {
+        return this.sqlGraph.of();
     }
 
     @Override

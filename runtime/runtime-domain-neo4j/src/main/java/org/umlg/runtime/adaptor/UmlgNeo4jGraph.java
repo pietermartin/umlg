@@ -485,6 +485,11 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
+    public <S, E> GraphTraversal<S, E> of() {
+        return this.neo4jGraph.of();
+    }
+
+    @Override
     public <C extends GraphComputer> C compute(Class<C>... graphComputerClass) {
         return (this.neo4jGraph.getBaseGraph()).compute(graphComputerClass);
     }
