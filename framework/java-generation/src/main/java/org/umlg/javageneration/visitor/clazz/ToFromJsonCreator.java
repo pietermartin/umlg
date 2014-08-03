@@ -370,6 +370,10 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                                 field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".doubleValue() : null");
                             } else if (pWrap.isLong()) {
                                 field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".longValue() : null");
+                            } else if (pWrap.isShort()) {
+                                field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".shortValue() : null");
+                            } else if (pWrap.isByte()) {
+                                field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".byteValue() : null");
                             } else {
                                 throw new RuntimeException("Not yet implemented!");
                             }
@@ -530,6 +534,10 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                                 ojForStatement.getBody().addToStatements(pWrap.adder() + "(value.doubleValue())");
                             } else if (pWrap.isLong()) {
                                 ojForStatement.getBody().addToStatements(pWrap.adder() + "(value.longValue())");
+                            } else if (pWrap.isShort()) {
+                                ojForStatement.getBody().addToStatements(pWrap.adder() + "(value.shortValue())");
+                            } else if (pWrap.isByte()) {
+                                ojForStatement.getBody().addToStatements(pWrap.adder() + "(value.byteValue())");
                             } else {
                                 throw new RuntimeException("Not yet implemented!");
                             }

@@ -1870,6 +1870,26 @@ endif</body>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3kkM4DW8EeOAlanvceIpiA"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3kkM4TW8EeOAlanvceIpiA" value="*"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_a_32UBonEeSL5ojTQwB9iQ" name="host" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_RFriQBogEeSL5ojTQwB9iQ"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cuG5wBonEeSL5ojTQwB9iQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_cuIH4BonEeSL5ojTQwB9iQ" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_lyaDcBo1EeSL5ojTQwB9iQ" name="quartzCron" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_TVbXUBogEeSL5ojTQwB9iQ"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_n9HngBo1EeSL5ojTQwB9iQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_n9KDwBo1EeSL5ojTQwB9iQ" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_pNaQQBptEeSL5ojTQwB9iQ" name="byteArray" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_XPfSIBptEeSL5ojTQwB9iQ"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rNXV0BptEeSL5ojTQwB9iQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rNZLABptEeSL5ojTQwB9iQ" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_1kO7oBpwEeSL5ojTQwB9iQ" name="password" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_CnalEBokEeSL5ojTQwB9iQ"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_374IcBpwEeSL5ojTQwB9iQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3759oBpwEeSL5ojTQwB9iQ" value="1"/>
+            </ownedAttribute>
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_XTUhQDe4EeOAlanvceIpiA" name="multiplecompositeparent">
@@ -2625,6 +2645,16 @@ endif</body>
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#float"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Z_0H4NEzEeOjlpjTZXDyqw"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Z_1WANEzEeOjlpjTZXDyqw" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_PMW7cBpoEeSL5ojTQwB9iQ" name="aByte" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#byte"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Qb5QsBpoEeSL5ojTQwB9iQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Qb7F4BpoEeSL5ojTQwB9iQ" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="__0MzwBppEeSL5ojTQwB9iQ" name="aManyByte" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#byte"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Cs4REBpqEeSL5ojTQwB9iQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Cs6GQBpqEeSL5ojTQwB9iQ" value="*"/>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_rbDk0NE1EeOjlpjTZXDyqw" name="JavaPrimitiveTypeWithValidation">

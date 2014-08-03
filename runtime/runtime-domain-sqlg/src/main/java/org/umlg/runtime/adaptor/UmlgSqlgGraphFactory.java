@@ -3,9 +3,9 @@ package org.umlg.runtime.adaptor;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.umlg.sqlgraph.sql.dialect.SqlDialect;
-import org.umlg.sqlgraph.structure.SchemaManager;
-import org.umlg.sqlgraph.structure.SqlGraphDataSource;
+import org.umlg.sqlg.sql.dialect.SqlDialect;
+import org.umlg.sqlg.structure.SchemaManager;
+import org.umlg.sqlg.structure.SqlGDataSource;
 
 import java.beans.PropertyVetoException;
 import java.net.URL;
@@ -46,7 +46,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
             throw new RuntimeException(e);
         }
         try {
-            SqlGraphDataSource.INSTANCE.setupDataSource(
+            SqlGDataSource.INSTANCE.setupDataSource(
                     sqlDialect.getJdbcDriver(),
                     configuration.getString("jdbc.url"),
                     configuration.getString("jdbc.username"),
@@ -56,7 +56,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
         }
         if (this.umlgGraph == null) {
             TransactionThreadEntityVar.remove();
-            try (Connection conn = SqlGraphDataSource.INSTANCE.get(configuration.getString("jdbc.url")).getConnection()) {
+            try (Connection conn = SqlGDataSource.INSTANCE.get(configuration.getString("jdbc.url")).getConnection()) {
                 if (!tableExist(conn, SchemaManager.VERTICES)) {
                     try {
                         this.umlgGraph = new UmlgSqlgGraph(configuration);
@@ -120,7 +120,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        try (Connection conn = SqlGraphDataSource.INSTANCE.get(this.configuration.getString("jdbc.url")).getConnection()) {
+        try (Connection conn = SqlGDataSource.INSTANCE.get(this.configuration.getString("jdbc.url")).getConnection()) {
             DatabaseMetaData metadata = conn.getMetaData();
             String catalog = "sqlgraphdb";
             String schemaPattern = null;

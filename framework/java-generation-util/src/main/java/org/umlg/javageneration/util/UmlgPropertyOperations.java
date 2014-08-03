@@ -320,6 +320,8 @@ public final class UmlgPropertyOperations extends PropertyOperations {
                 return "Float";
             } else if (primitiveType.getName().equals("Real") || primitiveType.getName().equals("double")) {
                 return "Double";
+            } else if (primitiveType.getName().equals("byte")) {
+                return "Byte";
             } else {
                 throw new IllegalStateException("unknown primitive " + primitiveType.getName());
             }

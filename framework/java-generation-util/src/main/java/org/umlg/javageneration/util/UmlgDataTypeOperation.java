@@ -21,7 +21,23 @@ public class UmlgDataTypeOperation extends DataTypeOperations {
 		return dataType.getQualifiedName().equals("umlgdatatypes::Email");
 	}
 
-	public static boolean isInternationalPhoneNumber(DataType dataType) {
+    public static boolean isHost(DataType dataType) {
+        return dataType.getQualifiedName().equals("umlgdatatypes::Host");
+    }
+
+    public static boolean isQuartzCron(DataType dataType) {
+        return dataType.getQualifiedName().equals("umlgdatatypes::QuartzCron");
+    }
+
+    public static boolean isUnixCron(DataType dataType) {
+        return dataType.getQualifiedName().equals("umlgdatatypes::UnixCron");
+    }
+
+    public static boolean isPassword(DataType dataType) {
+        return dataType.getQualifiedName().equals("umlgdatatypes::Password");
+    }
+
+    public static boolean isInternationalPhoneNumber(DataType dataType) {
 		return dataType.getQualifiedName().equals("umlgdatatypes::InternationalPhoneNumber");
 	}
 

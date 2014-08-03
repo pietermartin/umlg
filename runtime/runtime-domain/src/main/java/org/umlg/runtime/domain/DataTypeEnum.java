@@ -3,6 +3,7 @@ package org.umlg.runtime.domain;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.umlg.runtime.types.Password;
 
 public enum DataTypeEnum {
 
@@ -14,7 +15,12 @@ public enum DataTypeEnum {
     Email(String.class),
     Video(Object.class),
     Audio(Object.class),
-    Image(Object.class);
+    Image(Object.class),
+    Host(String.class),
+    QuartzCron(String.class),
+    UnixCron(String.class),
+    Password(org.umlg.runtime.types.Password.class),
+    ByteArray(byte[].class);
 
     Class type;
 
@@ -52,6 +58,26 @@ public enum DataTypeEnum {
 
     public boolean isAudio() {
         return this == Audio;
+    }
+
+    public boolean isHost() {
+        return this == Host;
+    }
+
+    public boolean isQuartzCron() {
+        return this == QuartzCron;
+    }
+
+    public boolean isUnixCron() {
+        return this == UnixCron;
+    }
+
+    public boolean isPassword() {
+        return this == Password;
+    }
+
+    public boolean isByteArray() {
+        return this == ByteArray;
     }
 
     public Class getType() {

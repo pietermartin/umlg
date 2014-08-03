@@ -79,7 +79,6 @@ public class UmlgFormatter {
     public static Long formatToPersist(DateTime dateTime) {
         if (dateTime != null) {
             return dateTime.getMillis();
-//            return ISODateTimeFormat.dateTime().print(dateTime);
         } else {
             return 0L;
         }
@@ -88,7 +87,6 @@ public class UmlgFormatter {
     public static Long formatToPersist(LocalDate date) {
         if (date != null) {
             return date.toDateTimeAtStartOfDay().getMillis();
-//            return ISODateTimeFormat.date().print(date);
         } else {
             return 0L;
         }
@@ -136,11 +134,21 @@ public class UmlgFormatter {
             case Time:
                 return formatToPersist((LocalTime) o);
             case InternationalPhoneNumber:
-                return (String) o;
+                return o;
             case LocalPhoneNumber:
-                return (String) o;
+                return o;
             case Email:
-                return (String) o;
+                return o;
+            case Host:
+                return o;
+            case QuartzCron:
+                return o;
+            case UnixCron:
+                return o;
+            case Password:
+                return o;
+            case ByteArray:
+                return o;
 //            case Video:
 //                return format((DateTime)o);
 //            case Audio:
@@ -165,6 +173,16 @@ public class UmlgFormatter {
             case LocalPhoneNumber:
                 return (E)s;
             case Email:
+                return (E)s;
+            case Host:
+                return (E)s;
+            case QuartzCron:
+                return (E)s;
+            case UnixCron:
+                return (E)s;
+            case Password:
+                return (E)s;
+            case ByteArray:
                 return (E)s;
 //            case Video:
 //                return format((DateTime)o);

@@ -28,6 +28,10 @@ public enum UmlgValidationEnum {
     MaxDouble("validateMaxDouble", new String[]{"value"}),
     RangeDouble("validateRangeDouble", new String[]{"min", "max"}),
     Email("validateEmail", new String[]{}),
+    Host("validateHost", new String[]{}),
+    QuartzCron("validateQuartzCron", new String[]{}),
+    UnixCron("validateUnixCron", new String[]{}),
+    Password("validatePassword", new String[]{}),
     DateTime("validateDateTime", new String[]{}),
     Date("validateDate", new String[]{}),
     Time("validateTime", new String[]{});
@@ -109,6 +113,14 @@ public enum UmlgValidationEnum {
                     return new Time();
                 case Email:
                     return new Email();
+                case Host:
+                    return new Host();
+                case QuartzCron:
+                    return new QuartzCron();
+                case UnixCron:
+                    return new UnixCron();
+                case Password:
+                    return new PasswordValidation();
                 case Image:
                     break;
                 case InternationalPhoneNumber:

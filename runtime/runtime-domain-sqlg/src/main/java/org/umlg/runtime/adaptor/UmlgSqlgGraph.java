@@ -13,7 +13,7 @@ import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.util.UmlgProperties;
-import org.umlg.sqlgraph.structure.SqlGraph;
+import org.umlg.sqlg.structure.SqlG;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -30,10 +30,10 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     private UmlgTransactionEventHandlerImpl transactionEventHandler;
     private Class<UmlgApplicationNode> umlgApplicationNodeClass;
-    protected SqlGraph sqlGraph;
+    protected SqlG sqlG;
 
     public UmlgSqlgGraph(Configuration config) {
-        this.sqlGraph = SqlGraph.open(config);
+        this.sqlG = SqlG.open(config);
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
@@ -43,7 +43,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Graph getReadOnlyGraph() {
-        final StrategyWrappedGraph swg = new StrategyWrappedGraph(this.sqlGraph);
+        final StrategyWrappedGraph swg = new StrategyWrappedGraph(this.sqlG);
         swg.strategy().setGraphStrategy(new ReadOnlyGraphStrategy());
         return swg;
     }
@@ -60,14 +60,14 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         if (Vertex.class.isAssignableFrom(elementClass)) {
             this.tx().readWrite();
             if (uniqueParameter.getValue()) {
-                this.sqlGraph.createUniqueConstraint(labelParameter.getValue(), key);
+                this.sqlG.createUniqueConstraint(labelParameter.getValue(), key);
             } else {
-                this.sqlGraph.createLabeledIndex(labelParameter.getValue(), key);
+                this.sqlG.createLabeledIndex(labelParameter.getValue(), key);
 
             }
         } else if (Edge.class.isAssignableFrom(elementClass)) {
             this.tx().readWrite();
-            this.sqlGraph.createLabeledIndex(labelParameter.getValue(), key);
+            this.sqlG.createLabeledIndex(labelParameter.getValue(), key);
         } else {
             throw Exceptions.classIsNotIndexable(elementClass);
         }
@@ -99,7 +99,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
             if (this.transactionEventHandler != null) {
                 this.transactionEventHandler.beforeCommit();
             }
-            this.sqlGraph.tx().commit();
+            this.sqlG.tx().commit();
         } finally {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
@@ -108,7 +108,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     public void rollback() {
         try {
-            this.sqlGraph.tx().rollback();
+            this.sqlG.tx().rollback();
         } finally {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
@@ -125,7 +125,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.sqlGraph.V().<Vertex>has(Element.LABEL, label).forEach (
+        this.sqlG.V().<Vertex>has(Element.LABEL, label).forEach (
                 vertex -> result.add(UMLG.get().<T>getEntity(vertex.id()))
         );
         return result;
@@ -141,7 +141,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.sqlGraph.V().<Vertex>has(Element.LABEL, label).forEach (
+        this.sqlG.V().<Vertex>has(Element.LABEL, label).forEach (
                 vertex -> {
                     T entity = UMLG.get().<T>getEntity(vertex.id());
                     if (filter.filter(entity)) {
@@ -157,9 +157,9 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         String label;
         if (className != null) {
             label = shortenClassName(className);
-            return this.sqlGraph.addVertex(Element.LABEL, label);
+            return this.sqlG.addVertex(Element.LABEL, label);
         } else {
-            return this.sqlGraph.addVertex();
+            return this.sqlG.addVertex();
         }
     }
 
@@ -271,7 +271,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 //                    StopWatch stopWatch = new StopWatch();
 //                    stopWatch.start();
                     StringBuilder sb = new StringBuilder();
-                    sb.append(this.sqlGraph.query(query));
+                    sb.append(this.sqlG.query(query));
 //                    stopWatch.stop();
 //                    sb.append("Time to execute query = ");
 //                    sb.append(stopWatch.toString());
@@ -331,7 +331,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public void clear() {
-        this.sqlGraph.getSchemaManager().clear();
+        this.sqlG.getSchemaManager().clear();
     }
 
     @Override
@@ -388,12 +388,12 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public long countVertices() {
-        return this.sqlGraph.countVertices() - 1;
+        return this.sqlG.countVertices() - 1;
     }
 
     @Override
     public long countEdges() {
-        return this.sqlGraph.countEdges();
+        return this.sqlG.countEdges();
     }
 
     @Override
@@ -422,51 +422,51 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Vertex addVertex(Object... keyValues) {
-        return this.sqlGraph.addVertex(keyValues);
+        return this.sqlG.addVertex(keyValues);
     }
 
     @Override
     public GraphTraversal<Vertex, Vertex> V() {
-        return this.sqlGraph.V();
+        return this.sqlG.V();
     }
 
     @Override
     public Vertex v(final Object id) {
-        return this.sqlGraph.v(id);
+        return this.sqlG.v(id);
     }
 
     @Override
     public Edge e(final Object id) {
-        return this.sqlGraph.e(id);
+        return this.sqlG.e(id);
     }
 
     @Override
     public GraphTraversal<Edge, Edge> E() {
-        return this.sqlGraph.E();
+        return this.sqlG.E();
     }
 
     @Override
     public <S, E> GraphTraversal<S, E> of() {
-        return this.sqlGraph.of();
+        return this.sqlG.of();
     }
 
     @Override
     public <C extends GraphComputer> C compute(Class<C>... graphComputerClass) {
-        return this.sqlGraph.compute(graphComputerClass);
+        return this.sqlG.compute(graphComputerClass);
     }
 
     @Override
     public Transaction tx() {
-        return this.sqlGraph.tx();
+        return this.sqlG.tx();
     }
 
     @Override
     public <V extends Variables> V variables() {
-        return this.sqlGraph.variables();
+        return this.sqlG.variables();
     }
 
     @Override
     public void close() throws Exception {
-        this.sqlGraph.close();
+        this.sqlG.close();
     }
 }

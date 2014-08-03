@@ -1350,6 +1350,8 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return getType() instanceof PrimitiveType &&
                 (getType().getName().equals("Integer") ||
                         getType().getName().equals("int") ||
+                        getType().getName().equals("byte") ||
+                        getType().getName().equals("Byte") ||
                         getType().getName().equals("long") ||
                         getType().getName().equals("float") ||
                         getType().getName().equals("double") ||
@@ -1379,6 +1381,14 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public boolean isFloat() {
         return getType() instanceof PrimitiveType && (getType().getName().equals("float"));
+    }
+
+    public boolean isByte() {
+        return getType() instanceof PrimitiveType && (getType().getName().equals("byte"));
+    }
+
+    public boolean isShort() {
+        return getType() instanceof PrimitiveType && (getType().getName().equals("short"));
     }
 
     public String toString() {
@@ -1419,6 +1429,22 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public boolean isEmail() {
         return getType() instanceof DataType && UmlgDataTypeOperation.isEmail((DataType) getType());
+    }
+
+    public boolean isHost() {
+        return getType() instanceof DataType && UmlgDataTypeOperation.isHost((DataType) getType());
+    }
+
+    public boolean isQuartzCron() {
+        return getType() instanceof DataType && UmlgDataTypeOperation.isQuartzCron((DataType) getType());
+    }
+
+    public boolean isUnixCron() {
+        return getType() instanceof DataType && UmlgDataTypeOperation.isUnixCron((DataType) getType());
+    }
+
+    public boolean isPassword() {
+        return getType() instanceof DataType && UmlgDataTypeOperation.isPassword((DataType) getType());
     }
 
     public boolean isInternationalPhoneNumber() {
@@ -1516,6 +1542,14 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
                 return hasRangeReal();
             case Email:
                 return isEmail();
+            case QuartzCron:
+                return isQuartzCron();
+            case UnixCron:
+                return isUnixCron();
+            case Host:
+                return isHost();
+            case Password:
+                return isPassword();
             default:
                 break;
         }
@@ -1585,6 +1619,14 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
                 return getRangeReal();
             case Email:
                 return getEmail();
+            case Host:
+                return getHost();
+            case QuartzCron:
+                return getQuartzCron();
+            case UnixCron:
+                return getUnixCron();
+            case Password:
+                return getPassword();
             default:
                 break;
         }
@@ -1715,6 +1757,22 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public Email getEmail() {
         return new Email();
+    }
+
+    public Host getHost() {
+        return new Host();
+    }
+
+    public QuartzCron getQuartzCron() {
+        return new QuartzCron();
+    }
+
+    public UnixCron getUnixCron() {
+        return new UnixCron();
+    }
+
+    public PasswordValidation getPassword() {
+        return new PasswordValidation();
     }
 
     public boolean hasMinLength() {

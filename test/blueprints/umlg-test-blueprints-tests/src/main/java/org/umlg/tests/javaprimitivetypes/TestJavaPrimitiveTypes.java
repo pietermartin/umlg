@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.umlg.javaprimitivetype.JavaPrimitiveType;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
+import java.util.Arrays;
+
 /**
  * Date: 2014/05/01
  * Time: 2:42 PM
@@ -139,6 +141,29 @@ public class TestJavaPrimitiveTypes extends BaseLocalDbTest {
         db.commit();
         javaPrimitiveType.reload();
         Assert.assertEquals(2, javaPrimitiveType.getAManyFloat().size());
+    }
+
+    @Test
+    public void testByte() {
+        JavaPrimitiveType javaPrimitiveType = new JavaPrimitiveType();
+        javaPrimitiveType.setAByte(new Byte((byte)1));
+        db.commit();
+        javaPrimitiveType.reload();
+        Assert.assertEquals(new Byte((byte)1), javaPrimitiveType.getAByte());
+        db.commit();
+    }
+
+    @Test
+    public void testManyBytes() {
+        JavaPrimitiveType javaPrimitiveType = new JavaPrimitiveType();
+        javaPrimitiveType.addToAManyByte((byte)1);
+        javaPrimitiveType.addToAManyByte((byte)2);
+        javaPrimitiveType.addToAManyByte((byte)3);
+        db.commit();
+        javaPrimitiveType.reload();
+        Byte[] objects = javaPrimitiveType.getAManyByte().<Byte>toArray(new Byte[]{});
+        Assert.assertTrue(Arrays.equals(new Byte[]{1,2,3}, objects));
+        db.commit();
     }
 
 }

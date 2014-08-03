@@ -19,6 +19,8 @@ import org.umlg.runtime.collection.ocl.IterateExpressionAccumulator;
 import org.umlg.runtime.collection.ocl.OclStdLibCollection;
 import org.umlg.runtime.domain.*;
 import org.umlg.runtime.domain.ocl.OclState;
+import org.umlg.runtime.types.Password;
+import org.umlg.runtime.types.UmlgType;
 import org.umlg.runtime.util.UmlgFormatter;
 
 import java.lang.reflect.Method;
@@ -1279,7 +1281,9 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     protected boolean validateElementType(E e) {
         if (this.umlgRuntimeProperty.isManyPrimitive() || this.umlgRuntimeProperty.isOnePrimitive()) {
-            if (!(e instanceof String) && !(e instanceof Boolean) && !(e instanceof Integer) && !(e instanceof Long) && !(e instanceof Float) && !(e instanceof Double)) {
+            if (!(e instanceof String) && !(e instanceof Boolean) && !(e instanceof Integer) &&
+                    !(e instanceof Long) && !(e instanceof Float) && !(e instanceof Double) &&
+                    !(e instanceof Byte) && !(e instanceof Short)) {
                 throw new IllegalStateException(String.format("Expected primitive got %s", e.getClass().getName()));
             }
         } else if (this.umlgRuntimeProperty.isManyEnumeration() || this.umlgRuntimeProperty.isOneEnumeration()) {
@@ -1295,13 +1299,27 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     private void setDataTypeOnVertex(Vertex v, E e) {
-        v.property(getPersistentName(), UmlgFormatter.format(getDataTypeEnum(), e));
+        if (e instanceof UmlgType) {
+            ((UmlgType)e).setOnVertex(v, getPersistentName());
+        } else {
+            v.property(getPersistentName(), UmlgFormatter.format(getDataTypeEnum(), e));
+        }
     }
 
     private void loadOneDataType() {
         this.vertex.property(getPersistentName()).ifPresent(
                 s -> {
-                    E result = UmlgFormatter.parse(getDataTypeEnum(), s);
+                    E result;
+                    DataTypeEnum dte = getDataTypeEnum();
+                    switch (dte) {
+                        case Password:
+                            Password password = new Password();
+                            password.loadFromVertex(this.vertex, getPersistentName());
+                            result = (E)password;
+                            break;
+                        default:
+                            result = UmlgFormatter.parse(getDataTypeEnum(), s);
+                    }
                     this.internalCollection.add(result);
                 }
         );
