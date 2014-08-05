@@ -396,6 +396,10 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                             field = new OJField(pWrap.getName(), DataTypeEnum.Time.getPathName());
                             field.setInitExp(UmlgGenerationUtil.umlgFormatter.getLast() + ".parseTime((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
                             annotatedClass.addToImports(UmlgGenerationUtil.umlgFormatter);
+                        } else if (pWrap.isPassword()) {
+                            field = new OJField(pWrap.getName(), DataTypeEnum.Password.getPathName());
+                            field.setInitExp("new " + DataTypeEnum.Password.getPathName().getLast() + "((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
+                            annotatedClass.addToImports(UmlgGenerationUtil.umlgFormatter);
                         } else if (pWrap.isImage()) {
                             field = new OJField(pWrap.getName(), DataTypeEnum.Image.getPathName());
                             field.setInitExp(UmlgGenerationUtil.umlgFormatter.getLast() + ".decode((String)propertyMap.get(\"" + pWrap.getName() + "\"))");

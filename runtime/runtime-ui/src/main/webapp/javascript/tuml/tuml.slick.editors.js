@@ -43,7 +43,7 @@
         var defaultValue;
 
         this.init = function () {
-            $input = $("<INPUT type='text' class='slick-grid-umlg-editor-text' />")
+            $input = $("<INPUT type=" + (args.column.options.property.dataTypeEnum === 'Password' ? "'password'" : "'text'") + "class='slick-grid-umlg-editor-text' />")
                 .appendTo(args.container)
                 .bind("keydown.nav", function (e) {
                     if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {

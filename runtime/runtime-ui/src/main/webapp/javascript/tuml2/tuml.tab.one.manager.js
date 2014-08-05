@@ -530,8 +530,12 @@
                 $input = $('<p />', {class: 'form-control'});
             }
         } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
-            if (property.dataTypeEnum == 'Date' || property.dataTypeEnum == 'Time' || property.dataTypeEnum == 'DateTime' || property.dataTypeEnum == 'InternationalPhoneNumber' || property.dataTypeEnum == 'LocalPhoneNumber' || property.dataTypeEnum == 'Email') {
+            if (property.dataTypeEnum == 'Date' || property.dataTypeEnum == 'Time' || property.dataTypeEnum == 'DateTime' ||
+                property.dataTypeEnum == 'InternationalPhoneNumber' || property.dataTypeEnum == 'LocalPhoneNumber' ||
+                property.dataTypeEnum == 'Email' || property.dataTypeEnum == 'Host') {
                 $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
+            } else if (property.dataTypeEnum == 'Password') {
+                $input = $("<input />", {type: 'password', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
             } else if (property.dataTypeEnum == 'Video' || property.dataTypeEnum == 'Audio' || property.dataTypeEnum == 'Image') {
                 $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
             } else {

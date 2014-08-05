@@ -5973,6 +5973,10 @@
           <element xmi:type="uml:Property" href="umlg-test.uml#_1kO7oBpwEeSL5ojTQwB9iQ"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_1kVpURpwEeSL5ojTQwB9iQ"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_MNTw0BxfEeS0VvhEKHz6FQ" type="3012">
+          <element xmi:type="uml:Property" href="umlg-test.uml#_MNRUkBxfEeS0VvhEKHz6FQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_MNTw0RxfEeS0VvhEKHz6FQ"/>
+        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_GRikCDChEeOJbevgaGUOXQ"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_GRikCTChEeOJbevgaGUOXQ"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_GRikCjChEeOJbevgaGUOXQ"/>

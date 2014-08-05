@@ -3,7 +3,6 @@ function calculateBodyHeight(container) {
     if (container instanceof Tuml.TumlTabManyViewManager) {
         windowHeight = 600;
     } else {
-//        windowHeight = $('.ui-layout-center').height() - 98;
         windowHeight = $('.ui-layout-center').height() - 102;
     }
     return windowHeight;
@@ -58,15 +57,7 @@ function retrieveMetaDataIfNotInCache(tumlUri, contextVertexId, result, callback
 
 
 function combineMetaDataWithResult(result, metaDataResult) {
-    //Combine the meta data with the data
-//    if (result.length !== metaDataResult.length) {
-//        throw Error('get and options must return the same number of meta data!');
-//    }
-
     for (var i = 0; i < result.length; i++) {
-        //Copy the meta data from options into the data result
-//        if (result[i].data !== null && result[i].data.length > 0) {
-
         if (metaDataResult[i].meta.from == undefined) {
             result[i].meta = metaDataResult[i].meta;
         } else {
@@ -83,24 +74,12 @@ function combineMetaDataWithResult(result, metaDataResult) {
 
             }
         }
-
-//        }
     }
 }
 
 function escapeColon(string) {
     return string.replace(/(:|\.)/g, '\\$1');
 }
-
-//function retrieveVertexId(url) {
-//    var urlId = url.match(/\/\d+/);
-//    if (urlId != null) {
-//        var urlArray = urlId[0].match(/\d+/);
-//        return parseInt(urlArray[0]);
-//    } else {
-//        return urlId;
-//    }
-//}
 
 function retrieveVertexId(url) {
     if (url == '/' + tumlModelName) {
@@ -143,9 +122,17 @@ function selectFormatter(property, isNew, updatedId) {
             return TumlSlick.Formatters.TumlRegularFormatter;
         }
     } else if (property.lower > 0 && property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
-        return  TumlSlick.Formatters.TumlRequired;
+        if (property.dataTypeEnum !== 'Password') {
+            return  TumlSlick.Formatters.TumlRequired;
+        } else {
+            return  TumlSlick.Formatters.TumlRequiredPassword;
+        }
     } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
-        return null;
+        if (property.dataTypeEnum !== 'Password') {
+            return null;
+        } else {
+            return  TumlSlick.Formatters.TumlPassword;
+        }
     } else if (property.lower > 0 && (property.oneEnumeration || property.manyEnumeration)) {
         return  TumlSlick.Formatters.TumlRequired;
     } else if (property.composite && property.lower > 0) {
@@ -193,6 +180,10 @@ function selectFieldValidator(property) {
             } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
             } else if (property.dataTypeEnum == 'Email') {
                 return new TumlSlick.Validators.TumlManyString(property).validate;
+            } else if (property.dataTypeEnum == 'Host') {
+                return new TumlSlick.Validators.TumlManyString(property).validate;
+            } else if (property.dataTypeEnum == 'Password') {
+                return new TumlSlick.Validators.TumlManyString(property).validate;
             } else if (property.dataTypeEnum == 'Video') {
             } else if (property.dataTypeEnum == 'Audio') {
             } else if (property.dataTypeEnum == 'Image') {
@@ -209,6 +200,10 @@ function selectFieldValidator(property) {
             } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
             } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
             } else if (property.dataTypeEnum == 'Email') {
+                return new TumlSlick.Validators.TumlString(property).validate;
+            } else if (property.dataTypeEnum == 'Host') {
+                return new TumlSlick.Validators.TumlString(property).validate;
+            } else if (property.dataTypeEnum == 'Password') {
                 return new TumlSlick.Validators.TumlString(property).validate;
             } else if (property.dataTypeEnum == 'Video') {
             } else if (property.dataTypeEnum == 'Audio') {
@@ -288,6 +283,10 @@ function selectEditor(property) {
                 return Tuml.Slick.Editors.Text;
             } else if (property.dataTypeEnum == 'Email') {
                 return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'Host') {
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'Password') {
+                return Tuml.Slick.Editors.Text;
             } else if (property.dataTypeEnum == 'Video') {
                 return Tuml.Slick.Editors.Text;
             } else if (property.dataTypeEnum == 'Audio') {
@@ -311,6 +310,10 @@ function selectEditor(property) {
                 //TODO
                 return Tuml.Slick.Editors.Text;
             } else if (property.dataTypeEnum == 'Email') {
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'Host') {
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'Password') {
                 return Tuml.Slick.Editors.Text;
             } else if (property.dataTypeEnum == 'Video') {
                 return Tuml.Slick.Editors.Text;

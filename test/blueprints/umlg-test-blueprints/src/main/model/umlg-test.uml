@@ -1890,6 +1890,11 @@ endif</body>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_374IcBpwEeSL5ojTQwB9iQ"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3759oBpwEeSL5ojTQwB9iQ" value="1"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_MNRUkBxfEeS0VvhEKHz6FQ" name="unsecurePassword" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_Tyt4EBwUEeS0VvhEKHz6FQ"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_P1-goBxfEeS0VvhEKHz6FQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_P1_uwBxfEeS0VvhEKHz6FQ" value="1"/>
+            </ownedAttribute>
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_XTUhQDe4EeOAlanvceIpiA" name="multiplecompositeparent">

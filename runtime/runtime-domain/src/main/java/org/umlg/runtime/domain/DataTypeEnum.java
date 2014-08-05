@@ -20,6 +20,7 @@ public enum DataTypeEnum {
     QuartzCron(String.class),
     UnixCron(String.class),
     Password(org.umlg.runtime.types.Password.class),
+    UnsecurePassword(String.class),
     ByteArray(byte[].class);
 
     Class type;
@@ -74,6 +75,10 @@ public enum DataTypeEnum {
 
     public boolean isPassword() {
         return this == Password;
+    }
+
+    public boolean isUnsecurePassword() {
+        return this == UnsecurePassword;
     }
 
     public boolean isByteArray() {

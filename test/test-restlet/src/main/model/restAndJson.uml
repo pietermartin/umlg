@@ -961,6 +961,16 @@ endif</body>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sBy2sDdQEeOAlanvceIpiA"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sBzdwDdQEeOAlanvceIpiA" value="*"/>
               </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_bOhc8BwBEeS0VvhEKHz6FQ" name="host" visibility="public">
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_RFriQBogEeSL5ojTQwB9iQ"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cgolEBwBEeS0VvhEKHz6FQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_cgrBUBwBEeS0VvhEKHz6FQ" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_1pR1wBwHEeS0VvhEKHz6FQ" name="password" visibility="public">
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_CnalEBokEeSL5ojTQwB9iQ"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_26jQYBwHEeS0VvhEKHz6FQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_26mTsBwHEeS0VvhEKHz6FQ" value="1"/>
+              </ownedAttribute>
             </packagedElement>
           </packagedElement>
           <packagedElement xmi:type="uml:Package" xmi:id="_khEpoKYREeOPt7R4er8hcg" name="qualifier">
@@ -1426,6 +1436,12 @@ endif</body>
         <references xmi:type="ecore:EPackage" href="validation.profile.uml#_VpQxkAUsEeSLIPXdtbyv6Q"/>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="validation.profile.uml#_6Zdd4AV1EeK9oIwdQfC0-w"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_NRlIUBv-EeS0VvhEKHz6FQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NTCg4Bv-EeS0VvhEKHz6FQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_sYse0YZLEeKyw49uR6nx3g"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#ActionLanguage"/>
     </profileApplication>
   </uml:Model>
   <UmlgValidation:RangeLength xmi:id="_ZylKcMfuEeOiQ-tGJXxh5A" min="5" max="10" base_Property="_5DaPAAc4EeKnuck7rKo4mA"/>

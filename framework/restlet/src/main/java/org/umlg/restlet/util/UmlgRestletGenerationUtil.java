@@ -110,6 +110,10 @@ public class UmlgRestletGenerationUtil {
                     return "FieldType.ByteArray";
                 case Image:
                     return "FieldType.ByteArray";
+                case Host:
+                    return "FieldType.Host";
+                case Password:
+                    return "FieldType.Password";
                 default:
                     throw new RuntimeException("Unknown data type " + dataTypeEnum.name());
             }

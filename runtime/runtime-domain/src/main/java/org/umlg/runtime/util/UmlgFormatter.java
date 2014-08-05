@@ -147,6 +147,8 @@ public class UmlgFormatter {
                 return o;
             case Password:
                 return o;
+            case UnsecurePassword:
+                return o;
             case ByteArray:
                 return o;
 //            case Video:
@@ -181,6 +183,8 @@ public class UmlgFormatter {
             case UnixCron:
                 return (E)s;
             case Password:
+                return (E)s;
+            case UnsecurePassword:
                 return (E)s;
             case ByteArray:
                 return (E)s;

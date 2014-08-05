@@ -16,6 +16,8 @@ public enum FieldType {
     Float,
     Double,
 	Boolean,
-    ByteArray;
-	
+    ByteArray,
+    Host,
+    Password;
+
 }

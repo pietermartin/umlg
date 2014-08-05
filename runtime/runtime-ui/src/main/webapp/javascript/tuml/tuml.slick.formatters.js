@@ -9,7 +9,9 @@
     $.extend(true, window, {
         "TumlSlick":{
             "Formatters":{
+                "TumlPassword":TumlPasswordFormatter,
                 "TumlRequired":TumlRequiredFormatter,
+                "TumlRequiredPassword":TumlRequiredPasswordFormatter,
                 "TumlDerivedPropertyFormatter":TumlDerivedPropertyFormatter,
                 "TumlToOneRequiredFormatter": TumlToOneRequiredFormatter,
                 "TumlToAssociationClassRequiredFormatter": TumlToAssociationClassRequiredFormatter,
@@ -98,11 +100,23 @@
         }
     }
 
+    function TumlPasswordFormatter(row, cell, value, columnDef, dataContext) {
+        return "*****";
+    }
+
     function TumlRequiredFormatter(row, cell, value, columnDef, dataContext) {
         if (value == null || value === "" || value.length === 0) {
             return "<div style='color:red;'>required</div>";
         } else {
             return value;
+        }
+    }
+
+    function TumlRequiredPasswordFormatter(row, cell, value, columnDef, dataContext) {
+        if (value == null || value === "" || value.length === 0) {
+            return "<div style='color:red;'>required</div>";
+        } else {
+            return "*****";
         }
     }
 

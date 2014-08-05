@@ -3944,6 +3944,14 @@
           <element xmi:type="uml:Property" href="restAndJson.uml#_pnD5oDdQEeOAlanvceIpiA"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_pnFu0TdQEeOAlanvceIpiA"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_bOj5MBwBEeS0VvhEKHz6FQ" type="3012">
+          <element xmi:type="uml:Property" href="restAndJson.uml#_bOhc8BwBEeS0VvhEKHz6FQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_bOj5MRwBEeS0VvhEKHz6FQ"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_1pUSABwHEeS0VvhEKHz6FQ" type="3012">
+          <element xmi:type="uml:Property" href="restAndJson.uml#_1pR1wBwHEeS0VvhEKHz6FQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_1pUSARwHEeS0VvhEKHz6FQ"/>
+        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_9kJBVjXKEeOAlanvceIpiA"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_9kJBVzXKEeOAlanvceIpiA"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_9kJBWDXKEeOAlanvceIpiA"/>

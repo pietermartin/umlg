@@ -17,6 +17,7 @@ public enum DataTypeEnum {
     QuartzCron("java.lang.String", "DataTypeEnum.QuartzCron"),
     UnixCron("java.lang.String", "DataTypeEnum.UnixCron"),
     Password("org.umlg.runtime.types.Password", "DataTypeEnum.Password"),
+    UnsecurePassword("java.lang.String", "DataTypeEnum.UnsecurePassword"),
     ByteArray("byte[]", "DataTypeEnum.ByteArray");
 
     private OJPathName pathName;
@@ -62,6 +63,8 @@ public enum DataTypeEnum {
             return UnixCron;
         } else if (dataType.getName().equals(Password.name())) {
             return Password;
+        } else if (dataType.getName().equals(UnsecurePassword.name())) {
+            return UnsecurePassword;
         } else if (dataType.getName().equals(ByteArray.name())) {
             return ByteArray;
         } else {
@@ -123,6 +126,10 @@ public enum DataTypeEnum {
 
     public boolean isPassword() {
         return this == Password;
+    }
+
+    public boolean isUnsecurePassword() {
+        return this == UnsecurePassword;
     }
 
     public boolean isByteArray() {
