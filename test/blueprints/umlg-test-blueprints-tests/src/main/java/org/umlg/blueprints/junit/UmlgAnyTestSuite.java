@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.umlg.tests.datatype.DataTypeTest;
 import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypes;
+import org.umlg.tests.ocl.datatypes.TestOclCollectOnDataTypes;
 
 /**
  * Date: 2013/10/19
@@ -11,7 +12,7 @@ import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypes;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        DataTypeTest.class
+        TestJavaPrimitiveTypes.class
 })
 public class UmlgAnyTestSuite {
 }

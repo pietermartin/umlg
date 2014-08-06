@@ -1,8 +1,10 @@
 package org.umlg.tests.javaprimitivetypes;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 import org.umlg.javaprimitivetype.JavaPrimitiveTypeWithValidation;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.runtime.validation.UmlgConstraintViolationException;
 
@@ -149,6 +151,7 @@ public class TestJavaPrimitiveTypesWithValidation extends BaseLocalDbTest {
 
     @Test
     public void testMaxFloatPass() {
+        Assume.assumeTrue(UMLG.get().getFeatures().vertex().properties().supportsFloatValues());
         JavaPrimitiveTypeWithValidation javaPrimitiveTypeWithValidation = new JavaPrimitiveTypeWithValidation();
         javaPrimitiveTypeWithValidation.setAMaxFloat(1F);
         db.commit();
@@ -164,6 +167,7 @@ public class TestJavaPrimitiveTypesWithValidation extends BaseLocalDbTest {
 
     @Test
     public void testMinFloatPass() {
+        Assume.assumeTrue(UMLG.get().getFeatures().vertex().properties().supportsFloatValues());
         JavaPrimitiveTypeWithValidation javaPrimitiveTypeWithValidation = new JavaPrimitiveTypeWithValidation();
         javaPrimitiveTypeWithValidation.setAMinFloat(6F);
         db.commit();
@@ -179,6 +183,7 @@ public class TestJavaPrimitiveTypesWithValidation extends BaseLocalDbTest {
 
     @Test
     public void testRangeFloatPass() {
+        Assume.assumeTrue(UMLG.get().getFeatures().vertex().properties().supportsFloatValues());
         JavaPrimitiveTypeWithValidation javaPrimitiveTypeWithValidation = new JavaPrimitiveTypeWithValidation();
         javaPrimitiveTypeWithValidation.setARangeFloat(4F);
         db.commit();

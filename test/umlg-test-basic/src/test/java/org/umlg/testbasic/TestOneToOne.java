@@ -29,7 +29,7 @@ public class TestOneToOne extends BaseLocalDbTest {
         db.commit();
         Assert.assertEquals(8, countVertices());
         //There is an edge to the root node for every non composite vertex
-        Assert.assertEquals(12 + 8, countEdges());
+        Assert.assertEquals(12, countEdges());
 
         boolean exception = false;
         try {
@@ -40,7 +40,7 @@ public class TestOneToOne extends BaseLocalDbTest {
         }
         Assert.assertTrue(exception);
         Assert.assertEquals(8, countVertices());
-        Assert.assertEquals(12 + 8, countEdges());
+        Assert.assertEquals(12, countEdges());
     }
 
     @Test
@@ -63,14 +63,14 @@ public class TestOneToOne extends BaseLocalDbTest {
         oneOne4.addToOneTwo(oneTwo4);
         db.commit();
         Assert.assertEquals(8, countVertices());
-        Assert.assertEquals(12 + 8, countEdges());
+        Assert.assertEquals(12, countEdges());
 
         oneOne1.setOneTwo(oneTwo2);
         Assert.assertEquals(oneOne1.getOneTwo(), oneTwo2);
         Assert.assertEquals(oneTwo2.getOneOne(), oneOne1);
         db.commit();
         Assert.assertEquals(8, countVertices());
-        Assert.assertEquals(11 + 8, countEdges());
+        Assert.assertEquals(11, countEdges());
 
         OneOne oneOne1Test = new OneOne(oneOne1.getVertex());
         Assert.assertEquals(oneTwo2, oneOne1Test.getOneTwo());

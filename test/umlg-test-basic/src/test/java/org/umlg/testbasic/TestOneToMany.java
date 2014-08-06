@@ -25,7 +25,7 @@ public class TestOneToMany extends BaseLocalDbTest {
         }
         db.commit();
         org.junit.Assert.assertEquals(10001, countVertices());
-        org.junit.Assert.assertEquals(10001 + 10001, countEdges());
+        org.junit.Assert.assertEquals(10001, countEdges());
         stopWatch.stop();
         System.out.println(stopWatch.toString());
     }
@@ -38,7 +38,7 @@ public class TestOneToMany extends BaseLocalDbTest {
         Many many = new Many(one);
         db.commit();
         Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2 + 2, countEdges());
+        Assert.assertEquals(2, countEdges());
         One testOne = new One(one.getVertex());
         Assert.assertEquals(1, testOne.getMany().size());
         Many testMany = new Many(many.getVertex());
@@ -61,7 +61,7 @@ public class TestOneToMany extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(6 + 6, countEdges());
+        Assert.assertEquals(6, countEdges());
 
         // This is to ensure the collection is loaded, to test that it gets
         // cleared again to ensure the correct one get loaded on the next call
@@ -70,7 +70,7 @@ public class TestOneToMany extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(6 + 6, countEdges());
+        Assert.assertEquals(6, countEdges());
 
         Many testMany21 = new Many(many21.getVertex());
         Assert.assertEquals(one1, testMany21.getOne());
@@ -86,12 +86,12 @@ public class TestOneToMany extends BaseLocalDbTest {
         Many many11 = new Many(one1);
         db.commit();
         Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2 + 2, countEdges());
+        Assert.assertEquals(2, countEdges());
 
         many11.delete();
         db.commit();
         Assert.assertEquals(1, countVertices());
-        Assert.assertEquals(1 + 1, countEdges());
+        Assert.assertEquals(1, countEdges());
 
     }
 

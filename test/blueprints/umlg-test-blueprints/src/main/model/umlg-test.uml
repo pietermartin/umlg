@@ -754,6 +754,9 @@
           <ownedComment xmi:type="uml:Comment" xmi:id="_bdZ1AK35EeOR4f3Enm7Mow" annotatedElement="_Yq2WivJKEeCeFLHNTzV0LA">
             <body>Qualified Association[name2]</body>
           </ownedComment>
+          <ownedComment xmi:type="uml:Comment" xmi:id="_PKFs8B0NEeSmCaILr6OaKg">
+            <body>Test qualifiers on multiple properties</body>
+          </ownedComment>
           <packagedElement xmi:type="uml:Class" xmi:id="_F-NRMPJKEeCeFLHNTzV0LA" name="Nature">
             <generalization xmi:type="uml:Generalization" xmi:id="_dMJlACXIEeKbPYSfIbmXag">
               <general xmi:type="uml:Class" href="umlg-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
@@ -909,6 +912,8 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_o09ofzB2EeGr0M0sn6WkMw" value="*"/>
             </ownedEnd>
           </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_TuwVIBzEEeSmCaILr6OaKg" name="QualifierA"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_WEgrkBzEEeSmCaILr6OaKg" name="QualifierB"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_ossv8BFLEeGoRIAInCGFZA" name="collectiontest">
           <packagedElement xmi:type="uml:Class" xmi:id="_dVgyEBFHEeGoRIAInCGFZA" name="Hand">
@@ -2841,6 +2846,38 @@ endif</body>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UH-bQu8CEeOCtvMnpL9cwg"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UH-bQ-8CEeOCtvMnpL9cwg" value="*"/>
             </ownedEnd>
+          </packagedElement>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_2zoC8B0NEeSmCaILr6OaKg" name="ocl">
+          <packagedElement xmi:type="uml:Package" xmi:id="_9SSIcB0NEeSmCaILr6OaKg" name="datatype">
+            <packagedElement xmi:type="uml:Class" xmi:id="_BbojcB0OEeSmCaILr6OaKg" name="OclDataType1">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_H_B_AB0OEeSmCaILr6OaKg" name="oclDataType2" type="_FkeBEB0OEeSmCaILr6OaKg" aggregation="composite" association="_H_CmEB0OEeSmCaILr6OaKg">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_H_B_AR0OEeSmCaILr6OaKg"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_H_B_Ah0OEeSmCaILr6OaKg" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_52B8oB0QEeSmCaILr6OaKg" name="oclDataType2Emails" visibility="public" isDerived="true">
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Awks4B0REeSmCaILr6OaKg"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Awl7AB0REeSmCaILr6OaKg" value="*"/>
+                <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_KcupIB0REeSmCaILr6OaKg" name="oclDataTypeEmailOcl">
+                  <language>OCL</language>
+                  <body>self.oclDataType2.email->asSet()</body>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_FkeBEB0OEeSmCaILr6OaKg" name="OclDataType2">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_VXktcB0OEeSmCaILr6OaKg" name="email" visibility="public">
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_YjrdEB0OEeSmCaILr6OaKg"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_YjtSQB0OEeSmCaILr6OaKg" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_H_CmEB0OEeSmCaILr6OaKg" name="A_oclDataType1_oclDataType2_1" memberEnd="_H_CmER0OEeSmCaILr6OaKg _H_B_AB0OEeSmCaILr6OaKg" navigableOwnedEnd="_H_CmER0OEeSmCaILr6OaKg">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_H_CmER0OEeSmCaILr6OaKg" name="oclDataType1" type="_BbojcB0OEeSmCaILr6OaKg" association="_H_CmEB0OEeSmCaILr6OaKg">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_H_CmEh0OEeSmCaILr6OaKg" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_H_CmEx0OEeSmCaILr6OaKg" value="1"/>
+              </ownedEnd>
+            </packagedElement>
           </packagedElement>
         </packagedElement>
       </packagedElement>

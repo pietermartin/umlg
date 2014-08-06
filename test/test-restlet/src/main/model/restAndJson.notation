@@ -3952,6 +3952,14 @@
           <element xmi:type="uml:Property" href="restAndJson.uml#_1pR1wBwHEeS0VvhEKHz6FQ"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_1pUSARwHEeS0VvhEKHz6FQ"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_QvueMByCEeSk2psSd8_PbA" type="3012">
+          <element xmi:type="uml:Property" href="restAndJson.uml#_QtMuoByCEeSk2psSd8_PbA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_QvueMRyCEeSk2psSd8_PbA"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_rEScgByVEeSk2psSd8_PbA" type="3012">
+          <element xmi:type="uml:Property" href="restAndJson.uml#_rEQnUByVEeSk2psSd8_PbA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_rEScgRyVEeSk2psSd8_PbA"/>
+        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_9kJBVjXKEeOAlanvceIpiA"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_9kJBVzXKEeOAlanvceIpiA"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_9kJBWDXKEeOAlanvceIpiA"/>

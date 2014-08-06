@@ -43,33 +43,33 @@ public class DataTypeTest extends BaseLocalDbTest {
     @Test
     public void testManyDataTypeEmail() {
         DataTypeEntity dataTypeEntity = new DataTypeEntity(true);
-        dataTypeEntity.addToEmail1("asd@asd.asd");
-        dataTypeEntity.addToEmailList("j@jj.jj");
-        dataTypeEntity.addToEmailList("jj@jj.jj");
-        dataTypeEntity.addToEmailList("jjj@jj.jj");
-        dataTypeEntity.addToEmailList("jjjj@jj.jj");
-        dataTypeEntity.addToEmailList("jjjjj@jj.jj");
+        dataTypeEntity.addToEmail1("john@register.com");
+        dataTypeEntity.addToEmailList("jjohn@register.com");
+        dataTypeEntity.addToEmailList("jjjohn@register.com");
+        dataTypeEntity.addToEmailList("jjjjohn@register.com");
+        dataTypeEntity.addToEmailList("jjjjjohn@register.com");
+        dataTypeEntity.addToEmailList("jjjjjjohn@register.com");
         db.commit();
         dataTypeEntity.reload();
         Assert.assertEquals(5, dataTypeEntity.getEmailList().size());
-        Assert.assertEquals("jjjj@jj.jj", dataTypeEntity.getEmailList().get(3));
+        Assert.assertEquals("jjjjjohn@register.com", dataTypeEntity.getEmailList().get(3));
     }
 
     @Test
     public void testDataTypeEmailWithSameValue() {
         DataTypeEntity dataTypeEntity = new DataTypeEntity(true);
-        dataTypeEntity.addToEmail1("asd@asd.asd");
-        dataTypeEntity.addToEmail2("asd@asd.asd");
+        dataTypeEntity.addToEmail1("john@register.com");
+        dataTypeEntity.addToEmail2("john@register.com");
         db.commit();
         dataTypeEntity.reload();
-        Assert.assertEquals("asd@asd.asd", dataTypeEntity.getEmail1());
-        Assert.assertEquals("asd@asd.asd", dataTypeEntity.getEmail2());
+        Assert.assertEquals("john@register.com", dataTypeEntity.getEmail1());
+        Assert.assertEquals("john@register.com", dataTypeEntity.getEmail2());
 
         dataTypeEntity.setEmail1(null);
         db.commit();
         dataTypeEntity.reload();
         Assert.assertEquals(null, dataTypeEntity.getEmail1());
-        Assert.assertEquals("asd@asd.asd", dataTypeEntity.getEmail2());
+        Assert.assertEquals("john@register.com", dataTypeEntity.getEmail2());
 
     }
 
@@ -138,6 +138,8 @@ public class DataTypeTest extends BaseLocalDbTest {
         Assert.assertEquals(1, dataTypeEntity.getDateOrderedSet().indexOf(new LocalDate("2000-06-03")));
         Assert.assertFalse(dataTypeEntity.getDateOrderedSet().contains(new LocalDate("2000-06-02")));
     }
+
+
 
     @Test
     public void testDataTypeBag() {

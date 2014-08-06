@@ -2,7 +2,6 @@ package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.gremlin.neo4j.structure.Neo4jEdge;
 import com.tinkerpop.gremlin.neo4j.structure.Neo4jGraph;
-import com.tinkerpop.gremlin.neo4j.structure.Neo4jVertex;
 import com.tinkerpop.gremlin.process.computer.GraphComputer;
 import com.tinkerpop.gremlin.process.graph.GraphTraversal;
 import com.tinkerpop.gremlin.structure.*;
@@ -10,7 +9,6 @@ import com.tinkerpop.gremlin.structure.strategy.ReadOnlyGraphStrategy;
 import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedEdge;
 import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedGraph;
 import com.tinkerpop.gremlin.structure.util.GraphFactory;
-import com.tinkerpop.gremlin.util.StreamFactory;
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.lang.time.StopWatch;
 import org.neo4j.cypher.ExecutionEngine;
@@ -27,20 +25,20 @@ import org.neo4j.graphdb.schema.Schema;
 import org.neo4j.kernel.GraphDatabaseAPI;
 import org.neo4j.kernel.impl.core.NodeManager;
 import org.neo4j.kernel.impl.util.StringLogger;
-import org.neo4j.tooling.GlobalGraphOperations;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgLazyList;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
-import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.util.UmlgProperties;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
-import java.util.stream.StreamSupport;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Date: 2013/01/09
@@ -485,7 +483,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public <S, E> GraphTraversal<S, E> of() {
+    public <S> GraphTraversal<S, S> of() {
         return this.neo4jGraph.of();
     }
 
@@ -500,13 +498,18 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public <V extends Variables> V variables() {
+    public Variables variables() {
         return ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).variables();
     }
 
     @Override
     public void close() throws Exception {
         this.neo4jGraph.close();
+    }
+
+    @Override
+    public Features getFeatures() {
+        return this.neo4jGraph.getFeatures();
     }
 
     private IndexDefinition createLabeledIndex(String label, String propertyKey) throws ConstraintViolationException {
@@ -539,4 +542,5 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         Schema schema = ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getBaseGraph().schema();
         return schema.constraintFor(DynamicLabel.label(label)).assertPropertyIsUnique(propertyKey).create();
     }
+
 }

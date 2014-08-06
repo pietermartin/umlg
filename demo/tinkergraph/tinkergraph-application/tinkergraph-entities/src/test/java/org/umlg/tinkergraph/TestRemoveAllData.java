@@ -44,7 +44,7 @@ public class TestRemoveAllData {
             a.delete();
         }
         db.commit();
-        Assert.assertEquals(9, ((UmlgAdminGraph)db).countVertices());
+        Assert.assertEquals(0, ((UmlgAdminGraph)db).countVertices());
     }
 
 }

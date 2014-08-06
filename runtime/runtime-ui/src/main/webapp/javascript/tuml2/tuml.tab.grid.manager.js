@@ -795,6 +795,10 @@
                                         if (item[c.field] == undefined || item[c.field].indexOf(columnFilters[columnId]) == -1) {
                                             return false;
                                         }
+                                    } else if (property.dataTypeEnum == 'Cron') {
+                                        if (item[c.field] == undefined || item[c.field].indexOf(columnFilters[columnId]) == -1) {
+                                            return false;
+                                        }
                                     } else {
                                         alert('Unsupported dataType ' + property.dataTypeEnum);
                                     }

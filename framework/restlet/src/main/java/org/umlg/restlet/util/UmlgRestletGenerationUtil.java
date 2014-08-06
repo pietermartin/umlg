@@ -114,6 +114,10 @@ public class UmlgRestletGenerationUtil {
                     return "FieldType.Host";
                 case Password:
                     return "FieldType.Password";
+                case UnsecurePassword:
+                    return "FieldType.UnsecurePassword";
+                case QuartzCron:
+                    return "FieldType.QuartzCron";
                 default:
                     throw new RuntimeException("Unknown data type " + dataTypeEnum.name());
             }

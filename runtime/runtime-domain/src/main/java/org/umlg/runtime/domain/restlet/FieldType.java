@@ -18,6 +18,8 @@ public enum FieldType {
 	Boolean,
     ByteArray,
     Host,
-    Password;
+    Password,
+    UnsecurePassword,
+    QuartzCron;
 
 }

@@ -536,7 +536,11 @@
                 $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
             } else if (property.dataTypeEnum == 'Password') {
                 $input = $("<input />", {type: 'password', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
+            } else if (property.dataTypeEnum == 'UnsecurePassword') {
+                $input = $("<input />", {type: 'password', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
             } else if (property.dataTypeEnum == 'Video' || property.dataTypeEnum == 'Audio' || property.dataTypeEnum == 'Image') {
+                $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
+            } else if (property.dataTypeEnum == 'QuartzCron') {
                 $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
             } else {
                 alert('Unsupported dataType ' + property.dataTypeEnum);

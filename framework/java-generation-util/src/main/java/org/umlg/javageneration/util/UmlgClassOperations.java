@@ -477,7 +477,14 @@ public class UmlgClassOperations extends ClassOperations {
             sb.append(">");
             return sb.toString();
         } else {
-            return Namer.name(clazz);
+
+            if (!(clazz instanceof PrimitiveType) && !(clazz instanceof Enumeration) && clazz instanceof DataType) {
+                return DataTypeEnum.getPathNameFromDataType((DataType) clazz).getLast();
+            } else {
+                return Namer.name(clazz);
+            }
+
+
         }
     }
 

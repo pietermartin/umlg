@@ -7,11 +7,11 @@ import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.ocl.expressions.Variable;
 import org.eclipse.ocl.uml.CollectionType;
 import org.eclipse.ocl.uml.impl.CollectionTypeImpl;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.uml2.uml.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.javageneration.ocl.util.UmlgOclUtil;
 import org.umlg.javageneration.ocl.visitor.HandleIteratorExp;
+import org.umlg.javageneration.util.DataTypeEnum;
 import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.util.UmlgCollectionKindEnum;
 
@@ -38,7 +38,6 @@ public class OclCollectExpToJava implements HandleIteratorExp {
 		
 		OCLExpression<Classifier> body = callExp.getBody();
 		String bodyType = UmlgClassOperations.className(body.getType());
-
         if (body.getType() instanceof CollectionType) {
             CollectionType collectionType = (CollectionType)body.getType();
             ojClass.addToImports(UmlgCollectionKindEnum.from(collectionType.getKind()).getOjPathName());
@@ -47,10 +46,21 @@ public class OclCollectExpToJava implements HandleIteratorExp {
         String flattenedType;
 		Classifier c = body.getType();
 		if (c instanceof CollectionTypeImpl) {
-			CollectionTypeImpl collectionTypeImpl = (CollectionTypeImpl)c;
-			flattenedType = UmlgClassOperations.className(collectionTypeImpl.getElementType());
+            CollectionTypeImpl collectionTypeImpl = (CollectionTypeImpl) c;
+
+            Classifier elementType = collectionTypeImpl.getElementType();
+            if (!(elementType instanceof PrimitiveType) && !(elementType instanceof Enumeration) && elementType instanceof DataType) {
+                flattenedType = DataTypeEnum.getPathNameFromDataType((DataType) elementType).getLast();
+            } else {
+                flattenedType = UmlgClassOperations.className(elementType);
+            }
+
 		} else {
-			flattenedType = UmlgClassOperations.className(c);
+            if (!(c instanceof PrimitiveType) && !(c instanceof Enumeration) && c instanceof DataType) {
+                flattenedType = DataTypeEnum.getPathNameFromDataType((DataType) c).getLast();
+            } else {
+                flattenedType = UmlgClassOperations.className(c);
+            }
 		}
 		
 		StringBuilder result = new StringBuilder(sourceResult);

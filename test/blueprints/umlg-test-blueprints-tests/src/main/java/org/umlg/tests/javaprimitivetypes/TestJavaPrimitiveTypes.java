@@ -1,8 +1,10 @@
 package org.umlg.tests.javaprimitivetypes;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 import org.umlg.javaprimitivetype.JavaPrimitiveType;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 import java.util.Arrays;
@@ -119,6 +121,7 @@ public class TestJavaPrimitiveTypes extends BaseLocalDbTest {
 
     @Test
     public void testFloat() {
+        Assume.assumeTrue(UMLG.get().getFeatures().vertex().properties().supportsFloatValues());
         JavaPrimitiveType javaPrimitiveType = new JavaPrimitiveType();
         javaPrimitiveType.setAFloat(1F);
         db.commit();
@@ -132,6 +135,7 @@ public class TestJavaPrimitiveTypes extends BaseLocalDbTest {
 
     @Test
     public void testManyFloat() {
+        Assume.assumeTrue(UMLG.get().getFeatures().vertex().properties().supportsFloatValues());
         JavaPrimitiveType javaPrimitiveType = new JavaPrimitiveType();
         javaPrimitiveType.addToAManyFloat(1.111F);
         db.commit();

@@ -122,7 +122,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
         }
         try (Connection conn = SqlGDataSource.INSTANCE.get(this.configuration.getString("jdbc.url")).getConnection()) {
             DatabaseMetaData metadata = conn.getMetaData();
-            String catalog = "sqlgraphdb";
+            String catalog = null;
             String schemaPattern = null;
             String tableNamePattern = "%";
             String[] types = {"TABLE"};
@@ -138,6 +138,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
                     preparedStatement.executeUpdate();
                 }
             }
+            SqlGDataSource.INSTANCE.close(this.configuration.getString("jdbc.url"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

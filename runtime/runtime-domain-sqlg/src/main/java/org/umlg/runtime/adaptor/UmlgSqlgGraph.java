@@ -2,6 +2,7 @@ package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.gremlin.process.computer.GraphComputer;
 import com.tinkerpop.gremlin.process.graph.GraphTraversal;
+import com.tinkerpop.gremlin.process.graph.step.map.StartStep;
 import com.tinkerpop.gremlin.structure.*;
 import com.tinkerpop.gremlin.structure.strategy.ReadOnlyGraphStrategy;
 import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedGraph;
@@ -13,6 +14,7 @@ import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.util.UmlgProperties;
+import org.umlg.sqlg.strategy.SqlGGraphStepStrategy;
 import org.umlg.sqlg.structure.SqlG;
 
 import java.lang.reflect.InvocationTargetException;
@@ -336,7 +338,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Vertex getRoot() {
-        return this.v(1L);
+        return this.v(0L);
     }
 
     @Override
@@ -446,7 +448,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public <S, E> GraphTraversal<S, E> of() {
+    public <S> GraphTraversal<S, S> of() {
         return this.sqlG.of();
     }
 
@@ -461,12 +463,17 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public <V extends Variables> V variables() {
+    public Variables variables() {
         return this.sqlG.variables();
     }
 
     @Override
     public void close() throws Exception {
         this.sqlG.close();
+    }
+
+    @Override
+    public Features getFeatures() {
+        return this.sqlG.getFeatures();
     }
 }

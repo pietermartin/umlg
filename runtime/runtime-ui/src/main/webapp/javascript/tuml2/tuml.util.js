@@ -122,16 +122,20 @@ function selectFormatter(property, isNew, updatedId) {
             return TumlSlick.Formatters.TumlRegularFormatter;
         }
     } else if (property.lower > 0 && property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
-        if (property.dataTypeEnum !== 'Password') {
-            return  TumlSlick.Formatters.TumlRequired;
-        } else {
+        if (property.dataTypeEnum === 'Password') {
             return  TumlSlick.Formatters.TumlRequiredPassword;
+        } else if (property.dataTypeEnum === 'UnsecurePassword') {
+            return  TumlSlick.Formatters.TumlRequiredPassword;
+        } else {
+            return  TumlSlick.Formatters.TumlRequired;
         }
     } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
-        if (property.dataTypeEnum !== 'Password') {
-            return null;
-        } else {
+        if (property.dataTypeEnum === 'Password') {
             return  TumlSlick.Formatters.TumlPassword;
+        } else if (property.dataTypeEnum === 'UnsecurePassword') {
+            return  TumlSlick.Formatters.TumlPassword;
+        } else {
+            return null;
         }
     } else if (property.lower > 0 && (property.oneEnumeration || property.manyEnumeration)) {
         return  TumlSlick.Formatters.TumlRequired;
@@ -184,6 +188,10 @@ function selectFieldValidator(property) {
                 return new TumlSlick.Validators.TumlManyString(property).validate;
             } else if (property.dataTypeEnum == 'Password') {
                 return new TumlSlick.Validators.TumlManyString(property).validate;
+            } else if (property.dataTypeEnum == 'UnsecurePassword') {
+                return new TumlSlick.Validators.TumlManyString(property).validate;
+            } else if (property.dataTypeEnum == 'QuartzCron') {
+                return new TumlSlick.Validators.TumlManyString(property).validate;
             } else if (property.dataTypeEnum == 'Video') {
             } else if (property.dataTypeEnum == 'Audio') {
             } else if (property.dataTypeEnum == 'Image') {
@@ -204,6 +212,10 @@ function selectFieldValidator(property) {
             } else if (property.dataTypeEnum == 'Host') {
                 return new TumlSlick.Validators.TumlString(property).validate;
             } else if (property.dataTypeEnum == 'Password') {
+                return new TumlSlick.Validators.TumlString(property).validate;
+            } else if (property.dataTypeEnum == 'UnsecurePassword') {
+                return new TumlSlick.Validators.TumlString(property).validate;
+            } else if (property.dataTypeEnum == 'QuartzCron') {
                 return new TumlSlick.Validators.TumlString(property).validate;
             } else if (property.dataTypeEnum == 'Video') {
             } else if (property.dataTypeEnum == 'Audio') {
@@ -287,6 +299,10 @@ function selectEditor(property) {
                 return Tuml.Slick.Editors.Text;
             } else if (property.dataTypeEnum == 'Password') {
                 return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'UnsecurePassword') {
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'QuartzCron') {
+                return Tuml.Slick.Editors.Text;
             } else if (property.dataTypeEnum == 'Video') {
                 return Tuml.Slick.Editors.Text;
             } else if (property.dataTypeEnum == 'Audio') {
@@ -314,6 +330,10 @@ function selectEditor(property) {
             } else if (property.dataTypeEnum == 'Host') {
                 return Tuml.Slick.Editors.Text;
             } else if (property.dataTypeEnum == 'Password') {
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'UnsecurePassword') {
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'QuartzCron') {
                 return Tuml.Slick.Editors.Text;
             } else if (property.dataTypeEnum == 'Video') {
                 return Tuml.Slick.Editors.Text;

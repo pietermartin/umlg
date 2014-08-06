@@ -1,5 +1,6 @@
 package org.umlg.runtime.adaptor;
 
+import com.tinkerpop.gremlin.neo4j.structure.Neo4jVertex;
 import com.tinkerpop.gremlin.structure.Graph;
 import com.tinkerpop.gremlin.structure.Vertex;
 import com.tinkerpop.gremlin.structure.strategy.GraphStrategy;
@@ -25,6 +26,7 @@ public class UmlgNeo4jGraphStrategy implements GraphStrategy {
                 getDeletionVertex(ctx.getBaseGraph()).addEdge(UmlgGraph.DELETION_VERTEX, v);
                 v.properties().values().forEach(p -> p.remove());
                 v.property("_deleted", true);
+                ((Neo4jVertex)v).getBaseVertex().removeLabel(((Neo4jVertex)v).getBaseVertex().getLabels().iterator().next());
                 return null;
             };
         } else {

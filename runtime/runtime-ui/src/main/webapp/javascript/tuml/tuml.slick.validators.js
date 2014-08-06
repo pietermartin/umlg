@@ -17,6 +17,7 @@
                 "MinLength": MinLengthValidator,
                 "Url": UrlValidator,
                 "Email": EmailValidator,
+                "QuartzCron": QuartzCronValidator,
                 "Host": HostValidator,
                 "DateTime": DateTimeValidator,
                 "Date": DateValidator,
@@ -144,6 +145,9 @@
                     }
                     if (property.validations.email !== undefined) {
                         result = TumlSlick.Validators.Email(property, value);
+                    }
+                    if (property.validations.quartzCron !== undefined) {
+                        result = TumlSlick.Validators.QuartzCron(property, value);
                     }
                     if (property.validations.host !== undefined) {
                         result = TumlSlick.Validators.Host(property, value);
@@ -690,6 +694,10 @@
         } else {
             return {valid: true};
         }
+    }
+
+    function QuartzCronValidator(property, value) {
+        return {valid: true};
     }
 
     function HostValidator(property, value) {
