@@ -1,15 +1,14 @@
 package org.umlg.framework;
 
-import java.lang.annotation.Annotation;
+import org.eclipse.uml2.uml.Element;
+import org.eclipse.uml2.uml.PackageImport;
+import org.eclipse.uml2.uml.Profile;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
-
-import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.PackageImport;
-import org.eclipse.uml2.uml.Profile;
 
 public class ModelVisitor {
 
@@ -28,9 +27,6 @@ public class ModelVisitor {
 		// This is the type the visitor is visiting
 		Type visitingType = paramTypes[0];
 		try {
-
-
-
             Class<?> visitingTypeClass = (Class<?>) visitingType;
 			Method method = visitor.getClass().getMethod("visitBefore", visitingTypeClass);
             VisitFilter visitFilter = method.getAnnotation(VisitFilter.class);

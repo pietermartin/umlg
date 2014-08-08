@@ -6,7 +6,10 @@ import org.eclipse.ocl.expressions.OperationCallExp;
 import org.eclipse.ocl.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.DataType;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Operation;
+import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgPropertyOperations;
 
 public class OclEqualExprToJava extends BaseHandleOperationExp {
 

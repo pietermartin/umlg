@@ -1,65 +1,27 @@
 package org.umlg.javageneration.ocl.visitor;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.ocl.Environment;
 import org.eclipse.ocl.expressions.*;
-import org.eclipse.ocl.expressions.AssociationClassCallExp;
-import org.eclipse.ocl.expressions.BooleanLiteralExp;
-import org.eclipse.ocl.expressions.CollectionItem;
-import org.eclipse.ocl.expressions.CollectionLiteralExp;
-import org.eclipse.ocl.expressions.CollectionLiteralPart;
-import org.eclipse.ocl.expressions.CollectionRange;
-import org.eclipse.ocl.expressions.EnumLiteralExp;
-import org.eclipse.ocl.expressions.FeatureCallExp;
-import org.eclipse.ocl.expressions.IfExp;
-import org.eclipse.ocl.expressions.IntegerLiteralExp;
-import org.eclipse.ocl.expressions.InvalidLiteralExp;
-import org.eclipse.ocl.expressions.IterateExp;
-import org.eclipse.ocl.expressions.IteratorExp;
-import org.eclipse.ocl.expressions.LetExp;
-import org.eclipse.ocl.expressions.MessageExp;
-import org.eclipse.ocl.expressions.NullLiteralExp;
-import org.eclipse.ocl.expressions.OCLExpression;
-import org.eclipse.ocl.expressions.OperationCallExp;
-import org.eclipse.ocl.expressions.PropertyCallExp;
-import org.eclipse.ocl.expressions.RealLiteralExp;
-import org.eclipse.ocl.expressions.StateExp;
-import org.eclipse.ocl.expressions.StringLiteralExp;
-import org.eclipse.ocl.expressions.TupleLiteralExp;
-import org.eclipse.ocl.expressions.TupleLiteralPart;
-import org.eclipse.ocl.expressions.TypeExp;
-import org.eclipse.ocl.expressions.UnlimitedNaturalLiteralExp;
-import org.eclipse.ocl.expressions.UnspecifiedValueExp;
 import org.eclipse.ocl.expressions.Variable;
-import org.eclipse.ocl.expressions.VariableExp;
 import org.eclipse.ocl.types.CollectionType;
 import org.eclipse.ocl.types.VoidType;
-import org.eclipse.ocl.uml.*;
 import org.eclipse.ocl.uml.impl.CollectionItemImpl;
 import org.eclipse.ocl.uml.impl.CollectionTypeImpl;
 import org.eclipse.ocl.util.TypeUtil;
-import org.eclipse.ocl.utilities.AbstractVisitor;
-import org.eclipse.ocl.utilities.ExpressionInOCL;
+import org.eclipse.ocl.utilities.*;
 import org.eclipse.ocl.utilities.TypedElement;
-import org.eclipse.ocl.utilities.UMLReflection;
-import org.eclipse.ocl.utilities.Visitable;
 import org.eclipse.uml2.uml.*;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
-import org.umlg.javageneration.ocl.visitor.tojava.OclIfExpToJava;
-import org.umlg.javageneration.ocl.visitor.tojava.OclIterateExpToJava;
-import org.umlg.javageneration.ocl.visitor.tojava.OclTupleLiteralExpToJava;
-import org.umlg.javageneration.ocl.visitor.tojava.OclTupleLiteralPartToJava;
-import org.umlg.javageneration.ocl.visitor.tojava.OclVariableExpToJava;
+import org.umlg.javageneration.ocl.visitor.tojava.*;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.util.UmlgCollectionKindEnum;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class UmlgJavaVisitor extends
         AbstractVisitor<String, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint> {
@@ -167,7 +129,7 @@ public class UmlgJavaVisitor extends
     @Override
     public String visitEnumLiteralExp(EnumLiteralExp<Classifier, EnumerationLiteral> el) {
         EnumerationLiteral l = el.getReferredEnumLiteral();
-        return getQualifiedName(l);
+        return UmlgClassOperations.getPathName(l.getClassifier()).getLast() + "." + l.getName();
     }
 
     /**

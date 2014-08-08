@@ -36,16 +36,10 @@
           <emfPageIdentifier href="test-ocl.notation#_PX4aCgAPEeKpVr_ntT6cLA"/>
         </children>
         <children>
-          <emfPageIdentifier href="test-ocl.notation#_PX4aCAAPEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
           <emfPageIdentifier href="test-ocl.notation#_PX4aDAAPEeKpVr_ntT6cLA"/>
         </children>
         <children>
           <emfPageIdentifier href="test-ocl.notation#_mHX3AKbrEeOPt7R4er8hcg"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="test-ocl.notation#_PX4aBgAPEeKpVr_ntT6cLA"/>
         </children>
         <children>
           <emfPageIdentifier href="test-ocl.notation#_1i7T8KuqEeOPt7R4er8hcg"/>

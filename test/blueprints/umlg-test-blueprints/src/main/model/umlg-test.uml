@@ -2879,6 +2879,51 @@ endif</body>
               </ownedEnd>
             </packagedElement>
           </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_-5dNAB4-EeS3m7NpUxmIvw" name="ocloperator">
+            <packagedElement xmi:type="uml:Class" xmi:id="_Ov124B4_EeS3m7NpUxmIvw" name="OclAnd">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_jVRCwB4_EeS3m7NpUxmIvw" name="age" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mHHfUB4_EeS3m7NpUxmIvw"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mHKioB4_EeS3m7NpUxmIvw" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_m2VVwB4_EeS3m7NpUxmIvw" name="testAnd" visibility="public" isDerived="true">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_pg_lMB4_EeS3m7NpUxmIvw" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_phAzUB4_EeS3m7NpUxmIvw" value="1"/>
+                <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_yo92UB4_EeS3m7NpUxmIvw" name="oclAndOcl">
+                  <language>OCL</language>
+                  <body>self.age > 1 and self.age &lt; 5</body>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_X0POkB5KEeSglo_7OnFCeA" name="oclenum">
+            <packagedElement xmi:type="uml:Class" xmi:id="_a90OoB5KEeSglo_7OnFCeA" name="OclEnum">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_e5AR0B5KEeSglo_7OnFCeA" name="oCLENUM1" type="_cAB5kB5KEeSglo_7OnFCeA" association="_e5A44B5KEeSglo_7OnFCeA">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_e5AR0R5KEeSglo_7OnFCeA" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_e5AR0h5KEeSglo_7OnFCeA" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_mIrkkB5KEeSglo_7OnFCeA" name="isEnum1" visibility="public" isDerived="true">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_n8238B5KEeSglo_7OnFCeA" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_n84tIB5KEeSglo_7OnFCeA" value="1"/>
+                <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_1iyiIB5KEeSglo_7OnFCeA" name="isEnumOcl">
+                  <language>OCL</language>
+                  <body>self.oCLENUM1 = OCLENUM1::ENUM1</body>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Enumeration" xmi:id="_cAB5kB5KEeSglo_7OnFCeA" name="OCLENUM1">
+              <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_dXsQEB5KEeSglo_7OnFCeA" name="ENUM1"/>
+              <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_eJgukB5KEeSglo_7OnFCeA" name="ENUM2"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_e5A44B5KEeSglo_7OnFCeA" name="A_oclEnum_oCLENUM1_1" memberEnd="_e5A44R5KEeSglo_7OnFCeA _e5AR0B5KEeSglo_7OnFCeA">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_e5A44R5KEeSglo_7OnFCeA" name="oclEnum" type="_a90OoB5KEeSglo_7OnFCeA" association="_e5A44B5KEeSglo_7OnFCeA">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_e5A44h5KEeSglo_7OnFCeA"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_e5A44x5KEeSglo_7OnFCeA" value="*"/>
+              </ownedEnd>
+            </packagedElement>
+          </packagedElement>
         </packagedElement>
       </packagedElement>
     </packagedElement>
