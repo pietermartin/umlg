@@ -134,7 +134,7 @@ public class TestNeo4jBlueprints {
         graph.close();
     }
 
-    @Test
+//    @Test
     public void testNewInstanceInNewThreadFails() throws Exception {
         final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "blueprintstest2";
         File dir = new File(url);
@@ -175,7 +175,7 @@ public class TestNeo4jBlueprints {
         graph.close();
     }
 
-    @Test
+//    @Test
     public void testMultipleEdgesBetweenNodes() throws Exception {
         final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "blueprintstest2";
         File dir = new File(url);
@@ -196,7 +196,7 @@ public class TestNeo4jBlueprints {
         graph.close();
     }
 
-    @Test
+//    @Test
     public void testSpeed() throws Exception {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
@@ -222,7 +222,7 @@ public class TestNeo4jBlueprints {
         graph.close();
     }
 
-    @Test
+//    @Test
     public void testNeo4jPropertyDifferentType() {
         File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
         if (f.exists()) {
@@ -448,113 +448,6 @@ public class TestNeo4jBlueprints {
             g.close();
         }
     }
-
-////    @Test
-//    public void testRemoveTransactionAlreadyWritable() throws IOException {
-//        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
-//        if (f.exists()) {
-//            FileUtils.deleteDirectory(f);
-//        }
-//        f.mkdir();
-//        Neo4jGraph graph = Neo4jGraph.open(f.getAbsolutePath());
-//        try {
-//            graph.createKeyIndex("name", Vertex.class);
-//            graph.commit();
-//
-//            Vertex v1 = graph.addVertex();
-//            v1.property("name", "aaaa");
-//            for (int i = 0; i < 10; i++) {
-//                Vertex v2 = graph.addVertex();
-//                v2.property("name", "bbbb");
-//                Edge e = graph.addEdge(null, v1, v2, "label1");
-//                e.property("name", "cccc");
-//            }
-//            graph.commit();
-//
-//            org.junit.Assert.assertEquals(11, count(graph.getVertices()) - 1);
-//            org.junit.Assert.assertEquals(1, count(graph.getVertices("name", "aaaa")));
-//            org.junit.Assert.assertEquals(10, count(graph.getVertices("name", "bbbb")));
-//            org.junit.Assert.assertEquals(10, count(graph.getEdges("name", "cccc")));
-//
-//            Iterator<Vertex> iter = graph.getVertices("name", "bbbb").iterator();
-//            Vertex v = iter.next();
-//            long removedId = (Long)v.getId();
-////            v.property("name", "bbbba");
-////            org.junit.Assert.assertEquals("bbbba", v.getProperty("name"));
-//            iter.remove();
-//            org.junit.Assert.assertNull(graph.getVertex(removedId));
-//            org.junit.Assert.assertEquals(9, count(iter));
-//
-//            graph.commit();
-//            iter = graph.getVertices("name", "bbbb").iterator();
-//            org.junit.Assert.assertEquals(9, count(iter));
-//
-//        } finally {
-//            graph.shutdown();
-//        }
-//    }
-
-
-////    @Test
-//    public void testIndexSpeed() throws IOException {
-//        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
-//        if (f.exists()) {
-//            FileUtils.deleteDirectory(f);
-//        }
-//        f.mkdir();
-//        Neo4j2Graph g = new Neo4j2Graph(f.getAbsolutePath());
-//        try {
-//
-//            g.createKeyIndex("many", Vertex.class);
-//
-//            int NUMBER_TO_ITER = 10000000;
-//
-//            StopWatch stopWatch = new StopWatch();
-//            stopWatch.start();
-//
-//            Vertex one = g.addVertex();
-//            one.property("one", -1);
-//            long previousSplitTime = 0;
-//            for (int i = 0; i < NUMBER_TO_ITER; i++) {
-//                Vertex many = g.addVertex();
-//                many.property("many", i);
-//                g.addEdge(null, one, many, "toMany");
-//
-//                if (i != 0 && i % 100000 == 0) {
-//                    stopWatch.split();
-//                    long splitTime = stopWatch.getSplitTime();
-//                    System.out.println(i + " " + stopWatch.toString() + " 100000 in " + (splitTime - previousSplitTime));
-//                    previousSplitTime = stopWatch.getSplitTime();
-//                    g.commit();
-//                }
-//            }
-//            g.commit();
-//            stopWatch.stop();
-//            System.out.println("write 10000000 = " + stopWatch.toString());
-//
-//            stopWatch.reset();
-//            stopWatch.start();
-//
-//            for (int i = 0; i < NUMBER_TO_ITER; i++) {
-//                Iterator<Vertex> iter = g.getVertices("many", i).iterator();
-//                Assert.assertTrue(iter.hasNext());
-//
-//                if (i != 0 && i % 1000000 == 0) {
-//                    stopWatch.split();
-//                    long splitTime = stopWatch.getSplitTime();
-//                    System.out.println(i + " " + stopWatch.toString() + " 1000000 in " + (splitTime - previousSplitTime));
-//                    previousSplitTime = stopWatch.getSplitTime();
-//                }
-//
-//            }
-//
-//            stopWatch.stop();
-//            System.out.println("read " + NUMBER_TO_ITER + " = " + stopWatch.toString());
-//        } finally {
-//            g.shutdown();
-//        }
-//    }
-
 
     protected int countIter(Iterator iter) {
         int count = 0;

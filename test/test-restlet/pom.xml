@@ -1,58 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.umlg</groupId>
-		<artifactId>test</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
-	<artifactId>test-restlet</artifactId>
-	<name>test-restlet</name>
-	<url>http://maven.apache.org</url>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.umlg</groupId>
+        <artifactId>test</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>test-restlet</artifactId>
+    <name>test-restlet</name>
+    <url>http://maven.apache.org</url>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
                                 <source>src/main/generated-java</source>
-								<source>src/main/generated-java-restlet</source>
+                                <source>src/main/generated-java-restlet</source>
                                 <source>src/main/generated-java-meta</source>
                                 <source>src/main/generated-groovy</source>
-							</sources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>add-resource</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>add-resource</goal>
-						</goals>
-						<configuration>
-							<resources>
-								<resource>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-resource</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>add-resource</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
                                     <directory>src/main/model</directory>
                                 </resource>
                                 <resource>
                                     <directory>src/main/generated-resources</directory>
                                 </resource>
-							</resources>
-						</configuration>
-					</execution>					
-				</executions>
-			</plugin>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -77,43 +78,48 @@
                     </arguments>
                 </configuration>
             </plugin>
-		</plugins>
-	</build>
-	<dependencies>
-		<dependency>
-			<groupId>org.umlg</groupId>
-			<artifactId>runtime-restlet</artifactId>
-			<version>${umlg.version}</version>
-		</dependency>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.umlg</groupId>
+            <artifactId>runtime-restlet</artifactId>
+            <version>${umlg.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-jetty</artifactId>
             <version>${umlg.version}</version>
         </dependency>
         <dependency>
-			<groupId>org.umlg</groupId>
+            <groupId>org.umlg</groupId>
             <artifactId>runtime-domain-sqlg</artifactId>
-			<!--<artifactId>runtime-domain-neo4j</artifactId>-->
+            <!--<artifactId>runtime-domain-neo4j</artifactId>-->
             <!--<artifactId>runtime-domain-orientdb</artifactId>-->
             <!--<artifactId>runtime-domain-bitsy</artifactId>-->
             <!--<artifactId>runtime-domain-titan</artifactId>-->
             <!--<artifactId>runtime-domain-thundergraph</artifactId>-->
-			<version>${umlg.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.umlg</groupId>
-			<artifactId>runtime-ui</artifactId>
-			<version>${umlg.version}</version>
-		</dependency>		
-		<dependency>
-			<groupId>org.umlg</groupId>
-			<artifactId>runtime-test-restlet</artifactId>
-			<version>${umlg.version}</version>
-		</dependency>
+            <version>${umlg.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.umlg</groupId>
+            <artifactId>runtime-ui</artifactId>
+            <version>${umlg.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-restlet-client</artifactId>
             <version>${umlg.version}</version>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.umlg</groupId>
+            <artifactId>runtime-test-restlet</artifactId>
+            <version>${umlg.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.umlg</groupId>
+            <artifactId>sqlg-hsqldb</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

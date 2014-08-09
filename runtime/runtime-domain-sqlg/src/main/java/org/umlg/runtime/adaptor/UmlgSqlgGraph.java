@@ -338,7 +338,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Vertex getRoot() {
-        return this.v(1L);
+        return this.v(this.sqlG.getSqlDialect().getSequenceStart());
     }
 
     @Override
