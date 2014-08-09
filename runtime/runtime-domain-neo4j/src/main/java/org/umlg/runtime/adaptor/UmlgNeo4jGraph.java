@@ -488,8 +488,8 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public <C extends GraphComputer> C compute(Class<C>... graphComputerClass) {
-        return (this.neo4jGraph.getBaseGraph()).compute(graphComputerClass);
+    public GraphComputer compute(final Class... graphComputerClass) {
+        return this.neo4jGraph.compute(graphComputerClass);
     }
 
     @Override

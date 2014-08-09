@@ -453,7 +453,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public <C extends GraphComputer> C compute(Class<C>... graphComputerClass) {
+    public GraphComputer compute(final Class... graphComputerClass) {
         return this.sqlG.compute(graphComputerClass);
     }
 

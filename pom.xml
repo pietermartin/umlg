@@ -73,7 +73,6 @@
         <module>framework</module>
         <module>runtime</module>
         <module>archetypes</module>
-        <module>demo</module>
         <module>eclipselib</module>
         <module>test</module>
     </modules>
