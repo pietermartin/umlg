@@ -1,5 +1,6 @@
 package org.umlg.ocl.qualifier.test;
 
+import com.tinkerpop.gremlin.process.T;
 import org.apache.commons.lang.time.StopWatch;
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,34 +8,35 @@ import org.umlg.ocl.UmlgOclExecutor;
 import org.umlg.qualifier.*;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.test.BaseLocalDbTest;
+import org.umlg.runtime.util.Pair;
 
 public class TestQualifiers extends BaseLocalDbTest {
 
-	@Test
-	public void testQualifier1() {
-		StopWatch stopWatch = new StopWatch();
-		stopWatch.start();
-		Bank bank = new Bank(true);
-		bank.setName("BADASS");
-		for (int i = 0; i < 1000; i++) {
-			Customer customer1 = new Customer(true);
-			customer1.setName("c" + Integer.toString(i));
-			customer1.setAccountNumber(i);
-			customer1.setBank(bank);
-		}
+    @Test
+    public void testQualifier1() {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        Bank bank = new Bank(true);
+        bank.setName("BADASS");
+        for (int i = 0; i < 1000; i++) {
+            Customer customer1 = new Customer(true);
+            customer1.setName("c" + Integer.toString(i));
+            customer1.setAccountNumber(i);
+            customer1.setBank(bank);
+        }
 
-		Customer john1 = new Customer(true);
-		john1.setName("john");
-		john1.setAccountNumber(1);
-		john1.setBank(bank);
+        Customer john1 = new Customer(true);
+        john1.setName("john");
+        john1.setAccountNumber(1);
+        john1.setBank(bank);
 
-		db.commit();
-		Assert.assertEquals(1001, new Bank(bank.getVertex()).getCustomer().size());
-		Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierAccountNumberQualifier("c1", 1));
-		Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerJohn001());
-		stopWatch.stop();
-		System.out.println("Time taken = " + stopWatch.toString());
-	}
+        db.commit();
+        Assert.assertEquals(1001, new Bank(bank.getVertex()).getCustomer().size());
+        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierandAccountNumberQualifier(Pair.of(T.eq, "c1"), Pair.of(T.eq, 1)));
+        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerJohn001());
+        stopWatch.stop();
+        System.out.println("Time taken = " + stopWatch.toString());
+    }
 
     @Test
     public void testNestedQualifiers() {
@@ -79,7 +81,7 @@ public class TestQualifiers extends BaseLocalDbTest {
         db.commit();
         Assert.assertEquals(1003, D.allInstances().size());
 
-        UmlgSet<C> result =  a.getTestOclQualifier();
+        UmlgSet<C> result = a.getTestOclQualifier();
         Assert.assertEquals(1, result.size());
 
     }

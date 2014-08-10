@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.umlg.framework.Visitor;
@@ -13,32 +14,34 @@ import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 /**
- * Qualifiers must have a corresponding derived property on the class that
- * represents the type of its owning property. This derived property will supply
- * the value of the qualifier at runtime. The derived property must have the
- * same name as the qualifier. This means that no two qualifiers within the same
- * context (i.e. the type of the owning property) can have the same name.
- * 
+ * Qualifiers must have a corresponding 'QualifierVisitor' stereotyped property on the class that
+ * represents the type of its owning property. This property will supply
+ * the value of the qualifier at runtime. The QualifierVisitor's property will select the qualifiers that is supplies
+ * a value to.
+ *
  * @author -
  * 
  */
 public class QualifierValidator extends BaseVisitor implements Visitor<Property> {
 
+	private final static Map<org.eclipse.uml2.uml.Type, List<Property>> derivedPropertyMap = new HashMap<>();
+
 	public QualifierValidator(Workspace workspace) {
 		super(workspace);
 	}
-
-	private final static Map<org.eclipse.uml2.uml.Type, List<Property>> derivedPropertyMap = new HashMap<org.eclipse.uml2.uml.Type, List<Property>>();
 
 	@Override
 	public void visitBefore(Property p) {
 		PropertyWrapper qualifier = new PropertyWrapper(p);
 		if (qualifier.isQualifier()) {
-			validateHasCorrespondingDerivedProperty(qualifier);
+			validateHasCorrespondingPropertyWithQualiferVisitorStereotype(qualifier);
 			Property ownerElement = (Property) p.getOwner();
 			PropertyWrapper ownerElementPWrap = new PropertyWrapper(ownerElement);
 			Type qualifiedClassifier = ownerElementPWrap.getType();
-			
+
+            //Validate that a every qualifier has only one corresponding QualifierVisitor
+            qualifier.validateQualifierCorrespondingQualifierStereotypedProperty();
+
 			if (derivedPropertyMap.containsKey(qualifiedClassifier)) {
 				List<Property> qualifiers = derivedPropertyMap.get(qualifiedClassifier);
 				for (Property q : qualifiers) {
@@ -64,10 +67,10 @@ public class QualifierValidator extends BaseVisitor implements Visitor<Property>
 	public void visitAfter(Property p) {
 	}
 
-	private void validateHasCorrespondingDerivedProperty(PropertyWrapper pWrap) {
-		if (!pWrap.haveQualifierCorrespondingDerivedProperty()) {
-			throw new IllegalStateException(String.format("Qualified %s on %s does not have a corresponding derived property on %s",
-					new Object[] { pWrap.getName(), pWrap.getOwner(), pWrap.getQualifierContext().getName() }));
+	private void validateHasCorrespondingPropertyWithQualiferVisitorStereotype(PropertyWrapper pWrap) {
+		if (!pWrap.hasQualifierCorrespondingQualifierVisitorStereotypedProperty()) {
+			throw new IllegalStateException(String.format("Qualified %s on %s does not have a corresponding QualifierVisitor stereotyped property on %s",
+					new Object[] { pWrap.getName(), ((NamedElement)pWrap.getOwner()).getName(), pWrap.getQualifierContext().getName() }));
 		}
 	}
 

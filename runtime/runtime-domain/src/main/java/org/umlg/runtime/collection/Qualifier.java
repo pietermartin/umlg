@@ -14,21 +14,6 @@ public class Qualifier {
 		this.multiplicity = multiplicity;
 	}
 
-	public Qualifier(String[] keys, Object[] values, Multiplicity multiplicity) {
-		super();
-		String keyValue = "";
-		String objectValue = "";
-		for (String k : keys) {
-			keyValue += k;
-		}
-		this.key = keyValue;
-		for (Object o : values) {
-			objectValue += o;
-		}
-		this.value = objectValue;
-		this.multiplicity = multiplicity;
-	}
-
 	public String getValue() {
 		if (value instanceof UmlgNode) {
 			return ((UmlgNode) value).getUid();

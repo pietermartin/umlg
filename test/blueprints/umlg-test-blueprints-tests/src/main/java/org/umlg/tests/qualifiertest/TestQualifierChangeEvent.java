@@ -1,10 +1,12 @@
 package org.umlg.tests.qualifiertest;
 
+import com.tinkerpop.gremlin.process.T;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
 import org.umlg.qualifiertest.Nature;
 import org.umlg.runtime.test.BaseLocalDbTest;
+import org.umlg.runtime.util.Pair;
 
 public class TestQualifierChangeEvent extends BaseLocalDbTest {
 
@@ -25,11 +27,11 @@ public class TestQualifierChangeEvent extends BaseLocalDbTest {
         db.commit();
 		
 		God g = new God(god.getVertex());
-		g.getNatureForQualifier2("nature2").iterator().next().setName2("nameSoGonaFail");
+		g.getNatureForQualifier2(Pair.of(T.eq, "nature2")).iterator().next().setName2("nameSoGonaFail");
         db.commit();
 		
 		God gg = new God(god.getVertex());
-		Assert.assertTrue(!gg.getNatureForQualifier2("nameSoGonaFail").isEmpty());
+		Assert.assertTrue(!gg.getNatureForQualifier2(Pair.of(T.eq, "nameSoGonaFail")).isEmpty());
 	}
 
 }

@@ -7,6 +7,8 @@ import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 
 public class UmlgGenerationUtil {
 
+    public static final OJPathName Element = new OJPathName("com.tinkerpop.gremlin.structure.Element");
+    public static final OJPathName token = new OJPathName("com.tinkerpop.gremlin.process.T");
     public static final String getEntity = "getEntity";
     public static final String Index = "Index";
     public static final String Index_UNIQUE = "UNIQUE";

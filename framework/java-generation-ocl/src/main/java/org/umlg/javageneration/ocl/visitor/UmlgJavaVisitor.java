@@ -170,7 +170,17 @@ public class UmlgJavaVisitor extends
         String getter;
         if (!qualifierResults.isEmpty()) {
             getter = pWrap.getQualifiedNameFor(pWrap.getQualifiersAsPropertyWrappers());
-            getter += "(" + qualifierResults.toString().replace("[", "").replace("]", "") + ")";
+            getter += "(";
+            int count = 1;
+            for (String qualifierValue : qualifierResults) {
+                getter += "Pair.of(T.eq, " + qualifierValue + ")";
+                if (count++ < qualifierResults.size()) {
+                    getter += ", ";
+                }
+            }
+            getter += ")";
+            this.ojClass.addToImports(UmlgGenerationUtil.token);
+            this.ojClass.addToImports(UmlgGenerationUtil.Pair);
         } else {
             getter = pWrap.getter();
             getter += "()";

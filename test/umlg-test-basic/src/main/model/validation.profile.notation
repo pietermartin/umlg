@@ -97,7 +97,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Ugv3gs8MEeOjlpjTZXDyqw"/>
       </children>
       <element xmi:type="uml:Stereotype" href="validation.profile.uml#_Zj2ggAV6EeK9oIwdQfC0-w"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Zj4VsQV6EeK9oIwdQfC0-w" x="184" y="44" width="157" height="68"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Zj4VsQV6EeK9oIwdQfC0-w" x="195" y="46" width="157" height="68"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_bWT8oAV6EeK9oIwdQfC0-w" type="1026" fontName="Sans" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bWUjsAV6EeK9oIwdQfC0-w" source="ShadowFigure">
@@ -483,6 +483,8 @@
       <styles xmi:type="notation:FontStyle" xmi:id="_BhJ_sQV-EeK9oIwdQfC0-w" fontName="Sans"/>
       <element xmi:type="uml:Extension" href="validation.profile.uml#_BhJYoAV-EeK9oIwdQfC0-w"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BhJ_sgV-EeK9oIwdQfC0-w" points="[30, 34, -126, -117]$[106, 149, -50, -2]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_eHUUQAUyEeSLIPXdtbyv6Q" id="(0.6050955414012739,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_eHU7UAUyEeSLIPXdtbyv6Q" id="(0.37,0.0)"/>
     </edges>
     <edges xmi:type="notation:Connector" xmi:id="_Bv9QsAV-EeK9oIwdQfC0-w" type="1013" source="_gRrf4AV5EeK9oIwdQfC0-w" target="_fLALsAV5EeK9oIwdQfC0-w" lineColor="0">
       <styles xmi:type="notation:FontStyle" xmi:id="_Bv9QsQV-EeK9oIwdQfC0-w" fontName="Sans"/>

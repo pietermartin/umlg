@@ -1,5 +1,6 @@
 package org.umlg.ocl.test;
 
+import com.tinkerpop.gremlin.process.T;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -8,6 +9,7 @@ import org.umlg.ocl.UmlgOclExecutor;
 import org.umlg.qualifier.Bank;
 import org.umlg.qualifier.Customer;
 import org.umlg.runtime.test.BaseLocalDbTest;
+import org.umlg.runtime.util.Pair;
 
 import java.net.URL;
 import java.util.Collection;
@@ -51,7 +53,7 @@ public class TestRuntimeOclQualifiers extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(1001, new Bank(bank.getVertex()).getCustomer().size());
-        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierAccountNumberQualifier("c1", 1));
+        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierandAccountNumberQualifier(Pair.of(T.eq, "c1"), Pair.of(T.eq, 1)));
         Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerJohn001());
 
         Object result = UmlgOclExecutor.executeOclQuery(bank, "self.customer['john', 1].bank.name");
@@ -78,7 +80,7 @@ public class TestRuntimeOclQualifiers extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(1001, new Bank(bank.getVertex()).getCustomer().size());
-        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierAccountNumberQualifier("c1", 1));
+        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierandAccountNumberQualifier(Pair.of(T.eq, "c1"), Pair.of(T.eq, 1)));
         Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerJohn001());
 
         Object result = UmlgOclExecutor.executeOclQuery(bank, "self.customer->asSet()");
@@ -106,7 +108,7 @@ public class TestRuntimeOclQualifiers extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(1001, new Bank(bank.getVertex()).getCustomer().size());
-        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierAccountNumberQualifier("c1", 1));
+        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierandAccountNumberQualifier(Pair.of(T.eq, "c1"), Pair.of(T.eq, 1)));
         Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerJohn001());
 
         Object result = UmlgOclExecutor.executeOclQuery(john1, "self.bank->asSet()");

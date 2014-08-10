@@ -16,6 +16,10 @@ public class Pair<T1, T2> {
         this.obj2 = obj2;
     }
 
+    public static <T1,T2> Pair<T1,T2> of(T1 a, T2 b) {
+        return new Pair(a, b);
+    }
+
     public void setFirst(T1 obj1) {
         this.obj1 = obj1;
     }

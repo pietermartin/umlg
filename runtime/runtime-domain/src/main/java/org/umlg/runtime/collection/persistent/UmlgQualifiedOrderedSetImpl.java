@@ -25,7 +25,6 @@ public class UmlgQualifiedOrderedSetImpl<E> extends UmlgBaseOrderedSet<E> implem
             if (!(e instanceof UmlgNode)) {
                 throw new IllegalStateException("Primitive properties can not be qualified!");
             }
-            addQualifierToIndex(edge, (UmlgNode) e);
         }
     }
 

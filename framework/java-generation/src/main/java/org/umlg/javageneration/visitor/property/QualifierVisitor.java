@@ -32,13 +32,14 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             //This generates the getter that takes qualifier value as input
             //In this case they are the same as the qualifier is not refined
             generateQualifiedGetter(pWrap, pWrap);
-            //update the index on setters of the properties as specified on the QualifierListener stereotype
-            generateUpdateOfIndex(pWrap);
 
+//            //update the index on setters of the properties as specified on the QualifierListener stereotype
+//            generateUpdateOfIndex(pWrap);
+//
             List<Property> refinedQualifieds = pWrap.getRefinedQualifieds();
             for (Property refinedQualified : refinedQualifieds) {
                 generateQualifiedGetter(pWrap, new PropertyWrapper(refinedQualified));
-                generateUpdateOfIndex(new PropertyWrapper(refinedQualified));
+//                generateUpdateOfIndex(new PropertyWrapper(refinedQualified));
             }
 
         }
@@ -49,7 +50,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
     }
 
     private void validateHasCorrespondingDerivedProperty(PropertyWrapper qualifier) {
-        if (!qualifier.haveQualifierCorrespondingDerivedProperty()) {
+        if (!qualifier.hasQualifierCorrespondingQualifierVisitorStereotypedProperty()) {
             throw new IllegalStateException(String.format("Qualifier %s on %s does not have a corresponding derived property on %s",
                     new Object[]{qualifier.getName(), qualifier.getOwner(), qualifier.getQualifierContext().getName()}));
         }
@@ -63,7 +64,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         result.setName("result");
         result.setType(new OJPathName("java.util.List"));
         result.getType().addToElementTypes(UmlgGenerationUtil.UmlgQualifierPathName);
-        result.setInitExp("new ArrayList<" + UmlgGenerationUtil.UmlgQualifierPathName.getLast() + ">()");
+        result.setInitExp("new ArrayList<>()");
         ojClass.addToImports("java.util.ArrayList");
         qualifierGetter.setReturnType(result.getType());
         qualifierGetter.getBody().addToLocals(result);
@@ -81,47 +82,31 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
     }
 
     private void buildUMLGQualifier(OJAnnotatedClass ojClass, PropertyWrapper qualified, OJAnnotatedOperation qualifierGetter) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("result.add(");
-        sb.append("new ");
-        sb.append(UmlgGenerationUtil.UmlgQualifierPathName.getLast());
-        sb.append("(new String[]{");
-
-        for (Iterator<Property> iterator = qualified.getQualifiers().iterator(); iterator.hasNext(); ) {
-            PropertyWrapper qWrap = new PropertyWrapper(iterator.next());
-            sb.append(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast());
-            sb.append(".getUmlgLabelConverter().convert(");
-            sb.append("\"");
-            sb.append(qWrap.getPersistentName());
-            sb.append("\")");
-            if (iterator.hasNext()) {
-                sb.append(", ");
-            }
-        }
         ojClass.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);
-        sb.append("}, new String[]{");
-        for (Iterator<Property> iterator = qualified.getQualifiers().iterator(); iterator.hasNext(); ) {
-            PropertyWrapper qWrap = new PropertyWrapper(iterator.next());
-            sb.append("context.");
-            sb.append(qWrap.getter());
-            sb.append("() == null ? ");
-            sb.append(UmlgGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + \"___NULL___\" : " + UmlgGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + ");
-            sb.append("context.");
-            sb.append(qWrap.getter());
-            sb.append("().toString() ");
-            if (iterator.hasNext()) {
-                sb.append(", ");
-            }
-        }
 
-        sb.append("}, ");
-        sb.append(UmlgGenerationUtil.calculateMultiplcity(qualified));
-        sb.append("))");
-        qualifierGetter.getBody().addToStatements(sb.toString());
+        for (Iterator<Property> iterator = qualified.getQualifiers().iterator(); iterator.hasNext(); ) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("result.add(");
+            sb.append("new ");
+            sb.append(UmlgGenerationUtil.UmlgQualifierPathName.getLast());
+            sb.append("(");
+
+            PropertyWrapper qWrap = new PropertyWrapper(iterator.next());
+            sb.append("\"");
+            sb.append(qWrap.getQualifierCorrespondingQualifierStereotypedProperty().getPersistentName());
+            sb.append("\", ");
+            sb.append("context.");
+            sb.append(new PropertyWrapper(qWrap.getQualifierCorrespondingQualifierStereotypedProperty()).getter());
+            sb.append("()");
+            sb.append(", ");
+            sb.append(UmlgGenerationUtil.calculateMultiplcity(qualified));
+            sb.append("))");
+            qualifierGetter.getBody().addToStatements(sb.toString());
+        }
     }
 
-    private void generateQualifiedGetter(PropertyWrapper qualified, PropertyWrapper refinedQualifier) {
-        List<PropertyWrapper> qualifiers = refinedQualifier.getQualifiersAsPropertyWrappers();
+    private void generateQualifiedGetter(PropertyWrapper qualified, PropertyWrapper refinedQualified) {
+        List<PropertyWrapper> qualifiers = refinedQualified.getQualifiersAsPropertyWrappers();
         for (PropertyWrapper qualifier : qualifiers) {
             validateHasCorrespondingDerivedProperty(qualifier);
         }
@@ -130,60 +115,51 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         Type qualifiedClassifier = qualified.getOwningType();
         OJAnnotatedClass ojClass = findOJClass(qualifiedClassifier);
 
-        OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(refinedQualifier.getQualifiedNameFor(qualifiers));
-        if (refinedQualifier.isUnqualifiedOne()) {
-            qualifierValue.setReturnType(refinedQualifier.javaBaseTypePath());
+        OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(refinedQualified.getQualifiedNameFor(qualifiers));
+        if (refinedQualified.isUnqualifiedOne()) {
+            qualifierValue.setReturnType(refinedQualified.javaBaseTypePath());
         } else {
             // This needs to only return a Set or Bag for now, not sorting the
             // result
             // by index as yet
-            qualifierValue.setReturnType(refinedQualifier.javaTypePath());
+            qualifierValue.setReturnType(refinedQualified.javaTypePath());
         }
         for (PropertyWrapper qualifier : qualifiers) {
-            qualifierValue.addParam(qualifier.fieldname(), qualifier.javaBaseTypePath());
+            qualifierValue.addParam(qualifier.fieldname(), UmlgGenerationUtil.Pair.getCopy().addToGenerics(UmlgGenerationUtil.token).addToGenerics(qualifier.javaBaseTypePath()));
         }
-//        ojClass.addToImports(UmlgGenerationUtil.tinkerDirection);
         ojClass.addToImports(UmlgGenerationUtil.edgePathName);
-
-        OJBlock elseBlock = new OJBlock();
-        OJField indexKey = new OJField(elseBlock, "indexKey", new OJPathName("String"));
-        StringBuilder init = new StringBuilder();
-        int count = 0;
-
-        for (PropertyWrapper qualifier : qualifiers) {
-            count++;
-            init.append(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast());
-            init.append(".getUmlgLabelConverter().convert(");
-            init.append("\"" + qualifier.getPersistentName() + "\")");
-            if (count != qualifiers.size()) {
-                init.append(" + ");
-            }
-        }
-        indexKey.setInitExp(init.toString());
-        elseBlock.addToLocals(indexKey);
-
-        OJField indexValue = new OJField(elseBlock, "indexValue", new OJPathName("String"));
+        StringBuilder hasStatement = new StringBuilder();
+        hasStatement.append("Iterator<Vertex> iterator = ");
+        //build the has containers
+        hasStatement.append("this.vertex.to(\n        ");
+        hasStatement.append(UmlgClassOperations.propertyEnumName(qualifiedClassifier) + "." + qualified.fieldname() + ".isControllingSide() ? ");
+        hasStatement.append(UmlgGenerationUtil.tinkerDirection.getLast());
+        hasStatement.append(".OUT : ");
+        hasStatement.append(UmlgGenerationUtil.tinkerDirection.getLast());
+        hasStatement.append(".IN,\n        ");
+        hasStatement.append(UmlgClassOperations.propertyEnumName(qualifiedClassifier) + "." + qualified.fieldname() + ".getLabel())");
         boolean first = true;
         for (PropertyWrapper qualifier : qualifiers) {
             if (first) {
+                hasStatement.append("\n        .has(Element.LABEL, \"");
+                hasStatement.append(qualifier.getQualifierCorrespondingQualifierStereotypedProperty().getOwningType().getName());
+                hasStatement.append("\")\n        .<Vertex>has(");
                 first = false;
-                indexValue.setInitExp(qualifier.fieldname() + " == null ? " + UmlgGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + \"___NULL___\" : " + UmlgGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + " + qualifier.fieldname());
             } else {
-                elseBlock.addToStatements("indexValue += " + qualifier.fieldname() + " == null ? " + UmlgGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + \"___NULL___\" : " + UmlgGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + " + qualifier.fieldname());
+                hasStatement.append("\n        .<Vertex>has(");
             }
+            hasStatement.append("\"" + qualifier.getQualifierCorrespondingQualifierStereotypedProperty().getPersistentName() + "\", ");
+            hasStatement.append(qualifier.fieldname() + ".getFirst(), ");
+            hasStatement.append(qualifier.fieldname() + ".getSecond())");
         }
 
-        elseBlock.addToStatements("Iterator<Edge> iterator = " + UmlgGenerationUtil.UMLGAccess + ".E().has(indexKey, indexValue)");
-
-        qualifierValue.getBody().addToStatements(elseBlock);
+        qualifierValue.getBody().addToStatements(hasStatement.toString());
+        ojClass.addToImports(UmlgGenerationUtil.Element);
+        ojClass.addToImports(UmlgGenerationUtil.tinkerDirection);
         ojClass.addToImports("java.util.Iterator");
         OJIfStatement ifHasNext = new OJIfStatement("iterator.hasNext()");
-        if (refinedQualifier.isUnqualifiedOne()) {
-            OJIfStatement ifControllingSide = new OJIfStatement();
-            ifControllingSide.setCondition(UmlgClassOperations.propertyEnumName(qualifiedClassifier) + "." + qualified.fieldname() + ".isControllingSide()");
-            ifControllingSide.addToThenPart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next().inV().next())");
-            ifControllingSide.addToElsePart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next().outV().next())");
-            ifHasNext.addToThenPart(ifControllingSide);
+        if (refinedQualified.isUnqualifiedOne()) {
+            ifHasNext.addToThenPart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next())");
             ifHasNext.addToElsePart("return null");
         } else {
             OJSimpleStatement ojSimpleStatement;

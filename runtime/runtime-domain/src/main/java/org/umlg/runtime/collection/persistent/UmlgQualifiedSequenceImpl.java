@@ -22,7 +22,6 @@ public class UmlgQualifiedSequenceImpl<E> extends BaseSequence<E> implements Uml
 		if (!(e instanceof UmlgNode)) {
 			throw new IllegalStateException("Primitive properties can not be qualified!");
 		}
-		addQualifierToIndex(edge, (UmlgNode)e);
         if (this.loaded) {
             getInternalList().add(indexOf, e);
         }

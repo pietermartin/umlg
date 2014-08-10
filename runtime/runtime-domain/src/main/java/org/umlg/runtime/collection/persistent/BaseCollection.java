@@ -166,7 +166,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 if (!(e instanceof UmlgNode)) {
                     throw new IllegalStateException("Primitive properties can not be qualified!");
                 }
-                addQualifierToIndex(this.edge, (UmlgNode) e);
+//                addQualifierToIndex(this.edge, (UmlgNode) e);
             }
 
             if (isOrdered()) {
@@ -504,12 +504,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         UmlgNode node = (UmlgNode) e;
         if (isQualified()) {
             for (Qualifier qualifier : this.owner.getQualifiers(this.umlgRuntimeProperty, node, false)) {
-                validateQualifiedMultiplicity(/*index, */qualifier);
+                validateQualifiedMultiplicity(false, this.vertex, qualifier);
             }
         }
         if (isInverseQualified()) {
             for (Qualifier qualifier : node.getQualifiers(this.umlgRuntimeProperty, this.owner, true)) {
-                validateQualifiedMultiplicity(/*tmpIndex, */qualifier);
+                validateQualifiedMultiplicity(true, node.getVertex(), qualifier);
             }
         }
     }
@@ -860,41 +860,27 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         return result;
     }
 
-    private void validateQualifiedMultiplicity(Qualifier qualifier) {
+    private void validateQualifiedMultiplicity(boolean inverse, Vertex vertex, Qualifier qualifier) {
         if (qualifier.isOne()) {
-            long count = UMLG.get().E().has(qualifier.getKey(), qualifier.getValue()).count().next();
+            long count;
+            if (inverse) {
+                if (!isControllingSide()) {
+                    count = vertex.out(this.getLabel()).has(qualifier.getKey(), qualifier.getValue()).count().next();
+                } else {
+                    count = vertex.in(this.getLabel()).has(qualifier.getKey(), qualifier.getValue()).count().next();
+                }
+            } else {
+                if (!isControllingSide()) {
+                    count = vertex.in(this.getLabel()).has(qualifier.getKey(), qualifier.getValue()).count().next();
+                } else {
+                    count = vertex.out(this.getLabel()).has(qualifier.getKey(), qualifier.getValue()).count().next();
+                }
+            }
             if (count > 0) {
                 // Add info to exception
                 throw new IllegalStateException(String.format("Qualifier fails, qualifier multiplicity is one and an entry for key '%s' and value '%s' already exist",
                         qualifier.getKey(), qualifier.getValue()));
             }
-        }
-    }
-
-    protected void addQualifierToIndex(Edge edge, UmlgNode node) {
-        // if is qualified update index
-        if (isQualified()) {
-            addQualifierToIndex(edge, this.owner, node, false);
-        }
-
-        // if is qualified update index
-        if (isInverseQualified()) {
-            addQualifierToIndex(edge, node, this.owner, true);
-        }
-    }
-
-    /**
-     * element is the context for the ocl expression representing the qualifier
-     * value
-     * <p>
-     * //     * @param index
-     *
-     * @param qualifiedNode
-     * @param qualifierNode
-     */
-    private void addQualifierToIndex(Edge edge, UmlgNode qualifiedNode, UmlgNode qualifierNode, boolean inverse) {
-        for (Qualifier qualifier : qualifiedNode.getQualifiers(this.umlgRuntimeProperty, qualifierNode, inverse)) {
-            edge.property(qualifier.getKey(), qualifier.getValue());
         }
     }
 

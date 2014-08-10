@@ -1,11 +1,13 @@
 package org.umlg.tests.qualifiertest;
 
+import com.tinkerpop.gremlin.process.T;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
 import org.umlg.qualifiertest.Many1;
 import org.umlg.qualifiertest.Many2;
 import org.umlg.runtime.test.BaseLocalDbTest;
+import org.umlg.runtime.util.Pair;
 
 public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 
@@ -71,21 +73,21 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 		Assert.assertEquals(25, countEdges());
 
 		Many1 m = new Many1(many1_1.getVertex());
-		Assert.assertNotNull(m.getMany2ForQualifier1("many2_1"));
-		Assert.assertNotNull(m.getMany2ForQualifier1("many2_2"));
-		Assert.assertNotNull(m.getMany2ForQualifier1("many2_3"));
-		Assert.assertNotNull(m.getMany2ForQualifier1("many2_4"));
+		Assert.assertNotNull(m.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_1")));
+		Assert.assertNotNull(m.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_2")));
+		Assert.assertNotNull(m.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_3")));
+		Assert.assertNotNull(m.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_4")));
 
 		Many2 m2 = new Many2(many2_1.getVertex());
-		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_1"));
-		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_1"));
-		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_1"));
-		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_1"));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_1")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_1")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_1")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_1")));
 
-		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_4"));
-		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_4"));
-		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_4"));
-		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_4"));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_4")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_4")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_4")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_4")));
 
 	}
 
@@ -151,18 +153,18 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
         Assert.assertEquals(97, countEdges());
 
 		Many1 m = new Many1(many1_1.getVertex());
-		Assert.assertEquals(1, m.getMany2ListForListQualifier2("many2_1").size());
-		Assert.assertEquals(1, m.getMany2ListForListQualifier2("many2_2").size());
-		Assert.assertEquals(1, m.getMany2ListForListQualifier2("many2_3").size());
-		Assert.assertEquals(1, m.getMany2ListForListQualifier2("many2_4").size());
+		Assert.assertEquals(1, m.getMany2ListForListQualifier2(Pair.of(T.eq, "many2_1")).size());
+		Assert.assertEquals(1, m.getMany2ListForListQualifier2(Pair.of(T.eq, "many2_2")).size());
+		Assert.assertEquals(1, m.getMany2ListForListQualifier2(Pair.of(T.eq, "many2_3")).size());
+		Assert.assertEquals(1, m.getMany2ListForListQualifier2(Pair.of(T.eq, "many2_4")).size());
 
 		Many2 m2 = new Many2(many2_1.getVertex());
-		Assert.assertEquals(3, m2.getMany1ListForListQualifier1("many1_1").size());
-		Assert.assertEquals(3, m2.getMany1ListForListQualifier1("many1_1").size());
-		Assert.assertEquals(3, m2.getMany1ListForListQualifier1("many1_1").size());
-		Assert.assertEquals(3, m2.getMany1ListForListQualifier1("many1_1").size());
+		Assert.assertEquals(3, m2.getMany1ListForListQualifier1(Pair.of(T.eq, "many1_1")).size());
+		Assert.assertEquals(3, m2.getMany1ListForListQualifier1(Pair.of(T.eq, "many1_1")).size());
+		Assert.assertEquals(3, m2.getMany1ListForListQualifier1(Pair.of(T.eq, "many1_1")).size());
+		Assert.assertEquals(3, m2.getMany1ListForListQualifier1(Pair.of(T.eq, "many1_1")).size());
 
-		Assert.assertEquals(1, m2.getMany1ListForListQualifier1("many1_4").size());
+		Assert.assertEquals(1, m2.getMany1ListForListQualifier1(Pair.of(T.eq, "many1_4")).size());
 	}
 
     @Test
@@ -209,35 +211,36 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
         many2_1.addToMany1List(many1_3);
 
         db.commit();
+        Assert.assertEquals(3, many2_1.getMany1ListForListQualifier1(Pair.of(T.eq, "many1_1")).size());
 
         many1_1.reload();
-        Many2 m2 = many1_1.getMany2ForQualifier1("many2_1");
+        Many2 m2 = many1_1.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_1"));
         Assert.assertNotNull(m2);
         Assert.assertEquals("many2_1", m2.getName());
         m2.setName("wwww");
         db.commit();
-        m2 = many1_1.getMany2ForQualifier1("many2_1");
+        m2 = many1_1.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_1"));
         Assert.assertNull(m2);
-        m2 = many1_1.getMany2ForQualifier1("wwww");
+        m2 = many1_1.getMany2ForMany2Qualifier1(Pair.of(T.eq, "wwww"));
         Assert.assertNotNull(m2);
 
         many2_1.reload();
-        Assert.assertEquals(3, many2_1.getMany1ListForListQualifier1("many1_1").size());
+        Assert.assertEquals(3, many2_1.getMany1ListForListQualifier1(Pair.of(T.eq, "many1_1")).size());
         many1_1.setName("aaaa");
         db.commit();
 
-        Assert.assertEquals(2, many2_1.getMany1ListForListQualifier1("many1_1").size());
-        Assert.assertEquals(1, many2_1.getMany1ListForListQualifier1("aaaa").size());
+        Assert.assertEquals(2, many2_1.getMany1ListForListQualifier1(Pair.of(T.eq, "many1_1")).size());
+        Assert.assertEquals(1, many2_1.getMany1ListForListQualifier1(Pair.of(T.eq, "aaaa")).size());
 
         many1_2.setName("aaaa");
         db.commit();
-        Assert.assertEquals(1, many2_1.getMany1ListForListQualifier1("many1_1").size());
-        Assert.assertEquals(2, many2_1.getMany1ListForListQualifier1("aaaa").size());
+        Assert.assertEquals(1, many2_1.getMany1ListForListQualifier1(Pair.of(T.eq, "many1_1")).size());
+        Assert.assertEquals(2, many2_1.getMany1ListForListQualifier1(Pair.of(T.eq, "aaaa")).size());
 
         many1_3.setName("aaaa");
         db.commit();
-        Assert.assertEquals(0, many2_1.getMany1ListForListQualifier1("many1_1").size());
-        Assert.assertEquals(3, many2_1.getMany1ListForListQualifier1("aaaa").size());
+        Assert.assertEquals(0, many2_1.getMany1ListForListQualifier1(Pair.of(T.eq, "many1_1")).size());
+        Assert.assertEquals(3, many2_1.getMany1ListForListQualifier1(Pair.of(T.eq, "aaaa")).size());
 
     }
 

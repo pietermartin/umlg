@@ -12,4 +12,10 @@
   <packagedElement xmi:type="uml:DataType" xmi:id="_QhhnkAV-EeK9oIwdQfC0-w" name="Interval"/>
   <packagedElement xmi:type="uml:DataType" xmi:id="_fe6z8AV-EeK9oIwdQfC0-w" name="Duration"/>
   <packagedElement xmi:type="uml:DataType" xmi:id="_tq9b4AV-EeK9oIwdQfC0-w" name="CreditCardNumber"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_RFriQBogEeSL5ojTQwB9iQ" name="Host"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_TVbXUBogEeSL5ojTQwB9iQ" name="QuartzCron"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_U5Tk4BogEeSL5ojTQwB9iQ" name="UnixCron"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_CnalEBokEeSL5ojTQwB9iQ" name="Password"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_XPfSIBptEeSL5ojTQwB9iQ" name="ByteArray"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_Tyt4EBwUEeS0VvhEKHz6FQ" name="UnsecurePassword"/>
 </uml:Model>

@@ -1,11 +1,13 @@
 package org.umlg.tests.qualifiertest;
 
+import com.tinkerpop.gremlin.process.T;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.qualifiertest.QualifierA;
 import org.umlg.qualifiertest.QualifierB;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.test.BaseLocalDbTest;
+import org.umlg.runtime.util.Pair;
 
 /**
  * Date: 2014/08/09
@@ -17,6 +19,7 @@ public class TestQualifiedOnMultipleProperties extends BaseLocalDbTest {
     public void testQualifiedOnMultipleProperties() {
         QualifierA qualifierA = new QualifierA();
         qualifierA.setName("qualifierA");
+
         QualifierB qualifierB1 = new QualifierB();
         qualifierB1.setName1("qualifierB1Name1");
         qualifierB1.setName2("qualifierB1Name2");
@@ -38,8 +41,8 @@ public class TestQualifiedOnMultipleProperties extends BaseLocalDbTest {
         qualifierA.addToQualifierB(qualifierB4);
         UMLG.get().commit();
 
-        QualifierB qualifierB = qualifierA.getQualifierBForName1and2Qualifier("qualifierB4Name1qualifierB4Name2");
-        Assert.assertEquals(qualifierB, qualifierB4);
+        QualifierB qualifierB = qualifierA.getQualifierBForName1QualifierandName2Qualifier(Pair.of(T.eq, "qualifierB1Name1"), Pair.of(T.eq, "qualifierB1Name2"));
+        Assert.assertEquals(qualifierB1, qualifierB);
     }
 
     @Test
@@ -54,8 +57,8 @@ public class TestQualifiedOnMultipleProperties extends BaseLocalDbTest {
         qualifierA.addToQualifierBInt(qualifierB2);
         UMLG.get().commit();
 
-        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBIntForQualifierInt1(1));
-        Assert.assertNull(qualifierA.getQualifierBIntForQualifierInt1(3));
+        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBIntForQualifierInt1(Pair.of(T.eq, 1)));
+        Assert.assertNull(qualifierA.getQualifierBIntForQualifierInt1(Pair.of(T.eq, 3)));
     }
 
     @Test
@@ -72,11 +75,11 @@ public class TestQualifiedOnMultipleProperties extends BaseLocalDbTest {
         qualifierA.addToQualifierBMultipleInt(qualifierB2);
         UMLG.get().commit();
 
-        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBMultipleIntForQualifierMultipleInt("11"));
-        Assert.assertEquals(qualifierB2, qualifierA.getQualifierBMultipleIntForQualifierMultipleInt("22"));
+        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(T.eq, 1), Pair.of(T.eq, 1)));
+        Assert.assertEquals(qualifierB2, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(T.eq, 2), Pair.of(T.eq, 2)));
 
         qualifierB1.setInt2(2);
         UMLG.get().commit();
-        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBMultipleIntForQualifierMultipleInt("21"));
+        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(T.eq, 2), Pair.of(T.eq, 1)));
     }
 }

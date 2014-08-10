@@ -14,14 +14,14 @@ public class GenerateTestProjects {
             args = new String[]{"."};
         }
 		JavaGenerator javaGenerator = new JavaGenerator();
-        javaGenerator.generate(new File(args[0] + "/test/blueprints/umlg-test-blueprints/src/main/model/umlg-test.uml"), new File(args[0] + "/test/blueprints/umlg-test-blueprints/"), DefaultVisitors.getDefaultJavaVisitors());
-        javaGenerator = new JavaGenerator();
-		javaGenerator.generate(new File(args[0] + "/test/test-restlet/src/main/model/restAndJson.uml"), new File(args[0] + "/test/test-restlet/"), RestletVisitors.getDefaultJavaVisitors());
-		javaGenerator = new JavaGenerator();
-		javaGenerator.generate(new File(args[0] + "/test/umlg-test-basic/src/main/model/umlg-test-basic.uml"), new File(args[0] + "/test/umlg-test-basic/"), DefaultVisitors.getDefaultJavaVisitors());
-		javaGenerator = new JavaGenerator();
+//        javaGenerator.generate(new File(args[0] + "/test/blueprints/umlg-test-blueprints/src/main/model/umlg-test.uml"), new File(args[0] + "/test/blueprints/umlg-test-blueprints/"), DefaultVisitors.getDefaultJavaVisitors());
+//        javaGenerator = new JavaGenerator();
+//		javaGenerator.generate(new File(args[0] + "/test/test-restlet/src/main/model/restAndJson.uml"), new File(args[0] + "/test/test-restlet/"), RestletVisitors.getDefaultJavaVisitors());
+//		javaGenerator = new JavaGenerator();
+//		javaGenerator.generate(new File(args[0] + "/test/umlg-test-basic/src/main/model/umlg-test-basic.uml"), new File(args[0] + "/test/umlg-test-basic/"), DefaultVisitors.getDefaultJavaVisitors());
+//		javaGenerator = new JavaGenerator();
 		javaGenerator.generate(new File(args[0] + "/test/umlg-test-ocl/src/main/model/test-ocl.uml"), new File(args[0] + "/test/umlg-test-ocl/"), DefaultVisitors.getDefaultJavaVisitors());
-        javaGenerator = new JavaGenerator();
-        javaGenerator.generate(new File(args[0] + "/test/umlg-test-tinkergraph/src/main/model/tinkergraph.uml"), new File(args[0] + "/test/umlg-test-tinkergraph/"), DefaultVisitors.getDefaultJavaVisitors());
+//        javaGenerator = new JavaGenerator();
+//        javaGenerator.generate(new File(args[0] + "/test/umlg-test-tinkergraph/src/main/model/tinkergraph.uml"), new File(args[0] + "/test/umlg-test-tinkergraph/"), DefaultVisitors.getDefaultJavaVisitors());
     }
 }

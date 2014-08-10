@@ -4088,18 +4088,14 @@
           <element xmi:type="uml:Property" href="restAndJson.uml#_s7CrYKa4EeOPt7R4er8hcg"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_s7D5gaa4EeOPt7R4er8hcg"/>
         </children>
-        <children xmi:type="notation:Shape" xmi:id="_ZI3r8Ka5EeOPt7R4er8hcg" type="3012" fontName="Sans" fontHeight="10" lineColor="0">
-          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_DZ1VsN25EeOEP64qykw2fg" source="Stereotype_Annotation">
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_DZ1Vsd25EeOEP64qykw2fg" key="StereotypeWithQualifiedNameList" value=""/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_DZ1Vst25EeOEP64qykw2fg" key="StereotypeList" value="Umlg::Profile::QualifierListener"/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_DZ1Vs925EeOEP64qykw2fg" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_DZ1VtN25EeOEP64qykw2fg" key="PropStereoDisplay" value=""/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_DZ1Vtd25EeOEP64qykw2fg" key="StereotypePropertyLocation" value="Compartment"/>
-          </eAnnotations>
-          <element xmi:type="uml:Property" href="restAndJson.uml#_ZI2d0Ka5EeOPt7R4er8hcg"/>
-          <layoutConstraint xmi:type="notation:Location" xmi:id="_ZI3r8aa5EeOPt7R4er8hcg"/>
-        </children>
         <children xmi:type="notation:Shape" xmi:id="_ybVR4Ka9EeOPt7R4er8hcg" type="3012" fontName="Sans" fontHeight="10" lineColor="0">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_f_mDQCC3EeSAN4w8XdCgjw" source="Stereotype_Annotation">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_f_mDQSC3EeSAN4w8XdCgjw" key="StereotypeWithQualifiedNameList" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_f_mDQiC3EeSAN4w8XdCgjw" key="StereotypeList" value="Umlg::Profile::QualifierListener"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_f_mqUCC3EeSAN4w8XdCgjw" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_f_mqUSC3EeSAN4w8XdCgjw" key="PropStereoDisplay" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_f_mqUiC3EeSAN4w8XdCgjw" key="StereotypePropertyLocation" value="Compartment"/>
+          </eAnnotations>
           <element xmi:type="uml:Property" href="restAndJson.uml#_ybUDwKa9EeOPt7R4er8hcg"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_ybVR4aa9EeOPt7R4er8hcg"/>
         </children>
@@ -4125,7 +4121,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_r7y04qa4EeOPt7R4er8hcg"/>
       </children>
       <element xmi:type="uml:Class" href="restAndJson.uml#_r7tVUKa4EeOPt7R4er8hcg"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_r7t8Yaa4EeOPt7R4er8hcg" x="243" y="341"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_r7t8Yaa4EeOPt7R4er8hcg" x="256" y="345"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_2Xw48KbCEeOPt7R4er8hcg" type="2012" fontName="Sans" fontHeight="10" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_2XxgAKbCEeOPt7R4er8hcg" source="ShadowFigure">
@@ -4165,8 +4161,8 @@
       <styles xmi:type="notation:FontStyle" xmi:id="_vj2gsaa4EeOPt7R4er8hcg" fontName="Sans" fontHeight="10"/>
       <element xmi:type="uml:Association" href="restAndJson.uml#_vj1SkKa4EeOPt7R4er8hcg"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_vj2gsqa4EeOPt7R4er8hcg" points="[6, 15, 0, -162]$[6, 172, 0, -5]"/>
-      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_vkA4wKa4EeOPt7R4er8hcg" id="(0.5074626865671642,0.85)"/>
-      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_vkA4waa4EeOPt7R4er8hcg" id="(0.5,0.05)"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_vkA4wKa4EeOPt7R4er8hcg" id="(0.45751633986928103,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_vkA4waa4EeOPt7R4er8hcg" id="(0.49855907780979825,0.0)"/>
     </edges>
     <edges xmi:type="notation:Connector" xmi:id="_8jD9kKbCEeOPt7R4er8hcg" type="4013" source="_2Xw48KbCEeOPt7R4er8hcg" target="_vj2gsKa4EeOPt7R4er8hcg" lineColor="0">
       <styles xmi:type="notation:FontStyle" xmi:id="_8jD9kabCEeOPt7R4er8hcg" fontName="Sans" fontHeight="10"/>

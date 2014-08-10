@@ -212,17 +212,55 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return sb.toString();
     }
 
-    public Property getQualifierCorrespondingDerivedProperty() {
+    public PropertyWrapper getQualifierCorrespondingQualifierStereotypedProperty() {
+        PropertyWrapper result = null;
         if (!isQualifier()) {
-            throw new IllegalStateException("getCorrespondingDerivedProperty can only be called on a qualifier");
+            throw new IllegalStateException("getQualifierCorrespondingQualifierStereotypedProperty can only be called on a qualifier");
         }
         Property owner = (Property) getOwner();
+        Stereotype qualifierVisitor = ModelLoader.INSTANCE.findStereotype("QualifierListener");
         for (Element e : owner.getType().getOwnedElements()) {
-            if (e instanceof Property && ((Property) e).isDerived() && ((Property) e).getName().equals(getName())) {
-                return (Property) e;
+            if (e instanceof Property) {
+                Property p = (Property) e;
+                if (p.isStereotypeApplied(qualifierVisitor)) {
+                    List<Property> qualifierTemps = (List<Property>) p.getValue(qualifierVisitor, "qualifier");
+                    if (qualifierTemps.isEmpty()) {
+                        throw new IllegalStateException(String.format("Property %s QualifierVisitor stereotype does not have its qualifier property set!", new Object[]{p.getQualifiedName()}));
+                    }
+                    if (qualifierTemps.contains(this.property)) {
+                        result = new PropertyWrapper(p);
+                        break;
+                    }
+                }
             }
         }
-        return null;
+        return result;
+    }
+
+    /**
+     * Validate that a qualifier has only one corresponding stereotyped property on its owning property's type
+     */
+    public void validateQualifierCorrespondingQualifierStereotypedProperty() {
+        if (!isQualifier()) {
+            throw new IllegalStateException("getQualifierCorrespondingQualifierStereotypedProperty can only be called on a qualifier");
+        }
+        Property correspondingProperty = null;
+        Property owner = (Property) getOwner();
+        Stereotype qualifierVisitor = ModelLoader.INSTANCE.findStereotype("QualifierListener");
+        for (Element e : owner.getType().getOwnedElements()) {
+            if (e instanceof Property) {
+                Property p = (Property) e;
+                if (p.isStereotypeApplied(qualifierVisitor)) {
+                    List<Property> qualifierTemps = (List<Property>) p.getValue(qualifierVisitor, "qualifier");
+                    if (correspondingProperty != null && qualifierTemps.contains(this.property)) {
+                        throw new IllegalStateException(String.format("Qualifier %s has more than one corresponding QualifierVisitor stereotype. %s and %s ",
+                                new Object[]{this.getQualifiedName(), correspondingProperty.getQualifiedName(), p.getQualifiedName()}));
+                    } else if (qualifierTemps.contains(this.property)) {
+                        correspondingProperty = p;
+                    }
+                }
+            }
+        }
     }
 
     public OJPathName getQualifierContextPathName() {
@@ -243,11 +281,11 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return owner.getType();
     }
 
-    public boolean haveQualifierCorrespondingDerivedProperty() {
+    public boolean hasQualifierCorrespondingQualifierVisitorStereotypedProperty() {
         if (!isQualifier()) {
             throw new IllegalStateException("getCorrespondingDerivedProperty can only be called on a qualifier");
         }
-        return getQualifierCorrespondingDerivedProperty() != null;
+        return getQualifierCorrespondingQualifierStereotypedProperty() != null;
     }
 
     public String getQualifiedGetterName() {
@@ -256,8 +294,13 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public String getQualifiedNameFor(List<PropertyWrapper> qualifers) {
         StringBuilder sb = new StringBuilder();
+        boolean first = true;
         for (PropertyWrapper q : qualifers) {
+            if (!first) {
+                sb.append("and");
+            }
             sb.append(StringUtils.capitalize(q.getName()));
+            first = false;
         }
         return getter() + "For" + sb.toString();
     }
@@ -291,16 +334,16 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
                 return "\"\"";
             }
         } else if (v instanceof LiteralReal) {
-            LiteralReal literalReal = (LiteralReal)v;
+            LiteralReal literalReal = (LiteralReal) v;
             return String.valueOf(literalReal.getValue() + "D");
         } else if (v instanceof LiteralInteger) {
-            LiteralInteger literalInteger = (LiteralInteger)v;
+            LiteralInteger literalInteger = (LiteralInteger) v;
             return String.valueOf(literalInteger.getValue());
         } else if (v instanceof LiteralUnlimitedNatural) {
-            LiteralUnlimitedNatural literalUnlimitedNatural = (LiteralUnlimitedNatural)v;
+            LiteralUnlimitedNatural literalUnlimitedNatural = (LiteralUnlimitedNatural) v;
             return String.valueOf(literalUnlimitedNatural.getValue());
         } else if (v instanceof LiteralBoolean) {
-            LiteralBoolean literalBoolean = (LiteralBoolean)v;
+            LiteralBoolean literalBoolean = (LiteralBoolean) v;
             return String.valueOf(literalBoolean.isValue());
         } else if (v instanceof LiteralNull) {
             return "null";
@@ -363,7 +406,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 //        if (!isDerived() && !isPrimitive() && !isDataType() && !isNavigable()) {
 //            return UmlgPropertyOperations.internalSetter(this.property);
 //        } else {
-            return UmlgPropertyOperations.setter(this.property);
+        return UmlgPropertyOperations.setter(this.property);
 //        }
     }
 
@@ -688,6 +731,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     /**
      * Indicates the multipliticity as modelled. i.e. not the raw implied many on a qualified property
+     *
      * @return
      */
     public boolean isUnqualifiedOne() {
@@ -848,7 +892,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     @Override
     public String getQualifiedName() {
         if (isQualifier()) {
-            return ((NamedElement)this.property.getOwner()).getQualifiedName() + "::" + this.property.getQualifiedName();
+            return ((NamedElement) this.property.getOwner()).getQualifiedName() + "::" + this.property.getQualifiedName();
         } else {
             return this.property.getQualifiedName();
         }
@@ -856,8 +900,8 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public String getPersistentName() {
         if (isQualifier()) {
-            return ((Property)this.getOwner()).getName() + "_" + getName();
-        }  else {
+            return ((Property) this.getOwner()).getName() + "_" + getName();
+        } else {
             return this.getName();
         }
     }
@@ -1680,10 +1724,8 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public RangeUnlimitedNatural getRangeUnlimitedNatural() {
         Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.RangeUnlimitedNatural.name());
-        return new RangeUnlimitedNatural((Integer)property.getValue(stereotype, "min"), (Integer)property.getValue(stereotype, "max"));
+        return new RangeUnlimitedNatural((Integer) property.getValue(stereotype, "min"), (Integer) property.getValue(stereotype, "max"));
     }
-
-
 
 
     public MaxLong getMaxLong() {
@@ -1730,14 +1772,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.RangeDouble.name());
         return new RangeDouble((Double) property.getValue(stereotype, "min"), (Double) property.getValue(stereotype, "max"));
     }
-
-
-
-
-
-
-
-
 
 
     public MaxReal getMaxReal() {
@@ -2146,13 +2180,14 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public String updateIndexForQualifierName() {
         if (!this.isQualifier()) {
-             throw new IllegalStateException("PropertyWrapper.updateIndexForQualifierName() can only be called for a qualifier!");
+            throw new IllegalStateException("PropertyWrapper.updateIndexForQualifierName() can only be called for a qualifier!");
         }
         return "updateIndexFor" + StringUtils.capitalize(this.getName());
     }
 
     /**
      * that is an association of a class with itself
+     *
      * @return
      */
     public boolean isRecursive() {
@@ -2167,6 +2202,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     /**
      * This indicates that the property is a member end of an association that in turn is a <<Refine>>abstraction of another association.
      * <<Refine>> abstraction is used on qualified associations to indicate multiple separate qualifiers.
+     *
      * @return
      */
     public boolean isRefined() {
@@ -2187,7 +2223,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
                 List<NamedElement> clients = abstraction.getClients();
                 for (NamedElement supplier : clients) {
                     if (supplier instanceof Association) {
-                        Association refinedAssociation = (Association)supplier;
+                        Association refinedAssociation = (Association) supplier;
                         List<Property> refinedMemberEnds = refinedAssociation.getMemberEnds();
                         for (Property p : refinedMemberEnds) {
                             PropertyWrapper propertyWrapper = new PropertyWrapper(p);
