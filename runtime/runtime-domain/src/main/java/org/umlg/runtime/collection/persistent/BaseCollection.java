@@ -3,6 +3,7 @@ package org.umlg.runtime.collection.persistent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.tinkerpop.gremlin.process.Traversal;
 import com.tinkerpop.gremlin.structure.Direction;
 import com.tinkerpop.gremlin.structure.Edge;
 import com.tinkerpop.gremlin.structure.Property;
@@ -22,6 +23,7 @@ import org.umlg.runtime.domain.ocl.OclState;
 import org.umlg.runtime.types.Password;
 import org.umlg.runtime.types.UmlgType;
 import org.umlg.runtime.util.UmlgFormatter;
+import org.umlg.runtime.validation.RangeUnlimitedNatural;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -503,14 +505,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         }
         UmlgNode node = (UmlgNode) e;
         if (isQualified()) {
-            for (Qualifier qualifier : this.owner.getQualifiers(this.umlgRuntimeProperty, node, false)) {
-                validateQualifiedMultiplicity(false, this.vertex, qualifier);
-            }
+            List<Qualifier> qualifiers = this.owner.getQualifiers(this.umlgRuntimeProperty, node, false);
+            validateQualifiedMultiplicity(false, this.vertex, qualifiers);
         }
         if (isInverseQualified()) {
-            for (Qualifier qualifier : node.getQualifiers(this.umlgRuntimeProperty, this.owner, true)) {
-                validateQualifiedMultiplicity(true, node.getVertex(), qualifier);
-            }
+            List<Qualifier> qualifiers = node.getQualifiers(this.umlgRuntimeProperty, this.owner, true);
+            validateQualifiedMultiplicity(true, node.getVertex(), qualifiers);
         }
     }
 
@@ -860,26 +860,41 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         return result;
     }
 
-    private void validateQualifiedMultiplicity(boolean inverse, Vertex vertex, Qualifier qualifier) {
-        if (qualifier.isOne()) {
-            long count;
+    private void validateQualifiedMultiplicity(boolean inverse, Vertex vertex, List<Qualifier> qualifiers) {
+        if (qualifiers.get(0).isOne()) {
+            StringBuilder keys = new StringBuilder();
+            StringBuilder values = new StringBuilder();
+            long count = 1;
+            List<Traversal> traversals = new ArrayList<>();
+            for (Qualifier qualifier : qualifiers) {
+                if (qualifier.getValue()==null) {
+                    break;
+                }
+                keys.append(qualifier.getKey());
+                values.append(qualifier.getValue().toString());
+                if (count++ < qualifiers.size()) {
+                    keys.append(", ");
+                    values.append(", ");
+                }
+                traversals.add(UMLG.get().of().as("a").has(qualifier.getKey(), qualifier.getValue()));
+            }
             if (inverse) {
                 if (!isControllingSide()) {
-                    count = vertex.out(this.getLabel()).has(qualifier.getKey(), qualifier.getValue()).count().next();
+                    count = vertex.out(this.getLabel()).match("a", traversals.toArray(new Traversal[]{})).count().next();
                 } else {
-                    count = vertex.in(this.getLabel()).has(qualifier.getKey(), qualifier.getValue()).count().next();
+                    count = vertex.in(this.getLabel()).match("a", traversals.toArray(new Traversal[]{})).count().next();
                 }
             } else {
                 if (!isControllingSide()) {
-                    count = vertex.in(this.getLabel()).has(qualifier.getKey(), qualifier.getValue()).count().next();
+                    count = vertex.in(this.getLabel()).match("a", traversals.toArray(new Traversal[]{})).count().next();
                 } else {
-                    count = vertex.out(this.getLabel()).has(qualifier.getKey(), qualifier.getValue()).count().next();
+                    count = vertex.out(this.getLabel()).match("a", traversals.toArray(new Traversal[]{})).count().next();
                 }
             }
             if (count > 0) {
                 // Add info to exception
                 throw new IllegalStateException(String.format("Qualifier fails, qualifier multiplicity is one and an entry for key '%s' and value '%s' already exist",
-                        qualifier.getKey(), qualifier.getValue()));
+                        keys.toString(), values.toString()));
             }
         }
     }

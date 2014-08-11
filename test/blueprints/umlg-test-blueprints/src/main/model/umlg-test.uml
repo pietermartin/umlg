@@ -960,6 +960,53 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__9lRcx_IEeS6wLiaOddMTA" value="1"/>
             </ownedEnd>
           </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_NPpewCEZEeSAN4w8XdCgjw" name="QualifierC">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_ULXTsCEZEeSAN4w8XdCgjw" name="qualifierD" type="_OUYSMCEZEeSAN4w8XdCgjw" association="_ULX6wCEZEeSAN4w8XdCgjw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ULXTsSEZEeSAN4w8XdCgjw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ULXTsiEZEeSAN4w8XdCgjw" value="1"/>
+              <qualifier xmi:type="uml:Property" xmi:id="_-joEUCEaEeSAN4w8XdCgjw" name="dateQualifier">
+                <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
+              </qualifier>
+              <qualifier xmi:type="uml:Property" xmi:id="_EsECMCEbEeSAN4w8XdCgjw" name="enum1Qualifier" type="_PY5qQCEZEeSAN4w8XdCgjw"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_gryHUCEZEeSAN4w8XdCgjw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_kE-QsCEZEeSAN4w8XdCgjw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_kE-3wCEZEeSAN4w8XdCgjw" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_OUYSMCEZEeSAN4w8XdCgjw" name="QualifierD">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_anYU4CEZEeSAN4w8XdCgjw" name="eNUM1" type="_PY5qQCEZEeSAN4w8XdCgjw" association="_anY78CEZEeSAN4w8XdCgjw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_anYU4SEZEeSAN4w8XdCgjw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_anYU4iEZEeSAN4w8XdCgjw" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_kvMSYCEZEeSAN4w8XdCgjw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mjNNsCEZEeSAN4w8XdCgjw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mjPC4CEZEeSAN4w8XdCgjw" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_tiUU4CEZEeSAN4w8XdCgjw" name="date" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vA39kCEZEeSAN4w8XdCgjw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vA5ywCEZEeSAN4w8XdCgjw" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_PY5qQCEZEeSAN4w8XdCgjw" name="ENUM1">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_QZI_QCEZEeSAN4w8XdCgjw" name="A"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_RCtgsCEZEeSAN4w8XdCgjw" name="B"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_ULX6wCEZEeSAN4w8XdCgjw" name="A_qualifierC_qualifierD_1" memberEnd="_ULX6wSEZEeSAN4w8XdCgjw _ULXTsCEZEeSAN4w8XdCgjw" navigableOwnedEnd="_ULX6wSEZEeSAN4w8XdCgjw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_ULX6wSEZEeSAN4w8XdCgjw" name="qualifierC" type="_NPpewCEZEeSAN4w8XdCgjw" association="_ULX6wCEZEeSAN4w8XdCgjw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ULX6wiEZEeSAN4w8XdCgjw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ULX6wyEZEeSAN4w8XdCgjw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_anY78CEZEeSAN4w8XdCgjw" name="A_qualifierD_eNUM1_1" memberEnd="_anY78SEZEeSAN4w8XdCgjw _anYU4CEZEeSAN4w8XdCgjw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_anY78SEZEeSAN4w8XdCgjw" name="qualifierD" type="_OUYSMCEZEeSAN4w8XdCgjw" association="_anY78CEZEeSAN4w8XdCgjw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_anY78iEZEeSAN4w8XdCgjw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_anY78yEZEeSAN4w8XdCgjw" value="*"/>
+            </ownedEnd>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_ossv8BFLEeGoRIAInCGFZA" name="collectiontest">
           <packagedElement xmi:type="uml:Class" xmi:id="_dVgyEBFHEeGoRIAInCGFZA" name="Hand">
@@ -3054,4 +3101,6 @@ endif</body>
   <UmlgProfile:QualifierListener xmi:id="_hQoL8CB4EeSAN4w8XdCgjw" base_Property="_8yErwBqsEeG2HY-TJLNivw" qualifier="_sejkgBqtEeG2HY-TJLNivw"/>
   <UmlgProfile:QualifierListener xmi:id="_v16aUCB4EeSAN4w8XdCgjw" base_Property="_RCfXUBq1EeG2HY-TJLNivw" qualifier="_VtHawBqyEeG2HY-TJLNivw"/>
   <UmlgProfile:QualifierListener xmi:id="_2U3awCB4EeSAN4w8XdCgjw" base_Property="_1fC9sBh1EeGyD6zYrs7NuQ" qualifier="_-rykoBh2EeGyD6zYrs7NuQ"/>
+  <UmlgProfile:QualifierListener xmi:id="_N7YRcCEbEeSAN4w8XdCgjw" base_Property="_tiUU4CEZEeSAN4w8XdCgjw" qualifier="_-joEUCEaEeSAN4w8XdCgjw"/>
+  <UmlgProfile:QualifierListener xmi:id="_U8uNQCEbEeSAN4w8XdCgjw" base_Property="_anYU4CEZEeSAN4w8XdCgjw" qualifier="_EsECMCEbEeSAN4w8XdCgjw"/>
 </xmi:XMI>

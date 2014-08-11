@@ -100,6 +100,12 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             sb.append("()");
             sb.append(", ");
             sb.append(UmlgGenerationUtil.calculateMultiplcity(qualified));
+            sb.append(", ");
+            sb.append(UmlgClassOperations.getPathName(qWrap.getQualifierCorrespondingQualifierStereotypedProperty().getOwningType()).getLast());
+            sb.append(".");
+            sb.append(UmlgClassOperations.propertyEnumName(qWrap.getQualifierCorrespondingQualifierStereotypedProperty().getOwningType()));
+            sb.append(".");
+            sb.append(qWrap.getQualifierCorrespondingQualifierStereotypedProperty().fieldname());
             sb.append("))");
             qualifierGetter.getBody().addToStatements(sb.toString());
         }
@@ -150,7 +156,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             }
             hasStatement.append("\"" + qualifier.getQualifierCorrespondingQualifierStereotypedProperty().getPersistentName() + "\", ");
             hasStatement.append(qualifier.fieldname() + ".getFirst(), ");
-            hasStatement.append(qualifier.fieldname() + ".getSecond())");
+            hasStatement.append(buildSecondFormatter(ojClass, qualifier));
         }
 
         qualifierValue.getBody().addToStatements(hasStatement.toString());
@@ -176,137 +182,19 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         ojClass.addToOperations(qualifierValue);
     }
 
-    private void generateUpdateOfIndex(PropertyWrapper qualified) {
-
-        for (Iterator<Property> iterator = qualified.getQualifiers().iterator(); iterator.hasNext(); ) {
-            PropertyWrapper qualifierPWrap = new PropertyWrapper(iterator.next());
-            OJAnnotatedClass contextOJClass = findOJClass(qualifierPWrap);
-            //find the property to listen on via the qualifierListener stereotype
-
-            Classifier targetClassifier = (Classifier) qualified.getType();
-            Property derivedQualifierProperty = targetClassifier.getAttribute(qualifierPWrap.getName(), qualifierPWrap.getType());
-            if (!derivedQualifierProperty.isDerived()) {
-                throw new IllegalStateException(String.format("Property %p for qualifier %s must be derived", new String[]{derivedQualifierProperty.getQualifiedName(), qualifierPWrap.getQualifiedName()}));
-            }
-
-            Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgProfileEnum.QualifierListener.name());
-            if (derivedQualifierProperty.isStereotypeApplied(stereotype)) {
-                List<Property> properties = (List<Property>) derivedQualifierProperty.getValue(stereotype, "property");
-                for (Property p : properties) {
-                    PropertyWrapper propertyToListenOn = new PropertyWrapper(p);
-                    OJAnnotatedOperation setter;
-                    if (propertyToListenOn.isMany()) {
-                        setter = contextOJClass.findOperation(propertyToListenOn.setter(), propertyToListenOn.javaTypePath());
-                    } else {
-                        setter = contextOJClass.findOperation(propertyToListenOn.setter(), propertyToListenOn.javaBaseTypePath());
-                    }
-
-                    generateUpdateMethodToAddToSetter(setter, qualified, qualifierPWrap, propertyToListenOn);
-                    generateUpdateIndexMethodForQualifier(contextOJClass, qualified, qualifierPWrap, propertyToListenOn);
-
-                }
-            } else {
-                throw new IllegalStateException(String.format("Qualified property %s does not have a the QualifierListener stereotype applied on its corresponding derived property %s.", new String[]{qualified.getQualifiedName(), derivedQualifierProperty.getQualifiedName()}));
-            }
-        }
-
-    }
-
-    private void generateUpdateIndexMethodForQualifier(OJAnnotatedClass contextOJClass, PropertyWrapper qualified, PropertyWrapper qualifier, PropertyWrapper propertyToListenOn) {
-        OJAnnotatedOperation updateIndexForQualifier = new OJAnnotatedOperation(qualifier.updateIndexForQualifierName());
-
-        PropertyWrapper otherEnd = new PropertyWrapper(qualified.getOtherEnd());
-
-        OJForStatement forElementsOnOtherSide = null;
-        if (otherEnd.isMany()) {
-            forElementsOnOtherSide = new OJForStatement(otherEnd.fieldname(), otherEnd.javaBaseTypePath(), "this." + otherEnd.getter() + "()");
-        }
-
-        OJField qualifierField = new OJField("qualifier", UmlgGenerationUtil.UmlgQualifierPathName);
-        StringBuilder sb = new StringBuilder();
-        sb.append("new ");
-        sb.append(UmlgGenerationUtil.UmlgQualifierPathName.getLast());
-        sb.append("(new String[]{");
-        sb.append(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast());
-        sb.append(".getUmlgLabelConverter().convert(\"");
-        sb.append(qualifier.getPersistentName());
-        sb.append("\")}, new String[]{");
-        sb.append(qualifier.getter());
-        sb.append("() == null ? ");
-        sb.append(UmlgGenerationUtil.UmlgQualifierIdFactory.getLast());
-        sb.append(".getUmlgQualifierId().getId(");
-        if (otherEnd.isMany()) {
-            sb.append(otherEnd.fieldname());
+    private String buildSecondFormatter(OJAnnotatedClass ojClass, PropertyWrapper qualifier) {
+        if (qualifier.isEnumeration()) {
+            return qualifier.fieldname() + ".getSecond().name())";
+        } else if (qualifier.isDataType() && !qualifier.isPrimitive()) {
+            ojClass.addToImports(UmlgGenerationUtil.umlgFormatter);
+            return UmlgGenerationUtil.umlgFormatter.getLast() + ".format(" +
+                    qualifier.getDataTypeEnum().getInitExpression() +
+                    ", " +
+                    qualifier.fieldname() +
+                    ".getSecond()))";
         } else {
-            sb.append("this.");
-            sb.append(otherEnd.getter());
-            sb.append("()");
+            return qualifier.fieldname() + ".getSecond())";
         }
-        sb.append(") + \"___NULL___\" : ");
-        sb.append(UmlgGenerationUtil.UmlgQualifierIdFactory.getLast());
-        sb.append(".getUmlgQualifierId().getId(");
-        if (otherEnd.isMany()) {
-            sb.append(otherEnd.fieldname());
-        } else {
-            sb.append("this.");
-            sb.append(otherEnd.getter());
-            sb.append("()");
-        }
-        sb.append(") + this.");
-        sb.append(qualifier.getter());
-        sb.append("().toString()}, ");
-        sb.append(UmlgGenerationUtil.calculateMultiplcity(qualified));
-        sb.append(")");
-        qualifierField.setInitExp(sb.toString());
-
-        if (otherEnd.isMany()) {
-            forElementsOnOtherSide.getBody().addToLocals(qualifierField);
-        } else {
-            updateIndexForQualifier.getBody().addToLocals(qualifierField);
-        }
-
-        sb = new StringBuilder();
-        sb.append("this.vertex.toE(");
-        sb.append(UmlgClassOperations.propertyEnumName(qualified.getType()));
-        sb.append(".");
-        sb.append(new PropertyWrapper(qualified.getOtherEnd()).fieldname());
-        sb.append(".isControllingSide() ? ");
-        sb.append(UmlgGenerationUtil.tinkerDirection.getLast());
-        sb.append(".OUT : ");
-        sb.append(UmlgGenerationUtil.tinkerDirection.getLast());
-        sb.append(".IN, ");
-        sb.append(UmlgClassOperations.propertyEnumName(qualified.getType()));
-        sb.append(".");
-        sb.append(otherEnd.fieldname());
-        sb.append(".getLabel())");
-
-        ForEachStatement forEachStatement = new ForEachStatement(sb.toString(), "edge");
-        OJSimpleStatement ojSimpleStatement = new OJSimpleStatement();
-        ojSimpleStatement.addToExpression("edge.property(qualifier.getKey(), qualifier.getValue())");
-        forEachStatement.addStatement(ojSimpleStatement);
-
-        if (otherEnd.isMany()) {
-            forElementsOnOtherSide.getBody().addToStatements(forEachStatement);
-            updateIndexForQualifier.getBody().addToStatements(forElementsOnOtherSide);
-        } else {
-            updateIndexForQualifier.getBody().addToStatements(forEachStatement);
-        }
-
-        contextOJClass.addToOperations(updateIndexForQualifier);
-        contextOJClass.addToImports(UmlgGenerationUtil.tinkerDirection);
-        contextOJClass.addToImports(UmlgGenerationUtil.umlgMultiplicityPathName);
-        contextOJClass.addToImports(UmlgGenerationUtil.UmlgQualifierIdFactory);
-        contextOJClass.addToImports(UmlgGenerationUtil.UmlgQualifierPathName);
-    }
-
-    private void generateUpdateMethodToAddToSetter(OJAnnotatedOperation setter, PropertyWrapper qualified, PropertyWrapper qualifier, PropertyWrapper propertyToListenOn) {
-
-        OJIfStatement ifOtherSideIsNotNull = new OJIfStatement(
-                "this." + new PropertyWrapper(qualified.getOtherEnd()).getter() + "() != null",
-                "this." + qualifier.updateIndexForQualifierName() + "()");
-        setter.getBody().addToStatements(ifOtherSideIsNotNull);
-
-
     }
 
 }

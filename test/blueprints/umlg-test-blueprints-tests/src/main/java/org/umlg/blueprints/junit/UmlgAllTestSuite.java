@@ -40,10 +40,7 @@ import org.umlg.tests.nonnavigable.NonNavigableTest;
 import org.umlg.tests.ocl.datatypes.TestOclCollectOnDataTypes;
 import org.umlg.tests.primitive.TestBooleanPrimitive;
 import org.umlg.tests.primitive.TestPrimitiveRemoval;
-import org.umlg.tests.qualifiertest.TestQualifiedDeletion;
-import org.umlg.tests.qualifiertest.TestQualifiedOnMultipleProperties;
-import org.umlg.tests.qualifiertest.TestQualifier;
-import org.umlg.tests.qualifiertest.TestQualifierOnManyToMany;
+import org.umlg.tests.qualifiertest.*;
 import org.umlg.tests.query.TestMetaQueries;
 import org.umlg.tests.query.TestQueryBaseModelUmlgAssociation;
 import org.umlg.tests.ringtest.TestFingerRing;
@@ -121,7 +118,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestIndexingDataType.class,
         OneEnumerationTest.class,
         TestOclCollectOnDataTypes.class,
-        TestQualifiedOnMultipleProperties.class
+        TestQualifiedOnMultipleProperties.class,
+        TestQualifierWithDateAndEnum.class
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
 //        TestAssociationToSelf.class,
