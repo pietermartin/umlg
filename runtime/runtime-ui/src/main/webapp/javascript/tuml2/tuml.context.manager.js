@@ -84,67 +84,6 @@
                 }
             }
 
-//            $('#umlgBrandRoot').remove();
-//            var brandUl = $('<ol />', {id: 'umlgBrandRoot', class: 'nav navbar-nav'}).appendTo('.collapse.navbar-collapse');
-//            var brandLi = $('<li />').appendTo(brandUl);
-//            $('<a />', {class: 'navbar-brand', href: 'http://umlg.org', target: '_blank'}).text('Umlg').appendTo(brandLi);
-
-            /*
-             $('#contextRoot').remove();
-             var contextRoot = $('<div />', {id: 'contextRoot', class: 'ui-widget ui-state-default'}).appendTo('.ui-layout-north');
-
-             contextRoot.keydown(function(e) {
-             if (e.which == 39) {
-             //right arrow
-             var current = contextRoot.find('li.ui-state-focus');
-             var next = current.next('li');
-             current.removeClass('ui-state-focus');
-             next.addClass('ui-state-focus');
-             next.find('a')[0].focus();
-             } else if (e.which == 37) {
-             //left arrow
-             var current = contextRoot.find('li.ui-state-focus');
-             var previous = current.prev('li');
-             current.removeClass('ui-state-focus');
-             previous.addClass('ui-state-focus');
-             previous.find('a')[0].focus();
-             }
-             });
-
-             var contextRootUl = $('<ul />', {id: 'contextRootUl', class: 'ui-widget ui-widget-content ui-corner-all'}).appendTo(contextRoot);
-             data.reverse();
-
-             for (var i = 0; i < data.length; i++) {
-             var property = data[i];
-             var li = $('<li data=' + property.uri + ' class=ui-corner-all' + '/>').appendTo(contextRootUl);
-             li.on('focusout', function() {$(this).removeClass('ui-state-focus')});
-             var a = $('<a />', {href: property.uri, text: property.name, title: property.name, tabindex: i,
-             click: function (e) {
-             var url = $.data(e.target).data;
-             self.onClickContextMenu.notify({uri: url, name: "unused"}, null, self);
-             e.preventDefault();
-             return false;
-             }
-             });
-             a.appendTo(li);
-             li.on('mouseover focus', function() {$(this).addClass('ui-state-hover')});
-             li.on('mouseleave blur', function() {$(this).removeClass('ui-state-hover ui-state-focus')});
-             a.data('data', property.uri);
-             if (i == 0) {
-             $('<span />', {class: 'ui-icon ui-icon-home'}).appendTo(a);
-             } else {
-             $('<span />', {class: 'ui-icon ui-icon-carat-1-e'}).appendTo(a);
-             }
-             if (i == data.length - 2) {
-             previousUri = a;
-             }
-             };
-             */
-
-//            $('.embossed').remove();
-//            var p = $('<div />', {class: 'embossed'});
-//            $('<span />').text("UmlG").appendTo(p);
-//            p.appendTo(contextRoot);
         }
 
         //Public api

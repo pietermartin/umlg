@@ -305,6 +305,19 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return getter() + "For" + sb.toString();
     }
 
+    public String getQualifiedNameForPartial(List<PropertyWrapper> qualifers) {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (PropertyWrapper q : qualifers) {
+            if (!first) {
+                sb.append("and");
+            }
+            sb.append(StringUtils.capitalize(q.getName()));
+            first = false;
+        }
+        return getter() + "ForPartial" + sb.toString();
+    }
+
     public Property getProperty() {
         return property;
     }

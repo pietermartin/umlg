@@ -46,7 +46,7 @@ public class SpeedTest extends BaseLocalDbTest {
         God god = new God(true);
         god.setName("god");
         long previousSplitTime = 0;
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000; i++) {
             Hand hand = new Hand(god);
             hand.setName("hand" + i);
             if (i % 1000 == 0) {

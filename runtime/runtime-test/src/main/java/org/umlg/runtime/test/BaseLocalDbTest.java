@@ -7,6 +7,7 @@ import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgAdminGraph;
 import org.umlg.runtime.adaptor.UmlgGraph;
 
+import javax.management.relation.RoleUnresolved;
 import java.net.URL;
 import java.util.logging.LogManager;
 
@@ -20,7 +21,7 @@ public class BaseLocalDbTest {
 			URL url = BaseLocalDbTest.class.getResource("/logging.properties");
 			LogManager.getLogManager().readConfiguration(url.openStream());
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			throw new RuntimeException(ex);
 		}
 	}
 

@@ -64,7 +64,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
             if (uniqueParameter.getValue()) {
                 this.sqlG.createUniqueConstraint(labelParameter.getValue(), key);
             } else {
-                this.sqlG.createLabeledIndex(labelParameter.getValue(), key);
+                this.sqlG.createLabeledIndex(labelParameter.getValue(), key, SqlgDefaultValueUtil.valueFor(indexParameter.getValue()));
 
             }
         } else if (Edge.class.isAssignableFrom(elementClass)) {

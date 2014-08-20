@@ -7,6 +7,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 
 public class UmlgGenerationUtil {
 
+    public static final OJPathName GraphTraversal = new OJPathName("com.tinkerpop.gremlin.process.graph.GraphTraversal");
     public static final OJPathName Element = new OJPathName("com.tinkerpop.gremlin.structure.Element");
     public static final OJPathName token = new OJPathName("com.tinkerpop.gremlin.process.T");
     public static final String getEntity = "getEntity";
