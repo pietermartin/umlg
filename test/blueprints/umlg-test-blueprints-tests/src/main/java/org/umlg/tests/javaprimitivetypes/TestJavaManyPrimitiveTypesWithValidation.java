@@ -64,7 +64,7 @@ public class TestJavaManyPrimitiveTypesWithValidation extends BaseLocalDbTest {
 
     @Test
     public void testMaxFloatPass() {
-        Assume.assumeTrue(UMLG.get().getFeatures().vertex().properties().supportsFloatValues());
+        Assume.assumeTrue(UMLG.get().features().vertex().properties().supportsFloatValues());
         JavaManyPrimitiveTypeWithValidation javaManyPrimitiveTypeWithValidation = new JavaManyPrimitiveTypeWithValidation();
         javaManyPrimitiveTypeWithValidation.addToAMaxFloatMany(1F);
         javaManyPrimitiveTypeWithValidation.addToAMaxFloatMany(2F);
@@ -78,7 +78,7 @@ public class TestJavaManyPrimitiveTypesWithValidation extends BaseLocalDbTest {
 
     @Test(expected = UmlgConstraintViolationException.class)
     public void testMaxFloatFail() {
-        Assume.assumeTrue(UMLG.get().getFeatures().vertex().properties().supportsFloatValues());
+        Assume.assumeTrue(UMLG.get().features().vertex().properties().supportsFloatValues());
         JavaManyPrimitiveTypeWithValidation javaManyPrimitiveTypeWithValidation = new JavaManyPrimitiveTypeWithValidation();
         javaManyPrimitiveTypeWithValidation.addToAMaxFloatMany(1F);
         javaManyPrimitiveTypeWithValidation.addToAMaxFloatMany(2F);
@@ -152,7 +152,7 @@ public class TestJavaManyPrimitiveTypesWithValidation extends BaseLocalDbTest {
 
     @Test
     public void testMinFloatPass() {
-        Assume.assumeTrue(UMLG.get().getFeatures().vertex().properties().supportsFloatValues());
+        Assume.assumeTrue(UMLG.get().features().vertex().properties().supportsFloatValues());
         JavaManyPrimitiveTypeWithValidation javaManyPrimitiveTypeWithValidation = new JavaManyPrimitiveTypeWithValidation();
         javaManyPrimitiveTypeWithValidation.addToAMinFloatMany(5F);
         javaManyPrimitiveTypeWithValidation.addToAMinFloatMany(6F);
@@ -229,7 +229,7 @@ public class TestJavaManyPrimitiveTypesWithValidation extends BaseLocalDbTest {
 
     @Test
     public void testRangeFloatPass() {
-        Assume.assumeTrue(UMLG.get().getFeatures().vertex().properties().supportsFloatValues());
+        Assume.assumeTrue(UMLG.get().features().vertex().properties().supportsFloatValues());
         JavaManyPrimitiveTypeWithValidation javaManyPrimitiveTypeWithValidation = new JavaManyPrimitiveTypeWithValidation();
         javaManyPrimitiveTypeWithValidation.addToARangeFloatMany(-4.5F);
         javaManyPrimitiveTypeWithValidation.addToARangeFloatMany(1F);

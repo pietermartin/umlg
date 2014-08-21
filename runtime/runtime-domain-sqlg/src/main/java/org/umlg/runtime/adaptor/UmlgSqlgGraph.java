@@ -473,7 +473,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public Features getFeatures() {
-        return this.sqlG.getFeatures();
+    public Features features() {
+        return this.sqlG.features();
     }
 }
