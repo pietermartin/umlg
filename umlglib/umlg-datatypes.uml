@@ -18,4 +18,5 @@
   <packagedElement xmi:type="uml:DataType" xmi:id="_CnalEBokEeSL5ojTQwB9iQ" name="Password"/>
   <packagedElement xmi:type="uml:DataType" xmi:id="_XPfSIBptEeSL5ojTQwB9iQ" name="ByteArray"/>
   <packagedElement xmi:type="uml:DataType" xmi:id="_Tyt4EBwUEeS0VvhEKHz6FQ" name="UnsecurePassword"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_-sBCoCneEeSrKMaegwzyKA" name="RGBAColor"/>
 </uml:Model>

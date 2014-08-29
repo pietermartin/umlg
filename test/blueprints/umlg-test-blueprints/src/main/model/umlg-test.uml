@@ -2961,6 +2961,110 @@ endif</body>
                 </defaultValue>
               </ownedAttribute>
             </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_LjHRQCopEeSHBNK-NcrVHQ" name="OclIsUnique1">
+              <ownedRule xmi:type="uml:Constraint" xmi:id="_uuWP8CopEeSHBNK-NcrVHQ" name="Constraint" constrainedElement="_LjHRQCopEeSHBNK-NcrVHQ">
+                <specification xmi:type="uml:LiteralString" xmi:id="_uubvgCopEeSHBNK-NcrVHQ" name="constraintSpec" value="self.oclIsUnique2->isUnique(oclIsUnique3)"/>
+              </ownedRule>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_VwPzoCopEeSHBNK-NcrVHQ" name="oclIsUnique2" type="_QNjAECopEeSHBNK-NcrVHQ" aggregation="composite" association="_VwRBwCopEeSHBNK-NcrVHQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_VwPzoSopEeSHBNK-NcrVHQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_VwPzoiopEeSHBNK-NcrVHQ" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_jtYc4CopEeSHBNK-NcrVHQ" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_lSn8YCopEeSHBNK-NcrVHQ" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_lSrmwCopEeSHBNK-NcrVHQ" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_QNjAECopEeSHBNK-NcrVHQ" name="OclIsUnique2">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_c4Oi8CopEeSHBNK-NcrVHQ" name="oclIsUnique3" type="_SX6l4CopEeSHBNK-NcrVHQ" association="_c4Oi8yopEeSHBNK-NcrVHQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_c4Oi8SopEeSHBNK-NcrVHQ" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_c4Oi8iopEeSHBNK-NcrVHQ" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_nCeJYCopEeSHBNK-NcrVHQ" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_oKPpwCopEeSHBNK-NcrVHQ" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_oKQ34CopEeSHBNK-NcrVHQ" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_SX6l4CopEeSHBNK-NcrVHQ" name="OclIsUnique3">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_qcNsYCopEeSHBNK-NcrVHQ" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rroF0CopEeSHBNK-NcrVHQ" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rrpT8CopEeSHBNK-NcrVHQ" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_VwRBwCopEeSHBNK-NcrVHQ" name="A_oclIsUnique1_oclIsUnique2_1" memberEnd="_VwRBwSopEeSHBNK-NcrVHQ _VwPzoCopEeSHBNK-NcrVHQ" navigableOwnedEnd="_VwRBwSopEeSHBNK-NcrVHQ">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_VwRBwSopEeSHBNK-NcrVHQ" name="oclIsUnique1" type="_LjHRQCopEeSHBNK-NcrVHQ" association="_VwRBwCopEeSHBNK-NcrVHQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_VwRBwiopEeSHBNK-NcrVHQ" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_VwRBwyopEeSHBNK-NcrVHQ" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_c4Oi8yopEeSHBNK-NcrVHQ" name="A_oclIsUnique2_oclIsUnique3_1" memberEnd="_c4Oi9CopEeSHBNK-NcrVHQ _c4Oi8CopEeSHBNK-NcrVHQ" navigableOwnedEnd="_c4Oi9CopEeSHBNK-NcrVHQ">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_c4Oi9CopEeSHBNK-NcrVHQ" name="oclIsUnique2" type="_QNjAECopEeSHBNK-NcrVHQ" association="_c4Oi8yopEeSHBNK-NcrVHQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_c4Oi9SopEeSHBNK-NcrVHQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_c4Oi9iopEeSHBNK-NcrVHQ" value="*"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_xlaFwC0gEeSjA59PNO9unA" name="OclExists1">
+              <ownedRule xmi:type="uml:Constraint" xmi:id="_dU7ZsC0hEeSjA59PNO9unA" name="ExistsConstraint" constrainedElement="_xlaFwC0gEeSjA59PNO9unA">
+                <specification xmi:type="uml:OpaqueExpression" xmi:id="_401EYC0hEeSjA59PNO9unA" name="existConstraintocl">
+                  <language>OCL</language>
+                  <body>self.oclExists2->exists(name='joe')</body>
+                </specification>
+              </ownedRule>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_8iISAC0gEeSjA59PNO9unA" name="oclExists2" type="_0WQcwC0gEeSjA59PNO9unA" aggregation="composite" association="_8iJgIC0gEeSjA59PNO9unA">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8iISAS0gEeSjA59PNO9unA"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8iISAi0gEeSjA59PNO9unA" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_EKpikC0hEeSjA59PNO9unA" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GyGtAC0hEeSjA59PNO9unA" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GyJJQC0hEeSjA59PNO9unA" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_0WQcwC0gEeSjA59PNO9unA" name="OclExists2">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_H9wAwC0hEeSjA59PNO9unA" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_JwjbIC0hEeSjA59PNO9unA" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Jwl3YC0hEeSjA59PNO9unA" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_8iJgIC0gEeSjA59PNO9unA" name="A_oclExists1_oclExists2_1" memberEnd="_8iJgIS0gEeSjA59PNO9unA _8iISAC0gEeSjA59PNO9unA" navigableOwnedEnd="_8iJgIS0gEeSjA59PNO9unA">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_8iJgIS0gEeSjA59PNO9unA" name="oclExists1" type="_xlaFwC0gEeSjA59PNO9unA" association="_8iJgIC0gEeSjA59PNO9unA">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8iJgIi0gEeSjA59PNO9unA" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8iJgIy0gEeSjA59PNO9unA" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_j4MgIC0mEeSjA59PNO9unA" name="ForAll1">
+              <ownedRule xmi:type="uml:Constraint" xmi:id="_xkZKYC0mEeSjA59PNO9unA" name="Constraint1">
+                <specification xmi:type="uml:OpaqueExpression" xmi:id="_49ZYQC0mEeSjA59PNO9unA">
+                  <language>OCL</language>
+                  <body>self.forAll2->forAll(name='joe')</body>
+                </specification>
+              </ownedRule>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_oLSF8C0mEeSjA59PNO9unA" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ptpQkC0mEeSjA59PNO9unA" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ptqesC0mEeSjA59PNO9unA" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_sSRJcC0mEeSjA59PNO9unA" name="forAll2" type="_mQTnAC0mEeSjA59PNO9unA" aggregation="composite" association="_sSRwgC0mEeSjA59PNO9unA">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sSRJcS0mEeSjA59PNO9unA"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sSRJci0mEeSjA59PNO9unA" value="*"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_mQTnAC0mEeSjA59PNO9unA" name="ForAll2">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_qHes4C0mEeSjA59PNO9unA" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_roi3AC0mEeSjA59PNO9unA" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rokFIC0mEeSjA59PNO9unA" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_sSRwgC0mEeSjA59PNO9unA" name="A_forAll1_forAll2_1" memberEnd="_sSRwgS0mEeSjA59PNO9unA _sSRJcC0mEeSjA59PNO9unA" navigableOwnedEnd="_sSRwgS0mEeSjA59PNO9unA">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_sSRwgS0mEeSjA59PNO9unA" name="forAll1" type="_j4MgIC0mEeSjA59PNO9unA" association="_sSRwgC0mEeSjA59PNO9unA">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sSRwgi0mEeSjA59PNO9unA" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sSRwgy0mEeSjA59PNO9unA" value="1"/>
+              </ownedEnd>
+            </packagedElement>
           </packagedElement>
           <packagedElement xmi:type="uml:Package" xmi:id="_X0POkB5KEeSglo_7OnFCeA" name="oclenum">
             <packagedElement xmi:type="uml:Class" xmi:id="_a90OoB5KEeSglo_7OnFCeA" name="OclEnum">

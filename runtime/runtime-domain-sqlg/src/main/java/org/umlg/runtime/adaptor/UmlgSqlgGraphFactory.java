@@ -8,6 +8,7 @@ import org.umlg.sqlg.structure.SchemaManager;
 import org.umlg.sqlg.structure.SqlgDataSource;
 
 import java.beans.PropertyVetoException;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.sql.*;
 import java.util.logging.Level;
@@ -41,7 +42,8 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
         SqlDialect sqlDialect;
         try {
             Class<?> sqlDialectClass = Class.forName(configuration.getString("sql.dialect"));
-            sqlDialect = (SqlDialect)sqlDialectClass.newInstance();
+            Constructor<?> constructor = sqlDialectClass.getConstructor(Configuration.class);
+            sqlDialect = (SqlDialect) constructor.newInstance(configuration);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -116,7 +118,8 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
         SqlDialect sqlDialect;
         try {
             Class<?> sqlDialectClass = Class.forName(configuration.getString("sql.dialect"));
-            sqlDialect = (SqlDialect)sqlDialectClass.newInstance();
+            Constructor<?> constructor = sqlDialectClass.getConstructor(Configuration.class);
+            sqlDialect = (SqlDialect) constructor.newInstance(configuration);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

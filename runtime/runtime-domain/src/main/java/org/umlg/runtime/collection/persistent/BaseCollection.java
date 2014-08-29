@@ -1288,6 +1288,24 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         return this.oclStdLibCollection.collectNested(e);
     }
 
+    @Override
+    public <R> Boolean isUnique(BodyExpressionEvaluator<R, E> e) {
+        maybeLoad();
+        return this.oclStdLibCollection.isUnique(e);
+    }
+
+    @Override
+    public Boolean exists(BooleanExpressionEvaluator<E> v) {
+        maybeLoad();
+        return this.oclStdLibCollection.exists(v);
+    }
+
+    @Override
+    public Boolean forAll(BooleanExpressionEvaluator<E> v) {
+        maybeLoad();
+        return this.oclStdLibCollection.forAll(v);
+    }
+
     protected boolean validateElementType(E e) {
         if (this.umlgRuntimeProperty.isManyPrimitive() || this.umlgRuntimeProperty.isOnePrimitive()) {
             if (!(e instanceof String) && !(e instanceof Boolean) && !(e instanceof Integer) &&

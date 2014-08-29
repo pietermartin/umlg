@@ -70,7 +70,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * Does self contain all the elements of c2 ? 
 	 * post: result = c2->forAll(elem | self->includes(elem))
 	 * </pre> 
-	 * @param v
+	 * @param c
 	 * @return
 	 */
 	Boolean includesAll(UmlgCollection<E> c);
@@ -81,7 +81,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * Does self contain none of the elements of c2 ? 
 	 * post: result = c2->forAll(elem | self->excludes(elem))
 	 * </pre> 
-	 * @param v
+	 * @param c
 	 * @return
 	 */
 	Boolean excludesAll(UmlgCollection<E> c);
@@ -93,7 +93,6 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * 	post: result = ( self->size() = 0 ) 
 	 * Note: null->isEmpty() returns 'true' in virtue of the implicit casting from null to Bag{}
 	 * </pre>
-	 * @param v
 	 * @return
 	 */
 	boolean isEmpty();
@@ -105,7 +104,6 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * 	post: result = ( self->size() <> 0 ) 
 	 * null->notEmpty() returns 'false' in virtue of the implicit casting from null to Bag{}.
 	 * </pre> 
-	 * @param v
 	 * @return
 	 */
 	Boolean notEmpty();
@@ -118,7 +116,6 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * commutative. UnlimitedNatural, Integer and Real fulfill this condition.
 	 * 	post: result = self->iterate( elem; acc : T = self.first() | acc.max(elem) )
 	 * </pre> 
-	 * @param v
 	 * @return
 	 */
 	E max();
@@ -131,7 +128,6 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * commutative. UnlimitedNatural, Integer and Real fulfill this condition.
 	 * 	post: result = self->iterate( elem; acc : T = self.first() | acc.min(elem) )
 	 * </pre> 
-	 * @param v
 	 * @return
 	 */
 	E min();
@@ -147,7 +143,6 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * unpredictable results during evaluation. If an implementation is able to detect a lack of associativity or commutativity, the
 	 * implementation may bypass the evaluation and return an invalid result.
 	 * <pre>
-	 * @param v
 	 * @return
 	 */
 	E sum();
@@ -160,7 +155,6 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * 		c2->iterate (e2; acc2: Set(Tuple(first: T, second: T2)) = acc |
 	 * 			acc2->including (Tuple{first = e1, second = e2}) ) )
 	 * </pre> 
-	 * @param v
 	 * @return
 	 */
 	// TODO support Tuples
@@ -173,7 +167,6 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * 	post: result->forAll(elem | self ->includes(elem))
 	 * 	post: self ->forAll(elem | result->includes(elem))
 	 * </pre>
-	 * @param v
 	 * @return
 	 */
 	<E> UmlgSet<E> asSet();
@@ -239,7 +232,24 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 */
 	E any(BooleanExpressionEvaluator<E> e);
 
-	/**
+    /**
+     * Results in invalid if if body evaluates to invalid for any element in the source collection,
+     * otherwise true if body evaluates to a different, possibly null, value for each element in the source collection;
+     * otherwise result is false.
+     *
+     * source->isUnique (iterator | body) =
+     *     source->collect (iterator | Tuple{iter = Tuple{iterator}, value = body})
+     *         ->forAll (x, y | (x.iter <> y.iter) implies (x.value <> y.value))
+     *
+     * isUnique may have at most one iterator variable.
+     */
+    <R> Boolean isUnique(BodyExpressionEvaluator<R, E> e);
+
+    Boolean exists(BooleanExpressionEvaluator<E> e);
+
+    Boolean forAll(BooleanExpressionEvaluator<E> e);
+
+    /**
 	 * The Collection of elements that results from applying body to every
 	 * member of the source set. The result is flattened. Notice that this is
 	 * based on collectNested, which can be of different type depending on the

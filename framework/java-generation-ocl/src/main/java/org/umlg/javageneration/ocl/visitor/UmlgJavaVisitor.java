@@ -129,6 +129,7 @@ public class UmlgJavaVisitor extends
     @Override
     public String visitEnumLiteralExp(EnumLiteralExp<Classifier, EnumerationLiteral> el) {
         EnumerationLiteral l = el.getReferredEnumLiteral();
+        this.ojClass.addToImports(UmlgClassOperations.getPathName(l.getClassifier()));
         return UmlgClassOperations.getPathName(l.getClassifier()).getLast() + "." + l.getName();
     }
 

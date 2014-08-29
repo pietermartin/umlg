@@ -2,6 +2,8 @@ package org.umlg.test.generation;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.logging.LogManager;
 
 import org.umlg.generation.JavaGenerator;
 import org.umlg.javageneration.DefaultVisitors;
@@ -10,6 +12,12 @@ import org.umlg.restlet.generation.RestletVisitors;
 public class GenerateTestProjects {
 
 	public static void main(String[] args) throws URISyntaxException {
+        try {
+            URL url = GenerateTestProjects.class.getResource("/logging.properties");
+            LogManager.getLogManager().readConfiguration(url.openStream());
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
         if (args.length == 0) {
             args = new String[]{"."};
         }

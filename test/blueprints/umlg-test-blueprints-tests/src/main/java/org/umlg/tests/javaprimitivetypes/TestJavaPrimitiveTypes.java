@@ -149,6 +149,7 @@ public class TestJavaPrimitiveTypes extends BaseLocalDbTest {
 
     @Test
     public void testByte() {
+        Assume.assumeTrue(UMLG.get().features().vertex().properties().supportsByteValues());
         JavaPrimitiveType javaPrimitiveType = new JavaPrimitiveType();
         javaPrimitiveType.setAByte(new Byte((byte)1));
         db.commit();
@@ -159,6 +160,7 @@ public class TestJavaPrimitiveTypes extends BaseLocalDbTest {
 
     @Test
     public void testManyBytes() {
+        Assume.assumeTrue(UMLG.get().features().vertex().properties().supportsByteValues());
         JavaPrimitiveType javaPrimitiveType = new JavaPrimitiveType();
         javaPrimitiveType.addToAManyByte((byte)1);
         javaPrimitiveType.addToAManyByte((byte)2);
