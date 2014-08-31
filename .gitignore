@@ -12,4 +12,7 @@ framework/generation/.settings
 framework/generation/target
 framework/generation/.classpath
 framework/generation/.project
+runtime/runtime-domain-sqlg/target
+runtime/runtime-test-sqlg/target
+test/blueprints/umlg-test-sqlg-blueprints/target
 eclipselib
