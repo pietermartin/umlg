@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.umlg.qualifiertest.QualifierA;
 import org.umlg.qualifiertest.QualifierB;
 import org.umlg.runtime.adaptor.UMLG;
+import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.runtime.util.Pair;
 
@@ -41,7 +42,11 @@ public class TestQualifiedOnMultipleProperties extends BaseLocalDbTest {
         qualifierA.addToQualifierB(qualifierB4);
         UMLG.get().commit();
 
-        QualifierB qualifierB = qualifierA.getQualifierBForName1QualifierandName2Qualifier(Pair.of(T.eq, "qualifierB1Name1"), Pair.of(T.eq, "qualifierB1Name2"));
+        QualifierB qualifierB = qualifierA.getQualifierBForName1QualifierandName2Qualifier(
+                Pair.of(T.eq, "qualifierB1Name1"),
+                Pair.of(T.eq, "qualifierB1Name2")).any(
+                    a -> true
+        );
         Assert.assertEquals(qualifierB1, qualifierB);
     }
 

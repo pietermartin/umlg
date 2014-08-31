@@ -122,14 +122,14 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         OJAnnotatedClass ojClass = findOJClass(qualifiedClassifier);
 
         OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(refinedQualified.getQualifiedNameFor(qualifiers));
-        if (refinedQualified.isUnqualifiedOne()) {
-            qualifierValue.setReturnType(refinedQualified.javaBaseTypePath());
-        } else {
+//        if (refinedQualified.isUnqualifiedOne()) {
+//            qualifierValue.setReturnType(refinedQualified.javaBaseTypePath());
+//        } else {
             // This needs to only return a Set or Bag for now, not sorting the
             // result
             // by index as yet
             qualifierValue.setReturnType(refinedQualified.javaTypePath());
-        }
+//        }
         for (PropertyWrapper qualifier : qualifiers) {
             qualifierValue.addParam(qualifier.fieldname(), UmlgGenerationUtil.Pair.getCopy().addToGenerics(UmlgGenerationUtil.token).addToGenerics(qualifier.javaBaseTypePath()));
         }
@@ -163,22 +163,22 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         ojClass.addToImports(UmlgGenerationUtil.Element);
         ojClass.addToImports(UmlgGenerationUtil.tinkerDirection);
         ojClass.addToImports("java.util.Iterator");
-        OJIfStatement ifHasNext = new OJIfStatement("iterator.hasNext()");
-        if (refinedQualified.isUnqualifiedOne()) {
-            ifHasNext.addToThenPart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next())");
-            ifHasNext.addToElsePart("return null");
-        } else {
+//        OJIfStatement ifHasNext = new OJIfStatement("iterator.hasNext()");
+//        if (refinedQualified.isUnqualifiedOne()) {
+//            ifHasNext.addToThenPart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next())");
+//            ifHasNext.addToElsePart("return null");
+//        } else {
             OJSimpleStatement ojSimpleStatement;
             ojSimpleStatement = new OJSimpleStatement("return new "
                     + qualified.javaClosableIteratorTypePath().getCopy().getLast());
             ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(iterator, " + qualified.getTumlRuntimePropertyEnum() + ")");
             ojClass.addToImports(qualified.javaClosableIteratorTypePath());
-            ifHasNext.addToThenPart(ojSimpleStatement);
-            ifHasNext.addToElsePart("return " + qualified.emptyCollection());
+//            ifHasNext.addToThenPart(ojSimpleStatement);
+//            ifHasNext.addToElsePart("return " + qualified.emptyCollection());
             ojClass.addToImports(UmlgGenerationUtil.umlgUmlgCollections);
-        }
+//        }
 
-        qualifierValue.getBody().addToStatements(ifHasNext);
+        qualifierValue.getBody().addToStatements(ojSimpleStatement);
         ojClass.addToOperations(qualifierValue);
     }
 

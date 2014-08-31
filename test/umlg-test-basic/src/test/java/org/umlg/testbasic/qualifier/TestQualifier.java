@@ -28,9 +28,9 @@ public class TestQualifier extends BaseLocalDbTest {
         db.commit();
 
         God1 testGod = new God1(god.getVertex());
-        Nature testNature = testGod.getNatureForNatureQualifier1(Pair.of(T.eq, "natureName2"));
+        Nature testNature = testGod.getNatureForNatureQualifier1(Pair.of(T.eq, "natureName2")).any(a->true);
         Assert.assertNotNull(testNature);
-        testNature = testGod.getNatureForNatureQualifier1(Pair.of(T.eq, "natureNameX"));
+        testNature = testGod.getNatureForNatureQualifier1(Pair.of(T.eq, "natureNameX")).any(a->true);
         Assert.assertNull(testNature);
     }
 
@@ -53,9 +53,9 @@ public class TestQualifier extends BaseLocalDbTest {
         db.commit();
 
         God1 testGod = new God1(god.getVertex());
-        Angel testAngel = testGod.getAngelForAngelNameQualifierandAngelRankQualifier(Pair.of(T.eq, "angelName1"), Pair.of(T.eq, 1));
+        Angel testAngel = testGod.getAngelForAngelNameQualifierandAngelRankQualifier(Pair.of(T.eq, "angelName1"), Pair.of(T.eq, 1)).any(a->true);
         Assert.assertNotNull(testAngel);
-        testAngel = testGod.getAngelForAngelNameQualifierandAngelRankQualifier(Pair.of(T.eq, "angelName1"), Pair.of(T.eq, 2));
+        testAngel = testGod.getAngelForAngelNameQualifierandAngelRankQualifier(Pair.of(T.eq, "angelName1"), Pair.of(T.eq, 2)).any(a->true);
         Assert.assertNull(testAngel);
     }
 

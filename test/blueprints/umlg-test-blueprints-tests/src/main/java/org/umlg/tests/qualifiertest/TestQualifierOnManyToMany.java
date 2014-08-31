@@ -214,14 +214,14 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
         Assert.assertEquals(3, many2_1.getMany1ListForListQualifier1(Pair.of(T.eq, "many1_1")).size());
 
         many1_1.reload();
-        Many2 m2 = many1_1.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_1"));
+        Many2 m2 = many1_1.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_1")).any(a->true);
         Assert.assertNotNull(m2);
         Assert.assertEquals("many2_1", m2.getName());
         m2.setName("wwww");
         db.commit();
-        m2 = many1_1.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_1"));
+        m2 = many1_1.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_1")).any(a->true);
         Assert.assertNull(m2);
-        m2 = many1_1.getMany2ForMany2Qualifier1(Pair.of(T.eq, "wwww"));
+        m2 = many1_1.getMany2ForMany2Qualifier1(Pair.of(T.eq, "wwww")).any(a->true);
         Assert.assertNotNull(m2);
 
         many2_1.reload();
