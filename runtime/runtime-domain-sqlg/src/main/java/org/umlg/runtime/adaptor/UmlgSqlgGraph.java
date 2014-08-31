@@ -2,7 +2,6 @@ package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.gremlin.process.computer.GraphComputer;
 import com.tinkerpop.gremlin.process.graph.GraphTraversal;
-import com.tinkerpop.gremlin.process.graph.step.map.StartStep;
 import com.tinkerpop.gremlin.structure.*;
 import com.tinkerpop.gremlin.structure.strategy.ReadOnlyGraphStrategy;
 import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedGraph;
@@ -14,7 +13,6 @@ import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.util.UmlgProperties;
-import org.umlg.sqlg.strategy.SqlGGraphStepStrategy;
 import org.umlg.sqlg.structure.SqlG;
 
 import java.lang.reflect.InvocationTargetException;
@@ -64,7 +62,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
             if (uniqueParameter.getValue()) {
                 this.sqlG.createUniqueConstraint(labelParameter.getValue(), key);
             } else {
-                this.sqlG.createLabeledIndex(labelParameter.getValue(), key);
+                this.sqlG.createLabeledIndex(labelParameter.getValue(), key, SqlgDefaultValueUtil.valueFor(indexParameter.getValue()));
 
             }
         } else if (Edge.class.isAssignableFrom(elementClass)) {
@@ -473,7 +471,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public Features getFeatures() {
-        return this.sqlG.getFeatures();
+    public Features features() {
+        return this.sqlG.features();
     }
 }

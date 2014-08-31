@@ -67,16 +67,12 @@ public class RedefinitionPropertyVisitor extends BaseVisitor implements Visitor<
                         } else {
                             getter = new OJAnnotatedOperation(redefinedPropertyWrapper.getter(), redefinedPropertyWrapper.javaTypePath());
                         }
-                        getter.getBody().addToStatements(String.format("throw new IllegalStateException(\"Property %s has been redefined by %s, please invole the redefined property.\")", redefinedPropertyWrapper.getQualifiedName(), p.getQualifiedName()));
+                        getter.getBody().addToStatements(String.format("throw new IllegalStateException(\"Property %s has been redefined by %s, please invoke the redefined property.\")", redefinedPropertyWrapper.getQualifiedName(), p.getQualifiedName()));
                         UmlgGenerationUtil.addOverrideAnnotation(getter);
                         owner.addToOperations(getter);
                     }
                 }
-
-
             }
-
-
 		}
 	}
 

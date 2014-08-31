@@ -4,6 +4,8 @@ import org.umlg.runtime.collection.*;
 import org.umlg.runtime.domain.ocl.OclState;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 
@@ -218,8 +220,42 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 	public <R> UmlgCollection<R> collectNested(BodyExpressionEvaluator<R, E> e) {
 		throw new RuntimeException("Not implemented");
 	}
-	
-	@Override
+
+    @Override
+    public <R> Boolean isUnique(BodyExpressionEvaluator<R, E> v) {
+        Set<R> uniquenessSet = new HashSet<>();
+        for (E e : this.collection) {
+            R r = v.evaluate(e);
+            if (!uniquenessSet.contains(r)) {
+                uniquenessSet.add(r);
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean exists(BooleanExpressionEvaluator<E> v) {
+        for (E e : this.collection) {
+            if (v.evaluate(e)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean forAll(BooleanExpressionEvaluator<E> v) {
+        for (E e : this.collection) {
+            if (!v.evaluate(e)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
 	public E any(BooleanExpressionEvaluator<E> v) {
 		for (E e : this.collection) {
 			if (v.evaluate(e)) {

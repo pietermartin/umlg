@@ -33,7 +33,7 @@ public class UmlgUtil {
                         } catch (ClassNotFoundException eeeee) {
                             try {
                                 Class.forName("org.umlg.runtime.adaptor.UmlgSqlgGraph");
-                                poweredBy.setFirst("SQLG");
+                                poweredBy.setFirst("SqlG");
                                 poweredBy.setSecond("http://www.umlg.org/");
                             } catch (ClassNotFoundException eeeeee) {
                             }

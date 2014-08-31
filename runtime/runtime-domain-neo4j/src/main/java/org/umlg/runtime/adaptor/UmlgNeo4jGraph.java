@@ -508,14 +508,23 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public Features getFeatures() {
-        return this.neo4jGraph.getFeatures();
+    public Features features() {
+        return this.neo4jGraph.features();
     }
 
     private IndexDefinition createLabeledIndex(String label, String propertyKey) throws ConstraintViolationException {
         this.tx().readWrite();
         Schema schema = ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getBaseGraph().schema();
+        Iterable<IndexDefinition> indexDefinitions = schema.getIndexes(DynamicLabel.label(label));
+        for (IndexDefinition indexDefinition : indexDefinitions) {
+            for (String pk : indexDefinition.getPropertyKeys()) {
+                if (pk.equals(propertyKey)) {
+                    return indexDefinition;
+                }
+            }
+        }
         return schema.indexFor(DynamicLabel.label(label)).on(propertyKey).create();
+
     }
 
     private void createLegacyIndex(Class<? extends Element> elementClass, String key) {

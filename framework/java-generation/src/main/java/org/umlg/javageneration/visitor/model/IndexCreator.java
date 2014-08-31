@@ -41,25 +41,27 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
         for (Property q : qualifiers) {
             PropertyWrapper qualifierWrap = new PropertyWrapper(q);
             createIndexes.getBody().addToStatements(UmlgGenerationUtil.UMLGAccess + ".createKeyIndex(" +
-                    "\"" + qualifierWrap.getPersistentName() + "\", " +
-                    UmlgGenerationUtil.edgePathName.getLast() + ".class, " +
-                    "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Class<?>").getLast() + "(\"unusedIndexValueType\", String.class), " +
-                    "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Boolean").getLast() + "(\"unusedUniqueorNot\", false), " +
-                    "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("String").getLast() + "(\"unusedLabel\", \"" + qualifierWrap.getPersistentName() + "\"))"
+                            "\"" + qualifierWrap.getQualifierCorrespondingQualifierStereotypedProperty().getName() + "\", " +
+                            UmlgGenerationUtil.vertexPathName.getLast() + ".class, " +
+                            "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Class<?>").getLast() + "(\"unusedIndexValueType\", " +
+                                qualifierWrap.getQualifierCorrespondingQualifierStereotypedProperty().javaBaseTypePath().getLast() + ".class), " +
+                            "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Boolean").getLast() + "(\"unusedUniqueorNot\", false), " +
+                            "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("String").getLast() + "(\"unusedLabel\", \"" + UmlgClassOperations.getPathName(qualifierWrap.getQualifierCorrespondingQualifierStereotypedProperty().getOwningType()).getLast() + "\"))"
             );
+            indexCreator.addToImports(qualifierWrap.getQualifierCorrespondingQualifierStereotypedProperty().javaBaseTypePath());
             indexCreator.addToImports(UmlgGenerationUtil.edgePathName);
         }
         indexCreator.addToImports(UmlgGenerationUtil.Parameter);
 
         //Create index for the application root
         createIndexes.getBody().addToStatements(UmlgGenerationUtil.UMLGAccess +
-                ".createKeyIndex(" +
-                UmlgGenerationUtil.UmlgGraph.getLast() +
-                ".ROOT_VERTEX, " +
-                UmlgGenerationUtil.vertexPathName.getLast() + ".class, " +
-                "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Class<?>").getLast() + "(\"unusedIndexValueType\", String.class), " +
-                "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Boolean").getLast() + "(\"unusedUniqueorNot\", true), " +
-                "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("String").getLast() + "(\"unusedLabel\", \"ROOT_VERTEX\"))"
+                        ".createKeyIndex(" +
+                        UmlgGenerationUtil.UmlgGraph.getLast() +
+                        ".ROOT_VERTEX, " +
+                        UmlgGenerationUtil.vertexPathName.getLast() + ".class, " +
+                        "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Class<?>").getLast() + "(\"unusedIndexValueType\", String.class), " +
+                        "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("Boolean").getLast() + "(\"unusedUniqueorNot\", true), " +
+                        "new " + UmlgGenerationUtil.Parameter.getCopy().addToGenerics("String").addToGenerics("String").getLast() + "(\"unusedLabel\", \"ROOT_VERTEX\"))"
         );
 
         Stereotype stereotype = ModelLoader.INSTANCE.findStereotype("Index");

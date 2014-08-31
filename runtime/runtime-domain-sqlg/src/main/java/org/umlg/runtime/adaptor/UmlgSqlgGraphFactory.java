@@ -5,9 +5,10 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.umlg.sqlg.sql.dialect.SqlDialect;
 import org.umlg.sqlg.structure.SchemaManager;
-import org.umlg.sqlg.structure.SqlGDataSource;
+import org.umlg.sqlg.structure.SqlgDataSource;
 
 import java.beans.PropertyVetoException;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.sql.*;
 import java.util.logging.Level;
@@ -41,12 +42,13 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
         SqlDialect sqlDialect;
         try {
             Class<?> sqlDialectClass = Class.forName(configuration.getString("sql.dialect"));
-            sqlDialect = (SqlDialect)sqlDialectClass.newInstance();
+            Constructor<?> constructor = sqlDialectClass.getConstructor(Configuration.class);
+            sqlDialect = (SqlDialect) constructor.newInstance(configuration);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         try {
-            SqlGDataSource.INSTANCE.setupDataSource(
+            SqlgDataSource.INSTANCE.setupDataSource(
                     sqlDialect.getJdbcDriver(),
                     configuration.getString("jdbc.url"),
                     configuration.getString("jdbc.username"),
@@ -56,7 +58,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
         }
         if (this.umlgGraph == null) {
             TransactionThreadEntityVar.remove();
-            try (Connection conn = SqlGDataSource.INSTANCE.get(configuration.getString("jdbc.url")).getConnection()) {
+            try (Connection conn = SqlgDataSource.INSTANCE.get(configuration.getString("jdbc.url")).getConnection()) {
                 if (!tableExist(conn, SchemaManager.VERTICES)) {
                     try {
                         this.umlgGraph = new UmlgSqlgGraph(configuration);
@@ -116,11 +118,12 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
         SqlDialect sqlDialect;
         try {
             Class<?> sqlDialectClass = Class.forName(configuration.getString("sql.dialect"));
-            sqlDialect = (SqlDialect)sqlDialectClass.newInstance();
+            Constructor<?> constructor = sqlDialectClass.getConstructor(Configuration.class);
+            sqlDialect = (SqlDialect) constructor.newInstance(configuration);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        try (Connection conn = SqlGDataSource.INSTANCE.get(this.configuration.getString("jdbc.url")).getConnection()) {
+        try (Connection conn = SqlgDataSource.INSTANCE.get(this.configuration.getString("jdbc.url")).getConnection()) {
             DatabaseMetaData metadata = conn.getMetaData();
             String catalog = null;
             String schemaPattern = null;
@@ -129,6 +132,8 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
             ResultSet result = metadata.getTables(catalog, schemaPattern, tableNamePattern, types);
             while (result.next()) {
                 StringBuilder sql = new StringBuilder("DROP TABLE ");
+                sql.append(sqlDialect.maybeWrapInQoutes(result.getString(2)));
+                sql.append(".");
                 sql.append(sqlDialect.maybeWrapInQoutes(result.getString(3)));
                 sql.append(" CASCADE");
                 if (sqlDialect.needsSemicolon()) {
@@ -138,7 +143,24 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
                     preparedStatement.executeUpdate();
                 }
             }
-            SqlGDataSource.INSTANCE.close(this.configuration.getString("jdbc.url"));
+            catalog = null;
+            schemaPattern = null;
+            result = metadata.getSchemas(catalog, schemaPattern);
+            while (result.next()) {
+                String schema = result.getString(1);
+                if (!sqlDialect.getDefaultSchemas().contains(schema)) {
+                    StringBuilder sql = new StringBuilder("DROP SCHEMA ");
+                    sql.append(sqlDialect.maybeWrapInQoutes(schema));
+                    sql.append(" CASCADE");
+                    if (sqlDialect.needsSemicolon()) {
+                        sql.append(";");
+                    }
+                    try (PreparedStatement preparedStatement = conn.prepareStatement(sql.toString())) {
+                        preparedStatement.executeUpdate();
+                    }
+                }
+            }
+            SqlgDataSource.INSTANCE.close(this.configuration.getString("jdbc.url"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

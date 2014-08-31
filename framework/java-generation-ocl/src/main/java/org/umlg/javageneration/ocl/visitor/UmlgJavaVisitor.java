@@ -12,6 +12,7 @@ import org.eclipse.ocl.util.TypeUtil;
 import org.eclipse.ocl.utilities.*;
 import org.eclipse.ocl.utilities.TypedElement;
 import org.eclipse.uml2.uml.*;
+import org.eclipse.uml2.uml.internal.operations.MultiplicityElementOperations;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.javageneration.ocl.visitor.tojava.*;
@@ -129,6 +130,7 @@ public class UmlgJavaVisitor extends
     @Override
     public String visitEnumLiteralExp(EnumLiteralExp<Classifier, EnumerationLiteral> el) {
         EnumerationLiteral l = el.getReferredEnumLiteral();
+        this.ojClass.addToImports(UmlgClassOperations.getPathName(l.getClassifier()));
         return UmlgClassOperations.getPathName(l.getClassifier()).getLast() + "." + l.getName();
     }
 
@@ -158,8 +160,26 @@ public class UmlgJavaVisitor extends
      */
     @Override
     protected String handlePropertyCallExp(PropertyCallExp<Classifier, Property> pc, String sourceResult, List<String> qualifierResults) {
+
         Property property = pc.getReferredProperty();
         PropertyWrapper pWrap = new PropertyWrapper(property);
+
+        boolean addCollect = false;
+        //check if the source property is a qualified property
+        //if so and if the its multiplicity is 1 then the raw multiplicity is actually *
+        //therefore treat the current property expression as being called on a many property, i.e. as a collect statement
+        OCLExpression oclExpression = pc.getSource();
+        if (qualifierResults.isEmpty() && oclExpression instanceof PropertyCallExp) {
+            PropertyCallExp<?, Property> propertyPropertyCallExp = (PropertyCallExp<?, Property>) oclExpression;
+            //if the source property is qualified but the oocl expression itself has qualifier then the properties multiplicity will be correct
+            //i.e. no need for a collect statement
+            if (propertyPropertyCallExp.getQualifier().isEmpty()) {
+                Property sourceProperty = propertyPropertyCallExp.getReferredProperty();
+                PropertyWrapper sourcePropertyWrapper = PropertyWrapper.from(sourceProperty);
+                addCollect = sourcePropertyWrapper.isQualified() && sourcePropertyWrapper.isMany();
+            }
+        }
+
 
         //Validate property is navigable
         if (!pWrap.isNavigable()) {
@@ -188,9 +208,19 @@ public class UmlgJavaVisitor extends
         StringBuilder result = new StringBuilder();
         if (sourceResult != null && !sourceResult.equals("self")) {
             result.append(sourceResult);
+            if (addCollect) {
+                result.append(".<");
+                result.append(pWrap.javaBaseTypePath().getLast());
+                result.append(", ");
+                result.append(pWrap.javaTypePath().getLast());
+                result.append(">collect(a -> a");
+            }
             result.append(".");
         }
         result.append(getter);
+        if (addCollect) {
+            result.append(")");
+        }
         return result.toString();
     }
 
@@ -266,7 +296,7 @@ public class UmlgJavaVisitor extends
      */
     @Override
     protected String handleIfExp(IfExp<Classifier> ifExp, String conditionResult, String thenResult, String elseResult) {
-        return new OclIfExpToJava().setOJClass(this.ojClass).handleIfExp(ifExp, conditionResult, thenResult, elseResult);
+        return new OclIfExpToJava().setOJClass(this.ojClass).setElement(this.element).handleIfExp(ifExp, conditionResult, thenResult, elseResult);
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.umlg.runtime.validation.UmlgConstraintViolation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
     public static final String ALLINSTANCES_EDGE_LABEL = "allinstances";

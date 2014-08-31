@@ -47,8 +47,9 @@ public class UmlgGuiServerResource extends ServerResource {
             uri = withHostRef.replace("/ui2", "");
         }
 
-        Pair<String,String> poweredBy = UmlgUtil.getBlueprintsImplementationWithUrl();
-        dataModel.put("app", new App().setRootUrl(ModelLoader.INSTANCE.getModel().getName())
+        Pair<String, String> poweredBy = UmlgUtil.getBlueprintsImplementationWithUrl();
+        dataModel.put("app", new App().setRootUrl(
+                ModelLoader.INSTANCE.getModel().getName())
                 .setUri(uri)
                 .setUmlgLib(ModelLoader.INSTANCE.isUmlGLibIncluded())
                 .setPoweredBy(poweredBy.getFirst())
@@ -68,7 +69,7 @@ public class UmlgGuiServerResource extends ServerResource {
             URL jettyMarler = Thread.currentThread().getContextClassLoader().getResource("jetty.marker");
             servlet = jettyMarler == null;
         }
-        if (servlet)  {
+        if (servlet) {
             Representation umlgUiFtl = new ClientResource("war:///resources/org/umlg/ui/umlgui2.html").get();
             return new TemplateRepresentation(umlgUiFtl, dataModel, MediaType.TEXT_HTML);
         } else if (restlet) {

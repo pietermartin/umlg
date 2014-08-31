@@ -35,6 +35,9 @@
         <children>
           <emfPageIdentifier href="umlg-test-basic.notation#_LuJ6SgAPEeKpVr_ntT6cLA"/>
         </children>
+        <children>
+          <emfPageIdentifier href="umlg-test-basic.notation#_LuJ6QAAPEeKpVr_ntT6cLA"/>
+        </children>
       </children>
     </windows>
   </sashModel>

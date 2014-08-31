@@ -862,11 +862,15 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     private void validateQualifiedMultiplicity(boolean inverse, Vertex vertex, List<Qualifier> qualifiers) {
         if (qualifiers.get(0).isOne()) {
+            StringBuilder qualifierNames = new StringBuilder();
             StringBuilder keys = new StringBuilder();
             StringBuilder values = new StringBuilder();
             long count = 1;
             List<Traversal> traversals = new ArrayList<>();
             for (Qualifier qualifier : qualifiers) {
+                qualifierNames.append(qualifier.getUmlgRuntimeProperty().getQualifiedName());
+                qualifierNames.append(" ");
+
                 if (qualifier.getValue()==null) {
                     break;
                 }
@@ -893,8 +897,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             }
             if (count > 0) {
                 // Add info to exception
-                throw new IllegalStateException(String.format("Qualifier fails, qualifier multiplicity is one and an entry for key '%s' and value '%s' already exist",
-                        keys.toString(), values.toString()));
+                throw new IllegalStateException(
+                        String.format(
+                                "Qualifier %s fails, qualifier multiplicity is one and an entry for key '%s' and value '%s' already exist",
+                                qualifierNames.toString(),
+                                keys.toString(),
+                                values.toString()));
             }
         }
     }
@@ -1278,6 +1286,24 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     public <R> UmlgCollection<R> collectNested(BodyExpressionEvaluator<R, E> e) {
         maybeLoad();
         return this.oclStdLibCollection.collectNested(e);
+    }
+
+    @Override
+    public <R> Boolean isUnique(BodyExpressionEvaluator<R, E> e) {
+        maybeLoad();
+        return this.oclStdLibCollection.isUnique(e);
+    }
+
+    @Override
+    public Boolean exists(BooleanExpressionEvaluator<E> v) {
+        maybeLoad();
+        return this.oclStdLibCollection.exists(v);
+    }
+
+    @Override
+    public Boolean forAll(BooleanExpressionEvaluator<E> v) {
+        maybeLoad();
+        return this.oclStdLibCollection.forAll(v);
     }
 
     protected boolean validateElementType(E e) {

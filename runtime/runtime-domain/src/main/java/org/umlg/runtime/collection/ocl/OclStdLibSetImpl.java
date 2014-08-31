@@ -238,10 +238,10 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements U
 		this.set.clear();
 	}
 
-	@Override
-	public String toJson() {
-		// TODO
-		throw new RuntimeException("Not yet implemented");
-	}
+//	@Override
+//	public String toJson() {
+//		// TODO
+//		throw new RuntimeException("Not yet implemented");
+//	}
 
 }

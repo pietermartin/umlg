@@ -21,6 +21,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     private boolean indexed;
     private boolean refined;
 
+    public static PropertyWrapper from(Property sourceProperty) {
+        return new PropertyWrapper(sourceProperty);
+    }
+
     public PropertyWrapper(Property property) {
         super(property);
         this.property = property;
@@ -303,6 +307,19 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             first = false;
         }
         return getter() + "For" + sb.toString();
+    }
+
+    public String getQualifiedNameForPartial(List<PropertyWrapper> qualifers) {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (PropertyWrapper q : qualifers) {
+            if (!first) {
+                sb.append("and");
+            }
+            sb.append(StringUtils.capitalize(q.getName()));
+            first = false;
+        }
+        return getter() + "ForPartial" + sb.toString();
     }
 
     public Property getProperty() {

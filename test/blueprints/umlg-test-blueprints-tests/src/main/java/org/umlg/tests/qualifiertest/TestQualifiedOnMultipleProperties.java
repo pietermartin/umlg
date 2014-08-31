@@ -6,9 +6,10 @@ import org.junit.Test;
 import org.umlg.qualifiertest.QualifierA;
 import org.umlg.qualifiertest.QualifierB;
 import org.umlg.runtime.adaptor.UMLG;
-import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.runtime.util.Pair;
+
+import java.util.Set;
 
 /**
  * Date: 2014/08/09
@@ -23,31 +24,34 @@ public class TestQualifiedOnMultipleProperties extends BaseLocalDbTest {
 
         QualifierB qualifierB1 = new QualifierB();
         qualifierB1.setName1("qualifierB1Name1");
-        qualifierB1.setName2("qualifierB1Name2");
+        qualifierB1.setName2("qualifierBName2");
         qualifierA.addToQualifierB(qualifierB1);
 
         QualifierB qualifierB2 = new QualifierB();
         qualifierB2.setName1("qualifierB2Name1");
-        qualifierB2.setName2("qualifierB2Name2");
+        qualifierB2.setName2("qualifierBName2");
         qualifierA.addToQualifierB(qualifierB2);
 
         QualifierB qualifierB3 = new QualifierB();
         qualifierB3.setName1("qualifierB3Name1");
-        qualifierB3.setName2("qualifierB3Name2");
+        qualifierB3.setName2("qualifierBName2");
         qualifierA.addToQualifierB(qualifierB3);
 
         QualifierB qualifierB4 = new QualifierB();
         qualifierB4.setName1("qualifierB4Name1");
-        qualifierB4.setName2("qualifierB4Name2");
+        qualifierB4.setName2("qualifierBName2");
         qualifierA.addToQualifierB(qualifierB4);
         UMLG.get().commit();
 
-        QualifierB qualifierB = qualifierA.getQualifierBForName1QualifierandName2Qualifier(
-                Pair.of(T.eq, "qualifierB1Name1"),
-                Pair.of(T.eq, "qualifierB1Name2")).any(
-                    a -> true
-        );
+        QualifierB qualifierB = qualifierA.getQualifierBForName1QualifierandName2Qualifier(Pair.of(T.eq, "qualifierB1Name1"), Pair.of(T.eq, "qualifierBName2"));
         Assert.assertEquals(qualifierB1, qualifierB);
+
+        Set<QualifierB> qualifierBs = qualifierA.getQualifierBForPartialName1QualifierandName2Qualifier(Pair.of(T.eq, "qualifierB1Name1"), null);
+        Assert.assertEquals(1, qualifierBs.size());
+
+        qualifierBs = qualifierA.getQualifierBForPartialName1QualifierandName2Qualifier(null, Pair.of(T.eq, "qualifierBName2"));
+        Assert.assertEquals(4, qualifierBs.size());
+
     }
 
     @Test

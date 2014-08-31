@@ -245,7 +245,22 @@ public class UmlgMemoryCollection<E> implements UmlgCollection<E> {
 		return this.oclStdLibCollection.collectNested(e);
 	}
 
-	@Override
+    @Override
+    public <R> Boolean isUnique(BodyExpressionEvaluator<R, E> e) {
+        return this.oclStdLibCollection.isUnique(e);
+    }
+
+    @Override
+    public Boolean exists(BooleanExpressionEvaluator<E> e) {
+        return this.oclStdLibCollection.exists(e);
+    }
+
+    @Override
+    public Boolean forAll(BooleanExpressionEvaluator<E> e) {
+        return this.oclStdLibCollection.forAll(e);
+    }
+
+    @Override
 	public String toJson() {
 		//TODO
 		throw new RuntimeException("Not yet implemented");

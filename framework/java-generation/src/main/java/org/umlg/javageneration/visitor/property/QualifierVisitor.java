@@ -32,6 +32,11 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             //This generates the getter that takes qualifier value as input
             //In this case they are the same as the qualifier is not refined
             generateQualifiedGetter(pWrap, pWrap);
+            if (pWrap.getQualifiers().size() > 1) {
+                //Pariall getters only make sense if there are more than one qualifier.
+                //Some qualifiers can be left null then and  the search will be partial
+                generateQualifiedPartialGetter(pWrap, pWrap);
+            }
 
 //            //update the index on setters of the properties as specified on the QualifierListener stereotype
 //            generateUpdateOfIndex(pWrap);
@@ -113,29 +118,31 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 
     private void generateQualifiedGetter(PropertyWrapper qualified, PropertyWrapper refinedQualified) {
         List<PropertyWrapper> qualifiers = refinedQualified.getQualifiersAsPropertyWrappers();
-        for (PropertyWrapper qualifier : qualifiers) {
-            validateHasCorrespondingDerivedProperty(qualifier);
-        }
+        qualifiers.forEach(this::validateHasCorrespondingDerivedProperty);
 
         //TODO might be a intermittent bug in getting owning type logic for many to manies
         Type qualifiedClassifier = qualified.getOwningType();
         OJAnnotatedClass ojClass = findOJClass(qualifiedClassifier);
 
         OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(refinedQualified.getQualifiedNameFor(qualifiers));
-//        if (refinedQualified.isUnqualifiedOne()) {
-//            qualifierValue.setReturnType(refinedQualified.javaBaseTypePath());
-//        } else {
+        //partialQualifierValue is the same as qualifierValue but returns a List even if the multiplicity is one.
+        //This allows some qualifier values to be left null, i.e. not part of the query
+        if (refinedQualified.isUnqualifiedOne()) {
+            qualifierValue.setReturnType(refinedQualified.javaBaseTypePath());
+        } else {
             // This needs to only return a Set or Bag for now, not sorting the
             // result
             // by index as yet
             qualifierValue.setReturnType(refinedQualified.javaTypePath());
-//        }
+        }
         for (PropertyWrapper qualifier : qualifiers) {
             qualifierValue.addParam(qualifier.fieldname(), UmlgGenerationUtil.Pair.getCopy().addToGenerics(UmlgGenerationUtil.token).addToGenerics(qualifier.javaBaseTypePath()));
         }
         ojClass.addToImports(UmlgGenerationUtil.edgePathName);
+
+        OJField graphTraversal = new OJField(qualifierValue.getBody(), "graphTraversal", UmlgGenerationUtil.GraphTraversal.getCopy().addToGenerics(UmlgGenerationUtil.vertexPathName).addToGenerics(UmlgGenerationUtil.vertexPathName));
+
         StringBuilder hasStatement = new StringBuilder();
-        hasStatement.append("Iterator<Vertex> iterator = ");
         //build the has containers
         hasStatement.append("this.vertex.to(\n        ");
         hasStatement.append(UmlgClassOperations.propertyEnumName(qualifiedClassifier) + "." + qualified.fieldname() + ".isControllingSide() ? ");
@@ -144,41 +151,100 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         hasStatement.append(UmlgGenerationUtil.tinkerDirection.getLast());
         hasStatement.append(".IN,\n        ");
         hasStatement.append(UmlgClassOperations.propertyEnumName(qualifiedClassifier) + "." + qualified.fieldname() + ".getLabel())");
-        boolean first = true;
+        hasStatement.append("\n        .has(Element.LABEL, \"");
+        hasStatement.append(qualifiers.get(0).getQualifierCorrespondingQualifierStereotypedProperty().getOwningType().getName());
+        hasStatement.append("\");");
+        graphTraversal.setInitExp(hasStatement.toString());
         for (PropertyWrapper qualifier : qualifiers) {
-            if (first) {
-                hasStatement.append("\n        .has(Element.LABEL, \"");
-                hasStatement.append(qualifier.getQualifierCorrespondingQualifierStereotypedProperty().getOwningType().getName());
-                hasStatement.append("\")\n        .<Vertex>has(");
-                first = false;
-            } else {
-                hasStatement.append("\n        .<Vertex>has(");
-            }
-            hasStatement.append("\"" + qualifier.getQualifierCorrespondingQualifierStereotypedProperty().getPersistentName() + "\", ");
-            hasStatement.append(qualifier.fieldname() + ".getFirst(), ");
-            hasStatement.append(buildSecondFormatter(ojClass, qualifier));
+            qualifierValue.getBody().addToStatements("graphTraversal.has(" + "\"" +
+                    qualifier.getQualifierCorrespondingQualifierStereotypedProperty().getPersistentName() +
+                    "\", " +
+                    buildSecondFormatter(ojClass, qualifier));
         }
 
-        qualifierValue.getBody().addToStatements(hasStatement.toString());
         ojClass.addToImports(UmlgGenerationUtil.Element);
         ojClass.addToImports(UmlgGenerationUtil.tinkerDirection);
         ojClass.addToImports("java.util.Iterator");
-//        OJIfStatement ifHasNext = new OJIfStatement("iterator.hasNext()");
-//        if (refinedQualified.isUnqualifiedOne()) {
-//            ifHasNext.addToThenPart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next())");
-//            ifHasNext.addToElsePart("return null");
-//        } else {
+        OJIfStatement ifHasNext = new OJIfStatement("graphTraversal.hasNext()");
+        if (refinedQualified.isUnqualifiedOne()) {
+            ifHasNext.addToThenPart("return new " + qualified.javaBaseTypePath().getLast() + "(graphTraversal.next())");
+            ifHasNext.addToElsePart("return null");
+        } else {
             OJSimpleStatement ojSimpleStatement;
             ojSimpleStatement = new OJSimpleStatement("return new "
                     + qualified.javaClosableIteratorTypePath().getCopy().getLast());
-            ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(iterator, " + qualified.getTumlRuntimePropertyEnum() + ")");
+            ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(graphTraversal, " + qualified.getTumlRuntimePropertyEnum() + ")");
             ojClass.addToImports(qualified.javaClosableIteratorTypePath());
-//            ifHasNext.addToThenPart(ojSimpleStatement);
-//            ifHasNext.addToElsePart("return " + qualified.emptyCollection());
+            ifHasNext.addToThenPart(ojSimpleStatement);
+            ifHasNext.addToElsePart("return " + qualified.emptyCollection());
             ojClass.addToImports(UmlgGenerationUtil.umlgUmlgCollections);
-//        }
+        }
 
-        qualifierValue.getBody().addToStatements(ojSimpleStatement);
+        qualifierValue.getBody().addToStatements(ifHasNext);
+        ojClass.addToOperations(qualifierValue);
+    }
+
+    private void generateQualifiedPartialGetter(PropertyWrapper qualified, PropertyWrapper refinedQualified) {
+        List<PropertyWrapper> qualifiers = refinedQualified.getQualifiersAsPropertyWrappers();
+        qualifiers.forEach(this::validateHasCorrespondingDerivedProperty);
+
+        //TODO might be a intermittent bug in getting owning type logic for many to manies
+        Type qualifiedClassifier = qualified.getOwningType();
+        OJAnnotatedClass ojClass = findOJClass(qualifiedClassifier);
+
+        OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(refinedQualified.getQualifiedNameForPartial(qualifiers));
+        //partialQualifierValue is the same as qualifierValue but returns a List even if the multiplicity is one.
+        //This allows some qualifier values to be left null, i.e. not part of the query
+        // This needs to only return a Set or Bag for now, not sorting the
+        // result
+        // by index as yet
+        qualifierValue.setReturnType(refinedQualified.javaTypePath());
+        for (PropertyWrapper qualifier : qualifiers) {
+            qualifierValue.addParam(qualifier.fieldname(), UmlgGenerationUtil.Pair.getCopy().addToGenerics(UmlgGenerationUtil.token).addToGenerics(qualifier.javaBaseTypePath()));
+        }
+        ojClass.addToImports(UmlgGenerationUtil.edgePathName);
+
+        OJField graphTraversal = new OJField(qualifierValue.getBody(), "graphTraversal", UmlgGenerationUtil.GraphTraversal.getCopy().addToGenerics(UmlgGenerationUtil.vertexPathName).addToGenerics(UmlgGenerationUtil.vertexPathName));
+
+        StringBuilder hasStatement = new StringBuilder();
+        //build the has containers
+        hasStatement.append("this.vertex.to(\n        ");
+        hasStatement.append(UmlgClassOperations.propertyEnumName(qualifiedClassifier) + "." + qualified.fieldname() + ".isControllingSide() ? ");
+        hasStatement.append(UmlgGenerationUtil.tinkerDirection.getLast());
+        hasStatement.append(".OUT : ");
+        hasStatement.append(UmlgGenerationUtil.tinkerDirection.getLast());
+        hasStatement.append(".IN,\n        ");
+        hasStatement.append(UmlgClassOperations.propertyEnumName(qualifiedClassifier) + "." + qualified.fieldname() + ".getLabel())");
+        hasStatement.append("\n        .has(Element.LABEL, \"");
+        hasStatement.append(qualifiers.get(0).getQualifierCorrespondingQualifierStereotypedProperty().getOwningType().getName());
+        hasStatement.append("\")");
+        graphTraversal.setInitExp(hasStatement.toString());
+        for (PropertyWrapper qualifier : qualifiers) {
+
+            OJIfStatement ifHasNotNull = new OJIfStatement();
+            ifHasNotNull.setCondition(qualifier.fieldname() + " != null");
+            ifHasNotNull.addToThenPart("graphTraversal.has(" + "\"" +
+                    qualifier.getQualifierCorrespondingQualifierStereotypedProperty().getPersistentName() +
+                    "\", " +
+                    buildSecondFormatter(ojClass, qualifier));
+            qualifierValue.getBody().addToStatements(ifHasNotNull);
+
+        }
+
+        ojClass.addToImports(UmlgGenerationUtil.Element);
+        ojClass.addToImports(UmlgGenerationUtil.tinkerDirection);
+        ojClass.addToImports("java.util.Iterator");
+        OJIfStatement ifHasNext = new OJIfStatement("graphTraversal.hasNext()");
+        OJSimpleStatement ojSimpleStatement;
+        ojSimpleStatement = new OJSimpleStatement("return new "
+                + qualified.javaClosableIteratorTypePath().getCopy().getLast());
+        ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(graphTraversal, " + qualified.getTumlRuntimePropertyEnum() + ")");
+        ojClass.addToImports(qualified.javaClosableIteratorTypePath());
+        ifHasNext.addToThenPart(ojSimpleStatement);
+        ifHasNext.addToElsePart("return " + qualified.emptyCollection());
+        ojClass.addToImports(UmlgGenerationUtil.umlgUmlgCollections);
+
+        qualifierValue.getBody().addToStatements(ifHasNext);
         ojClass.addToOperations(qualifierValue);
     }
 
