@@ -239,6 +239,21 @@
         <children>
           <emfPageIdentifier href="umlg-test.notation#_jU3woC0mEeSjA59PNO9unA"/>
         </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#_7JIzcDANEeSW2N9UJoM5Cg"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#_DTv8EHtyEeOYhpiy1kqM8Q"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#_1chrRgAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#_5yJHUDA5EeSDyJkOzdhL-A"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#__Gfq8DA7EeSDyJkOzdhL-A"/>
+        </children>
       </children>
     </windows>
   </sashModel>

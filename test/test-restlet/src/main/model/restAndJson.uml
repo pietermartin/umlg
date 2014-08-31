@@ -1408,6 +1408,24 @@ endif</body>
               </ownedEnd>
             </packagedElement>
           </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_LNqS8C89EeSnv_6WWPb9PA" name="enumlookup">
+            <packagedElement xmi:type="uml:Class" xmi:id="_Oa0LcC89EeSnv_6WWPb9PA" name="EnumLookup">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_UJXCoC89EeSnv_6WWPb9PA" name="enumLookupEnum" type="_QtR9UC89EeSnv_6WWPb9PA" association="_UJXCoy89EeSnv_6WWPb9PA">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UJXCoS89EeSnv_6WWPb9PA" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UJXCoi89EeSnv_6WWPb9PA" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Enumeration" xmi:id="_QtR9UC89EeSnv_6WWPb9PA" name="EnumLookupEnum">
+              <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_R4DHUC89EeSnv_6WWPb9PA" name="ONE"/>
+              <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_TEly8C89EeSnv_6WWPb9PA" name="TWO"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_UJXCoy89EeSnv_6WWPb9PA" name="A_enumLookup_enumLookupEnum_1" memberEnd="_UJXCpC89EeSnv_6WWPb9PA _UJXCoC89EeSnv_6WWPb9PA">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_UJXCpC89EeSnv_6WWPb9PA" name="enumLookup" type="_Oa0LcC89EeSnv_6WWPb9PA" association="_UJXCoy89EeSnv_6WWPb9PA">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UJXCpS89EeSnv_6WWPb9PA"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UJXCpi89EeSnv_6WWPb9PA" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+          </packagedElement>
         </packagedElement>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_9Ayn0IYHEeORFsmiMkZYdA" name="testDiagramTree">

@@ -43,7 +43,7 @@ public class OperationImplementorSimple extends BaseVisitor implements Visitor<o
 				addQueryBody(ojClass, ojOper, oper);
 			}
 		} else {
-			throw new IllegalStateException("Operations are only supperted on Interfaces and Classes, not on " + operOwner.toString());
+			throw new IllegalStateException("Operations are only supported on Interfaces and Classes, not on " + operOwner.toString());
 		}
 	}
 

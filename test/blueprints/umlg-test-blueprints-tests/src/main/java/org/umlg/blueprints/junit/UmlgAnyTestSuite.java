@@ -9,10 +9,9 @@ import org.umlg.tests.datatype.DataTypeTest;
 import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypes;
 import org.umlg.tests.json.JsonTest;
 import org.umlg.tests.ocl.datatypes.TestOclCollectOnDataTypes;
-import org.umlg.tests.ocl.ocloperator.OclAndOperatorTest;
-import org.umlg.tests.ocl.ocloperator.OclExistsTest;
-import org.umlg.tests.ocl.ocloperator.OclForAllTest;
-import org.umlg.tests.ocl.ocloperator.OclIsUniqueTest;
+import org.umlg.tests.ocl.ocloperator.*;
+import org.umlg.tests.ocl.operation.OclOperationTest;
+import org.umlg.tests.ocl.qualifiers.TestNavigateQualifedProperty;
 import org.umlg.tests.qualifiertest.*;
 
 /**
@@ -21,7 +20,7 @@ import org.umlg.tests.qualifiertest.*;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        JsonTest.class
+        OclOrOperatorTest.class
 })
 public class UmlgAnyTestSuite {
 }

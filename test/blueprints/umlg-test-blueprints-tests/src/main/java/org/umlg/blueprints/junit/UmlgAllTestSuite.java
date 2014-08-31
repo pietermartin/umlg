@@ -39,6 +39,9 @@ import org.umlg.tests.mvel.TestMvel;
 import org.umlg.tests.nonnavigable.NonNavigableTest;
 import org.umlg.tests.ocl.datatypes.TestOclCollectOnDataTypes;
 import org.umlg.tests.ocl.ocloperator.OclIsUniqueTest;
+import org.umlg.tests.ocl.ocloperator.OclOrOperatorTest;
+import org.umlg.tests.ocl.operation.OclOperationTest;
+import org.umlg.tests.ocl.qualifiers.TestNavigateQualifedProperty;
 import org.umlg.tests.primitive.TestBooleanPrimitive;
 import org.umlg.tests.primitive.TestPrimitiveRemoval;
 import org.umlg.tests.qualifiertest.*;
@@ -121,7 +124,10 @@ import org.umlg.tests.validationtest.TestValidation;
         TestOclCollectOnDataTypes.class,
         TestQualifiedOnMultipleProperties.class,
         TestQualifierWithDateAndEnum.class,
-        OclIsUniqueTest.class
+        OclIsUniqueTest.class,
+        TestNavigateQualifedProperty.class,
+        OclOperationTest.class,
+        OclOrOperatorTest.class
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
 //        TestAssociationToSelf.class,

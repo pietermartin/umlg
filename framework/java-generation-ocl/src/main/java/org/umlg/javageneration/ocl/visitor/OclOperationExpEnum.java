@@ -40,7 +40,8 @@ public enum OclOperationExpEnum implements HandleOperationExp {
     INCLUDES(new OclIncludesExpToJava()),
     DEFAULT(new OclDefaultToStringExprToJava()),
     INDEX_OF(new OclIndexOfExprToJava()),
-    AND(new OclAndExprToJava());
+    AND(new OclAndExprToJava()),
+    OR(new OclOrExprToJava());
 
     private static Logger logger = Logger.getLogger(OclOperationExpEnum.class.getPackage().getName());
     private HandleOperationExp implementor;
@@ -109,6 +110,8 @@ public enum OclOperationExpEnum implements HandleOperationExp {
             return TO_STRING;
         } else if (name.equals(PredefinedType.AND_NAME)) {
             return AND;
+        } else if (name.equals(PredefinedType.OR_NAME)) {
+            return OR;
         } else {
             logger.warning(String.format("Not yet implemented, '%s'", name));
             return DEFAULT;

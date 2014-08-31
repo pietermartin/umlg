@@ -21,7 +21,7 @@ public class UmlgOperationOperations extends OperationOperations {
 		for (Parameter param : parametersExceptReturn) {
 			sb.append(param.getName());
 			sb.append(": ");
-			sb.append(param.getType().getName());
+			sb.append(param.getType().getQualifiedName());
 			if (count++ != parametersExceptReturn.size()) {
 				sb.append(", ");
 			}

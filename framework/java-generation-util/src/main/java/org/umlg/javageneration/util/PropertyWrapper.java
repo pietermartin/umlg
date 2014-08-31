@@ -21,6 +21,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     private boolean indexed;
     private boolean refined;
 
+    public static PropertyWrapper from(Property sourceProperty) {
+        return new PropertyWrapper(sourceProperty);
+    }
+
     public PropertyWrapper(Property property) {
         super(property);
         this.property = property;

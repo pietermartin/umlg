@@ -236,6 +236,12 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                                     "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? TinkerFormatter.encode("
                                             + pWrap.getter() + "()) : null " + "))"
                             );
+                        } else if (pWrap.isEmail()) {
+                            toJson.getBody().addToStatements(
+                                    "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? "
+                                            + UmlgGenerationUtil.ToJsonUtil.getLast() + ".primitivesToJson(" + pWrap.getter() + "()) : null " + "))"
+                            );
+                            annotatedClass.addToImports(UmlgGenerationUtil.ToJsonUtil);
                         } else {
                             toJson.getBody().addToStatements(
                                     "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + "
