@@ -9,6 +9,7 @@ import org.umlg.tests.allinstances.TestAllInstancesOnAbstractClass;
 import org.umlg.tests.allinstances.TestAllInstancesOnInterface;
 import org.umlg.tests.associationclass.TestAssociationClassCopiesOnePrimitivePropertiesToEdge;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
+import org.umlg.tests.changenotification.TestChangeNotification;
 import org.umlg.tests.collectiontest.*;
 import org.umlg.tests.componenttest.TestComponent;
 import org.umlg.tests.concretetest.TestNonCompositeOneToOne;
@@ -127,7 +128,8 @@ import org.umlg.tests.validationtest.TestValidation;
         OclIsUniqueTest.class,
         TestNavigateQualifedProperty.class,
         OclOperationTest.class,
-        OclOrOperatorTest.class
+        OclOrOperatorTest.class,
+        TestChangeNotification.class
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
 //        TestAssociationToSelf.class,

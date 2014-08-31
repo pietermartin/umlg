@@ -34,7 +34,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             }
 
             buildOneAdder(owner, propertyWrapper, false);
-            buildSetter(owner, propertyWrapper);
+            OJAnnotatedOperation setter = buildSetter(owner, propertyWrapper);
 
             if (propertyWrapper.isDataType() && propertyWrapper.getOwner() instanceof AssociationClass) {
                 //Add the property to copyOnePrimitivePropertiesToEdge
@@ -52,6 +52,12 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
                 }
                 copyOnePrimitivePropertiesToEdge.getBody().addToStatements(ifPropertyNotNull);
             }
+
+            //Add change listener
+            if (propertyWrapper.isChangedListener()) {
+                PropertyChangNotificationBuilder.buildChangeNotification(owner, setter, propertyWrapper);
+            }
+
         }
     }
 
@@ -179,7 +185,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         owner.addToOperations(singleAdder);
     }
 
-    public static void buildSetter(OJAnnotatedClass owner, PropertyWrapper pWrap) {
+    public static OJAnnotatedOperation buildSetter(OJAnnotatedClass owner, PropertyWrapper pWrap) {
         OJAnnotatedOperation setter = new OJAnnotatedOperation(pWrap.setter());
         setter.addParam(pWrap.fieldname(), pWrap.javaBaseTypePath());
         if (pWrap.isMemberOfAssociationClass()) {
@@ -204,5 +210,6 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname() + ", " + StringUtils.uncapitalize(pWrap.getAssociationClass().getName()) + ")");
         }
         owner.addToOperations(setter);
+        return setter;
     }
 }

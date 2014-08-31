@@ -5,9 +5,12 @@ import com.tinkerpop.gremlin.structure.Element;
 import com.tinkerpop.gremlin.structure.Graph;
 import com.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.collection.Filter;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
+import org.umlg.runtime.notification.NotificationListener;
+import org.umlg.runtime.notification.UmlgNotificationManager;
 
 import java.util.List;
 import java.util.Set;
@@ -115,6 +118,10 @@ public interface UmlgGraph extends Graph {
      * For OrientDb this is where the graph will be shutdown.
      */
     void afterThreadContext();
+
+    public default void registerListener(UmlgRuntimeProperty umlgRuntimeProperty, NotificationListener listener) {
+        UmlgNotificationManager.INSTANCE.registerListener(umlgRuntimeProperty, listener);
+    }
 
     public static class Exceptions {
         public static IllegalArgumentException classForElementCannotBeNull() {

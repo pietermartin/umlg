@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.umlg.gremlin.TestGroovyExecutor;
 import org.umlg.tests.allinstances.AllInstancesTest;
+import org.umlg.tests.changenotification.TestChangeNotification;
 import org.umlg.tests.collectiontest.*;
 import org.umlg.tests.datatype.DataTypeTest;
 import org.umlg.tests.javaprimitivetypes.TestJavaPrimitiveTypes;
@@ -20,7 +21,7 @@ import org.umlg.tests.qualifiertest.*;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        OclOrOperatorTest.class
+        TestChangeNotification.class
 })
 public class UmlgAnyTestSuite {
 }

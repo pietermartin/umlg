@@ -635,6 +635,13 @@
       <children xmi:type="notation:BasicCompartment" xmi:id="_1bJyQgAOEeKpVr_ntT6cLA" type="7018"/>
       <children xmi:type="notation:BasicCompartment" xmi:id="_1bJyQQAOEeKpVr_ntT6cLA" type="7017">
         <children xmi:type="notation:DecorationNode" xmi:id="_1ciSUQAOEeKpVr_ntT6cLA" type="3006">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GpznIDEHEeS9Hfg3kuQxnw" source="Stereotype_Annotation">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_5p3zsDELEeS9Hfg3kuQxnw" key="StereotypeWithQualifiedNameList" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_5p3zsTELEeS9Hfg3kuQxnw" key="StereotypeList" value="Umlg::Profile::ChangeListener"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_5p3zsjELEeS9Hfg3kuQxnw" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_5p3zszELEeS9Hfg3kuQxnw" key="PropStereoDisplay" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_5p3ztDELEeS9Hfg3kuQxnw" key="StereotypePropertyLocation" value="Compartment"/>
+          </eAnnotations>
           <element xmi:type="uml:Property" href="umlg-test.uml#_aI90cOwiEeCSwqyeEHd1tw"/>
         </children>
         <children xmi:type="notation:Shape" xmi:id="_-qhvMAD7EeKS1vh1F4YVWQ" type="3012" fontName="Sans" lineColor="0">

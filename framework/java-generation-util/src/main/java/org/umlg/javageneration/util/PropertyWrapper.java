@@ -2258,4 +2258,8 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         }
     }
 
+    public boolean isChangedListener() {
+        Stereotype changeListener = ModelLoader.INSTANCE.findStereotype("ChangeListener");
+        return this.isStereotypeApplied(changeListener);
+    }
 }
