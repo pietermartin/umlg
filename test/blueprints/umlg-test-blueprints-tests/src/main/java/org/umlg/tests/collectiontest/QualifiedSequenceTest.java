@@ -21,8 +21,8 @@ public class QualifiedSequenceTest extends BaseLocalDbTest {
 		foot2.addToGod(god);
         db.commit();
 		God godTest = new God(god.getVertex());
-		Assert.assertEquals("foot1", godTest.getFootForGodFootQualifier(Pair.of(T.eq, "foot1")).get(0).getName());
-		Assert.assertEquals("foot2", godTest.getFootForGodFootQualifier(Pair.of(T.eq, "foot2")).get(0).getName());
+		Assert.assertEquals("foot1", godTest.getFootForGodFootQualifier(Pair.of(T.eq, "foot1")).getName());
+		Assert.assertEquals("foot2", godTest.getFootForGodFootQualifier(Pair.of(T.eq, "foot2")).getName());
 	}
 	
 	@Test(expected=IllegalStateException.class)

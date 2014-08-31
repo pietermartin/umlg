@@ -72,16 +72,16 @@ public class TestQualifierWithDateAndEnum extends BaseLocalDbTest {
 
         UMLG.get().commit();
 
-        QualifierD qualifierDTest = qualifierC1.getQualifierDForDateQualifierandEnum1Qualifier(Pair.of(T.eq, LocalDate.now()), Pair.of(T.eq, ENUM1.A)).any(a->true);
+        QualifierD qualifierDTest = qualifierC1.getQualifierDForDateQualifierandEnum1Qualifier(Pair.of(T.eq, LocalDate.now()), Pair.of(T.eq, ENUM1.A));
         Assert.assertEquals(qualifierD1, qualifierDTest);
 
-        qualifierDTest = qualifierC1.getQualifierDForDateQualifierandEnum1Qualifier(Pair.of(T.eq, LocalDate.now().minusDays(1)), Pair.of(T.eq, ENUM1.A)).any(a->true);
+        qualifierDTest = qualifierC1.getQualifierDForDateQualifierandEnum1Qualifier(Pair.of(T.eq, LocalDate.now().minusDays(1)), Pair.of(T.eq, ENUM1.A));
         Assert.assertEquals(qualifierD2, qualifierDTest);
 
-        qualifierDTest = qualifierC2.getQualifierDForDateQualifierandEnum1Qualifier(Pair.of(T.eq, LocalDate.now().minusDays(1)), Pair.of(T.eq, ENUM1.A)).any(a->true);
+        qualifierDTest = qualifierC2.getQualifierDForDateQualifierandEnum1Qualifier(Pair.of(T.eq, LocalDate.now().minusDays(1)), Pair.of(T.eq, ENUM1.A));
         Assert.assertNotEquals(qualifierD3, qualifierDTest);
 
-        qualifierDTest = qualifierC2.getQualifierDForDateQualifierandEnum1Qualifier(Pair.of(T.eq, LocalDate.now().minusDays(1)), Pair.of(T.eq, ENUM1.B)).any(a->true);
+        qualifierDTest = qualifierC2.getQualifierDForDateQualifierandEnum1Qualifier(Pair.of(T.eq, LocalDate.now().minusDays(1)), Pair.of(T.eq, ENUM1.B));
         Assert.assertEquals(qualifierD4, qualifierDTest);
 
     }

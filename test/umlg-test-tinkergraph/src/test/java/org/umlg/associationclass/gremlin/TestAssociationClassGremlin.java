@@ -36,7 +36,7 @@ public class TestAssociationClassGremlin extends BaseLocalDbTest {
 
         db.commit();
 
-        String edges = UMLG.get().executeQueryToJson(UmlgQueryEnum.GROOVY, human.getId(), "self.outE.has('weight', T.eq, 1)");
+        String edges = UMLG.get().executeQueryToJson(UmlgQueryEnum.GROOVY, human.getId(), "self.outE().has('weight', T.eq, 1)");
         System.out.println(edges);
 
     }

@@ -127,10 +127,10 @@ public class TestQualifier extends BaseLocalDbTest {
 
         god.reload();
         Assert.assertNotNull(god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "1")));
-        Assert.assertEquals("2", god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "2")).iterator().next().getNameUnique());
-        Assert.assertEquals("3", god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "3")).iterator().next().getNameUnique());
-        Assert.assertEquals("4", god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "4")).iterator().next().getNameUnique());
-        Assert.assertEquals("5", god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "5")).iterator().next().getNameUnique());
+        Assert.assertEquals("2", god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "2")).getNameUnique());
+        Assert.assertEquals("3", god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "3")).getNameUnique());
+        Assert.assertEquals("4", god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "4")).getNameUnique());
+        Assert.assertEquals("5", god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "5")).getNameUnique());
 
     }
 
