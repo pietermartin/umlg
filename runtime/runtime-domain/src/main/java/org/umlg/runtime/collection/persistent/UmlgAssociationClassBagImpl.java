@@ -48,7 +48,7 @@ public class UmlgAssociationClassBagImpl<AssociationClassNode> extends UmlgBagIm
         if (!isOnePrimitive() && getDataTypeEnum() == null) {
             for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
                 Edge edge = iter.next();
-                if (edge.properties().containsKey(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
+                if (edge.properties().toList().contains(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
                     AssociationClassNode node;
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);

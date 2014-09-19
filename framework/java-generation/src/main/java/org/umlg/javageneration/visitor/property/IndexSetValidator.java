@@ -42,6 +42,7 @@ public class IndexSetValidator extends BaseVisitor implements Visitor<Property> 
                 ifIndexNotNull.setCondition(
                         pWrap.fieldname() + " != null && !" + pWrap.fieldname() + ".equals("+pWrap.getter()+"()) && " +
                         UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getFromUniqueIndex + "(" +
+                        owner.getPathName().getLast() + ".class.getSimpleName(), " +
                         UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +
                         ".getUmlgLabelConverter().convert(\"" +
                         pWrap.getPersistentName() + "\"), " +

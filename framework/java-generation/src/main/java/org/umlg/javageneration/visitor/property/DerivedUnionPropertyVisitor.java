@@ -140,7 +140,8 @@ public class DerivedUnionPropertyVisitor extends BaseVisitor implements Visitor<
                 OJAnnotatedOperation subsettingPropertyGetter = new OJAnnotatedOperation(subsettingPropertyWrapper.getter(), subsettingPropertyWrapper.javaTumlTypePath());
                 subsettingPropertyGetter.setVisibility(OJVisibilityKindGEN.PROTECTED);
                 subsettingPropertyGetter.setComment("Fake getter to help out the derivedUnion " + subsettedPropertyWrapper.getName());
-                subsettingPropertyGetter.getBody().addToStatements("return new " + subsettingPropertyWrapper.javaTumlMemoryTypePath().getLast() + "()");
+//                subsettingPropertyGetter.getBody().addToStatements("return new " + subsettingPropertyWrapper.javaTumlMemoryTypePath().getLast() + "()");
+                subsettingPropertyGetter.getBody().addToStatements("return null");
                 owner.addToImports(subsettingPropertyWrapper.javaTumlMemoryTypePath());
                 owner.addToOperations(subsettingPropertyGetter);
 

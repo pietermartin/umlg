@@ -2,11 +2,9 @@ package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.gremlin.neo4j.structure.Neo4jVertex;
 import com.tinkerpop.gremlin.structure.Graph;
+import com.tinkerpop.gremlin.structure.Property;
 import com.tinkerpop.gremlin.structure.Vertex;
-import com.tinkerpop.gremlin.structure.strategy.GraphStrategy;
-import com.tinkerpop.gremlin.structure.strategy.Strategy;
-import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedElement;
-import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedVertex;
+import com.tinkerpop.gremlin.structure.strategy.*;
 
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -18,13 +16,13 @@ import java.util.function.UnaryOperator;
 public class UmlgNeo4jGraphStrategy implements GraphStrategy {
 
     @Override
-    public UnaryOperator<Supplier<Void>> getRemoveElementStrategy(final Strategy.Context<? extends StrategyWrappedElement> ctx) {
+    public UnaryOperator<Supplier<Void>> getRemoveVertexStrategy(final Strategy.Context<StrategyWrappedVertex> ctx) {
         if (ctx.getCurrent() instanceof StrategyWrappedVertex) {
             return (t) -> () -> {
                 Vertex v = ((StrategyWrappedVertex) ctx.getCurrent()).getBaseVertex();
                 v.bothE().forEach(e -> e.remove());
                 getDeletionVertex(ctx.getBaseGraph()).addEdge(UmlgGraph.DELETION_VERTEX, v);
-                v.properties().values().forEach(p -> p.remove());
+                v.properties().forEachRemaining(Property::remove);
                 v.property("_deleted", true);
                 ((Neo4jVertex)v).getBaseVertex().removeLabel(((Neo4jVertex)v).getBaseVertex().getLabels().iterator().next());
                 return null;

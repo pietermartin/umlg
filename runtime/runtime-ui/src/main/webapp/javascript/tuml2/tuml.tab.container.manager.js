@@ -528,7 +528,7 @@
                 }
                 var validationResults = [];
                 var multiplicity = data.length;
-                if (multiplicity < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && multiplicity > this.tabContainerProperty.upper)) {
+                if (!this.tabContainerProperty.qualified && (multiplicity < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && multiplicity > this.tabContainerProperty.upper))) {
                     var validationMultiplicityResult = new Tuml.ValidationResult(this instanceof Tuml.TumlTabManyViewManager ? this.componentCell.row : "-1", this.tabContainerProperty);
                     validationMultiplicityResult.property = this.tabContainerProperty;
                     validationMultiplicityResult.message = 'multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + (this.tabContainerProperty.upper !== -1 ? this.tabContainerProperty.upper : '*') + ']';
@@ -737,7 +737,8 @@
                 rowCount++;
             }
         }
-        if (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper)) {
+        if (!this.tabContainerProperty.qualified && (
+            rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper))) {
             multiplicityWarning.append('multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + (this.tabContainerProperty.upper !== -1 ? this.tabContainerProperty.upper : '*') + ']');
         }
 

@@ -1,5 +1,6 @@
 package org.umlg.runtime.adaptor;
 
+import com.tinkerpop.gremlin.process.T;
 import com.tinkerpop.gremlin.process.computer.GraphComputer;
 import com.tinkerpop.gremlin.process.graph.GraphTraversal;
 import com.tinkerpop.gremlin.structure.*;
@@ -31,6 +32,8 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     private UmlgTransactionEventHandlerImpl transactionEventHandler;
     private Class<UmlgApplicationNode> umlgApplicationNodeClass;
     protected SqlG sqlG;
+    //cache the root vertex
+    private Vertex rootVertex;
 
     public UmlgSqlgGraph(Configuration config) {
         this.sqlG = SqlG.open(config);
@@ -46,6 +49,10 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         final StrategyWrappedGraph swg = new StrategyWrappedGraph(this.sqlG);
         swg.strategy().setGraphStrategy(new ReadOnlyGraphStrategy());
         return swg;
+    }
+
+    public void batchModeOn() {
+        this.sqlG.tx().batchModeOn();
     }
 
     public <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final Parameter... indexParameters) {
@@ -116,8 +123,8 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public <T extends PersistentObject> UmlgSet<T> allInstances(String className) {
-        UmlgMemorySet<T> result = new UmlgMemorySet();
+    public <TT extends PersistentObject> UmlgSet<TT> allInstances(String className) {
+        UmlgMemorySet<TT> result = new UmlgMemorySet();
         String label;
         int lastIndexOfDot = className.lastIndexOf(".");
         if (lastIndexOfDot != -1) {
@@ -125,15 +132,15 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.sqlG.V().<Vertex>has(Element.LABEL, label).forEach (
-                vertex -> result.add(UMLG.get().<T>getEntity(vertex.id()))
+        this.sqlG.V().<Vertex>has(T.label, label).forEach (
+                vertex -> result.add(UMLG.get().<TT>getEntity(vertex))
         );
         return result;
     }
 
     @Override
-    public <T extends PersistentObject> UmlgSet<T> allInstances(String className, Filter filter) {
-        UmlgMemorySet<T> result = new UmlgMemorySet();
+    public <TT extends PersistentObject> UmlgSet<TT> allInstances(String className, Filter filter) {
+        UmlgMemorySet<TT> result = new UmlgMemorySet();
         String label;
         int lastIndexOfDot = className.lastIndexOf(".");
         if (lastIndexOfDot != -1) {
@@ -141,9 +148,9 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.sqlG.V().<Vertex>has(Element.LABEL, label).forEach (
+        this.sqlG.V().<Vertex>has(T.label, label).forEach (
                 vertex -> {
-                    T entity = UMLG.get().<T>getEntity(vertex.id());
+                    TT entity = UMLG.get().<TT>getEntity(vertex);
                     if (filter.filter(entity)) {
                         result.add(entity);
                     }
@@ -157,7 +164,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         String label;
         if (className != null) {
             label = shortenClassName(className);
-            return this.sqlG.addVertex(Element.LABEL, label);
+            return this.sqlG.addVertex(T.label, label);
         } else {
             return this.sqlG.addVertex();
         }
@@ -204,6 +211,11 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         }
     }
 
+    @Override
+    public <T extends PersistentObject> T getEntity(Vertex vertex) {
+        return instantiateClassifier(vertex);
+    }
+
     private <T> T instantiateClassifier(Vertex v) {
         try {
             // TODO reimplement schemaHelper
@@ -216,8 +228,8 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public PersistentObject getFromUniqueIndex(String indexKey, Object indexValue) {
-        Iterator<Vertex> iterator = this.V().has(indexKey, indexValue);
+    public PersistentObject getFromUniqueIndex(String label, String indexKey, Object indexValue) {
+        Iterator<Vertex> iterator = this.V().has(T.label, shortenClassName(label)).has(indexKey, indexValue);
         if (iterator.hasNext()) {
             return instantiateClassifier(iterator.next());
         } else {
@@ -226,8 +238,8 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public List<PersistentObject> getFromIndex(String indexKey, Object indexValue) {
-        final Iterator<Vertex> iterator = this.V().has(indexKey, indexValue);
+    public List<PersistentObject> getFromIndex(String label, String indexKey, Object indexValue) {
+        final Iterator<Vertex> iterator = this.V().has(T.label, shortenClassName(label)).has(indexKey, indexValue);
         return new UmlgLazyList<PersistentObject>(iterator);
     }
 
@@ -336,7 +348,10 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Vertex getRoot() {
-        return this.v(this.sqlG.getSqlDialect().getSequenceStart());
+        if (this.rootVertex == null) {
+            this.rootVertex = this.v(this.sqlG.getSqlDialect().getSequenceStart());
+        }
+        return this.rootVertex;
     }
 
     @Override
@@ -418,6 +433,11 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         TransactionThreadMetaNodeVar.remove();
         UmlgAssociationClassManager.remove();
         UMLG.remove();
+    }
+
+    @Override
+    public Graph getUnderlyingGraph() {
+        return this.sqlG;
     }
 
     @Override

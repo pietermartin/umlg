@@ -63,61 +63,7 @@
     <windows xmi:id="_q7tX4QAOEeKpVr_ntT6cLA">
       <children xsi:type="di:TabFolder" xmi:id="_q7tX4AAOEeKpVr_ntT6cLA">
         <children>
-          <emfPageIdentifier href="restAndJson.notation#_Sr-QAJOTEeKVI4ITadnc-A"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_zWj7QDbrEeK9AeutZ8kzPA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_q7f8hAAOEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_v54awCs_EeKUKeU-gvRHzA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_Iuy0IMBUEeKz49-v52otyA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_00TAQEI-EeKpM48zLjI12Q"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_1wdkUPCXEeKXi9pM4yg14w"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_wUPMMPCXEeKXi9pM4yg14w"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_KHEDQCvvEeOJbevgaGUOXQ"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_82Sc0DXKEeOAlanvceIpiA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#__lbHwIYHEeORFsmiMkZYdA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_nXVsIKYREeOPt7R4er8hcg"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_BK1V0Kh3EeOPt7R4er8hcg"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_w-T-YKnrEeOPt7R4er8hcg"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_GedyAM_cEeOjlpjTZXDyqw"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_iukVANFlEeOjlpjTZXDyqw"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_TivdMNLoEeOCt7XMZfn16w"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_4wI1ABdREeS61_ff47-4bA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="restAndJson.notation#_N5yiAC89EeSnv_6WWPb9PA"/>
+          <emfPageIdentifier href="restAndJson.notation#_gUMucD-9EeS6-8IXi1ZhrA"/>
         </children>
       </children>
     </windows>

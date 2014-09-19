@@ -32,6 +32,7 @@ import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.util.UmlgProperties;
+import com.tinkerpop.gremlin.process.T;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -141,8 +142,8 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public <T extends PersistentObject> UmlgSet<T> allInstances(String className) {
-        UmlgMemorySet<T> result = new UmlgMemorySet();
+    public <TT extends PersistentObject> UmlgSet<TT> allInstances(String className) {
+        UmlgMemorySet<TT> result = new UmlgMemorySet();
         int lastIndexOfDot = className.lastIndexOf(".");
         String label;
         if (lastIndexOfDot != -1) {
@@ -150,15 +151,15 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.neo4jGraph.V().<Vertex>has(Element.LABEL, label).forEach (
-                vertex -> result.add(UMLG.get().<T>getEntity(vertex.id()))
+        this.neo4jGraph.V().<Vertex>has(T.label, label).forEach(
+                vertex -> result.add(UMLG.get().<TT>getEntity(vertex))
         );
         return result;
     }
 
     @Override
-    public <T extends PersistentObject> UmlgSet<T> allInstances(String className, Filter filter) {
-        UmlgMemorySet<T> result = new UmlgMemorySet();
+    public <TT extends PersistentObject> UmlgSet<TT> allInstances(String className, Filter filter) {
+        UmlgMemorySet<TT> result = new UmlgMemorySet();
         int lastIndexOfDot = className.lastIndexOf(".");
         String label;
         if (lastIndexOfDot != -1) {
@@ -166,9 +167,9 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.neo4jGraph.V().<Vertex>has(Element.LABEL, label).forEach (
+        this.neo4jGraph.V().<Vertex>has(T.label, label).forEach(
                 vertex -> {
-                    T entity = UMLG.get().<T>getEntity(vertex.id());
+                    TT entity = UMLG.get().<TT>getEntity(vertex);
                     if (filter.filter(entity)) {
                         result.add(entity);
                     }
@@ -187,7 +188,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
             } else {
                 label = className;
             }
-            return this.neo4jGraph.addVertex(Element.LABEL, label);
+            return this.neo4jGraph.addVertex(T.label, label);
         } else {
             return this.neo4jGraph.addVertex();
         }
@@ -220,6 +221,11 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         }
     }
 
+    @Override
+    public <T extends PersistentObject> T getEntity(Vertex vertex) {
+        return instantiateClassifier(vertex);
+    }
+
     private <T> T instantiateClassifier(Vertex v) {
         try {
             // TODO reimplement schemaHelper
@@ -232,8 +238,8 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public PersistentObject getFromUniqueIndex(String indexKey, Object indexValue) {
-        Iterator<Vertex> iterator = this.V().has(indexKey, indexValue);
+    public PersistentObject getFromUniqueIndex(String label, String indexKey, Object indexValue) {
+        Iterator<Vertex> iterator = this.V().has(T.label, label).has(indexKey, indexValue);
         if (iterator.hasNext()) {
             return instantiateClassifier(iterator.next());
         } else {
@@ -242,8 +248,8 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public List<PersistentObject> getFromIndex(String indexKey, Object indexValue) {
-        final Iterator<Vertex> iterator = this.V().has(indexKey, indexValue);
+    public List<PersistentObject> getFromIndex(String label, String indexKey, Object indexValue) {
+        final Iterator<Vertex> iterator = this.V().has(T.label, label).has(indexKey, indexValue);
         return new UmlgLazyList<PersistentObject>(iterator);
     }
 
@@ -458,6 +464,11 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
+    public Graph getUnderlyingGraph() {
+        return this.neo4jGraph;
+    }
+
+    @Override
     public Vertex addVertex(Object... keyValues) {
         return this.neo4jGraph.addVertex(keyValues);
     }
@@ -514,7 +525,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     private IndexDefinition createLabeledIndex(String label, String propertyKey) throws ConstraintViolationException {
         this.tx().readWrite();
-        Schema schema = ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getBaseGraph().schema();
+        Schema schema = ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).getBaseGraph().schema();
         Iterable<IndexDefinition> indexDefinitions = schema.getIndexes(DynamicLabel.label(label));
         for (IndexDefinition indexDefinition : indexDefinitions) {
             for (String pk : indexDefinition.getPropertyKeys()) {
@@ -530,13 +541,13 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     private void createLegacyIndex(Class<? extends Element> elementClass, String key) {
         this.tx().readWrite();
         if (Vertex.class.isAssignableFrom(elementClass)) {
-            AutoIndexer<Node> nodeAutoIndexer = ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getBaseGraph().index().getNodeAutoIndexer();
+            AutoIndexer<Node> nodeAutoIndexer = ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).getBaseGraph().index().getNodeAutoIndexer();
             if (!nodeAutoIndexer.isEnabled()) {
                 throw new IllegalStateException("Automatic indexing must be enabled at startup for legacy indexing to work on vertices!");
             }
             nodeAutoIndexer.startAutoIndexingProperty(key);
         } else if (Edge.class.isAssignableFrom(elementClass)) {
-            RelationshipAutoIndexer relationshipAutoIndexer = ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getBaseGraph().index().getRelationshipAutoIndexer();
+            RelationshipAutoIndexer relationshipAutoIndexer = ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).getBaseGraph().index().getRelationshipAutoIndexer();
             if (!relationshipAutoIndexer.isEnabled()) {
                 throw new IllegalStateException("Automatic indexing must be enabled at startup for legacy indexing to work on edges!");
             }
@@ -548,7 +559,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     private ConstraintDefinition createUniqueConstraint(String label, String propertyKey) {
         this.tx().readWrite();
-        Schema schema = ((Neo4jGraph)this.neo4jGraph.getBaseGraph()).getBaseGraph().schema();
+        Schema schema = ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).getBaseGraph().schema();
         return schema.constraintFor(DynamicLabel.label(label)).assertPropertyIsUnique(propertyKey).create();
     }
 

@@ -45,6 +45,14 @@ public interface UmlgGraph extends Graph {
     <T extends PersistentObject> T getEntity(Object id);
 
     /**
+     * Instantiate any concrete classifier with its vertex.
+     * @param vertex The vertex that represents this object.
+     * @param <T> The class of the object to instantiate.
+     * @return The entity that is represented by the vertex with id id.
+     */
+    public <T extends PersistentObject> T getEntity(Vertex vertex);
+
+    /**
      * uml models that have applied the Umlg::Profile and applied the <<Index>> stereotype to a property of the class
      * will have instances of that class automatically indexed. The key of the index is the qualified name of the property.
      * The value is the value of the property.
@@ -56,7 +64,7 @@ public interface UmlgGraph extends Graph {
      * @param <T> The class of the indexed entity.
      * @return The entity of class T with property with indexedKey that has a value of indexValue.
      */
-    <T extends PersistentObject> T getFromUniqueIndex(String key, Object value);
+    <T extends PersistentObject> T getFromUniqueIndex(String label, String key, Object value);
 
     /**
      * uml models that have applied the Umlg::Profile and applied the <<Index>> stereotype to a property of the class
@@ -70,7 +78,7 @@ public interface UmlgGraph extends Graph {
      * @param <T> The class of the indexed entity.
      * @return The entity of class T with property with indexedKey that has a value of indexValue.
      */
-    <T extends PersistentObject> List<T> getFromIndex(String key, Object value);
+    <T extends PersistentObject> List<T> getFromIndex(String label, String key, Object value);
 
     /**
      * Execute a query.
@@ -119,8 +127,14 @@ public interface UmlgGraph extends Graph {
      */
     void afterThreadContext();
 
+    <T extends Graph> T getUnderlyingGraph();
+
     public default void registerListener(UmlgRuntimeProperty umlgRuntimeProperty, NotificationListener listener) {
         UmlgNotificationManager.INSTANCE.registerListener(umlgRuntimeProperty, listener);
+    }
+
+    public default void batchModeOn() {
+
     }
 
     public static class Exceptions {
@@ -132,6 +146,5 @@ public interface UmlgGraph extends Graph {
             return new IllegalArgumentException("Class is not indexable: " + clazz);
         }
     }
-
 
 }

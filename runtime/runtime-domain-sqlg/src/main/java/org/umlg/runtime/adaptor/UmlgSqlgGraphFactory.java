@@ -3,19 +3,20 @@ package org.umlg.runtime.adaptor;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.sqlg.sql.dialect.SqlDialect;
 import org.umlg.sqlg.structure.SchemaManager;
 import org.umlg.sqlg.structure.SqlgDataSource;
 
 import java.beans.PropertyVetoException;
+import java.io.File;
 import java.lang.reflect.Constructor;
-import java.net.URL;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Neo4j db is a singleton
+ * sqlg db is a singleton
  */
 public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
 
@@ -32,15 +33,51 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
     }
 
     @Override
+    public void shutdown() {
+        if (this.umlgGraph != null) {
+            this.umlgGraph.rollback();
+            try {
+                this.umlgGraph.close();
+            } catch (Exception e) {
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                } else {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    @Override
     public UmlgGraph getTumlGraph(String url) {
-        URL sqlProperties = Thread.currentThread().getContextClassLoader().getResource("sqlgraph.properties");
         try {
-            this.configuration = new PropertiesConfiguration(sqlProperties);
+            this.configuration = new PropertiesConfiguration("sqlg.properties");
+            logger.info("loading sqlg.properties from the classpath");
         } catch (ConfigurationException e) {
-            throw new RuntimeException(e);
+            //if sqlgraph is not on the classpath, look in umlg.env.properties for its location
+            try {
+                System.out.println(new File(".").getAbsolutePath());
+                String[] propertiesFileLoacation = UmlgProperties.INSTANCE.getSqlgPropertiesLocation();
+                boolean foundPropertiesFile = false;
+                for (String location : propertiesFileLoacation) {
+                    File propertiesFile = new File(location);
+                    if (propertiesFile.exists()) {
+                        this.configuration = new PropertiesConfiguration(propertiesFile);
+                        foundPropertiesFile = true;
+                        logger.info(String.format("loading sqlg.properties from the %s", new String[]{propertiesFile.getAbsolutePath()}));
+                        break;
+                    }
+                }
+                if (!foundPropertiesFile) {
+                    throw new RuntimeException("sqlg.properties must be on the classpath or umlg.env.properties must specify its location in a property sqlg.properties.location", e);
+                }
+            } catch (ConfigurationException e1) {
+                throw new RuntimeException("sqlg.properties must be on the classpath or umlg.env.properties must specify its location in a property sqlg.properties.location", e);
+            }
         }
         SqlDialect sqlDialect;
         try {
+            logger.info(String.format("SqlG running with dialect %s", new String[]{configuration.getString("sql.dialect")}));
             Class<?> sqlDialectClass = Class.forName(configuration.getString("sql.dialect"));
             Constructor<?> constructor = sqlDialectClass.getConstructor(Configuration.class);
             sqlDialect = (SqlDialect) constructor.newInstance(configuration);
@@ -63,10 +100,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
                     try {
                         this.umlgGraph = new UmlgSqlgGraph(configuration);
                         this.umlgGraph.addRoot();
-//                        this.umlgGraph.addDeletionNode();
                         this.umlgGraph.commit();
-//                        UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
-//                        this.umlgGraph.commit();
                         //This is to bypass the beforeCommit
                         this.umlgGraph.setBypass(true);
                         UmlGIndexFactory.getUmlgIndexManager().createIndexes();
@@ -93,23 +127,6 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
             GroovyExecutor ge = GroovyExecutor.INSTANCE;
         }
         return this.umlgGraph;
-    }
-
-
-    @Override
-    public void shutdown() {
-        if (this.umlgGraph != null) {
-            this.umlgGraph.rollback();
-            try {
-                this.umlgGraph.close();
-            } catch (Exception e) {
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
-                } else {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
     }
 
     @Override

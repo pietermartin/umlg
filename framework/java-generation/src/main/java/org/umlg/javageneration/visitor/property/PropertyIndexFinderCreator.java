@@ -53,6 +53,7 @@ public class PropertyIndexFinderCreator extends BaseVisitor implements Visitor<P
             finder.getBody().addToStatements(
                     "return " +
                     UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getFromUniqueIndex + "(" +
+                    owner.getPathName().getLast() + ".class.getSimpleName(), " +
                     UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +
                     ".getUmlgLabelConverter().convert(\"" +
                     propertyWrapper.getPersistentName() + "\"), " +
@@ -64,6 +65,7 @@ public class PropertyIndexFinderCreator extends BaseVisitor implements Visitor<P
             finder.getBody().addToStatements(
                     "return " +
                             UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getFromNonUniqueIndex + "(" +
+                            owner.getPathName().getLast() + ".class.getSimpleName(), " +
                             UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +
                             ".getUmlgLabelConverter().convert(\"" +
                             propertyWrapper.getPersistentName() + "\"), " +

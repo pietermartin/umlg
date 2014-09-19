@@ -33,7 +33,7 @@ public class ClassValidateMultiplicitiesBuilder extends BaseVisitor implements V
         result.setInitExp("new ArrayList<" + UmlgGenerationUtil.UmlgConstraintViolation.getLast() + ">()");
         annotatedClass.addToImports(new OJPathName("java.util.ArrayList"));
         validateMultiplicities.getBody().addToLocals(result);
-        for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
+        for (Property p : UmlgClassOperations.getAllProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
             //Qualified properties raw multiplicity is assumed to be *
             if (!pWrap.isDerived() && !pWrap.isQualified() && (pWrap.getLower() > 0 || (pWrap.isMany() && pWrap.getUpper() != -1))) {

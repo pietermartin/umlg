@@ -1,6 +1,7 @@
 package org.umlg.blueprints;
 
 import com.tinkerpop.gremlin.neo4j.structure.Neo4jGraph;
+import com.tinkerpop.gremlin.process.T;
 import com.tinkerpop.gremlin.structure.Edge;
 import com.tinkerpop.gremlin.structure.Element;
 import com.tinkerpop.gremlin.structure.Vertex;
@@ -26,8 +27,8 @@ public class TestNeo4jBug {
         f.mkdir();
         Neo4jGraph g = Neo4jGraph.open(f.getAbsolutePath());
 
-        Vertex a = g.addVertex(Element.LABEL, "A");
-        Vertex b = g.addVertex(Element.LABEL, "B");
+        Vertex a = g.addVertex(T.label, "A");
+        Vertex b = g.addVertex(T.label, "B");
         a.addEdge("LABEL1", a);
         g.tx().commit();
 

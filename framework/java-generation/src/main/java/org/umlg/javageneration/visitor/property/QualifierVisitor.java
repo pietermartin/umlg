@@ -16,6 +16,7 @@ import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.java8.ForEachStatement;
 import org.umlg.javageneration.util.*;
 import org.umlg.javageneration.visitor.BaseVisitor;
+import org.umlg.javageneration.visitor.clazz.ClassBuilder;
 
 public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 
@@ -33,21 +34,37 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             //In this case they are the same as the qualifier is not refined
             generateQualifiedGetter(pWrap, pWrap);
             if (pWrap.getQualifiers().size() > 1) {
-                //Pariall getters only make sense if there are more than one qualifier.
+                //Partial getters only make sense if there are more than one qualifier.
                 //Some qualifiers can be left null then and  the search will be partial
                 generateQualifiedPartialGetter(pWrap, pWrap);
             }
 
-//            //update the index on setters of the properties as specified on the QualifierListener stereotype
-//            generateUpdateOfIndex(pWrap);
-//
             List<Property> refinedQualifieds = pWrap.getRefinedQualifieds();
             for (Property refinedQualified : refinedQualifieds) {
                 generateQualifiedGetter(pWrap, new PropertyWrapper(refinedQualified));
-//                generateUpdateOfIndex(new PropertyWrapper(refinedQualified));
             }
 
+            //if the qualified properties corresponding property does not have a default value give it one.
+            //This is needed to ensure that the qui works when adding a new qualified classifier in which case the qualified value is still empty.
+            addDefaultValue(pWrap);
+
         }
+    }
+
+    private void addDefaultValue(PropertyWrapper qualified) {
+        List<PropertyWrapper> qualifiers = qualified.getQualifiersAsPropertyWrappers();
+        for (PropertyWrapper qualifier : qualifiers) {
+            PropertyWrapper correspondingProperty = qualifier.getQualifierCorrespondingQualifierStereotypedProperty();
+            if (correspondingProperty.getDefaultValue() == null) {
+                OJAnnotatedClass infOwner = findOJClass(correspondingProperty);
+                OJAnnotatedOperation initVariables = infOwner.findOperation(ClassBuilder.INIT_VARIABLES);
+                initVariables.getBody().addToStatements(
+                        correspondingProperty.setter() + "(" + correspondingProperty.getQualifierJippoDefaultValue() + ")"
+                );
+
+            }
+        }
+
     }
 
     @Override
@@ -151,11 +168,21 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         hasStatement.append(UmlgGenerationUtil.tinkerDirection.getLast());
         hasStatement.append(".IN,\n        ");
         hasStatement.append(UmlgClassOperations.propertyEnumName(qualifiedClassifier) + "." + qualified.fieldname() + ".getLabel())");
-        hasStatement.append("\n        .has(Element.LABEL, \"");
+        graphTraversal.setInitExp(hasStatement.toString());
+
+        hasStatement.append("\n        .has(T.label, \"");
         hasStatement.append(qualifiers.get(0).getQualifierCorrespondingQualifierStereotypedProperty().getOwningType().getName());
         hasStatement.append("\");");
-        graphTraversal.setInitExp(hasStatement.toString());
+
+
         for (PropertyWrapper qualifier : qualifiers) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("graphTraversal.has(T.label, \"");
+            PropertyWrapper otherEnd = PropertyWrapper.from(qualified.getOtherEnd());
+            sb.append(UmlgClassOperations.getPathName(otherEnd.getOwningType()).getLast());
+            sb.append("\")");
+            qualifierValue.getBody().addToStatements(sb.toString());
+
             qualifierValue.getBody().addToStatements("graphTraversal.has(" + "\"" +
                     qualifier.getQualifierCorrespondingQualifierStereotypedProperty().getPersistentName() +
                     "\", " +
@@ -215,7 +242,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         hasStatement.append(UmlgGenerationUtil.tinkerDirection.getLast());
         hasStatement.append(".IN,\n        ");
         hasStatement.append(UmlgClassOperations.propertyEnumName(qualifiedClassifier) + "." + qualified.fieldname() + ".getLabel())");
-        hasStatement.append("\n        .has(Element.LABEL, \"");
+        hasStatement.append("\n        .has(T.label, \"");
         hasStatement.append(qualifiers.get(0).getQualifierCorrespondingQualifierStereotypedProperty().getOwningType().getName());
         hasStatement.append("\")");
         graphTraversal.setInitExp(hasStatement.toString());

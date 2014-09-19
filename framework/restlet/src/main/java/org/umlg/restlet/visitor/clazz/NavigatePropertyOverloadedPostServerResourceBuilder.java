@@ -453,10 +453,13 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
             if (!pWrap.isMemberOfAssociationClass()) {
                 OJField constructor = new OJField("constructor", new OJPathName("java.lang.reflect.Constructor").addToGenerics(pWrap.javaBaseTypePath()));
-                constructor.setInitExp("baseTumlClass.getConstructor(" + otherEndPWrap.javaBaseTypePath().getLast() + ".class)");
+//                constructor.setInitExp("baseTumlClass.getConstructor(" + otherEndPWrap.javaBaseTypePath().getLast() + ".class)");
+                constructor.setInitExp("baseTumlClass.getConstructor()");
                 tryInstantiate.getTryPart().addToLocals(constructor);
-                tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = constructor.newInstance(parentResource)");
+//                tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = constructor.newInstance(parentResource)");
+                tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = constructor.newInstance()");
                 tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
+                tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
                 tryInstantiate.getTryPart().addToStatements("objectList.add(new " + UmlgRestletGenerationUtil.UmlgNodeJsonHolder.getLast() + "(childResource))");
             } else {
                 PropertyWrapper otherEnd = new PropertyWrapper(pWrap.getOtherEnd());

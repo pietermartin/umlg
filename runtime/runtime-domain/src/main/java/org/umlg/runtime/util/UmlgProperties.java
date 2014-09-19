@@ -50,6 +50,10 @@ public class UmlgProperties {
         }
     }
 
+    public CompositeConfiguration getProperties() {
+        return properties;
+    }
+
     private boolean isDistribution() {
         return Boolean.valueOf(System.getProperty("UMLGServerDistribution", "false"));
     }
@@ -102,4 +106,7 @@ public class UmlgProperties {
         return this.properties.getInteger("webserver.port", 8080);
     }
 
+    public String[] getSqlgPropertiesLocation() {
+        return this.properties.getStringArray("sqlg.properties.location");
+    }
 }

@@ -4,6 +4,8 @@ import com.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.UMLG;
 
 import java.util.*;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Date: 2014/03/16
@@ -19,6 +21,14 @@ public class UmlgLazyList<PersistentObject> implements List {
     public UmlgLazyList(Iterator<Vertex> iterator) {
         this.iterator = new IteratorWrapper(iterator);
     }
+
+//    @Override
+//    public Stream<PersistentObject> stream() {
+//        if (!fullyLoaded) {
+//            loadFully();
+//        }
+//        return StreamSupport.stream(spliterator(), false);
+//    }
 
     @Override
     public int size() {
@@ -53,7 +63,12 @@ public class UmlgLazyList<PersistentObject> implements List {
 
     @Override
     public Iterator iterator() {
-        return this.iterator;
+        if (!fullyLoaded && this.loadedUpTo==0) {
+            return this.iterator;
+        } else {
+            loadFully();
+            return this.internal.iterator();
+        }
     }
 
     @Override

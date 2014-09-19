@@ -15,16 +15,16 @@
             <artifactId>runtime-domain-sqlg</artifactId>
             <version>${umlg.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.umlg</groupId>-->
-            <!--<artifactId>sqlg-postgres</artifactId>-->
-            <!--<version>0.0.1-SNAPSHOT</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.umlg</groupId>
-            <artifactId>sqlg-hsqldb</artifactId>
+            <artifactId>sqlg-postgres</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.umlg</groupId>-->
+            <!--<artifactId>sqlg-hsqldb</artifactId>-->
+            <!--<version>0.0.1-SNAPSHOT</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-test</artifactId>

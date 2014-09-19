@@ -8,6 +8,9 @@ import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Package;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.umlg.framework.ModelLoader;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.javageneration.validation.*;
@@ -223,7 +226,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         }
         Property owner = (Property) getOwner();
         Stereotype qualifierVisitor = ModelLoader.INSTANCE.findStereotype("QualifierListener");
-        for (Element e : owner.getType().getOwnedElements()) {
+        for (Element e : UmlgClassOperations.getAllProperties((Class)owner.getType())) {
             if (e instanceof Property) {
                 Property p = (Property) e;
                 if (p.isStereotypeApplied(qualifierVisitor)) {
@@ -328,6 +331,28 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public String getTumlRuntimePropertyEnum() {
         return UmlgClassOperations.propertyEnumName(getOwningType()) + "." + fieldname();
+    }
+
+    /**
+     * Qualifier's corresponding property gets defaulted to make the ui work.
+     * @return
+     */
+    public String getQualifierJippoDefaultValue() {
+        if (isString()) {
+            return "\"\"";
+        } else if (isBoolean()) {
+            return "false";
+        } else if (isInteger()) {
+            return "-1";
+        } else if (isDate()) {
+            return "LocalDate.now()";
+        } else if (isEnumeration()) {
+            Enumeration enumeration = (Enumeration)getType();
+            String name = Namer.qualifiedName(enumeration);
+            return name  + "." + enumeration.getOwnedLiterals().get(0).getName();
+        } else {
+            throw new IllegalStateException(String.format("Qualified property %s is a %s, this is not supported for default values", new String[]{getQualifiedName(), getType().getQualifiedName()}));
+        }
     }
 
     public String getDefaultValueAsJava() {

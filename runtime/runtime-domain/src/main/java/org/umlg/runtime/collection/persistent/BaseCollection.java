@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.tinkerpop.gremlin.process.Traversal;
+import com.tinkerpop.gremlin.process.graph.GraphTraversal;
 import com.tinkerpop.gremlin.structure.Direction;
 import com.tinkerpop.gremlin.structure.Edge;
 import com.tinkerpop.gremlin.structure.Property;
@@ -115,6 +116,15 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             return v.inE(this.getLabel());
         }
     }
+
+    protected Iterator<Vertex> getVertices() {
+        if (this.isControllingSide()) {
+            return this.vertex.out(this.getLabel());
+        } else {
+            return this.vertex.in(this.getLabel());
+        }
+    }
+
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
@@ -781,6 +791,18 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         }
     }
 
+    protected Class<?> getClassToInstantiate(Vertex vertex) {
+        try {
+            if (this.isControllingSide()) {
+                return Class.forName((String) vertex.value("className"));
+            } else {
+                return Class.forName((String) vertex.value("className"));
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     protected Class<?> getClassToInstantiateFromHyperVertexEdge(Edge hyperVertexEdge) {
         try {
             final Vertex v = hyperVertexEdge.inV().next();
@@ -866,35 +888,38 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             StringBuilder keys = new StringBuilder();
             StringBuilder values = new StringBuilder();
             long count = 1;
-            List<Traversal> traversals = new ArrayList<>();
+//            List<Traversal> traversals = new ArrayList<>();
+            GraphTraversal traversal;
+
+            if (inverse) {
+                if (!isControllingSide()) {
+                    traversal = vertex.out(this.getLabel());
+                } else {
+                    traversal = vertex.in(this.getLabel());
+                }
+            } else {
+                if (!isControllingSide()) {
+                    traversal = vertex.in(this.getLabel());
+                } else {
+                    traversal = vertex.out(this.getLabel());
+                }
+            }
+
             for (Qualifier qualifier : qualifiers) {
                 qualifierNames.append(qualifier.getUmlgRuntimeProperty().getQualifiedName());
                 qualifierNames.append(" ");
-
-                if (qualifier.getValue()==null) {
+                if (qualifier.getValue() == null) {
                     break;
                 }
                 keys.append(qualifier.getKey());
-                values.append(qualifier.getValue().toString());
+                values.append(qualifier.getValue() == null ? "null" : qualifier.getValue().toString());
                 if (count++ < qualifiers.size()) {
                     keys.append(", ");
                     values.append(", ");
                 }
-                traversals.add(UMLG.get().of().as("a").has(qualifier.getKey(), qualifier.getValue()));
+                traversal.has(qualifier.getKey(), qualifier.getValue());
             }
-            if (inverse) {
-                if (!isControllingSide()) {
-                    count = vertex.out(this.getLabel()).match("a", traversals.toArray(new Traversal[]{})).count().next();
-                } else {
-                    count = vertex.in(this.getLabel()).match("a", traversals.toArray(new Traversal[]{})).count().next();
-                }
-            } else {
-                if (!isControllingSide()) {
-                    count = vertex.in(this.getLabel()).match("a", traversals.toArray(new Traversal[]{})).count().next();
-                } else {
-                    count = vertex.out(this.getLabel()).match("a", traversals.toArray(new Traversal[]{})).count().next();
-                }
-            }
+            count = (Long) traversal.count().next();
             if (count > 0) {
                 // Add info to exception
                 throw new IllegalStateException(
@@ -1327,7 +1352,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     private void setDataTypeOnVertex(Vertex v, E e) {
         if (e instanceof UmlgType) {
-            ((UmlgType)e).setOnVertex(v, getPersistentName());
+            ((UmlgType) e).setOnVertex(v, getPersistentName());
         } else {
             v.property(getPersistentName(), UmlgFormatter.format(getDataTypeEnum(), e));
         }
@@ -1342,7 +1367,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                         case Password:
                             Password password = new Password();
                             password.loadFromVertex(this.vertex, getPersistentName());
-                            result = (E)password;
+                            result = (E) password;
                             break;
                         default:
                             result = UmlgFormatter.parse(getDataTypeEnum(), s);
@@ -1376,25 +1401,25 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         return result;
     }
 
-    private void loadManyNotPrimitiveNotDataType() {
-        for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
-            Edge edge = iter.next();
+    protected void loadManyNotPrimitiveNotDataType() {
+        for (Iterator<Vertex> iter = getVertices(); iter.hasNext(); ) {
+            Vertex vertex = iter.next();
             E node;
             try {
-                Class<?> c = this.getClassToInstantiate(edge);
+                Class<?> c = this.getClassToInstantiate(vertex);
                 if (c.isEnum()) {
-                    Object value = this.getVertexForDirection(edge).value(getPersistentName());
+                    Object value = vertex.value(getPersistentName());
                     node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                    putToInternalMap(node, this.getVertexForDirection(edge));
+                    putToInternalMap(node, vertex);
                 } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
                     Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                     node = (E) m.invoke(null);
                 } else if (UmlgNode.class.isAssignableFrom(c)) {
-                    node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
+                    node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
                 } else {
-                    Object value = this.getVertexForDirection(edge).value(getPersistentName());
+                    Object value = vertex.value(getPersistentName());
                     node = (E) value;
-                    putToInternalMap(value, this.getVertexForDirection(edge));
+                    putToInternalMap(value, vertex);
                 }
                 this.internalCollection.add(node);
             } catch (Exception ex) {

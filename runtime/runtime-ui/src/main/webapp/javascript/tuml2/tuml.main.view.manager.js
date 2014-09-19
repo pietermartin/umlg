@@ -486,7 +486,9 @@
                     break;
                 }
             }
-            if (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper)) {
+            //skip validating qualified properties, kinda assumed to be 0..*
+            if (!this.tabContainerProperty.qualified &&
+                    (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper))) {
                 var validationResult = new Tuml.ValidationResult(-1, this.tabContainerProperty.name);
                 validationResult.property = this.tabContainerProperty;
                 validationResult.qualifiedName = this.tabContainerProperty.qualifiedName;

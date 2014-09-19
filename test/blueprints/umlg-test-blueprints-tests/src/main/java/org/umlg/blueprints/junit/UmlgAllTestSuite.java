@@ -9,6 +9,7 @@ import org.umlg.tests.allinstances.TestAllInstancesOnAbstractClass;
 import org.umlg.tests.allinstances.TestAllInstancesOnInterface;
 import org.umlg.tests.associationclass.TestAssociationClassCopiesOnePrimitivePropertiesToEdge;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
+import org.umlg.tests.batch.TestBatchMode;
 import org.umlg.tests.changenotification.TestChangeNotification;
 import org.umlg.tests.collectiontest.*;
 import org.umlg.tests.componenttest.TestComponent;
@@ -39,8 +40,7 @@ import org.umlg.tests.multiplecompositeparenthierarchy.HierarchyMultipleParentsT
 import org.umlg.tests.mvel.TestMvel;
 import org.umlg.tests.nonnavigable.NonNavigableTest;
 import org.umlg.tests.ocl.datatypes.TestOclCollectOnDataTypes;
-import org.umlg.tests.ocl.ocloperator.OclIsUniqueTest;
-import org.umlg.tests.ocl.ocloperator.OclOrOperatorTest;
+import org.umlg.tests.ocl.ocloperator.*;
 import org.umlg.tests.ocl.operation.OclOperationTest;
 import org.umlg.tests.ocl.qualifiers.TestNavigateQualifedProperty;
 import org.umlg.tests.primitive.TestBooleanPrimitive;
@@ -129,7 +129,12 @@ import org.umlg.tests.validationtest.TestValidation;
         TestNavigateQualifedProperty.class,
         OclOperationTest.class,
         OclOrOperatorTest.class,
-        TestChangeNotification.class
+        TestChangeNotification.class,
+        OclIndexOfTest.class,
+        OclSubstringTest.class,
+        OclSubstringIndexOfTest.class,
+        TestQualifiedDerivedUnionProperty.class,
+        TestBatchMode.class
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
 //        TestAssociationToSelf.class,
