@@ -143,6 +143,8 @@ function selectFormatter(property, isNew, updatedId) {
         return  null;
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && (property.manyToOne || property.oneToOne) && property.lower > 0) {
         return  TumlSlick.Formatters.TumlToOneRequiredFormatter;
+    } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && (property.manyToMany || property.oneToMany) && property.lower > 0) {
+        return  TumlSlick.Formatters.TumlRequired;
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.manyEnumeration) {
         return function waitingFormatter(row, cell, value, columnDef, dataContext) {
             if (value !== undefined && value !== null) {
@@ -376,6 +378,8 @@ function selectEditor(property) {
         return  Tuml.Slick.Editors.SelectToOneAssociationClassCellEditor;
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && !property.associationClassOne && (property.oneToOne || property.manyToOne)) {
         return  Tuml.Slick.Editors.SelectOneToOneCellEditor;
+    } else if (!property.composite && property.lower > 0 && !property.associationClassOne && (property.oneToMany || property.manyToMany)) {
+        return null;
     } else if (!property.composite && property.lower > 0 && property.associationClassOne) {
         return null;
     } else if (property.name == 'id') {

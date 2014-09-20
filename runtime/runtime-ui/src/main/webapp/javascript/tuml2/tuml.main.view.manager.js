@@ -884,13 +884,13 @@
 //                var endTimeBeforeUpdateGrids = new Date().getTime();
 //                console.log("Time taken in millis for server call before update drop down = " + (endTimeBeforeUpdateGrids - startTime));
 
-                //For one lookup
+                //For lookup
                 if (Array.isArray(result)) {
                     var dataForTabOnly = [];
                     //Only interested in data for the current tab, i.e. its concrete type
                     for (var j = 0; j < result.length; j++) {
                         var r = result[j];
-                        if (r.meta.to.qualifiedName === qualifiedName) {
+                        if (r.meta.to.qualifiedName === qualifiedName || r.meta.qualifiedName === qualifiedName) {
                             for (var i = 0; i < r.data.length; i++) {
                                 var item = r.data[i];
                                 if (item.tmpId !== undefined && item.tmpId !== null) {

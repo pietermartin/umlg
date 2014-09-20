@@ -459,6 +459,9 @@
                     } else if (isComponentMany(column)) {
                         doComponentMany(column, args);
                         e.stopImmediatePropagation();
+                    } else if (isSelectMany(column)) {
+                        doSelectMany(column, args);
+                        e.stopImmediatePropagation();
                     } else if (isComponentOne(column)) {
                         //Component one
                         doComponentOne(column, args);
@@ -491,6 +494,11 @@
                     column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1);
             }
 
+            function isSelectMany(column) {
+                return !column.options.property.manyPrimitive && !column.options.property.manyEnumeration && !column.options.property.composite &&
+                    column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1);
+            }
+
             function doComponentMany(column, args) {
                 //Component many
                 var data = [];
@@ -501,6 +509,18 @@
                     }
                     var id = self.dataView.getItem(args.row)["id"];
                     self.tumlTabViewManager.openManyComponent(data, args, column.options.property.tumlUri, column.options.property);
+                }
+            }
+
+            function doSelectMany(column, args) {
+                //Select many
+                var data = [];
+                if (isCellEditableWithColumn(column, args.row, self.dataView.getItem(args.row))) {
+                    if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
+                        //Get the data currently for the component
+                        data = self.dataView.getItem(args.row)[column.name];
+                    }
+                    self.tumlTabViewManager.openNonCompositeManyComponent(self.dataView.getItem(args.row), data, args, column.options.property.tumlUri, column.options.property);
                 }
             }
 

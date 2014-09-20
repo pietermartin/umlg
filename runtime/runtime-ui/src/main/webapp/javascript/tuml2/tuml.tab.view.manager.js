@@ -1284,6 +1284,77 @@
         );
     }
 
+    TumlTabManyViewManager.prototype.openNonCompositeManyComponent = function (selectedRow, selectData, cell, tumlUri, property) {
+        var self = this;
+        //Get the meta data.
+
+        Tuml.Metadata.Cache.get(property.qualifiedName, property,
+            function (result) {
+                self.tabContainerProperty = property;
+                var firstTumlManyComponentTabViewManager = null;
+                for (var i = 0; i < result.length; i++) {
+
+                    var component = {meta: result[i].meta, data: []};
+                    self.maybeCreateTabContainer();
+                    self.addButtons();
+
+                    //Need to filter out the data per concrete class as returned in the meta data
+                    for (var j = 0; j < selectData.length; j++) {
+                        if (selectData[j].qualifiedName === component.meta.to.qualifiedName) {
+                            component.data.push(selectData[j]);
+                        }
+                    }
+                    var tumlManyComponentTabViewManager = self.createTabContainer(
+                        tuml.tab.Enum.Properties,
+                        component,
+                        tumlUri,
+                        {forLookup: false, forManyComponent: true, forOneComponent: false, isOne: false, forCreation: true},
+                        property
+                    );
+                    self.setCell(cell);
+                    self.addToTumlTabViewManagers(tumlManyComponentTabViewManager);
+                    tumlManyComponentTabViewManager.parentTabContainerManager = self;
+
+                    var parentPanelPanelDefault = $("#" + self.parentTabContainerManager.getTabId() + "panelPanelDefault");
+                    var parentTabContent = parentPanelPanelDefault.find('.tab-content');
+                    parentTabContent.hide();
+                    //make the body just height enough to display the tab nicely
+                    parentPanelPanelDefault.children('.umlg-panel-body.panel-body').height(45);
+                    var parentTabFooter = parentPanelPanelDefault.find('.umlg-panel-footer.panel-footer');
+                    parentTabFooter.hide();
+
+                    tumlManyComponentTabViewManager.backupData = $.extend(true, [], selectData);
+                    //pass through component's component validationResults
+                    self.passOnValidationResults(tumlManyComponentTabViewManager, cell.row, self.tumlTabGridManager.grid.getColumns()[cell.cell].name);
+
+                    tumlManyComponentTabViewManager.createTab(component, false);
+                    if (i === 0) {
+                        firstTumlManyComponentTabViewManager = tumlManyComponentTabViewManager;
+                        self.open = false;
+                        if (firstTumlManyComponentTabViewManager !== null) {
+                            self.tabContainer.find('a:first').tab('show');
+                        }
+                        self.updateNavigationHeader(property.qualifiedName);
+                        self.updateMultiplicityWarningHeader();
+
+                        self.contextVertexId = selectedRow.id;
+                        self.addSelectButton(property.name, firstTumlManyComponentTabViewManager);
+                    }
+
+                }
+
+//                var adjustedUri = property.tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), selectedRow.id);
+//                //populate the grid with the lookup
+//                self.handleLookup(adjustedUri, property.qualifiedName,
+//                    function (lookupData) {
+//                        //put the lookupData in the grid
+//                    }
+//                );
+            }
+
+        );
+    }
+
     TumlTabManyViewManager.prototype.openNonCompositeMany = function (property, qualifiedName) {
         var self = this;
 
@@ -1293,8 +1364,6 @@
         this.handleLookup(adjustedUri, qualifiedName,
 
             function (data) {
-
-//                self.tabContainerProperty = property;
                 var firstTumlManyComponentTabViewManager = null;
                 for (var i = 0; i < data.length; i++) {
                     var concreteData = data[i];
