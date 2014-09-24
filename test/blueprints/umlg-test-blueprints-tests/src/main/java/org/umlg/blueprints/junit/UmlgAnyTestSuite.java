@@ -25,7 +25,7 @@ import org.umlg.tests.ringtest.TestFingerRing;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        BagTestTest.class
+        TestBatchMode.class
 })
 public class UmlgAnyTestSuite {
 }

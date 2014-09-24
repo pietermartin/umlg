@@ -50,50 +50,50 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
 
     @Override
     public UmlgGraph getTumlGraph(String url) {
-        try {
-            this.configuration = new PropertiesConfiguration("sqlg.properties");
-            logger.info("loading sqlg.properties from the classpath");
-        } catch (ConfigurationException e) {
-            //if sqlgraph is not on the classpath, look in umlg.env.properties for its location
+        if (this.umlgGraph == null) {
             try {
-                System.out.println(new File(".").getAbsolutePath());
-                String[] propertiesFileLoacation = UmlgProperties.INSTANCE.getSqlgPropertiesLocation();
-                boolean foundPropertiesFile = false;
-                for (String location : propertiesFileLoacation) {
-                    File propertiesFile = new File(location);
-                    if (propertiesFile.exists()) {
-                        this.configuration = new PropertiesConfiguration(propertiesFile);
-                        foundPropertiesFile = true;
-                        logger.info(String.format("loading sqlg.properties from the %s", new String[]{propertiesFile.getAbsolutePath()}));
-                        break;
+                this.configuration = new PropertiesConfiguration("sqlg.properties");
+                logger.info("loading sqlg.properties from the classpath");
+            } catch (ConfigurationException e) {
+                //if sqlgraph is not on the classpath, look in umlg.env.properties for its location
+                try {
+                    System.out.println(new File(".").getAbsolutePath());
+                    String[] propertiesFileLoacation = UmlgProperties.INSTANCE.getSqlgPropertiesLocation();
+                    boolean foundPropertiesFile = false;
+                    for (String location : propertiesFileLoacation) {
+                        File propertiesFile = new File(location);
+                        if (propertiesFile.exists()) {
+                            this.configuration = new PropertiesConfiguration(propertiesFile);
+                            foundPropertiesFile = true;
+                            logger.info(String.format("loading sqlg.properties from the %s", new String[]{propertiesFile.getAbsolutePath()}));
+                            break;
+                        }
                     }
-                }
-                if (!foundPropertiesFile) {
+                    if (!foundPropertiesFile) {
+                        throw new RuntimeException("sqlg.properties must be on the classpath or umlg.env.properties must specify its location in a property sqlg.properties.location", e);
+                    }
+                } catch (ConfigurationException e1) {
                     throw new RuntimeException("sqlg.properties must be on the classpath or umlg.env.properties must specify its location in a property sqlg.properties.location", e);
                 }
-            } catch (ConfigurationException e1) {
-                throw new RuntimeException("sqlg.properties must be on the classpath or umlg.env.properties must specify its location in a property sqlg.properties.location", e);
             }
-        }
-        SqlDialect sqlDialect;
-        try {
-            logger.info(String.format("SqlG running with dialect %s", new String[]{configuration.getString("sql.dialect")}));
-            Class<?> sqlDialectClass = Class.forName(configuration.getString("sql.dialect"));
-            Constructor<?> constructor = sqlDialectClass.getConstructor(Configuration.class);
-            sqlDialect = (SqlDialect) constructor.newInstance(configuration);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            SqlgDataSource.INSTANCE.setupDataSource(
-                    sqlDialect.getJdbcDriver(),
-                    configuration.getString("jdbc.url"),
-                    configuration.getString("jdbc.username"),
-                    configuration.getString("jdbc.password"));
-        } catch (PropertyVetoException e) {
-            throw new RuntimeException(e);
-        }
-        if (this.umlgGraph == null) {
+            SqlDialect sqlDialect;
+            try {
+                logger.info(String.format("SqlG running with dialect %s", new String[]{configuration.getString("sql.dialect")}));
+                Class<?> sqlDialectClass = Class.forName(configuration.getString("sql.dialect"));
+                Constructor<?> constructor = sqlDialectClass.getConstructor(Configuration.class);
+                sqlDialect = (SqlDialect) constructor.newInstance(configuration);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                SqlgDataSource.INSTANCE.setupDataSource(
+                        sqlDialect.getJdbcDriver(),
+                        configuration.getString("jdbc.url"),
+                        configuration.getString("jdbc.username"),
+                        configuration.getString("jdbc.password"));
+            } catch (PropertyVetoException e) {
+                throw new RuntimeException(e);
+            }
             TransactionThreadEntityVar.remove();
             try (Connection conn = SqlgDataSource.INSTANCE.get(configuration.getString("jdbc.url")).getConnection()) {
                 if (!tableExist(conn, SchemaManager.VERTICES)) {
