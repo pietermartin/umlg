@@ -20,7 +20,7 @@ public class TestIndexingDataType extends BaseLocalDbTest {
         Product product = new Product();
         product.setCreated(new LocalDate(10000));
         db.commit();
-        Assert.assertEquals(1, Product.findByCreated(new LocalDate(10000)).size());
+        Assert.assertEquals(1, Product.product_findByCreated(new LocalDate(10000)).size());
     }
 
     @Test
@@ -28,8 +28,8 @@ public class TestIndexingDataType extends BaseLocalDbTest {
         Product product = new Product();
         product.setDeleted(new DateTime(10000123));
         db.commit();
-        Assert.assertNotNull(Product.findByDeleted(new DateTime(10000123)));
-        Assert.assertNull(Product.findByDeleted(new DateTime(10000124)));
+        Assert.assertNotNull(Product.product_findByDeleted(new DateTime(10000123)));
+        Assert.assertNull(Product.product_findByDeleted(new DateTime(10000124)));
     }
 
     @Test
@@ -37,8 +37,8 @@ public class TestIndexingDataType extends BaseLocalDbTest {
         Product product = new Product();
         product.setTime(new LocalTime(10000123));
         db.commit();
-        Assert.assertNotNull(Product.findByTime(new LocalTime(10000123)));
-        Assert.assertNull(Product.findByTime(new LocalTime(10000124)));
+        Assert.assertNotNull(Product.product_findByTime(new LocalTime(10000123)));
+        Assert.assertNull(Product.product_findByTime(new LocalTime(10000124)));
     }
 
     @Test
@@ -56,8 +56,8 @@ public class TestIndexingDataType extends BaseLocalDbTest {
         db.commit();
         product5.reload();
         Assert.assertEquals(PTYPE.REAL, product5.getType());
-        Assert.assertEquals(5, Product.findByType(PTYPE.REAL).size());
-        Assert.assertEquals(0, Product.findByType(PTYPE.TOY).size());
+        Assert.assertEquals(5, Product.product_findByType(PTYPE.REAL).size());
+        Assert.assertEquals(0, Product.product_findByType(PTYPE.TOY).size());
     }
 
 }

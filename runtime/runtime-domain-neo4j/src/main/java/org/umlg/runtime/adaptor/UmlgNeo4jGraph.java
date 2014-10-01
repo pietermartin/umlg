@@ -40,6 +40,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Date: 2013/01/09
@@ -250,7 +253,11 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     @Override
     public List<PersistentObject> getFromIndex(String label, String indexKey, Object indexValue) {
         final Iterator<Vertex> iterator = this.V().has(T.label, label).has(indexKey, indexValue);
-        return new UmlgLazyList<PersistentObject>(iterator);
+        Iterable<Vertex> iterable = () -> iterator;
+        Stream<PersistentObject> targetStream = StreamSupport.stream(iterable.spliterator(), false)
+                .map(v -> UMLG.get().getEntity(v));
+        List<PersistentObject> result = targetStream.collect(Collectors.toList());
+        return result;
     }
 
     /* Generic for all graphs end */

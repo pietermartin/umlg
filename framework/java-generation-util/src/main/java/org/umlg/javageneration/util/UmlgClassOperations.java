@@ -120,6 +120,18 @@ public class UmlgClassOperations extends ClassOperations {
         return result;
     }
 
+    public static Set<Property> getNonCompositeRequiredManyProperties(org.eclipse.uml2.uml.Class clazz) {
+        Set<Property> result = new HashSet<>();
+        for (Property p : getAllOwnedProperties(clazz)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+            if (!pWrap.isDerived() && !pWrap.isQualifier() && !pWrap.isDataType() && pWrap.getLower() > 0 && pWrap.isMany() && !pWrap.isComposite()) {
+                result.add(p);
+            }
+        }
+        return result;
+    }
+
+
     public static Set<Property> getNonCompositeProperties(org.eclipse.uml2.uml.Class clazz) {
         Set<Property> result = new HashSet<Property>();
         for (Property p : getAllOwnedProperties(clazz)) {
@@ -209,23 +221,23 @@ public class UmlgClassOperations extends ClassOperations {
         Set<Association> associations = getAllAssociations(clazz);
         for (Association association : associations) {
 
-                List<Property> memberEnds = association.getMemberEnds();
-                Property memberEnd1 = memberEnds.get(0);
-                Property memberEnd2 = memberEnds.get(1);
+            List<Property> memberEnds = association.getMemberEnds();
+            Property memberEnd1 = memberEnds.get(0);
+            Property memberEnd2 = memberEnds.get(1);
 
-                // This is for the case of hierarchies, i.e association to itself
-                if (isSpecializationOf(clazz, memberEnd1.getType()) && isSpecializationOf(clazz, memberEnd2.getType())) {
-                    result.add(memberEnd1);
-                    result.add(memberEnd2);
-                }
-                // This is to prevent getting the near side of an association
-                if (!isSpecializationOf(clazz, memberEnd1.getType())) {
-                    result.add(memberEnd1);
-                }
-                // This is to prevent getting the near side of an association
-                if (!isSpecializationOf(clazz, memberEnd2.getType())) {
-                    result.add(memberEnd2);
-                }
+            // This is for the case of hierarchies, i.e association to itself
+            if (isSpecializationOf(clazz, memberEnd1.getType()) && isSpecializationOf(clazz, memberEnd2.getType())) {
+                result.add(memberEnd1);
+                result.add(memberEnd2);
+            }
+            // This is to prevent getting the near side of an association
+            if (!isSpecializationOf(clazz, memberEnd1.getType())) {
+                result.add(memberEnd1);
+            }
+            // This is to prevent getting the near side of an association
+            if (!isSpecializationOf(clazz, memberEnd2.getType())) {
+                result.add(memberEnd2);
+            }
 
         }
         result.addAll(getPropertiesOnRealizedInterfaces(clazz));
@@ -236,8 +248,8 @@ public class UmlgClassOperations extends ClassOperations {
         Set<Property> properties = new HashSet<>();
         //Ignore associations that are refined abstraction
         for (Property p : result) {
-            if (!new PropertyWrapper(p).isRefined())  {
-                 properties.add(p);
+            if (!new PropertyWrapper(p).isRefined()) {
+                properties.add(p);
             }
         }
         return properties;
@@ -247,7 +259,7 @@ public class UmlgClassOperations extends ClassOperations {
         List<Association> associations = new ArrayList<>();
         //Ignore associations that are refined abstraction
         for (Association a : result) {
-            if (!ModelLoader.INSTANCE.isRefinedAssociation(a))  {
+            if (!ModelLoader.INSTANCE.isRefinedAssociation(a)) {
                 associations.add(a);
             }
         }
@@ -359,12 +371,12 @@ public class UmlgClassOperations extends ClassOperations {
         }
     }
 
-    private static void getSpecializations(Set<Classifier> result, Classifier clazz) {
+    private static void internalGetSpecializations(Set<Classifier> result, Classifier clazz) {
         result.add(clazz);
         List<Generalization> generalizations = ModelLoader.INSTANCE.getSpecifics(clazz);
         for (Generalization generalization : generalizations) {
             Classifier specific = generalization.getSpecific();
-            getSpecializations(result, specific);
+            internalGetSpecializations(result, specific);
         }
     }
 
@@ -438,13 +450,13 @@ public class UmlgClassOperations extends ClassOperations {
 
     public static Set<Classifier> getSpecializations(Classifier clazz) {
         Set<Classifier> result = new HashSet<Classifier>();
-        getSpecializations(result, clazz);
+        internalGetSpecializations(result, clazz);
         result.remove(clazz);
         return result;
     }
 
     /**
-     * Returns all concrete implementations sorted by the clissifier's name
+     * Returns all concrete implementations sorted by the classifier's name
      *
      * @param clazz
      * @return

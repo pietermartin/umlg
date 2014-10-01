@@ -1075,6 +1075,60 @@ endif</body>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2KRRU6j4EeOPt7R4er8hcg" value="1"/>
               </ownedEnd>
             </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_C3UlUEizEeS-qaKfIn90DQ" name="Report">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_OZ3bcEizEeS-qaKfIn90DQ" name="component" type="_DqbdQEizEeS-qaKfIn90DQ" aggregation="composite" isDerived="true" isDerivedUnion="true" association="_OZ3bc0izEeS-qaKfIn90DQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_OZ3bcUizEeS-qaKfIn90DQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_OZ3bckizEeS-qaKfIn90DQ" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_aFD3QEizEeS-qaKfIn90DQ" name="grid" type="_XV-a0EizEeS-qaKfIn90DQ" aggregation="composite" subsettedProperty="_OZ3bcEizEeS-qaKfIn90DQ" association="_aFEeUEizEeS-qaKfIn90DQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_aFD3QUizEeS-qaKfIn90DQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_aFD3QkizEeS-qaKfIn90DQ" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_dHwzQEizEeS-qaKfIn90DQ" name="chart" type="_YMRwsEizEeS-qaKfIn90DQ" aggregation="composite" subsettedProperty="_OZ3bcEizEeS-qaKfIn90DQ" association="_dHwzQ0izEeS-qaKfIn90DQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dHwzQUizEeS-qaKfIn90DQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_dHwzQkizEeS-qaKfIn90DQ" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_58XnEEizEeS-qaKfIn90DQ" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8DbaMEizEeS-qaKfIn90DQ" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8Dd2cEizEeS-qaKfIn90DQ" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_DqbdQEizEeS-qaKfIn90DQ" name="Component"/>
+            <packagedElement xmi:type="uml:Association" xmi:id="_OZ3bc0izEeS-qaKfIn90DQ" name="report_component" memberEnd="_OZ3bdEizEeS-qaKfIn90DQ _OZ3bcEizEeS-qaKfIn90DQ" navigableOwnedEnd="_OZ3bdEizEeS-qaKfIn90DQ">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_OZ3bdEizEeS-qaKfIn90DQ" name="report" type="_C3UlUEizEeS-qaKfIn90DQ" isDerived="true" isDerivedUnion="true" association="_OZ3bc0izEeS-qaKfIn90DQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_OZ3bdUizEeS-qaKfIn90DQ" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_OZ3bdkizEeS-qaKfIn90DQ" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_XV-a0EizEeS-qaKfIn90DQ" name="Grid">
+              <generalization xmi:type="uml:Generalization" xmi:id="_wJNOcEi0EeS-qaKfIn90DQ" general="_DqbdQEizEeS-qaKfIn90DQ"/>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="__QGxkEizEeS-qaKfIn90DQ" name="sql" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_AvKwkEi0EeS-qaKfIn90DQ" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_AvL-sEi0EeS-qaKfIn90DQ" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_YMRwsEizEeS-qaKfIn90DQ" name="Chart">
+              <generalization xmi:type="uml:Generalization" xmi:id="_wczf4Ei0EeS-qaKfIn90DQ" general="_DqbdQEizEeS-qaKfIn90DQ"/>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_BslbEEi0EeS-qaKfIn90DQ" name="chartName" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_DWjpkEi0EeS-qaKfIn90DQ" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_DWk3sEi0EeS-qaKfIn90DQ" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_aFEeUEizEeS-qaKfIn90DQ" name="gridReport_grid" memberEnd="_aFEeUUizEeS-qaKfIn90DQ _aFD3QEizEeS-qaKfIn90DQ" navigableOwnedEnd="_aFEeUUizEeS-qaKfIn90DQ">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_aFEeUUizEeS-qaKfIn90DQ" name="gridReport" type="_C3UlUEizEeS-qaKfIn90DQ" subsettedProperty="_OZ3bdEizEeS-qaKfIn90DQ" association="_aFEeUEizEeS-qaKfIn90DQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_aFEeUkizEeS-qaKfIn90DQ" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_aFEeU0izEeS-qaKfIn90DQ" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_dHwzQ0izEeS-qaKfIn90DQ" name="chartReport_chart" memberEnd="_dHwzREizEeS-qaKfIn90DQ _dHwzQEizEeS-qaKfIn90DQ" navigableOwnedEnd="_dHwzREizEeS-qaKfIn90DQ">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_dHwzREizEeS-qaKfIn90DQ" name="chartReport" type="_C3UlUEizEeS-qaKfIn90DQ" subsettedProperty="_OZ3bdEizEeS-qaKfIn90DQ" association="_dHwzQ0izEeS-qaKfIn90DQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dHwzRUizEeS-qaKfIn90DQ" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_dHwzRkizEeS-qaKfIn90DQ" value="1"/>
+              </ownedEnd>
+            </packagedElement>
           </packagedElement>
           <packagedElement xmi:type="uml:Package" xmi:id="_slDfIKnrEeOPt7R4er8hcg" name="interfacemany">
             <packagedElement xmi:type="uml:Class" xmi:id="_xwMHQKnrEeOPt7R4er8hcg" name="Root2">

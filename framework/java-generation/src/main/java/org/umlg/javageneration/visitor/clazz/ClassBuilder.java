@@ -43,7 +43,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         addPersistentConstructor(annotatedClass);
         callPersistentConstructorFromDefault(annotatedClass);
         addInitialiseProperties(annotatedClass, clazz);
-        addContructorWithVertex(annotatedClass, clazz);
+        addContructorWithVertexAndConstructorWithId(annotatedClass, clazz);
         if (clazz.getGeneralizations().isEmpty()) {
             persistUid(annotatedClass);
         }
@@ -170,9 +170,9 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         }
     }
 
-    protected void addContructorWithVertex(OJAnnotatedClass ojClass, Classifier classifier) {
+    protected void addContructorWithVertexAndConstructorWithId(OJAnnotatedClass ojClass, Classifier classifier) {
         OJConstructor constructor = new OJConstructor();
-        constructor.addParam("id", "Object");
+        constructor.addParam("id", "Long");
         constructor.getBody().addToStatements("super(id)");
         ojClass.addToConstructors(constructor);
 

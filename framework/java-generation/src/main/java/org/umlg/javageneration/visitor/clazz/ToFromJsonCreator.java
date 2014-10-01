@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.*;
@@ -47,6 +48,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
         addFromJsonWithMapper(clazz);
         addFromJsonDataTypeAndComposite(clazz);
         addFromJsonNonCompositeOne(clazz);
+        fromJsonNonCompositeRequiredMany(clazz);
     }
 
     @Override
@@ -262,7 +264,9 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
         if (clazz.getGenerals().isEmpty()) {
             //Add in qualified type name
-            toJson.getBody().addToStatements("sb.append(\", \")");
+            if (!propertiesForToJson.isEmpty()) {
+                toJson.getBody().addToStatements("sb.append(\", \")");
+            }
             toJson.getBody().addToStatements("sb.append(\"\\\"qualifiedName\\\": \\\"\" + getQualifiedName() + \"\\\"\")");
             toJson.getBody().addToStatements("sb.append(\", \")");
             toJson.getBody().addToStatements(URI_FOR_RESTFULL, "//PlaceHolder for restful\nsb.append(\"\\\"uri\\\": {}\")");
@@ -308,6 +312,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
         annotatedClass.addToOperations(fromJson);
         fromJson.getBody().addToStatements("fromJsonDataTypeAndComposite(propertyMap)");
         fromJson.getBody().addToStatements("fromJsonNonCompositeOne(propertyMap)");
+        fromJson.getBody().addToStatements("fromJsonNonCompositeRequiredMany(propertyMap)");
     }
 
     private void addFromJsonDataTypeAndComposite(Class clazz) {
@@ -782,5 +787,43 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
         }
     }
 
+    private void fromJsonNonCompositeRequiredMany(Class clazz) {
+        OJAnnotatedClass annotatedClass = findOJClass(clazz);
+        OJAnnotatedOperation fromJson = new OJAnnotatedOperation("fromJsonNonCompositeRequiredMany");
+        fromJson.addParam("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
+        fromJson.setVisibility(OJVisibilityKindGEN.PUBLIC);
+        UmlgGenerationUtil.addOverrideAnnotation(fromJson);
+        annotatedClass.addToOperations(fromJson);
+        if (!clazz.getGenerals().isEmpty()) {
+            fromJson.getBody().addToStatements("super.fromJsonNonCompositeRequiredMany(propertyMap)");
+        }
+        List<Property> propertiesForToJson = new ArrayList<>(UmlgClassOperations.getNonCompositeRequiredManyProperties(clazz));
+        if (!propertiesForToJson.isEmpty()) {
+            for (Property property : propertiesForToJson) {
+                if (!property.isReadOnly()) {
+                    PropertyWrapper pWrap = new PropertyWrapper(property);
+                    OJField field = new OJField(pWrap.fieldname() + "Map", "List<Map<String, Integer>>");
+                    field.setInitExp("(ArrayList<Map<String, Integer>>)propertyMap.get(\"" + pWrap.getName() + "\")");
+                    annotatedClass.addToImports(pWrap.javaTumlMemoryTypePath());
+                    annotatedClass.addToImports(new OJPathName("java.util.Collection"));
+                    OJIfStatement ifInMap = new OJIfStatement("propertyMap.containsKey(\"" + pWrap.fieldname() + "\")");
+                    fromJson.getBody().addToStatements(ifInMap);
+
+                    OJIfStatement ifNotNull = new OJIfStatement("propertyMap.get(\"" + pWrap.fieldname() + "\") != null");
+                    ifInMap.addToThenPart(ifNotNull);
+                    ifNotNull.getThenPart().addToLocals(field);
+
+                    ifNotNull.addToThenPart(pWrap.clearer() + "()");
+                    OJForStatement ojForStatement = new OJForStatement("row", new OJPathName("Map<String,Integer>"), pWrap.fieldname() + "Map");
+                    ifNotNull.addToThenPart(ojForStatement);
+                    OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.javaBaseTypePath().getLast() + " " + pWrap.fieldname() + " = " + UmlgGenerationUtil.UMLGAccess
+                            + "." + UmlgGenerationUtil.getEntity + "(row.get(\"id\"))");
+                    ojForStatement.getBody().addToStatements(ojSimpleStatementConstructor);
+                    OJSimpleStatement ojSimpleStatementFromJson = new OJSimpleStatement(pWrap.adder() + "(" + pWrap.fieldname() + ")");
+                    ojForStatement.getBody().addToStatements(ojSimpleStatementFromJson);
+                }
+            }
+        }
+    }
 
 }

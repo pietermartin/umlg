@@ -2,7 +2,10 @@ package org.umlg.tests.indexing;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.umlg.rootallinstances.BaseRoot;
+import org.umlg.rootallinstances.MiddleRoot;
 import org.umlg.rootallinstances.TopRoot;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 import java.util.List;
@@ -12,6 +15,26 @@ import java.util.List;
  * Time: 10:08 AM
  */
 public class TestIndexing extends BaseLocalDbTest {
+
+    @Test
+    public void testPolymorphicUniqueIndex() {
+        TopRoot topRoot1 = new TopRoot();
+        topRoot1.setNameUnique("a");
+        topRoot1.setIndexedName("aaa");
+        TopRoot topRoot2 = new TopRoot();
+        topRoot2.setNameUnique("b");
+        topRoot2.setIndexedName("aaaa");
+        MiddleRoot middleRoot1 = new MiddleRoot();
+        middleRoot1.setNameUnique("c");
+        BaseRoot baseRoot1 = new BaseRoot();
+        baseRoot1.setNameUnique("d");
+        UMLG.get().commit();
+
+        Assert.assertEquals(topRoot1, BaseRoot.baseRoot_findByNameUnique("a"));
+        Assert.assertEquals(topRoot2, BaseRoot.baseRoot_findByNameUnique("b"));
+        Assert.assertEquals(middleRoot1, BaseRoot.baseRoot_findByNameUnique("c"));
+        Assert.assertEquals(baseRoot1, BaseRoot.baseRoot_findByNameUnique("d"));
+    }
 
     @Test
     public void testUpdateIndexedFieldToPrevious() {
@@ -47,6 +70,7 @@ public class TestIndexing extends BaseLocalDbTest {
         topRoot = db.getFromUniqueIndex(TopRoot.class.getName(), TopRoot.TopRootRuntimePropertyEnum.indexedName.getPersistentName(), "99");
         Assert.assertNotNull(topRoot);
         Assert.assertEquals("99", topRoot.getIndexedName());
+
     }
 
     @Test
@@ -57,17 +81,21 @@ public class TestIndexing extends BaseLocalDbTest {
             topRoot.setIndexedName(String.valueOf(i));
         }
         db.commit();
-        TopRoot topRoot = TopRoot.findByIndexedName("0");
+        TopRoot topRoot = TopRoot.topRoot_findByIndexedName("0");
         Assert.assertNotNull(topRoot);
         Assert.assertEquals("0", topRoot.getIndexedName());
 
-        topRoot = TopRoot.findByIndexedName("50");
+        topRoot = TopRoot.topRoot_findByIndexedName("50");
         Assert.assertNotNull(topRoot);
         Assert.assertEquals("50", topRoot.getIndexedName());
 
-        topRoot = TopRoot.findByIndexedName("99");
+        topRoot = TopRoot.topRoot_findByIndexedName("99");
         Assert.assertNotNull(topRoot);
         Assert.assertEquals("99", topRoot.getIndexedName());
+
+        List<BaseRoot> baseRoots = BaseRoot.baseRoot_findByName("asdasdasd");
+        Assert.assertEquals(100, baseRoots.size());
+
     }
 
 
@@ -129,22 +157,22 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = TopRoot.findByIndexedNonUniqueName("aaaa");
+        List<TopRoot> topRoots = TopRoot.topRoot_findByIndexedNonUniqueName("aaaa");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexedNonUniqueName("bbbb");
+        topRoots = TopRoot.topRoot_findByIndexedNonUniqueName("bbbb");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexedNonUniqueName("cccc");
+        topRoots = TopRoot.topRoot_findByIndexedNonUniqueName("cccc");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexedNonUniqueName("dddd");
+        topRoots = TopRoot.topRoot_findByIndexedNonUniqueName("dddd");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexedNonUniqueName("eeee");
+        topRoots = TopRoot.topRoot_findByIndexedNonUniqueName("eeee");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexedNonUniqueName("ffff");
+        topRoots = TopRoot.topRoot_findByIndexedNonUniqueName("ffff");
         Assert.assertEquals(0, topRoots.size());
 
     }
@@ -169,47 +197,47 @@ public class TestIndexing extends BaseLocalDbTest {
         }
         db.commit();
 
-        Assert.assertEquals(0, TopRoot.findByIndexedNonUniqueName("asdasdasd").size());
-        Assert.assertEquals("aaaa", TopRoot.findByIndexedNonUniqueName("aaaa").get(0).getIndexedNonUniqueName());
-        Assert.assertEquals("bbbb", TopRoot.findByIndexedNonUniqueName("bbbb").get(0).getIndexedNonUniqueName());
-        Assert.assertEquals("cccc", TopRoot.findByIndexedNonUniqueName("cccc").get(0).getIndexedNonUniqueName());
-        Assert.assertEquals("dddd", TopRoot.findByIndexedNonUniqueName("dddd").get(0).getIndexedNonUniqueName());
-        Assert.assertEquals("eeee", TopRoot.findByIndexedNonUniqueName("eeee").get(0).getIndexedNonUniqueName());
+        Assert.assertEquals(0, TopRoot.topRoot_findByIndexedNonUniqueName("asdasdasd").size());
+        Assert.assertEquals("aaaa", TopRoot.topRoot_findByIndexedNonUniqueName("aaaa").get(0).getIndexedNonUniqueName());
+        Assert.assertEquals("bbbb", TopRoot.topRoot_findByIndexedNonUniqueName("bbbb").get(0).getIndexedNonUniqueName());
+        Assert.assertEquals("cccc", TopRoot.topRoot_findByIndexedNonUniqueName("cccc").get(0).getIndexedNonUniqueName());
+        Assert.assertEquals("dddd", TopRoot.topRoot_findByIndexedNonUniqueName("dddd").get(0).getIndexedNonUniqueName());
+        Assert.assertEquals("eeee", TopRoot.topRoot_findByIndexedNonUniqueName("eeee").get(0).getIndexedNonUniqueName());
 
-        Assert.assertEquals("aaaa", TopRoot.findByIndexedNonUniqueName("aaaa").get(10).getIndexedNonUniqueName());
-        Assert.assertEquals("bbbb", TopRoot.findByIndexedNonUniqueName("bbbb").get(10).getIndexedNonUniqueName());
-        Assert.assertEquals("cccc", TopRoot.findByIndexedNonUniqueName("cccc").get(10).getIndexedNonUniqueName());
-        Assert.assertEquals("dddd", TopRoot.findByIndexedNonUniqueName("dddd").get(10).getIndexedNonUniqueName());
-        Assert.assertEquals("eeee", TopRoot.findByIndexedNonUniqueName("eeee").get(10).getIndexedNonUniqueName());
+        Assert.assertEquals("aaaa", TopRoot.topRoot_findByIndexedNonUniqueName("aaaa").get(10).getIndexedNonUniqueName());
+        Assert.assertEquals("bbbb", TopRoot.topRoot_findByIndexedNonUniqueName("bbbb").get(10).getIndexedNonUniqueName());
+        Assert.assertEquals("cccc", TopRoot.topRoot_findByIndexedNonUniqueName("cccc").get(10).getIndexedNonUniqueName());
+        Assert.assertEquals("dddd", TopRoot.topRoot_findByIndexedNonUniqueName("dddd").get(10).getIndexedNonUniqueName());
+        Assert.assertEquals("eeee", TopRoot.topRoot_findByIndexedNonUniqueName("eeee").get(10).getIndexedNonUniqueName());
 
-        Assert.assertEquals("aaaa", TopRoot.findByIndexedNonUniqueName("aaaa").get(19).getIndexedNonUniqueName());
-        Assert.assertEquals("bbbb", TopRoot.findByIndexedNonUniqueName("bbbb").get(19).getIndexedNonUniqueName());
-        Assert.assertEquals("cccc", TopRoot.findByIndexedNonUniqueName("cccc").get(19).getIndexedNonUniqueName());
-        Assert.assertEquals("dddd", TopRoot.findByIndexedNonUniqueName("dddd").get(19).getIndexedNonUniqueName());
-        Assert.assertEquals("eeee", TopRoot.findByIndexedNonUniqueName("eeee").get(19).getIndexedNonUniqueName());
+        Assert.assertEquals("aaaa", TopRoot.topRoot_findByIndexedNonUniqueName("aaaa").get(19).getIndexedNonUniqueName());
+        Assert.assertEquals("bbbb", TopRoot.topRoot_findByIndexedNonUniqueName("bbbb").get(19).getIndexedNonUniqueName());
+        Assert.assertEquals("cccc", TopRoot.topRoot_findByIndexedNonUniqueName("cccc").get(19).getIndexedNonUniqueName());
+        Assert.assertEquals("dddd", TopRoot.topRoot_findByIndexedNonUniqueName("dddd").get(19).getIndexedNonUniqueName());
+        Assert.assertEquals("eeee", TopRoot.topRoot_findByIndexedNonUniqueName("eeee").get(19).getIndexedNonUniqueName());
 
-        Assert.assertEquals(20, TopRoot.findByIndexedNonUniqueName("aaaa").size());
-        Assert.assertEquals(20, TopRoot.findByIndexedNonUniqueName("bbbb").size());
-        Assert.assertEquals(20, TopRoot.findByIndexedNonUniqueName("cccc").size());
-        Assert.assertEquals(20, TopRoot.findByIndexedNonUniqueName("dddd").size());
-        Assert.assertEquals(20, TopRoot.findByIndexedNonUniqueName("eeee").size());
+        Assert.assertEquals(20, TopRoot.topRoot_findByIndexedNonUniqueName("aaaa").size());
+        Assert.assertEquals(20, TopRoot.topRoot_findByIndexedNonUniqueName("bbbb").size());
+        Assert.assertEquals(20, TopRoot.topRoot_findByIndexedNonUniqueName("cccc").size());
+        Assert.assertEquals(20, TopRoot.topRoot_findByIndexedNonUniqueName("dddd").size());
+        Assert.assertEquals(20, TopRoot.topRoot_findByIndexedNonUniqueName("eeee").size());
 
-        List<TopRoot> topRoots = TopRoot.findByIndexedNonUniqueName("aaaa");
+        List<TopRoot> topRoots = TopRoot.topRoot_findByIndexedNonUniqueName("aaaa");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexedNonUniqueName("bbbb");
+        topRoots = TopRoot.topRoot_findByIndexedNonUniqueName("bbbb");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexedNonUniqueName("cccc");
+        topRoots = TopRoot.topRoot_findByIndexedNonUniqueName("cccc");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexedNonUniqueName("dddd");
+        topRoots = TopRoot.topRoot_findByIndexedNonUniqueName("dddd");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexedNonUniqueName("eeee");
+        topRoots = TopRoot.topRoot_findByIndexedNonUniqueName("eeee");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexedNonUniqueName("ffff");
+        topRoots = TopRoot.topRoot_findByIndexedNonUniqueName("ffff");
         Assert.assertEquals(0, topRoots.size());
 
     }
@@ -272,22 +300,22 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = TopRoot.findByIndexNonUniqueInteger(1);
+        List<TopRoot> topRoots = TopRoot.topRoot_findByIndexNonUniqueInteger(1);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueInteger( 2);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueInteger(2);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueInteger(3);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueInteger(3);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueInteger(4);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueInteger(4);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueInteger(5);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueInteger(5);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueInteger(6);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueInteger(6);
         Assert.assertEquals(0, topRoots.size());
 
     }
@@ -350,22 +378,22 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = TopRoot.findByIndexNonUniqueUnlimitedNatural(1);
+        List<TopRoot> topRoots = TopRoot.topRoot_findByIndexNonUniqueUnlimitedNatural(1);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueUnlimitedNatural(2);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueUnlimitedNatural(2);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueUnlimitedNatural(3);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueUnlimitedNatural(3);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueUnlimitedNatural(4);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueUnlimitedNatural(4);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueUnlimitedNatural(5);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueUnlimitedNatural(5);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueUnlimitedNatural(6);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueUnlimitedNatural(6);
         Assert.assertEquals(0, topRoots.size());
 
     }
@@ -428,22 +456,22 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = TopRoot.findByIndexNonUniqueReal(1D);
+        List<TopRoot> topRoots = TopRoot.topRoot_findByIndexNonUniqueReal(1D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueReal(2D);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueReal(2D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueReal(3D);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueReal(3D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueReal(4D);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueReal(4D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueReal(5D);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueReal(5D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueInteger(6);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueInteger(6);
         Assert.assertEquals(0, topRoots.size());
 
     }
@@ -481,10 +509,10 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = TopRoot.findByIndexNonUniqueBoolean(true);
+        List<TopRoot> topRoots = TopRoot.topRoot_findByIndexNonUniqueBoolean(true);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findByIndexNonUniqueBoolean(false);
+        topRoots = TopRoot.topRoot_findByIndexNonUniqueBoolean(false);
         Assert.assertEquals(80, topRoots.size());
     }
 

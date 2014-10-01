@@ -38,7 +38,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         initialiseProperties();
     }
 
-    public BaseUmlg(Object id) {
+    public BaseUmlg(Long id) {
         super();
         //check if it has been deleted
         this.vertex = UMLG.get().v(id);
@@ -76,8 +76,8 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     }
 
     @Override
-    public final Object getId() {
-        return this.vertex.id();
+    public final Long getId() {
+        return (Long)this.vertex.id();
     }
 
     public Vertex getVertex() {

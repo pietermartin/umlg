@@ -134,7 +134,8 @@ import org.umlg.tests.validationtest.TestValidation;
         OclSubstringTest.class,
         OclSubstringIndexOfTest.class,
         TestQualifiedDerivedUnionProperty.class,
-        TestBatchMode.class
+        TestBatchMode.class,
+        OclTestToLowerCase.class
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
 //        TestAssociationToSelf.class,

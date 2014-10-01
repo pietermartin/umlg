@@ -25,13 +25,18 @@
                 "TumlIdNewFormatter": TumlIdNewFormatter,
                 "TumlIdUpdatedFormatter": TumlIdUpdatedFormatter,
                 "TumlAssociationComponentFormatter":TumlAssociationComponentFormatter,
-                "TumlComponentFormatter":TumlComponentFormatter
+                "TumlComponentFormatter":TumlComponentFormatter,
+                "UmlgRequiredManyFormatter":UmlgRequiredManyFormatter
             }
         }
     });
 
     function TumlComponentFormatter(row, cell, value, columnDef, dataContext) {
         return 'component';
+    }
+
+    function UmlgRequiredManyFormatter(row, cell, value, columnDef, dataContext) {
+        return '[non composite many]';
     }
 
     function TumlAssociationComponentFormatter(row, cell, value, columnDef, dataContext) {

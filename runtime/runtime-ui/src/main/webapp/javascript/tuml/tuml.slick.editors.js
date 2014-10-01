@@ -439,9 +439,6 @@
         return input;
     }
 
-
-
-
     function ManyDoublePrimitiveEditor(args) {
         this.args = args;
         //Only the from the grid is init called
@@ -472,12 +469,6 @@
         }
         return arrayToSerialize;
     }
-
-
-
-
-
-
 
     function ManyIntegerPrimitiveEditor(args) {
         this.args = args;
@@ -1117,7 +1108,6 @@
             var id = item.id;
             var adjustedUri = lookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), id);
 
-
             var tumlBaseGridManager = args.column.options.tumlBaseGridManager;
 
             var row = args.grid.getActiveCell().row;
@@ -1133,7 +1123,6 @@
                             var obj = data[i];
                             $select.append($('<option />)').val(obj.id).html(obj.name));
                         }
-                        ;
                         //currentValue is the vertex id of the oneToOne or manyToOne
                         currentValue = item[args.column.field];
                         //append the current value to the dropdown

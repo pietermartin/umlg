@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Logger;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.ocl.Environment;
@@ -26,6 +27,7 @@ import org.umlg.framework.ModelLoader;
 
 public class UmlgOcl2Parser implements ModelLoadedEvent {
 
+    private final Logger logger = Logger.getLogger(UmlgOcl2Parser.class.getPackage().getName());
     private OCL<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> ocl;
     private Environment<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> environment;
     private OCLHelper<Classifier, Operation, Property, Constraint> helper;
@@ -167,6 +169,7 @@ public class UmlgOcl2Parser implements ModelLoadedEvent {
             constraints = ocl.parse(new OCLInput(text));
             constraint = constraints.get(0);
         } catch (ParserException e) {
+            logger.severe(String.format("Error parsing ocl: %s", text));
             throw new RuntimeException(e);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException(e);

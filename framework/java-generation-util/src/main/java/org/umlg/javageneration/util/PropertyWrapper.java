@@ -417,7 +417,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public Type getOwningType() {
         return UmlgPropertyOperations.getOwningType(this.property);
-
     }
 
     public boolean isControllingSide() {

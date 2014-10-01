@@ -387,7 +387,7 @@
                         if (this.data[property.name] === stringValue && !this.isForCreation) {
                             this.updatedData[property.name] = undefined;
                         } else {
-                            this.updatedData[property.name] = stringValue;
+                            this.data[property.name] = stringValue;
                         }
                     }
                 } else if (property.fieldType == 'Boolean') {

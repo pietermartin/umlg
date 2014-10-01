@@ -458,7 +458,7 @@
                         self.tumlTabViewManager.refreshContext(uri);
                     } else if (isComponentMany(column)) {
                         doComponentMany(column, args);
-                        e.stopImmediatePropagation();
+                         e.stopImmediatePropagation();
                     } else if (isSelectMany(column)) {
                         doSelectMany(column, args);
                         e.stopImmediatePropagation();
@@ -695,8 +695,8 @@
             function isCellEditableWithColumn(column, row, item) {
                 if (column.name !== 'id' && column.name !== 'uri' && column.name !== 'delete' && !column.options.property.readOnly) {
                     var property = column.options.property;
-                    if ((property.composite && property.lower >= 1) || property.associationClassOne) {
-                        if (row >= self.dataView.getItems().length || self.dataView.getNewItems().indexOf(item) !== -1) {
+                    if ((property.composite && property.lower >= 1) || property.associationClassOne || nonNewCompositeManyRequiredAssociation(property, row, item)) {
+                        if (isNewRow(row, item)) {
                             //New rows
                             //Only click on a non composite association class once the non composite association has been selected
                             if (property.associationClassOne && !property.memberEndOfAssociationClass && !property.composite && (property.oneToOne || property.manyToOne)) {
@@ -732,6 +732,15 @@
                     }
                 }
                 return true;
+            }
+
+            function nonNewCompositeManyRequiredAssociation(property, row, item) {
+                return isNewRow(row, item) &&
+                    (!property.composite && property.lower > 0 && (property.upper == -1 || property.upper > 1) && !property.manyPrimitive || !property.manyEnumeration);
+            }
+
+            function isNewRow(row, item) {
+                return row >= self.dataView.getItems().length || self.dataView.getNewItems().indexOf(item) !== -1
             }
 
             function isCellEditable(row, cell, item) {
@@ -1071,6 +1080,12 @@
                             } else {
                                 column[property.name] = {"formatter": TumlSlick.Formatters.TumlComponentFormatter};
                             }
+                        }
+                    } else if (!property.onePrimitive && !property.oneEnumeration && !property.manyPrimitive &&  !property.manyEnumeration && (property.manyToMany || property.oneToMany)) {
+                        if (!isNew && (item === undefined || this.getNewItems().indexOf(item) !== -1)) {
+                            column[property.name] = {"formatter": TumlSlick.Formatters.TumlRequired};
+                        } else {
+                            column[property.name] = {"formatter": TumlSlick.Formatters.UmlgRequiredManyFormatter};
                         }
                     } else {
                         column[property.name] = {"formatter": selectFormatter(property, isNew, isUpdated)};

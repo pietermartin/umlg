@@ -162,7 +162,7 @@ public class UmlgGenerationUtil {
     public static OJPathName UmlgQualifierPathName = new OJPathName("org.umlg.runtime.collection.Qualifier");
     public static OJPathName umlgMultiplicityPathName = new OJPathName("org.umlg.runtime.collection.Multiplicity");
 
-//    public static OJPathName UmlgIdUtilFactoryPathName = new OJPathName("org.umlg.runtime.adaptor.UmlgIdUtilFactory");
+    //    public static OJPathName UmlgIdUtilFactoryPathName = new OJPathName("org.umlg.runtime.adaptor.UmlgIdUtilFactory");
     public static OJPathName UmlgLabelConverterFactoryPathName = new OJPathName("org.umlg.runtime.adaptor.UmlgLabelConverterFactory");
     public static OJPathName UmlgQualifierIdFactory = new OJPathName("org.umlg.runtime.adaptor.UmlgQualifierIdFactory");
 
@@ -195,6 +195,9 @@ public class UmlgGenerationUtil {
     public static String getEdgeName(Property p) {
         boolean isControllingSide = UmlgPropertyOperations.isControllingSide(p);
         if (p.getAssociation() != null) {
+            if (p.getAssociation().getName() == null) {
+                throw new IllegalStateException(String.format("Association %s belonging to property %s may not have a 'null' name", new String[]{p.getAssociation().getQualifiedName(), p.getQualifiedName()}));
+            }
             return p.getAssociation().getName();
         } else {
             // Note that the properties swap around between inverse and

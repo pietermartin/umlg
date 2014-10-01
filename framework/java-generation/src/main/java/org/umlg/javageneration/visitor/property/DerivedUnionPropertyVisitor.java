@@ -179,7 +179,7 @@ public class DerivedUnionPropertyVisitor extends BaseVisitor implements Visitor<
                 for (Type sc : subsettingProperty.subsettingContext()) {
                     for (Type sp : subsettedProperty.subsettingContext()) {
                         if (sp instanceof org.eclipse.uml2.uml.Class && !((Class) sp).getAllImplementedInterfaces().contains(sc) && !sc.conformsTo(sp)) {
-                            throw new IllegalStateException(String.format("The context of the subsetting property %s does not conform to the context of the subsetted property %s.", subsettedProperty.getType().getName(), subsettingProperty.getType().getName()));
+                            throw new IllegalStateException(String.format("The context of the subsetting property %s does not conform to the context of the subsetted property %s.", sp.getQualifiedName(), sc.getQualifiedName()));
                         }
                     }
                 }

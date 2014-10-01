@@ -95,7 +95,7 @@
                     metaDataNavigatingTo = this.handleOneNotForCreation(result);
 
                 } else {
-                    //Check if property navigating frmo is the composite owner.
+                    //Check if property navigating from is the composite owner.
                     //Creation is only possible from the composite owner
                     if (this.propertyNavigatingTo.composite) {
                         this.qualifiedName = result[0].meta.qualifiedName;
@@ -404,7 +404,7 @@
                     var tumlTabViewManager = this.tumlTabViewManagers[j];
                     if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
                         tumlTabViewManager.beginUpdate();
-                        //TOTO use qualified name somehow
+                        //TODO use qualified name somehow
                         if (tumlTabViewManager.tabId == metaForData.name) {
                             for (var k = 0; k < resultForTab.data.length; k++) {
                                 this.clearComponentAndAssociationClassTmpId(resultForTab.data[k], metaForData, true);
@@ -439,6 +439,7 @@
                 if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
                     //This will clear the update, insert arrays in slick grid's data view
                     tumlTabViewManager.clearArraysAfterCommit();
+//                    tumlTabViewManager.endUpdate(false);
                 }
             }
         }
@@ -488,7 +489,7 @@
             }
             //skip validating qualified properties, kinda assumed to be 0..*
             if (!this.tabContainerProperty.qualified &&
-                    (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper))) {
+                (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper))) {
                 var validationResult = new Tuml.ValidationResult(-1, this.tabContainerProperty.name);
                 validationResult.property = this.tabContainerProperty;
                 validationResult.qualifiedName = this.tabContainerProperty.qualifiedName;
@@ -911,6 +912,7 @@
                     }
                     loadDataCallback(result.data);
                 }
+
 //                endTimeBeforeUpdateGrids = new Date().getTime();
 //                console.log("Time taken in millis for server call after  update drop down = " + (endTimeBeforeUpdateGrids - startTime));
             },
@@ -921,4 +923,4 @@
     }
 
 })
-    (jQuery);
+(jQuery);

@@ -11,12 +11,9 @@ import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.generated.OJVisibilityKindGEN;
-import org.umlg.java.metamodel.java8.ForEachStatement;
 import org.umlg.javageneration.util.Namer;
 import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
-
-import java.util.Set;
 
 /**
  * Date: 2012/12/25
@@ -39,7 +36,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         if (ModelLoader.INSTANCE.isUmlGLibIncluded()) {
             metaClass.setSuperclass(UmlgGenerationUtil.BASE_CLASS_UMLG);
             addDefaultConstructor(metaClass, clazz);
-            addContructorWithVertex(metaClass, clazz);
+            addContructorWithVertexAndConstructorWithId(metaClass, clazz);
             //Ensure the meta class instance does not also try to create a edge to a meta class as it is also a normal entity
             addAddToThreadEntityVar(metaClass);
         } else {
@@ -132,7 +129,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
     }
 
     @Override
-    protected void addContructorWithVertex(OJAnnotatedClass ojClass, Classifier classifier) {
+    protected void addContructorWithVertexAndConstructorWithId(OJAnnotatedClass ojClass, Classifier classifier) {
         OJConstructor constructor = new OJConstructor();
         constructor.setVisibility(OJVisibilityKindGEN.PUBLIC);
         constructor.addParam("vertex", UmlgGenerationUtil.vertexPathName);
