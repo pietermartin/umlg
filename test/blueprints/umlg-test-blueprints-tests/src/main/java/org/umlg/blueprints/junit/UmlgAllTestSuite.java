@@ -10,6 +10,7 @@ import org.umlg.tests.allinstances.TestAllInstancesOnInterface;
 import org.umlg.tests.associationclass.TestAssociationClassCopiesOnePrimitivePropertiesToEdge;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.batch.TestBatchMode;
+import org.umlg.tests.bulkcollection.TestBulkCollection;
 import org.umlg.tests.changenotification.TestChangeNotification;
 import org.umlg.tests.collectiontest.*;
 import org.umlg.tests.componenttest.TestComponent;
@@ -135,7 +136,8 @@ import org.umlg.tests.validationtest.TestValidation;
         OclSubstringIndexOfTest.class,
         TestQualifiedDerivedUnionProperty.class,
         TestBatchMode.class,
-        OclTestToLowerCase.class
+        OclTestToLowerCase.class,
+        TestBulkCollection.class
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
 //        TestAssociationToSelf.class,

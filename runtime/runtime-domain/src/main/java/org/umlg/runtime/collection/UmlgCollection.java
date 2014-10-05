@@ -36,4 +36,8 @@ public interface UmlgCollection<E> extends Collection<E>, OclStdLibCollection<E>
 
     boolean inverseAdder(E e);
 
+    public default boolean addIgnoreInverse(E e) {
+        throw new IllegalStateException("addIgnoreInverse() is only supported by a persistent collection BaseCollection!");
+    }
+
 }

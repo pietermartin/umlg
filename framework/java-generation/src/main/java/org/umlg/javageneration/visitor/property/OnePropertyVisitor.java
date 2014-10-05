@@ -30,10 +30,11 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             if (propertyWrapper.isMemberOfAssociationClass()) {
                 buildGetterForAssociationClass(findAssociationClassOJClass(propertyWrapper), propertyWrapper);
                 OJAnnotatedClass associationOJClass = findAssociationClassOJClass(propertyWrapper);
-                OnePropertyVisitor.buildOneAdder(associationOJClass, propertyWrapper, true);
+                OnePropertyVisitor.buildOneAdder(associationOJClass, propertyWrapper, true, false);
             }
 
-            buildOneAdder(owner, propertyWrapper, false);
+            OnePropertyVisitor.buildOneAdder(owner, propertyWrapper, false, false);
+            OnePropertyVisitor.buildOneAdder(owner, propertyWrapper, false, true);
             OJAnnotatedOperation setter = buildSetter(owner, propertyWrapper);
 
             if (propertyWrapper.isDataType() && propertyWrapper.getOwner() instanceof AssociationClass) {
@@ -132,8 +133,8 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         ac.addToOperations(getter);
     }
 
-    public static void buildOneAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper, boolean isAssociationClass) {
-        OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
+    public static void buildOneAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper, boolean isAssociationClass, boolean ignoreInverse) {
+        OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(!ignoreInverse ? propertyWrapper.adder() : propertyWrapper.adderIgnoreInverse());
         singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
         if (!isAssociationClass && propertyWrapper.isMemberOfAssociationClass()) {
             singleAdder.addParam(StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()), UmlgClassOperations.getPathName(propertyWrapper.getAssociationClass()));
@@ -154,7 +155,11 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             ojBlock1.addToStatements(ifExist);
 
             if (isAssociationClass || !propertyWrapper.isMemberOfAssociationClass()) {
-                ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+                if (!ignoreInverse) {
+                    ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+                } else {
+                    ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".addIgnoreInverse(" + propertyWrapper.fieldname() + ")");
+                }
             } else {
                 ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
             }

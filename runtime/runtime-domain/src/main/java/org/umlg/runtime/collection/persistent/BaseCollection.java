@@ -45,6 +45,9 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     //The internal map is used to store the vertex representing a primitive or an enumeration
     protected ListMultimap<Object, Vertex> internalVertexMap = ArrayListMultimap.create();
     protected UmlgRuntimeProperty umlgRuntimeProperty;
+
+    protected boolean ignoreInverse = false;
+
     protected static final String LABEL_TO_FIRST_HYPER_VERTEX = "LTFHV";
     protected static final String LABEL_TO_LAST_HYPER_VERTEX = "LTLHV";
     protected static final String LABEL_TO_NEXT_HYPER_VERTEX = "LTNHV";
@@ -154,9 +157,17 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     @Override
+    public boolean addIgnoreInverse(E e) {
+        this.ignoreInverse = true;
+        boolean result = add(e);
+        this.ignoreInverse = false;
+        return result;
+    }
+
+    @Override
     public boolean add(E e) {
         maybeLoad();
-        if (isQualified() || isInverseQualified()) {
+        if (!this.ignoreInverse && (isQualified() || isInverseQualified())) {
             validateQualifiedAssociation(e);
         }
         boolean result = this.internalCollection.add(e);
@@ -628,9 +639,13 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 if (iteratorToOne.hasNext()) {
                     throw new IllegalStateException(String.format("Property %s has a multiplicity of 1 and is already set. First remove the value before setting it.", new String[]{getInverseQualifiedName()}));
                 }
+//                if (!this.ignoreInverse) {
+//                    this.handleInverseSide(node, umlgRuntimeProperty, true, this.owner);
+//                }
+            }
+            if (!this.ignoreInverse) {
                 this.handleInverseSide(node, umlgRuntimeProperty, true, this.owner);
             }
-            this.handleInverseSide(node, umlgRuntimeProperty, true, this.owner);
         } else if (e.getClass().isEnum() && (isManyToMany() || isOneToMany())) {
             v = UMLG.get().addVertex();
             v.property(getPersistentName(), ((Enum<?>) e).name());

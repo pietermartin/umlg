@@ -512,6 +512,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return UmlgPropertyOperations.adder(this.property);
     }
 
+    public String adderIgnoreInverse() {
+        return UmlgPropertyOperations.adder(this.property) + "IgnoreInverse";
+    }
+
     public String remover() {
         return UmlgPropertyOperations.remover(this.property);
     }
