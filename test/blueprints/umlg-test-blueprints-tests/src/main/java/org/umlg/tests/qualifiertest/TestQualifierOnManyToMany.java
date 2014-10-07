@@ -1,6 +1,6 @@
 package org.umlg.tests.qualifiertest;
 
-import com.tinkerpop.gremlin.process.T;
+import com.tinkerpop.gremlin.structure.Compare;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
@@ -73,21 +73,21 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 		Assert.assertEquals(25, countEdges());
 
 		Many1 m = new Many1(many1_1.getVertex());
-		Assert.assertNotNull(m.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_1")));
-		Assert.assertNotNull(m.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_2")));
-		Assert.assertNotNull(m.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_3")));
-		Assert.assertNotNull(m.getMany2ForMany2Qualifier1(Pair.of(T.eq, "many2_4")));
+		Assert.assertNotNull(m.getMany2ForMany2Qualifier1(Pair.of(Compare.eq, "many2_1")));
+		Assert.assertNotNull(m.getMany2ForMany2Qualifier1(Pair.of(Compare.eq, "many2_2")));
+		Assert.assertNotNull(m.getMany2ForMany2Qualifier1(Pair.of(Compare.eq, "many2_3")));
+		Assert.assertNotNull(m.getMany2ForMany2Qualifier1(Pair.of(Compare.eq, "many2_4")));
 
 		Many2 m2 = new Many2(many2_1.getVertex());
-		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_1")));
-		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_1")));
-		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_1")));
-		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_1")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(Compare.eq, "many1_1")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(Compare.eq, "many1_1")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(Compare.eq, "many1_1")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(Compare.eq, "many1_1")));
 
-		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_4")));
-		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_4")));
-		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_4")));
-		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many1_4")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(Compare.eq, "many1_4")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(Compare.eq, "many1_4")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(Compare.eq, "many1_4")));
+		Assert.assertNotNull(m2.getMany1ForMany1Qualifier1(Pair.of(Compare.eq, "many1_4")));
 
 	}
 

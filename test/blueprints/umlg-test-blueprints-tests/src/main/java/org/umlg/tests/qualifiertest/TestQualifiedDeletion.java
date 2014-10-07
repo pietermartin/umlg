@@ -1,6 +1,6 @@
 package org.umlg.tests.qualifiertest;
 
-import com.tinkerpop.gremlin.process.T;
+import com.tinkerpop.gremlin.structure.Compare;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.componenttest.Space;
@@ -94,14 +94,14 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		Assert.assertEquals(13, countVertices());
 		Assert.assertEquals(29, countEdges());
 		Many2 many2Test = new Many2(many21.getVertex());
-		Assert.assertEquals(1, many2Test.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many11")).size());
+		Assert.assertEquals(1, many2Test.getMany1ForMany1Qualifier1(Pair.of(Compare.eq, "many11")).size());
 
 		Many1 many1Test = new Many1(many11.getVertex());
 		many1Test.delete();
         db.commit();
 
 		many2Test = new Many2(many21.getVertex());
-		Assert.assertTrue(many2Test.getMany1ForMany1Qualifier1(Pair.of(T.eq, "many11")).isEmpty());
+		Assert.assertTrue(many2Test.getMany1ForMany1Qualifier1(Pair.of(Compare.eq, "many11")).isEmpty());
 	}
 
 	@SuppressWarnings("unused")
@@ -152,14 +152,14 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
         Assert.assertEquals(41, countVertices());
         Assert.assertEquals(97, countEdges());
 		Many2 many2Test = new Many2(many21.getVertex());
-		Assert.assertEquals(1, many2Test.getMany1ListForListQualifier1(Pair.of(T.eq, "many11")).size());
+		Assert.assertEquals(1, many2Test.getMany1ListForListQualifier1(Pair.of(Compare.eq, "many11")).size());
 
 		Many1 many1Test = new Many1(many11.getVertex());
 		many1Test.delete();
         db.commit();
 
 		many2Test = new Many2(many21.getVertex());
-		Assert.assertTrue(many2Test.getMany1ListForListQualifier1(Pair.of(T.eq, "many11")).isEmpty());
+		Assert.assertTrue(many2Test.getMany1ListForListQualifier1(Pair.of(Compare.eq, "many11")).isEmpty());
 
 		Assert.assertEquals("many12", many2Test.getMany1List().get(0).getName());
 		Assert.assertEquals("many13", many2Test.getMany1List().get(1).getName());
@@ -221,14 +221,14 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		Assert.assertEquals(6, countEdges());
 
 		God godTest = new God(god.getVertex());
-		Set<Nature> natureForQualifier2 = godTest.getNatureForQualifier2(Pair.of(T.eq, "xxx"));
+		Set<Nature> natureForQualifier2 = godTest.getNatureForQualifier2(Pair.of(Compare.eq, "xxx"));
 		Assert.assertEquals(4, natureForQualifier2.size());
-		natureForQualifier2 = godTest.getNatureForQualifier2(Pair.of(T.eq, "yyy"));
+		natureForQualifier2 = godTest.getNatureForQualifier2(Pair.of(Compare.eq, "yyy"));
 		Assert.assertEquals(1, natureForQualifier2.size());
         db.commit();
 
 		God godTest2 = new God(god.getVertex());
-		UmlgSet<Nature> natures = godTest2.getNatureForQualifier2(Pair.of(T.eq, "xxx"));
+		UmlgSet<Nature> natures = godTest2.getNatureForQualifier2(Pair.of(Compare.eq, "xxx"));
 		for (Nature nature2 : natures) {
 			nature2.delete();
 			break;
@@ -239,9 +239,9 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		Assert.assertEquals(5, countEdges());
 
 		God godTest3 = new God(god.getVertex());
-		natures = godTest3.getNatureForQualifier2(Pair.of(T.eq, "xxx"));
+		natures = godTest3.getNatureForQualifier2(Pair.of(Compare.eq, "xxx"));
 		Assert.assertEquals(3, natures.size());
-		Assert.assertEquals(1, godTest2.getNatureForQualifier2(Pair.of(T.eq, "yyy")).size());
+		Assert.assertEquals(1, godTest2.getNatureForQualifier2(Pair.of(Compare.eq, "yyy")).size());
 
 	}
 

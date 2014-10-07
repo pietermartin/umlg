@@ -1,6 +1,7 @@
 package org.umlg.ocl.qualifier.test;
 
 import com.tinkerpop.gremlin.process.T;
+import com.tinkerpop.gremlin.structure.Compare;
 import org.apache.commons.lang.time.StopWatch;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,7 +33,7 @@ public class TestQualifiers extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(1001, new Bank(bank.getVertex()).getCustomer().size());
-        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierandAccountNumberQualifier(Pair.of(T.eq, "c1"), Pair.of(T.eq, 1)));
+        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierandAccountNumberQualifier(Pair.of(Compare.eq, "c1"), Pair.of(Compare.eq, 1)));
         Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerJohn001());
         stopWatch.stop();
         System.out.println("Time taken = " + stopWatch.toString());

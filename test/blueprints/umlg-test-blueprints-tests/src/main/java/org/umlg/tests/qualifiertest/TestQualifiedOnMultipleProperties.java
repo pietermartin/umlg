@@ -1,6 +1,6 @@
 package org.umlg.tests.qualifiertest;
 
-import com.tinkerpop.gremlin.process.T;
+import com.tinkerpop.gremlin.structure.Compare;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.qualifiertest.QualifierA;
@@ -43,13 +43,13 @@ public class TestQualifiedOnMultipleProperties extends BaseLocalDbTest {
         qualifierA.addToQualifierB(qualifierB4);
         UMLG.get().commit();
 
-        QualifierB qualifierB = qualifierA.getQualifierBForName1QualifierandName2Qualifier(Pair.of(T.eq, "qualifierB1Name1"), Pair.of(T.eq, "qualifierBName2"));
+        QualifierB qualifierB = qualifierA.getQualifierBForName1QualifierandName2Qualifier(Pair.of(Compare.eq, "qualifierB1Name1"), Pair.of(Compare.eq, "qualifierBName2"));
         Assert.assertEquals(qualifierB1, qualifierB);
 
-        Set<QualifierB> qualifierBs = qualifierA.getQualifierBForPartialName1QualifierandName2Qualifier(Pair.of(T.eq, "qualifierB1Name1"), null);
+        Set<QualifierB> qualifierBs = qualifierA.getQualifierBForPartialName1QualifierandName2Qualifier(Pair.of(Compare.eq, "qualifierB1Name1"), null);
         Assert.assertEquals(1, qualifierBs.size());
 
-        qualifierBs = qualifierA.getQualifierBForPartialName1QualifierandName2Qualifier(null, Pair.of(T.eq, "qualifierBName2"));
+        qualifierBs = qualifierA.getQualifierBForPartialName1QualifierandName2Qualifier(null, Pair.of(Compare.eq, "qualifierBName2"));
         Assert.assertEquals(4, qualifierBs.size());
 
     }
@@ -66,8 +66,8 @@ public class TestQualifiedOnMultipleProperties extends BaseLocalDbTest {
         qualifierA.addToQualifierBInt(qualifierB2);
         UMLG.get().commit();
 
-        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBIntForQualifierInt1(Pair.of(T.eq, 1)));
-        Assert.assertNull(qualifierA.getQualifierBIntForQualifierInt1(Pair.of(T.eq, 3)));
+        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBIntForQualifierInt1(Pair.of(Compare.eq, 1)));
+        Assert.assertNull(qualifierA.getQualifierBIntForQualifierInt1(Pair.of(Compare.eq, 3)));
     }
 
     @Test
@@ -84,11 +84,11 @@ public class TestQualifiedOnMultipleProperties extends BaseLocalDbTest {
         qualifierA.addToQualifierBMultipleInt(qualifierB2);
         UMLG.get().commit();
 
-        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(T.eq, 1), Pair.of(T.eq, 1)));
-        Assert.assertEquals(qualifierB2, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(T.eq, 2), Pair.of(T.eq, 2)));
+        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(Compare.eq, 1), Pair.of(Compare.eq, 1)));
+        Assert.assertEquals(qualifierB2, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(Compare.eq, 2), Pair.of(Compare.eq, 2)));
 
         qualifierB1.setInt2(2);
         UMLG.get().commit();
-        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(T.eq, 2), Pair.of(T.eq, 1)));
+        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(Compare.eq, 2), Pair.of(Compare.eq, 1)));
     }
 }

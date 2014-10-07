@@ -1,6 +1,7 @@
 package org.umlg.tests.qualifiertest;
 
 import com.tinkerpop.gremlin.process.T;
+import com.tinkerpop.gremlin.structure.Compare;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
@@ -27,11 +28,11 @@ public class TestQualifierChangeEvent extends BaseLocalDbTest {
         db.commit();
 		
 		God g = new God(god.getVertex());
-		g.getNatureForQualifier2(Pair.of(T.eq, "nature2")).iterator().next().setName2("nameSoGonaFail");
+		g.getNatureForQualifier2(Pair.of(Compare.eq, "nature2")).iterator().next().setName2("nameSoGonaFail");
         db.commit();
 		
 		God gg = new God(god.getVertex());
-		Assert.assertTrue(!gg.getNatureForQualifier2(Pair.of(T.eq, "nameSoGonaFail")).isEmpty());
+		Assert.assertTrue(!gg.getNatureForQualifier2(Pair.of(Compare.eq, "nameSoGonaFail")).isEmpty());
 	}
 
 }

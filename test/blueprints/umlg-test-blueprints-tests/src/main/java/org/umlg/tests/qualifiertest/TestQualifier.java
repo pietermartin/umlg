@@ -1,6 +1,6 @@
 package org.umlg.tests.qualifiertest;
 
-import com.tinkerpop.gremlin.process.T;
+import com.tinkerpop.gremlin.structure.Compare;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
@@ -25,10 +25,10 @@ public class TestQualifier extends BaseLocalDbTest {
         db.commit();
 
 		God godTest = new God(god.getVertex());
-		UmlgSet<Nature> natureForQualifier1 = godTest.getNatureForQualifier2(Pair.of(T.eq, "nature2"));
+		UmlgSet<Nature> natureForQualifier1 = godTest.getNatureForQualifier2(Pair.of(Compare.eq, "nature2"));
 		Assert.assertFalse(natureForQualifier1.isEmpty());
 		Assert.assertEquals("nature1", natureForQualifier1.iterator().next().getName1());
-		natureForQualifier1 = godTest.getNatureForQualifier2(Pair.of(T.eq, "nature1"));
+		natureForQualifier1 = godTest.getNatureForQualifier2(Pair.of(Compare.eq, "nature1"));
 		Assert.assertTrue(natureForQualifier1.isEmpty());
         db.commit();
 	}
@@ -74,12 +74,12 @@ public class TestQualifier extends BaseLocalDbTest {
         db.commit();
 
 		God godTest = new God(god.getVertex());
-		Set<Nature> natureForQualifier2 = godTest.getNatureForQualifier2(Pair.of(T.eq, "xxx"));
+		Set<Nature> natureForQualifier2 = godTest.getNatureForQualifier2(Pair.of(Compare.eq, "xxx"));
 		Assert.assertEquals(4, natureForQualifier2.size());
-		natureForQualifier2 = godTest.getNatureForQualifier2(Pair.of(T.eq, "yyy"));
+		natureForQualifier2 = godTest.getNatureForQualifier2(Pair.of(Compare.eq, "yyy"));
 		Assert.assertEquals(1, natureForQualifier2.size());
 
-        Set<Nature> natureForQualifier3 = godTest.getNatureForName1Qualifier(Pair.of(T.eq, "name1_1"));
+        Set<Nature> natureForQualifier3 = godTest.getNatureForName1Qualifier(Pair.of(Compare.eq, "name1_1"));
         Assert.assertEquals(2, natureForQualifier3.size());
 
     }
@@ -126,11 +126,11 @@ public class TestQualifier extends BaseLocalDbTest {
         db.commit();
 
         god.reload();
-        Assert.assertNotNull(god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "1")));
-        Assert.assertEquals("2", god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "2")).getNameUnique());
-        Assert.assertEquals("3", god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "3")).getNameUnique());
-        Assert.assertEquals("4", god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "4")).getNameUnique());
-        Assert.assertEquals("5", god.getNatureForNameUniqueQualifier(Pair.of(T.eq, "5")).getNameUnique());
+        Assert.assertNotNull(god.getNatureForNameUniqueQualifier(Pair.of(Compare.eq, "1")));
+        Assert.assertEquals("2", god.getNatureForNameUniqueQualifier(Pair.of(Compare.eq, "2")).getNameUnique());
+        Assert.assertEquals("3", god.getNatureForNameUniqueQualifier(Pair.of(Compare.eq, "3")).getNameUnique());
+        Assert.assertEquals("4", god.getNatureForNameUniqueQualifier(Pair.of(Compare.eq, "4")).getNameUnique());
+        Assert.assertEquals("5", god.getNatureForNameUniqueQualifier(Pair.of(Compare.eq, "5")).getNameUnique());
 
     }
 

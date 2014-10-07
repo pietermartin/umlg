@@ -198,6 +198,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
                         buildSecondFormatter(ojClass, qualifier));
             }
 
+            ojClass.addToImports(UmlgGenerationUtil.t);
             ojClass.addToImports(UmlgGenerationUtil.Element);
             ojClass.addToImports(UmlgGenerationUtil.tinkerDirection);
             ojClass.addToImports("java.util.Iterator");

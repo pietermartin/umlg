@@ -1,6 +1,6 @@
 package org.umlg.tests.qualifiertest;
 
-import com.tinkerpop.gremlin.process.T;
+import com.tinkerpop.gremlin.structure.Compare;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.qualifiertest.*;
@@ -35,11 +35,11 @@ public class TestQualifiedDerivedUnionProperty extends BaseLocalDbTest {
 
         UMLG.get().commit();
 
-        Assert.assertEquals(1, aQualifierB.getBQualifierAForAQualifierABQualifierAByName(Pair.of(T.eq, "bQualifierB1")).size(), 0);
-        Assert.assertEquals(1, aQualifierB.getBQualifierAForAQualifierABQualifierAByName(Pair.of(T.eq, "bQualifierB2")).size(), 0);
+        Assert.assertEquals(1, aQualifierB.getBQualifierAForAQualifierABQualifierAByName(Pair.of(Compare.eq, "bQualifierB1")).size(), 0);
+        Assert.assertEquals(1, aQualifierB.getBQualifierAForAQualifierABQualifierAByName(Pair.of(Compare.eq, "bQualifierB2")).size(), 0);
 
-        Assert.assertEquals(1, aQualifierC.getBQualifierAForAQualifierABQualifierAByName(Pair.of(T.eq, "bQualifierC1")).size(), 0);
-        Assert.assertEquals(1, aQualifierC.getBQualifierAForAQualifierABQualifierAByName(Pair.of(T.eq, "bQualifierB2")).size(), 0);
+        Assert.assertEquals(1, aQualifierC.getBQualifierAForAQualifierABQualifierAByName(Pair.of(Compare.eq, "bQualifierC1")).size(), 0);
+        Assert.assertEquals(1, aQualifierC.getBQualifierAForAQualifierABQualifierAByName(Pair.of(Compare.eq, "bQualifierB2")).size(), 0);
 
     }
 
@@ -56,8 +56,8 @@ public class TestQualifiedDerivedUnionProperty extends BaseLocalDbTest {
 
         UMLG.get().commit();
 
-        Assert.assertEquals(1, aQualifierA.getBQualifierAForAQualifierABQualifierAByName(Pair.of(T.eq, "bQualifierA1")).size(), 0);
-        Assert.assertEquals(1, aQualifierA.getBQualifierAForAQualifierABQualifierAByName(Pair.of(T.eq, "bQualifierA2")).size(), 0);
+        Assert.assertEquals(1, aQualifierA.getBQualifierAForAQualifierABQualifierAByName(Pair.of(Compare.eq, "bQualifierA1")).size(), 0);
+        Assert.assertEquals(1, aQualifierA.getBQualifierAForAQualifierABQualifierAByName(Pair.of(Compare.eq, "bQualifierA2")).size(), 0);
 
     }
 
@@ -74,8 +74,8 @@ public class TestQualifiedDerivedUnionProperty extends BaseLocalDbTest {
 
         UMLG.get().commit();
 
-        Assert.assertEquals(1, aQualifierD.getBQualifierDForBQualifierDByNameQualifier(Pair.of(T.eq, "bQualifierD1")).size(), 0);
-        Assert.assertEquals(1, aQualifierD.getBQualifierDForBQualifierDByNameQualifier(Pair.of(T.eq, "bQualifierD2")).size(), 0);
+        Assert.assertEquals(1, aQualifierD.getBQualifierDForBQualifierDByNameQualifier(Pair.of(Compare.eq, "bQualifierD1")).size(), 0);
+        Assert.assertEquals(1, aQualifierD.getBQualifierDForBQualifierDByNameQualifier(Pair.of(Compare.eq, "bQualifierD2")).size(), 0);
 
     }
 

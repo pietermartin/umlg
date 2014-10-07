@@ -193,7 +193,7 @@ public class UmlgJavaVisitor extends
             getter += "(";
             int count = 1;
             for (String qualifierValue : qualifierResults) {
-                getter += "Pair.of(T.eq, " + qualifierValue + ")";
+                getter += "Pair.of(Compare.eq, " + qualifierValue + ")";
                 if (count++ < qualifierResults.size()) {
                     getter += ", ";
                 }
