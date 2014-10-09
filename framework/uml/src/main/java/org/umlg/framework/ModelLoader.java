@@ -95,7 +95,7 @@ public class ModelLoader {
     }
 
     public List<Property> findSubsettingProperties(final Property subsettedProperty) {
-        List<Property> results = new ArrayList<Property>();
+        List<Property> results = new ArrayList();
         filter(results, this.model, new Filter() {
             @Override
             public boolean filter(Element e) {
@@ -105,6 +105,16 @@ public class ModelLoader {
         return results;
     }
 
+    public List<Slot> findSlotsForThisDataType(EnumerationLiteral enumerationLiteral) {
+        List<Slot> results = new ArrayList();
+        filter(results, this.model, new Filter() {
+            @Override
+            public boolean filter(Element e) {
+                return e instanceof Slot && ((Slot) e).getDefiningFeature().getType().equals(enumerationLiteral.getOwner());
+            }
+        });
+        return results;
+    }
 
     public Stereotype findStereotype(String name) {
         Stereotype result = null;

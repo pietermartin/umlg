@@ -19,6 +19,7 @@ import org.umlg.tests.concretetest.TestOneToMany;
 import org.umlg.tests.constraint.ConstrainedClassTest;
 import org.umlg.tests.constraint.ConstrainedPropertyTest;
 import org.umlg.tests.datatype.DataTypeTest;
+import org.umlg.tests.datatypeassociation.TestDataTypeAssociation;
 import org.umlg.tests.deletiontest.DeletionInheritenceTest;
 import org.umlg.tests.deletiontest.DeletionTest;
 import org.umlg.tests.deletiontest.EmbeddedSetDeletionTest;
@@ -137,7 +138,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestQualifiedDerivedUnionProperty.class,
         TestBatchMode.class,
         OclTestToLowerCase.class,
-        TestBulkCollection.class
+        TestBulkCollection.class,
+        TestDataTypeAssociation.class
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
 //        TestAssociationToSelf.class,

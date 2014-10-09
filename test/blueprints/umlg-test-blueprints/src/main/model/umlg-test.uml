@@ -3360,6 +3360,102 @@ endif</body>
             </packagedElement>
           </packagedElement>
         </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_c7uUgE8YEeSo664unH6t3Q" name="datatypeassociation">
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_qT0-EE8YEeSo664unH6t3Q" name="VENDOR_TECH">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_6YU8cE8YEeSo664unH6t3Q" name="HUAWEI_GSM">
+              <slot xmi:type="uml:Slot" xmi:id="_RHEL4E_iEeSeXZdz9VznGw" definingFeature="_57DYRE_hEeSeXZdz9VznGw">
+                <value xmi:type="uml:InstanceValue" xmi:id="_Vif4kE_mEeSeXZdz9VznGw" name="vendorTechErissonInstanceValue" type="_rfxacE_hEeSeXZdz9VznGw" instance="_uk28EE_hEeSeXZdz9VznGw"/>
+              </slot>
+              <slot xmi:type="uml:Slot" xmi:id="_YIQZ4E_mEeSeXZdz9VznGw" definingFeature="_GAKv9E_iEeSeXZdz9VznGw">
+                <value xmi:type="uml:InstanceValue" xmi:id="_ekUeYE_mEeSeXZdz9VznGw" name="vendorTechTECHNOLOGYInstanceValue" type="_szUF8E_hEeSeXZdz9VznGw" instance="_w4RwME_hEeSeXZdz9VznGw"/>
+              </slot>
+            </ownedLiteral>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_DFW-AE8ZEeSo664unH6t3Q" name="HUAWEI_UMTS">
+              <slot xmi:type="uml:Slot" xmi:id="_oPva0E_mEeSeXZdz9VznGw" definingFeature="_57DYRE_hEeSeXZdz9VznGw">
+                <value xmi:type="uml:InstanceValue" xmi:id="_A5f-0E_nEeSeXZdz9VznGw" name="vendorTechWNDORInstanceValue" type="_rfxacE_hEeSeXZdz9VznGw" instance="_uk28EE_hEeSeXZdz9VznGw"/>
+              </slot>
+              <slot xmi:type="uml:Slot" xmi:id="_BkgqsE_nEeSeXZdz9VznGw" definingFeature="_GAKv9E_iEeSeXZdz9VznGw">
+                <value xmi:type="uml:InstanceValue" xmi:id="_LnYd0E_nEeSeXZdz9VznGw" name="vendorTechTECHNOLOGYInstanceValue" type="_szUF8E_hEeSeXZdz9VznGw" instance="_xr7asE_hEeSeXZdz9VznGw"/>
+              </slot>
+            </ownedLiteral>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_X97jwE_nEeSeXZdz9VznGw" name="ERICSSON_GSM">
+              <slot xmi:type="uml:Slot" xmi:id="_bxLy8E_nEeSeXZdz9VznGw" definingFeature="_57DYRE_hEeSeXZdz9VznGw">
+                <value xmi:type="uml:InstanceValue" xmi:id="_jX9-IE_nEeSeXZdz9VznGw" name="asdasd" type="_rfxacE_hEeSeXZdz9VznGw" instance="_tzQgAE_hEeSeXZdz9VznGw"/>
+              </slot>
+              <slot xmi:type="uml:Slot" xmi:id="_mIHxkE_nEeSeXZdz9VznGw" definingFeature="_GAKv9E_iEeSeXZdz9VznGw">
+                <value xmi:type="uml:InstanceValue" xmi:id="_ACBHwE_oEeSeXZdz9VznGw" name="cvbcvbcvb" type="_szUF8E_hEeSeXZdz9VznGw" instance="_w4RwME_hEeSeXZdz9VznGw"/>
+              </slot>
+            </ownedLiteral>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_Zbd4wE_nEeSeXZdz9VznGw" name="ERICSSON_UMTS">
+              <slot xmi:type="uml:Slot" xmi:id="_CK-YUE_oEeSeXZdz9VznGw" definingFeature="_57DYRE_hEeSeXZdz9VznGw">
+                <value xmi:type="uml:InstanceValue" xmi:id="_J8ZtQE_oEeSeXZdz9VznGw" name="asdasd" type="_rfxacE_hEeSeXZdz9VznGw" instance="_tzQgAE_hEeSeXZdz9VznGw"/>
+              </slot>
+              <slot xmi:type="uml:Slot" xmi:id="_CsFhUE_oEeSeXZdz9VznGw" definingFeature="_GAKv9E_iEeSeXZdz9VznGw">
+                <value xmi:type="uml:InstanceValue" xmi:id="_QdCIsE_oEeSeXZdz9VznGw" name="asdasd" type="_szUF8E_hEeSeXZdz9VznGw" instance="_xr7asE_hEeSeXZdz9VznGw"/>
+              </slot>
+            </ownedLiteral>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_rT7wME8YEeSo664unH6t3Q" name="SOFTWARE_VERSION">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_7LYKAE8YEeSo664unH6t3Q" name="HUAWEI_GSM_R15">
+              <slot xmi:type="uml:Slot" xmi:id="_Vbb9cE8ZEeSo664unH6t3Q" definingFeature="_sN43BE8YEeSo664unH6t3Q">
+                <value xmi:type="uml:InstanceValue" xmi:id="_nbox4E95EeSo664unH6t3Q" name="huaweiGsmR15VendorTechInstanceValue" type="_qT0-EE8YEeSo664unH6t3Q" instance="_6YU8cE8YEeSo664unH6t3Q"/>
+              </slot>
+            </ownedLiteral>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_7xFfIE8YEeSo664unH6t3Q" name="HUAWEI_UMTS_R15">
+              <slot xmi:type="uml:Slot" xmi:id="_zxZNoE95EeSo664unH6t3Q" definingFeature="_sN43BE8YEeSo664unH6t3Q">
+                <value xmi:type="uml:InstanceValue" xmi:id="_34p98E95EeSo664unH6t3Q" name="huaweiUmtsR15VendorTechInstanceValue" type="_qT0-EE8YEeSo664unH6t3Q" instance="_DFW-AE8ZEeSo664unH6t3Q"/>
+              </slot>
+            </ownedLiteral>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_UBl3wE_sEeSeXZdz9VznGw" name="ERICSSON_GSM_R13">
+              <slot xmi:type="uml:Slot" xmi:id="_YV8o4E_sEeSeXZdz9VznGw" definingFeature="_sN43BE8YEeSo664unH6t3Q">
+                <value xmi:type="uml:InstanceValue" xmi:id="_kU_NwE_sEeSeXZdz9VznGw" name="asdasd" type="_qT0-EE8YEeSo664unH6t3Q" instance="_X97jwE_nEeSeXZdz9VznGw"/>
+              </slot>
+            </ownedLiteral>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_V_Cb4E_sEeSeXZdz9VznGw" name="ERICSSON_UMTS_W12">
+              <slot xmi:type="uml:Slot" xmi:id="_lEyTAE_sEeSeXZdz9VznGw" definingFeature="_sN43BE8YEeSo664unH6t3Q">
+                <value xmi:type="uml:InstanceValue" xmi:id="_rpxC8E_sEeSeXZdz9VznGw" name="asdasdasd" type="_qT0-EE8YEeSo664unH6t3Q" instance="_Zbd4wE_nEeSeXZdz9VznGw"/>
+              </slot>
+            </ownedLiteral>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_sN43AE8YEeSo664unH6t3Q" memberEnd="_sN43BE8YEeSo664unH6t3Q _sN43AU8YEeSo664unH6t3Q" navigableOwnedEnd="_sN43BE8YEeSo664unH6t3Q _sN43AU8YEeSo664unH6t3Q">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_sN43AU8YEeSo664unH6t3Q" name="softwareVersion" type="_rT7wME8YEeSo664unH6t3Q" association="_sN43AE8YEeSo664unH6t3Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sN43Ak8YEeSo664unH6t3Q"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sN43A08YEeSo664unH6t3Q" value="*"/>
+            </ownedEnd>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_sN43BE8YEeSo664unH6t3Q" name="vendorTech" type="_qT0-EE8YEeSo664unH6t3Q" association="_sN43AE8YEeSo664unH6t3Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sN43BU8YEeSo664unH6t3Q" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sN43Bk8YEeSo664unH6t3Q" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_rfxacE_hEeSeXZdz9VznGw" name="VENDOR">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tzQgAE_hEeSeXZdz9VznGw" name="ERICSSON"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_uk28EE_hEeSeXZdz9VznGw" name="HUAWEI"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_szUF8E_hEeSeXZdz9VznGw" name="TECHNOLOGY">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_w4RwME_hEeSeXZdz9VznGw" name="GSM"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_xr7asE_hEeSeXZdz9VznGw" name="UMTS"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_57DYQE_hEeSeXZdz9VznGw" name="vENDOR_vENDOR_TECH" memberEnd="_57DYRE_hEeSeXZdz9VznGw _57DYQU_hEeSeXZdz9VznGw" navigableOwnedEnd="_57DYRE_hEeSeXZdz9VznGw _57DYQU_hEeSeXZdz9VznGw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_57DYQU_hEeSeXZdz9VznGw" name="vENDOR_TECH" type="_qT0-EE8YEeSo664unH6t3Q" association="_57DYQE_hEeSeXZdz9VznGw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_57DYQk_hEeSeXZdz9VznGw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_57DYQ0_hEeSeXZdz9VznGw" value="*"/>
+            </ownedEnd>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_57DYRE_hEeSeXZdz9VznGw" name="vENDOR" type="_rfxacE_hEeSeXZdz9VznGw" association="_57DYQE_hEeSeXZdz9VznGw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_57DYRU_hEeSeXZdz9VznGw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_57DYRk_hEeSeXZdz9VznGw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_GAKv8E_iEeSeXZdz9VznGw" name="tECHNOLOGY_vENDOR_TECH" memberEnd="_GAKv9E_iEeSeXZdz9VznGw _GAKv8U_iEeSeXZdz9VznGw" navigableOwnedEnd="_GAKv9E_iEeSeXZdz9VznGw _GAKv8U_iEeSeXZdz9VznGw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_GAKv8U_iEeSeXZdz9VznGw" name="vENDOR_TECH" type="_qT0-EE8YEeSo664unH6t3Q" association="_GAKv8E_iEeSeXZdz9VznGw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GAKv8k_iEeSeXZdz9VznGw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GAKv80_iEeSeXZdz9VznGw" value="*"/>
+            </ownedEnd>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_GAKv9E_iEeSeXZdz9VznGw" name="tECHNOLOGY" type="_szUF8E_hEeSeXZdz9VznGw" association="_GAKv8E_iEeSeXZdz9VznGw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GAKv9U_iEeSeXZdz9VznGw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GAKv9k_iEeSeXZdz9VznGw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_1clVoQAOEeKpVr_ntT6cLA">
