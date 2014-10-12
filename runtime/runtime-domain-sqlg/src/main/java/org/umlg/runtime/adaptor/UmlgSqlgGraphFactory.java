@@ -7,6 +7,7 @@ import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.sqlg.sql.dialect.SqlDialect;
 import org.umlg.sqlg.structure.SchemaManager;
 import org.umlg.sqlg.structure.SqlgDataSource;
+import org.umlg.sqlg.structure.SqlgGraph;
 
 import java.beans.PropertyVetoException;
 import java.io.File;
@@ -76,53 +77,78 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
                     throw new RuntimeException("sqlg.properties must be on the classpath or umlg.env.properties must specify its location in a property sqlg.properties.location", e);
                 }
             }
-            SqlDialect sqlDialect;
-            try {
-                logger.info(String.format("SqlG running with dialect %s", new String[]{configuration.getString("sql.dialect")}));
-                Class<?> sqlDialectClass = Class.forName(configuration.getString("sql.dialect"));
-                Constructor<?> constructor = sqlDialectClass.getConstructor(Configuration.class);
-                sqlDialect = (SqlDialect) constructor.newInstance(configuration);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                SqlgDataSource.INSTANCE.setupDataSource(
-                        sqlDialect.getJdbcDriver(),
-                        configuration.getString("jdbc.url"),
-                        configuration.getString("jdbc.username"),
-                        configuration.getString("jdbc.password"));
-            } catch (PropertyVetoException e) {
-                throw new RuntimeException(e);
-            }
+//            SqlDialect sqlDialect;
+//            try {
+//                logger.info(String.format("SqlG running with dialect %s", new String[]{configuration.getString("sql.dialect")}));
+//                Class<?> sqlDialectClass = Class.forName(configuration.getString("sql.dialect"));
+//                Constructor<?> constructor = sqlDialectClass.getConstructor(Configuration.class);
+//                sqlDialect = (SqlDialect) constructor.newInstance(configuration);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//            try {
+//                SqlgDataSource.INSTANCE.setupDataSource(
+//                        sqlDialect.getJdbcDriver(),
+//                        configuration.getString("jdbc.url"),
+//                        configuration.getString("jdbc.username"),
+//                        configuration.getString("jdbc.password"));
+//            } catch (PropertyVetoException e) {
+//                throw new RuntimeException(e);
+//            }
             TransactionThreadEntityVar.remove();
-            try (Connection conn = SqlgDataSource.INSTANCE.get(configuration.getString("jdbc.url")).getConnection()) {
-                if (!tableExist(conn, SchemaManager.VERTICES)) {
-                    try {
-                        this.umlgGraph = new UmlgSqlgGraph(configuration);
-                        this.umlgGraph.addRoot();
-                        this.umlgGraph.commit();
-                        //This is to bypass the beforeCommit
-                        this.umlgGraph.setBypass(true);
-                        UmlGIndexFactory.getUmlgIndexManager().createIndexes();
-                        this.umlgGraph.commit();
-                        this.umlgGraph.setBypass(false);
-                    } catch (Exception e) {
-                        logger.log(Level.SEVERE, "Could not start sqlg db!", e);
-                        if (this.umlgGraph != null) {
-                            this.umlgGraph.rollback();
-                        }
-                        if (e instanceof RuntimeException) {
-                            throw (RuntimeException) e;
-                        } else {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                } else {
+            this.umlgGraph = new UmlgSqlgGraph(configuration);
+            SqlgGraph sqlgGraph = (SqlgGraph)this.umlgGraph.getUnderlyingGraph();
+            if (!sqlgGraph.getSchemaManager().tableExist(sqlgGraph.getSqlDialect().getPublicSchema(), SchemaManager.VERTICES)) {
+                try {
                     this.umlgGraph = new UmlgSqlgGraph(configuration);
+                    this.umlgGraph.addRoot();
+                    this.umlgGraph.commit();
+                    //This is to bypass the beforeCommit
+                    this.umlgGraph.setBypass(true);
+                    UmlGIndexFactory.getUmlgIndexManager().createIndexes();
+                    this.umlgGraph.commit();
+                    this.umlgGraph.setBypass(false);
+                } catch (Exception e) {
+                    logger.log(Level.SEVERE, "Could not start sqlg db!", e);
+                    if (this.umlgGraph != null) {
+                        this.umlgGraph.rollback();
+                    }
+                    if (e instanceof RuntimeException) {
+                        throw (RuntimeException) e;
+                    } else {
+                        throw new RuntimeException(e);
+                    }
                 }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
             }
+
+//            try (Connection conn = SqlgDataSource.INSTANCE.get(configuration.getString("jdbc.url")).getConnection()) {
+//                if (!tableExist(conn, SchemaManager.VERTICES)) {
+//                    try {
+//                        this.umlgGraph = new UmlgSqlgGraph(configuration);
+//                        this.umlgGraph.addRoot();
+//                        this.umlgGraph.commit();
+//                        //This is to bypass the beforeCommit
+//                        this.umlgGraph.setBypass(true);
+//                        UmlGIndexFactory.getUmlgIndexManager().createIndexes();
+//                        this.umlgGraph.commit();
+//                        this.umlgGraph.setBypass(false);
+//                    } catch (Exception e) {
+//                        logger.log(Level.SEVERE, "Could not start sqlg db!", e);
+//                        if (this.umlgGraph != null) {
+//                            this.umlgGraph.rollback();
+//                        }
+//                        if (e instanceof RuntimeException) {
+//                            throw (RuntimeException) e;
+//                        } else {
+//                            throw new RuntimeException(e);
+//                        }
+//                    }
+//                } else {
+//                    this.umlgGraph = new UmlgSqlgGraph(configuration);
+//                }
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
             //Prepare groovy
             GroovyExecutor ge = GroovyExecutor.INSTANCE;
         }
@@ -132,14 +158,15 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
     @Override
     public void drop() {
         this.umlgGraph.rollback();
-        SqlDialect sqlDialect;
-        try {
-            Class<?> sqlDialectClass = Class.forName(configuration.getString("sql.dialect"));
-            Constructor<?> constructor = sqlDialectClass.getConstructor(Configuration.class);
-            sqlDialect = (SqlDialect) constructor.newInstance(configuration);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        SqlgGraph sqlgGraph = (SqlgGraph)this.umlgGraph.getUnderlyingGraph();
+        SqlDialect sqlDialect = sqlgGraph.getSqlDialect();
+//        try {
+//            Class<?> sqlDialectClass = Class.forName(configuration.getString("sql.dialect"));
+//            Constructor<?> constructor = sqlDialectClass.getConstructor(Configuration.class);
+//            sqlDialect = (SqlDialect) constructor.newInstance(configuration);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
         try (Connection conn = SqlgDataSource.INSTANCE.get(this.configuration.getString("jdbc.url")).getConnection()) {
             DatabaseMetaData metadata = conn.getMetaData();
             String catalog = null;

@@ -1,16 +1,13 @@
 package org.umlg.javageneration.visitor.enumeration;
 
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.ocl.uml.OrderedSetType;
 import org.eclipse.uml2.uml.*;
-import org.eclipse.uml2.uml.Enumeration;
 import org.umlg.framework.ModelLoader;
+import org.umlg.framework.Visitor;
+import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.annotation.OJEnum;
 import org.umlg.java.metamodel.annotation.OJEnumLiteral;
-import org.umlg.framework.Visitor;
-import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.generated.OJVisibilityKindGEN;
 import org.umlg.javageneration.util.Namer;
 import org.umlg.javageneration.util.PropertyWrapper;
@@ -114,10 +111,20 @@ public class EnumerationVisitor extends BaseVisitor implements Visitor<org.eclip
             for (Slot slot : slots) {
                 StructuralFeature structuralFeature = slot.getDefiningFeature();
                 for (ValueSpecification valueSpecification : slot.getValues()) {
-                    InstanceValue instanceValue = (InstanceValue) valueSpecification;
                     OJField literalField = new OJField(UmlgClassOperations.getPathName(structuralFeature.getType()).getLast().toLowerCase(), UmlgClassOperations.getPathName(structuralFeature.getType()));
                     literalField.setVisibility(OJVisibilityKindGEN.PRIVATE);
-                    literalField.setInitExp(UmlgClassOperations.getPathName(structuralFeature.getType()).getLast() + "." + instanceValue.getInstance().getName());
+                    if (valueSpecification instanceof InstanceValue) {
+                        InstanceValue instanceValue = (InstanceValue) valueSpecification;
+                        literalField.setInitExp(UmlgClassOperations.getPathName(structuralFeature.getType()).getLast() + "." + instanceValue.getInstance().getName());
+                    } else if (valueSpecification instanceof LiteralString) {
+                        literalField.setInitExp("\"" + ((LiteralString) valueSpecification).getValue() + "\"");
+                    } else if (valueSpecification instanceof LiteralBoolean) {
+                        literalField.setInitExp(String.valueOf(((LiteralBoolean) valueSpecification).isValue()));
+                    } else if (valueSpecification instanceof LiteralReal) {
+                        literalField.setInitExp(String.valueOf(((LiteralReal) valueSpecification).getValue()));
+                    } else {
+                        throw new RuntimeException(String.format("Enumeration attribute of type %s not yet implemented!", valueSpecification.getName()));
+                    }
                     ojLiteral.addToAttributeValues(literalField);
                 }
             }

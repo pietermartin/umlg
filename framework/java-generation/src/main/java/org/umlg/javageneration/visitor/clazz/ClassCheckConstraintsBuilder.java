@@ -48,6 +48,9 @@ public class ClassCheckConstraintsBuilder extends BaseVisitor implements Visitor
         result.setInitExp("new ArrayList<" + UmlgGenerationUtil.UmlgConstraintViolation.getLast() + ">()");
         checkConstraints.getBody().addToLocals(result);
         List<Constraint> constraints = ModelLoader.INSTANCE.getConstraints(clazz);
+        if (!clazz.getGeneralizations().isEmpty()) {
+            checkConstraints.getBody().addToStatements("result.addAll(super.checkClassConstraints())");
+        }
         for (Constraint constraint : constraints) {
             checkConstraints.getBody().addToStatements("result.addAll(" + UmlgClassOperations.checkClassConstraintName(constraint) + "())");
         }

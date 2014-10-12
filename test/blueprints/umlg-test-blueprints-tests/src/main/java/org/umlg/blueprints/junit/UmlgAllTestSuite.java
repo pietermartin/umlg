@@ -26,6 +26,7 @@ import org.umlg.tests.deletiontest.EmbeddedSetDeletionTest;
 import org.umlg.tests.embeddedtest.TestEmbeddedTest;
 import org.umlg.tests.enumeration.ManyEnumerationTest;
 import org.umlg.tests.enumeration.OneEnumerationTest;
+import org.umlg.tests.enumeration.TestEnumerationAttribute;
 import org.umlg.tests.hierarchytest.TestHierarchy;
 import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.indexing.TestIndexingDataType;
@@ -139,7 +140,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestBatchMode.class,
         OclTestToLowerCase.class,
         TestBulkCollection.class,
-        TestDataTypeAssociation.class
+        TestDataTypeAssociation.class,
+        TestEnumerationAttribute.class
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
 //        TestAssociationToSelf.class,

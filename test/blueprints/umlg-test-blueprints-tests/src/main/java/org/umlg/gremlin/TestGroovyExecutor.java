@@ -52,7 +52,7 @@ public class TestGroovyExecutor extends BaseLocalDbTest {
         gremlinResult = GroovyExecutor.INSTANCE.executeGroovy(null, "Direction.OUT.toString(); Direction.IN.toString()");
         Assert.assertEquals("IN", gremlinResult);
 
-        gremlinResult = GroovyExecutor.INSTANCE.executeGroovy(null, "g.V().has('age').has('age',T.gt,25).count().next()");
+        gremlinResult = GroovyExecutor.INSTANCE.executeGroovy(null, "g.V().has('age').has('age',Compare.gt,25).count().next()");
         Assert.assertEquals(0L, gremlinResult);
 
         //TODO used to work

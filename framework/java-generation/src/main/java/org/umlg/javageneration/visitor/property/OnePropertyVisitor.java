@@ -8,10 +8,11 @@ import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedField;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.javageneration.util.*;
+import org.umlg.javageneration.util.DataTypeEnum;
+import org.umlg.javageneration.util.PropertyWrapper;
+import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.visitor.BaseVisitor;
-
-import java.util.List;
 
 public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property> {
 
@@ -23,7 +24,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
     public void visitBefore(Property p) {
         PropertyWrapper propertyWrapper = new PropertyWrapper(p);
         // TODO qualifiers
-        if (propertyWrapper.isOne() && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier() && !propertyWrapper.isRefined()) {
+        if (propertyWrapper.isOne() && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier() && !propertyWrapper.isRefined() && !(propertyWrapper.getOwner() instanceof Enumeration) ) {
             OJAnnotatedClass owner = findOJClass(p);
             buildGetter(owner, propertyWrapper);
 

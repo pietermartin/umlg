@@ -13,7 +13,7 @@ import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.util.UmlgProperties;
-import org.umlg.sqlg.structure.SqlG;
+import org.umlg.sqlg.structure.SqlgGraph;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -33,12 +33,12 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     private UmlgTransactionEventHandlerImpl transactionEventHandler;
     private Class<UmlgApplicationNode> umlgApplicationNodeClass;
-    protected SqlG sqlG;
+    protected SqlgGraph sqlG;
     //cache the root vertex
     private Vertex rootVertex;
 
     public UmlgSqlgGraph(Configuration config) {
-        this.sqlG = SqlG.open(config);
+        this.sqlG = SqlgGraph.open(config);
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 

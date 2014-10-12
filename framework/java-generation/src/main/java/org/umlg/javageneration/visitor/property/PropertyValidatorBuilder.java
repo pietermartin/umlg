@@ -1,5 +1,6 @@
 package org.umlg.javageneration.visitor.property;
 
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.java.metamodel.OJField;
 import org.umlg.java.metamodel.OJIfStatement;
@@ -23,7 +24,7 @@ public class PropertyValidatorBuilder extends BaseVisitor implements Visitor<Pro
 	@Override
 	public void visitBefore(Property p) {
 		PropertyWrapper propertyWrapper = new PropertyWrapper(p);
-		if (propertyWrapper.isDataType() && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier()) {
+		if (propertyWrapper.isDataType() && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier() && !(propertyWrapper.getOwner() instanceof Enumeration)) {
 			OJAnnotatedClass owner = findOJClass(p);
 			buildValidator(owner, propertyWrapper);
 		}

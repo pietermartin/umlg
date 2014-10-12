@@ -4,10 +4,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.eclipse.ocl.expressions.OCLExpression;
-import org.eclipse.uml2.uml.BehavioredClassifier;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.*;
 import org.umlg.java.metamodel.OJIfStatement;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
@@ -35,7 +32,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
         if (!propertyWrapper.isRefined()) {
             OJAnnotatedClass owner = findOJClass(p);
             validateProperty(propertyWrapper);
-            if (!propertyWrapper.isDerived() && !propertyWrapper.isQualifier() && !propertyWrapper.isForQualifier()) {
+            if (!propertyWrapper.isDerived() && !propertyWrapper.isQualifier() && !propertyWrapper.isForQualifier() && !(propertyWrapper.getOwner() instanceof Enumeration)) {
                 buildField(owner, propertyWrapper);
                 buildRemover(owner, propertyWrapper);
                 buildClearer(owner, propertyWrapper);
