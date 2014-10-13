@@ -17,6 +17,8 @@ public enum OclOperationExpEnum implements HandleOperationExp {
     IS_EMPTY(new OclIsEmptyExprToJava()),
     OCL_IS_UNDEFINED(new OclOclIsUndefinedExpToJava()),
     OCL_IS_INVALID(new OclOclIsInvalidExpToJava()),
+    OCL_IS_TYPE_OF(new OclOclIsTypeOfExpToJava()),
+    OCL_IS_KIND_OF(new OclOclIsKindOfExpToJava()),
     INCLUDING(new OclIncludingExprToJava()),
     TO_STRING(new OclToStringExprToJava()),
     FIRST(new OclFirstExprToJava()),
@@ -99,6 +101,10 @@ public enum OclOperationExpEnum implements HandleOperationExp {
             return INCLUDING;
         } else if (name.equals(PredefinedType.OCL_IS_INVALID_NAME)) {
             return OCL_IS_INVALID;
+        } else if (name.equals(PredefinedType.OCL_IS_TYPE_OF_NAME)) {
+            return OCL_IS_TYPE_OF;
+        } else if (name.equals(PredefinedType.OCL_IS_KIND_OF_NAME)) {
+            return OCL_IS_KIND_OF;
         } else if (name.equals(PredefinedType.OCL_IS_UNDEFINED_NAME)) {
             return OCL_IS_UNDEFINED;
         } else if (name.equals(PredefinedType.IS_EMPTY_NAME)) {

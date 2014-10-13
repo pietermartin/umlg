@@ -3374,6 +3374,32 @@ endif</body>
               </packagedElement>
             </packagedElement>
           </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_h2nzAFMPEeS8pYcpPdl0ow" name="oclIsTypeOf">
+            <packagedElement xmi:type="uml:Class" xmi:id="_lPyHMFMPEeS8pYcpPdl0ow" name="OclIsTypeOf">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_pTcw8FMPEeS8pYcpPdl0ow" name="test" visibility="public" isDerived="true">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sIo1YFMPEeS8pYcpPdl0ow" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sIpccFMPEeS8pYcpPdl0ow" value="1"/>
+                <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_ye1icFMPEeS8pYcpPdl0ow">
+                  <language>OCL</language>
+                  <body>self.oclIsTypeOf(OclIsTypeOf)</body>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_aLQ0YFMQEeS8pYcpPdl0ow" name="OclIsKindOf">
+              <generalization xmi:type="uml:Generalization" xmi:id="_PRjDYFMREeS8pYcpPdl0ow" general="_NkPNAFMREeS8pYcpPdl0ow"/>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_cn2yoFMQEeS8pYcpPdl0ow" name="test" visibility="public" isDerived="true">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_eN-b4FMQEeS8pYcpPdl0ow" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_eN_qAFMQEeS8pYcpPdl0ow" value="1"/>
+                <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_hx7DwFMQEeS8pYcpPdl0ow">
+                  <language>OCL</language>
+                  <body>self.oclIsKindOf(AbstractOclIsKindOf)</body>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_NkPNAFMREeS8pYcpPdl0ow" name="AbstractOclIsKindOf"/>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_c7uUgE8YEeSo664unH6t3Q" name="datatypeassociation">
           <packagedElement xmi:type="uml:Enumeration" xmi:id="_qT0-EE8YEeSo664unH6t3Q" name="VENDOR_TECH">

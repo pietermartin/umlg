@@ -11,6 +11,7 @@ import org.umlg.tests.embeddedtest.TestEmbeddedTest;
 import org.umlg.tests.enumeration.TestEnumerationAttribute;
 import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.indexing.TestIndexingDataType;
+import org.umlg.tests.ocl.kindoftypeof.TestKindOfTypeOf;
 import org.umlg.tests.ocl.ocloperator.OclTestToLowerCase;
 
 /**
@@ -19,7 +20,7 @@ import org.umlg.tests.ocl.ocloperator.OclTestToLowerCase;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestGroovyExecutor.class
+        TestKindOfTypeOf.class
 })
 public class UmlgAnyTestSuite {
 }

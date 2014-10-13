@@ -43,6 +43,7 @@ import org.umlg.tests.multiplecompositeparenthierarchy.HierarchyMultipleParentsT
 import org.umlg.tests.mvel.TestMvel;
 import org.umlg.tests.nonnavigable.NonNavigableTest;
 import org.umlg.tests.ocl.datatypes.TestOclCollectOnDataTypes;
+import org.umlg.tests.ocl.kindoftypeof.TestKindOfTypeOf;
 import org.umlg.tests.ocl.ocloperator.*;
 import org.umlg.tests.ocl.operation.OclOperationTest;
 import org.umlg.tests.ocl.qualifiers.TestNavigateQualifedProperty;
@@ -141,7 +142,8 @@ import org.umlg.tests.validationtest.TestValidation;
         OclTestToLowerCase.class,
         TestBulkCollection.class,
         TestDataTypeAssociation.class,
-        TestEnumerationAttribute.class
+        TestEnumerationAttribute.class,
+        TestKindOfTypeOf.class
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
 //        TestAssociationToSelf.class,
