@@ -1,17 +1,17 @@
 package org.umlg.javageneration.ocl.visitor.tojava;
 
+import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.ocl.expressions.OperationCallExp;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Type;
-import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.OJVisibilityKind;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.javageneration.util.UmlgClassOperations;
 
 import java.util.List;
 
-public class OclOclIsTypeOfExpToJava extends BaseHandleOperationExp {
+public class OclOclAsTypeExpToJava extends BaseHandleOperationExp {
 
 	/**
 	 * Wraps the source expression in a try catch block. If
@@ -20,20 +20,24 @@ public class OclOclIsTypeOfExpToJava extends BaseHandleOperationExp {
 	@Override
 	public String handleOperationExp(OperationCallExp<Classifier, Operation> oc, String sourceResult, List<String> argumentResults) {
 		if (argumentResults.size() != 1) {
-			throw new IllegalStateException("oclIsTypeOf operation must have one argument!");
+			throw new IllegalStateException("oclAsType operation must have one argument!");
 		}
 
-        Type sourceType = oc.getSource().getType();
+        List<OCLExpression<Classifier>> arguments = oc.getArgument();
+        Type argumentType = arguments.get(0).getType();
 
 		String operationName = oc.getReferredOperation().getName();
-		OJAnnotatedOperation oper = new OJAnnotatedOperation(operationName + this.ojClass.countOperationsStartingWith(operationName), new OJPathName("Boolean"));
-        oper.addParam(sourceResult, UmlgClassOperations.getPathName(sourceType));
+		OJAnnotatedOperation oper = new OJAnnotatedOperation(operationName + this.ojClass.countOperationsStartingWith(operationName), UmlgClassOperations.getPathName(argumentType));
+        oper.addParam(sourceResult, UmlgClassOperations.getPathName(argumentType));
 		this.ojClass.addToOperations(oper);
 		oper.setVisibility(OJVisibilityKind.PRIVATE);
-        oper.getBody().addToStatements("return " + sourceResult + " instanceof " + argumentResults.get(0));
         if (sourceResult.equals("self")) {
             sourceResult = "this";
         }
-		return oper.getName() + "(" + sourceResult + ")";
+        oper.getBody().addToStatements("return ((" + argumentResults.get(0) + ")" + sourceResult + ")");
+        if (sourceResult.equals("self")) {
+            sourceResult = "this";
+        }
+        return oper.getName() + "(" + sourceResult + ")";
 	}
 }

@@ -3397,6 +3397,22 @@ endif</body>
                   <body>self.oclIsKindOf(AbstractOclIsKindOf)</body>
                 </defaultValue>
               </ownedAttribute>
+              <ownedOperation xmi:type="uml:Operation" xmi:id="_Ca718FMUEeS8pYcpPdl0ow" name="testCast" bodyCondition="_dIIRUFMUEeS8pYcpPdl0ow" isQuery="true">
+                <ownedRule xmi:type="uml:Constraint" xmi:id="_dIIRUFMUEeS8pYcpPdl0ow">
+                  <specification xmi:type="uml:OpaqueExpression" xmi:id="_dIIRUVMUEeS8pYcpPdl0ow">
+                    <language>OCL</language>
+                    <body>if (param1.oclIsTypeOf(OclIsTypeOf)) then
+	param1.oclAsType(OclIsTypeOf).test
+else 
+	false
+endif</body>
+                  </specification>
+                </ownedRule>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_FBNUoFMUEeS8pYcpPdl0ow" direction="return">
+                  <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_GZhycFMUEeS8pYcpPdl0ow" name="param1" type="_lPyHMFMPEeS8pYcpPdl0ow"/>
+              </ownedOperation>
             </packagedElement>
             <packagedElement xmi:type="uml:Class" xmi:id="_NkPNAFMREeS8pYcpPdl0ow" name="AbstractOclIsKindOf"/>
           </packagedElement>
