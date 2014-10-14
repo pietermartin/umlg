@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 import org.umlg.gremlin.TestGroovyExecutor;
 import org.umlg.tests.batch.TestBatchMode;
 import org.umlg.tests.bulkcollection.TestBulkCollection;
+import org.umlg.tests.changenotification.TestChangeNotification;
 import org.umlg.tests.collectiontest.OrderedSetTestTest;
 import org.umlg.tests.datatypeassociation.TestDataTypeAssociation;
 import org.umlg.tests.embeddedtest.TestEmbeddedTest;
@@ -20,7 +21,7 @@ import org.umlg.tests.ocl.ocloperator.OclTestToLowerCase;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestKindOfTypeOf.class
+        TestChangeNotification.class
 })
 public class UmlgAnyTestSuite {
 }

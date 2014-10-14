@@ -34,7 +34,6 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
                 OnePropertyVisitor.buildOneAdder(associationOJClass, propertyWrapper, true, false);
             }
             buildManyAdder(owner, propertyWrapper, false);
-            buildManyAdder(owner, propertyWrapper, false);
             if (propertyWrapper.isOrdered()) {
                 buildManyAdder(owner, propertyWrapper, true);
             }
@@ -192,9 +191,14 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         }
         owner.addToOperations(singleAdder);
 
+        //Add change listener
+        if (propertyWrapper.isChangedListener()) {
+            PropertyChangeNotificationBuilder.buildChangeNotification(owner, singleAdder, propertyWrapper, true);
+        }
+
     }
 
-    public static void buildSetter(OJAnnotatedClass owner, PropertyWrapper pWrap) {
+    public static OJAnnotatedOperation buildSetter(OJAnnotatedClass owner, PropertyWrapper pWrap) {
         OJAnnotatedOperation setter = new OJAnnotatedOperation(pWrap.setter());
         if (pWrap.isReadOnly()) {
             setter.setVisibility(OJVisibilityKind.PROTECTED);
@@ -215,6 +219,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         }
         setter.getBody().addToStatements(ifNotNull);
         owner.addToOperations(setter);
+        return setter;
     }
 
 }

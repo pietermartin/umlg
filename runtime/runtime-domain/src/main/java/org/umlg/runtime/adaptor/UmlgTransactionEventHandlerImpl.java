@@ -1,17 +1,19 @@
 package org.umlg.runtime.adaptor;
 
 import org.umlg.runtime.domain.UmlgNode;
+import org.umlg.runtime.notification.ChangeHolder;
+import org.umlg.runtime.notification.NotificationListener;
 import org.umlg.runtime.validation.UmlgConstraintViolation;
 import org.umlg.runtime.validation.UmlgConstraintViolationException;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class validates what is being committed.
  * On every UmlgNode is calls validateMultiplicities.
  * futher it validates that a non root class has one and only one composite parent
- *
- *
  */
 public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHandler {
 
@@ -46,6 +48,25 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
         } finally {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
+        }
+    }
+
+    @Override
+    public void afterCommit() {
+        try {
+            for (Map.Entry<NotificationListener, List<ChangeHolder>> notificationListenerSetEntry : TransactionThreadNotificationVar.get().entrySet()) {
+                NotificationListener notificationListener = notificationListenerSetEntry.getKey();
+                List<ChangeHolder> changeHolders = notificationListenerSetEntry.getValue();
+                for (ChangeHolder changeHolder : changeHolders) {
+                    notificationListener.notifyChanged(
+                            changeHolder.getUmlgNode(),
+                            changeHolder.getUmlgRuntimeProperty(),
+                            changeHolder.getOldValue(),
+                            changeHolder.getNewValue());
+                }
+            }
+        } finally {
+            TransactionThreadNotificationVar.remove();
         }
     }
 

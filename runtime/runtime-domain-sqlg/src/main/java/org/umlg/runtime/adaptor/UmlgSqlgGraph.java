@@ -109,6 +109,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
                 this.transactionEventHandler.beforeCommit();
             }
             this.sqlG.tx().commit();
+            this.transactionEventHandler.afterCommit();
         } finally {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();

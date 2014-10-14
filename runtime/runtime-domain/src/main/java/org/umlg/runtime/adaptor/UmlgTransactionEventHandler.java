@@ -7,4 +7,5 @@ package org.umlg.runtime.adaptor;
 public interface UmlgTransactionEventHandler {
 
     void beforeCommit();
+    void afterCommit();
 }

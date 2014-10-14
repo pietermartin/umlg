@@ -129,6 +129,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
                 this.transactionEventHandler.beforeCommit();
             }
             this.neo4jGraph.tx().commit();
+            this.transactionEventHandler.afterCommit();
         } finally {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();

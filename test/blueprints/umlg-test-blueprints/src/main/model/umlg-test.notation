@@ -840,13 +840,23 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1di-9wAOEeKpVr_ntT6cLA" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1di--AAOEeKpVr_ntT6cLA" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_6HZ6EFOCEeSrW_3W8L-f7w" name="maskLabel">
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+        </styles>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_1di-9QAOEeKpVr_ntT6cLA" x="10" y="10"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_1djmAQAOEeKpVr_ntT6cLA" type="6005">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1djmAgAOEeKpVr_ntT6cLA" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1djmAwAOEeKpVr_ntT6cLA" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_1djmAAAOEeKpVr_ntT6cLA" x="10" y="10"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_6yihwFOCEeSrW_3W8L-f7w" name="maskLabel">
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_1djmAAAOEeKpVr_ntT6cLA" x="-18" y="-16"/>
       </children>
       <element xmi:type="uml:Association" href="umlg-test.uml#_IYKIYOzqEeCemKc79Sc_aw"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_1di-8AAOEeKpVr_ntT6cLA"/>
@@ -866,12 +876,22 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1dkNFAAOEeKpVr_ntT6cLA" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1dkNFQAOEeKpVr_ntT6cLA" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_vA05IFOAEeSrW_3W8L-f7w" name="maskLabel">
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+        </styles>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_1dkNEgAOEeKpVr_ntT6cLA" x="10" y="10"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_1dk0IQAOEeKpVr_ntT6cLA" type="6005">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1dk0IgAOEeKpVr_ntT6cLA" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1dk0IwAOEeKpVr_ntT6cLA" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_vgkJIFOAEeSrW_3W8L-f7w" name="maskLabel">
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+        </styles>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_1dk0IAAOEeKpVr_ntT6cLA" x="10" y="10"/>
       </children>
       <element xmi:type="uml:Association" href="umlg-test.uml#_LhyLwOzqEeCemKc79Sc_aw"/>
@@ -12859,7 +12879,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_aLSCkVMQEeS8pYcpPdl0ow"/>
       </children>
       <element xmi:type="uml:Class" href="umlg-test.uml#_aLQ0YFMQEeS8pYcpPdl0ow"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_aLSCgVMQEeS8pYcpPdl0ow" x="452" y="236"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_aLSCgVMQEeS8pYcpPdl0ow" x="443" y="251"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_NkP0EFMREeS8pYcpPdl0ow" type="2008">
       <children xmi:type="notation:DecorationNode" xmi:id="_NkQbIFMREeS8pYcpPdl0ow" type="5029"/>
@@ -12897,7 +12917,7 @@
       <styles xmi:type="notation:FontStyle" xmi:id="_PRqYIVMREeS8pYcpPdl0ow"/>
       <element xmi:type="uml:Generalization" href="umlg-test.uml#_PRjDYFMREeS8pYcpPdl0ow"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_PRqYIlMREeS8pYcpPdl0ow" points="[-5, -50, -14, 120]$[-60, -126, -69, 44]"/>
-      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_Hs2mEFMVEeS8pYcpPdl0ow" id="(0.4756944444444444,0.0)"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_Hs2mEFMVEeS8pYcpPdl0ow" id="(0.4437299035369775,0.0)"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_Hs2mEVMVEeS8pYcpPdl0ow" id="(0.539568345323741,1.0)"/>
     </edges>
   </notation:Diagram>

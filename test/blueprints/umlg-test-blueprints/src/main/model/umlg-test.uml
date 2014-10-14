@@ -3634,4 +3634,5 @@ endif</body>
   <ActionLanguage:TextualRepresentation xmi:id="_XzZLMEc1EeShtMlRJp6sTQ" language="org.eclipse.papyrus.uml.textedit.property.xtext.UmlProperty"/>
   <UmlgProfile:Index xmi:id="_cXC8kEc1EeShtMlRJp6sTQ" base_Property="_WNGi0Ec1EeShtMlRJp6sTQ"/>
   <ActionLanguage:TextualRepresentation xmi:id="_KU0X4EfSEeSIgo37w9oFNw" language="org.eclipse.papyrus.uml.textedit.property.xtext.UmlProperty"/>
+  <UmlgProfile:ChangeListener xmi:id="_1l4PoFOCEeSrW_3W8L-f7w" base_Property="_IYFP4OzqEeCemKc79Sc_aw"/>
 </xmi:XMI>
