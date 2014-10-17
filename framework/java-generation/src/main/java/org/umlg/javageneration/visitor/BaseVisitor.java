@@ -10,6 +10,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.Namer;
 import org.umlg.javageneration.util.PropertyWrapper;
+import org.umlg.javageneration.visitor.property.PropertyChangeNotificationBuilder;
 
 public class BaseVisitor {
 
@@ -153,6 +154,12 @@ public class BaseVisitor {
         }
         singleRemover.getBody().addToStatements(ifNotNull);
         owner.addToOperations(singleRemover);
+
+        //Add change listener
+        if (propertyWrapper.isChangedListener()) {
+            PropertyChangeNotificationBuilder.buildChangeNotification(owner, singleRemover, propertyWrapper, PropertyChangeNotificationBuilder.CHANGE_TYPE.REMOVE);
+        }
+
     }
 
     protected void buildClearer(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {

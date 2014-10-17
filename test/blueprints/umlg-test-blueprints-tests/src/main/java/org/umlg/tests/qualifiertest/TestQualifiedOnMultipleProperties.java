@@ -54,41 +54,41 @@ public class TestQualifiedOnMultipleProperties extends BaseLocalDbTest {
 
     }
 
-    @Test
-    public void testQualifierOnInt() {
-        QualifierA qualifierA = new QualifierA();
-        qualifierA.setName("qualifierA");
-        QualifierB qualifierB1 = new QualifierB();
-        qualifierB1.setInt1(1);
-        qualifierA.addToQualifierBInt(qualifierB1);
-        QualifierB qualifierB2 = new QualifierB();
-        qualifierB2.setInt1(2);
-        qualifierA.addToQualifierBInt(qualifierB2);
-        UMLG.get().commit();
-
-        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBIntForQualifierInt1(Pair.of(Compare.eq, 1)));
-        Assert.assertNull(qualifierA.getQualifierBIntForQualifierInt1(Pair.of(Compare.eq, 3)));
-    }
-
-    @Test
-    public void testMultipleIntQualifiers() {
-        QualifierA qualifierA = new QualifierA();
-        qualifierA.setName("qualifierA");
-        QualifierB qualifierB1 = new QualifierB();
-        qualifierB1.setInt2(1);
-        qualifierB1.setInt3(1);
-        qualifierA.addToQualifierBMultipleInt(qualifierB1);
-        QualifierB qualifierB2 = new QualifierB();
-        qualifierB2.setInt2(2);
-        qualifierB2.setInt3(2);
-        qualifierA.addToQualifierBMultipleInt(qualifierB2);
-        UMLG.get().commit();
-
-        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(Compare.eq, 1), Pair.of(Compare.eq, 1)));
-        Assert.assertEquals(qualifierB2, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(Compare.eq, 2), Pair.of(Compare.eq, 2)));
-
-        qualifierB1.setInt2(2);
-        UMLG.get().commit();
-        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(Compare.eq, 2), Pair.of(Compare.eq, 1)));
-    }
+//    @Test
+//    public void testQualifierOnInt() {
+//        QualifierA qualifierA = new QualifierA();
+//        qualifierA.setName("qualifierA");
+//        QualifierB qualifierB1 = new QualifierB();
+//        qualifierB1.setInt1(1);
+//        qualifierA.addToQualifierBInt(qualifierB1);
+//        QualifierB qualifierB2 = new QualifierB();
+//        qualifierB2.setInt1(2);
+//        qualifierA.addToQualifierBInt(qualifierB2);
+//        UMLG.get().commit();
+//
+//        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBIntForQualifierInt1(Pair.of(Compare.eq, 1)));
+//        Assert.assertNull(qualifierA.getQualifierBIntForQualifierInt1(Pair.of(Compare.eq, 3)));
+//    }
+//
+//    @Test
+//    public void testMultipleIntQualifiers() {
+//        QualifierA qualifierA = new QualifierA();
+//        qualifierA.setName("qualifierA");
+//        QualifierB qualifierB1 = new QualifierB();
+//        qualifierB1.setInt2(1);
+//        qualifierB1.setInt3(1);
+//        qualifierA.addToQualifierBMultipleInt(qualifierB1);
+//        QualifierB qualifierB2 = new QualifierB();
+//        qualifierB2.setInt2(2);
+//        qualifierB2.setInt3(2);
+//        qualifierA.addToQualifierBMultipleInt(qualifierB2);
+//        UMLG.get().commit();
+//
+//        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(Compare.eq, 1), Pair.of(Compare.eq, 1)));
+//        Assert.assertEquals(qualifierB2, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(Compare.eq, 2), Pair.of(Compare.eq, 2)));
+//
+//        qualifierB1.setInt2(2);
+//        UMLG.get().commit();
+//        Assert.assertEquals(qualifierB1, qualifierA.getQualifierBMultipleIntForQualifierInt2andQualifierInt3(Pair.of(Compare.eq, 2), Pair.of(Compare.eq, 1)));
+//    }
 }

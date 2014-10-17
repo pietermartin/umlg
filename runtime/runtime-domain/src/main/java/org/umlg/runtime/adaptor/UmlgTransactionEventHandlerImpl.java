@@ -44,6 +44,18 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
                     }
                     umlgNode.doBeforeCommit();
                 }
+                for (Map.Entry<NotificationListener, List<ChangeHolder>> notificationListenerSetEntry : TransactionThreadNotificationVar.get().entrySet()) {
+                    NotificationListener notificationListener = notificationListenerSetEntry.getKey();
+                    List<ChangeHolder> changeHolders = notificationListenerSetEntry.getValue();
+                    for (ChangeHolder changeHolder : changeHolders) {
+                        notificationListener.notifyChanged(
+                                NotificationListener.COMMIT_TYPE.BEFORE_COMMIT,
+                                changeHolder.getUmlgNode(),
+                                changeHolder.getUmlgRuntimeProperty(),
+                                changeHolder.getOldValue(),
+                                changeHolder.getNewValue());
+                    }
+                }
             }
         } finally {
             TransactionThreadEntityVar.remove();
@@ -59,6 +71,7 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
                 List<ChangeHolder> changeHolders = notificationListenerSetEntry.getValue();
                 for (ChangeHolder changeHolder : changeHolders) {
                     notificationListener.notifyChanged(
+                            NotificationListener.COMMIT_TYPE.AFTER_COMMIT,
                             changeHolder.getUmlgNode(),
                             changeHolder.getUmlgRuntimeProperty(),
                             changeHolder.getOldValue(),

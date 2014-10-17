@@ -9,5 +9,12 @@ import org.umlg.runtime.domain.UmlgNode;
  */
 @FunctionalInterface
 public interface NotificationListener {
-    void notifyChanged(UmlgNode umlgNode, UmlgRuntimeProperty umlgRuntimeProperty, Object oldValue, Object newValue);
+
+    //add update remove is on property adders removers and setters.
+    //delete is on class.delete
+    public static enum COMMIT_TYPE {
+        BEFORE_COMMIT, AFTER_COMMIT;
+    }
+
+    void notifyChanged(COMMIT_TYPE commit_type, UmlgNode umlgNode, UmlgRuntimeProperty umlgRuntimeProperty, Object oldValue, Object newValue);
 }

@@ -80,6 +80,7 @@ public class UmlgGraphManager {
             TransactionThreadVar.remove();
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
+            TransactionThreadNotificationVar.remove();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

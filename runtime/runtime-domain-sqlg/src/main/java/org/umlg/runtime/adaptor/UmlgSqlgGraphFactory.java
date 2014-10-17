@@ -96,6 +96,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
 //                throw new RuntimeException(e);
 //            }
             TransactionThreadEntityVar.remove();
+            TransactionThreadNotificationVar.remove();
             this.umlgGraph = new UmlgSqlgGraph(configuration);
             SqlgGraph sqlgGraph = (SqlgGraph)this.umlgGraph.getUnderlyingGraph();
             if (!sqlgGraph.getSchemaManager().tableExist(sqlgGraph.getSqlDialect().getPublicSchema(), SchemaManager.VERTICES)) {

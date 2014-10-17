@@ -757,9 +757,11 @@
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1eeMAQAOEeKpVr_ntT6cLA" key="QualifiedNameDepth" value="1000"/>
       </eAnnotations>
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1eeMAgAOEeKpVr_ntT6cLA" source="Stereotype_Annotation">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1eeMAwAOEeKpVr_ntT6cLA" key="StereotypeList" value=""/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1eeMBAAOEeKpVr_ntT6cLA" key="StereotypePropertyLocation" value="Compartment"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1eeMBQAOEeKpVr_ntT6cLA" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3cfyIFR2EeSYKoTKo2lKtA" key="StereotypeWithQualifiedNameList" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3cfyIVR2EeSYKoTKo2lKtA" key="StereotypeList" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3cfyIlR2EeSYKoTKo2lKtA" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3cfyI1R2EeSYKoTKo2lKtA" key="PropStereoDisplay" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3cfyJFR2EeSYKoTKo2lKtA" key="StereotypePropertyLocation" value="Compartment"/>
       </eAnnotations>
       <children xmi:type="notation:BasicCompartment" xmi:id="_1bODsgAOEeKpVr_ntT6cLA" type="7018"/>
       <children xmi:type="notation:BasicCompartment" xmi:id="_1bODsQAOEeKpVr_ntT6cLA" type="7017">
@@ -856,7 +858,7 @@
           <stringListValue>name</stringListValue>
           <stringListValue>derived</stringListValue>
         </styles>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_1djmAAAOEeKpVr_ntT6cLA" x="-18" y="-16"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_1djmAAAOEeKpVr_ntT6cLA" x="-32" y="-23"/>
       </children>
       <element xmi:type="uml:Association" href="umlg-test.uml#_IYKIYOzqEeCemKc79Sc_aw"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_1di-8AAOEeKpVr_ntT6cLA"/>

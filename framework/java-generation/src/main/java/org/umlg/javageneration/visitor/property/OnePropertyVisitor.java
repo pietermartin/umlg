@@ -57,7 +57,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 
             //Add change listener
             if (propertyWrapper.isChangedListener()) {
-                PropertyChangeNotificationBuilder.buildChangeNotification(owner, setter, propertyWrapper, false);
+                PropertyChangeNotificationBuilder.buildChangeNotification(owner, setter, propertyWrapper, PropertyChangeNotificationBuilder.CHANGE_TYPE.UPDATE);
             }
 
         }

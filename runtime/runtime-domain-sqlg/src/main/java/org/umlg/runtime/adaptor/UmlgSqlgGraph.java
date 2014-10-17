@@ -113,6 +113,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         } finally {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
+            TransactionThreadNotificationVar.remove();
         }
     }
 
@@ -122,6 +123,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         } finally {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
+            TransactionThreadNotificationVar.remove();
         }
     }
 
@@ -438,6 +440,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 //        }
         TransactionThreadEntityVar.remove();
         TransactionThreadMetaNodeVar.remove();
+        TransactionThreadNotificationVar.remove();
         UmlgAssociationClassManager.remove();
         UMLG.remove();
     }

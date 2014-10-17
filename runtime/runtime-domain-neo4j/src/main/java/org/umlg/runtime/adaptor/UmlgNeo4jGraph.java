@@ -133,6 +133,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         } finally {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
+            TransactionThreadNotificationVar.remove();
         }
     }
 
@@ -142,6 +143,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         } finally {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
+            TransactionThreadNotificationVar.remove();
         }
     }
 
@@ -459,14 +461,9 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public void afterThreadContext() {
-//        if (TransactionThreadEntityVar.get()!=null && TransactionThreadEntityVar.get().size()>0) {
-//            throw new RuntimeException("wtf");
-//        }
-//        if (TransactionThreadMetaNodeVar.get()!=null && TransactionThreadMetaNodeVar.get().size()>0) {
-//            throw new RuntimeException("wtf");
-//        }
         TransactionThreadEntityVar.remove();
         TransactionThreadMetaNodeVar.remove();
+        TransactionThreadNotificationVar.remove();
         UmlgAssociationClassManager.remove();
         UMLG.remove();
     }

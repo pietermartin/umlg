@@ -903,7 +903,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             StringBuilder keys = new StringBuilder();
             StringBuilder values = new StringBuilder();
             long count = 1;
-//            List<Traversal> traversals = new ArrayList<>();
             GraphTraversal traversal;
 
             if (inverse) {

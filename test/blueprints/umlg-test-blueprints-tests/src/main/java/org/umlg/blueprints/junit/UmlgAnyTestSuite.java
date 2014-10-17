@@ -14,6 +14,7 @@ import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.indexing.TestIndexingDataType;
 import org.umlg.tests.ocl.kindoftypeof.TestKindOfTypeOf;
 import org.umlg.tests.ocl.ocloperator.OclTestToLowerCase;
+import org.umlg.tests.qualifiertest.TestQualifiedOnMultipleProperties;
 
 /**
  * Date: 2013/10/19
@@ -21,7 +22,7 @@ import org.umlg.tests.ocl.ocloperator.OclTestToLowerCase;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestChangeNotification.class
+        TestQualifiedOnMultipleProperties.class
 })
 public class UmlgAnyTestSuite {
 }
