@@ -137,6 +137,10 @@ public interface UmlgGraph extends Graph {
 
     }
 
+    public default boolean isInBatchMode() {
+        return false;
+    }
+
     public static class Exceptions {
         public static IllegalArgumentException classForElementCannotBeNull() {
             return new IllegalArgumentException("elementClass argument cannot be null.");

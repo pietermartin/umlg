@@ -22,7 +22,7 @@ import org.umlg.tests.qualifiertest.TestQualifiedOnMultipleProperties;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestQualifiedOnMultipleProperties.class
+        TestBatchMode.class
 })
 public class UmlgAnyTestSuite {
 }

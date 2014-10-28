@@ -61,7 +61,7 @@ public class TestNeo4jSpeed {
                     public void run() {
                         Object prevId = null;
                         for (int j = 0; j < numVerticesPerThread; j++) {
-                            Vertex v = graph.addVertex(null);
+                            Vertex v = graph.addVertex("null");
                             if (prevId == null) {
                                 startVertex[tid] = v.id();
                             } else {
@@ -157,8 +157,8 @@ public class TestNeo4jSpeed {
 
         // Vertices
         for (int i=0; i < partSize; i++) {
-            outVertices[i] = graph.addVertex(null).id();
-            inVertices[i] = graph.addVertex(null).id();
+            outVertices[i] = graph.addVertex("null").id();
+            inVertices[i] = graph.addVertex("null").id();
 
             if (i % numPerCommit == 0) {
                 graph.tx().commit();

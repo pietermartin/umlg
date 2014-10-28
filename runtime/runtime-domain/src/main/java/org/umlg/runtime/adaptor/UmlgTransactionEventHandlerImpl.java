@@ -29,7 +29,7 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
     @Override
     public void beforeCommit() {
         try {
-            if (!this.bypass && UMLG.get() != null) {
+            if (!this.bypass && UMLG.get() != null && !UMLG.get().isInBatchMode()) {
                 TransactionThreadVar.clear();
                 ((UmlgAdminGraph) UMLG.get()).incrementTransactionCount();
                 List<UmlgNode> entities = TransactionThreadEntityVar.get();

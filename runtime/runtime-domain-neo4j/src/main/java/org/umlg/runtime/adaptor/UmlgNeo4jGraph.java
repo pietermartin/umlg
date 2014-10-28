@@ -10,6 +10,7 @@ import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedEdge;
 import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedGraph;
 import com.tinkerpop.gremlin.structure.util.GraphFactory;
 import org.apache.commons.configuration.BaseConfiguration;
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.time.StopWatch;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
@@ -75,6 +76,11 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     void setBypass(boolean bypasss) {
         this.transactionEventHandler.setBypass(bypasss);
+    }
+
+    @Override
+    public Configuration configuration() {
+        return this.configuration();
     }
 
     public <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final Parameter... indexParameters) {

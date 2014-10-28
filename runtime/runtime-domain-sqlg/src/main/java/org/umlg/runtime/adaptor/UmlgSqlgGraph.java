@@ -53,8 +53,19 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         return swg;
     }
 
+    @Override
+    public Configuration configuration() {
+        return this.sqlG.configuration();
+    }
+
+    @Override
     public void batchModeOn() {
         this.sqlG.tx().batchModeOn();
+    }
+
+    @Override
+    public boolean isInBatchMode() {
+        return this.sqlG.tx().isInBatchMode();
     }
 
     public <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final Parameter... indexParameters) {
