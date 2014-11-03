@@ -1118,8 +1118,11 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CTUm1mLSEeS41NgVNzSvIg" value="1"/>
             </ownedEnd>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_Gb4XoGLSEeS41NgVNzSvIg" name="ConcreteQ">
+          <packagedElement xmi:type="uml:Class" xmi:id="_Gb4XoGLSEeS41NgVNzSvIg" name="ConcreteQ1">
             <generalization xmi:type="uml:Generalization" xmi:id="_RcMDYGLSEeS41NgVNzSvIg" general="_9XUm4GLREeS41NgVNzSvIg"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_8VWTQGMjEeS41NgVNzSvIg" name="ConcreteQ2">
+            <generalization xmi:type="uml:Generalization" xmi:id="_-3TSoGMjEeS41NgVNzSvIg" general="_9XUm4GLREeS41NgVNzSvIg"/>
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_ossv8BFLEeGoRIAInCGFZA" name="collectiontest">

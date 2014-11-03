@@ -172,19 +172,20 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 
             PropertyWrapper qualifiedToSearchOnPW = PropertyWrapper.from(qualifiedToSearchOn);
 
-            OJField graphTraversal = new OJField(refinedQualifierValue.getBody(), "graphTraversal" + qualifiedToSearchOnPW.getName(), UmlgGenerationUtil.GraphTraversal.getCopy().addToGenerics(UmlgGenerationUtil.vertexPathName).addToGenerics(UmlgGenerationUtil.vertexPathName));
-            StringBuilder hasStatement = new StringBuilder();
             //build the has containers
 
             //if the qualified is not a derived union then we need to search on all concrete generals of the qualified's type
             Set<Classifier> concreteImplementations;
             if (qualified.isDerivedUnion()) {
                 concreteImplementations = new HashSet<>();
-                concreteImplementations.add((Classifier)qualifiedToSearchOnPW.getType());
+                concreteImplementations.add((Classifier) qualifiedToSearchOnPW.getType());
             } else {
                 concreteImplementations = UmlgClassOperations.getConcreteImplementations((Classifier) qualifiedToSearchOnPW.getType());
             }
+            int countHas = 1;
             for (Classifier concrete : concreteImplementations) {
+                OJField graphTraversal = new OJField(refinedQualifierValue.getBody(), "graphTraversal" + qualifiedToSearchOnPW.getName() + "_" + concrete.getName(), UmlgGenerationUtil.GraphTraversal.getCopy().addToGenerics(UmlgGenerationUtil.vertexPathName).addToGenerics(UmlgGenerationUtil.vertexPathName));
+                StringBuilder hasStatement = new StringBuilder();
                 hasStatement.append("this.vertex.to(\n        ");
                 hasStatement.append(UmlgClassOperations.propertyEnumName(qualifiedToSearchOnPW.getOwningType()) + "." + qualifiedToSearchOnPW.fieldname() + ".isControllingSide() ? ");
                 hasStatement.append(UmlgGenerationUtil.tinkerDirection.getLast());
@@ -193,21 +194,24 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
                 hasStatement.append(".IN,\n        ");
                 hasStatement.append(UmlgClassOperations.propertyEnumName(qualifiedToSearchOnPW.getOwningType()) + "." + qualifiedToSearchOnPW.fieldname() + ".getLabel())");
                 hasStatement.append("\n        .has(T.label, \"");
-
 //                hasStatement.append(qualifiedToSearhOnPW.getType().getName());
 
                 hasStatement.append(concrete.getName());
                 hasStatement.append("\")");
+                if (countHas++ < concreteImplementations.size()) {
+                    hasStatement.append(";\n");
+                }
                 ojClass.addToImports(UmlgClassOperations.getPathName(qualifiedToSearchOnPW.getOwningType()).append(UmlgClassOperations.propertyEnumName(qualifiedToSearchOnPW.getOwningType())));
                 graphTraversal.setInitExp(hasStatement.toString());
             }
 
-
-            for (PropertyWrapper qualifier : refinedQualifiers) {
-                refinedQualifierValue.getBody().addToStatements("graphTraversal" + qualifiedToSearchOnPW.getName() + ".has(" + "\"" +
-                        qualifier.getQualifierCorrespondingQualifierStereotypedProperty().getPersistentName() +
-                        "\", " +
-                        buildSecondFormatter(ojClass, qualifier));
+            for (Classifier concrete : concreteImplementations) {
+                for (PropertyWrapper qualifier : refinedQualifiers) {
+                    refinedQualifierValue.getBody().addToStatements("graphTraversal" + qualifiedToSearchOnPW.getName() + "_" + concrete.getName() + ".has(" + "\"" +
+                            qualifier.getQualifierCorrespondingQualifierStereotypedProperty().getPersistentName() +
+                            "\", " +
+                            buildSecondFormatter(ojClass, qualifier));
+                }
             }
 
             ojClass.addToImports(UmlgGenerationUtil.t);
@@ -217,23 +221,27 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 
             //Union the traversals
             OJSimpleStatement ojSimpleStatement;
-            ojSimpleStatement = new OJSimpleStatement(qualified.javaTypePath().getLast()  +  " " + qualified.getName() + "_" + qualifiedToSearchOnPW.getName() + " = new "
-                    + qualified.javaClosableIteratorTypePath().getCopy().getLast());
-            ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(graphTraversal" + qualifiedToSearchOnPW.getName() + ", " + qualified.getTumlRuntimePropertyEnum() + ")");
-            refinedQualifierValue.getBody().addToStatements(ojSimpleStatement);
 
-            StringBuilder union = new StringBuilder();
-            if (count++ == 1) {
-                union.append("result = ");
-                union.append(qualified.getName() + "_" + qualifiedToSearchOnPW.getName());
-                union.append("");
-                refinedQualifierValue.getBody().addToStatements(union.toString());
-            } else {
-                union.append("result = result.union(");
-                union.append(qualified.getName() + "_" + qualifiedToSearchOnPW.getName());
-                union.append(")");
-                refinedQualifierValue.getBody().addToStatements(union.toString());
+            for (Classifier concrete : concreteImplementations) {
+                ojSimpleStatement = new OJSimpleStatement(qualified.javaTypePath().getLast() + " " + qualified.getName() + "_" + qualifiedToSearchOnPW.getName() + "_" + concrete.getName() + " = new "
+                        + qualified.javaClosableIteratorTypePath().getCopy().getLast());
+                ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(graphTraversal" + qualifiedToSearchOnPW.getName()  + "_" + concrete.getName() + ", " + qualified.getTumlRuntimePropertyEnum() + ")");
+                refinedQualifierValue.getBody().addToStatements(ojSimpleStatement);
+
+                StringBuilder union = new StringBuilder();
+                if (count++ == 1) {
+                    union.append("result = ");
+                    union.append(qualified.getName() + "_" + qualifiedToSearchOnPW.getName() + "_" + concrete.getName());
+                    union.append("");
+                    refinedQualifierValue.getBody().addToStatements(union.toString());
+                } else {
+                    union.append("result = result.union(");
+                    union.append(qualified.getName() + "_" + qualifiedToSearchOnPW.getName() + "_" + concrete.getName());
+                    union.append(")");
+                    refinedQualifierValue.getBody().addToStatements(union.toString());
+                }
             }
+
 
             ojClass.addToImports(qualified.javaClosableIteratorTypePath());
 
