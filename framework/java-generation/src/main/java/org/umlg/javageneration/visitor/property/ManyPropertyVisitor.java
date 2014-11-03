@@ -33,9 +33,10 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
                 OJAnnotatedClass associationOJClass = findAssociationClassOJClass(propertyWrapper);
                 OnePropertyVisitor.buildOneAdder(associationOJClass, propertyWrapper, true, false);
             }
-            buildManyAdder(owner, propertyWrapper, false);
+            buildManyAdder(owner, propertyWrapper, false, false);
+            buildManyAdder(owner, propertyWrapper, false, true);
             if (propertyWrapper.isOrdered()) {
-                buildManyAdder(owner, propertyWrapper, true);
+                buildManyAdder(owner, propertyWrapper, true, false);
             }
             buildSetter(owner, propertyWrapper);
         }
@@ -101,7 +102,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         ac.addToOperations(getter);
     }
 
-    public static void buildManyAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper, boolean indexed) {
+    public static void buildManyAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper, boolean indexed, boolean ignoreInverse) {
         OJAnnotatedOperation adder = new OJAnnotatedOperation(propertyWrapper.adder());
         if (!propertyWrapper.isMemberOfAssociationClass()) {
             if (indexed) {
@@ -136,7 +137,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         }
         owner.addToOperations(adder);
 
-        OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
+        OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(!ignoreInverse ? propertyWrapper.adder() : propertyWrapper.adderIgnoreInverse());
         if (indexed) {
             singleAdder.addParam("index", "int");
         }
@@ -176,7 +177,11 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
 
             if (!propertyWrapper.isMemberOfAssociationClass()) {
                 if (!indexed) {
-                    block.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+                    if (!ignoreInverse) {
+                        block.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+                    } else {
+                        block.addToStatements("this." + propertyWrapper.fieldname() + ".addIgnoreInverse(" + propertyWrapper.fieldname() + ")");
+                    }
                 } else {
                     block.addToStatements("this." + propertyWrapper.fieldname() + ".add(index, " + propertyWrapper.fieldname() + ")");
                 }

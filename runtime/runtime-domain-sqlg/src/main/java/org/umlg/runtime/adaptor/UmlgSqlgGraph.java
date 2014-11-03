@@ -49,7 +49,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     @Override
     public Graph getReadOnlyGraph() {
         final StrategyWrappedGraph swg = new StrategyWrappedGraph(this.sqlG);
-        swg.strategy().setGraphStrategy(new ReadOnlyGraphStrategy());
+        swg.getStrategy().setGraphStrategy(new ReadOnlyGraphStrategy());
         return swg;
     }
 
@@ -148,7 +148,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.sqlG.V().<Vertex>has(T.label, label).forEach (
+        this.sqlG.V().<Vertex>has(T.label, label).forEachRemaining (
                 vertex -> result.add(UMLG.get().<TT>getEntity(vertex))
         );
         return result;
@@ -164,7 +164,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.sqlG.V().<Vertex>has(T.label, label).forEach (
+        this.sqlG.V().<Vertex>has(T.label, label).forEachRemaining (
                 vertex -> {
                     TT entity = UMLG.get().<TT>getEntity(vertex);
                     if (filter.filter(entity)) {
@@ -398,7 +398,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
         if (!v1.equals(v2)) {
 
-            edges.forEach(
+            edges.forEachRemaining(
                     edge -> {
                         if (edge.inV().next().equals(v2) || edge.outV().next().equals(v2)) {
                             result.add(edge);
@@ -408,7 +408,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
         } else {
 
-            edges.forEach(
+            edges.forEachRemaining(
                     edge -> {
                         if (edge.inV().next().equals(v2) && edge.outV().next().equals(v2)) {
                             result.add(edge);

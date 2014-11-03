@@ -145,7 +145,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestDataTypeAssociation.class,
         TestEnumerationAttribute.class,
         TestKindOfTypeOf.class,
-        TestAsType.class
+        TestAsType.class,
+        TestQualifierToAbstractClass.class
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
 //        TestAssociationToSelf.class,

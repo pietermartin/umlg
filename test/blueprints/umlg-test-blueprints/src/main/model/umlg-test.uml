@@ -1091,6 +1091,36 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GHiSs0ZfEeSsxadmgXYTww" value="1"/>
             </ownedEnd>
           </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_8R9hUGLREeS41NgVNzSvIg" name="Q">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_CTUm0GLSEeS41NgVNzSvIg" name="abstractQ" type="_9XUm4GLREeS41NgVNzSvIg" association="_CTUm02LSEeS41NgVNzSvIg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_CTUm0WLSEeS41NgVNzSvIg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CTUm0mLSEeS41NgVNzSvIg" value="1"/>
+              <qualifier xmi:type="uml:Property" xmi:id="_FItqIGLTEeS41NgVNzSvIg" name="abstractQNameQualifier">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              </qualifier>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_SvcbAGLSEeS41NgVNzSvIg" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UX9Q8GLSEeS41NgVNzSvIg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UX_GIGLSEeS41NgVNzSvIg" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_9XUm4GLREeS41NgVNzSvIg" name="AbstractQ" isAbstract="true">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_VRBm8GLSEeS41NgVNzSvIg" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_W6L9IGLSEeS41NgVNzSvIg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_W6NLQGLSEeS41NgVNzSvIg" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_CTUm02LSEeS41NgVNzSvIg" name="q_abstractQ" memberEnd="_CTUm1GLSEeS41NgVNzSvIg _CTUm0GLSEeS41NgVNzSvIg" navigableOwnedEnd="_CTUm1GLSEeS41NgVNzSvIg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_CTUm1GLSEeS41NgVNzSvIg" name="q" type="_8R9hUGLREeS41NgVNzSvIg" association="_CTUm02LSEeS41NgVNzSvIg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_CTUm1WLSEeS41NgVNzSvIg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CTUm1mLSEeS41NgVNzSvIg" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_Gb4XoGLSEeS41NgVNzSvIg" name="ConcreteQ">
+            <generalization xmi:type="uml:Generalization" xmi:id="_RcMDYGLSEeS41NgVNzSvIg" general="_9XUm4GLREeS41NgVNzSvIg"/>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_ossv8BFLEeGoRIAInCGFZA" name="collectiontest">
           <packagedElement xmi:type="uml:Class" xmi:id="_dVgyEBFHEeGoRIAInCGFZA" name="Hand">
@@ -3642,4 +3672,5 @@ endif</body>
   <UmlgProfile:Index xmi:id="_cXC8kEc1EeShtMlRJp6sTQ" base_Property="_WNGi0Ec1EeShtMlRJp6sTQ"/>
   <ActionLanguage:TextualRepresentation xmi:id="_KU0X4EfSEeSIgo37w9oFNw" language="org.eclipse.papyrus.uml.textedit.property.xtext.UmlProperty"/>
   <UmlgProfile:ChangeListener xmi:id="_1l4PoFOCEeSrW_3W8L-f7w" base_Property="_IYFP4OzqEeCemKc79Sc_aw"/>
+  <UmlgProfile:QualifierListener xmi:id="_KaWi4GLTEeS41NgVNzSvIg" base_Property="_VRBm8GLSEeS41NgVNzSvIg" qualifier="_FItqIGLTEeS41NgVNzSvIg"/>
 </xmi:XMI>

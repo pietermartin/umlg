@@ -138,7 +138,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
 
     private int loadFromHyperVertex(Vertex hyperVertex, int fromIndex) {
         int toIndex = fromIndex;
-        hyperVertex.outE(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).forEach(
+        hyperVertex.outE(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).forEachRemaining(
                 edgeToElement -> {
                     Vertex vertexToLoad = edgeToElement.inV().next();
                     loadNode(edgeToElement, vertexToLoad, true);

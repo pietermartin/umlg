@@ -70,7 +70,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     public Graph getReadOnlyGraph() {
         Neo4jGraph rawNeo4jGraph = (Neo4jGraph) this.neo4jGraph.getBaseGraph();
         final StrategyWrappedGraph swg = new StrategyWrappedGraph(rawNeo4jGraph);
-        swg.strategy().setGraphStrategy(new ReadOnlyGraphStrategy());
+        swg.getStrategy().setGraphStrategy(new ReadOnlyGraphStrategy());
         return swg;
     }
 
@@ -163,7 +163,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.neo4jGraph.V().<Vertex>has(T.label, label).forEach(
+        this.neo4jGraph.V().<Vertex>has(T.label, label).forEachRemaining(
                 vertex -> result.add(UMLG.get().<TT>getEntity(vertex))
         );
         return result;
@@ -179,7 +179,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.neo4jGraph.V().<Vertex>has(T.label, label).forEach(
+        this.neo4jGraph.V().<Vertex>has(T.label, label).forEachRemaining(
                 vertex -> {
                     TT entity = UMLG.get().<TT>getEntity(vertex);
                     if (filter.filter(entity)) {
@@ -375,8 +375,8 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public void clear() {
-        this.V().forEach(Vertex::remove);
-        this.E().forEach(Edge::remove);
+        this.V().forEachRemaining(Vertex::remove);
+        this.E().forEachRemaining(Edge::remove);
     }
 
     @Override
@@ -408,7 +408,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
         if (!v1.equals(v2)) {
 
-            edges.forEach(
+            edges.forEachRemaining(
                     edge -> {
                         if (edge.inV().next().equals(v2) || edge.outV().next().equals(v2)) {
                             result.add(edge);
@@ -418,7 +418,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
         } else {
 
-            edges.forEach(
+            edges.forEachRemaining(
                     edge -> {
                         if (edge.inV().next().equals(v2) && edge.outV().next().equals(v2)) {
                             result.add(edge);

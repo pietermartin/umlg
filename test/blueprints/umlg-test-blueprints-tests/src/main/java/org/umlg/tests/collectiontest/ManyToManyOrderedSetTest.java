@@ -657,4 +657,31 @@ public class ManyToManyOrderedSetTest extends BaseLocalDbTest {
         b1.reload();
         Assert.assertEquals(1, b1.getA().size());
     }
+
+    @Test
+    public void testAddIgnoreInverse() {
+        A a1 = new A();
+        a1.setName("a1");
+        B b1 = new B();
+        b1.setName("b1");
+        a1.addToBIgnoreInverse(b1);
+        db.commit();
+        a1.reload();
+        b1.reload();
+        Assert.assertEquals(b1, a1.getB().first());
+    }
+
+    @Test
+    public void testAddIgnoreInverseInverse() {
+        A a1 = new A();
+        a1.setName("a1");
+        B b1 = new B();
+        b1.setName("b1");
+        b1.addToAIgnoreInverse(a1);
+        db.commit();
+        a1.reload();
+        b1.reload();
+        Assert.assertEquals(a1, b1.getA().first());
+    }
+
 }

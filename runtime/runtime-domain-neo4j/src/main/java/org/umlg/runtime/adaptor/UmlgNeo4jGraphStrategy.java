@@ -20,7 +20,7 @@ public class UmlgNeo4jGraphStrategy implements GraphStrategy {
         if (ctx.getCurrent() instanceof StrategyWrappedVertex) {
             return (t) -> () -> {
                 Vertex v = ((StrategyWrappedVertex) ctx.getCurrent()).getBaseVertex();
-                v.bothE().forEach(e -> e.remove());
+                v.bothE().forEachRemaining(e -> e.remove());
                 getDeletionVertex(ctx.getBaseGraph()).addEdge(UmlgGraph.DELETION_VERTEX, v);
                 v.properties().forEachRemaining(Property::remove);
                 v.property("_deleted", true);

@@ -388,7 +388,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
      */
     private Vertex getFirstHyperVertexInListForVertex(Vertex vertex, Direction direction) {
         Set<Vertex> hyperVertexes = new HashSet<>();
-        vertex.inE(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).forEach(
+        vertex.inE(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).forEachRemaining(
                 e -> hyperVertexes.add(e.outV().next())
         );
         //Take any hyper vertex and start iterating to the beginning.
