@@ -42,6 +42,11 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
+    public UmlgSqlgGraph(SqlgGraph sqlgGraph) {
+        this.sqlG = sqlgGraph;
+        this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
+    }
+
     void setBypass(boolean bypasss) {
         this.transactionEventHandler.setBypass(bypasss);
     }
@@ -217,9 +222,18 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     @Override
     public <T extends PersistentObject> T getEntity(Object id) {
         try {
-            Vertex v = this.v(id);
+            Long tmpId;
+            if (id instanceof Long) {
+                tmpId = (Long)id;
+            } else if (id instanceof String) {
+                tmpId = Long.valueOf((String)id);
+            } else {
+                throw new IllegalStateException("Sqlg only supports Long ids!");
+            }
+
+            Vertex v = this.v(tmpId);
             if (v == null) {
-                throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{id}));
+                throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{tmpId}));
             }
             return instantiateClassifier(v);
         } catch (Exception e) {
@@ -473,12 +487,28 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Vertex v(final Object id) {
-        return this.sqlG.v(id);
+        Long tmpId;
+        if (id instanceof Long) {
+            tmpId = (Long)id;
+        } else if (id instanceof String) {
+            tmpId = Long.valueOf((String)id);
+        } else {
+            throw new IllegalStateException("Sqlg only supports Long ids!");
+        }
+        return this.sqlG.v(tmpId);
     }
 
     @Override
     public Edge e(final Object id) {
-        return this.sqlG.e(id);
+        Long tmpId;
+        if (id instanceof Long) {
+            tmpId = (Long)id;
+        } else if (id instanceof String) {
+            tmpId = Long.valueOf((String)id);
+        } else {
+            throw new IllegalStateException("Sqlg only supports Long ids!");
+        }
+        return this.sqlG.e(tmpId);
     }
 
     @Override
