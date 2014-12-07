@@ -55,10 +55,10 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
                 copyOnePrimitivePropertiesToEdge.getBody().addToStatements(ifPropertyNotNull);
             }
 
-            //Add change listener
-            if (propertyWrapper.isChangedListener()) {
-                PropertyChangeNotificationBuilder.buildChangeNotification(owner, setter, propertyWrapper, PropertyChangeNotificationBuilder.CHANGE_TYPE.UPDATE);
-            }
+//            //Add change listener
+//            if (propertyWrapper.isChangedListener()) {
+//                PropertyChangeNotificationBuilder.buildChangeNotification(owner, setter, propertyWrapper, PropertyChangeNotificationBuilder.CHANGE_TYPE.UPDATE);
+//            }
 
         }
     }

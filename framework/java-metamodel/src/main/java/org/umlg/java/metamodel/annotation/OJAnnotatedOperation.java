@@ -17,6 +17,7 @@ public class OJAnnotatedOperation extends OJOperation implements OJAnnotatedElem
     Map<OJPathName, OJAnnotationValue> f_annotations = new TreeMap<OJPathName, OJAnnotationValue>();
     private OJAnnotatedField resultVariable;
     private boolean interfaceDefault;
+    private String wildCardType;
 
     public OJAnnotatedOperation(String string, String returnPathName) {
         this(string);
@@ -32,6 +33,10 @@ public class OJAnnotatedOperation extends OJOperation implements OJAnnotatedElem
     public OJAnnotatedOperation(String string) {
         super();
         setName(string);
+    }
+
+    public void setWildCardType(String wildCardType) {
+        this.wildCardType = wildCardType;
     }
 
     public boolean isInterfaceDefault() {

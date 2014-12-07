@@ -225,6 +225,11 @@ public class RuntimePropertyImplementor {
         jsonField.setName("_json");
         ojEnum.addToFields(jsonField);
 
+        OJField changeListenerField = new OJField();
+        changeListenerField.setType(new OJPathName("boolean"));
+        changeListenerField.setName("_changeListener");
+        ojEnum.addToFields(changeListenerField);
+
         ojEnum.implementGetter();
         ojEnum.createConstructorFromFields();
 
@@ -330,7 +335,8 @@ public class RuntimePropertyImplementor {
                         pWrap.isDerived(),
                         pWrap.isNavigable(),
                         UmlgGenerationUtil.getEdgeName(pWrap.getProperty()),
-                        pWrap.javaBaseTypePath().getTypeName()
+                        pWrap.javaBaseTypePath().getTypeName(),
+                        pWrap.isChangedListener()
                 );
             } else {
                 //This is for properties of the association class itself
@@ -357,7 +363,8 @@ public class RuntimePropertyImplementor {
                             pWrap.isDerived(),
                             pWrap.isNavigable(),
                             UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_" + pWrap.getName() + "_AC",
-                            pWrap.javaBaseTypePath().getTypeName()
+                            pWrap.javaBaseTypePath().getTypeName(),
+                            pWrap.isChangedListener()
                     );
                 } else {
                     addEnumLiteral(
@@ -381,7 +388,8 @@ public class RuntimePropertyImplementor {
                             false/*derived*/,
                             true,/*navigable*/
                             UmlgGenerationUtil.getEdgeName(pWrap.getProperty()),
-                            pWrap.javaBaseTypePath().getTypeName()
+                            pWrap.javaBaseTypePath().getTypeName(),
+                            pWrap.isChangedListener()
                     );
                 }
             }
@@ -408,7 +416,8 @@ public class RuntimePropertyImplementor {
                         false/*derived*/,
                         true,/*navigable*/
                         UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_AC",
-                        pWrap.javaBaseTypePath().getTypeName());
+                        pWrap.javaBaseTypePath().getTypeName(),
+                        pWrap.isChangedListener());
             }
         }
 //        }
@@ -432,7 +441,8 @@ public class RuntimePropertyImplementor {
                     "inverseOf" + modelName, "inverseOf" + modelName, false, false, null,
                     Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, 1, false, false, false, false, false, false, false, false,
                     "root" + className.getName(),
-                    "Object");
+                    "Object",
+                    false);
         }
         asJson.getBody().addToStatements("sb.append(\"]}\")");
         asJson.getBody().addToStatements("return sb.toString()");
@@ -487,7 +497,8 @@ public class RuntimePropertyImplementor {
             boolean isDerived,
             boolean isNavigable,
             String edgeName,
-            String javaQualifiedClass) {
+            String javaQualifiedClass,
+            boolean isChangeListener) {
 
         OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(_label)");
         // Do not make upper case, leave with java case sensitive
@@ -898,6 +909,12 @@ public class RuntimePropertyImplementor {
         sb.append("}");
         jsonAttribute.setInitExp("\"" + sb.toString() + "\"");
         ojEnumLiteral.addToAttributeValues(jsonAttribute);
+
+        OJField isChangeListenerAttribute = new OJField();
+        isChangeListenerAttribute.setName("isChangeListenerAttribute");
+        isChangeListenerAttribute.setType(new OJPathName("boolean"));
+        isChangeListenerAttribute.setInitExp(String.valueOf(isChangeListener));
+        ojEnumLiteral.addToAttributeValues(isChangeListenerAttribute);
 
         ojEnum.addToLiterals(ojEnumLiteral);
         return ojEnumLiteral;

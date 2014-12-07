@@ -21,6 +21,8 @@ import org.umlg.runtime.collection.ocl.IterateExpressionAccumulator;
 import org.umlg.runtime.collection.ocl.OclStdLibCollection;
 import org.umlg.runtime.domain.*;
 import org.umlg.runtime.domain.ocl.OclState;
+import org.umlg.runtime.notification.ChangeHolder;
+import org.umlg.runtime.notification.UmlgNotificationManager;
 import org.umlg.runtime.types.Password;
 import org.umlg.runtime.types.UmlgType;
 import org.umlg.runtime.util.UmlgFormatter;
@@ -172,6 +174,17 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         }
         boolean result = this.internalCollection.add(e);
         if (result) {
+            if (this.umlgRuntimeProperty.isChangeListener()) {
+                UmlgNotificationManager.INSTANCE.notify(
+                        this.umlgRuntimeProperty,
+                        ChangeHolder.of(
+                                this.owner,
+                                this.umlgRuntimeProperty,
+                                ChangeHolder.ChangeType.ADD,
+                                e
+                        )
+                );
+            }
             if (!(this.owner instanceof UmlgMetaNode)) {
                 TransactionThreadEntityVar.setNewEntity(this.owner);
             }
@@ -540,6 +553,17 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         maybeLoad();
         boolean result = this.internalCollection.remove(o);
         if (result) {
+            if (this.umlgRuntimeProperty.isChangeListener()) {
+                UmlgNotificationManager.INSTANCE.notify(
+                        this.umlgRuntimeProperty,
+                        ChangeHolder.of(
+                                this.owner,
+                                this.umlgRuntimeProperty,
+                                ChangeHolder.ChangeType.REMOVE,
+                                o
+                        )
+                );
+            }
             if (!(this.owner instanceof UmlgMetaNode)) {
                 TransactionThreadEntityVar.setNewEntity(this.owner);
             }
@@ -1128,6 +1152,10 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         return this.umlgRuntimeProperty.getPropertyType();
     }
 
+    @Override
+    public boolean isChangeListener() {
+        return this.umlgRuntimeProperty.isChangeListener();
+    }
 
     @Override
     public boolean equals(UmlgCollection<E> c) {
@@ -1420,7 +1448,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             Vertex vertex = iter.next();
             E node;
             try {
-                Class<?> c = this.getClassToInstantiate(vertex);
+                Class<?> c = getClassToInstantiate(vertex);
                 if (c.isEnum()) {
                     Object value = vertex.value(getPersistentName());
                     node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);

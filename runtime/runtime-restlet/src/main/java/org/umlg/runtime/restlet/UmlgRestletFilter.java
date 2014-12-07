@@ -7,12 +7,16 @@ import org.restlet.data.Status;
 import org.restlet.routing.Filter;
 import org.umlg.runtime.adaptor.UMLG;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Date: 2013/03/14
  * Time: 7:05 PM
  */
 public class UmlgRestletFilter extends Filter {
 
+    private static final Logger logger = Logger.getLogger(UmlgRestletFilter.class.getPackage().getName());
     public UmlgRestletFilter(Context context) {
         super(context);
     }
@@ -26,8 +30,9 @@ public class UmlgRestletFilter extends Filter {
     protected void afterHandle(Request request, Response response) {
         if (response.getStatus() != Status.REDIRECTION_NOT_MODIFIED) {
             if (UMLG.get().isTransactionActive()) {
-                throw new IllegalStateException("Transaction is still active! Request = " + request.toString());
+                logger.log(Level.SEVERE, "Transaction is still active! Request = " + request.toString());
             }
+            UMLG.get().rollback();
             UMLG.get().afterThreadContext();
         }
     }

@@ -14,7 +14,7 @@ import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
-import org.umlg.javageneration.visitor.property.PropertyChangeNotificationBuilder;
+import org.umlg.javageneration.visitor.property.UmlgNodeDeleteNotificationBuilder;
 
 import java.util.Set;
 
@@ -179,7 +179,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
             if (otherEnd != null) {
                 PropertyWrapper otherEndPWrap = PropertyWrapper.from(otherEnd);
                 if (otherEndPWrap.isChangedListener()) {
-                    PropertyChangeNotificationBuilder.buildChangeNotification(annotatedClass, delete, otherEndPWrap, PropertyChangeNotificationBuilder.CHANGE_TYPE.DELETE);
+                    UmlgNodeDeleteNotificationBuilder.buildDeleteNotification(annotatedClass, delete, otherEndPWrap);
                 }
             }
         }

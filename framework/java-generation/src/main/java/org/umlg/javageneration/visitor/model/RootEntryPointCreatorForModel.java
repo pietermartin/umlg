@@ -125,7 +125,8 @@ public class RootEntryPointCreatorForModel extends BaseVisitor implements Visito
                     "inverseOf::" + clazz.getQualifiedName(), false, false,
                     null, Collections.<Validation>emptyList(), true, false, false, false, true, false, false, true, false, -1, 0, 1, false, false, false/*ordered*/, false, true,
                     true, false, true, "root" + UmlgClassOperations.className(clazz),
-                    UmlgClassOperations.className(clazz));
+                    UmlgClassOperations.className(clazz),
+                    false);
 
             asJson.getBody().addToStatements(
                     "sb.append(" + ojEnum.getName() + "." + StringUtils.uncapitalize(UmlgClassOperations.className(clazz)) + ".toJson())");

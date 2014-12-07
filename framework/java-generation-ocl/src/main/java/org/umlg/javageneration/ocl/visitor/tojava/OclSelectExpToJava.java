@@ -33,18 +33,11 @@ public class OclSelectExpToJava implements HandleIteratorExp {
 		String variableType = UmlgClassOperations.className(variable.getType());
 		StringBuilder result = new StringBuilder(sourceResult);
 		result.append(".select(");
-		result.append("new ");
-		result.append(HandleIteratorExp.BooleanExpressionEvaluator);
-		result.append("<");
-		result.append(variableType);
-		result.append(">() {\n");
-		result.append("    @Override\n");
-		result.append("    public Boolean evaluate(");
-		result.append(UmlgOclUtil.removeVariableInit(variableResults.get(0)));
-		result.append(") {\n");
-		result.append("        return ");
-        //if the body result is an operation then it needs the variable passed in.
-        if (bodyResult.endsWith("()")) {
+
+		String oclVariable = UmlgOclUtil.extractVariable(variableResults.get(0));
+		result.append(oclVariable);
+		result.append("->");
+		if (bodyResult.endsWith("()")) {
             String bodyResultWithoutParenthises = bodyResult.substring(0, bodyResult.length() - 2);
             OJAnnotatedOperation bodyOperation = ojClass.findOperation(bodyResultWithoutParenthises);
             bodyOperation.addParam(variable.getName(), UmlgClassOperations.getPathName(variable.getType()));
@@ -52,8 +45,30 @@ public class OclSelectExpToJava implements HandleIteratorExp {
         } else {
 		    result.append(bodyResult);
         }
-		result.append(";\n    }");
-		result.append("\n})");
+		result.append(")");
+
+
+//		result.append("new ");
+//		result.append(HandleIteratorExp.BooleanExpressionEvaluator);
+//		result.append("<");
+//		result.append(variableType);
+//		result.append(">() {\n");
+//		result.append("    @Override\n");
+//		result.append("    public Boolean evaluate(");
+//		result.append(UmlgOclUtil.removeVariableInit(variableResults.get(0)));
+//		result.append(") {\n");
+//		result.append("        return ");
+//        //if the body result is an operation then it needs the variable passed in.
+//        if (bodyResult.endsWith("()")) {
+//            String bodyResultWithoutParenthises = bodyResult.substring(0, bodyResult.length() - 2);
+//            OJAnnotatedOperation bodyOperation = ojClass.findOperation(bodyResultWithoutParenthises);
+//            bodyOperation.addParam(variable.getName(), UmlgClassOperations.getPathName(variable.getType()));
+//            result.append(bodyResultWithoutParenthises + "(" + variable.getName() + ")");
+//        } else {
+//		    result.append(bodyResult);
+//        }
+//		result.append(";\n    }");
+//		result.append("\n})");
 		return result.toString();
 	}
 }

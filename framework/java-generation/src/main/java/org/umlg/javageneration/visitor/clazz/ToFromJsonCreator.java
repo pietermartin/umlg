@@ -254,8 +254,8 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     }
                 } else {
                     toJson.getBody().addToStatements(
-                            "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + " + pWrap.getter()
-                                    + "().replace(\"\\n\", \"\\\\n\").replace(\"\\\"\", \"\\\\\\\"\") + \"\\\"\" : null " + "))"
+                            "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + " + UmlgGenerationUtil.StringEscapeUtils.getLast() + ".escapeJson(" + pWrap.getter()
+                                    + "()) + \"\\\"\" : null " + "))"
                     );
                 }
             }
@@ -275,6 +275,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
         toJson.getBody().addToStatements("sb.append(\"}\")");
         toJson.getBody().addToStatements("return sb.toString()");
         annotatedClass.addToOperations(toJson);
+        annotatedClass.addToImports(UmlgGenerationUtil.StringEscapeUtils);
     }
 
     private void addFromJson(Class clazz) {

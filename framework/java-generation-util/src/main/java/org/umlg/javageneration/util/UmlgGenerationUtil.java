@@ -7,8 +7,9 @@ import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 
 public class UmlgGenerationUtil {
 
+    public static final OJPathName StringEscapeUtils = new OJPathName("org.apache.commons.lang3.StringEscapeUtils");
     public static final OJPathName ChangeHolder = new OJPathName("org.umlg.runtime.notification.ChangeHolder");
-    public static final OJPathName UmlgNotificationManager = new OJPathName("org.umlg.runtime.notification.UmlgNotificationManager");
+    public  static final OJPathName UmlgNotificationManager = new OJPathName("org.umlg.runtime.notification.UmlgNotificationManager");
     public static final OJPathName GraphTraversal = new OJPathName("com.tinkerpop.gremlin.process.graph.GraphTraversal");
     public static final OJPathName Element = new OJPathName("com.tinkerpop.gremlin.structure.Element");
     public static final OJPathName token = new OJPathName("com.tinkerpop.gremlin.structure.Compare");
@@ -177,7 +178,7 @@ public class UmlgGenerationUtil {
     }
 
     public static String getEdgeToRootLabelStrategy(org.eclipse.uml2.uml.Class clazz) {
-        return "root" + UmlgClassOperations.getPathName(clazz).getLast();
+        return "root_" + UmlgClassOperations.getPathName(clazz).getLast();
     }
 
     public static String calculateMultiplcity(MultiplicityElement multiplicityKind) {

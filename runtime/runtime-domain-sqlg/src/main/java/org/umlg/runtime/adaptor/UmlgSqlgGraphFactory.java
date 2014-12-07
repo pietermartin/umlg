@@ -86,6 +86,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
                     //This is to bypass the beforeCommit
                     this.umlgGraph.setBypass(true);
                     UmlGIndexFactory.getUmlgIndexManager().createIndexes();
+                    UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
                     this.umlgGraph.commit();
                     this.umlgGraph.setBypass(false);
                 } catch (Exception e) {

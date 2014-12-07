@@ -14,6 +14,8 @@ import org.umlg.runtime.collection.ocl.OclStdLibSequence;
 import org.umlg.runtime.collection.ocl.OclStdLibSequenceImpl;
 import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
+import org.umlg.runtime.notification.ChangeHolder;
+import org.umlg.runtime.notification.UmlgNotificationManager;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

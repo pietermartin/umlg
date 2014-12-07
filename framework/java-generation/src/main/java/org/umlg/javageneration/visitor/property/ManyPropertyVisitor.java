@@ -196,10 +196,10 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         }
         owner.addToOperations(singleAdder);
 
-        //Add change listener
-        if (propertyWrapper.isChangedListener()) {
-            PropertyChangeNotificationBuilder.buildChangeNotification(owner, singleAdder, propertyWrapper, PropertyChangeNotificationBuilder.CHANGE_TYPE.ADD);
-        }
+//        //Add change listener
+//        if (propertyWrapper.isChangedListener()) {
+//            PropertyChangeNotificationBuilder.buildChangeNotification(owner, singleAdder, propertyWrapper, PropertyChangeNotificationBuilder.CHANGE_TYPE.ADD);
+//        }
 
     }
 

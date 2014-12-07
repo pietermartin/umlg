@@ -16,5 +16,5 @@ public interface NotificationListener {
         BEFORE_COMMIT, AFTER_COMMIT;
     }
 
-    void notifyChanged(COMMIT_TYPE commit_type, UmlgNode umlgNode, UmlgRuntimeProperty umlgRuntimeProperty, Object oldValue, Object newValue);
+    void notifyChanged(COMMIT_TYPE commit_type, UmlgNode umlgNode, UmlgRuntimeProperty umlgRuntimeProperty, ChangeHolder.ChangeType changeType, Object value);
 }

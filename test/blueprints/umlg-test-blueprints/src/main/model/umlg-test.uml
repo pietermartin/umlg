@@ -3676,4 +3676,6 @@ endif</body>
   <ActionLanguage:TextualRepresentation xmi:id="_KU0X4EfSEeSIgo37w9oFNw" language="org.eclipse.papyrus.uml.textedit.property.xtext.UmlProperty"/>
   <UmlgProfile:ChangeListener xmi:id="_1l4PoFOCEeSrW_3W8L-f7w" base_Property="_IYFP4OzqEeCemKc79Sc_aw"/>
   <UmlgProfile:QualifierListener xmi:id="_KaWi4GLTEeS41NgVNzSvIg" base_Property="_VRBm8GLSEeS41NgVNzSvIg" qualifier="_FItqIGLTEeS41NgVNzSvIg"/>
+  <UmlgProfile:ChangeListener xmi:id="_YDINoG0DEeSGYbt32h2qNw" base_Property="_sWkFwbdVEeORtvbQ18esMQ"/>
+  <UmlgProfile:ChangeListener xmi:id="_aWKAMG0DEeSGYbt32h2qNw" base_Property="_sWjesLdVEeORtvbQ18esMQ"/>
 </xmi:XMI>

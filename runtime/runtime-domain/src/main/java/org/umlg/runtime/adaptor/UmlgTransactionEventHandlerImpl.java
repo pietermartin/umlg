@@ -8,7 +8,6 @@ import org.umlg.runtime.validation.UmlgConstraintViolationException;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * This class validates what is being committed.
@@ -52,8 +51,8 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
                                 NotificationListener.COMMIT_TYPE.BEFORE_COMMIT,
                                 changeHolder.getUmlgNode(),
                                 changeHolder.getUmlgRuntimeProperty(),
-                                changeHolder.getOldValue(),
-                                changeHolder.getNewValue());
+                                changeHolder.getChangeType(),
+                                changeHolder.getValue());
                     }
                 }
             }
@@ -74,8 +73,8 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
                             NotificationListener.COMMIT_TYPE.AFTER_COMMIT,
                             changeHolder.getUmlgNode(),
                             changeHolder.getUmlgRuntimeProperty(),
-                            changeHolder.getOldValue(),
-                            changeHolder.getNewValue());
+                            changeHolder.getChangeType(),
+                            changeHolder.getValue());
                 }
             }
         } finally {

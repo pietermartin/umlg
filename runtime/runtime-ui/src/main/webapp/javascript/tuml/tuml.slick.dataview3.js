@@ -437,6 +437,7 @@
         }
 
         function insertItem(insertBefore, item) {
+            newItems.push(item);
             items.splice(insertBefore, 0, item);
             updateIdxById(insertBefore);
             refresh();

@@ -35,5 +35,6 @@ public interface UmlgRuntimeProperty {
 	boolean isUnique();
     boolean isInverseUnique();
 	String toJson();
+	boolean isChangeListener();
     Class getPropertyType();
 }

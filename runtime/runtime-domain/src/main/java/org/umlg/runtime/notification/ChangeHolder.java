@@ -9,20 +9,27 @@ import org.umlg.runtime.domain.UmlgNode;
  */
 public class ChangeHolder {
 
-    private UmlgNode umlgNode;
-    private UmlgRuntimeProperty umlgRuntimeProperty;
-    private Object oldValue;
-    private Object newValue;
-
-    private ChangeHolder(UmlgNode umlgNode, UmlgRuntimeProperty umlgRuntimeProperty, Object oldValue, Object newValue) {
-        this.umlgNode = umlgNode;
-        this.umlgRuntimeProperty = umlgRuntimeProperty;
-        this.oldValue = oldValue;
-        this.newValue = newValue;
+    public static enum ChangeType {
+        ADD, REMOVE, DELETE
     }
 
-    public static ChangeHolder of(UmlgNode umlgNode, UmlgRuntimeProperty umlgRuntimeProperty, Object oldValue, Object newValue) {
-        return new ChangeHolder(umlgNode, umlgRuntimeProperty, oldValue, newValue);
+    private UmlgNode umlgNode;
+    private UmlgRuntimeProperty umlgRuntimeProperty;
+    private Object value;
+    private ChangeType changeType;
+
+    private ChangeHolder(UmlgNode umlgNode, UmlgRuntimeProperty umlgRuntimeProperty, ChangeType changeType, Object value) {
+        if (changeType == ChangeType.DELETE && !(value instanceof String)) {
+            throw new IllegalStateException("ChangeType.DELETE must pass in a json representation of the deleted node!");
+        }
+        this.umlgNode = umlgNode;
+        this.umlgRuntimeProperty = umlgRuntimeProperty;
+        this.changeType = changeType;
+        this.value = value;
+    }
+
+    public static ChangeHolder of(UmlgNode umlgNode, UmlgRuntimeProperty umlgRuntimeProperty, ChangeType changeType, Object value) {
+        return new ChangeHolder(umlgNode, umlgRuntimeProperty, changeType, value);
     }
 
     public UmlgNode getUmlgNode() {
@@ -33,11 +40,11 @@ public class ChangeHolder {
         return umlgRuntimeProperty;
     }
 
-    public Object getOldValue() {
-        return oldValue;
+    public ChangeType getChangeType() {
+        return changeType;
     }
 
-    public Object getNewValue() {
-        return newValue;
+    public Object getValue() {
+        return value;
     }
 }

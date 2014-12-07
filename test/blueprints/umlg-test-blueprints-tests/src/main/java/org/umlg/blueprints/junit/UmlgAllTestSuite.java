@@ -8,6 +8,7 @@ import org.umlg.tests.allinstances.AllInstancesTest;
 import org.umlg.tests.allinstances.TestAllInstancesOnAbstractClass;
 import org.umlg.tests.allinstances.TestAllInstancesOnInterface;
 import org.umlg.tests.associationclass.TestAssociationClassCopiesOnePrimitivePropertiesToEdge;
+import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.batch.TestBatchMode;
 import org.umlg.tests.bulkcollection.TestBulkCollection;
@@ -146,7 +147,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestEnumerationAttribute.class,
         TestKindOfTypeOf.class,
         TestAsType.class,
-        TestQualifierToAbstractClass.class
+        TestQualifierToAbstractClass.class,
+        TestAssociationClassMoveInList.class
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
 //        TestAssociationToSelf.class,

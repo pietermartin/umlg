@@ -940,7 +940,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6_KTIquqEeOPt7R4er8hcg"/>
       </children>
       <element xmi:type="uml:AssociationClass" href="test-ocl.uml#_6-_UAKuqEeOPt7R4er8hcg"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6_GBsauqEeOPt7R4er8hcg" x="392" y="129"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6_GBsauqEeOPt7R4er8hcg" x="379" y="133"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_1i7T8auqEeOPt7R4er8hcg"/>
     <element xmi:type="uml:Package" href="test-ocl.uml#_zXk2sKuqEeOPt7R4er8hcg"/>
@@ -972,6 +972,7 @@
       <element xsi:nil="true"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_6_MvYquqEeOPt7R4er8hcg" points="[-50, -50, 0, 0]$[-50, -50, 0, 0]"/>
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_6_NWcKuqEeOPt7R4er8hcg" id="(0.496551724137931,0.49624060150375937)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_S9i_UG6BEeSnktUOXRA-mw" id="(0.4966442953020134,1.0)"/>
     </edges>
   </notation:Diagram>
   <notation:Diagram xmi:id="_1dnloKw4EeOnn8UJImpdOg" type="PapyrusUMLClassDiagram" name="FriendAssociationClassDiagram" measurementUnit="Pixel">

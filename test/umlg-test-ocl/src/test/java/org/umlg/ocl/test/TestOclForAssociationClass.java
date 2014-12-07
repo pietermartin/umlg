@@ -26,6 +26,8 @@ public class TestOclForAssociationClass extends BaseLocalDbTest {
         db.commit();
 
         company1.reload();
+        Assert.assertEquals(1, company1.getPerson().size());
+        Assert.assertTrue(company1.getPerson().iterator().next() instanceof Person);
         Assert.assertEquals(1, company1.getJobs().size());
         Assert.assertTrue(company1.getJobs().iterator().next() instanceof Job);
     }
