@@ -83,7 +83,7 @@
 <li><a href="#AccessentitiesbyallInstancesID">Access entities by allInstances</a></li></ul>
 </li><li><a href="#Accessingallconcreteinstancesofaninterfacebyclass.ID">Accessing all concrete instances of an interface by class.</a></li></ul>
 </li><li><a href="#IndexingID">Indexing</a></li><li><a href="#QueriesID">Queries</a><ul class="nav">
-<li><a href="#OCLID">OCL</a></li><li><a href="#GremlinID">Gremlin</a></li><li><a href="#CypherID">Cypher</a></li></ul>
+<li><a href="#OCLID">OCL</a></li><li><a href="#Gremlin/GroovyID">Gremlin/Groovy</a></li><li><a href="#CypherID">Cypher</a></li></ul>
 </li>
                 </ul>
             </div>
@@ -322,7 +322,7 @@ public void testNonUniqueEnumIndex() {
 
 <h2 id="QueriesID">Queries</h2>
 
-<p>Queries can be executed in OCL, Gremlin and in the case of Neo4j, Cypher.</p>
+<p>Queries can be executed in OCL, Gremlin/Groovy and in the case of Neo4j, Cypher.</p>
 
 <p>All queries are executed via UMLG's primary graph interface. <code class="language-java">UMLG.get().executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query)</code></p>
 
@@ -393,7 +393,47 @@ public void testOcl() {
 
 <p>Please see the <a href="/umlg-gh-pages/gh-pages/ocl_reference.html">OCL Reference</a> guide for further details.</p>
 
-<h3 id="GremlinID">Gremlin</h3>
+<h3 id="Gremlin/GroovyID">Gremlin/Groovy</h3>
+
+<p>UMLG supports the execution of groovy and gremlin scripts.</p>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testGremlin() {
+    Customer customer = new Customer();
+    customer.setName("john");
+
+    Purchase car1 = new Purchase();
+    car1.setName("bmw");
+    customer.addToPurchase(car1);
+
+    Purchase car2 = new Purchase();
+    car2.setName("merc");
+    customer.addToPurchase(car2);
+
+    Account account1 = new Account();
+    account1.setBalance(1000D);
+    customer.addToAccount(account1);
+
+    Account account2 = new Account();
+    account2.setBalance(10D);
+    customer.addToAccount(account2);
+
+    db.commit();
+
+    //'self' translates to g.V(id) where id is the customers id
+    Assert.assertEquals("john", db.executeQuery(UmlgQueryEnum.GROOVY, customer, "self.name"));
+
+    Object result = db.executeQuery(UmlgQueryEnum.GROOVY, customer, "self.both.has('name').name");
+    Assert.assertTrue(result instanceof Pipeline);
+    List&lt;String&gt; names = new ArrayList();
+    for (String name : (Pipeline&lt;Object, String&gt;)result) {
+        names.add(name);
+    }
+    Assert.assertEquals(2, names.size());
+    Assert.assertTrue(names.contains("merc"));
+    Assert.assertTrue(names.contains("merc"));
+}
+</code></pre>
 
 <h3 id="CypherID">Cypher</h3>
 

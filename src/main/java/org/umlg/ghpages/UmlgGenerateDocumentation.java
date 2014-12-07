@@ -67,6 +67,7 @@ public class UmlgGenerateDocumentation {
 
             FileUtils.write(new File("./" + md.getName().substring(0, md.getName().length() - 3) + ".html"), template);
         }
+        System.out.println("Done generating docs.");
     }
 
     private static boolean hasMenu(File md) {
