@@ -33,6 +33,15 @@ public class UmlgGenerateDocumentation {
             String template;
             if (!hasMenu(md)) {
                 template = FileUtils.readFileToString(new File("./doc/html_template/documentation_no_menu_template.html"));
+            } else if (isSqlg(md)) {
+                template = FileUtils.readFileToString(new File("./doc/html_template/documentation_sqlg_template.html"));
+                String completeMenu = "";
+                boolean first = true;
+                for (Menu rootMenu : rootMenus) {
+                    completeMenu += rootMenu.toHtml(first);
+                    first = false;
+                }
+                template = template.replace("<!-- GENERATED MENU -->", completeMenu);
             } else {
                 template = FileUtils.readFileToString(new File("./doc/html_template/documentation_template.html"));
                 String completeMenu = "";
@@ -42,7 +51,6 @@ public class UmlgGenerateDocumentation {
                     first = false;
                 }
                 template = template.replace("<!-- GENERATED MENU -->", completeMenu);
-                //            FileUtils.write(new File("./doc/documentation-template-with-menu/" + md.getName() + ".menu"), template);
             }
 
             //Insert the heading into the template
@@ -70,12 +78,16 @@ public class UmlgGenerateDocumentation {
         System.out.println("Done generating docs.");
     }
 
+    private static boolean isSqlg(File md) {
+        return md.getName().equals("sqlg.md");
+    }
+
     private static boolean hasMenu(File md) {
         return !md.getName().equals("doc_home.md") && !md.getName().equals("introduction.md");
     }
 
     private static List<Menu> parseMd(File md) throws IOException {
-        List<Menu> rootMenus = new ArrayList<Menu>();
+        List<Menu> rootMenus = new ArrayList<>();
         Menu current = null;
         String mdAsString = FileUtils.readFileToString(md);
         int indexOfHash = mdAsString.indexOf("#");

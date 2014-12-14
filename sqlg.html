@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
-    <title>UMLG</title>
+    <title>Sqlg</title>
 
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -37,38 +37,17 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="index.html" class="navbar-brand">UMLG</a>
+            <a href="sqlg.html" class="navbar-brand">Sqlg</a>
         </div>
         <nav class="collapse navbar-collapse" role="navigation">
             <ul class="nav navbar-nav pull-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="doc_home.html">Home</a></li>
-                        <li><a href="introduction.html">Introduction</a></li>
-                        <li><a href="getting_started.html">Getting Started</a></li>
-                        <li><a href="umlg_inaction.html">UMLG In action</a></li>
-                        <li><a href="gremlin_extension.html">Gremlin Extension</a></li>
-                        <li><a href="umlg_reference.html">UMLG Reference</a></li>
-                        <li><a href="ocl_reference.html">OCL reference</a></li>
-                        <li><a href="rest_interface.html">Rest Interface</a></li>
-                        <li><a href="gui.html">Gui</a></li>
-                    </ul>
-                </li>
                 <li>
-                    <a href="https://github.com/pietermartin/umlg">Github</a>
-                </li>
-                <li>
-                    <a href="http://demo.umlg.org">Demo</a>
+                    <a href="https://github.com/pietermartin/sqlg">Github</a>
                 </li>
             </ul>
         </nav>
     </div>
 </header>
-
-<div class="jumbotron umlg-doc-jumbotron">
-    <p>SqlG Documentation</p>
-</div>
 
 <!-- Begin Body -->
 <div class="container umlgcontainer">
@@ -76,7 +55,13 @@
         <div class="col-md-3" id="leftcol">
             <div class="bs-docs-sidebar hidden-print" role="complementary">
                 <ul class="nav bs-docs-sidebar" id="sidebar">
-                    <li class="active"><a href="#IntroductionID">Introduction</a></li><li><a href="#GettingStartedID">Getting Started</a></li><li><a href="#UMLGGremlinExtensionID">UMLG Gremlin Extension</a></li><li><a href="#UMLGUMLLReferenceID">UMLG UMLL Reference</a></li><li><a href="#OCLReferenceID">OCL Reference</a></li><li><a href="#TheRestInterfaceID">The Rest Interface</a></li><li><a href="#TheGuiID">The Gui</a></li>
+                    <li class="active"><a href="#IntroductionID">Introduction</a><ul class="nav">
+<li><a href="#TinkerpopsupportedfeaturesID">Tinkerpop supported features</a></li></ul>
+</li><li><a href="#GettingStartedID">Getting Started</a><ul class="nav">
+<li><a href="#MavenID">Maven</a></li><li><a href="#GremlinConsoleID">Gremlin Console</a></li></ul>
+</li><li><a href="#DatatypesID">Data types</a></li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#IndexesID">Indexes</a><ul class="nav">
+<li><a href="#ExampleID">Example</a></li></ul>
+</li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#BatchmodeID">Batch mode</a></li>
                 </ul>
             </div>
         </div>
@@ -85,16 +70,68 @@
             <p class="pull-right visible-xs">
                 <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
             </p>
-            <!-- SqlG Documentation -->
+            <!-- Sqlg -->
 
 <h2 id="IntroductionID">Introduction</h2>
 
-<p><kbd>Sqlg</kbd> is a implementation of <a href="https://github.com/tinkerpop/tinkerpop3">Tinkerpop3</a> on a <a href="http://en.wikipedia.org/wiki/Relational_database_management_system">RDBMS</a>.
-Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgresql.org/">postgresql</a> is supported.</p>
+<p><strong>Sqlg</strong> is a implementation of <a href="https://github.com/tinkerpop/tinkerpop3">Tinkerpop3</a> on a <a href="http://en.wikipedia.org/wiki/Relational_database_management_system">RDBMS</a>.
+Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgresql.org/">Postgresql</a> is supported.</p>
+
+<h3 id="TinkerpopsupportedfeaturesID">Tinkerpop supported features</h3>
+
+<p>Sqlg passes Tinkerpop's <code class="language-java">StructureStandardSuite</code> and <code class="language-java">ProcessStandardSuite</code> test suites.</p>
+
+<p>Graph Features <strong>not</strong> implemented.</p>
+
+<ul>
+<li>Computer</li>
+<li>ThreadedTransactions</li>
+<li>Variables</li>
+</ul>
+
+<p>Vertex Features <strong>not</strong> implemented.</p>
+
+<ul>
+<li>MultiProperties</li>
+<li>MetaProperties</li>
+<li>UserSuppliedIds</li>
+</ul>
+
+<p>Edge Features <strong>not</strong> implemented.</p>
+
+<ul>
+<li>UserSuppliedIds</li>
+</ul>
+
+<p>Vertex property features <strong>not</strong> implemented.</p>
+
+<ul>
+<li>MapValues</li>
+<li>MixedListValues</li>
+<li>SerializableValues</li>
+<li>UniformListValues</li>
+</ul>
+
+<p>Edge property feature <strong>not</strong> implemented.</p>
+
+<ul>
+<li>MapValues</li>
+<li>MixedListValues</li>
+<li>SerializableValues</li>
+<li>UniformListValues</li>
+</ul>
 
 <h2 id="GettingStartedID">Getting Started</h2>
 
-<p>The <kbd>Sqlg</kbd> maven coordinates for <kbd>HSQLDB</kbd> is</p>
+<p><br /></p>
+
+<h3 id="MavenID">Maven</h3>
+
+<p><br /></p>
+
+<p>Maven coordinates,</p>
+
+<p><strong>HSQLDB</strong></p>
 
 <pre class="prettyprint"><code class="language-java">&lt;dependency&gt;
     &lt;groupId&gt;org.umlg&lt;/groupId&gt;
@@ -103,7 +140,7 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 &lt;/dependency&gt;
 </code></pre>
 
-<p>and for <kbd>postgresql</kbd></p>
+<p><strong>Postgresql</strong></p>
 
 <pre class="prettyprint"><code class="language-java">&lt;dependency&gt;
     &lt;groupId&gt;org.umlg&lt;/groupId&gt;
@@ -112,43 +149,274 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 &lt;/dependency&gt;
 </code></pre>
 
-<p><em>Sqlg</em> needs one property file <code class="language-java">sqlg.properties</code></p>
+<p>Sqlg is designed to run as a singleton that can be shared among multiple threads. Instantiate Sqlg via the standard
+tinkerpop3 static constructors.</p>
 
-<p>For HSQLDB a sample is</p>
+<ul>
+<li><code class="language-java">SqlgGraph.open(final Configuration configuration)</code></li>
+<li><code class="language-java">SqlgGraph.open(final String pathToSqlgProperties)</code></li>
+</ul>
+
+<p>The configuration object requires the following properties.</p>
+
+<p><strong>HSQLDB</strong></p>
 
 <pre class="prettyprint"><code class="language-java">jdbc.url=jdbc:hsqldb:file:/tmp/sqlg
 jdbc.username=SA
 jdbc.password=
 </code></pre>
 
-<p>and for postgresql</p>
+<p><strong>Postgresql</strong></p>
 
 <pre class="prettyprint"><code class="language-java">jdbc.url=jdbc:postgresql://localhost:5432/sqlgraphdb
 jdbc.username=postgres
-jdbc.password=postgres
+jdbc.password=******
 </code></pre>
 
-<p>An in depth explanation of the entities and the primary UMLG db interface. <a href="umlg_inaction.html">UMLG In Action</a>.</p>
+<p><br /></p>
 
-<h2 id="UMLGGremlinExtensionID">UMLG Gremlin Extension</h2>
+<h3 id="GremlinConsoleID">Gremlin Console</h3>
 
-<p>UMLG's <a href="gremlin_extension.html">gremlin extension</a> to facilitate accessing properties and association classes.</p>
+<p><br /></p>
 
-<h2 id="UMLGUMLLReferenceID">UMLG UMLL Reference</h2>
+<p><strong>HSQLDB</strong></p>
 
-<p>A UMLG <a href="umlg_reference.html">reference manual</a>. Going through all uml class diagram features supported and implemented by UMLG.</p>
+<pre class="prettyprint"><code class="language-java">[pieter@pieter-laptop bin]$ ./gremlin.sh
 
-<h2 id="OCLReferenceID">OCL Reference</h2>
+         \,,,/
+         (o o)
+-----oOOo-(3)-oOOo-----
+gremlin&gt; :install org.umlg sqlg-hsqldb 0.0.2-SNAPSHOT
+==&gt;A module with the name sqlg-hsqldb is already installed
+gremlin&gt; :plugin use tinkerpop.sqlg-hsqldb
+==&gt;tinkerpop.sqlg-hsqldb activated
+gremlin&gt; g = SqlgGraph.open('/home/pieter/Downloads/sqlg/sqlg-hsqldb/src/test/resources/sqlg.properties')
+==&gt;sqlggraph[SqlGraph]
+gremlin&gt; g.loadGraphML('../../data/grateful-dead.xml')
+==&gt;null
+gremlin&gt; g.V().count()
+==&gt;2424
+gremlin&gt;
+</code></pre>
 
-<p>An <a href="ocl_reference.html">OCL reference document</a> illustrating OCL as supported in UMLG.</p>
+<p><strong>Postgresql</strong></p>
 
-<h2 id="TheRestInterfaceID">The Rest Interface</h2>
+<pre class="prettyprint"><code class="language-java">[pieter@pieter-laptop bin]$ ./gremlin.sh
 
-<p>Description of UMLG's  <a href="rest_interface.html">rest interface</a>.</p>
+         \,,,/
+         (o o)
+-----oOOo-(3)-oOOo-----
+gremlin&gt; :install org.umlg sqlg-postgres 0.0.2-SNAPSHOT
+==&gt;A module with the name sqlg-postgres is already installed
+gremlin&gt; :plugin use tinkerpop.sqlg-postgres
+==&gt;tinkerpop.sqlg-postgres activated
+gremlin&gt; g = SqlgGraph.open('/home/pieter/Downloads/sqlg/sqlg-postgres/src/test/resources/sqlg.properties')
+==&gt;sqlggraph[SqlGraph]
+gremlin&gt; g.loadGraphML('../../data/grateful-dead.xml')
+==&gt;null
+gremlin&gt; g.V().count()
+==&gt;2424
+gremlin&gt;
+</code></pre>
 
-<h2 id="TheGuiID">The Gui</h2>
+<p><br /></p>
 
-<p>Description of UMLG's <a href="gui.html">gui</a>.</p>
+<h2 id="DatatypesID">Data types</h2>
+
+<p><br /></p>
+
+<div>
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Java</th>
+            <th>HSQLDB</th>
+            <th>Postgres</th>
+        </tr>
+    </thead>
+    <tbody>
+        </tr>
+            <td>Boolean</td>
+            <td>BOOLEAN</td>
+            <td>BOOLEAN</td>
+        </tr>
+        <tr>
+            <td>Byte</td>
+            <td>TINYINT</td>
+            <td><strong>Not supported</strong></td>
+        </tr>
+        <tr>
+            <td>Short</td>
+            <td>SMALLINT</td>
+            <td>SMALLINT</td>
+        </tr>
+        <tr>
+            <td>Integer</td>
+            <td>INTEGER</td>
+            <td>INTEGER</td>
+        </tr>
+        <tr>
+            <td>Long</td>
+            <td>BIGINT</td>
+            <td>BIGINTtd>
+        </tr>
+        <tr>
+            <td>Float</td>
+            <td><strong>Not supported</strong></td>
+            <td>REAL</td>
+        </tr>
+        <tr>
+            <td>Double</td>
+            <td>DOUBLE</td>
+            <td>DOUBLE PRECISION</td>
+        </tr>
+        <tr>
+            <td>String</td>
+            <td>LONGVARCHAR</td>
+            <td>TEXT</td>
+        </tr>
+        <!-- Arrays -->
+        <tr>
+            <td>Boolean[]</td>
+            <td>BOOLEAN ARRAY DEFAULT ARRAY[]</td>
+            <td>BOOLEAN[]</td>
+        </tr>
+        <tr>
+            <td>Byte[]</td>
+            <td>LONGVARBINARY</td>
+            <td>BYTEA</td>
+        </tr>
+        <tr>
+            <td>Short[]</td>
+            <td>SMALLINT ARRAY DEFAULT ARRAY[]</td>
+            <td>SMALLINT[]</td>
+        </tr>
+        <tr>
+            <td>Integer[]</td>
+            <td>INTEGER ARRAY DEFAULT ARRAY[]</td>
+            <td>INTEGER[]</td>
+        </tr>
+        <tr>
+            <td>Long[]</td>
+            <td>BIGINT ARRAY DEFAULT ARRAY[]</td>
+            <td>BIGINT[]</td>
+        </tr>
+        <tr>
+            <td>Float[]</td>
+            <td>Not supported</td>
+            <td>REAL[]</td>
+        </tr>
+        <tr>
+            <td>Double[]</td>
+            <td>DOUBLE ARRAY DEFAULT ARRAY[]</td>
+            <td>DOUBLE PRECISION[]</td>
+        </tr>
+        <tr>
+            <td>String[]</td>
+            <td>LONGVARCHAR ARRAY DEFAULT ARRAY[]</td>
+            <td>TEXT[]</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<p><br /></p>
+
+<h2 id="SchemacreationID">Schema creation</h2>
+
+<p><br /></p>
+
+<p>Sqlg creates the schema lazily. This is great, however it comes with serious caveats.</p>
+
+<p><strong>HSQLDB</strong> does not support transactional schema creation. HSQLDB automatically commits any schema creation/alter command
+and immediately starts a new transaction.
+This can have some rather unfortunate consequences, as HSQLDB will silently commit a user transaction thus invalidating
+the user's transaction semantics.</p>
+
+<p><strong>Postgres</strong> supports transactional schema creation/alter commands. The user's transaction semantics remains intact.
+ However schema creation commands cause table level locks increasing the risk of dead locks in a multi threaded environment.</p>
+
+<p><br /></p>
+
+<h2 id="IndexesID">Indexes</h2>
+
+<p><br /></p>
+
+<p>Sqlg supports basic indexing.</p>
+
+<p><code class="language-java">org.umlg.sqlg.structure.SqlgGraph</code> has two methods on it to create indexes. One for vertices and one for edges.</p>
+
+<ul>
+<li><code class="language-java">SqlgGraph.createVertexLabeledIndex(String label, Object... dummykeyValues)</code></li>
+<li><code class="language-java">SqlgGraph.createEdgeLabeledIndex(String label, Object... dummykeyValues)</code></li>
+</ul>
+
+<p>The <code class="language-java">dummykeyValues</code> are required to indicate to Sqlg the name and type. The type is needed in case Sqlg needs
+to create the relevant column.</p>
+
+<h3 id="ExampleID">Example</h3>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testIndexOnVertex() {
+    this.sqlgGraph.createVertexLabeledIndex("Person", "name", "dummy");
+    this.sqlgGraph.tx().commit();
+    for (int i = 0; i &lt; 5000; i++) {
+        this.sqlgGraph.addVertex(T.label, "Person", "name", "john" + i);
+    }
+    this.sqlgGraph.tx().commit();
+    Assert.assertEquals(1, this.sqlgGraph.V().has(T.label, "Person").has("name1", Compare.eq, "john50").count().next().intValue());
+}
+</code></pre>
+
+<p>The gremlin query <code class="language-java">this.sqlgGraph.V().has(T.label, "Person").has("name1", Compare.eq, "john50")</code> will utilize the index on the <code class="language-java">name</code> field.
+Currently only <code class="language-java">Compare.eq</code> is supported.</p>
+
+<p><br /></p>
+
+<h2 id="MultipleJvmID">Multiple Jvm</h2>
+
+<p><br /></p>
+
+<p>It is possible to run many Sqlg instances pointing to the same underlying database. These instances can be in the same jvm
+but is primarily intended for separate jvm(s) pointing to the same underlying database.</p>
+
+<p>Sqlg caches database schema information. When multiple Sqlg instances point to the same database,
+Sqlg uses <a href="http://hazelcast.com/">Hazelcast</a> as a distributed cache of the schema information.</p>
+
+<p>To indicate to Sqlg that a <code class="language-java">Hazelcast</code> cluster is required specify <code class="language-java">hazelcast.members=ipaddres1,ipaddres2,ipaddres3</code>
+in the constructors configuration object. Hazelcast will then automatically set up the distributed cluster for the schema
+information.</p>
+
+<p><br /></p>
+
+<h2 id="BatchmodeID">Batch mode</h2>
+
+<p><br /></p>
+
+<p>Postgres is significantly slower than HSQLDB. This is expected as Postgres runs as a server. HSQLDB shines when it runs
+in embedded mode. (HSQLDB has not been tested in server mode!)</p>
+
+<p>Sqlg supports a batch mode. This is currently only implemented on Postgres.
+Batch mode is activated on the transaction object itself. After every <code class="language-java">commit</code> batchMode needs to be reactivated.</p>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testBatchMode() {
+    this.sqlgGraph.tx().batchModeOn();
+    for (int i = 0; i &lt; 1000000; i++) {
+        Vertex person1 = this.sqlgGraph.addVertex(T.label, "Person", "name", "a" + i);
+        Vertex person2 = this.sqlgGraph.addVertex(T.label, "Person", "name", "b" + i);
+        person1.addEdge("friend", person2, "context", 1);
+        if (i != 0 &amp;&amp; i % 100000 == 0) {
+            this.sqlgGraph.tx().commit();
+            this.sqlgGraph.tx().batchModeOn();
+        }
+    }
+    this.sqlgGraph.tx().commit();
+}
+</code></pre>
+
+<p>With <code class="language-java">batchMode</code> on Sqlg will cache all modification to the graph and on <code class="language-java">commit</code> execute bulk sql statements.
+This has a very significant improvement on performance.</p>
 
 
         </div>
@@ -175,7 +443,7 @@ jdbc.password=postgres
         $('#sidebar').affix(
                 {
                     offset: {
-                        top: 80
+                        top: 40
                     }
                 }
         );
