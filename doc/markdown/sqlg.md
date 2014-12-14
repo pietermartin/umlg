@@ -311,3 +311,39 @@ Batch mode is activated on the transaction object itself. After every `commit` b
 
 With `batchMode` on Sqlg will cache all modification to the graph and on `commit` execute bulk sql statements.
 This has a very significant improvement on performance.
+
+<br />
+##Performance Indicator
+<br />
+
+Running Tinkerpop's `StructurePerformanceTest` produces the following output
+
+**HSQLDB**
+
+    WriteToIO.writeGraphSON: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+     round: 1.42 [+- 1.82], round.block: 0.02 [+- 0.01], round.gc: 0.00 [+- 0.00], GC.calls: 12, GC.time: 0.28, time.total: 14.17, time.warmup: 0.00, time.bench: 14.17
+    WriteToIO.writeKryo: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+     round: 0.70 [+- 0.11], round.block: 0.03 [+- 0.05], round.gc: 0.00 [+- 0.00], GC.calls: 4, GC.time: 0.05, time.total: 7.03, time.warmup: 0.00, time.bench: 7.03
+    WriteToIO.writeGraphML: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+     round: 0.77 [+- 0.06], round.block: 0.05 [+- 0.10], round.gc: 0.00 [+- 0.00], GC.calls: 5, GC.time: 0.06, time.total: 7.66, time.warmup: 0.00, time.bench: 7.66
+    WriteToGraph.writeEmptyVertices: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+     round: 3.31 [+- 0.43], round.block: 0.12 [+- 0.16], round.gc: 0.00 [+- 0.00], GC.calls: 11, GC.time: 0.09, time.total: 33.15, time.warmup: 0.00, time.bench: 33.15
+    WriteToGraph.writeEmptyVerticesAndEdges: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+     round: 11.52 [+- 0.63], round.block: 0.20 [+- 0.36], round.gc: 0.00 [+- 0.00], GC.calls: 52, GC.time: 0.56, time.total: 115.21, time.warmup: 0.00, time.bench: 115.21
+    ReadFromGraph.readAllProperties: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+     round: 4.26 [+- 0.97], round.block: 0.22 [+- 0.59], round.gc: 0.00 [+- 0.00], GC.calls: 25, GC.time: 0.98, time.total: 42.59, time.warmup: 0.00, time.bench: 42.59
+
+**Postgres**
+
+    WriteToIO.writeGraphSON: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+     round: 3.62 [+- 0.46], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 11, GC.time: 0.42, time.total: 36.24, time.warmup: 0.00, time.bench: 36.23
+    WriteToIO.writeKryo: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+     round: 3.64 [+- 0.11], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 4, GC.time: 0.55, time.total: 36.36, time.warmup: 0.00, time.bench: 36.36
+    WriteToIO.writeGraphML: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+     round: 4.24 [+- 0.10], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 4, GC.time: 0.48, time.total: 42.40, time.warmup: 0.00, time.bench: 42.40
+    WriteToGraph.writeEmptyVertices: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+     round: 14.53 [+- 0.19], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 12, GC.time: 2.26, time.total: 145.28, time.warmup: 0.00, time.bench: 145.28
+    WriteToGraph.writeEmptyVerticesAndEdges: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+     round: 48.64 [+- 0.41], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 36, GC.time: 7.29, time.total: 486.37, time.warmup: 0.00, time.bench: 486.37
+    ReadFromGraph.readAllProperties: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+     round: 16.00 [+- 0.35], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 17, GC.time: 2.72, time.total: 159.97, time.warmup: 0.00, time.bench: 159.97
