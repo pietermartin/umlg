@@ -61,7 +61,11 @@
 <li><a href="#MavenID">Maven</a></li><li><a href="#GremlinConsoleID">Gremlin Console</a></li></ul>
 </li><li><a href="#DatatypesID">Data types</a></li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#IndexesID">Indexes</a><ul class="nav">
 <li><a href="#ExampleID">Example</a></li></ul>
-</li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#BatchmodeID">Batch mode</a></li>
+</li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#BatchmodeID">Batch mode</a></li><li><a href="#PerformanceIndicatorID">Performance Indicator</a><ul class="nav">
+<li><a href="#Sometrivialexamples.ID">Some trivial examples.</a><ul class="nav">
+<li><a href="#Createa10000objects,eachwith2propertiesID">Create a 10000 objects, each with 2 properties</a></li><li><a href="#Createa10001Persons,eachwith2propertiesandonefriendID">Create a 10001 Persons, each with 2 properties and one friend</a></li><li><a href="#Postgres,Createa1000000PersonsandDogswithapetedge.BatchModeon.ID">Postgres, Create a 1 000 000 Persons and Dogs with a pet edge. BatchMode on.</a></li><li><a href="#HSQLDB,Createa1000000PersonsandDogswithapetedge.ID">HSQLDB, Create a 1 000 000 Persons and Dogs with a pet edge.</a></li></ul>
+</li></ul>
+</li>
                 </ul>
             </div>
         </div>
@@ -75,7 +79,7 @@
 <h2 id="IntroductionID">Introduction</h2>
 
 <p><strong>Sqlg</strong> is a implementation of <a href="https://github.com/tinkerpop/tinkerpop3">Tinkerpop3</a> on a <a href="http://en.wikipedia.org/wiki/Relational_database_management_system">RDBMS</a>.
-Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgresql.org/">Postgresql</a> is supported.</p>
+Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgresql.org/">Postgresql</a> are supported.</p>
 
 <h3 id="TinkerpopsupportedfeaturesID">Tinkerpop supported features</h3>
 
@@ -172,6 +176,22 @@ jdbc.password=
 jdbc.username=postgres
 jdbc.password=******
 </code></pre>
+
+<p>In the case of Postgres the database must already exist.</p>
+
+<p>If you want to run the Tinkerpop tests on Postgres you need to create the various databases used upfront.
+These are,</p>
+
+<ul>
+<li>g1</li>
+<li>g2</li>
+<li>readGraph</li>
+<li>standard</li>
+<li>subgraph</li>
+<li>temp</li>
+<li>temp2</li>
+<li>temp2</li>
+</ul>
 
 <p><br /></p>
 
@@ -417,6 +437,207 @@ public void testBatchMode() {
 
 <p>With <code class="language-java">batchMode</code> on Sqlg will cache all modification to the graph and on <code class="language-java">commit</code> execute bulk sql statements.
 This has a very significant improvement on performance.</p>
+
+<p><br /></p>
+
+<h2 id="PerformanceIndicatorID">Performance Indicator</h2>
+
+<p><br /></p>
+
+<p>Below are some fairly trivial examples using Sqlg. The purpose is to give an indication of the performance that can be
+expected by Sqlg.</p>
+
+<p>All tests were run on a standard laptop.</p>
+
+<ul>
+<li>Intel(R) Core(TM) i7-4800MQ CPU @ 2.70GHz</li>
+<li>500G Solid state drive</li>
+</ul>
+
+<p>Running Tinkerpop's <code class="language-java">StructurePerformanceTest</code> produces the following output</p>
+
+<p><strong>HSQLDB</strong></p>
+
+<pre class="prettyprint"><code class="language-java">WriteToIO.writeGraphSON: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+ round: 1.42 [+- 1.82]...
+WriteToIO.writeKryo: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+ round: 0.70 [+- 0.11]...
+WriteToIO.writeGraphML: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+ round: 0.77 [+- 0.06]...
+WriteToGraph.writeEmptyVertices: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+ round: 3.31 [+- 0.43]...
+WriteToGraph.writeEmptyVerticesAndEdges: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+ round: 11.52 [+- 0.63]...
+ReadFromGraph.readAllProperties: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+ round: 4.26 [+- 0.97]...
+</code></pre>
+
+<p><strong>Postgres</strong></p>
+
+<pre class="prettyprint"><code class="language-java">WriteToIO.writeGraphSON: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+ round: 3.62 [+- 0.46]...
+WriteToIO.writeKryo: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+ round: 3.64 [+- 0.11]...
+WriteToIO.writeGraphML: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+ round: 4.24 [+- 0.10]...
+WriteToGraph.writeEmptyVertices: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+ round: 14.53 [+- 0.19]...
+WriteToGraph.writeEmptyVerticesAndEdges: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+ round: 48.64 [+- 0.41]...
+ReadFromGraph.readAllProperties: [measured 10 out of 10 rounds, threads: 1 (sequential)]
+ round: 16.00 [+- 0.35]...
+</code></pre>
+
+<h3 id="Sometrivialexamples.ID">Some trivial examples.</h3>
+
+<h4 id="Createa10000objects,eachwith2propertiesID">Create a 10000 objects, each with 2 properties</h4>
+
+<pre class="prettyprint"><code class="language-java">//Create a 10000 objects, each with 2 properties
+@Test
+public void testAddPersons() {
+    StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
+    for (int i = 0; i &lt; 10000; i++) {
+        this.sqlgGraph.addVertex(T.label, "Person", "prop1", "property1", "prop2", "property2");
+    }
+    this.sqlgGraph.tx().commit();
+    stopWatch.stop();
+    System.out.println("Time to insert: " + stopWatch.toString());
+    stopWatch.reset();
+    stopWatch.start();
+    Assert.assertEquals(Long.valueOf(10000), this.sqlgGraph.V().has(T.label, "Person").count().next());
+    stopWatch.stop();
+    System.out.println("Time to read: " + stopWatch.toString());
+}
+</code></pre>
+
+<p><strong>HSQLDB</strong></p>
+
+<pre class="prettyprint"><code class="language-java">Time to insert: 0:00:00.672
+Time to read: 0:00:00.124
+</code></pre>
+
+<p><strong>Postgres</strong></p>
+
+<pre class="prettyprint"><code class="language-java">Time to insert: 0:00:01.955
+Time to read: 0:00:00.117
+</code></pre>
+
+<p>Note the Postgres read time is roughly equivalent to HSQLDB. This is because in the above test there is only one call to
+the database. Postgres itself is fast, however round trips between client and server is expensive.</p>
+
+<h4 id="Createa10001Persons,eachwith2propertiesandonefriendID">Create a 10001 Persons, each with 2 properties and one friend</h4>
+
+<pre class="prettyprint"><code class="language-java">//Create a 10001 Persons, each with 2 properties and one friend
+@Test
+public void testAddPersonAndFriends() {
+    StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
+    Vertex previous = this.sqlgGraph.addVertex(T.label, "Person", "name", "first");
+
+    for (int i = 0; i &lt; 10000; i++) {
+        Vertex current = this.sqlgGraph.addVertex(T.label, "Person", "name", "current" + i);
+        previous.addEdge("friend", current);
+    }
+    this.sqlgGraph.tx().commit();
+    stopWatch.stop();
+    System.out.println("Time to insert: " + stopWatch.toString());
+    stopWatch.reset();
+    stopWatch.start();
+    List&lt;Vertex&gt; persons = this.sqlgGraph.V().&lt;Vertex&gt;has(T.label, "Person").toList();
+    Map&lt;Vertex, List&lt;Vertex&gt;&gt; friendMap = new HashMap&lt;&gt;();
+    persons.forEach(
+            p -&gt; friendMap.put(p, p.in("friend").toList())
+    );
+    Assert.assertEquals(10001, friendMap.size());
+    stopWatch.stop();
+    System.out.println("Time to read all vertices: " + stopWatch.toString());
+}
+</code></pre>
+
+<p><strong>HSQLDB</strong></p>
+
+<pre class="prettyprint"><code class="language-java">Time to insert: 0:00:02.095
+Time to read all vertices: 0:00:01.138
+</code></pre>
+
+<p><strong>Postgres</strong></p>
+
+<pre class="prettyprint"><code class="language-java">Time to insert: 0:00:04.810
+Time to read all vertices: 0:00:09.177
+</code></pre>
+
+<p>To retrieve the friends a 1001 calls are made made. Postgres is significantly slower in this case.</p>
+
+<h4 id="Postgres,Createa1000000PersonsandDogswithapetedge.BatchModeon.ID">Postgres, Create a 1 000 000 Persons and Dogs with a pet edge. BatchMode on.</h4>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testPostgresBatchMode() {
+    this.sqlgGraph.tx().batchModeOn();
+    StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
+    for (int i = 1; i &lt; 1000001; i++) {
+        Vertex person = this.sqlgGraph.addVertex(T.label, "Person", "name", "John" + i);
+        Vertex dog = this.sqlgGraph.addVertex(T.label, "Dog", "name", "snowy" + i);
+        person.addEdge("pet", dog);
+        if (1 % 100000 == 0) {
+            this.sqlgGraph.tx().commit();
+            this.sqlgGraph.tx().batchModeOn();
+        }
+    }
+    this.sqlgGraph.tx().commit();
+    stopWatch.stop();
+    System.out.println("Time to insert: " + stopWatch.toString());
+    stopWatch.reset();
+    stopWatch.start();
+
+    Assert.assertEquals(1000000, this.sqlgGraph.V().&lt;Vertex&gt;has(T.label, "Person").count().next().intValue());
+    Assert.assertEquals(1000000, this.sqlgGraph.V().&lt;Vertex&gt;has(T.label, "Dog").count().next().intValue());
+
+    stopWatch.stop();
+    System.out.println("Time to read all vertices: " + stopWatch.toString());
+}
+</code></pre>
+
+<p><strong>Postgres</strong></p>
+
+<pre class="prettyprint"><code class="language-java">Time to insert: 0:00:51.681
+Time to read all vertices: 0:00:16.130
+</code></pre>
+
+<h4 id="HSQLDB,Createa1000000PersonsandDogswithapetedge.ID">HSQLDB, Create a 1 000 000 Persons and Dogs with a pet edge.</h4>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void testHsqldbLargeLoad() {
+    StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
+    for (int i = 1; i &lt; 1000001; i++) {
+        Vertex person = this.sqlgGraph.addVertex(T.label, "Person", "name", "John" + i);
+        Vertex dog = this.sqlgGraph.addVertex(T.label, "Dog", "name", "snowy" + i);
+        person.addEdge("pet", dog);
+        if (i % 100000 == 0) {
+            this.sqlgGraph.tx().commit();
+        }
+    }
+    this.sqlgGraph.tx().commit();
+    stopWatch.stop();
+    System.out.println("Time to insert: " + stopWatch.toString());
+    stopWatch.reset();
+    stopWatch.start();
+
+    Assert.assertEquals(1000000, this.sqlgGraph.V().&lt;Vertex&gt;has(T.label, "Person").count().next().intValue());
+    Assert.assertEquals(1000000, this.sqlgGraph.V().&lt;Vertex&gt;has(T.label, "Dog").count().next().intValue());
+
+    stopWatch.stop();
+    System.out.println("Time to read all vertices: " + stopWatch.toString());
+}
+</code></pre>
+
+<p><strong>HSQLDB</strong></p>
+
+<pre class="prettyprint"><code class="language-java">Time to insert: 0:02:32.435
+Time to read all vertices: 0:00:19.026
+</code></pre>
 
 
         </div>

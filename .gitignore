@@ -4,3 +4,5 @@
 !spec/*.iml
 /.project
 /.metadata
+/doc/markdown-parsed/
+/target/
