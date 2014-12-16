@@ -52,7 +52,7 @@ Maven coordinates,
     <dependency>
         <groupId>org.umlg</groupId>
         <artifactId>sqlg-hsqldb</artifactId>
-        <version>0.0.2-SNAPSHOT</version>
+        <version>1.0.0.M1</version>
     </dependency>
 
 **Postgresql**
@@ -60,7 +60,7 @@ Maven coordinates,
     <dependency>
         <groupId>org.umlg</groupId>
         <artifactId>sqlg-postgres</artifactId>
-        <version>0.0.2-SNAPSHOT</version>
+        <version>1.0.0.M1</version>
     </dependency>
 
 Sqlg is designed to run as a singleton that can be shared among multiple threads. Instantiate Sqlg via the standard
@@ -108,7 +108,7 @@ These are,
              \,,,/
              (o o)
     -----oOOo-(3)-oOOo-----
-    gremlin> :install org.umlg sqlg-hsqldb 0.0.2-SNAPSHOT
+    gremlin> :install org.umlg sqlg-hsqldb 1.0.0.M1
     ==>A module with the name sqlg-hsqldb is already installed
     gremlin> :plugin use tinkerpop.sqlg-hsqldb
     ==>tinkerpop.sqlg-hsqldb activated
