@@ -41,7 +41,7 @@
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>sqlg-core</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
+            <version>1.0.0.M6</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
