@@ -269,7 +269,7 @@ of the `VERTICES` table.
 This strategy allows gremlin queries of the form `g.V(1L)` to find the vertex in the `VERTICES` table and then know in which
 table the vertex is stored.
 
-Queries of the form `g.V().has(T.label, 'Person')` will go directly to the `V_Person` table to retrieve the vertex.
+Queries of the form `g.V().has(T.label, 'Person')` will go directly to the `V_Person` table to retrieve the vertices.
 
 ####EDGES####
 The `EDGES` table has one record for every edge in the graph. The `EDGES` tables' auto generated primary key
