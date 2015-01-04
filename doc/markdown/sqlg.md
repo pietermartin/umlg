@@ -245,11 +245,11 @@ These are,
 
 With the coming of vertex label's to Tinkerpop3 the mapping of Tinkerpop's graph semantics to that of a RDBMS became natural and useful.
 
-###Vertex table
+###Vertex tables
 Every unique vertex label maps to a table. Vertex tables are prefixed with a `V_`. i.e. `V_Person`. The vertex table
 stores the vertex's properties.
 
-###Edge table
+###Edge tables
 Every unique edge label maps to a table. Edge tables are prefixed with a `E_`. i.e. `E_friend`. The edge table stores
 the edge's adjacent vertex ids and the edge properties. The column corresponding to each adjacent vertex id (`IN` and `OUT`)
 has a foreign key to the adjacent vertex's table.
