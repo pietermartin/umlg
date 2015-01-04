@@ -279,6 +279,8 @@ Similar to the vertex look-ups the `EDGES` table facilitates implementing querie
 
 ###Tinkerpop-classic
 
+####ER Diagram
+
 ![image of tinkerpop-classic](images/sqlg/tinkerpop-classic1-er.png)
 ![image of tinkerpop-classic](images/sqlg/tinkerpop-classic2-er.png)
 
