@@ -63,7 +63,7 @@
 <li><a href="#VertextableID">Vertex table</a></li><li><a href="#EdgetableID">Edge table</a></li><li><a href="#VERTICESandEDGESID">VERTICES and EDGES</a><ul class="nav">
 <li><a href="#VERTICESID">VERTICES</a></li><li><a href="#EDGESID">EDGES</a></li></ul>
 </li><li><a href="#Tinkerpop-classicID">Tinkerpop-classic</a><ul class="nav">
-<li><a href="#AlltablesID">All tables</a></li><li><a href="#personID">person</a></li><li><a href="#softwareID">software</a></li><li><a href="#knowsID">knows</a></li><li><a href="#createdID">created</a></li><li><a href="#VERTICESID">VERTICES</a></li><li><a href="#EDGESID">EDGES</a></li></ul>
+<li><a href="#AlltablesID">All tables</a></li><li><a href="#V_personID">V_person</a></li><li><a href="#V_softwareID">V_software</a></li><li><a href="#E_knowsID">E_knows</a></li><li><a href="#E_createdID">E_created</a></li><li><a href="#VERTICESID">VERTICES</a></li><li><a href="#EDGESID">EDGES</a></li></ul>
 </li><li><a href="#NamespacingandSchemasID">Namespacing and Schemas</a></li></ul>
 </li><li><a href="#IndexesID">Indexes</a><ul class="nav">
 <li><a href="#ExampleID">Example</a></li></ul>
@@ -399,19 +399,19 @@ functions as the edge id. Additionally the <code class="language-java">EDGES</co
 
 <p><img src="images/sqlg/tinkerpop-classic.png" alt="image of tinkerpop-classic" title="" /></p>
 
-<h4 id="personID">person</h4>
+<h4 id="V_personID">V_person</h4>
 
 <p><img src="images/sqlg/person.png" alt="image of tinkerpop-classic" title="" /></p>
 
-<h4 id="softwareID">software</h4>
+<h4 id="V_softwareID">V_software</h4>
 
 <p><img src="images/sqlg/software.png" alt="image of tinkerpop-classic" title="" /></p>
 
-<h4 id="knowsID">knows</h4>
+<h4 id="E_knowsID">E_knows</h4>
 
 <p><img src="images/sqlg/knows.png" alt="image of tinkerpop-classic" title="" /></p>
 
-<h4 id="createdID">created</h4>
+<h4 id="E_createdID">E_created</h4>
 
 <p><img src="images/sqlg/created.png" alt="image of tinkerpop-classic" title="" /></p>
 
@@ -427,7 +427,7 @@ functions as the edge id. Additionally the <code class="language-java">EDGES</co
 
 <p>Many RDBMS databases have the notion of a <code class="language-java">schema</code> as a namespace for tables. Sqlg supports schemas. Schemas
 only apply to vertex labels. Edge tables are created in the schema of the adjacent <code class="language-java">out</code> vertex.
-By default all vertex tables go into the underlying databases' default schema. For Postgresql this
+By default all vertex tables go into the underlying databases' default schema. For postgresql and hsqldb this
 is the <code class="language-java">public</code> schema.</p>
 
 <p>To specify the schema for a label Sqlg uses the dot <code class="language-java">.</code> notation.</p>
@@ -439,7 +439,7 @@ palace1.addEdge("managedBy", john);
 corrola.addEdge("owner", john);
 </code></pre>
 
-<p>This will create a table <code class="language-java">V_manager</code> in the <code class="language-java">public</code> (default) schema. A table <code class="language-java">V_house</code> in a <code class="language-java">property</code> schema and table <code class="language-java">V_car</code>
+<p>This will create a table <code class="language-java">V_manager</code> in the <code class="language-java">public</code> (default) schema. Table <code class="language-java">V_house</code> in a <code class="language-java">property</code> schema and table <code class="language-java">V_car</code>
 in a <code class="language-java">fleet</code> schema. For the edges a <code class="language-java">E_managedBy</code> table is created in the <code class="language-java">property</code> schema and a <code class="language-java">E_owner</code> table in the <code class="language-java">fleet</code> schema.</p>
 
 <p><img src="images/sqlg/schemas.png" alt="image of tinkerpop-classic" title="" /></p>

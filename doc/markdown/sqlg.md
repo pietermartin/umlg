@@ -284,13 +284,13 @@ Similar to the vertex look-ups the `EDGES` table facilitates implementing querie
 
 ####All tables
 ![image of tinkerpop-classic](images/sqlg/tinkerpop-classic.png)
-####person####
+####V_person####
 ![image of tinkerpop-classic](images/sqlg/person.png)
-####software
+####V_software
 ![image of tinkerpop-classic](images/sqlg/software.png)
-####knows
+####E_knows
 ![image of tinkerpop-classic](images/sqlg/knows.png)
-####created
+####E_created
 ![image of tinkerpop-classic](images/sqlg/created.png)
 ####VERTICES
 ![image of tinkerpop-classic](images/sqlg/vertices.png)
@@ -301,7 +301,7 @@ Similar to the vertex look-ups the `EDGES` table facilitates implementing querie
 
 Many RDBMS databases have the notion of a `schema` as a namespace for tables. Sqlg supports schemas. Schemas
 only apply to vertex labels. Edge tables are created in the schema of the adjacent `out` vertex.
-By default all vertex tables go into the underlying databases' default schema. For Postgresql this
+By default all vertex tables go into the underlying databases' default schema. For postgresql and hsqldb this
 is the `public` schema.
 
 To specify the schema for a label Sqlg uses the dot `.` notation.
@@ -312,7 +312,7 @@ To specify the schema for a label Sqlg uses the dot `.` notation.
     palace1.addEdge("managedBy", john);
     corrola.addEdge("owner", john);
 
-This will create a table `V_manager` in the `public` (default) schema. A table `V_house` in a `property` schema and table `V_car`
+This will create a table `V_manager` in the `public` (default) schema. Table `V_house` in a `property` schema and table `V_car`
 in a `fleet` schema. For the edges a `E_managedBy` table is created in the `property` schema and a `E_owner` table in the `fleet` schema.
 
 ![image of tinkerpop-classic](images/sqlg/schemas.png)
