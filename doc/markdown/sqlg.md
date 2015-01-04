@@ -5,6 +5,7 @@
 **Sqlg** is a implementation of [Tinkerpop3](https://github.com/tinkerpop/tinkerpop3) on a [RDBMS](http://en.wikipedia.org/wiki/Relational_database_management_system).
 Currently [HSQLDB](http://hsqldb.org/) and [Postgresql](http://www.postgresql.org/) are supported.
 
+
 ###Tinkerpop supported features
 
 Sqlg passes Tinkerpop's `StructureStandardSuite` and `ProcessStandardSuite` test suites.
@@ -94,7 +95,7 @@ These are,
 * standard
 * subgraph
 * temp
-* temp2
+* temp1
 * temp2
 
 <br />
@@ -239,6 +240,89 @@ These are,
 </div>
 
 <br />
+##Architecture
+<br />
+
+With the coming of vertex label's to Tinkerpop3 the mapping of Tinkerpop's graph semantics to that of a RDBMS became natural and useful.
+
+###Vertex table###
+Every unique vertex label maps to a table. Vertex tables are prefixed with a `V_`. i.e. `V_Person`. The vertex table
+stores the vertex's properties.
+
+###Edge table###
+Every unique edge label maps to a table. Edge tables are prefixed with a `E_`. i.e. `E_friend`. The edge table stores
+the edge's adjacent vertex ids and the edge properties. The column corresponding to each adjacent vertex id (`IN` and `OUT`)
+has a foreign key to the adjacent vertex's table.
+
+###VERTICES and EDGES###
+
+There are two special tables in Sqlg. One for vertices (`VERTICES`) and one for edges (`EDGES`).
+
+####VERTICES####
+The `VERTICES` table has one record for every vertex in the graph. The `VERTICES` tables' auto generated primary key
+functions as the vertex id. Additionally the `VERTICES` table stores the vertex's label and the unique set of labels of
+the vertex's incident edges.
+
+Every vertex has a label and as such a vertex table. This table's `ID` column has a one to one mapping the `ID` column
+of the `VERTICES` table.
+
+This strategy allows gremlin queries of the form `g.V(1L)` to find the vertex in the `VERTICES` table and then know in which
+table the vertex is stored.
+
+Queries of the form `g.V().has(T.label, 'Person')` will go directly to the `V_Person` table to retrieve the vertex.
+
+####EDGES####
+The `EDGES` table has one record for every edge in the graph. The `EDGES` tables' auto generated primary key
+functions as the edge id. Additionally the `EDGES` table stores the edge's label.
+
+Similar to the vertex look-ups the `EDGES` table facilitates implementing queries of the form `g.E(1L)`
+
+###Tinkerpop-classic###
+
+![image of tinkerpop-classic](images/sqlg/tinkerpop-classic1-er.png)
+![image of tinkerpop-classic](images/sqlg/tinkerpop-classic2-er.png)
+
+####All tables###
+![image of tinkerpop-classic](images/sqlg/tinkerpop-classic.png)
+####person####
+![image of tinkerpop-classic](images/sqlg/person.png)
+####software####
+![image of tinkerpop-classic](images/sqlg/software.png)
+####knows####
+![image of tinkerpop-classic](images/sqlg/knows.png)
+####created####
+![image of tinkerpop-classic](images/sqlg/created.png)
+####VERTICES####
+![image of tinkerpop-classic](images/sqlg/vertices.png)
+####EDGES####
+![image of tinkerpop-classic](images/sqlg/edges.png)
+
+###Namespacing and Schemas###
+
+Many RDBMS databases have the notion of a `schema` as a namespace for tables. Sqlg supports schemas. Schemas
+only apply to vertex labels. Edge tables are created in the schema of the adjacent `out` vertex.
+By default all vertex tables go into the underlying databases' default schema. For Postgresql this
+is the `public` schema.
+
+To specify the schema for a label Sqlg uses the dot `.` notation.
+
+    Vertex john = this.sqlgGraph.addVertex(T.label, "manager", "name", "john");
+    Vertex palace1 = this.sqlgGraph.addVertex(T.label, "property.house", "name", "palace1");
+    Vertex corrola = this.sqlgGraph.addVertex(T.label, "fleet.car", "model", "corrola");
+    palace1.addEdge("managedBy", john);
+    corrola.addEdge("owner", john);
+
+This will create a table `V_manager` in the `public` (default) schema. A table `V_house` in a `property` schema and table `V_car`
+in a `fleet` schema. For the edges a `E_managedBy` table is created in the `property` schema and a `E_owner` table in the `fleet` schema.
+
+![image of tinkerpop-classic](images/sqlg/schemas.png)
+
+
+
+
+
+
+<br />
 ##Schema creation
 <br />
 
@@ -264,8 +348,8 @@ Sqlg supports basic indexing.
 * `SqlgGraph.createEdgeLabeledIndex(String label, Object... dummykeyValues)`
 
 
-The `dummykeyValues` are required to indicate to Sqlg the name and type. The type is needed in case Sqlg needs
-to create the relevant column.
+The `dummykeyValues` are required to indicate to Sqlg the name and type of the property. The type is needed  for when
+the column does not yet exist and Sqlg needs to create the relevant column.
 
 ###Example
 
@@ -280,6 +364,7 @@ to create the relevant column.
         Assert.assertEquals(1, this.sqlgGraph.V().has(T.label, "Person").has("name1", Compare.eq, "john50").count().next().intValue());
     }
 
+In the above usecase, Sqlg will create a table `Person` with a column `name` together with an index on the name column.
 The gremlin query `this.sqlgGraph.V().has(T.label, "Person").has("name1", Compare.eq, "john50")` will utilize the index on the `name` field.
 Currently only `Compare.eq` is supported.
 
@@ -401,7 +486,7 @@ Running Tinkerpop's `StructurePerformanceTest` produces the following output
     Time to insert: 0:00:01.955
     Time to read: 0:00:00.117
 
-Note the Postgres read time is roughly equivalent to HSQLDB. This is because in the above test there is only one call to
+Note, the Postgres read time is roughly equivalent to HSQLDB. This is because in the above test there is only one call to
 the database. Postgres itself is fast, however round trips between client and server is expensive.
 
 ####Create a 10001 Persons, each with 2 properties and one friend

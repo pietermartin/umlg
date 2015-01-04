@@ -59,7 +59,13 @@
 <li><a href="#TinkerpopsupportedfeaturesID">Tinkerpop supported features</a></li></ul>
 </li><li><a href="#GettingStartedID">Getting Started</a><ul class="nav">
 <li><a href="#MavenID">Maven</a></li><li><a href="#GremlinConsoleID">Gremlin Console</a></li></ul>
-</li><li><a href="#DatatypesID">Data types</a></li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#IndexesID">Indexes</a><ul class="nav">
+</li><li><a href="#DatatypesID">Data types</a></li><li><a href="#ArchitectureID">Architecture</a><ul class="nav">
+<li><a href="#VertextableID">Vertex table</a></li><li><a href="#EdgetableID">Edge table</a></li><li><a href="#VERTICESandEDGESID">VERTICES and EDGES</a><ul class="nav">
+<li><a href="#VERTICESID">VERTICES</a></li><li><a href="#EDGESID">EDGES</a></li></ul>
+</li><li><a href="#Tinkerpop-classicID">Tinkerpop-classic</a><ul class="nav">
+<li><a href="#AlltablesID">All tables</a></li><li><a href="#personID">person</a></li><li><a href="#softwareID">software</a></li><li><a href="#knowsID">knows</a></li><li><a href="#createdID">created</a></li><li><a href="#VERTICESID">VERTICES</a></li><li><a href="#EDGESID">EDGES</a></li></ul>
+</li><li><a href="#NamespacingandSchemasID">Namespacing and Schemas</a></li></ul>
+</li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#IndexesID">Indexes</a><ul class="nav">
 <li><a href="#ExampleID">Example</a></li></ul>
 </li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#BatchmodeID">Batch mode</a></li><li><a href="#PerformanceIndicatorID">Performance Indicator</a><ul class="nav">
 <li><a href="#Sometrivialexamples.ID">Some trivial examples.</a><ul class="nav">
@@ -140,7 +146,7 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 <pre class="prettyprint"><code class="language-java">&lt;dependency&gt;
     &lt;groupId&gt;org.umlg&lt;/groupId&gt;
     &lt;artifactId&gt;sqlg-hsqldb&lt;/artifactId&gt;
-    &lt;version&gt;0.0.2-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.0.0.M1&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 
@@ -149,7 +155,7 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 <pre class="prettyprint"><code class="language-java">&lt;dependency&gt;
     &lt;groupId&gt;org.umlg&lt;/groupId&gt;
     &lt;artifactId&gt;sqlg-postgres&lt;/artifactId&gt;
-    &lt;version&gt;0.0.2-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.0.0.M1&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 
@@ -189,7 +195,7 @@ These are,</p>
 <li>standard</li>
 <li>subgraph</li>
 <li>temp</li>
-<li>temp2</li>
+<li>temp1</li>
 <li>temp2</li>
 </ul>
 
@@ -206,7 +212,7 @@ These are,</p>
          \,,,/
          (o o)
 -----oOOo-(3)-oOOo-----
-gremlin&gt; :install org.umlg sqlg-hsqldb 0.0.2-SNAPSHOT
+gremlin&gt; :install org.umlg sqlg-hsqldb 1.0.0.M1
 ==&gt;A module with the name sqlg-hsqldb is already installed
 gremlin&gt; :plugin use tinkerpop.sqlg-hsqldb
 ==&gt;tinkerpop.sqlg-hsqldb activated
@@ -342,6 +348,104 @@ gremlin&gt;
 
 <p><br /></p>
 
+<h2 id="ArchitectureID">Architecture</h2>
+
+<p><br /></p>
+
+<p>With the coming of vertex label's to Tinkerpop3 the mapping of Tinkerpop's graph semantics to that of a RDBMS became natural and useful.</p>
+
+<h3 id="VertextableID">Vertex table</h3>
+
+<p>Every unique vertex label maps to a table. Vertex tables are prefixed with a <code class="language-java">V_</code>. i.e. <code class="language-java">V_Person</code>. The vertex table
+stores the vertex's properties.</p>
+
+<h3 id="EdgetableID">Edge table</h3>
+
+<p>Every unique edge label maps to a table. Edge tables are prefixed with a <code class="language-java">E_</code>. i.e. <code class="language-java">E_friend</code>. The edge table stores
+the edge's adjacent vertex ids and the edge properties. The column corresponding to each adjacent vertex id (<code class="language-java">IN</code> and <code class="language-java">OUT</code>)
+has a foreign key to the adjacent vertex's table.</p>
+
+<h3 id="VERTICESandEDGESID">VERTICES and EDGES</h3>
+
+<p>There are two special tables in Sqlg. One for vertices (<code class="language-java">VERTICES</code>) and one for edges (<code class="language-java">EDGES</code>).</p>
+
+<h4 id="VERTICESID">VERTICES</h4>
+
+<p>The <code class="language-java">VERTICES</code> table has one record for every vertex in the graph. The <code class="language-java">VERTICES</code> tables' auto generated primary key
+functions as the vertex id. Additionally the <code class="language-java">VERTICES</code> table stores the vertex's label and the unique set of labels of
+the vertex's incident edges.</p>
+
+<p>Every vertex has a label and as such a vertex table. This table's <code class="language-java">ID</code> column has a one to one mapping the <code class="language-java">ID</code> column
+of the <code class="language-java">VERTICES</code> table.</p>
+
+<p>This strategy allows gremlin queries of the form <code class="language-java">g.V(1L)</code> to find the vertex in the <code class="language-java">VERTICES</code> table and then know in which
+table the vertex is stored.</p>
+
+<p>Queries of the form <code class="language-java">g.V().has(T.label, 'Person')</code> will go directly to the <code class="language-java">V_Person</code> table to retrieve the vertex.</p>
+
+<h4 id="EDGESID">EDGES</h4>
+
+<p>The <code class="language-java">EDGES</code> table has one record for every edge in the graph. The <code class="language-java">EDGES</code> tables' auto generated primary key
+functions as the edge id. Additionally the <code class="language-java">EDGES</code> table stores the edge's label.</p>
+
+<p>Similar to the vertex look-ups the <code class="language-java">EDGES</code> table facilitates implementing queries of the form <code class="language-java">g.E(1L)</code></p>
+
+<h3 id="Tinkerpop-classicID">Tinkerpop-classic</h3>
+
+<p><img src="images/sqlg/tinkerpop-classic1-er.png" alt="image of tinkerpop-classic" title="" />
+<img src="images/sqlg/tinkerpop-classic2-er.png" alt="image of tinkerpop-classic" title="" /></p>
+
+<h4 id="AlltablesID">All tables</h4>
+
+<p><img src="images/sqlg/tinkerpop-classic.png" alt="image of tinkerpop-classic" title="" /></p>
+
+<h4 id="personID">person</h4>
+
+<p><img src="images/sqlg/person.png" alt="image of tinkerpop-classic" title="" /></p>
+
+<h4 id="softwareID">software</h4>
+
+<p><img src="images/sqlg/software.png" alt="image of tinkerpop-classic" title="" /></p>
+
+<h4 id="knowsID">knows</h4>
+
+<p><img src="images/sqlg/knows.png" alt="image of tinkerpop-classic" title="" /></p>
+
+<h4 id="createdID">created</h4>
+
+<p><img src="images/sqlg/created.png" alt="image of tinkerpop-classic" title="" /></p>
+
+<h4 id="VERTICESID">VERTICES</h4>
+
+<p><img src="images/sqlg/vertices.png" alt="image of tinkerpop-classic" title="" /></p>
+
+<h4 id="EDGESID">EDGES</h4>
+
+<p><img src="images/sqlg/edges.png" alt="image of tinkerpop-classic" title="" /></p>
+
+<h3 id="NamespacingandSchemasID">Namespacing and Schemas</h3>
+
+<p>Many RDBMS databases have the notion of a <code class="language-java">schema</code> as a namespace for tables. Sqlg supports schemas. Schemas
+only apply to vertex labels. Edge tables are created in the schema of the adjacent <code class="language-java">out</code> vertex.
+By default all vertex tables go into the underlying databases' default schema. For Postgresql this
+is the <code class="language-java">public</code> schema.</p>
+
+<p>To specify the schema for a label Sqlg uses the dot <code class="language-java">.</code> notation.</p>
+
+<pre class="prettyprint"><code class="language-java">Vertex john = this.sqlgGraph.addVertex(T.label, "manager", "name", "john");
+Vertex palace1 = this.sqlgGraph.addVertex(T.label, "property.house", "name", "palace1");
+Vertex corrola = this.sqlgGraph.addVertex(T.label, "fleet.car", "model", "corrola");
+palace1.addEdge("managedBy", john);
+corrola.addEdge("owner", john);
+</code></pre>
+
+<p>This will create a table <code class="language-java">V_manager</code> in the <code class="language-java">public</code> (default) schema. A table <code class="language-java">V_house</code> in a <code class="language-java">property</code> schema and table <code class="language-java">V_car</code>
+in a <code class="language-java">fleet</code> schema. For the edges a <code class="language-java">E_managedBy</code> table is created in the <code class="language-java">property</code> schema and a <code class="language-java">E_owner</code> table in the <code class="language-java">fleet</code> schema.</p>
+
+<p><img src="images/sqlg/schemas.png" alt="image of tinkerpop-classic" title="" /></p>
+
+<p><br /></p>
+
 <h2 id="SchemacreationID">Schema creation</h2>
 
 <p><br /></p>
@@ -371,8 +475,8 @@ the user's transaction semantics.</p>
 <li><code class="language-java">SqlgGraph.createEdgeLabeledIndex(String label, Object... dummykeyValues)</code></li>
 </ul>
 
-<p>The <code class="language-java">dummykeyValues</code> are required to indicate to Sqlg the name and type. The type is needed in case Sqlg needs
-to create the relevant column.</p>
+<p>The <code class="language-java">dummykeyValues</code> are required to indicate to Sqlg the name and type of the property. The type is needed  for when
+the column does not yet exist and Sqlg needs to create the relevant column.</p>
 
 <h3 id="ExampleID">Example</h3>
 
@@ -388,7 +492,8 @@ public void testIndexOnVertex() {
 }
 </code></pre>
 
-<p>The gremlin query <code class="language-java">this.sqlgGraph.V().has(T.label, "Person").has("name1", Compare.eq, "john50")</code> will utilize the index on the <code class="language-java">name</code> field.
+<p>In the above usecase, Sqlg will create a table <code class="language-java">Person</code> with a column <code class="language-java">name</code> together with an index on the name column.
+The gremlin query <code class="language-java">this.sqlgGraph.V().has(T.label, "Person").has("name1", Compare.eq, "john50")</code> will utilize the index on the <code class="language-java">name</code> field.
 Currently only <code class="language-java">Compare.eq</code> is supported.</p>
 
 <p><br /></p>
@@ -492,8 +597,7 @@ ReadFromGraph.readAllProperties: [measured 10 out of 10 rounds, threads: 1 (sequ
 
 <h4 id="Createa10000objects,eachwith2propertiesID">Create a 10000 objects, each with 2 properties</h4>
 
-<pre class="prettyprint"><code class="language-java">//Create a 10000 objects, each with 2 properties
-@Test
+<pre class="prettyprint"><code class="language-java">@Test
 public void testAddPersons() {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
@@ -523,13 +627,12 @@ Time to read: 0:00:00.124
 Time to read: 0:00:00.117
 </code></pre>
 
-<p>Note the Postgres read time is roughly equivalent to HSQLDB. This is because in the above test there is only one call to
+<p>Note, the Postgres read time is roughly equivalent to HSQLDB. This is because in the above test there is only one call to
 the database. Postgres itself is fast, however round trips between client and server is expensive.</p>
 
 <h4 id="Createa10001Persons,eachwith2propertiesandonefriendID">Create a 10001 Persons, each with 2 properties and one friend</h4>
 
-<pre class="prettyprint"><code class="language-java">//Create a 10001 Persons, each with 2 properties and one friend
-@Test
+<pre class="prettyprint"><code class="language-java">@Test
 public void testAddPersonAndFriends() {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
