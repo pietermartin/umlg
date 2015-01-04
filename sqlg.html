@@ -65,9 +65,9 @@
 </li><li><a href="#Tinkerpop-classicID">Tinkerpop-classic</a><ul class="nav">
 <li><a href="#AlltablesID">All tables</a></li><li><a href="#personID">person</a></li><li><a href="#softwareID">software</a></li><li><a href="#knowsID">knows</a></li><li><a href="#createdID">created</a></li><li><a href="#VERTICESID">VERTICES</a></li><li><a href="#EDGESID">EDGES</a></li></ul>
 </li><li><a href="#NamespacingandSchemasID">Namespacing and Schemas</a></li></ul>
-</li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#IndexesID">Indexes</a><ul class="nav">
+</li><li><a href="#IndexesID">Indexes</a><ul class="nav">
 <li><a href="#ExampleID">Example</a></li></ul>
-</li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#BatchmodeID">Batch mode</a></li><li><a href="#PerformanceIndicatorID">Performance Indicator</a><ul class="nav">
+</li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#BatchmodeID">Batch mode</a></li><li><a href="#PerformanceIndicatorID">Performance Indicator</a><ul class="nav">
 <li><a href="#Sometrivialexamples.ID">Some trivial examples.</a><ul class="nav">
 <li><a href="#Createa10000objects,eachwith2propertiesID">Create a 10000 objects, each with 2 properties</a></li><li><a href="#Createa10001Persons,eachwith2propertiesandonefriendID">Create a 10001 Persons, each with 2 properties and one friend</a></li><li><a href="#Postgres,Createa1000000PersonsandDogswithapetedge.BatchModeon.ID">Postgres, Create a 1 000 000 Persons and Dogs with a pet edge. BatchMode on.</a></li><li><a href="#HSQLDB,Createa1000000PersonsandDogswithapetedge.ID">HSQLDB, Create a 1 000 000 Persons and Dogs with a pet edge.</a></li></ul>
 </li></ul>
@@ -381,7 +381,7 @@ of the <code class="language-java">VERTICES</code> table.</p>
 <p>This strategy allows gremlin queries of the form <code class="language-java">g.V(1L)</code> to find the vertex in the <code class="language-java">VERTICES</code> table and then know in which
 table the vertex is stored.</p>
 
-<p>Queries of the form <code class="language-java">g.V().has(T.label, 'Person')</code> will go directly to the <code class="language-java">V_Person</code> table to retrieve the vertex.</p>
+<p>Queries of the form <code class="language-java">g.V().has(T.label, 'Person')</code> will go directly to the <code class="language-java">V_Person</code> table to retrieve the vertices.</p>
 
 <h4 id="EDGESID">EDGES</h4>
 
@@ -446,22 +446,6 @@ in a <code class="language-java">fleet</code> schema. For the edges a <code clas
 
 <p><br /></p>
 
-<h2 id="SchemacreationID">Schema creation</h2>
-
-<p><br /></p>
-
-<p>Sqlg creates the schema lazily. This is great, however it comes with serious caveats.</p>
-
-<p><strong>HSQLDB</strong> does not support transactional schema creation. HSQLDB automatically commits any schema creation/alter command
-and immediately starts a new transaction.
-This can have some rather unfortunate consequences, as HSQLDB will silently commit a user transaction thus invalidating
-the user's transaction semantics.</p>
-
-<p><strong>Postgres</strong> supports transactional schema creation/alter commands. The user's transaction semantics remains intact.
- However schema creation commands cause table level locks increasing the risk of dead locks in a multi threaded environment.</p>
-
-<p><br /></p>
-
 <h2 id="IndexesID">Indexes</h2>
 
 <p><br /></p>
@@ -478,23 +462,58 @@ the user's transaction semantics.</p>
 <p>The <code class="language-java">dummykeyValues</code> are required to indicate to Sqlg the name and type of the property. The type is needed  for when
 the column does not yet exist and Sqlg needs to create the relevant column.</p>
 
+<p>Outside of creating the index Sqlg has no further direct interaction with index logic. However gremlin queries with a
+<code class="language-java">has</code> step will translate to a <code class="language-java">sql</code> <code class="language-java">where</code> clause. If an index had been created on the property of the <code class="language-java">has</code> step then
+the underlying sql engine will utilize the index on that field.</p>
+
 <h3 id="ExampleID">Example</h3>
 
 <pre class="prettyprint"><code class="language-java">@Test
-public void testIndexOnVertex() {
+public void testIndexOnVertex() throws SQLException {
     this.sqlgGraph.createVertexLabeledIndex("Person", "name", "dummy");
     this.sqlgGraph.tx().commit();
     for (int i = 0; i &lt; 5000; i++) {
         this.sqlgGraph.addVertex(T.label, "Person", "name", "john" + i);
     }
     this.sqlgGraph.tx().commit();
-    Assert.assertEquals(1, this.sqlgGraph.V().has(T.label, "Person").has("name1", Compare.eq, "john50").count().next().intValue());
+    assertEquals(1, this.sqlgGraph.V().has(T.label, "Person").has("name", "john50").count().next(), 0);
+
+    //Check if the index is being used
+    Connection conn = this.sqlgGraph.tx().getConnection();
+    Statement statement = conn.createStatement();
+    ResultSet rs = statement.executeQuery("explain analyze SELECT * FROM \"public\".\"V_Person\" a WHERE a.\"name\" = 'john50'");
+    assertTrue(rs.next());
+    String result = rs.getString(1);
+    System.out.println(result);
+    assertTrue(result.contains("Index Scan") || result.contains("Bitmap Heap Scan"));
+    statement.close();
+    this.sqlgGraph.tx().rollback();
 }
+
+Output: "Bitmap Heap Scan on "V_Person" a  (cost=4.42..32.42 rows=18 width=40) (actual time=0.016..0.016 rows=1 loops=1)"
 </code></pre>
 
-<p>In the above usecase, Sqlg will create a table <code class="language-java">Person</code> with a column <code class="language-java">name</code> together with an index on the name column.
-The gremlin query <code class="language-java">this.sqlgGraph.V().has(T.label, "Person").has("name1", Compare.eq, "john50")</code> will utilize the index on the <code class="language-java">name</code> field.
+<p>In the above use case, Sqlg will create a table <code class="language-java">V_Person</code> with column <code class="language-java">name</code> together with a index on the <code class="language-java">name</code>.
+At present the default index is created. For postgresql this is a <code class="language-java">Btree</code> index.</p>
+
+<p>The gremlin query <code class="language-java">this.sqlgGraph.V().has(T.label, "Person").has("name1", "john50")</code> will utilize the index on the <code class="language-java">name</code> field.
 Currently only <code class="language-java">Compare.eq</code> is supported.</p>
+
+<p><br /></p>
+
+<h2 id="SchemacreationID">Schema creation</h2>
+
+<p><br /></p>
+
+<p>Sqlg creates the schema lazily. This is great, however it comes with serious caveats.</p>
+
+<p><strong>HSQLDB</strong> does not support transactional schema creation. HSQLDB automatically commits any schema creation/alter command
+and immediately starts a new transaction.
+This can have some rather unfortunate consequences, as HSQLDB will silently commit a user transaction thus invalidating
+the user's transaction semantics.</p>
+
+<p><strong>Postgres</strong> supports transactional schema creation/alter commands. The user's transaction semantics remains intact.
+ However schema creation commands cause table level locks increasing the risk of dead locks in a multi threaded environment.</p>
 
 <p><br /></p>
 

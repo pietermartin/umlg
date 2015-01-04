@@ -245,20 +245,20 @@ These are,
 
 With the coming of vertex label's to Tinkerpop3 the mapping of Tinkerpop's graph semantics to that of a RDBMS became natural and useful.
 
-###Vertex table###
+###Vertex table
 Every unique vertex label maps to a table. Vertex tables are prefixed with a `V_`. i.e. `V_Person`. The vertex table
 stores the vertex's properties.
 
-###Edge table###
+###Edge table
 Every unique edge label maps to a table. Edge tables are prefixed with a `E_`. i.e. `E_friend`. The edge table stores
 the edge's adjacent vertex ids and the edge properties. The column corresponding to each adjacent vertex id (`IN` and `OUT`)
 has a foreign key to the adjacent vertex's table.
 
-###VERTICES and EDGES###
+###VERTICES and EDGES
 
 There are two special tables in Sqlg. One for vertices (`VERTICES`) and one for edges (`EDGES`).
 
-####VERTICES####
+####VERTICES
 The `VERTICES` table has one record for every vertex in the graph. The `VERTICES` tables' auto generated primary key
 functions as the vertex id. Additionally the `VERTICES` table stores the vertex's label and the unique set of labels of
 the vertex's incident edges.
@@ -271,33 +271,33 @@ table the vertex is stored.
 
 Queries of the form `g.V().has(T.label, 'Person')` will go directly to the `V_Person` table to retrieve the vertices.
 
-####EDGES####
+####EDGES
 The `EDGES` table has one record for every edge in the graph. The `EDGES` tables' auto generated primary key
 functions as the edge id. Additionally the `EDGES` table stores the edge's label.
 
 Similar to the vertex look-ups the `EDGES` table facilitates implementing queries of the form `g.E(1L)`
 
-###Tinkerpop-classic###
+###Tinkerpop-classic
 
 ![image of tinkerpop-classic](images/sqlg/tinkerpop-classic1-er.png)
 ![image of tinkerpop-classic](images/sqlg/tinkerpop-classic2-er.png)
 
-####All tables###
+####All tables
 ![image of tinkerpop-classic](images/sqlg/tinkerpop-classic.png)
 ####person####
 ![image of tinkerpop-classic](images/sqlg/person.png)
-####software####
+####software
 ![image of tinkerpop-classic](images/sqlg/software.png)
-####knows####
+####knows
 ![image of tinkerpop-classic](images/sqlg/knows.png)
-####created####
+####created
 ![image of tinkerpop-classic](images/sqlg/created.png)
-####VERTICES####
+####VERTICES
 ![image of tinkerpop-classic](images/sqlg/vertices.png)
-####EDGES####
+####EDGES
 ![image of tinkerpop-classic](images/sqlg/edges.png)
 
-###Namespacing and Schemas###
+###Namespacing and Schemas
 
 Many RDBMS databases have the notion of a `schema` as a namespace for tables. Sqlg supports schemas. Schemas
 only apply to vertex labels. Edge tables are created in the schema of the adjacent `out` vertex.
@@ -317,10 +317,56 @@ in a `fleet` schema. For the edges a `E_managedBy` table is created in the `prop
 
 ![image of tinkerpop-classic](images/sqlg/schemas.png)
 
+<br />
+##Indexes
+<br />
+
+Sqlg supports basic indexing.
+
+`org.umlg.sqlg.structure.SqlgGraph` has two methods on it to create indexes. One for vertices and one for edges.
+
+* `SqlgGraph.createVertexLabeledIndex(String label, Object... dummykeyValues)`
+* `SqlgGraph.createEdgeLabeledIndex(String label, Object... dummykeyValues)`
+
+The `dummykeyValues` are required to indicate to Sqlg the name and type of the property. The type is needed  for when
+the column does not yet exist and Sqlg needs to create the relevant column.
+
+Outside of creating the index Sqlg has no further direct interaction with index logic. However gremlin queries with a
+`has` step will translate to a `sql` `where` clause. If an index had been created on the property of the `has` step then
+the underlying sql engine will utilize the index on that field.
+
+###Example
+
+    @Test
+    public void testIndexOnVertex() throws SQLException {
+        this.sqlgGraph.createVertexLabeledIndex("Person", "name", "dummy");
+        this.sqlgGraph.tx().commit();
+        for (int i = 0; i < 5000; i++) {
+            this.sqlgGraph.addVertex(T.label, "Person", "name", "john" + i);
+        }
+        this.sqlgGraph.tx().commit();
+        assertEquals(1, this.sqlgGraph.V().has(T.label, "Person").has("name", "john50").count().next(), 0);
+
+        //Check if the index is being used
+        Connection conn = this.sqlgGraph.tx().getConnection();
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery("explain analyze SELECT * FROM \"public\".\"V_Person\" a WHERE a.\"name\" = 'john50'");
+        assertTrue(rs.next());
+        String result = rs.getString(1);
+        System.out.println(result);
+        assertTrue(result.contains("Index Scan") || result.contains("Bitmap Heap Scan"));
+        statement.close();
+        this.sqlgGraph.tx().rollback();
+    }
+
+    Output: "Bitmap Heap Scan on "V_Person" a  (cost=4.42..32.42 rows=18 width=40) (actual time=0.016..0.016 rows=1 loops=1)"
 
 
+In the above use case, Sqlg will create a table `V_Person` with column `name` together with a index on the `name`.
+At present the default index is created. For postgresql this is a `Btree` index.
 
-
+The gremlin query `this.sqlgGraph.V().has(T.label, "Person").has("name1", "john50")` will utilize the index on the `name` field.
+Currently only `Compare.eq` is supported.
 
 <br />
 ##Schema creation
@@ -335,38 +381,6 @@ the user's transaction semantics.
 
 **Postgres** supports transactional schema creation/alter commands. The user's transaction semantics remains intact.
  However schema creation commands cause table level locks increasing the risk of dead locks in a multi threaded environment.
-
-<br />
-##Indexes
-<br />
-
-Sqlg supports basic indexing.
-
-`org.umlg.sqlg.structure.SqlgGraph` has two methods on it to create indexes. One for vertices and one for edges.
-
-* `SqlgGraph.createVertexLabeledIndex(String label, Object... dummykeyValues)`
-* `SqlgGraph.createEdgeLabeledIndex(String label, Object... dummykeyValues)`
-
-
-The `dummykeyValues` are required to indicate to Sqlg the name and type of the property. The type is needed  for when
-the column does not yet exist and Sqlg needs to create the relevant column.
-
-###Example
-
-    @Test
-    public void testIndexOnVertex() {
-        this.sqlgGraph.createVertexLabeledIndex("Person", "name", "dummy");
-        this.sqlgGraph.tx().commit();
-        for (int i = 0; i < 5000; i++) {
-            this.sqlgGraph.addVertex(T.label, "Person", "name", "john" + i);
-        }
-        this.sqlgGraph.tx().commit();
-        Assert.assertEquals(1, this.sqlgGraph.V().has(T.label, "Person").has("name1", Compare.eq, "john50").count().next().intValue());
-    }
-
-In the above usecase, Sqlg will create a table `Person` with a column `name` together with an index on the name column.
-The gremlin query `this.sqlgGraph.V().has(T.label, "Person").has("name1", Compare.eq, "john50")` will utilize the index on the `name` field.
-Currently only `Compare.eq` is supported.
 
 <br />
 ##Multiple Jvm
