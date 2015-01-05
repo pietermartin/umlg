@@ -60,16 +60,16 @@
 </li><li><a href="#GettingStartedID">Getting Started</a><ul class="nav">
 <li><a href="#MavenID">Maven</a></li><li><a href="#GremlinConsoleID">Gremlin Console</a></li></ul>
 </li><li><a href="#DatatypesID">Data types</a></li><li><a href="#ArchitectureID">Architecture</a><ul class="nav">
-<li><a href="#VertextableID">Vertex table</a></li><li><a href="#EdgetableID">Edge table</a></li><li><a href="#VERTICESandEDGESID">VERTICES and EDGES</a><ul class="nav">
+<li><a href="#VertextablesID">Vertex tables</a></li><li><a href="#EdgetablesID">Edge tables</a></li><li><a href="#VERTICESandEDGESID">VERTICES and EDGES</a><ul class="nav">
 <li><a href="#VERTICESID">VERTICES</a></li><li><a href="#EDGESID">EDGES</a></li></ul>
 </li><li><a href="#Tinkerpop-classicID">Tinkerpop-classic</a><ul class="nav">
 <li><a href="#ERDiagramID">ER Diagram</a></li><li><a href="#AlltablesID">All tables</a></li><li><a href="#V_personID">V_person</a></li><li><a href="#V_softwareID">V_software</a></li><li><a href="#E_knowsID">E_knows</a></li><li><a href="#E_createdID">E_created</a></li><li><a href="#VERTICESID">VERTICES</a></li><li><a href="#EDGESID">EDGES</a></li></ul>
 </li><li><a href="#NamespacingandSchemasID">Namespacing and Schemas</a></li></ul>
 </li><li><a href="#IndexesID">Indexes</a><ul class="nav">
 <li><a href="#ExampleID">Example</a></li></ul>
-</li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#BatchmodeID">Batch mode</a></li><li><a href="#PerformanceIndicatorID">Performance Indicator</a><ul class="nav">
+</li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#SqlqueriesID">Sql queries</a></li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#BatchmodeID">Batch mode</a></li><li><a href="#PerformanceIndicatorID">Performance Indicator</a><ul class="nav">
 <li><a href="#Sometrivialexamples.ID">Some trivial examples.</a><ul class="nav">
-<li><a href="#Createa10000objects,eachwith2propertiesID">Create a 10000 objects, each with 2 properties</a></li><li><a href="#Createa10001Persons,eachwith2propertiesandonefriendID">Create a 10001 Persons, each with 2 properties and one friend</a></li><li><a href="#Postgres,Createa1000000PersonsandDogswithapetedge.BatchModeon.ID">Postgres, Create a 1 000 000 Persons and Dogs with a pet edge. BatchMode on.</a></li><li><a href="#HSQLDB,Createa1000000PersonsandDogswithapetedge.ID">HSQLDB, Create a 1 000 000 Persons and Dogs with a pet edge.</a></li></ul>
+<li><a href="#Create10000objects,eachwith2propertiesID">Create 10000 objects, each with 2 properties</a></li><li><a href="#Create10001Persons,eachwith2propertiesandonefriendID">Create 10001 Persons, each with 2 properties and one friend</a></li><li><a href="#Postgres,Create1000000PersonsandDogswithapetedge.BatchModeon.ID">Postgres, Create 1 000 000 Persons and Dogs with a pet edge. BatchMode on.</a></li><li><a href="#HSQLDB,Create1000000PersonsandDogswithapetedge.ID">HSQLDB, Create 1 000 000 Persons and Dogs with a pet edge.</a></li></ul>
 </li></ul>
 </li>
                 </ul>
@@ -159,7 +159,7 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 &lt;/dependency&gt;
 </code></pre>
 
-<p>Sqlg is designed to run as a singleton that can be shared among multiple threads. Instantiate Sqlg via the standard
+<p>Sqlg is designed to run as a singleton that can be shared among multiple threads. You can instantiate Sqlg using the standard
 tinkerpop3 static constructors.</p>
 
 <ul>
@@ -185,7 +185,7 @@ jdbc.password=******
 
 <p>In the case of Postgres the database must already exist.</p>
 
-<p>If you want to run the Tinkerpop tests on Postgres you need to create the various databases used upfront.
+<p>If you want to run the Tinkerpop tests on Postgres you need to create upfront the various databases that are used.
 These are,</p>
 
 <ul>
@@ -352,45 +352,49 @@ gremlin&gt;
 
 <p><br /></p>
 
-<p>With the coming of vertex label's to Tinkerpop3 the mapping of Tinkerpop's graph semantics to that of a RDBMS became natural and useful.</p>
+<p>With the coming of vertex labels to Tinkerpop3 the mapping of Tinkerpop's graph semantics to that of a RDBMS became natural and useful.</p>
 
-<h3 id="VertextableID">Vertex table</h3>
+<h3 id="VertextablesID">Vertex tables</h3>
 
 <p>Every unique vertex label maps to a table. Vertex tables are prefixed with a <code class="language-java">V_</code>. i.e. <code class="language-java">V_Person</code>. The vertex table
 stores the vertex's properties.</p>
 
-<h3 id="EdgetableID">Edge table</h3>
+<h3 id="EdgetablesID">Edge tables</h3>
 
 <p>Every unique edge label maps to a table. Edge tables are prefixed with a <code class="language-java">E_</code>. i.e. <code class="language-java">E_friend</code>. The edge table stores
-the edge's adjacent vertex ids and the edge properties. The column corresponding to each adjacent vertex id (<code class="language-java">IN</code> and <code class="language-java">OUT</code>)
+each edge's adjacent vertex ids and the edge properties. The column corresponding to each adjacent vertex id (<code class="language-java">IN</code> and <code class="language-java">OUT</code>)
 has a foreign key to the adjacent vertex's table.</p>
 
 <h3 id="VERTICESandEDGESID">VERTICES and EDGES</h3>
 
-<p>There are two special tables in Sqlg. One for vertices (<code class="language-java">VERTICES</code>) and one for edges (<code class="language-java">EDGES</code>).</p>
+<p>There are two special tables in Sqlg. One is for vertices (<code class="language-java">VERTICES</code>) and the other is for edges (<code class="language-java">EDGES</code>).</p>
 
 <h4 id="VERTICESID">VERTICES</h4>
 
-<p>The <code class="language-java">VERTICES</code> table has one record for every vertex in the graph. The <code class="language-java">VERTICES</code> tables' auto generated primary key
-functions as the vertex id. Additionally the <code class="language-java">VERTICES</code> table stores the vertex's label and the unique set of labels of
-the vertex's incident edges.</p>
+<p>The <code class="language-java">VERTICES</code> table has one record for every vertex in the graph. The <code class="language-java">VERTICES</code> table's auto generated primary key
+functions as the vertex id. Additionally the <code class="language-java">VERTICES</code> table stores each vertex's label and the unique set of labels of
+each vertex's incident edges.</p>
 
 <p>Every vertex has a label and as such a vertex table. This table's <code class="language-java">ID</code> column has a one to one mapping the <code class="language-java">ID</code> column
 of the <code class="language-java">VERTICES</code> table.</p>
 
-<p>This strategy allows gremlin queries of the form <code class="language-java">g.V(1L)</code> to find the vertex in the <code class="language-java">VERTICES</code> table and then know in which
+<p>This strategy allows gremlin queries of the form <code class="language-java">g.V(1L)</code> to find a specific vertex in the <code class="language-java">VERTICES</code> table and then know in which
 table the vertex is stored.</p>
 
-<p>Queries of the form <code class="language-java">g.V().has(T.label, 'Person')</code> will go directly to the <code class="language-java">V_Person</code> table to retrieve the vertices.</p>
+<p>For example, a query of the form <code class="language-java">g.V().has(T.label, 'Person')</code> will go directly to the <code class="language-java">V_Person</code>.</p>
 
 <h4 id="EDGESID">EDGES</h4>
 
 <p>The <code class="language-java">EDGES</code> table has one record for every edge in the graph. The <code class="language-java">EDGES</code> tables' auto generated primary key
-functions as the edge id. Additionally the <code class="language-java">EDGES</code> table stores the edge's label.</p>
+functions as the edge id. Additionally the <code class="language-java">EDGES</code> table stores each edge's label.</p>
 
 <p>Similar to the vertex look-ups the <code class="language-java">EDGES</code> table facilitates implementing queries of the form <code class="language-java">g.E(1L)</code></p>
 
 <h3 id="Tinkerpop-classicID">Tinkerpop-classic</h3>
+
+<p>Taken from <a href="http://www.tinkerpop.com/docs/3.0.0-SNAPSHOT/#intro">Tinkerpop3</a></p>
+
+<p><img src="images/sqlg/tinkerpop-classic-graph.png" alt="image of tinkerpop-classic" title="" /></p>
 
 <h4 id="ERDiagramID">ER Diagram</h4>
 
@@ -427,9 +431,9 @@ functions as the edge id. Additionally the <code class="language-java">EDGES</co
 
 <h3 id="NamespacingandSchemasID">Namespacing and Schemas</h3>
 
-<p>Many RDBMS databases have the notion of a <code class="language-java">schema</code> as a namespace for tables. Sqlg supports schemas. Schemas
-only apply to vertex labels. Edge tables are created in the schema of the adjacent <code class="language-java">out</code> vertex.
-By default all vertex tables go into the underlying databases' default schema. For postgresql and hsqldb this
+<p>Many RDBMS databases have the notion of a <code class="language-java">schema</code> as a namespace for tables. Sqlg supports schemas
+for vertex labels. Distinct schemas for edge tables are unnecessary as edge tables are created in the schema of the adjacent <code class="language-java">out</code> vertex.
+By default schemas for vertex tables go into the underlying databases' default schema. For postgresql and hsqldb this
 is the <code class="language-java">public</code> schema.</p>
 
 <p>To specify the schema for a label Sqlg uses the dot <code class="language-java">.</code> notation.</p>
@@ -441,8 +445,8 @@ palace1.addEdge("managedBy", john);
 corrola.addEdge("owner", john);
 </code></pre>
 
-<p>This will create a table <code class="language-java">V_manager</code> in the <code class="language-java">public</code> (default) schema. Table <code class="language-java">V_house</code> in a <code class="language-java">property</code> schema and table <code class="language-java">V_car</code>
-in a <code class="language-java">fleet</code> schema. For the edges a <code class="language-java">E_managedBy</code> table is created in the <code class="language-java">property</code> schema and a <code class="language-java">E_owner</code> table in the <code class="language-java">fleet</code> schema.</p>
+<p>This will create a table <code class="language-java">V_manager</code> in the <code class="language-java">public</code> (default) schema. Table <code class="language-java">V_house</code> is in a <code class="language-java">property</code> schema and table <code class="language-java">V_car</code>
+is in a <code class="language-java">fleet</code> schema. For the edges a <code class="language-java">E_managedBy</code> table is created in the <code class="language-java">property</code> schema and a <code class="language-java">E_owner</code> table in the <code class="language-java">fleet</code> schema.</p>
 
 <p><img src="images/sqlg/schemas.png" alt="image of tinkerpop-classic" title="" /></p>
 
@@ -454,19 +458,19 @@ in a <code class="language-java">fleet</code> schema. For the edges a <code clas
 
 <p>Sqlg supports basic indexing.</p>
 
-<p><code class="language-java">org.umlg.sqlg.structure.SqlgGraph</code> has two methods on it to create indexes. One for vertices and one for edges.</p>
+<p><code class="language-java">org.umlg.sqlg.structure.SqlgGraph</code> has two methods on it to create indexes one for vertices and one for edges.</p>
 
 <ul>
 <li><code class="language-java">SqlgGraph.createVertexLabeledIndex(String label, Object... dummykeyValues)</code></li>
 <li><code class="language-java">SqlgGraph.createEdgeLabeledIndex(String label, Object... dummykeyValues)</code></li>
 </ul>
 
-<p>The <code class="language-java">dummykeyValues</code> are required to indicate to Sqlg the name and type of the property. The type is needed  for when
-the column does not yet exist and Sqlg needs to create the relevant column.</p>
+<p>The <code class="language-java">dummykeyValues</code> are required to indicate to Sqlg the name and type of the property. The type is needed when
+the column does not yet exist and Sqlg needs to create it.</p>
 
 <p>Outside of creating the index Sqlg has no further direct interaction with index logic. However gremlin queries with a
-<code class="language-java">has</code> step will translate to a <code class="language-java">sql</code> <code class="language-java">where</code> clause. If an index had been created on the property of the <code class="language-java">has</code> step then
-the underlying sql engine will utilize the index on that field.</p>
+<code class="language-java">has</code> step will translate to a <code class="language-java">sql</code> <code class="language-java">where</code> clause. If an index has been created on the property of the <code class="language-java">has</code> step then
+the underlying sql engine will utilize that index.</p>
 
 <h3 id="ExampleID">Example</h3>
 
@@ -495,8 +499,10 @@ public void testIndexOnVertex() throws SQLException {
 Output: "Bitmap Heap Scan on "V_Person" a  (cost=4.42..32.42 rows=18 width=40) (actual time=0.016..0.016 rows=1 loops=1)"
 </code></pre>
 
-<p>In the above use case, Sqlg will create a table <code class="language-java">V_Person</code> with column <code class="language-java">name</code> together with a index on the <code class="language-java">name</code>.
+<p>In the above example, Sqlg will create a table <code class="language-java">V_Person</code> with column <code class="language-java">name</code> together with an index on the <code class="language-java">name</code>.
 At present the default index is created. For postgresql this is a <code class="language-java">Btree</code> index.</p>
+
+<p>The output shows the result of a postgres query explain plan. The result shows that postgres does indeed utilize the index.</p>
 
 <p>The gremlin query <code class="language-java">this.sqlgGraph.V().has(T.label, "Person").has("name1", "john50")</code> will utilize the index on the <code class="language-java">name</code> field.
 Currently only <code class="language-java">Compare.eq</code> is supported.</p>
@@ -507,15 +513,30 @@ Currently only <code class="language-java">Compare.eq</code> is supported.</p>
 
 <p><br /></p>
 
-<p>Sqlg creates the schema lazily. This is great, however it comes with serious caveats.</p>
+<p>Sqlg creates the schema lazily. This is great, but comes with serious caveats.</p>
 
 <p><strong>HSQLDB</strong> does not support transactional schema creation. HSQLDB automatically commits any schema creation/alter command
 and immediately starts a new transaction.
 This can have some rather unfortunate consequences, as HSQLDB will silently commit a user transaction thus invalidating
 the user's transaction semantics.</p>
 
-<p><strong>Postgres</strong> supports transactional schema creation/alter commands. The user's transaction semantics remains intact.
- However schema creation commands cause table level locks increasing the risk of dead locks in a multi threaded environment.</p>
+<p><strong>Postgres</strong> supports transactional schema creation/alter commands. The user's transaction semantics remain intact.
+ However schema creation commands creates table level locks which increases the risk of deadlocks in a multi-threaded environment.</p>
+
+<p><br /></p>
+
+<h2 id="SqlqueriesID">Sql queries</h2>
+
+<p><br /></p>
+
+<p><strong>Note</strong> Experimental Feature</p>
+
+<pre class="prettyprint"><code class="language-java">List&lt;Vertex&gt; SqlgGraph.vertexQuery(String sql)
+</code></pre>
+
+<p>The requirement is that the given sql must return a <code class="language-java">ID</code> column representing any vertex idx.
+Sqlg will then be able to wrap the given sql to retrieve the necessary data to instantiate a SqlgVertex. This way only one
+sql query is executed to retrieve vertices. The performance impact on the original query should be minimal.</p>
 
 <p><br /></p>
 
@@ -529,7 +550,7 @@ but is primarily intended for separate jvm(s) pointing to the same underlying da
 <p>Sqlg caches database schema information. When multiple Sqlg instances point to the same database,
 Sqlg uses <a href="http://hazelcast.com/">Hazelcast</a> as a distributed cache of the schema information.</p>
 
-<p>To indicate to Sqlg that a <code class="language-java">Hazelcast</code> cluster is required specify <code class="language-java">hazelcast.members=ipaddres1,ipaddres2,ipaddres3</code>
+<p>To indicate to Sqlg that a <code class="language-java">Hazelcast</code> cluster is required  you must specify <code class="language-java">hazelcast.members=ipaddres1,ipaddres2,ipaddres3</code>
 in the constructors configuration object. Hazelcast will then automatically set up the distributed cluster for the schema
 information.</p>
 
@@ -561,8 +582,8 @@ public void testBatchMode() {
 }
 </code></pre>
 
-<p>With <code class="language-java">batchMode</code> on Sqlg will cache all modification to the graph and on <code class="language-java">commit</code> execute bulk sql statements.
-This has a very significant improvement on performance.</p>
+<p>With <code class="language-java">batchMode</code> on Sqlg will cache all modifications to the graph and on <code class="language-java">commit</code> execute bulk sql statements.
+This causes a very significant improvement of performance.</p>
 
 <p><br /></p>
 
@@ -570,10 +591,10 @@ This has a very significant improvement on performance.</p>
 
 <p><br /></p>
 
-<p>Below are some fairly trivial examples using Sqlg. The purpose is to give an indication of the performance that can be
-expected by Sqlg.</p>
+<p>Below are some fairly trivial examples using Sqlg, the purpose of which is to give an indication of the performance that can be
+expected from Sqlg.</p>
 
-<p>All tests were run on a standard laptop.</p>
+<p>All tests were run on a standard laptop with the following specs.</p>
 
 <ul>
 <li>Intel(R) Core(TM) i7-4800MQ CPU @ 2.70GHz</li>
@@ -616,7 +637,7 @@ ReadFromGraph.readAllProperties: [measured 10 out of 10 rounds, threads: 1 (sequ
 
 <h3 id="Sometrivialexamples.ID">Some trivial examples.</h3>
 
-<h4 id="Createa10000objects,eachwith2propertiesID">Create a 10000 objects, each with 2 properties</h4>
+<h4 id="Create10000objects,eachwith2propertiesID">Create 10000 objects, each with 2 properties</h4>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void testAddPersons() {
@@ -648,10 +669,10 @@ Time to read: 0:00:00.124
 Time to read: 0:00:00.117
 </code></pre>
 
-<p>Note, the Postgres read time is roughly equivalent to HSQLDB. This is because in the above test there is only one call to
-the database. Postgres itself is fast, however round trips between client and server is expensive.</p>
+<p>Note that the Postgres read time is roughly equivalent to that of HSQLDB. This is because in the above test there is only one call to
+the database. Postgres itself is fast, however round trips between client and server are expensive.</p>
 
-<h4 id="Createa10001Persons,eachwith2propertiesandonefriendID">Create a 10001 Persons, each with 2 properties and one friend</h4>
+<h4 id="Create10001Persons,eachwith2propertiesandonefriendID">Create 10001 Persons, each with 2 properties and one friend</h4>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void testAddPersonAndFriends() {
@@ -691,9 +712,9 @@ Time to read all vertices: 0:00:01.138
 Time to read all vertices: 0:00:09.177
 </code></pre>
 
-<p>To retrieve the friends a 1001 calls are made made. Postgres is significantly slower in this case.</p>
+<p>To retrieve the friends 1001 calls are made made. Postgres is significantly slower in this case.</p>
 
-<h4 id="Postgres,Createa1000000PersonsandDogswithapetedge.BatchModeon.ID">Postgres, Create a 1 000 000 Persons and Dogs with a pet edge. BatchMode on.</h4>
+<h4 id="Postgres,Create1000000PersonsandDogswithapetedge.BatchModeon.ID">Postgres, Create 1 000 000 Persons and Dogs with a pet edge. BatchMode on.</h4>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void testPostgresBatchMode() {
@@ -729,7 +750,7 @@ public void testPostgresBatchMode() {
 Time to read all vertices: 0:00:16.130
 </code></pre>
 
-<h4 id="HSQLDB,Createa1000000PersonsandDogswithapetedge.ID">HSQLDB, Create a 1 000 000 Persons and Dogs with a pet edge.</h4>
+<h4 id="HSQLDB,Create1000000PersonsandDogswithapetedge.ID">HSQLDB, Create 1 000 000 Persons and Dogs with a pet edge.</h4>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void testHsqldbLargeLoad() {

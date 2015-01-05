@@ -64,7 +64,7 @@ Maven coordinates,
         <version>1.0.0.M1</version>
     </dependency>
 
-Sqlg is designed to run as a singleton that can be shared among multiple threads. Instantiate Sqlg via the standard
+Sqlg is designed to run as a singleton that can be shared among multiple threads. You can instantiate Sqlg using the standard
 tinkerpop3 static constructors.
 
 * `SqlgGraph.open(final Configuration configuration)`
@@ -86,7 +86,7 @@ The configuration object requires the following properties.
 
 In the case of Postgres the database must already exist.
 
-If you want to run the Tinkerpop tests on Postgres you need to create the various databases used upfront.
+If you want to run the Tinkerpop tests on Postgres you need to create upfront the various databases that are used.
 These are,
 
 * g1
@@ -243,7 +243,7 @@ These are,
 ##Architecture
 <br />
 
-With the coming of vertex label's to Tinkerpop3 the mapping of Tinkerpop's graph semantics to that of a RDBMS became natural and useful.
+With the coming of vertex labels to Tinkerpop3 the mapping of Tinkerpop's graph semantics to that of a RDBMS became natural and useful.
 
 ###Vertex tables
 Every unique vertex label maps to a table. Vertex tables are prefixed with a `V_`. i.e. `V_Person`. The vertex table
@@ -251,33 +251,39 @@ stores the vertex's properties.
 
 ###Edge tables
 Every unique edge label maps to a table. Edge tables are prefixed with a `E_`. i.e. `E_friend`. The edge table stores
-the edge's adjacent vertex ids and the edge properties. The column corresponding to each adjacent vertex id (`IN` and `OUT`)
+each edge's adjacent vertex ids and the edge properties. The column corresponding to each adjacent vertex id (`IN` and `OUT`)
 has a foreign key to the adjacent vertex's table.
+
+From a rdbms' perspective each edge table is a classic `many to many` join table between vertices.
 
 ###VERTICES and EDGES
 
-There are two special tables in Sqlg. One for vertices (`VERTICES`) and one for edges (`EDGES`).
+There are two special tables in Sqlg. One is for vertices (`VERTICES`) and the other is for edges (`EDGES`).
 
 ####VERTICES
-The `VERTICES` table has one record for every vertex in the graph. The `VERTICES` tables' auto generated primary key
-functions as the vertex id. Additionally the `VERTICES` table stores the vertex's label and the unique set of labels of
-the vertex's incident edges.
+The `VERTICES` table has one record for every vertex in the graph. The `VERTICES` table's auto generated primary key
+functions as the vertex id. Additionally the `VERTICES` table stores each vertex's label and the unique set of labels of
+each vertex's incident edges.
 
 Every vertex has a label and as such a vertex table. This table's `ID` column has a one to one mapping the `ID` column
 of the `VERTICES` table.
 
-This strategy allows gremlin queries of the form `g.V(1L)` to find the vertex in the `VERTICES` table and then know in which
+This strategy allows gremlin queries of the form `g.V(1L)` to find a specific vertex in the `VERTICES` table and then know in which
 table the vertex is stored.
 
-Queries of the form `g.V().has(T.label, 'Person')` will go directly to the `V_Person` table to retrieve the vertices.
+For example, a query of the form `g.V().has(T.label, 'Person')` will go directly to the `V_Person`.
 
 ####EDGES
 The `EDGES` table has one record for every edge in the graph. The `EDGES` tables' auto generated primary key
-functions as the edge id. Additionally the `EDGES` table stores the edge's label.
+functions as the edge id. Additionally the `EDGES` table stores each edge's label.
 
 Similar to the vertex look-ups the `EDGES` table facilitates implementing queries of the form `g.E(1L)`
 
 ###Tinkerpop-classic
+
+Taken from [Tinkerpop3](http://www.tinkerpop.com/docs/3.0.0-SNAPSHOT/#intro)
+
+![image of tinkerpop-classic](images/sqlg/tinkerpop-classic-graph.png)
 
 ####ER Diagram
 
@@ -301,9 +307,9 @@ Similar to the vertex look-ups the `EDGES` table facilitates implementing querie
 
 ###Namespacing and Schemas
 
-Many RDBMS databases have the notion of a `schema` as a namespace for tables. Sqlg supports schemas. Schemas
-only apply to vertex labels. Edge tables are created in the schema of the adjacent `out` vertex.
-By default all vertex tables go into the underlying databases' default schema. For postgresql and hsqldb this
+Many RDBMS databases have the notion of a `schema` as a namespace for tables. Sqlg supports schemas
+for vertex labels. Distinct schemas for edge tables are unnecessary as edge tables are created in the schema of the adjacent `out` vertex.
+By default schemas for vertex tables go into the underlying databases' default schema. For postgresql and hsqldb this
 is the `public` schema.
 
 To specify the schema for a label Sqlg uses the dot `.` notation.
@@ -314,8 +320,8 @@ To specify the schema for a label Sqlg uses the dot `.` notation.
     palace1.addEdge("managedBy", john);
     corrola.addEdge("owner", john);
 
-This will create a table `V_manager` in the `public` (default) schema. Table `V_house` in a `property` schema and table `V_car`
-in a `fleet` schema. For the edges a `E_managedBy` table is created in the `property` schema and a `E_owner` table in the `fleet` schema.
+This will create a table `V_manager` in the `public` (default) schema. Table `V_house` is in a `property` schema and table `V_car`
+is in a `fleet` schema. For the edges a `E_managedBy` table is created in the `property` schema and a `E_owner` table in the `fleet` schema.
 
 ![image of tinkerpop-classic](images/sqlg/schemas.png)
 
@@ -325,17 +331,17 @@ in a `fleet` schema. For the edges a `E_managedBy` table is created in the `prop
 
 Sqlg supports basic indexing.
 
-`org.umlg.sqlg.structure.SqlgGraph` has two methods on it to create indexes. One for vertices and one for edges.
+`org.umlg.sqlg.structure.SqlgGraph` has two methods on it to create indexes one for vertices and one for edges.
 
 * `SqlgGraph.createVertexLabeledIndex(String label, Object... dummykeyValues)`
 * `SqlgGraph.createEdgeLabeledIndex(String label, Object... dummykeyValues)`
 
-The `dummykeyValues` are required to indicate to Sqlg the name and type of the property. The type is needed  for when
-the column does not yet exist and Sqlg needs to create the relevant column.
+The `dummykeyValues` are required to indicate to Sqlg the name and type of the property. The type is needed when
+the column does not yet exist and Sqlg needs to create it.
 
 Outside of creating the index Sqlg has no further direct interaction with index logic. However gremlin queries with a
-`has` step will translate to a `sql` `where` clause. If an index had been created on the property of the `has` step then
-the underlying sql engine will utilize the index on that field.
+`has` step will translate to a `sql` `where` clause. If an index has been created on the property of the `has` step then
+the underlying sql engine will utilize that index.
 
 ###Example
 
@@ -364,8 +370,10 @@ the underlying sql engine will utilize the index on that field.
     Output: "Bitmap Heap Scan on "V_Person" a  (cost=4.42..32.42 rows=18 width=40) (actual time=0.016..0.016 rows=1 loops=1)"
 
 
-In the above use case, Sqlg will create a table `V_Person` with column `name` together with a index on the `name`.
+In the above example, Sqlg will create a table `V_Person` with column `name` together with an index on the `name`.
 At present the default index is created. For postgresql this is a `Btree` index.
+
+The output shows the result of a postgres query explain plan. The result shows that postgres does indeed utilize the index.
 
 The gremlin query `this.sqlgGraph.V().has(T.label, "Person").has("name1", "john50")` will utilize the index on the `name` field.
 Currently only `Compare.eq` is supported.
@@ -374,15 +382,27 @@ Currently only `Compare.eq` is supported.
 ##Schema creation
 <br />
 
-Sqlg creates the schema lazily. This is great, however it comes with serious caveats.
+Sqlg creates the schema lazily. This is great, but comes with serious caveats.
 
 **HSQLDB** does not support transactional schema creation. HSQLDB automatically commits any schema creation/alter command
 and immediately starts a new transaction.
 This can have some rather unfortunate consequences, as HSQLDB will silently commit a user transaction thus invalidating
 the user's transaction semantics.
 
-**Postgres** supports transactional schema creation/alter commands. The user's transaction semantics remains intact.
- However schema creation commands cause table level locks increasing the risk of dead locks in a multi threaded environment.
+**Postgres** supports transactional schema creation/alter commands. The user's transaction semantics remain intact.
+ However schema creation commands creates table level locks which increases the risk of deadlocks in a multi-threaded environment.
+
+<br />
+##Sql queries
+<br />
+
+**Note** Experimental Feature
+
+    List<Vertex> SqlgGraph.vertexQuery(String sql)
+
+The requirement is that the given sql must return a `ID` column representing any vertex idx.
+Sqlg will then be able to wrap the given sql to retrieve the necessary data to instantiate a SqlgVertex. This way only one
+sql query is executed to retrieve vertices. The performance impact on the original query should be minimal.
 
 <br />
 ##Multiple Jvm
@@ -395,7 +415,7 @@ but is primarily intended for separate jvm(s) pointing to the same underlying da
 Sqlg caches database schema information. When multiple Sqlg instances point to the same database,
 Sqlg uses [Hazelcast](http://hazelcast.com/) as a distributed cache of the schema information.
 
-To indicate to Sqlg that a `Hazelcast` cluster is required specify `hazelcast.members=ipaddres1,ipaddres2,ipaddres3`
+To indicate to Sqlg that a `Hazelcast` cluster is required  you must specify `hazelcast.members=ipaddres1,ipaddres2,ipaddres3`
 in the constructors configuration object. Hazelcast will then automatically set up the distributed cluster for the schema
 information.
 
@@ -424,17 +444,17 @@ Batch mode is activated on the transaction object itself. After every `commit` b
         this.sqlgGraph.tx().commit();
     }
 
-With `batchMode` on Sqlg will cache all modification to the graph and on `commit` execute bulk sql statements.
-This has a very significant improvement on performance.
+With `batchMode` on Sqlg will cache all modifications to the graph and on `commit` execute bulk sql statements.
+This causes a very significant improvement of performance.
 
 <br />
 ##Performance Indicator
 <br />
 
-Below are some fairly trivial examples using Sqlg. The purpose is to give an indication of the performance that can be
-expected by Sqlg.
+Below are some fairly trivial examples using Sqlg, the purpose of which is to give an indication of the performance that can be
+expected from Sqlg.
 
-All tests were run on a standard laptop.
+All tests were run on a standard laptop with the following specs.
 
 * Intel(R) Core(TM) i7-4800MQ CPU @ 2.70GHz
 * 500G Solid state drive
@@ -473,7 +493,7 @@ Running Tinkerpop's `StructurePerformanceTest` produces the following output
 
 ###Some trivial examples.
 
-####Create a 10000 objects, each with 2 properties
+####Create 10000 objects, each with 2 properties
 
     @Test
     public void testAddPersons() {
@@ -502,10 +522,10 @@ Running Tinkerpop's `StructurePerformanceTest` produces the following output
     Time to insert: 0:00:01.955
     Time to read: 0:00:00.117
 
-Note, the Postgres read time is roughly equivalent to HSQLDB. This is because in the above test there is only one call to
-the database. Postgres itself is fast, however round trips between client and server is expensive.
+Note that the Postgres read time is roughly equivalent to that of HSQLDB. This is because in the above test there is only one call to
+the database. Postgres itself is fast, however round trips between client and server are expensive.
 
-####Create a 10001 Persons, each with 2 properties and one friend
+####Create 10001 Persons, each with 2 properties and one friend
 
     @Test
     public void testAddPersonAndFriends() {
@@ -542,9 +562,9 @@ the database. Postgres itself is fast, however round trips between client and se
     Time to insert: 0:00:04.810
     Time to read all vertices: 0:00:09.177
 
-To retrieve the friends a 1001 calls are made made. Postgres is significantly slower in this case.
+To retrieve the friends 1001 calls are made made. Postgres is significantly slower in this case.
 
-####Postgres, Create a 1 000 000 Persons and Dogs with a pet edge. BatchMode on.
+####Postgres, Create 1 000 000 Persons and Dogs with a pet edge. BatchMode on.
 
     @Test
     public void testPostgresBatchMode() {
@@ -578,7 +598,7 @@ To retrieve the friends a 1001 calls are made made. Postgres is significantly sl
     Time to insert: 0:00:51.681
     Time to read all vertices: 0:00:16.130
 
-####HSQLDB, Create a 1 000 000 Persons and Dogs with a pet edge.
+####HSQLDB, Create 1 000 000 Persons and Dogs with a pet edge.
 
     @Test
     public void testHsqldbLargeLoad() {
