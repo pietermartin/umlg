@@ -87,6 +87,8 @@
 <p><strong>Sqlg</strong> is a implementation of <a href="https://github.com/tinkerpop/tinkerpop3">Tinkerpop3</a> on a <a href="http://en.wikipedia.org/wiki/Relational_database_management_system">RDBMS</a>.
 Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgresql.org/">Postgresql</a> are supported.</p>
 
+<p>Sqlg has a discussion forum <a href="https://groups.google.com/forum/?hl=en#!forum/sqlg">here</a></p>
+
 <h3 id="TinkerpopsupportedfeaturesID">Tinkerpop supported features</h3>
 
 <p>Sqlg passes Tinkerpop's <code class="language-java">StructureStandardSuite</code> and <code class="language-java">ProcessStandardSuite</code> test suites.</p>
@@ -364,6 +366,8 @@ stores the vertex's properties.</p>
 <p>Every unique edge label maps to a table. Edge tables are prefixed with a <code class="language-java">E_</code>. i.e. <code class="language-java">E_friend</code>. The edge table stores
 each edge's adjacent vertex ids and the edge properties. The column corresponding to each adjacent vertex id (<code class="language-java">IN</code> and <code class="language-java">OUT</code>)
 has a foreign key to the adjacent vertex's table.</p>
+
+<p>From a rdbms' perspective each edge table is a classic <code class="language-java">many to many</code> join table between vertices.</p>
 
 <h3 id="VERTICESandEDGESID">VERTICES and EDGES</h3>
 

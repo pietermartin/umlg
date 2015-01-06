@@ -6,6 +6,9 @@
 Currently [HSQLDB](http://hsqldb.org/) and [Postgresql](http://www.postgresql.org/) are supported.
 
 
+Sqlg has a [Google Group](https://groups.google.com/forum/?hl=en#!forum/sqlg).
+
+
 ###Tinkerpop supported features
 
 Sqlg passes Tinkerpop's `StructureStandardSuite` and `ProcessStandardSuite` test suites.
