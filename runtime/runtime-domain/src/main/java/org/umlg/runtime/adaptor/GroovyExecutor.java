@@ -116,11 +116,11 @@ public class GroovyExecutor {
         if (context != null) {
             if (context instanceof UmlgNode) {
                 Object id = ((UmlgNode) context).getId();
-                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.v(\"" + id.toString() + "\")");
+                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.V(\"" + id.toString() + "\").next()");
             } else if (!(context instanceof Long)) {
-                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.v(\"" + context.toString() + "\")");
+                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.V(\"" + context.toString() + "\").next()");
             } else {
-                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.v(" + context + ")");
+                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.V(" + context + ").next()");
             }
         }
         Graph graph = ((UmlgAdminGraph)UMLG.get()).getReadOnlyGraph();

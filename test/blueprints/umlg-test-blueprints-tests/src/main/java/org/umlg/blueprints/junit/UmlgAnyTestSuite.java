@@ -2,6 +2,7 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.umlg.gremlin.TestGroovyExecutor;
 import org.umlg.tests.changenotification.TestChangeNotification;
 
 /**
@@ -10,7 +11,7 @@ import org.umlg.tests.changenotification.TestChangeNotification;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestChangeNotification.class
+        TestGroovyExecutor.class
 })
 public class UmlgAnyTestSuite {
 }

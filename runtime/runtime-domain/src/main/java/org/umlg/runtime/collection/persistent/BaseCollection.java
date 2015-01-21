@@ -613,7 +613,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
                     Property edgeIdProperty = this.vertex.property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
                     if (edgeIdProperty.isPresent()) {
-                        Edge edge1 = UMLG.get().e(edgeIdProperty.value());
+                        Edge edge1 = UMLG.get().E(edgeIdProperty.value()).next();
                         edge1.property(getPersistentName()).remove();
                         //This is here because Titan has the nasty habit of recreating edges and changing the id.
                         this.vertex.property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID, edge1.id().toString());
@@ -681,7 +681,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 Property edgeIdProperty = this.vertex.property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
                 //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
                 if (edgeIdProperty.isPresent()) {
-                    UMLG.get().e(edgeIdProperty.value()).property(getPersistentName(), e);
+                    UMLG.get().E(edgeIdProperty.value()).next().property(getPersistentName(), e);
                 }
             }
         } else if (isOneEnumeration()) {
@@ -690,7 +690,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
                 Property edgeIdProperty = this.vertex.property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
                 if (edgeIdProperty.isPresent()) {
-                    UMLG.get().e(edgeIdProperty.value()).property(getPersistentName(), ((Enum<?>) e).name());
+                    UMLG.get().E(edgeIdProperty.value()).next().property(getPersistentName(), ((Enum<?>) e).name());
                 }
             }
         } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {

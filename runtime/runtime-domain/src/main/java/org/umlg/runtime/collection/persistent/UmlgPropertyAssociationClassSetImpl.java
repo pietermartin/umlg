@@ -68,7 +68,7 @@ public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassN
     private void removeEdge(Vertex v) {
         Set<Edge> edges = UMLG.get().getEdgesBetween(this.vertex, v, this.getLabel());
         for (Edge edge : edges) {
-            Vertex associationClassVertex = UMLG.get().v(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
+            Vertex associationClassVertex = UMLG.get().V(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)).next();
             //The remove code will delete all in and out edges
             associationClassVertex.remove();
         }

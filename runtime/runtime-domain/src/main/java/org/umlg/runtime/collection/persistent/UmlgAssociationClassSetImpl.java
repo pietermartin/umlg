@@ -100,7 +100,7 @@ public class UmlgAssociationClassSetImpl<AssociationClassNode> extends UmlgSetIm
     @Override
     protected Class<?> getClassToInstantiate(Edge edge) {
         try {
-            Vertex associationClassVertex = UMLG.get().v(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
+            Vertex associationClassVertex = UMLG.get().V(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)).next();
             return Class.forName((String) associationClassVertex.value("className"));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -109,7 +109,7 @@ public class UmlgAssociationClassSetImpl<AssociationClassNode> extends UmlgSetIm
 
     @Override
     protected Vertex getVertexForDirection(Edge edge) {
-        Vertex associationClassVertex = UMLG.get().v(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
+        Vertex associationClassVertex = UMLG.get().V(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)).next();
         return associationClassVertex;
     }
 

@@ -59,5 +59,10 @@
             <artifactId>websocket-servlet</artifactId>
             <version>${jetty.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-rewrite</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
     </dependencies>
 </project>

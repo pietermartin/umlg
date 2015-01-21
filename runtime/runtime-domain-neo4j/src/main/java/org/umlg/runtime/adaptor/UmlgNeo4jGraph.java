@@ -2,12 +2,14 @@ package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.gremlin.neo4j.structure.Neo4jEdge;
 import com.tinkerpop.gremlin.neo4j.structure.Neo4jGraph;
+import com.tinkerpop.gremlin.process.T;
+import com.tinkerpop.gremlin.process.Traversal;
 import com.tinkerpop.gremlin.process.computer.GraphComputer;
 import com.tinkerpop.gremlin.process.graph.GraphTraversal;
 import com.tinkerpop.gremlin.structure.*;
-import com.tinkerpop.gremlin.structure.strategy.ReadOnlyGraphStrategy;
-import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedEdge;
-import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedGraph;
+import com.tinkerpop.gremlin.structure.strategy.ReadOnlyStrategy;
+import com.tinkerpop.gremlin.structure.strategy.StrategyEdge;
+import com.tinkerpop.gremlin.structure.strategy.StrategyGraph;
 import com.tinkerpop.gremlin.structure.util.GraphFactory;
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
@@ -28,12 +30,10 @@ import org.neo4j.kernel.impl.core.NodeManager;
 import org.neo4j.kernel.impl.util.StringLogger;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.collection.UmlgSet;
-import org.umlg.runtime.collection.memory.UmlgLazyList;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.util.UmlgProperties;
-import com.tinkerpop.gremlin.process.T;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -54,7 +54,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     private UmlgTransactionEventHandlerImpl transactionEventHandler;
     private Class<UmlgApplicationNode> umlgApplicationNodeClass;
     private ExecutionEngine engine;
-    private StrategyWrappedGraph neo4jGraph;
+    private StrategyGraph neo4jGraph;
 
     public UmlgNeo4jGraph(String directory) {
         BaseConfiguration conf = new BaseConfiguration();
@@ -62,15 +62,15 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         conf.setProperty(Neo4jGraph.CONFIG_DIRECTORY, directory);
         conf.setProperty("gremlin.neo4j.conf.node_auto_indexing", "true");
         conf.setProperty("gremlin.neo4j.conf.relationship_auto_indexing", "true");
-        this.neo4jGraph = (StrategyWrappedGraph) GraphFactory.open(conf, new UmlgNeo4jGraphStrategy());
+        this.neo4jGraph = GraphFactory.open(conf).strategy(new UmlgNeo4jGraphStrategy());
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
     @Override
     public Graph getReadOnlyGraph() {
         Neo4jGraph rawNeo4jGraph = (Neo4jGraph) this.neo4jGraph.getBaseGraph();
-        final StrategyWrappedGraph swg = new StrategyWrappedGraph(rawNeo4jGraph);
-        swg.getStrategy().setGraphStrategy(new ReadOnlyGraphStrategy());
+        final StrategyGraph swg = new StrategyGraph(rawNeo4jGraph);
+        swg.strategy(ReadOnlyStrategy.instance());
         return swg;
     }
 
@@ -81,6 +81,11 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     @Override
     public Configuration configuration() {
         return this.configuration();
+    }
+
+    @Override
+    public Iterators iterators() {
+        return this.neo4jGraph.iterators();
     }
 
     public <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final Parameter... indexParameters) {
@@ -135,10 +140,11 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
                 this.transactionEventHandler.beforeCommit();
             }
             this.neo4jGraph.tx().commit();
-            this.transactionEventHandler.afterCommit();
         } finally {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
+            //This may start a new transaction
+            this.transactionEventHandler.afterCommit();
             TransactionThreadNotificationVar.remove();
         }
     }
@@ -223,11 +229,11 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     @Override
     public <T extends PersistentObject> T getEntity(Object id) {
         try {
-            Vertex v = this.v(id);
-            if (v == null) {
+            GraphTraversal<Vertex, Vertex> traversal = this.V(id);
+            if (!traversal.hasNext()) {
                 throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{id}));
             }
-            return instantiateClassifier(v);
+            return instantiateClassifier(traversal.next());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -381,7 +387,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Vertex getRoot() {
-        return this.v(0L);
+        return this.V(0L).next();
     }
 
     @Override
@@ -451,7 +457,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public boolean hasEdgeBeenDeleted(Edge edge) {
-        Neo4jEdge neo4jEdge = (Neo4jEdge) ((StrategyWrappedEdge) edge).getBaseEdge();
+        Neo4jEdge neo4jEdge = (Neo4jEdge) ((StrategyEdge) edge).getBaseEdge();
         try {
             neo4jEdge.getBaseElement().hasProperty("asd");
             return false;
@@ -485,28 +491,18 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public GraphTraversal<Vertex, Vertex> V() {
-        return this.neo4jGraph.V();
+    public GraphTraversal<Vertex, Vertex> V(final Object... vertexIds) {
+        return this.neo4jGraph.V(vertexIds);
     }
 
     @Override
-    public Vertex v(final Object id) {
-        return this.neo4jGraph.v(id);
+    public GraphTraversal<Edge, Edge> E(final Object... edgeIds) {
+        return this.neo4jGraph.E(edgeIds);
     }
 
     @Override
-    public Edge e(final Object id) {
-        return this.neo4jGraph.e(id);
-    }
-
-    @Override
-    public GraphTraversal<Edge, Edge> E() {
-        return this.neo4jGraph.E();
-    }
-
-    @Override
-    public <S> GraphTraversal<S, S> of() {
-        return this.neo4jGraph.of();
+    public <T extends Traversal<S, S>, S> T of(final Class<T> traversalClass) {
+        return this.neo4jGraph.of(traversalClass);
     }
 
     @Override

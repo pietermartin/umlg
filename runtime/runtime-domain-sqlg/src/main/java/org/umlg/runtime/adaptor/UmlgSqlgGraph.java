@@ -4,8 +4,8 @@ import com.tinkerpop.gremlin.process.T;
 import com.tinkerpop.gremlin.process.computer.GraphComputer;
 import com.tinkerpop.gremlin.process.graph.GraphTraversal;
 import com.tinkerpop.gremlin.structure.*;
-import com.tinkerpop.gremlin.structure.strategy.ReadOnlyGraphStrategy;
-import com.tinkerpop.gremlin.structure.strategy.StrategyWrappedGraph;
+import com.tinkerpop.gremlin.structure.strategy.ReadOnlyStrategy;
+import com.tinkerpop.gremlin.structure.strategy.StrategyGraph;
 import org.apache.commons.configuration.Configuration;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.collection.UmlgSet;
@@ -53,14 +53,17 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Graph getReadOnlyGraph() {
-        final StrategyWrappedGraph swg = new StrategyWrappedGraph(this.sqlG);
-        swg.getStrategy().setGraphStrategy(new ReadOnlyGraphStrategy());
-        return swg;
+        return this.sqlG.strategy(ReadOnlyStrategy.instance());
     }
 
     @Override
     public Configuration configuration() {
         return this.sqlG.configuration();
+    }
+
+    @Override
+    public Iterators iterators() {
+        return this.sqlG.iterators();
     }
 
     @Override
@@ -125,10 +128,11 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
                 this.transactionEventHandler.beforeCommit();
             }
             this.sqlG.tx().commit();
-            this.transactionEventHandler.afterCommit();
         } finally {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
+            //This may start a new transaction
+            this.transactionEventHandler.afterCommit();
             TransactionThreadNotificationVar.remove();
         }
     }
@@ -228,14 +232,14 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
             } else if (id instanceof String) {
                 tmpId = Long.valueOf((String)id);
             } else {
-                throw new IllegalStateException("Sqlg only supports Long ids!");
+                throw new IllegalStateException(String.format("Sqlg only supports Long ids!, %s", id.toString()));
             }
 
-            Vertex v = this.v(tmpId);
-            if (v == null) {
+            GraphTraversal<Vertex, Vertex> traversal = this.V(tmpId);
+            if (!traversal.hasNext()) {
                 throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{tmpId}));
             }
-            return instantiateClassifier(v);
+            return instantiateClassifier(traversal.next());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -383,7 +387,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     @Override
     public Vertex getRoot() {
         if (this.rootVertex == null) {
-            this.rootVertex = this.v(this.sqlG.getSqlDialect().getSequenceStart());
+            this.rootVertex = this.V(this.sqlG.getSqlDialect().getSequenceStart()).next();
         }
         return this.rootVertex;
     }
@@ -481,45 +485,19 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public GraphTraversal<Vertex, Vertex> V() {
-        return this.sqlG.V();
+    public GraphTraversal<Vertex, Vertex> V(final Object... vertexIds) {
+        return this.sqlG.V(vertexIds);
     }
 
     @Override
-    public Vertex v(final Object id) {
-        Long tmpId;
-        if (id instanceof Long) {
-            tmpId = (Long)id;
-        } else if (id instanceof String) {
-            tmpId = Long.valueOf((String)id);
-        } else {
-            throw new IllegalStateException("Sqlg only supports Long ids!");
-        }
-        return this.sqlG.v(tmpId);
+    public GraphTraversal<Edge, Edge> E(final Object... edgeIds) {
+        return this.sqlG.E(edgeIds);
     }
 
-    @Override
-    public Edge e(final Object id) {
-        Long tmpId;
-        if (id instanceof Long) {
-            tmpId = (Long)id;
-        } else if (id instanceof String) {
-            tmpId = Long.valueOf((String)id);
-        } else {
-            throw new IllegalStateException("Sqlg only supports Long ids!");
-        }
-        return this.sqlG.e(tmpId);
-    }
-
-    @Override
-    public GraphTraversal<Edge, Edge> E() {
-        return this.sqlG.E();
-    }
-
-    @Override
-    public <S> GraphTraversal<S, S> of() {
-        return this.sqlG.of();
-    }
+//    @Override
+//    public <S> GraphTraversal<S, S> of() {
+//        return this.sqlG.of();
+//    }
 
     @Override
     public GraphComputer compute(final Class... graphComputerClass) {

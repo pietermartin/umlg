@@ -112,7 +112,7 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Um
             }
             Vertex associationClassVertex = null;
             for (Edge edge : edges) {
-                associationClassVertex = UMLG.get().v(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
+                associationClassVertex = UMLG.get().V(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)).next();
             }
             if (associationClassVertex == null) {
                 throw new IllegalStateException("Can not find associationClassVertex, this is a bug!");
