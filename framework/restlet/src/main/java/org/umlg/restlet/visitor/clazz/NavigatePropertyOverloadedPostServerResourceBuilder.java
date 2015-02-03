@@ -331,15 +331,13 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             }
             ojIfBlock.addToStatements("result.append(" + UmlgClassOperations.propertyEnumName(concreteImplementation) + ".asJson())");
             annotatedClass.addToImports(UmlgClassOperations.getPathName(concreteImplementation).append(UmlgClassOperations.propertyEnumName(concreteImplementation)));
-
             ojIfBlock.addToStatements("result.append(\", \\\"from\\\": \")");
             Classifier owningType = (Classifier) pWrap.getOwningType();
             ojIfBlock.addToStatements("result.append(" + UmlgClassOperations.propertyEnumName(owningType) + ".asJson())");
             annotatedClass.addToImports(UmlgClassOperations.getPathName(owningType).append(UmlgClassOperations.propertyEnumName(owningType)));
             ojIfBlock.addToStatements("result.append(\"}\")");
-
+            ojIfBlock.addToStatements("result.append(\"\")");
         }
-
 
         OJIfStatement ifLast = new OJIfStatement("count++ == resultMap.size()");
         ifLast.addToThenPart("result.append(\"}\")");

@@ -1,7 +1,7 @@
 package org.umlg.runtime.collection.persistent;
 
 import com.google.common.base.Preconditions;
-import com.tinkerpop.gremlin.process.graph.GraphTraversal;
+import com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal;
 import com.tinkerpop.gremlin.structure.Direction;
 import com.tinkerpop.gremlin.structure.Edge;
 import com.tinkerpop.gremlin.structure.Vertex;
@@ -14,15 +14,12 @@ import org.umlg.runtime.collection.ocl.OclStdLibSequence;
 import org.umlg.runtime.collection.ocl.OclStdLibSequenceImpl;
 import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
-import org.umlg.runtime.notification.ChangeHolder;
-import org.umlg.runtime.notification.UmlgNotificationManager;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.stream.IntStream;
 
 public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgSequence<E> {
 

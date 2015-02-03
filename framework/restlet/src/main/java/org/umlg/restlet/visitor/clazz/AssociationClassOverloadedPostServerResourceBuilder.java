@@ -279,9 +279,11 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                 ojIfBlock = ifClassInstanceOf.addToElseIfCondition("baseClass.equals(" + UmlgClassOperations.getPathName(concreteImplementation).getLast() + ".class)", "");
             }
             ojIfBlock.addToStatements("result.append(" + UmlgClassOperations.propertyEnumName(concreteImplementation) + ".asJson())");
+            annotatedClass.addToImports(UmlgClassOperations.getPathName(concreteImplementation).append(UmlgClassOperations.propertyEnumName(concreteImplementation)));
             ojIfBlock.addToStatements("result.append(\", \\\"from\\\": \")");
             Classifier owningType = (Classifier) pWrap.getOwningType();
             ojIfBlock.addToStatements("result.append(" + UmlgClassOperations.propertyEnumName(owningType) + ".asJson())");
+            annotatedClass.addToImports(UmlgClassOperations.getPathName(owningType).append(UmlgClassOperations.propertyEnumName(owningType)));
             ojIfBlock.addToStatements("result.append(\"}\")");
 
         }

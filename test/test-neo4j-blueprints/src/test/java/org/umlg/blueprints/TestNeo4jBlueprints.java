@@ -87,7 +87,7 @@ public class TestNeo4jBlueprints {
 
         stopWatch.reset();
         stopWatch.start();
-        Vertex startV = g.v(oneId);
+        Vertex startV = g.V(oneId).next();
         for (Vertex v : startV.out("toMany").toList()) {
             v.value("many");
         }
@@ -189,7 +189,7 @@ public class TestNeo4jBlueprints {
         Edge edge2 = v1.addEdge("test", v1);
         graph.tx().commit();
         Assert.assertNotSame(edge1, edge2);
-        v1 = graph.v(v1.id());
+        v1 = graph.V(v1.id()).next();
         Iterator<Edge> iterator = v1.outE("test");
         Assert.assertEquals(edge1, iterator.next());
         Assert.assertEquals(edge2, iterator.next());
@@ -281,7 +281,7 @@ public class TestNeo4jBlueprints {
 
             stopWatch.reset();
             stopWatch.start();
-            Vertex startV = g.v(one.id());
+            Vertex startV = g.V(one.id()).next();
             int count = 1;
             for (Vertex v : startV.out("toMany").toList()) {
                 v.value("many");
@@ -345,7 +345,7 @@ public class TestNeo4jBlueprints {
             int count = 0;
             for (Object id : ids) {
                 count++;
-                Vertex vertex = g.v(id);
+                Vertex vertex = g.V(id).next();
 
                 for (Vertex v : vertex.out("toMany").toList()) {
                     v.value("many");
@@ -431,7 +431,7 @@ public class TestNeo4jBlueprints {
             stopWatch.reset();
             stopWatch.start();
             int count = 1;
-            Vertex startV = g.v(start.id());
+            Vertex startV = g.V(start.id()).next();
             Iterator<Vertex> vertices = startV.out();
             while (vertices.hasNext()) {
                 Vertex next = vertices.next();

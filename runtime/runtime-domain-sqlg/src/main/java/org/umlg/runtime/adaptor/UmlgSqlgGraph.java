@@ -2,10 +2,9 @@ package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.gremlin.process.T;
 import com.tinkerpop.gremlin.process.computer.GraphComputer;
-import com.tinkerpop.gremlin.process.graph.GraphTraversal;
+import com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal;
 import com.tinkerpop.gremlin.structure.*;
 import com.tinkerpop.gremlin.structure.strategy.ReadOnlyStrategy;
-import com.tinkerpop.gremlin.structure.strategy.StrategyGraph;
 import org.apache.commons.configuration.Configuration;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.collection.UmlgSet;

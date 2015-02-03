@@ -65,7 +65,7 @@ public class TestNeo4jSpeed {
                             if (prevId == null) {
                                 startVertex[tid] = v.id();
                             } else {
-                                Vertex prevV = graph.v(prevId);
+                                Vertex prevV = graph.V(prevId).next();
                                 prevV.addEdge(TEST_LABEL, v);
                             }
                             graph.tx().commit();
@@ -98,7 +98,7 @@ public class TestNeo4jSpeed {
                     public void run() {
                         for (int k = 0; k < 100; k++) {
                             int count = 0;
-                            Vertex v = graph.v(startVertex[tid]);
+                            Vertex v = graph.V(startVertex[tid]).next();
 
                             Edge e;
                             do {
@@ -167,10 +167,10 @@ public class TestNeo4jSpeed {
 
         // Edges
         for (int i=0; i < partSize; i++) {
-            Vertex outVertex = graph.v(outVertices[i]);
-            outVertex.addEdge(label, graph.v(inVertices[(5 * i + 1) % partSize]));
-            outVertex.addEdge(label, graph.v(inVertices[(5 * i + 4) % partSize]));
-            outVertex.addEdge(label, graph.v(inVertices[(5 * i + 7) % partSize]));
+            Vertex outVertex = graph.V(outVertices[i]).next();
+            outVertex.addEdge(label, graph.V(inVertices[(5 * i + 1) % partSize]).next());
+            outVertex.addEdge(label, graph.V(inVertices[(5 * i + 4) % partSize]).next());
+            outVertex.addEdge(label, graph.V(inVertices[(5 * i + 7) % partSize]).next());
 
             if (i % numPerCommit == 0) {
                 graph.tx().commit();
@@ -198,7 +198,7 @@ public class TestNeo4jSpeed {
                         @Override
                         public void run() {
                             try {
-                                Vertex v = graph.v(outVertices[0]);
+                                Vertex v = graph.V(outVertices[0]).next();
                                 long startTime = System.currentTimeMillis();
 
                                 for (int k=0; k < 100 * numIters / numThreads; k++) {

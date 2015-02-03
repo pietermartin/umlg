@@ -3,8 +3,7 @@ package org.umlg.runtime.collection.persistent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import com.tinkerpop.gremlin.process.Traversal;
-import com.tinkerpop.gremlin.process.graph.GraphTraversal;
+import com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal;
 import com.tinkerpop.gremlin.structure.Direction;
 import com.tinkerpop.gremlin.structure.Edge;
 import com.tinkerpop.gremlin.structure.Property;
@@ -26,7 +25,6 @@ import org.umlg.runtime.notification.UmlgNotificationManager;
 import org.umlg.runtime.types.Password;
 import org.umlg.runtime.types.UmlgType;
 import org.umlg.runtime.util.UmlgFormatter;
-import org.umlg.runtime.validation.RangeUnlimitedNatural;
 
 import java.lang.reflect.Method;
 import java.util.*;
