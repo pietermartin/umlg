@@ -105,7 +105,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
      */
     @Override
     public void incrementTransactionCount() {
-        this.getRoot().property("transactionCount", (Integer) this.getRoot().value("transactionCount") + 1);
+//        this.getRoot().property("transactionCount", (Integer) this.getRoot().value("transactionCount") + 1);
     }
 
     @Override

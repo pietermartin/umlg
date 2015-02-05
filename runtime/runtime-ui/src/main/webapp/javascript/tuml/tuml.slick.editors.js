@@ -43,7 +43,7 @@
         var defaultValue;
 
         this.init = function () {
-            $input = $("<INPUT type=" + (args.column.options.property.dataTypeEnum === 'Password' || args.column.options.property.dataTypeEnum === 'UnsecurePassword' ? "'password'" : "'text'") + "class='slick-grid-umlg-editor-text' />")
+            $input = $("<TEXTAREA type=" + (args.column.options.property.dataTypeEnum === 'Password' || args.column.options.property.dataTypeEnum === 'UnsecurePassword' ? "'password'" : "'text'") + "class='slick-grid-umlg-editor-text' ></TEXTAREA>")
                 .appendTo(args.container)
                 .bind("keydown.nav", function (e) {
                     if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
