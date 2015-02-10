@@ -120,7 +120,7 @@ public class GroovyExecutor {
             } else if (!(context instanceof Long)) {
                 groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.V(\"" + context.toString() + "\").next()");
             } else {
-                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.V(" + context + ").next()");
+                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.V(" + context + "L).next()");
             }
         }
         Graph graph = ((UmlgAdminGraph)UMLG.get()).getReadOnlyGraph();

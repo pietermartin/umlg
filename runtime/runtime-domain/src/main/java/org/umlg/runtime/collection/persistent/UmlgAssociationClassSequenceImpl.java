@@ -113,7 +113,8 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
             }
             Vertex associationClassVertex = null;
             for (Edge edge : edges) {
-                associationClassVertex = UMLG.get().V(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)).next();
+                String value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
+                associationClassVertex = UMLG.get().V(value).next();
             }
 
             Class<?> c;

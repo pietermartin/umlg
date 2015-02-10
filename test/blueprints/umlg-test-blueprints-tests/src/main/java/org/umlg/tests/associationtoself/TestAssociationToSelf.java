@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.umlg.associationtoself.*;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
+import java.util.Arrays;
+
 /**
  * Date: 2014/03/21
  * Time: 4:46 PM
@@ -133,6 +135,9 @@ public class TestAssociationToSelf extends BaseLocalDbTest {
         Assert.assertEquals(0, b.getTo().size());
 
         Assert.assertEquals(3, a.getEAC_to().size());
+        for (EAC eac : a.getEAC_to()) {
+            Assert.assertTrue(Arrays.asList("AB", "AC", "AD").contains(eac.getName()));
+        }
         Assert.assertEquals(1, b.getEAC_from().size());
         Assert.assertEquals(1, b.getEAC_from().size());
         Assert.assertEquals(1, b.getEAC_from().size());

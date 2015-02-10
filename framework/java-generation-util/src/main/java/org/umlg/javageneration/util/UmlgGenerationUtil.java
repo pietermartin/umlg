@@ -19,7 +19,7 @@ public class UmlgGenerationUtil {
     public static final String Index_UNIQUE = "UNIQUE";
     public static final String Index_NON_UNIQUE = "NON_UNIQUE";
     public static final String BaseClassUmlgQualifiedName = "org::umlg::meta::BaseClassUmlg";
-    public static OJPathName Parameter = new OJPathName("org.umlg.runtime.adaptor.Parameter");
+    public static OJPathName UmlgParameter = new OJPathName("org.umlg.runtime.adaptor.UmlgParameter");
     public static OJPathName BASE_CLASS_UMLG = new OJPathName("org.umlg.meta.BaseClassUmlg");
 
     public static String umlgizeUmlName(String umlName) {

@@ -16,10 +16,7 @@ import org.umlg.sqlg.structure.SqlgGraph;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -75,26 +72,28 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         return this.sqlG.tx().isInBatchMode();
     }
 
-    public <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final Parameter... indexParameters) {
+    public <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final UmlgParameter... indexUmlgParameters) {
         if (elementClass == null) {
             throw Exceptions.classForElementCannotBeNull();
         }
 
-        Parameter<String, Class<?>> indexParameter = indexParameters[0];
-        Parameter<String, Boolean> uniqueParameter = indexParameters[1];
-        Parameter<String, String> labelParameter = indexParameters[2];
+        UmlgParameter<String, Class<?>> indexUmlgParameter = indexUmlgParameters[0];
+        UmlgParameter<String, Boolean> uniqueUmlgParameter = indexUmlgParameters[1];
+        UmlgParameter<String, String> labelUmlgParameter = indexUmlgParameters[2];
 
         if (Vertex.class.isAssignableFrom(elementClass)) {
             this.tx().readWrite();
-            if (uniqueParameter.getValue()) {
-                this.sqlG.createUniqueConstraint(labelParameter.getValue(), key);
+            if (uniqueUmlgParameter.getValue()) {
+                //TODO
+//                this.sqlG.createUniqueConstraint(labelParameter.getValue(), key);
+                this.sqlG.createVertexLabeledIndex(labelUmlgParameter.getValue(), key, SqlgDefaultValueUtil.valueFor(indexUmlgParameter.getValue()));
             } else {
-                this.sqlG.createVertexLabeledIndex(labelParameter.getValue(), key, SqlgDefaultValueUtil.valueFor(indexParameter.getValue()));
+                this.sqlG.createVertexLabeledIndex(labelUmlgParameter.getValue(), key, SqlgDefaultValueUtil.valueFor(indexUmlgParameter.getValue()));
 
             }
         } else if (Edge.class.isAssignableFrom(elementClass)) {
             this.tx().readWrite();
-            this.sqlG.createEdgeLabeledIndex(labelParameter.getValue(), key);
+            this.sqlG.createEdgeLabeledIndex(labelUmlgParameter.getValue(), key);
         } else {
             throw Exceptions.classIsNotIndexable(elementClass);
         }
@@ -485,18 +484,21 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public GraphTraversal<Vertex, Vertex> V(final Object... vertexIds) {
-        return this.sqlG.V(vertexIds);
+        return this.sqlG.V(validateIds(vertexIds));
     }
 
     @Override
     public GraphTraversal<Edge, Edge> E(final Object... edgeIds) {
-        return this.sqlG.E(edgeIds);
+        return this.sqlG.E(validateIds(edgeIds));
     }
 
-//    @Override
-//    public <S> GraphTraversal<S, S> of() {
-//        return this.sqlG.of();
-//    }
+    private Long[] validateIds(final Object... ids) {
+        List<Long> longIds = new ArrayList<>();
+        for (Object id : ids) {
+           longIds.add(Long.valueOf(id.toString()));
+        }
+        return longIds.toArray(new Long[]{});
+    }
 
     @Override
     public GraphComputer compute(final Class... graphComputerClass) {

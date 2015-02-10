@@ -2689,6 +2689,35 @@ endif</body>
               </defaultValue>
             </ownedAttribute>
           </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_2GVe8K9kEeSa140Z-U4zOw" name="VirtualGroup">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_3gJKgK9kEeSa140Z-U4zOw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5KGK4K9kEeSa140Z-U4zOw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5KIAEK9kEeSa140Z-U4zOw" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_8r8hAK9kEeSa140Z-U4zOw" name="workspaceelement" type="_6FfcIK9kEeSa140Z-U4zOw" association="_8r9vIK9kEeSa140Z-U4zOw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8r9IEK9kEeSa140Z-U4zOw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8r9IEa9kEeSa140Z-U4zOw" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_6FfcIK9kEeSa140Z-U4zOw" name="WorkspaceElement">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_Y-phoK9lEeSa140Z-U4zOw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_aaOHwK9lEeSa140Z-U4zOw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_aaOu0K9lEeSa140Z-U4zOw" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:AssociationClass" xmi:id="_8r9vIK9kEeSa140Z-U4zOw" name="VirtualGroupWorkspaceElementAC" memberEnd="_8r9vIa9kEeSa140Z-U4zOw _8r8hAK9kEeSa140Z-U4zOw" navigableOwnedEnd="_8r9vIa9kEeSa140Z-U4zOw">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_bEU0sK9lEeSa140Z-U4zOw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cfcH0K9lEeSa140Z-U4zOw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_cfdV8K9lEeSa140Z-U4zOw" value="1"/>
+            </ownedAttribute>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_8r9vIa9kEeSa140Z-U4zOw" name="virtualgroup" type="_2GVe8K9kEeSa140Z-U4zOw" association="_8r9vIK9kEeSa140Z-U4zOw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8r9vIq9kEeSa140Z-U4zOw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8r9vI69kEeSa140Z-U4zOw" value="*"/>
+            </ownedEnd>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_fjsrwM8FEeOjlpjTZXDyqw" name="validation">
           <packagedElement xmi:type="uml:Class" xmi:id="_iQoMEM8FEeOjlpjTZXDyqw" name="TestValidation">

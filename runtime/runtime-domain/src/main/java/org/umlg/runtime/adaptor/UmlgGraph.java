@@ -34,7 +34,7 @@ public interface UmlgGraph extends Graph {
      */
     UmlgApplicationNode getUmlgApplicationNode();
 
-    <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final Parameter... indexParameters);
+    <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final UmlgParameter... indexUmlgParameters);
 
     /**
      * Instantiate any concrete classifier with its vertex id.

@@ -6,12 +6,12 @@ import java.util.Map;
  * Date: 2014/06/14
  * Time: 9:01 AM
  */
-public class Parameter<K, V> implements Map.Entry<K, V> {
+public class UmlgParameter<K, V> implements Map.Entry<K, V> {
 
     private final K key;
     private V value;
 
-    public Parameter(final K key, final V value) {
+    public UmlgParameter(final K key, final V value) {
         this.key = key;
         this.value = value;
     }
@@ -30,9 +30,9 @@ public class Parameter<K, V> implements Map.Entry<K, V> {
     }
 
     public boolean equals(Object object) {
-        if (object.getClass().equals(Parameter.class)) {
-            final Object otherKey = ((Parameter) object).getKey();
-            final Object otherValue = ((Parameter) object).getValue();
+        if (object.getClass().equals(UmlgParameter.class)) {
+            final Object otherKey = ((UmlgParameter) object).getKey();
+            final Object otherValue = ((UmlgParameter) object).getValue();
             if (otherKey == null) {
                 if (key != null)
                     return false;

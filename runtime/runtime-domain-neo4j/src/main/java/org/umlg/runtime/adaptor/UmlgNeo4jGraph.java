@@ -88,21 +88,21 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         return this.neo4jGraph.iterators();
     }
 
-    public <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final Parameter... indexParameters) {
+    public <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final UmlgParameter... indexUmlgParameters) {
         if (elementClass == null) {
             throw UmlgGraph.Exceptions.classForElementCannotBeNull();
         }
 
-        Parameter<String, Class<?>> indexParameter = indexParameters[0];
-        Parameter<String, Boolean> uniqueParameter = indexParameters[1];
-        Parameter<String, String> labelParameter = indexParameters[2];
+        UmlgParameter<String, Class<?>> indexUmlgParameter = indexUmlgParameters[0];
+        UmlgParameter<String, Boolean> uniqueUmlgParameter = indexUmlgParameters[1];
+        UmlgParameter<String, String> labelUmlgParameter = indexUmlgParameters[2];
 
         if (Vertex.class.isAssignableFrom(elementClass)) {
             this.tx().readWrite();
-            if (uniqueParameter.getValue()) {
-                createUniqueConstraint(labelParameter.getValue(), key);
+            if (uniqueUmlgParameter.getValue()) {
+                createUniqueConstraint(labelUmlgParameter.getValue(), key);
             } else {
-                createLabeledIndex(labelParameter.getValue(), key);
+                createLabeledIndex(labelUmlgParameter.getValue(), key);
 
             }
         } else if (Edge.class.isAssignableFrom(elementClass)) {

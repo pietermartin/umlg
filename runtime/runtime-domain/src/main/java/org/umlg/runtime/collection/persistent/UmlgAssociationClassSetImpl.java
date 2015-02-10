@@ -8,8 +8,10 @@ import org.joda.time.LocalTime;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
+import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 
 /**
@@ -22,6 +24,37 @@ public class UmlgAssociationClassSetImpl<AssociationClassNode> extends UmlgSetIm
 
     public UmlgAssociationClassSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
+    }
+
+    /**
+     * AssociationClass need to go via the edges as the association class' id is stored there
+     * @return
+     */
+    protected void loadManyNotPrimitiveNotDataType() {
+        for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
+            Edge edge = iter.next();
+            AssociationClassNode node;
+            try {
+                Class<?> c = this.getClassToInstantiate(edge);
+                if (c.isEnum()) {
+                    Object value = this.getVertexForDirection(edge).value(getPersistentName());
+                    node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+                    putToInternalMap(node, this.getVertexForDirection(edge));
+                } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
+                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+                    node = (AssociationClassNode) m.invoke(null);
+                } else if (UmlgNode.class.isAssignableFrom(c)) {
+                    node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
+                } else {
+                    Object value = this.getVertexForDirection(edge).value(getPersistentName());
+                    node = (AssociationClassNode) value;
+                    putToInternalMap(value, this.getVertexForDirection(edge));
+                }
+                this.internalCollection.add(node);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
     /**
@@ -100,7 +133,8 @@ public class UmlgAssociationClassSetImpl<AssociationClassNode> extends UmlgSetIm
     @Override
     protected Class<?> getClassToInstantiate(Edge edge) {
         try {
-            Vertex associationClassVertex = UMLG.get().V(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)).next();
+            String value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
+            Vertex associationClassVertex = UMLG.get().V(value).next();
             return Class.forName((String) associationClassVertex.value("className"));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -109,7 +143,8 @@ public class UmlgAssociationClassSetImpl<AssociationClassNode> extends UmlgSetIm
 
     @Override
     protected Vertex getVertexForDirection(Edge edge) {
-        Vertex associationClassVertex = UMLG.get().V(edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)).next();
+        String value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
+        Vertex associationClassVertex = UMLG.get().V(value).next();
         return associationClassVertex;
     }
 

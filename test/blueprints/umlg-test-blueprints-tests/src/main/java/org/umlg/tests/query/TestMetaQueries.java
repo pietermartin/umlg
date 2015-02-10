@@ -40,7 +40,7 @@ public class TestMetaQueries extends BaseLocalDbTest {
 
         db.commit();
         //One for the enum also
-        Assert.assertEquals(7, countVertices());
+        Assert.assertEquals(6, countVertices());
         Assert.assertEquals(9, countEdges());
 
         ClassQuery q2 = new ClassQuery(true);

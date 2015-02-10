@@ -38,7 +38,7 @@ public class UmlgRestletGenerationUtil {
     public final static OJPathName ResourceException = new OJPathName("org.restlet.resource.ResourceException");
     public final static OJPathName JsonRepresentation = new OJPathName("org.restlet.ext.json.JsonRepresentation");
     public static final OJPathName Router = new OJPathName("org.restlet.routing.Router");
-    public static final OJPathName Parameter = new OJPathName("org.restlet.data.Parameter");
+    public static final OJPathName Parameter = new OJPathName("org.restlet.data.UmlgParameter");
     public static final OJPathName EnumerationLookupServerResouceImpl = new OJPathName("org.umlg.model.EnumerationLookup_ServerResourceImpl");
     public static final OJPathName EnumerationLookupServerResource = new OJPathName("org.umlg.model.EnumerationLookup_ServerResource");
     public static final OJPathName BaseOclExecutionServerResourceImpl = new OJPathName("org.umlg.runtime.restlet.BaseOclExecutionServerResourceImpl");
