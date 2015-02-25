@@ -1,11 +1,9 @@
 package org.umlg.ocl.qualifier.test;
 
-import com.tinkerpop.gremlin.process.T;
-import com.tinkerpop.gremlin.structure.Compare;
 import org.apache.commons.lang.time.StopWatch;
+import org.apache.tinkerpop.gremlin.structure.Compare;
 import org.junit.Assert;
 import org.junit.Test;
-import org.umlg.ocl.UmlgOclExecutor;
 import org.umlg.qualifier.*;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.test.BaseLocalDbTest;

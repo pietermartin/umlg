@@ -1,7 +1,7 @@
 package org.umlg.runtime.types;
 
-import com.tinkerpop.gremlin.structure.Property;
-import com.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.Property;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.util.PasswordEncryptionService;
 
 import java.security.NoSuchAlgorithmException;

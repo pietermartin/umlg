@@ -1,6 +1,6 @@
 package org.umlg.runtime.domain;
 
-import com.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.joda.time.DateTime;
 import org.umlg.runtime.adaptor.TransactionThreadVar;
 import org.umlg.runtime.util.UmlgFormatter;

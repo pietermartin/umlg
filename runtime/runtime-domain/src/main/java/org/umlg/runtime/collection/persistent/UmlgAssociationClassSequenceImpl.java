@@ -1,7 +1,7 @@
 package org.umlg.runtime.collection.persistent;
 
-import com.tinkerpop.gremlin.structure.Edge;
-import com.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -113,7 +113,7 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
             }
             Vertex associationClassVertex = null;
             for (Edge edge : edges) {
-                String value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
+                Object value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
                 associationClassVertex = UMLG.get().V(value).next();
             }
 

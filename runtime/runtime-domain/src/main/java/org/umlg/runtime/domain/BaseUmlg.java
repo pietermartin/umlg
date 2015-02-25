@@ -1,9 +1,9 @@
 package org.umlg.runtime.domain;
 
-import com.tinkerpop.gremlin.structure.Property;
-import com.tinkerpop.gremlin.structure.Vertex;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.tinkerpop.gremlin.structure.Property;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgExceptionUtilFactory;
@@ -38,7 +38,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         initialiseProperties();
     }
 
-    public BaseUmlg(Long id) {
+    public BaseUmlg(Object id) {
         super();
         //check if it has been deleted
         this.vertex = UMLG.get().V(id).next();
@@ -76,8 +76,8 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     }
 
     @Override
-    public final Long getId() {
-        return (Long)this.vertex.id();
+    public final Object getId() {
+        return this.vertex.id();
     }
 
     public Vertex getVertex() {

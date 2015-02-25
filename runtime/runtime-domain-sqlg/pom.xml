@@ -35,7 +35,7 @@
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>com.tinkerpop</groupId>
+            <groupId>org.apache.tinkerpop</groupId>
             <artifactId>gremlin-core</artifactId>
         </dependency>
         <dependency>

@@ -1,7 +1,7 @@
 package org.umlg.runtime.collection.persistent;
 
-import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Set;

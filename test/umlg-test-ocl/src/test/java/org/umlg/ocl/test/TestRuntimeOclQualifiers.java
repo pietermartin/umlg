@@ -1,6 +1,6 @@
 package org.umlg.ocl.test;
 
-import com.tinkerpop.gremlin.structure.Compare;
+import org.apache.tinkerpop.gremlin.structure.Compare;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

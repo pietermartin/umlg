@@ -1,16 +1,13 @@
 package org.umlg.runtime.domain;
 
-import com.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.collection.Qualifier;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.domain.ocl.OclAny;
 import org.umlg.runtime.validation.UmlgConstraintViolation;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 
 public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
     public static final String ALLINSTANCES_EDGE_LABEL = "allinstances";

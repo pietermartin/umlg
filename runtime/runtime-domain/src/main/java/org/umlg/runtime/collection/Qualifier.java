@@ -1,6 +1,5 @@
 package org.umlg.runtime.collection;
 
-import org.umlg.runtime.domain.DataTypeEnum;
 import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.util.UmlgFormatter;
 

@@ -1,12 +1,12 @@
 package org.umlg.runtime.adaptor;
 
-import com.tinkerpop.gremlin.neo4j.structure.Neo4jVertex;
-import com.tinkerpop.gremlin.structure.Graph;
-import com.tinkerpop.gremlin.structure.Property;
-import com.tinkerpop.gremlin.structure.Vertex;
-import com.tinkerpop.gremlin.structure.strategy.GraphStrategy;
-import com.tinkerpop.gremlin.structure.strategy.StrategyContext;
-import com.tinkerpop.gremlin.structure.strategy.StrategyVertex;
+import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jVertex;
+import org.apache.tinkerpop.gremlin.structure.Graph;
+import org.apache.tinkerpop.gremlin.structure.Property;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.strategy.GraphStrategy;
+import org.apache.tinkerpop.gremlin.structure.strategy.StrategyContext;
+import org.apache.tinkerpop.gremlin.structure.strategy.StrategyVertex;
 
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;

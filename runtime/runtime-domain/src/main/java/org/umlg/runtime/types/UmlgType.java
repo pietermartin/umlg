@@ -1,6 +1,6 @@
 package org.umlg.runtime.types;
 
-import com.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 /**
  * Created by pieter on 2014/08/02.

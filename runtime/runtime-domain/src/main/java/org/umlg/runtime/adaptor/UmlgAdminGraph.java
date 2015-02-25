@@ -1,6 +1,6 @@
 package org.umlg.runtime.adaptor;
 
-import com.tinkerpop.gremlin.structure.Graph;
+import org.apache.tinkerpop.gremlin.structure.Graph;
 
 /**
  * Created by pieter on 2014/04/28.

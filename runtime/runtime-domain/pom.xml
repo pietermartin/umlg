@@ -65,11 +65,11 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>com.tinkerpop</groupId>
+            <groupId>org.apache.tinkerpop</groupId>
             <artifactId>gremlin-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.tinkerpop</groupId>
+            <groupId>org.apache.tinkerpop</groupId>
             <artifactId>gremlin-groovy</artifactId>
         </dependency>
         <dependency>

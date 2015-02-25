@@ -1,6 +1,6 @@
 package org.umlg.runtime.domain;
 
-import com.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public abstract class BaseUmlgCompositionNode extends BaseUmlg implements Compos
         super(persistent);
     }
 
-    public BaseUmlgCompositionNode(Long id)  {
+    public BaseUmlgCompositionNode(Object id)  {
         super(id);
     }
 

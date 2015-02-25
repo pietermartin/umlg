@@ -1,6 +1,6 @@
 package org.umlg.tests.associationclass;
 
-import com.tinkerpop.gremlin.process.Traversal;
+import org.apache.tinkerpop.gremlin.process.Traversal;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.associationclass.AssociationClass1;

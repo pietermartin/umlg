@@ -10,10 +10,10 @@ public class UmlgGenerationUtil {
     public static final OJPathName StringEscapeUtils = new OJPathName("org.apache.commons.lang3.StringEscapeUtils");
     public static final OJPathName ChangeHolder = new OJPathName("org.umlg.runtime.notification.ChangeHolder");
     public  static final OJPathName UmlgNotificationManager = new OJPathName("org.umlg.runtime.notification.UmlgNotificationManager");
-    public static final OJPathName GraphTraversal = new OJPathName("com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal");
-    public static final OJPathName Element = new OJPathName("com.tinkerpop.gremlin.structure.Element");
-    public static final OJPathName token = new OJPathName("com.tinkerpop.gremlin.structure.Compare");
-    public static final OJPathName t = new OJPathName("com.tinkerpop.gremlin.process.T");
+    public static final OJPathName GraphTraversal = new OJPathName("org.apache.tinkerpop.gremlin.process.graph.traversal.GraphTraversal");
+    public static final OJPathName Element = new OJPathName("org.apache.tinkerpop.gremlin.structure.Element");
+    public static final OJPathName token = new OJPathName("org.apache.tinkerpop.gremlin.structure.Compare");
+    public static final OJPathName t = new OJPathName("org.apache.tinkerpop.gremlin.process.T");
     public static final String getEntity = "getEntity";
     public static final String Index = "Index";
     public static final String Index_UNIQUE = "UNIQUE";
@@ -89,8 +89,8 @@ public class UmlgGenerationUtil {
     public static final OJPathName umlgUmlgSetClosableIterableImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgSetClosableIterableImpl");
 
     public static final OJPathName umlgRuntimePropertyPathName = new OJPathName("org.umlg.runtime.collection.UmlgRuntimeProperty");
-    public static final OJPathName umlgTransactionalGraphPathName = new OJPathName("com.tinkerpop.blueprints.TransactionalGraph");
-//    public static final OJPathName tinkerIndexPathName = new OJPathName("com.tinkerpop.blueprints.Index");
+    public static final OJPathName umlgTransactionalGraphPathName = new OJPathName("org.apache.tinkerpop.blueprints.TransactionalGraph");
+//    public static final OJPathName tinkerIndexPathName = new OJPathName("org.apache.tinkerpop.blueprints.Index");
 
     public static final OJPathName umlgBagCloseableIterablePathName = new OJPathName("org.umlg.runtime.collection.persistent.UmlgBagClosableIterableImpl");
     public static final OJPathName umlgSequenceCloseableIterablePathName = new OJPathName("org.umlg.runtime.collection.persistent.UmlgSequenceClosableIterableImpl");
@@ -98,7 +98,7 @@ public class UmlgGenerationUtil {
     public static final OJPathName umlgOrderedSetCloseableIterablePathName = new OJPathName("org.umlg.runtime.collection.persistent.UmlgOrderedSetClosableIterableImpl");
 
 
-    public static final OJPathName tinkerDirection = new OJPathName("com.tinkerpop.gremlin.structure.Direction");
+    public static final OJPathName tinkerDirection = new OJPathName("org.apache.tinkerpop.gremlin.structure.Direction");
     public static final OJPathName AssociationClassNode = new OJPathName("org.umlg.runtime.domain.AssociationClassNode");
     public static final OJPathName umlgCompositionNodePathName = new OJPathName("org.umlg.runtime.domain.CompositionNode");
     public static final OJPathName compositionNodePathName = new OJPathName("org.umlg.runtime.domain.CompositionNode");
@@ -112,7 +112,7 @@ public class UmlgGenerationUtil {
     public static final String PERSISTENT_CONSTRUCTOR_PARAM_NAME = "persistent";
 
     public static final String ORIGINAL_UID = "originalUid";
-    public static OJPathName vertexPathName = new OJPathName("com.tinkerpop.gremlin.structure.Vertex");
+    public static OJPathName vertexPathName = new OJPathName("org.apache.tinkerpop.gremlin.structure.Vertex");
     public static OJPathName umlgFormatter = new OJPathName("org.umlg.runtime.util.UmlgFormatter");
     public static OJPathName transactionThreadVar = new OJPathName("org.umlg.runtime.adaptor.TransactionThreadVar");
     public static OJPathName transactionThreadEntityVar = new OJPathName("org.umlg.runtime.adaptor.TransactionThreadEntityVar");
@@ -155,7 +155,7 @@ public class UmlgGenerationUtil {
     public static OJPathName umlgQualifiedBag = new OJPathName("org.umlg.runtime.collection.UmlgQualifiedBag");
     public static OJPathName umlgQualifiedBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgQualifiedBagImpl");
 
-    public static OJPathName edgePathName = new OJPathName("com.tinkerpop.gremlin.structure.Edge");
+    public static OJPathName edgePathName = new OJPathName("org.apache.tinkerpop.gremlin.structure.Edge");
     public static String UMLGAccess = "UMLG.get()";
     public static String getFromUniqueIndex = "getFromUniqueIndex";
     public static String getFromNonUniqueIndex = "getFromIndex";

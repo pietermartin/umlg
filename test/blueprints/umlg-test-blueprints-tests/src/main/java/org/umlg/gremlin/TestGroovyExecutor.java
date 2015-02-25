@@ -1,7 +1,7 @@
 package org.umlg.gremlin;
 
-import com.tinkerpop.gremlin.process.Traversal;
-import com.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.process.Traversal;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.componenttest.Space;
@@ -9,7 +9,6 @@ import org.umlg.componenttest.SpaceTime;
 import org.umlg.componenttest.Time;
 import org.umlg.concretetest.God;
 import org.umlg.concretetest.Universe;
-import org.umlg.concretetest.meta.GodMeta;
 import org.umlg.runtime.adaptor.GroovyExecutor;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgQueryEnum;

@@ -172,7 +172,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
     protected void addContructorWithVertexAndConstructorWithId(OJAnnotatedClass ojClass, Classifier classifier) {
         OJConstructor constructor = new OJConstructor();
-        constructor.addParam("id", "Long");
+        constructor.addParam("id", "Object");
         constructor.getBody().addToStatements("super(id)");
         ojClass.addToConstructors(constructor);
 

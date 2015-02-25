@@ -1,19 +1,20 @@
 package org.umlg.runtime.adaptor;
 
-import com.tinkerpop.gremlin.neo4j.structure.Neo4jEdge;
-import com.tinkerpop.gremlin.neo4j.structure.Neo4jGraph;
-import com.tinkerpop.gremlin.process.T;
-import com.tinkerpop.gremlin.process.Traversal;
-import com.tinkerpop.gremlin.process.computer.GraphComputer;
-import com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal;
-import com.tinkerpop.gremlin.structure.*;
-import com.tinkerpop.gremlin.structure.strategy.ReadOnlyStrategy;
-import com.tinkerpop.gremlin.structure.strategy.StrategyEdge;
-import com.tinkerpop.gremlin.structure.strategy.StrategyGraph;
-import com.tinkerpop.gremlin.structure.util.GraphFactory;
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.time.StopWatch;
+import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jEdge;
+import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jGraph;
+import org.apache.tinkerpop.gremlin.process.T;
+import org.apache.tinkerpop.gremlin.process.Traversal;
+import org.apache.tinkerpop.gremlin.process.TraversalEngine;
+import org.apache.tinkerpop.gremlin.process.computer.GraphComputer;
+import org.apache.tinkerpop.gremlin.process.graph.traversal.GraphTraversal;
+import org.apache.tinkerpop.gremlin.structure.*;
+import org.apache.tinkerpop.gremlin.structure.strategy.ReadOnlyStrategy;
+import org.apache.tinkerpop.gremlin.structure.strategy.StrategyEdge;
+import org.apache.tinkerpop.gremlin.structure.strategy.StrategyGraph;
+import org.apache.tinkerpop.gremlin.structure.util.GraphFactory;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
 import org.neo4j.graphdb.ConstraintViolationException;
@@ -55,6 +56,8 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     private Class<UmlgApplicationNode> umlgApplicationNodeClass;
     private ExecutionEngine engine;
     private StrategyGraph neo4jGraph;
+    //cache the root vertex
+    private Vertex rootVertex;
 
     public UmlgNeo4jGraph(String directory) {
         BaseConfiguration conf = new BaseConfiguration();
@@ -387,7 +390,10 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Vertex getRoot() {
-        return this.V(0L).next();
+        if (this.rootVertex == null) {
+            this.rootVertex = this.V().has(T.label, UmlgGraph.ROOT_VERTEX).next();
+        }
+        return this.rootVertex;
     }
 
     @Override
@@ -506,9 +512,25 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public GraphComputer compute(final Class... graphComputerClass) {
-        return this.neo4jGraph.compute(graphComputerClass);
+    public void compute(Class<? extends GraphComputer> graphComputerClass) throws IllegalArgumentException {
+        this.neo4jGraph.compute(graphComputerClass);
     }
+
+    @Override
+    public GraphComputer compute() {
+        return this.neo4jGraph.compute();
+    }
+
+    @Override
+    public TraversalEngine engine() {
+        return this.neo4jGraph.engine();
+    }
+
+    @Override
+    public void engine(TraversalEngine traversalEngine) {
+        this.neo4jGraph.engine(traversalEngine);
+    }
+
 
     @Override
     public Transaction tx() {

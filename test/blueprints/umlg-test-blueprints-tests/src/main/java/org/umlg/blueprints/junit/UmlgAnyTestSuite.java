@@ -17,7 +17,7 @@ import org.umlg.tests.concretetest.TestOneToMany;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestGroovyExecutor.class
+        TestOneToMany.class
 })
 public class UmlgAnyTestSuite {
 }

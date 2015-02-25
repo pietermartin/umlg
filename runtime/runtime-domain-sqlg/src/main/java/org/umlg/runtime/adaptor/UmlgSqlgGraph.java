@@ -1,17 +1,20 @@
 package org.umlg.runtime.adaptor;
 
-import com.tinkerpop.gremlin.process.T;
-import com.tinkerpop.gremlin.process.computer.GraphComputer;
-import com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal;
-import com.tinkerpop.gremlin.structure.*;
-import com.tinkerpop.gremlin.structure.strategy.ReadOnlyStrategy;
 import org.apache.commons.configuration.Configuration;
+import org.apache.tinkerpop.gremlin.process.T;
+import org.apache.tinkerpop.gremlin.process.TraversalEngine;
+import org.apache.tinkerpop.gremlin.process.computer.GraphComputer;
+import org.apache.tinkerpop.gremlin.process.graph.traversal.GraphTraversal;
+import org.apache.tinkerpop.gremlin.structure.*;
+import org.apache.tinkerpop.gremlin.structure.strategy.ReadOnlyStrategy;
+import org.apache.tinkerpop.gremlin.structure.strategy.StrategyGraph;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.util.UmlgProperties;
+import org.umlg.sqlg.structure.RecordId;
 import org.umlg.sqlg.structure.SqlgGraph;
 
 import java.lang.reflect.InvocationTargetException;
@@ -49,7 +52,9 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Graph getReadOnlyGraph() {
-        return this.sqlG.strategy(ReadOnlyStrategy.instance());
+        final StrategyGraph swg = new StrategyGraph(this);
+        swg.strategy(ReadOnlyStrategy.instance());
+        return swg;
     }
 
     @Override
@@ -224,18 +229,13 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     @Override
     public <T extends PersistentObject> T getEntity(Object id) {
         try {
-            Long tmpId;
-            if (id instanceof Long) {
-                tmpId = (Long)id;
-            } else if (id instanceof String) {
-                tmpId = Long.valueOf((String)id);
-            } else {
+            if (!(id instanceof RecordId)) {
                 throw new IllegalStateException(String.format("Sqlg only supports Long ids!, %s", id.toString()));
             }
 
-            GraphTraversal<Vertex, Vertex> traversal = this.V(tmpId);
+            GraphTraversal<Vertex, Vertex> traversal = this.V(id);
             if (!traversal.hasNext()) {
-                throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{tmpId}));
+                throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{id}));
             }
             return instantiateClassifier(traversal.next());
         } catch (Exception e) {
@@ -385,7 +385,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     @Override
     public Vertex getRoot() {
         if (this.rootVertex == null) {
-            this.rootVertex = this.V(this.sqlG.getSqlDialect().getSequenceStart()).next();
+            this.rootVertex = this.V().has(T.label, UmlgGraph.ROOT_VERTEX).next();
         }
         return this.rootVertex;
     }
@@ -492,17 +492,32 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         return this.sqlG.E(validateIds(edgeIds));
     }
 
-    private Long[] validateIds(final Object... ids) {
-        List<Long> longIds = new ArrayList<>();
-        for (Object id : ids) {
-           longIds.add(Long.valueOf(id.toString()));
-        }
-        return longIds.toArray(new Long[]{});
+    @Override
+    public void compute(Class<? extends GraphComputer> graphComputerClass) throws IllegalArgumentException {
+        this.sqlG.compute(graphComputerClass);
     }
 
     @Override
-    public GraphComputer compute(final Class... graphComputerClass) {
-        return this.sqlG.compute(graphComputerClass);
+    public GraphComputer compute() {
+        return this.sqlG.compute();
+    }
+
+    @Override
+    public TraversalEngine engine() {
+        return this.sqlG.engine();
+    }
+
+    @Override
+    public void engine(TraversalEngine traversalEngine) {
+        this.sqlG.engine(traversalEngine);
+    }
+
+    private RecordId[] validateIds(final Object... ids) {
+        List<RecordId> longIds = new ArrayList<>();
+        for (Object id : ids) {
+           longIds.add((RecordId)id);
+        }
+        return longIds.toArray(new RecordId[]{});
     }
 
     @Override

@@ -1,8 +1,6 @@
 package org.umlg.runtime.domain;
 
-import com.tinkerpop.gremlin.structure.Vertex;
-import org.umlg.runtime.collection.Filter;
-import org.umlg.runtime.collection.UmlgSet;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 /**
  * Date: 2012/12/26

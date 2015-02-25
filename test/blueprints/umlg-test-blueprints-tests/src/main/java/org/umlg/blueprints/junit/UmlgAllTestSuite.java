@@ -150,10 +150,10 @@ import org.umlg.tests.validationtest.TestValidation;
         TestAsType.class,
         TestQualifierToAbstractClass.class,
         TestAssociationClassMoveInList.class,
-        TestAssociationClass.class
+        TestAssociationClass.class,
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
-//        TestAssociationToSelf.class,
+        TestAssociationToSelf.class
 })
 public class UmlgAllTestSuite {
 }

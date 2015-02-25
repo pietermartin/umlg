@@ -1,6 +1,6 @@
 package org.umlg.runtime.collection.persistent;
 
-import com.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.umlg.runtime.collection.UmlgBag;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgSet;

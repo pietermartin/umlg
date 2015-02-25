@@ -1,8 +1,8 @@
 package org.umlg.runtime.adaptor;
 
-import com.tinkerpop.gremlin.groovy.DefaultImportCustomizerProvider;
-import com.tinkerpop.gremlin.structure.Graph;
 import org.apache.commons.lang.time.StopWatch;
+import org.apache.tinkerpop.gremlin.groovy.DefaultImportCustomizerProvider;
+import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.umlg.runtime.domain.UmlgNode;
 
 import javax.script.ScriptException;
