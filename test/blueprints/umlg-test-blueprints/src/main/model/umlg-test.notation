@@ -4785,7 +4785,7 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_0EUNJYMeEeKT8t6_7PBWIQ" y="-20"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_0EUNJoMeEeKT8t6_7PBWIQ" type="6005">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_0EUNJ4MeEeKT8t6_7PBWIQ" x="-18" y="16"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_0EUNJ4MeEeKT8t6_7PBWIQ" x="-36" y="14"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_0EUNKIMeEeKT8t6_7PBWIQ" type="6033">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_0EUNKYMeEeKT8t6_7PBWIQ" y="20"/>
@@ -4854,10 +4854,22 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_nYDk0oM9EeKT8t6_7PBWIQ" y="20"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_nYDk04M9EeKT8t6_7PBWIQ" type="6003">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_nYDk1IM9EeKT8t6_7PBWIQ" y="-20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_o1G2IL0dEeSxeulg21bf0g" name="maskLabel">
+          <stringListValue>visibility</stringListValue>
+          <stringListValue>name</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+          <stringListValue>derived</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_nYDk1IM9EeKT8t6_7PBWIQ" x="66" y="-22"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_nYDk1YM9EeKT8t6_7PBWIQ" type="6005">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_nYDk1oM9EeKT8t6_7PBWIQ" x="18" y="30"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_oHvZ0L0dEeSxeulg21bf0g" name="maskLabel">
+          <stringListValue>visibility</stringListValue>
+          <stringListValue>name</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+          <stringListValue>derived</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_nYDk1oM9EeKT8t6_7PBWIQ" x="15" y="-11"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_nYDk14M9EeKT8t6_7PBWIQ" type="6033">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_nYDk2IM9EeKT8t6_7PBWIQ" y="20"/>

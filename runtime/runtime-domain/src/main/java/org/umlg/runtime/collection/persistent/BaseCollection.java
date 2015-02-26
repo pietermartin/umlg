@@ -262,22 +262,22 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         } else {
             //Get the new vertex for the element
             Vertex newElementVertex = getVertexForDirection(edge);
-            System.out.println("About to call outE " + LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id());
-            if (newElementVertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id()).hasNext()) {
-                Edge edgeToLastVertex = newElementVertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id()).next();
+            System.out.println("About to call outE " + LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(newElementVertex));
+            if (newElementVertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(newElementVertex)).hasNext()) {
+                Edge edgeToLastVertex = newElementVertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(newElementVertex)).next();
                 Vertex lastVertex = edgeToLastVertex.inV().next();
 
                 //move the edge to the last vertex
                 edgeToLastVertex.remove();
 
-                newElementVertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id(), this.vertex);
+                newElementVertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(newElementVertex), this.vertex);
                 //add the element to the linked list
                 //lastVertex here is the previous last vertex. its last edge has been removed, this.vertex is the new last vertex
-                lastVertex.addEdge(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id(), this.vertex);
+                lastVertex.addEdge(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(newElementVertex), this.vertex);
             } else {
                 //its the first element in the list
-                Edge edgeToFirst = newElementVertex.addEdge(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id(), this.vertex);
-                Edge edgeToLast = newElementVertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.id(), this.vertex);
+                Edge edgeToFirst = newElementVertex.addEdge(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(newElementVertex), this.vertex);
+                Edge edgeToLast = newElementVertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(newElementVertex), this.vertex);
                 System.out.println("");
             }
         }
@@ -348,41 +348,41 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             //No duplicates to handle, i.e the collection is an ordered set
             Vertex vertexToRemove = v;
             //Check if it is first, i.e. see if it has a previous vertex
-            if (vertexToRemove.inE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.id()).hasNext()) {
+            if (vertexToRemove.inE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + getIdForLabel(this.vertex)).hasNext()) {
                 //It is not first
-                Edge edgeToPrevious = vertexToRemove.inE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.id()).next();
+                Edge edgeToPrevious = vertexToRemove.inE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + getIdForLabel(this.vertex)).next();
                 Vertex previousVertex = edgeToPrevious.outV().next();
                 edgeToPrevious.remove();
                 //Check if it is last
-                if (vertexToRemove.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.id()).hasNext()) {
+                if (vertexToRemove.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + getIdForLabel(this.vertex)).hasNext()) {
                     //Not last
-                    Edge edgeToNext = vertexToRemove.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.id()).next();
+                    Edge edgeToNext = vertexToRemove.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + getIdForLabel(this.vertex)).next();
                     Vertex nextVertex = edgeToNext.inV().next();
                     edgeToNext.remove();
-                    previousVertex.addEdge(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.id(), nextVertex);
+                    previousVertex.addEdge(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + getIdForLabel(this.vertex), nextVertex);
                 } else {
                     //Last,
                     //previous becomes to last
-                    Edge edgeToLast = this.vertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.id()).next();
+                    Edge edgeToLast = this.vertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + getIdForLabel(this.vertex)).next();
                     edgeToLast.remove();
-                    this.vertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.id(), previousVertex);
+                    this.vertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + getIdForLabel(this.vertex), previousVertex);
                 }
             } else {
                 //It is first
-                Edge edgeToFirst = this.vertex.outE(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.id()).next();
+                Edge edgeToFirst = this.vertex.outE(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + getIdForLabel(this.vertex)).next();
                 edgeToFirst.remove();
                 //Check is it is last
-                if (vertexToRemove.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.id()).hasNext()) {
+                if (vertexToRemove.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + getIdForLabel(this.vertex)).hasNext()) {
                     //Not last
                     //Move the edge to first
-                    Edge edgeToNext = vertexToRemove.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.id()).next();
+                    Edge edgeToNext = vertexToRemove.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + getIdForLabel(this.vertex)).next();
                     Vertex nextVertex = edgeToNext.inV().next();
                     edgeToNext.remove();
-                    this.vertex.addEdge(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.id(), nextVertex);
+                    this.vertex.addEdge(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + getIdForLabel(this.vertex), nextVertex);
                 } else {
                     //Last
                     //Only one element in the list
-                    Edge edgeToLast = this.vertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.id()).next();
+                    Edge edgeToLast = this.vertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + getIdForLabel(this.vertex)).next();
                     edgeToLast.remove();
                 }
             }
@@ -483,45 +483,49 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             Vertex vertexToRemove = v;
             //this.vertex has the next and previous links to manage in a inverse situation
             //Check if it is first
-            if (this.vertex.inE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.id()).hasNext()) {
+            if (this.vertex.inE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(vertexToRemove)).hasNext()) {
                 //It is not first
-                Edge edgeToPrevious = this.vertex.inE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.id()).next();
+                Edge edgeToPrevious = this.vertex.inE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(vertexToRemove)).next();
                 Vertex previousVertex = edgeToPrevious.outV().next();
                 edgeToPrevious.remove();
                 //Check if it is last
-                if (this.vertex.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.id()).hasNext()) {
+                if (this.vertex.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(vertexToRemove)).hasNext()) {
                     //Not last
-                    Edge edgeToNext = this.vertex.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.id()).next();
+                    Edge edgeToNext = this.vertex.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(vertexToRemove)).next();
                     Vertex nextVertex = edgeToNext.inV().next();
                     edgeToNext.remove();
-                    previousVertex.addEdge(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.id(), nextVertex);
+                    previousVertex.addEdge(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(vertexToRemove), nextVertex);
                 } else {
                     //Last,
                     //previous becomes to last
-                    Edge edgeToLast = vertexToRemove.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.id()).next();
+                    Edge edgeToLast = vertexToRemove.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(vertexToRemove)).next();
                     edgeToLast.remove();
-                    vertexToRemove.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.id(), previousVertex);
+                    vertexToRemove.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(vertexToRemove), previousVertex);
                 }
             } else {
                 //It is first
-                Edge edgeToFirst = vertexToRemove.outE(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.id()).next();
+                Edge edgeToFirst = vertexToRemove.outE(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(vertexToRemove)).next();
                 edgeToFirst.remove();
                 //Check is it is last
-                if (this.vertex.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.id()).hasNext()) {
+                if (this.vertex.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(vertexToRemove)).hasNext()) {
                     //Not last
                     //Move the edge to first
-                    Edge edgeToNext = this.vertex.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.id()).next();
+                    Edge edgeToNext = this.vertex.outE(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(vertexToRemove)).next();
                     Vertex nextVertex = edgeToNext.inV().next();
                     edgeToNext.remove();
-                    vertexToRemove.addEdge(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.id(), nextVertex);
+                    vertexToRemove.addEdge(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(vertexToRemove), nextVertex);
                 } else {
                     //Last
                     //Only one element in the list
-                    Edge edgeToLast = vertexToRemove.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.id()).next();
+                    Edge edgeToLast = vertexToRemove.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + getIdForLabel(vertexToRemove)).next();
                     edgeToLast.remove();
                 }
             }
         }
+    }
+
+    protected String getIdForLabel(Vertex vertexToRemove) {
+        return vertexToRemove.id().toString().replace(".", "_");
     }
 
     /**

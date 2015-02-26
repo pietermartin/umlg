@@ -52,9 +52,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Graph getReadOnlyGraph() {
-        final StrategyGraph swg = new StrategyGraph(this);
-        swg.strategy(ReadOnlyStrategy.instance());
-        return swg;
+        return this.sqlG.strategy(ReadOnlyStrategy.instance());
     }
 
     @Override
@@ -160,7 +158,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.sqlG.V().<Vertex>has(T.label, label).forEachRemaining (
+        this.sqlG.V().<Vertex>has(T.label, label).forEachRemaining(
                 vertex -> result.add(UMLG.get().<TT>getEntity(vertex))
         );
         return result;
@@ -176,7 +174,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.sqlG.V().<Vertex>has(T.label, label).forEachRemaining (
+        this.sqlG.V().<Vertex>has(T.label, label).forEachRemaining(
                 vertex -> {
                     TT entity = UMLG.get().<TT>getEntity(vertex);
                     if (filter.filter(entity)) {
@@ -228,14 +226,16 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public <T extends PersistentObject> T getEntity(Object id) {
+        RecordId recordId;
         try {
             if (!(id instanceof RecordId)) {
-                throw new IllegalStateException(String.format("Sqlg only supports Long ids!, %s", id.toString()));
+                recordId = RecordId.from(id);
+            } else {
+                recordId = (RecordId)id;
             }
-
-            GraphTraversal<Vertex, Vertex> traversal = this.V(id);
+            GraphTraversal<Vertex, Vertex> traversal = this.V(recordId);
             if (!traversal.hasNext()) {
-                throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{id}));
+                throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{recordId}));
             }
             return instantiateClassifier(traversal.next());
         } catch (Exception e) {
@@ -515,7 +515,11 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     private RecordId[] validateIds(final Object... ids) {
         List<RecordId> longIds = new ArrayList<>();
         for (Object id : ids) {
-           longIds.add((RecordId)id);
+            if (id instanceof RecordId) {
+                longIds.add((RecordId) id);
+            } else {
+                longIds.add(RecordId.from(id));
+            }
         }
         return longIds.toArray(new RecordId[]{});
     }

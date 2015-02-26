@@ -35,6 +35,7 @@ public class TestIndexingDataType extends BaseLocalDbTest {
     @Test
     public void testIndexTime() {
         Product product = new Product();
+        db.commit();
         product.setTime(new LocalTime(10000123));
         db.commit();
         Assert.assertNotNull(Product.product_findByTime(new LocalTime(10000123)));

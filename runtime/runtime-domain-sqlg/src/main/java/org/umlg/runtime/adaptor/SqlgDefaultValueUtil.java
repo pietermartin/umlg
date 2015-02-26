@@ -18,7 +18,7 @@ public class SqlgDefaultValueUtil {
         } else if (clazz.equals(LocalDate.class)) {
             return 0L;
         } else if (clazz.equals(LocalTime.class)) {
-            return 0L;
+            return "";
         } else if (clazz.isEnum()) {
             return "";
         } else if (clazz.equals(Integer.class)) {
