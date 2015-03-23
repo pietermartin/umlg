@@ -2,6 +2,7 @@ package org.umlg.runtime.domain;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.Property;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
@@ -41,7 +42,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     public BaseUmlg(Object id) {
         super();
         //check if it has been deleted
-        this.vertex = UMLG.get().V(id).next();
+        this.vertex = UMLG.get().traversal().V(id).next();
         Property<Boolean> deletedProperty = this.vertex.property("deleted");
         if (deletedProperty.isPresent() && deletedProperty.value()) {
             throw new IllegalStateException("Vertex has been deleted!");
@@ -60,13 +61,17 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         initVariables();
     }
 
+//    protected GraphTraversal v(Vertex v) {
+//        UMLG.get()
+//    }
+
     @Override
     public void doBeforeCommit() {
         //Override to do something exciting!
     }
 
     public BaseUmlg reload() {
-        this.vertex = UMLG.get().V(this.vertex.id()).next();
+        this.vertex = UMLG.get().traversal().V(this.vertex.id()).next();
         initialiseProperties();
         return this;
     }

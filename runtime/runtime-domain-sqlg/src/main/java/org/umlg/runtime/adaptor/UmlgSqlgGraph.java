@@ -1,13 +1,11 @@
 package org.umlg.runtime.adaptor;
 
 import org.apache.commons.configuration.Configuration;
-import org.apache.tinkerpop.gremlin.process.T;
-import org.apache.tinkerpop.gremlin.process.TraversalEngine;
 import org.apache.tinkerpop.gremlin.process.computer.GraphComputer;
-import org.apache.tinkerpop.gremlin.process.graph.traversal.GraphTraversal;
+import org.apache.tinkerpop.gremlin.process.traversal.T;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.*;
 import org.apache.tinkerpop.gremlin.structure.strategy.ReadOnlyStrategy;
-import org.apache.tinkerpop.gremlin.structure.strategy.StrategyGraph;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
@@ -60,10 +58,10 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         return this.sqlG.configuration();
     }
 
-    @Override
-    public Iterators iterators() {
-        return this.sqlG.iterators();
-    }
+//    @Override
+//    public Iterators iterators() {
+//        return this.sqlG.iterators();
+//    }
 
     @Override
     public void batchModeOn() {
@@ -158,7 +156,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.sqlG.V().<Vertex>has(T.label, label).forEachRemaining(
+        this.sqlG.traversal().V().<Vertex>has(T.label, label).forEachRemaining(
                 vertex -> result.add(UMLG.get().<TT>getEntity(vertex))
         );
         return result;
@@ -174,7 +172,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.sqlG.V().<Vertex>has(T.label, label).forEachRemaining(
+        this.sqlG.traversal().V().<Vertex>has(T.label, label).forEachRemaining(
                 vertex -> {
                     TT entity = UMLG.get().<TT>getEntity(vertex);
                     if (filter.filter(entity)) {
@@ -195,6 +193,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
             return this.sqlG.addVertex();
         }
     }
+
 
     private String shortenClassName(String className) {
         int lastIndexOfDot = className.lastIndexOf(".");
@@ -217,8 +216,8 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     private Vertex getDeletionVertex() {
-        if (getRoot() != null && getRoot().outE(DELETED_VERTEX_EDGE).hasNext()) {
-            return getRoot().outE(DELETED_VERTEX_EDGE).next().inV().next();
+        if (getRoot() != null && getRoot().edges(Direction.OUT, DELETED_VERTEX_EDGE).hasNext()) {
+            return getRoot().edges(Direction.OUT, DELETED_VERTEX_EDGE).next().vertices(Direction.IN).next();
         } else {
             return null;
         }
@@ -231,7 +230,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
             if (!(id instanceof RecordId)) {
                 recordId = RecordId.from(id);
             } else {
-                recordId = (RecordId)id;
+                recordId = (RecordId) id;
             }
             GraphTraversal<Vertex, Vertex> traversal = this.V(recordId);
             if (!traversal.hasNext()) {
@@ -410,13 +409,13 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     public Set<Edge> getEdgesBetween(Vertex v1, Vertex v2, String... labels) {
 
         Set<Edge> result = new HashSet<>();
-        GraphTraversal<Vertex, Edge> edges = v1.bothE(labels);
+        Iterator<Edge> edges = v1.edges(Direction.BOTH,labels);
 
         if (!v1.equals(v2)) {
 
             edges.forEachRemaining(
                     edge -> {
-                        if (edge.inV().next().equals(v2) || edge.outV().next().equals(v2)) {
+                        if (edge.vertices(Direction.IN).next().equals(v2) || edge.vertices(Direction.OUT).next().equals(v2)) {
                             result.add(edge);
                         }
                     }
@@ -426,7 +425,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
             edges.forEachRemaining(
                     edge -> {
-                        if (edge.inV().next().equals(v2) && edge.outV().next().equals(v2)) {
+                        if (edge.vertices(Direction.IN).next().equals(v2) && edge.vertices(Direction.OUT).next().equals(v2)) {
                             result.add(edge);
                         }
                     }
@@ -482,20 +481,24 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         return this.sqlG.addVertex(keyValues);
     }
 
-    @Override
+//    @Override
     public GraphTraversal<Vertex, Vertex> V(final Object... vertexIds) {
-        return this.sqlG.V(validateIds(vertexIds));
+        return this.sqlG.traversal().V(validateIds(vertexIds));
     }
 
-    @Override
+//    @Override
     public GraphTraversal<Edge, Edge> E(final Object... edgeIds) {
-        return this.sqlG.E(validateIds(edgeIds));
+        return this.sqlG.traversal().E(validateIds(edgeIds));
     }
 
     @Override
-    public void compute(Class<? extends GraphComputer> graphComputerClass) throws IllegalArgumentException {
-        this.sqlG.compute(graphComputerClass);
+    public <C extends GraphComputer> C compute(Class<C> graphComputerClass) throws IllegalArgumentException {
+        return this.sqlG.compute(graphComputerClass);
     }
+//    @Override
+//    public void compute(Class<? extends GraphComputer> graphComputerClass) throws IllegalArgumentException {
+//        this.sqlG.compute(graphComputerClass);
+//    }
 
     @Override
     public GraphComputer compute() {
@@ -503,14 +506,24 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public TraversalEngine engine() {
-        return this.sqlG.engine();
+    public Iterator<Vertex> vertices(Object... vertexIds) {
+        return this.sqlG.vertices(vertexIds);
     }
 
     @Override
-    public void engine(TraversalEngine traversalEngine) {
-        this.sqlG.engine(traversalEngine);
+    public Iterator<Edge> edges(Object... edgeIds) {
+        return this.sqlG.edges(edgeIds);
     }
+
+//    @Override
+//    public TraversalEngine engine() {
+//        return this.sqlG.engine();
+//    }
+//
+//    @Override
+//    public void engine(TraversalEngine traversalEngine) {
+//        this.sqlG.engine(traversalEngine);
+//    }
 
     private RecordId[] validateIds(final Object... ids) {
         List<RecordId> longIds = new ArrayList<>();

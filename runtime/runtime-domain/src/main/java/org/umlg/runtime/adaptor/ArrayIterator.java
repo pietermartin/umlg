@@ -1,6 +1,6 @@
 package org.umlg.runtime.adaptor;
 
-import org.apache.tinkerpop.gremlin.process.FastNoSuchElementException;
+import org.apache.tinkerpop.gremlin.process.traversal.FastNoSuchElementException;
 
 import java.util.Iterator;
 

@@ -2,6 +2,7 @@ package org.umlg.runtime.collection.persistent;
 
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -48,7 +49,7 @@ public class UmlgAssociationClassBagImpl<AssociationClassNode> extends UmlgBagIm
         if (!isOnePrimitive() && getDataTypeEnum() == null) {
             for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
                 Edge edge = iter.next();
-                if (edge.properties().toList().contains(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
+                if (IteratorUtils.list(edge.properties()).contains(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
                     AssociationClassNode node;
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);
@@ -100,7 +101,7 @@ public class UmlgAssociationClassBagImpl<AssociationClassNode> extends UmlgBagIm
     protected Class<?> getClassToInstantiate(Edge edge) {
         try {
             String value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
-            Vertex associationClassVertex = UMLG.get().V(value).next();
+            Vertex associationClassVertex = UMLG.get().traversal().V(value).next();
             return Class.forName((String) associationClassVertex.value("className"));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -110,7 +111,7 @@ public class UmlgAssociationClassBagImpl<AssociationClassNode> extends UmlgBagIm
     @Override
     protected Vertex getVertexForDirection(Edge edge) {
         String value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
-        Vertex associationClassVertex = UMLG.get().V(value).next();
+        Vertex associationClassVertex = UMLG.get().traversal().V(value).next();
         return associationClassVertex;
     }
 

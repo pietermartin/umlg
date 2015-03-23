@@ -1,6 +1,7 @@
 package org.umlg.runtime.collection.persistent;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
+import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.collection.UmlgOrderedSet;
@@ -38,9 +39,9 @@ public class UmlgOrderedSetClosableIterableImpl<E> extends BaseCollection<E> imp
     protected void addToLinkedList(Edge edge) {
         //Get the new vertex for the element
         Vertex newElementVertex = getVertexForDirection(edge);
-        if (this.vertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).hasNext()) {
-            Edge edgeToLastVertex = this.vertex.outE(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).next();
-            Vertex lastVertex = edgeToLastVertex.inV().next();
+        if (this.vertex.edges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).hasNext()) {
+            Edge edgeToLastVertex = this.vertex.edges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).next();
+            Vertex lastVertex = edgeToLastVertex.vertices(Direction.IN).next();
 
             //move the edge to the last vertex
             edgeToLastVertex.remove();

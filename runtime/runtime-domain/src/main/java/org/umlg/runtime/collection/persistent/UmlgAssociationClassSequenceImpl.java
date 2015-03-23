@@ -1,7 +1,9 @@
 package org.umlg.runtime.collection.persistent;
 
+import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -47,7 +49,7 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
         if (!isOnePrimitive() && getDataTypeEnum() == null) {
             for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
                 Edge edge = iter.next();
-                if (edge.properties().toList().contains(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
+                if (IteratorUtils.list(edge.properties()).contains(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
                     AssociationClassNode node;
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);
@@ -114,7 +116,7 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
             Vertex associationClassVertex = null;
             for (Edge edge : edges) {
                 Object value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
-                associationClassVertex = UMLG.get().V(value).next();
+                associationClassVertex = UMLG.get().traversal().V(value).next();
             }
 
             Class<?> c;
@@ -122,7 +124,7 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
                 c = Class.forName((String) associationClassVertex.value("className"));
                 //This is a debug check
                 //TODO optimize
-                Vertex debugVertex = edgeToElement.inV().next();
+                Vertex debugVertex = edgeToElement.vertices(Direction.IN).next();
                 if (!debugVertex.equals(vertexToLoad)) {
                     throw new IllegalStateException("Vertexes should be the same, what is going on?");
                 }

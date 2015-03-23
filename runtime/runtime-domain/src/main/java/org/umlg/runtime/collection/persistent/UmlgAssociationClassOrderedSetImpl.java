@@ -2,6 +2,7 @@ package org.umlg.runtime.collection.persistent;
 
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -51,7 +52,7 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Um
         if (!isOnePrimitive() && getDataTypeEnum() == null) {
             for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
                 Edge edge = iter.next();
-                if (edge.properties().toList().contains(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
+                if (IteratorUtils.list(edge.properties()).contains(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
                     AssociationClassNode node;
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);
@@ -113,7 +114,7 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Um
             Vertex associationClassVertex = null;
             for (Edge edge : edges) {
                 String value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
-                associationClassVertex = UMLG.get().V(value).next();
+                associationClassVertex = UMLG.get().traversal().V(value).next();
             }
             if (associationClassVertex == null) {
                 throw new IllegalStateException("Can not find associationClassVertex, this is a bug!");

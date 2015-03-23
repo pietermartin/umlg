@@ -5,16 +5,15 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jEdge;
 import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jGraph;
-import org.apache.tinkerpop.gremlin.process.T;
-import org.apache.tinkerpop.gremlin.process.Traversal;
-import org.apache.tinkerpop.gremlin.process.TraversalEngine;
 import org.apache.tinkerpop.gremlin.process.computer.GraphComputer;
-import org.apache.tinkerpop.gremlin.process.graph.traversal.GraphTraversal;
+import org.apache.tinkerpop.gremlin.process.traversal.T;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.*;
 import org.apache.tinkerpop.gremlin.structure.strategy.ReadOnlyStrategy;
 import org.apache.tinkerpop.gremlin.structure.strategy.StrategyEdge;
 import org.apache.tinkerpop.gremlin.structure.strategy.StrategyGraph;
 import org.apache.tinkerpop.gremlin.structure.util.GraphFactory;
+import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
 import org.neo4j.graphdb.ConstraintViolationException;
@@ -86,10 +85,6 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         return this.configuration();
     }
 
-    @Override
-    public Iterators iterators() {
-        return this.neo4jGraph.iterators();
-    }
 
     public <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final UmlgParameter... indexUmlgParameters) {
         if (elementClass == null) {
@@ -172,7 +167,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.neo4jGraph.V().<Vertex>has(T.label, label).forEachRemaining(
+        this.neo4jGraph.traversal().V().<Vertex>has(T.label, label).forEachRemaining(
                 vertex -> result.add(UMLG.get().<TT>getEntity(vertex))
         );
         return result;
@@ -188,7 +183,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         } else {
             label = className;
         }
-        this.neo4jGraph.V().<Vertex>has(T.label, label).forEachRemaining(
+        this.neo4jGraph.traversal().V().<Vertex>has(T.label, label).forEachRemaining(
                 vertex -> {
                     TT entity = UMLG.get().<TT>getEntity(vertex);
                     if (filter.filter(entity)) {
@@ -216,14 +211,20 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
+    public <C extends GraphComputer> C compute(Class<C> graphComputerClass) throws IllegalArgumentException {
+        return null;
+    }
+
+
+    @Override
     public void addDeletionNode() {
         Vertex v = addVertex(DELETION_VERTEX);
         getRoot().addEdge(DELETED_VERTEX_EDGE, v);
     }
 
     private Vertex getDeletionVertex() {
-        if (getRoot() != null && getRoot().outE(DELETED_VERTEX_EDGE).hasNext()) {
-            return getRoot().outE(DELETED_VERTEX_EDGE).next().inV().next();
+        if (getRoot() != null && getRoot().edges(Direction.OUT, DELETED_VERTEX_EDGE).hasNext()) {
+            return getRoot().edges(Direction.OUT, DELETED_VERTEX_EDGE).next().vertices(Direction.IN).next();
         } else {
             return null;
         }
@@ -416,13 +417,13 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     public Set<Edge> getEdgesBetween(Vertex v1, Vertex v2, String... labels) {
 
         Set<Edge> result = new HashSet<>();
-        GraphTraversal<Vertex, Edge> edges = v1.bothE(labels);
+        Iterator<Edge> edges = v1.edges(Direction.BOTH,labels);
 
         if (!v1.equals(v2)) {
 
             edges.forEachRemaining(
                     edge -> {
-                        if (edge.inV().next().equals(v2) || edge.outV().next().equals(v2)) {
+                        if (edge.vertices(Direction.IN).next().equals(v2) || edge.vertices(Direction.OUT).next().equals(v2)) {
                             result.add(edge);
                         }
                     }
@@ -432,7 +433,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
             edges.forEachRemaining(
                     edge -> {
-                        if (edge.inV().next().equals(v2) && edge.outV().next().equals(v2)) {
+                        if (edge.vertices(Direction.IN).next().equals(v2) && edge.vertices(Direction.OUT).next().equals(v2)) {
                             result.add(edge);
                         }
                     }
@@ -446,7 +447,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     @Override
     public long countVertices() {
         int countDeletedNodes = 0;
-        for (Edge edge : getDeletionVertex().outE(DELETION_VERTEX).toList()) {
+        for (Edge edge : IteratorUtils.list(getDeletionVertex().edges(Direction.OUT, DELETION_VERTEX))) {
             countDeletedNodes++;
         }
         return ((GraphDatabaseAPI) ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).getBaseGraph()).getDependencyResolver().resolveDependency(NodeManager.class).getNumberOfIdsInUse(Node.class) - 2 - countDeletedNodes;
@@ -455,7 +456,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     @Override
     public long countEdges() {
         int countDeletedNodes = 0;
-        for (Edge edge : getDeletionVertex().outE(DELETION_VERTEX).toList()) {
+        for (Edge edge : IteratorUtils.list(getDeletionVertex().edges(Direction.OUT, DELETION_VERTEX))) {
             countDeletedNodes++;
         }
         return ((GraphDatabaseAPI) ((Neo4jGraph) this.neo4jGraph.getBaseGraph()).getBaseGraph()).getDependencyResolver().resolveDependency(NodeManager.class).getNumberOfIdsInUse(Relationship.class) - 1 - countDeletedNodes;
@@ -496,41 +497,58 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         return this.neo4jGraph.addVertex(keyValues);
     }
 
-    @Override
+//    @Override
     public GraphTraversal<Vertex, Vertex> V(final Object... vertexIds) {
-        return this.neo4jGraph.V(vertexIds);
+        return this.neo4jGraph.traversal().V(vertexIds);
     }
 
-    @Override
+//    @Override
     public GraphTraversal<Edge, Edge> E(final Object... edgeIds) {
-        return this.neo4jGraph.E(edgeIds);
+        return this.neo4jGraph.traversal().E(edgeIds);
     }
 
-    @Override
-    public <T extends Traversal<S, S>, S> T of(final Class<T> traversalClass) {
-        return this.neo4jGraph.of(traversalClass);
-    }
+//    @Override
+//    public <T extends Traversal<S, S>, S> T of(final Class<T> traversalClass) {
+//        return this.neo4jGraph.of(traversalClass);
+//    }
 
-    @Override
-    public void compute(Class<? extends GraphComputer> graphComputerClass) throws IllegalArgumentException {
-        this.neo4jGraph.compute(graphComputerClass);
-    }
 
+//    @Override
+//    public Iterators iterators() {
+//        return this.neo4jGraph.iterators();
+//    }
+//    @Override
+//    public <C extends GraphComputer> C compute(Class<C> graphComputerClass) throws IllegalArgumentException {
+//        return null;
+//    }
+//    @Override
+//    public void compute(Class<? extends GraphComputer> graphComputerClass) throws IllegalArgumentException {
+//        this.neo4jGraph.compute(graphComputerClass);
+//    }
     @Override
     public GraphComputer compute() {
         return this.neo4jGraph.compute();
     }
 
     @Override
-    public TraversalEngine engine() {
-        return this.neo4jGraph.engine();
+    public Iterator<Vertex> vertices(Object... vertexIds) {
+        return this.neo4jGraph.vertices(vertexIds);
     }
 
     @Override
-    public void engine(TraversalEngine traversalEngine) {
-        this.neo4jGraph.engine(traversalEngine);
+    public Iterator<Edge> edges(Object... edgeIds) {
+        return this.neo4jGraph.edges(edgeIds);
     }
 
+//    @Override
+//    public TraversalEngine engine() {
+//        return this.neo4jGraph.engine();
+//    }
+//
+//    @Override
+//    public void engine(TraversalEngine traversalEngine) {
+//        this.neo4jGraph.engine(traversalEngine);
+//    }
 
     @Override
     public Transaction tx() {

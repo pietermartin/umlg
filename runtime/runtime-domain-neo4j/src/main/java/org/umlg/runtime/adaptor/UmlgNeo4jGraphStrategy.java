@@ -1,6 +1,7 @@
 package org.umlg.runtime.adaptor;
 
 import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jVertex;
+import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.Property;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
@@ -22,11 +23,11 @@ public class UmlgNeo4jGraphStrategy implements GraphStrategy {
         if (ctx.getCurrent() instanceof StrategyVertex) {
             return (t) -> () -> {
                 Vertex v = (ctx.getCurrent()).getBaseVertex();
-                v.bothE().forEachRemaining(e -> e.remove());
+                v.edges(Direction.BOTH).forEachRemaining(e -> e.remove());
                 getDeletionVertex(ctx.getStrategyGraph()).addEdge(UmlgGraph.DELETION_VERTEX, v);
                 v.properties().forEachRemaining(Property::remove);
                 v.property("_deleted", true);
-                ((Neo4jVertex)v).getBaseVertex().removeLabel(((Neo4jVertex)v).getBaseVertex().getLabels().iterator().next());
+                ((Neo4jVertex) v).getBaseVertex().removeLabel(((Neo4jVertex) v).getBaseVertex().getLabels().iterator().next());
                 return null;
             };
         } else {
@@ -35,9 +36,9 @@ public class UmlgNeo4jGraphStrategy implements GraphStrategy {
     }
 
     private Vertex getDeletionVertex(Graph g) {
-        Vertex root = g.V(0L).next();
-        if (root != null && root.outE(UmlgGraph.DELETED_VERTEX_EDGE).hasNext()) {
-            return root.outE(UmlgGraph.DELETED_VERTEX_EDGE).next().inV().next();
+        Vertex root = g.traversal().V(0L).next();
+        if (root != null && root.edges(Direction.OUT, UmlgGraph.DELETED_VERTEX_EDGE).hasNext()) {
+            return root.edges(Direction.OUT, UmlgGraph.DELETED_VERTEX_EDGE).next().vertices(Direction.IN).next();
         } else {
             throw new IllegalStateException("The root node or deletion vertex is not present. It must be created at graph initialization!");
         }

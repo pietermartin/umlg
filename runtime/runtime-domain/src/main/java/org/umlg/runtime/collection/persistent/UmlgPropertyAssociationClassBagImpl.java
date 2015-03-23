@@ -68,7 +68,7 @@ public class UmlgPropertyAssociationClassBagImpl<E, AC extends AssociationClassN
         Set<Edge> edges = UMLG.get().getEdgesBetween(this.vertex, v, this.getLabel());
         for (Edge edge : edges) {
             String value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
-            Vertex associationClassVertex = UMLG.get().V(value).next();
+            Vertex associationClassVertex = UMLG.get().traversal().V(value).next();
             //The remove code will delete all in and out edges
             associationClassVertex.remove();
         }
