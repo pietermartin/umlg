@@ -3,6 +3,7 @@ package org.umlg.blueprints.junit;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.umlg.tests.batch.TestBatchMode;
+import org.umlg.tests.collectiontest.SequenceTest;
 
 /**
  * Date: 2013/10/19
@@ -10,7 +11,7 @@ import org.umlg.tests.batch.TestBatchMode;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestBatchMode.class
+        SequenceTest.class
 })
 public class UmlgAnyTestSuite {
 }

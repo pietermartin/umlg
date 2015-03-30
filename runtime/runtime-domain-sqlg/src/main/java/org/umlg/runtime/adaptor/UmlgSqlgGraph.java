@@ -3,9 +3,10 @@ package org.umlg.runtime.adaptor;
 import org.apache.commons.configuration.Configuration;
 import org.apache.tinkerpop.gremlin.process.computer.GraphComputer;
 import org.apache.tinkerpop.gremlin.process.traversal.T;
+import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.*;
-import org.apache.tinkerpop.gremlin.structure.strategy.ReadOnlyStrategy;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
@@ -50,7 +51,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public Graph getReadOnlyGraph() {
-        return this.sqlG.strategy(ReadOnlyStrategy.instance());
+        return null;
     }
 
     @Override
@@ -479,6 +480,11 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     @Override
     public Vertex addVertex(Object... keyValues) {
         return this.sqlG.addVertex(keyValues);
+    }
+
+    @Override
+    public GraphTraversalSource traversal() {
+        return this.sqlG.traversal();
     }
 
 //    @Override

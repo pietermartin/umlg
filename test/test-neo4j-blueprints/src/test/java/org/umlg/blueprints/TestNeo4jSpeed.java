@@ -1,8 +1,10 @@
 package org.umlg.blueprints;
 
 import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jGraph;
+import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -65,7 +67,7 @@ public class TestNeo4jSpeed {
                             if (prevId == null) {
                                 startVertex[tid] = v.id();
                             } else {
-                                Vertex prevV = graph.V(prevId).next();
+                                Vertex prevV = graph.traversal().V(prevId).next();
                                 prevV.addEdge(TEST_LABEL, v);
                             }
                             graph.tx().commit();
@@ -98,16 +100,16 @@ public class TestNeo4jSpeed {
                     public void run() {
                         for (int k = 0; k < 100; k++) {
                             int count = 0;
-                            Vertex v = graph.V(startVertex[tid]).next();
+                            Vertex v = graph.traversal().V(startVertex[tid]).next();
 
                             Edge e;
                             do {
-                                Iterator<Edge> eIter = v.outE();
+                                Iterator<Edge> eIter = v.edges(Direction.BOTH);
                                 if (!eIter.hasNext()) {
                                     break;
                                 } else {
                                     count++;
-                                    v = eIter.next().inV().next();
+                                    v = eIter.next().inVertex();
                                 }
                             } while (true);
 
@@ -167,10 +169,10 @@ public class TestNeo4jSpeed {
 
         // Edges
         for (int i=0; i < partSize; i++) {
-            Vertex outVertex = graph.V(outVertices[i]).next();
-            outVertex.addEdge(label, graph.V(inVertices[(5 * i + 1) % partSize]).next());
-            outVertex.addEdge(label, graph.V(inVertices[(5 * i + 4) % partSize]).next());
-            outVertex.addEdge(label, graph.V(inVertices[(5 * i + 7) % partSize]).next());
+            Vertex outVertex = graph.traversal().V(outVertices[i]).next();
+            outVertex.addEdge(label, graph.traversal().V(inVertices[(5 * i + 1) % partSize]).next());
+            outVertex.addEdge(label, graph.traversal().V(inVertices[(5 * i + 4) % partSize]).next());
+            outVertex.addEdge(label, graph.traversal().V(inVertices[(5 * i + 7) % partSize]).next());
 
             if (i % numPerCommit == 0) {
                 graph.tx().commit();
@@ -198,18 +200,18 @@ public class TestNeo4jSpeed {
                         @Override
                         public void run() {
                             try {
-                                Vertex v = graph.V(outVertices[0]).next();
+                                Vertex v = graph.traversal().V(outVertices[0]).next();
                                 long startTime = System.currentTimeMillis();
 
                                 for (int k=0; k < 100 * numIters / numThreads; k++) {
                                     Assert.assertNotNull(v);
 
-                                    Vertex nextV = randomVertex(v.out(label).toList());
+                                    Vertex nextV = randomVertex(IteratorUtils.list(v.vertices(Direction.BOTH, label)));
 
                                     Assert.assertNotNull(nextV);
 
                                     // Take a random edge back
-                                    Vertex backV = randomVertex(nextV.out().toList());
+                                    Vertex backV = randomVertex(IteratorUtils.list(nextV.vertices(Direction.BOTH)));
                                     if (backV != null) {
                                         v = backV;
                                     }

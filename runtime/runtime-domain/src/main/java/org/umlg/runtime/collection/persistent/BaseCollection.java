@@ -122,9 +122,9 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     protected Iterator<Vertex> getVertices() {
         if (this.isControllingSide()) {
-            return UMLG.get().getUnderlyingGraph().traversal().fromV(this.vertex).out(this.getLabel());
+            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex).out(this.getLabel());
         } else {
-            return UMLG.get().getUnderlyingGraph().traversal().fromV(this.vertex).in(this.getLabel());
+            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex).in(this.getLabel());
         }
     }
 
@@ -933,15 +933,15 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
             if (inverse) {
                 if (!isControllingSide()) {
-                    traversal = UMLG.get().getUnderlyingGraph().traversal().fromV(vertex).out(this.getLabel());
+                    traversal = UMLG.get().getUnderlyingGraph().traversal().V(vertex).out(this.getLabel());
                 } else {
-                    traversal = UMLG.get().getUnderlyingGraph().traversal().fromV(vertex).in(this.getLabel());
+                    traversal = UMLG.get().getUnderlyingGraph().traversal().V(vertex).in(this.getLabel());
                 }
             } else {
                 if (!isControllingSide()) {
-                    traversal = UMLG.get().getUnderlyingGraph().traversal().fromV(vertex).in(this.getLabel());
+                    traversal = UMLG.get().getUnderlyingGraph().traversal().V(vertex).in(this.getLabel());
                 } else {
-                    traversal = UMLG.get().getUnderlyingGraph().traversal().fromV(vertex).out(this.getLabel());
+                    traversal = UMLG.get().getUnderlyingGraph().traversal().V(vertex).out(this.getLabel());
                 }
             }
 

@@ -186,7 +186,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             for (Classifier concrete : concreteImplementations) {
                 OJField graphTraversal = new OJField(refinedQualifierValue.getBody(), "graphTraversal" + qualifiedToSearchOnPW.getName() + "_" + concrete.getName(), UmlgGenerationUtil.GraphTraversal.getCopy().addToGenerics(UmlgGenerationUtil.vertexPathName).addToGenerics(UmlgGenerationUtil.vertexPathName));
                 StringBuilder hasStatement = new StringBuilder();
-                hasStatement.append("this.vertex.to(\n        ");
+                hasStatement.append("UMLG.get().traversal().V(this.vertex).to(\n        ");
                 hasStatement.append(UmlgClassOperations.propertyEnumName(qualifiedToSearchOnPW.getOwningType()) + "." + qualifiedToSearchOnPW.fieldname() + ".isControllingSide() ? ");
                 hasStatement.append(UmlgGenerationUtil.tinkerDirection.getLast());
                 hasStatement.append(".OUT : ");
@@ -279,7 +279,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 
         StringBuilder hasStatement = new StringBuilder();
         //build the has containers
-        hasStatement.append("this.vertex.to(\n        ");
+        hasStatement.append("UMLG.get().traversal().V(this.vertex).to(\n        ");
         hasStatement.append(UmlgClassOperations.propertyEnumName(qualifiedClassifier) + "." + qualified.fieldname() + ".isControllingSide() ? ");
         hasStatement.append(UmlgGenerationUtil.tinkerDirection.getLast());
         hasStatement.append(".OUT : ");

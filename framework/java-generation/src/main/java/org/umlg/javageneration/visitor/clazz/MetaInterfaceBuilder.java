@@ -154,17 +154,17 @@ public class MetaInterfaceBuilder extends BaseVisitor implements Visitor<Interfa
         OJField result = new OJField("result", metaClass.getPathName());
         INSTANCE.getBody().addToLocals(result);
 
-        INSTANCE.getBody().addToStatements("Iterator<Edge> iter = " + UmlgGenerationUtil.UMLGAccess + ".getRoot().outE(" + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(classifier) + "\"))");
+        INSTANCE.getBody().addToStatements("Iterator<Edge> iter = " + UmlgGenerationUtil.UMLGAccess + ".getRoot().edges(Direction.OUT, " + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(classifier) + "\"))");
         OJIfStatement ifHasNext = new OJIfStatement("iter.hasNext()");
-        ifHasNext.addToThenPart("result =  new " + UmlgClassOperations.getMetaClassName(classifier) + "(iter.next().inV().next())");
+        ifHasNext.addToThenPart("result =  new " + UmlgClassOperations.getMetaClassName(classifier) + "(iter.next().inVertex())");
         INSTANCE.getBody().addToStatements(ifHasNext);
 
-        ifHasNext.addToElsePart("iter = " + UmlgGenerationUtil.UMLGAccess + ".getRoot().outE(" + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(classifier) + "\"))");
+        ifHasNext.addToElsePart("iter = " + UmlgGenerationUtil.UMLGAccess + ".getRoot().edges(Direction.OUT, " + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(classifier) + "\"))");
 
         OJIfStatement ifIter2 = new OJIfStatement("!iter.hasNext()");
         ifIter2.addToThenPart("result = new " + metaClass.getName() + "()");
 
-        ifIter2.addToElsePart("result = new " + metaClass.getName() + "(iter.next().inV().next())");
+        ifIter2.addToElsePart("result = new " + metaClass.getName() + "(iter.next().inVertex())");
         ifHasNext.addToElsePart(ifIter2);
 
         INSTANCE.getBody().addToStatements("return result");

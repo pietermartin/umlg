@@ -1,6 +1,6 @@
 package org.umlg.tests.associationclass;
 
-import org.apache.tinkerpop.gremlin.process.Traversal;
+import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.associationclass.AssociationClass1;
@@ -29,7 +29,6 @@ public class TestAssociationClassCopiesOnePrimitivePropertiesToEdge extends Base
         db.commit();
 
         //Check if the name property is on the edge
-        System.out.println(associationClass1.getVertex().inE("AssociationClassAC").values("name").next());
         Object result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, associationClass1.getId(), "self.inE('AssociationClassAC').values('name')");
         Assert.assertEquals("ac1", ((Traversal)result).next());
     }

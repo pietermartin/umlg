@@ -1,8 +1,10 @@
 package org.umlg.blueprints;
 
 import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jGraph;
-import org.apache.tinkerpop.gremlin.process.T;
+import org.apache.tinkerpop.gremlin.process.traversal.T;
+import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,8 +31,8 @@ public class TestNeo4jBug {
         a.addEdge("LABEL1", a);
         g.tx().commit();
 
-        Assert.assertEquals(1, a.outE("LABEL1").count().next(), 0);
-        Assert.assertEquals(0, a.outE("LABEL2").count().next(), 0);
+        Assert.assertEquals(1, IteratorUtils.count(a.edges(Direction.OUT, "LABEL1")), 0);
+        Assert.assertEquals(0, IteratorUtils.count(a.edges(Direction.OUT, "LABEL2")), 0);
 
     }
 }

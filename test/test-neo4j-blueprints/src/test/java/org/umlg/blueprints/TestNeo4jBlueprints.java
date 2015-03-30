@@ -3,8 +3,10 @@ package org.umlg.blueprints;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jGraph;
+import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
 import org.junit.Assert;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -86,8 +88,8 @@ public class TestNeo4jBlueprints {
 
         stopWatch.reset();
         stopWatch.start();
-        Vertex startV = g.V(oneId).next();
-        for (Vertex v : startV.out("toMany").toList()) {
+        Vertex startV = g.traversal().V(oneId).next();
+        for (Vertex v : IteratorUtils.list(startV.vertices(Direction.BOTH, "toMany"))) {
             v.value("many");
         }
         stopWatch.stop();
@@ -188,8 +190,8 @@ public class TestNeo4jBlueprints {
         Edge edge2 = v1.addEdge("test", v1);
         graph.tx().commit();
         Assert.assertNotSame(edge1, edge2);
-        v1 = graph.V(v1.id()).next();
-        Iterator<Edge> iterator = v1.outE("test");
+        v1 = graph.traversal().V(v1.id()).next();
+        Iterator<Edge> iterator = v1.edges(Direction.OUT, "test");
         Assert.assertEquals(edge1, iterator.next());
         Assert.assertEquals(edge2, iterator.next());
         graph.close();
@@ -280,9 +282,9 @@ public class TestNeo4jBlueprints {
 
             stopWatch.reset();
             stopWatch.start();
-            Vertex startV = g.V(one.id()).next();
+            Vertex startV = g.traversal().V(one.id()).next();
             int count = 1;
-            for (Vertex v : startV.out("toMany").toList()) {
+            for (Vertex v : IteratorUtils.list(startV.vertices(Direction.OUT, "toMany"))) {
                 v.value("many");
                 if (count++ % 1000000 == 0) {
                     System.out.println("in vertex id = " + v.id());
@@ -344,24 +346,24 @@ public class TestNeo4jBlueprints {
             int count = 0;
             for (Object id : ids) {
                 count++;
-                Vertex vertex = g.V(id).next();
+                Vertex vertex = g.traversal().V(id).next();
 
-                for (Vertex v : vertex.out("toMany").toList()) {
+                for (Vertex v : IteratorUtils.list(vertex.vertices(Direction.BOTH, "toMany"))) {
                     v.value("many");
                 }
                 if (count == ids.length) {
-                    Assert.assertEquals(0, count(vertex.out("toMany").toList()));
+                    Assert.assertEquals(0, IteratorUtils.count(vertex.vertices(Direction.BOTH, "toMany")));
                 } else {
-                    Assert.assertEquals(10, count(vertex.out("toMany").toList()));
+                    Assert.assertEquals(10, IteratorUtils.count(vertex.vertices(Direction.BOTH, "toMany")));
                 }
 
-                for (Vertex v : vertex.out().toList()) {
+                for (Vertex v : IteratorUtils.list(vertex.vertices(Direction.BOTH))) {
                     v.value("many");
                 }
                 if (count == ids.length) {
-                    Assert.assertEquals(0, count(vertex.out()));
+                    Assert.assertEquals(0, count(vertex.vertices(Direction.BOTH)));
                 } else {
-                    Assert.assertEquals(10, count(vertex.out()));
+                    Assert.assertEquals(10, count(vertex.vertices(Direction.BOTH)));
                 }
 
                 if (count % 100000 == 0) {
@@ -430,12 +432,12 @@ public class TestNeo4jBlueprints {
             stopWatch.reset();
             stopWatch.start();
             int count = 1;
-            Vertex startV = g.V(start.id()).next();
-            Iterator<Vertex> vertices = startV.out();
+            Vertex startV = g.traversal().V(start.id()).next();
+            Iterator<Vertex> vertices = startV.vertices(Direction.BOTH);
             while (vertices.hasNext()) {
                 Vertex next = vertices.next();
                 Assert.assertEquals(sb.toString(), next.value("many1"));
-                vertices = next.out();
+                vertices = next.vertices(Direction.BOTH);
                 if (count++ % 1000000 == 0) {
                     System.out.println("next vertex id = " + next.id());
                 }

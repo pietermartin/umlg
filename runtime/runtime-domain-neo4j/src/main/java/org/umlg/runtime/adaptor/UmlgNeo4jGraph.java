@@ -9,9 +9,6 @@ import org.apache.tinkerpop.gremlin.process.computer.GraphComputer;
 import org.apache.tinkerpop.gremlin.process.traversal.T;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.*;
-import org.apache.tinkerpop.gremlin.structure.strategy.ReadOnlyStrategy;
-import org.apache.tinkerpop.gremlin.structure.strategy.StrategyEdge;
-import org.apache.tinkerpop.gremlin.structure.strategy.StrategyGraph;
 import org.apache.tinkerpop.gremlin.structure.util.GraphFactory;
 import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
 import org.neo4j.cypher.ExecutionEngine;
@@ -54,7 +51,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
     private UmlgTransactionEventHandlerImpl transactionEventHandler;
     private Class<UmlgApplicationNode> umlgApplicationNodeClass;
     private ExecutionEngine engine;
-    private StrategyGraph neo4jGraph;
+    private Neo4jGraph neo4jGraph;
     //cache the root vertex
     private Vertex rootVertex;
 
@@ -64,16 +61,20 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
         conf.setProperty(Neo4jGraph.CONFIG_DIRECTORY, directory);
         conf.setProperty("gremlin.neo4j.conf.node_auto_indexing", "true");
         conf.setProperty("gremlin.neo4j.conf.relationship_auto_indexing", "true");
-        this.neo4jGraph = GraphFactory.open(conf).strategy(new UmlgNeo4jGraphStrategy());
+        this.neo4jGraph = (Neo4jGraph) GraphFactory.open(conf);
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
     @Override
     public Graph getReadOnlyGraph() {
-        Neo4jGraph rawNeo4jGraph = (Neo4jGraph) this.neo4jGraph.getBaseGraph();
-        final StrategyGraph swg = new StrategyGraph(rawNeo4jGraph);
-        swg.strategy(ReadOnlyStrategy.instance());
-        return swg;
+//        final GraphTraversalSource.Builder builder = GraphTraversalSource.build().engine(StandardTraversalEngine.build());
+//        Stream.of(ReadOnlyStrategy.instance()).forEach(builder::with);
+//        return builder.create(this.neo4jGraph);
+//        this.neo4jGraph.traversal(ReadOnlyStrategy.instance());
+//        Neo4jGraph rawNeo4jGraph = (Neo4jGraph) this.neo4jGraph.getBaseGraph();
+//        final StrategyGraph swg = new StrategyGraph(rawNeo4jGraph);
+//        swg.strategy(ReadOnlyStrategy.instance());
+        return null;
     }
 
     void setBypass(boolean bypasss) {
@@ -464,7 +465,7 @@ public class UmlgNeo4jGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public boolean hasEdgeBeenDeleted(Edge edge) {
-        Neo4jEdge neo4jEdge = (Neo4jEdge) ((StrategyEdge) edge).getBaseEdge();
+        Neo4jEdge neo4jEdge = (Neo4jEdge) edge;
         try {
             neo4jEdge.getBaseElement().hasProperty("asd");
             return false;
