@@ -28,6 +28,8 @@ import org.umlg.runtime.util.UmlgFormatter;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
 
 public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntimeProperty, OclStdLibCollection<E> {
 
@@ -1374,6 +1376,8 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         maybeLoad();
         return this.oclStdLibCollection.forAll(v);
     }
+
+//    public abstract <R> UmlgCollection<R> sortedBy(Comparator comparator);
 
     protected boolean validateElementType(E e) {
         if (this.umlgRuntimeProperty.isManyPrimitive() || this.umlgRuntimeProperty.isOnePrimitive()) {

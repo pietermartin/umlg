@@ -17,7 +17,8 @@ public enum OclIteratorExpEnum implements HandleIteratorExp {
     ANY(new OclAnyExpToJava()),
     IS_UNIQUE(new OclIsUniqueExpToJava()),
     EXISTS(new OclExistsExpToJava()),
-    FOR_ALL(new OclForAllExpToJava());
+    FOR_ALL(new OclForAllExpToJava()),
+	SORTED_BY(new OclSortedByExpToJava());
 	private HandleIteratorExp implementor;
 	
 	private OclIteratorExpEnum(HandleIteratorExp implementor) {
@@ -39,6 +40,8 @@ public enum OclIteratorExpEnum implements HandleIteratorExp {
             return EXISTS;
         } else if (name.equals(PredefinedType.FOR_ALL_NAME)) {
             return FOR_ALL;
+		} else if (name.equals(PredefinedType.SORTED_BY_NAME)) {
+			return SORTED_BY;
 		} else {
 			throw new RuntimeException(String.format("Not yet implemented, %s", name));
 		}

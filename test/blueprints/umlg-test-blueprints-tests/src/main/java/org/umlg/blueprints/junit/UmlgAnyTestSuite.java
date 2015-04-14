@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.umlg.tests.batch.TestBatchMode;
 import org.umlg.tests.collectiontest.SequenceTest;
+import org.umlg.tests.concretetest.TestOneToMany;
 
 /**
  * Date: 2013/10/19
@@ -11,7 +12,7 @@ import org.umlg.tests.collectiontest.SequenceTest;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        SequenceTest.class
+        TestOneToMany.class
 })
 public class UmlgAnyTestSuite {
 }

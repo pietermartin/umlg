@@ -15,10 +15,7 @@ import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgSequence<E> {
 
@@ -490,4 +487,8 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
         return this.oclStdLibSequence.reverse();
     }
 
+//    @Override
+//    public <R> UmlgSequence<R> sortedBy(Comparator comparator) {
+//        return null;
+//    }
 }

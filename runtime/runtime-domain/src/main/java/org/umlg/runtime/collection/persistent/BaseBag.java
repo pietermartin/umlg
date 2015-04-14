@@ -15,6 +15,7 @@ import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.lang.reflect.Method;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -199,5 +200,9 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>
 		maybeLoad();
 		return this.oclStdLibBag.excluding(object);
 	}
-	
+
+//	@Override
+//	public <R> UmlgBag<R> sortedBy(Comparator comparator) {
+//		return null;
+//	}
 }

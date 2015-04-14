@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ActionLanguage="http://www.omg.org/spec/ALF/20120827/ActionLanguage-Profile" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_e14eMFR1EeSYKoTKo2lKtA/12" xmlns:UmlgValidation="http:///schemas/UmlgValidation/_VpQKgAUsEeSLIPXdtbyv6Q/16" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:standard="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http://www.omg.org/spec/ALF/20120827/ActionLanguage-Profile pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_sYse0YZLEeKyw49uR6nx3g http:///schemas/UmlgProfile/_e14eMFR1EeSYKoTKo2lKtA/12 umlg.profile.uml#_e15sUFR1EeSYKoTKo2lKtA http:///schemas/UmlgValidation/_VpQKgAUsEeSLIPXdtbyv6Q/16 validation.profile.uml#_VpQxkAUsEeSLIPXdtbyv6Q">
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_e14eMFR1EeSYKoTKo2lKtA/12" xmlns:UmlgValidation="http:///schemas/UmlgValidation/_VpQKgAUsEeSLIPXdtbyv6Q/16" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:standard="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgProfile/_e14eMFR1EeSYKoTKo2lKtA/12 umlg.profile.uml#_e15sUFR1EeSYKoTKo2lKtA http:///schemas/UmlgValidation/_VpQKgAUsEeSLIPXdtbyv6Q/16 validation.profile.uml#_VpQxkAUsEeSLIPXdtbyv6Q">
   <uml:Model xmi:id="_qb8akM37EdqwVrslYOdUDA" name="umlgtest">
     <elementImport xmi:type="uml:ElementImport" xmi:id="_vhWmcOYQEeCCXPbP2D6kZQ">
       <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
@@ -26,7 +26,7 @@
       <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#_0"/>
     </packageImport>
     <packageImport xmi:type="uml:PackageImport" xmi:id="_5fiXINjTEeOEP64qykw2fg">
-      <importedPackage xmi:type="uml:Profile" href="pathmap://UML_PROFILES/StandardL2.profile.uml#_0"/>
+      <importedPackage xmi:type="uml:Profile" href="pathmap://UML_PROFILES/Standard.profile.uml#_0"/>
     </packageImport>
     <packagedElement xmi:type="uml:Package" xmi:id="_lvLY8MTDEeGJXus6eZqdyw" name="org">
       <packagedElement xmi:type="uml:Package" xmi:id="_w8IxIM37EdqwVrslYOdUDA" name="umlg">
@@ -3309,6 +3309,38 @@ endif</body>
                 </defaultValue>
               </ownedAttribute>
             </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_nioL8OFLEeSqkZJO8LzYrg" name="SortedByParent">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_qWeMkOFLEeSqkZJO8LzYrg" name="sortedByChild" type="_o5gfUOFLEeSqkZJO8LzYrg" association="_qWezoOFLEeSqkZJO8LzYrg">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_qWeMkeFLEeSqkZJO8LzYrg"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_qWeMkuFLEeSqkZJO8LzYrg" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_2i0NoOFLEeSqkZJO8LzYrg" name="sortedBy" visibility="public" type="_o5gfUOFLEeSqkZJO8LzYrg" isDerived="true">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3s8ecOFLEeSqkZJO8LzYrg"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3s9FgOFLEeSqkZJO8LzYrg" value="*"/>
+                <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_BFjMkOFMEeSqkZJO8LzYrg">
+                  <language>OCL</language>
+                  <body>self.sortedByChild</body>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_o5gfUOFLEeSqkZJO8LzYrg" name="SortedByChild">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_xXweAOFLEeSqkZJO8LzYrg" name="sortBy" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_zXlAsOFLEeSqkZJO8LzYrg" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_zXmO0OFLEeSqkZJO8LzYrg" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_z4NBgOFLEeSqkZJO8LzYrg" name="sortByInt" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1tB1IOFLEeSqkZJO8LzYrg" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1tCcMOFLEeSqkZJO8LzYrg" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_qWezoOFLEeSqkZJO8LzYrg" name="sortedByParent_sortedByChild" memberEnd="_qWezoeFLEeSqkZJO8LzYrg _qWeMkOFLEeSqkZJO8LzYrg">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_qWezoeFLEeSqkZJO8LzYrg" name="sortedByParent" type="_nioL8OFLEeSqkZJO8LzYrg" association="_qWezoOFLEeSqkZJO8LzYrg">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_qWezouFLEeSqkZJO8LzYrg" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_qWezo-FLEeSqkZJO8LzYrg" value="1"/>
+              </ownedEnd>
+            </packagedElement>
           </packagedElement>
           <packagedElement xmi:type="uml:Package" xmi:id="_X0POkB5KEeSglo_7OnFCeA" name="oclenum">
             <packagedElement xmi:type="uml:Class" xmi:id="_a90OoB5KEeSglo_7OnFCeA" name="OclEnum">
@@ -3606,7 +3638,7 @@ endif</body>
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_SlmcoNjUEeOEP64qykw2fg" source="http://www.eclipse.org/uml2/2.0.0/UML">
         <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard#/"/>
       </eAnnotations>
-      <appliedProfile xmi:type="uml:Profile" href="pathmap://UML_PROFILES/StandardL2.profile.uml#_0"/>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://UML_PROFILES/Standard.profile.uml#_0"/>
     </profileApplication>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_ROf_oB_JEeS6wLiaOddMTA">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_RRWfUB_JEeS6wLiaOddMTA" source="http://www.eclipse.org/uml2/2.0.0/UML">
@@ -3678,7 +3710,6 @@ endif</body>
   <UmlgProfile:Index xmi:id="_aSwaYOmPEeO5xohz8WLHnw" base_Property="_OBEmUOmPEeO5xohz8WLHnw"/>
   <UmlgProfile:Index xmi:id="_0bkWUOmPEeO5xohz8WLHnw" base_Property="_wjzakOmPEeO5xohz8WLHnw"/>
   <UmlgProfile:Index xmi:id="_S7p54OmjEeO5xohz8WLHnw" base_Property="_-Dzb4OmPEeO5xohz8WLHnw" type="NON_UNIQUE"/>
-  <ActionLanguage:TextualRepresentation xmi:id="_RRg3YB_JEeS6wLiaOddMTA" language="org.eclipse.papyrus.uml.textedit.property.xtext.UmlProperty"/>
   <UmlgProfile:QualifierListener xmi:id="_4KJmkCBmEeSFa74Bzzzd5g" base_Property="_HGZ5cA1TEeGMEcd2Uio8Tg" qualifier="_KW7PAA1TEeGMEcd2Uio8Tg"/>
   <UmlgProfile:QualifierListener xmi:id="_JbdWUCBnEeSFa74Bzzzd5g" base_Property="_zVLuUPJOEeCeFLHNTzV0LA" qualifier="_gqZEsN3EEeOEP64qykw2fg"/>
   <UmlgProfile:QualifierListener xmi:id="_klOY8CBnEeSFa74Bzzzd5g" base_Property="_rEo6MN29EeOEP64qykw2fg" qualifier="_8c7bsN29EeOEP64qykw2fg"/>
@@ -3699,10 +3730,7 @@ endif</body>
   <UmlgProfile:QualifierListener xmi:id="_xOhAkDAREeSW2N9UJoM5Cg" base_Property="_KOKm8DAQEeSW2N9UJoM5Cg" qualifier="_pXA40DAREeSW2N9UJoM5Cg"/>
   <UmlgProfile:ChangeListener xmi:id="_5p0JUDELEeS9Hfg3kuQxnw" base_Property="_aI90cOwiEeCSwqyeEHd1tw"/>
   <UmlgProfile:QualifierListener xmi:id="_V0ObcDawEeSnn-X4fEzpQw" base_Property="_UlsdsDauEeSnn-X4fEzpQw" qualifier="_f-qPsEXFEeSbxZfYAmYcLg __bQfkEZsEeSsxadmgXYTww"/>
-  <ActionLanguage:TextualRepresentation xmi:id="_PScd0Ec1EeShtMlRJp6sTQ" language="org.eclipse.papyrus.uml.textedit.property.xtext.UmlProperty"/>
-  <ActionLanguage:TextualRepresentation xmi:id="_XzZLMEc1EeShtMlRJp6sTQ" language="org.eclipse.papyrus.uml.textedit.property.xtext.UmlProperty"/>
   <UmlgProfile:Index xmi:id="_cXC8kEc1EeShtMlRJp6sTQ" base_Property="_WNGi0Ec1EeShtMlRJp6sTQ"/>
-  <ActionLanguage:TextualRepresentation xmi:id="_KU0X4EfSEeSIgo37w9oFNw" language="org.eclipse.papyrus.uml.textedit.property.xtext.UmlProperty"/>
   <UmlgProfile:ChangeListener xmi:id="_1l4PoFOCEeSrW_3W8L-f7w" base_Property="_IYFP4OzqEeCemKc79Sc_aw"/>
   <UmlgProfile:QualifierListener xmi:id="_KaWi4GLTEeS41NgVNzSvIg" base_Property="_VRBm8GLSEeS41NgVNzSvIg" qualifier="_FItqIGLTEeS41NgVNzSvIg"/>
   <UmlgProfile:ChangeListener xmi:id="_YDINoG0DEeSGYbt32h2qNw" base_Property="_sWkFwbdVEeORtvbQ18esMQ"/>

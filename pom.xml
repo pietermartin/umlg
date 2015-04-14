@@ -61,6 +61,10 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
+        <repository>
+            <id>apache-snapshot</id>
+            <url>https://repository.apache.org/content/groups/snapshots/</url>
+        </repository>
     </repositories>
 
     <properties>

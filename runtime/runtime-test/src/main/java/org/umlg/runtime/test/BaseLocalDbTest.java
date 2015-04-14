@@ -36,11 +36,11 @@ public class BaseLocalDbTest {
     }
 
 	protected long countVertices() {
-        return ((UmlgAdminGraph)this.db).countVertices() - 174;
+        return ((UmlgAdminGraph)this.db).countVertices() - 176;
 	}
 
 	protected long countEdges() {
-        return ((UmlgAdminGraph)this.db).countEdges() - 174;
+        return ((UmlgAdminGraph)this.db).countEdges() - 176;
 	}
 
 }

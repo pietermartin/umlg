@@ -293,4 +293,6 @@ public interface OclStdLibCollection<E> extends OclAny {
      */
     <T2> UmlgCollection<T2> flatten();
 
+
+
 }

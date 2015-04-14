@@ -31,9 +31,23 @@
                     enableCursorHotkey: false,
                     livePaneResizing: true,
                     //This is the navbar height,
-                    north: {initClosed: false, togglerLength_open: 0, minSize: topHeight, resizable: false, spacing_open: panelReziserSpace, spacing_closed: panelReziserSpace},
+                    north: {
+                        initClosed: false,
+                        togglerLength_open: 0,
+                        minSize: topHeight,
+                        resizable: false,
+                        spacing_open: panelReziserSpace,
+                        spacing_closed: panelReziserSpace
+                    },
                     east: {initClosed: true, spacing_open: panelReziserSpace, spacing_closed: panelReziserSpace},
-                    south: {minSize: 30, togglerLength_open: 0, initClosed: false, resizable: false, spacing_open: 0, spacing_closed: 0},
+                    south: {
+                        minSize: 30,
+                        togglerLength_open: 0,
+                        initClosed: false,
+                        resizable: false,
+                        spacing_open: 0,
+                        spacing_closed: 0
+                    },
                     west: {minSize: 300, spacing_open: panelReziserSpace, spacing_closed: panelReziserSpace}
                 }
             );
@@ -120,7 +134,12 @@
                 }
             });
 
-            var umlgWebsocket = new WebSocket("ws://" + window.location.host + "/" + tumlModelName + "/websocket");
+            var umlgWebsocket;
+            if (location.protocol === 'https:') {
+                umlgWebsocket = new WebSocket("wss://" + window.location.host + "/" + tumlModelName + "/websocket");
+            } else {
+                umlgWebsocket = new WebSocket("ws://" + window.location.host + "/" + tumlModelName + "/websocket");
+            }
             var userCountP = $('#userCountId');
             umlgWebsocket.onmessage = function (event) {
                 console.log(event.data);
@@ -233,7 +252,11 @@
 
                     if ((response.data.id !== undefined && response.data.id.indexOf('fake') === -1) || metaDataNavigatingTo.name === tumlModelName) {
                         metaDataNavigatingTo = result[i].meta.to;
-                        return {name: metaDataNavigatingTo.name, uri: metaDataNavigatingTo.uri, contextVertexId: response.data.id};
+                        return {
+                            name: metaDataNavigatingTo.name,
+                            uri: metaDataNavigatingTo.uri,
+                            contextVertexId: response.data.id
+                        };
                     }
                 }
                 return {name: metaDataNavigatingFrom.name, uri: metaDataNavigatingFrom.uri, contextVertexId: urlId};
