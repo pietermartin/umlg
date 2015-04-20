@@ -268,4 +268,12 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 		throw new RuntimeException("Not yet implemented");
 	}
 
+	//Predefined Iterator Expressions
+	@Override
+	public UmlgOrderedSet<E> sortedBy(Comparator<E> comparator) {
+		List<E> list = new ArrayList<>(this.orderedSet);
+		Collections.sort(list, comparator);
+		UmlgOrderedSet<E> result = new UmlgMemoryOrderedSet<>(list);
+		return result;
+	}
 }

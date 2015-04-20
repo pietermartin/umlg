@@ -8,10 +8,7 @@ import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibOrderedSet;
 import org.umlg.runtime.collection.ocl.OclStdLibOrderedSetImpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class UmlgMemoryOrderedSet<E> extends UmlgMemoryCollection<E> implements UmlgOrderedSet<E> {
 
@@ -156,4 +153,8 @@ public class UmlgMemoryOrderedSet<E> extends UmlgMemoryCollection<E> implements 
 		return this.oclStdLibOrderedSet.including(e);
 	}
 
+	@Override
+	public UmlgOrderedSet<E> sortedBy(Comparator<E> comparator) {
+		return this.oclStdLibOrderedSet.sortedBy(comparator);
+	}
 }

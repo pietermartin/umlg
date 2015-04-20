@@ -7,6 +7,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgSequence;
+import org.umlg.runtime.collection.memory.UmlgMemorySequence;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibSequence;
@@ -487,8 +488,9 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
         return this.oclStdLibSequence.reverse();
     }
 
-//    @Override
-//    public <R> UmlgSequence<R> sortedBy(Comparator comparator) {
-//        return null;
-//    }
+    @Override
+    public UmlgSequence<E> sortedBy(Comparator<E> comparator) {
+        maybeLoad();
+        return this.oclStdLibSequence.sortedBy(comparator);
+    }
 }

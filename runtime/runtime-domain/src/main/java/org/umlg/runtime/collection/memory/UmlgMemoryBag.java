@@ -3,6 +3,7 @@ package org.umlg.runtime.collection.memory;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import org.umlg.runtime.collection.UmlgBag;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
@@ -10,6 +11,7 @@ import org.umlg.runtime.collection.ocl.OclStdLibBag;
 import org.umlg.runtime.collection.ocl.OclStdLibBagImpl;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Set;
 
 public class UmlgMemoryBag<E> extends UmlgMemoryCollection<E> implements UmlgBag<E> {
@@ -124,5 +126,9 @@ public class UmlgMemoryBag<E> extends UmlgMemoryCollection<E> implements UmlgBag
 	public UmlgBag<E> excluding(E object) {
 		return this.oclStdLibBag.excluding(object);
 	}
-	
+
+	@Override
+	public UmlgSequence<E> sortedBy(Comparator<E> comparator) {
+		return this.oclStdLibBag.sortedBy(comparator);
+	}
 }

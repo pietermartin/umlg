@@ -6,17 +6,13 @@ import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgMemoryOrderedSet;
-import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibSet;
 import org.umlg.runtime.collection.ocl.OclStdLibSetImpl;
 import org.umlg.runtime.domain.UmlgNode;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public abstract class BaseSet<E> extends BaseCollection<E> implements UmlgSet<E>, OclStdLibSet<E> {
 
@@ -131,13 +127,9 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements UmlgSet<E>
 		return this.oclStdLibSet.symmetricDifference(s);
 	}
 
-//	@Override
-//	public <R> UmlgOrderedSet<R> sortedBy(Comparator comparator) {
-//		maybeLoad();
-//		UmlgOrderedSet<E> result = new UmlgMemoryOrderedSet<>(this);
-//		Collections.sort(this);
-//		result.addAll(s);
-//		return result;
-//		return new OclStdLibSetImpl<E>(new HashSet<E>(collection));
-//	}
+	@Override
+	public UmlgOrderedSet<E> sortedBy(Comparator<E> comparator) {
+		maybeLoad();
+		return this.oclStdLibSet.sortedBy(comparator);
+	}
 }

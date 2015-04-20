@@ -3,6 +3,8 @@ package org.umlg.runtime.collection.ocl;
 import org.umlg.runtime.collection.*;
 import org.umlg.runtime.domain.ocl.OclAny;
 
+import java.util.Comparator;
+
 /**
  * From ocl spec v2.3.1
  */
@@ -294,5 +296,8 @@ public interface OclStdLibCollection<E> extends OclAny {
     <T2> UmlgCollection<T2> flatten();
 
 
+
+	//Predefined Iterator Expressions
+	UmlgCollection<E> sortedBy(Comparator<E> e);
 
 }

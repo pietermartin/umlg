@@ -6,10 +6,7 @@ import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibSequence;
 import org.umlg.runtime.collection.ocl.OclStdLibSequenceImpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class UmlgMemorySequence<E> extends UmlgMemoryCollection<E> implements UmlgSequence<E> {
 
@@ -163,4 +160,8 @@ public class UmlgMemorySequence<E> extends UmlgMemoryCollection<E> implements Um
 		return this.oclStdLibSequence.reverse();
 	}
 
+	@Override
+	public UmlgSequence<E> sortedBy(Comparator<E> comparator) {
+		return this.oclStdLibSequence.sortedBy(comparator);
+	}
 }

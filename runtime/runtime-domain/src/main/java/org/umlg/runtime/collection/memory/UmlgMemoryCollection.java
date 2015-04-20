@@ -8,6 +8,7 @@ import org.umlg.runtime.collection.ocl.OclStdLibCollection;
 import org.umlg.runtime.domain.ocl.OclState;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class UmlgMemoryCollection<E> implements UmlgCollection<E> {
@@ -264,5 +265,10 @@ public class UmlgMemoryCollection<E> implements UmlgCollection<E> {
 	public String toJson() {
 		//TODO
 		throw new RuntimeException("Not yet implemented");
+	}
+
+	@Override
+	public UmlgCollection<E> sortedBy(Comparator<E> comparator) {
+		return this.oclStdLibCollection.sortedBy(comparator);
 	}
 }

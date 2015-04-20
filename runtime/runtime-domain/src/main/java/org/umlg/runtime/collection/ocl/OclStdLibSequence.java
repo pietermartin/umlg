@@ -4,6 +4,8 @@ import org.umlg.runtime.collection.UmlgBag;
 import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.collection.UmlgSequence;
 
+import java.util.Comparator;
+
 
 public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 
@@ -247,4 +249,8 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
     @Override
     <T2> UmlgSequence<T2> flatten();
 
+
+	//Predefined Iterator Expressions
+	@Override
+	UmlgSequence<E> sortedBy(Comparator<E> e);
 }

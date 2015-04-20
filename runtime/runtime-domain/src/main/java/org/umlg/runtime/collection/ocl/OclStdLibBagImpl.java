@@ -4,13 +4,13 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import org.umlg.runtime.collection.UmlgBag;
 import org.umlg.runtime.collection.UmlgCollection;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgMemoryBag;
+import org.umlg.runtime.collection.memory.UmlgMemorySequence;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements UmlgBag<E> {
 
@@ -216,7 +216,9 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements U
         return this.bag.add(element);
     }
 
-    @Override
+
+
+	@Override
 	public boolean add(E element) {
 		return this.bag.add(element);
 	}
@@ -265,4 +267,14 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements U
 	public String toJson() {
 		throw new RuntimeException("Not yet implemented");
 	}
+
+	//Predefined Iterator Expressions
+	@Override
+	public UmlgSequence<E> sortedBy(Comparator<E> comparator) {
+		ArrayList<E> list = new ArrayList<>(this.bag);
+		Collections.sort(list, comparator);
+		UmlgSequence<E> result = new UmlgMemorySequence<>(list);
+		return result;
+	}
+
 }

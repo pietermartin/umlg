@@ -4,14 +4,13 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import org.umlg.runtime.collection.UmlgBag;
 import org.umlg.runtime.collection.UmlgCollection;
+import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgMemoryBag;
+import org.umlg.runtime.collection.memory.UmlgMemoryOrderedSet;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements UmlgSet<E> {
 
@@ -238,10 +237,18 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements U
 		this.set.clear();
 	}
 
-//	@Override
-//	public String toJson() {
-//		// TODO
-//		throw new RuntimeException("Not yet implemented");
-//	}
+	@Override
+	public String toJson() {
+		// TODO
+		throw new RuntimeException("Not yet implemented");
+	}
 
+	//Predefined Iterator Expressions
+	@Override
+	public UmlgOrderedSet<E> sortedBy(Comparator<E> comparator) {
+		List<E> list = new ArrayList<>(this.set);
+		Collections.sort(list, comparator);
+		UmlgOrderedSet<E> result = new UmlgMemoryOrderedSet<>(list);
+		return result;
+	}
 }

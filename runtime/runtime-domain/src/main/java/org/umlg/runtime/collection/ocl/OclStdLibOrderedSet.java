@@ -4,6 +4,8 @@ import org.umlg.runtime.collection.UmlgBag;
 import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.collection.UmlgSequence;
 
+import java.util.Comparator;
+
 
 public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 
@@ -182,4 +184,7 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	 */
 	UmlgOrderedSet<E> including(E e);
 
+
+	//Predefined Iterator Expressions
+	UmlgOrderedSet<E> sortedBy(Comparator<E> e);
 }

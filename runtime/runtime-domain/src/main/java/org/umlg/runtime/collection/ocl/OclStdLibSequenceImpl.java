@@ -289,4 +289,12 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 		throw new RuntimeException("Not yet implemented");
 	}
 
+	//Predefined Iterator Expressions
+	@Override
+	public UmlgSequence<E> sortedBy(Comparator<E> comparator) {
+		List<E> list = new ArrayList<>(this.list);
+		Collections.sort(list, comparator);
+		UmlgSequence<E> result = new UmlgMemorySequence<>(list);
+		return result;
+	}
 }

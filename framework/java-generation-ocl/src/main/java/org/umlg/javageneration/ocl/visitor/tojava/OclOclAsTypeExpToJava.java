@@ -28,13 +28,13 @@ public class OclOclAsTypeExpToJava extends BaseHandleOperationExp {
 
 		String operationName = oc.getReferredOperation().getName();
 		OJAnnotatedOperation oper = new OJAnnotatedOperation(operationName + this.ojClass.countOperationsStartingWith(operationName), UmlgClassOperations.getPathName(argumentType));
-        oper.addParam(sourceResult, UmlgClassOperations.getPathName(argumentType));
+        oper.addParam("sourceResult", "Object");
 		this.ojClass.addToOperations(oper);
 		oper.setVisibility(OJVisibilityKind.PRIVATE);
         if (sourceResult.equals("self")) {
             sourceResult = "this";
         }
-        oper.getBody().addToStatements("return ((" + argumentResults.get(0) + ")" + sourceResult + ")");
+        oper.getBody().addToStatements("return ((" + argumentResults.get(0) + ")" + "sourceResult)");
         if (sourceResult.equals("self")) {
             sourceResult = "this";
         }

@@ -1,9 +1,11 @@
 package org.umlg.runtime.collection;
 
 import org.umlg.runtime.collection.ocl.OclStdLibCollection;
+import org.umlg.runtime.collection.persistent.BaseCollection;
 import org.umlg.runtime.domain.UmlgEnum;
 
 import java.util.Collection;
+import java.util.Comparator;
 
 public interface UmlgCollection<E> extends Collection<E>, OclStdLibCollection<E> {
     public static final String ASSOCIATION_CLASS_VERTEX_ID = "associationClassVertexId";
@@ -40,4 +42,5 @@ public interface UmlgCollection<E> extends Collection<E>, OclStdLibCollection<E>
         throw new IllegalStateException("addIgnoreInverse() is only supported by a persistent collection BaseCollection!");
     }
 
+    UmlgCollection<E> sortedBy(Comparator<E> e);
 }

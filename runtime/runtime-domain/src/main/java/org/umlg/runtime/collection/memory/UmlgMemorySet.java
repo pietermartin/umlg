@@ -1,6 +1,7 @@
 package org.umlg.runtime.collection.memory;
 
 import org.umlg.runtime.collection.UmlgBag;
+import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
@@ -8,6 +9,7 @@ import org.umlg.runtime.collection.ocl.OclStdLibSet;
 import org.umlg.runtime.collection.ocl.OclStdLibSetImpl;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -94,4 +96,8 @@ public class UmlgMemorySet<E> extends UmlgMemoryCollection<E> implements UmlgSet
 		return oclStdLibSet.symmetricDifference(s);
 	}
 
+	@Override
+	public UmlgOrderedSet<E> sortedBy(Comparator<E> comparator) {
+		return this.oclStdLibSet.sortedBy(comparator);
+	}
 }

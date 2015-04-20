@@ -7,6 +7,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgSequence;
+import org.umlg.runtime.collection.memory.UmlgMemoryOrderedSet;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibOrderedSet;
@@ -14,10 +15,7 @@ import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class UmlgOrderedSetClosableIterableImpl<E> extends BaseCollection<E> implements UmlgOrderedSet<E> {
 
@@ -239,4 +237,12 @@ public class UmlgOrderedSetClosableIterableImpl<E> extends BaseCollection<E> imp
         }
     }
 
+	@Override
+	public UmlgOrderedSet<E> sortedBy(Comparator comparator) {
+		maybeLoad();
+		ArrayList<E> list = new ArrayList<>(this.internalCollection);
+		Collections.sort(list, comparator);
+		UmlgOrderedSet<E> result = new UmlgMemoryOrderedSet<>(list);
+		return result;
+	}
 }

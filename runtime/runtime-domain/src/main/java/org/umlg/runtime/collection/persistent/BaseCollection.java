@@ -1377,8 +1377,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         return this.oclStdLibCollection.forAll(v);
     }
 
-//    public abstract <R> UmlgCollection<R> sortedBy(Comparator comparator);
-
     protected boolean validateElementType(E e) {
         if (this.umlgRuntimeProperty.isManyPrimitive() || this.umlgRuntimeProperty.isOnePrimitive()) {
             if (!(e instanceof String) && !(e instanceof Boolean) && !(e instanceof Integer) &&

@@ -49,6 +49,7 @@ import org.umlg.tests.ocl.kindoftypeof.TestAsType;
 import org.umlg.tests.ocl.kindoftypeof.TestKindOfTypeOf;
 import org.umlg.tests.ocl.ocloperator.*;
 import org.umlg.tests.ocl.operation.OclOperationTest;
+import org.umlg.tests.ocl.prefefinediterator.TestSortedBy;
 import org.umlg.tests.ocl.qualifiers.TestNavigateQualifedProperty;
 import org.umlg.tests.primitive.TestBooleanPrimitive;
 import org.umlg.tests.primitive.TestPrimitiveRemoval;
@@ -153,7 +154,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestAssociationClass.class,
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
-        TestAssociationToSelf.class
+        TestAssociationToSelf.class,
+        TestSortedBy.class
 })
 public class UmlgAllTestSuite {
 }

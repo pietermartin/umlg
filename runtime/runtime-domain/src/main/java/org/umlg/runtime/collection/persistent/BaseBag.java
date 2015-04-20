@@ -6,7 +6,9 @@ import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.collection.UmlgBag;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.UmlgSet;
+import org.umlg.runtime.collection.memory.UmlgMemorySequence;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibBag;
@@ -15,9 +17,7 @@ import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.lang.reflect.Method;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>, OclStdLibBag<E> {
 
@@ -201,8 +201,9 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>
 		return this.oclStdLibBag.excluding(object);
 	}
 
-//	@Override
-//	public <R> UmlgBag<R> sortedBy(Comparator comparator) {
-//		return null;
-//	}
+	@Override
+	public UmlgSequence<E> sortedBy(Comparator comparator) {
+		maybeLoad();
+		return this.oclStdLibBag.sortedBy(comparator);
+	}
 }

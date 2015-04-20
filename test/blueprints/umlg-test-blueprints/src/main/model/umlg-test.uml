@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_e14eMFR1EeSYKoTKo2lKtA/12" xmlns:UmlgValidation="http:///schemas/UmlgValidation/_VpQKgAUsEeSLIPXdtbyv6Q/16" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:standard="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgProfile/_e14eMFR1EeSYKoTKo2lKtA/12 umlg.profile.uml#_e15sUFR1EeSYKoTKo2lKtA http:///schemas/UmlgValidation/_VpQKgAUsEeSLIPXdtbyv6Q/16 validation.profile.uml#_VpQxkAUsEeSLIPXdtbyv6Q">
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ActionLanguage="http://www.omg.org/spec/ALF/20120827/ActionLanguage-Profile" xmlns:UmlgProfile="http:///schemas/UmlgProfile/_e14eMFR1EeSYKoTKo2lKtA/12" xmlns:UmlgValidation="http:///schemas/UmlgValidation/_VpQKgAUsEeSLIPXdtbyv6Q/16" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:standard="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http://www.omg.org/spec/ALF/20120827/ActionLanguage-Profile pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_sYse0YZLEeKyw49uR6nx3g http:///schemas/UmlgProfile/_e14eMFR1EeSYKoTKo2lKtA/12 umlg.profile.uml#_e15sUFR1EeSYKoTKo2lKtA http:///schemas/UmlgValidation/_VpQKgAUsEeSLIPXdtbyv6Q/16 validation.profile.uml#_VpQxkAUsEeSLIPXdtbyv6Q">
   <uml:Model xmi:id="_qb8akM37EdqwVrslYOdUDA" name="umlgtest">
     <elementImport xmi:type="uml:ElementImport" xmi:id="_vhWmcOYQEeCCXPbP2D6kZQ">
       <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
@@ -3314,12 +3314,12 @@ endif</body>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_qWeMkeFLEeSqkZJO8LzYrg"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_qWeMkuFLEeSqkZJO8LzYrg" value="*"/>
               </ownedAttribute>
-              <ownedAttribute xmi:type="uml:Property" xmi:id="_2i0NoOFLEeSqkZJO8LzYrg" name="sortedBy" visibility="public" type="_o5gfUOFLEeSqkZJO8LzYrg" isDerived="true">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_2i0NoOFLEeSqkZJO8LzYrg" name="sortedBy" visibility="public" type="_o5gfUOFLEeSqkZJO8LzYrg" isOrdered="true" isDerived="true">
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3s8ecOFLEeSqkZJO8LzYrg"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3s9FgOFLEeSqkZJO8LzYrg" value="*"/>
                 <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_BFjMkOFMEeSqkZJO8LzYrg">
                   <language>OCL</language>
-                  <body>self.sortedByChild</body>
+                  <body>self.sortedByChild->sortedBy(sortBy)</body>
                 </defaultValue>
               </ownedAttribute>
             </packagedElement>
@@ -3491,6 +3491,10 @@ endif</body>
                   <body>self.oclIsKindOf(AbstractOclIsKindOf)</body>
                 </defaultValue>
               </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_PRFUYORQEeSToKE0MwMyDA" name="something" type="_JYqvgORQEeSToKE0MwMyDA" association="_PRF7cORQEeSToKE0MwMyDA">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_PRFUYeRQEeSToKE0MwMyDA"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_PRFUYuRQEeSToKE0MwMyDA" value="*"/>
+              </ownedAttribute>
               <ownedOperation xmi:type="uml:Operation" xmi:id="_Ca718FMUEeS8pYcpPdl0ow" name="testCast" bodyCondition="_dIIRUFMUEeS8pYcpPdl0ow" isQuery="true">
                 <ownedRule xmi:type="uml:Constraint" xmi:id="_dIIRUFMUEeS8pYcpPdl0ow">
                   <specification xmi:type="uml:OpaqueExpression" xmi:id="_dIIRUVMUEeS8pYcpPdl0ow">
@@ -3508,7 +3512,49 @@ endif</body>
                 <ownedParameter xmi:type="uml:Parameter" xmi:id="_GZhycFMUEeS8pYcpPdl0ow" name="param1" type="_lPyHMFMPEeS8pYcpPdl0ow"/>
               </ownedOperation>
             </packagedElement>
-            <packagedElement xmi:type="uml:Class" xmi:id="_NkPNAFMREeS8pYcpPdl0ow" name="AbstractOclIsKindOf"/>
+            <packagedElement xmi:type="uml:Class" xmi:id="_NkPNAFMREeS8pYcpPdl0ow" name="AbstractOclIsKindOf">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_63UfIOTBEeSF5_jQQbOZ8Q" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_83cj0OTBEeSF5_jQQbOZ8Q"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_83dx8OTBEeSF5_jQQbOZ8Q" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_TxOmIORNEeSToKE0MwMyDA" name="TestOclTypeOf">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_Yh44wORNEeSToKE0MwMyDA" name="abstractOclIsKindOf" type="_NkPNAFMREeS8pYcpPdl0ow" association="_Yh5f0ORNEeSToKE0MwMyDA">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Yh44weRNEeSToKE0MwMyDA"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Yh44wuRNEeSToKE0MwMyDA" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_lsAX8OTBEeSF5_jQQbOZ8Q" name="testOclTypeOf" visibility="public" type="_JYqvgORQEeSToKE0MwMyDA" isDerived="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_mtepwOTGEeSF5_jQQbOZ8Q">
+                  <body>Kind</body>
+                </ownedComment>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ql9JcOTBEeSF5_jQQbOZ8Q"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ql_lsOTBEeSF5_jQQbOZ8Q" value="*"/>
+                <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_53DU8OTBEeSF5_jQQbOZ8Q">
+                  <language>OCL</language>
+                  <body>self.abstractOclIsKindOf->any(name='testOclIsKindOf').oclAsType(OclIsKindOf).something</body>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_Yh5f0ORNEeSToKE0MwMyDA" name="testOclTypeOf_abstractOclIsKindOf" memberEnd="_Yh5f0eRNEeSToKE0MwMyDA _Yh44wORNEeSToKE0MwMyDA" navigableOwnedEnd="_Yh5f0eRNEeSToKE0MwMyDA">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_Yh5f0eRNEeSToKE0MwMyDA" name="testOclTypeOf" type="_TxOmIORNEeSToKE0MwMyDA" association="_Yh5f0ORNEeSToKE0MwMyDA">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Yh5f0uRNEeSToKE0MwMyDA"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Yh5f0-RNEeSToKE0MwMyDA" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_JYqvgORQEeSToKE0MwMyDA" name="Something">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_KxKzgORQEeSToKE0MwMyDA" name="test" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_N3zNQORQEeSToKE0MwMyDA" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_N31CcORQEeSToKE0MwMyDA" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_PRF7cORQEeSToKE0MwMyDA" name="oclIsKindOf_something" memberEnd="_PRF7ceRQEeSToKE0MwMyDA _PRFUYORQEeSToKE0MwMyDA" navigableOwnedEnd="_PRF7ceRQEeSToKE0MwMyDA">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_PRF7ceRQEeSToKE0MwMyDA" name="oclIsKindOf" type="_aLQ0YFMQEeS8pYcpPdl0ow" association="_PRF7cORQEeSToKE0MwMyDA">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_PRF7cuRQEeSToKE0MwMyDA"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_PRF7c-RQEeSToKE0MwMyDA" value="1"/>
+              </ownedEnd>
+            </packagedElement>
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_c7uUgE8YEeSo664unH6t3Q" name="datatypeassociation">
@@ -3735,4 +3781,5 @@ endif</body>
   <UmlgProfile:QualifierListener xmi:id="_KaWi4GLTEeS41NgVNzSvIg" base_Property="_VRBm8GLSEeS41NgVNzSvIg" qualifier="_FItqIGLTEeS41NgVNzSvIg"/>
   <UmlgProfile:ChangeListener xmi:id="_YDINoG0DEeSGYbt32h2qNw" base_Property="_sWkFwbdVEeORtvbQ18esMQ"/>
   <UmlgProfile:ChangeListener xmi:id="_aWKAMG0DEeSGYbt32h2qNw" base_Property="_sWjesLdVEeORtvbQ18esMQ"/>
+  <ActionLanguage:TextualRepresentation xmi:id="_mtkJUOTGEeSF5_jQQbOZ8Q" base_Comment="_mtepwOTGEeSF5_jQQbOZ8Q" language="org.eclipse.papyrus.uml.textedit.property.xtext.UmlProperty"/>
 </xmi:XMI>

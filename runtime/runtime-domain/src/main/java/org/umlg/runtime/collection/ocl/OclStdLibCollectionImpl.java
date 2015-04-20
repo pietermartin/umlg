@@ -1,11 +1,10 @@
 package org.umlg.runtime.collection.ocl;
 
 import org.umlg.runtime.collection.*;
+import org.umlg.runtime.collection.memory.UmlgMemorySequence;
 import org.umlg.runtime.domain.ocl.OclState;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 
@@ -107,13 +106,13 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
                 max = (Number)e;
             }
             if (e instanceof Integer) {
-                max = Math.max((Integer)max, (Integer)e);
+                max = Math.max((Integer) max, (Integer) e);
             } else if (e instanceof Long) {
-                max = Math.max((Long)max, (Long)e);
+                max = Math.max((Long) max, (Long) e);
             } else if (e instanceof Float) {
-                max = Math.max((Float)max, (Float)e);
+                max = Math.max((Float) max, (Float) e);
             } else {
-                max = Math.max((Double)max, (Double)e);
+                max = Math.max((Double) max, (Double) e);
             }
         }
 		return (E)max;
@@ -138,13 +137,13 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
                 min = (Number)e;
             }
             if (e instanceof Integer) {
-                min = Math.min((Integer)min, (Integer)e);
+                min = Math.min((Integer) min, (Integer) e);
             } else if (e instanceof Long) {
-                min = Math.min((Long)min, (Long)e);
+                min = Math.min((Long) min, (Long) e);
             } else if (e instanceof Float) {
-                min = Math.min((Float)min, (Float)e);
+                min = Math.min((Float) min, (Float) e);
             } else {
-                min = Math.min((Double)min, (Double)e);
+                min = Math.min((Double) min, (Double) e);
             }
         }
         return (E)min;
@@ -199,7 +198,8 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
         throw new RuntimeException("Not implemented");
 	}
 
-	
+
+
 	/***************************************************
 	 * Iterate goodies
 	 ***************************************************/
@@ -294,6 +294,9 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 		return acc;
 	}
 
+
+
+
 	/*******************************
 	 * OclAny  
 	 *******************************/
@@ -353,4 +356,11 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 		throw new RuntimeException("Not implemented");
 	}
 
+	@Override
+	public UmlgCollection<E> sortedBy(Comparator<E> comparator) {
+		ArrayList<E> list = new ArrayList<>(this.collection);
+		Collections.sort(list, comparator);
+		UmlgSequence<E> result = new UmlgMemorySequence<>(list);
+		return result;
+	}
 }
