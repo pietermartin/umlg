@@ -16,7 +16,7 @@
         <module>umlg-test-ocl</module>
         <module>umlg-test-tinkergraph</module>
         <module>test-restlet</module>
-        <module>test-neo4j-blueprints</module>
+        <!--<module>test-neo4j-blueprints</module>-->
         <!--<module>test-orientdb-blueprints</module>-->
         <!--<module>test-titan</module>-->
         <!--<module>test-bitsy</module>-->
