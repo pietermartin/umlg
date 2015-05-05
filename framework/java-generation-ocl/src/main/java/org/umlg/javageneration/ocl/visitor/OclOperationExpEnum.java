@@ -41,6 +41,7 @@ public enum OclOperationExpEnum implements HandleOperationExp {
     FLATTEN(new OclFlattenExprToJava()),
     CONCAT(new OclConcatExprToJava()),
     INCLUDES(new OclIncludesExpToJava()),
+    INCLUDES_ALL(new OclIncludesAllExpToJava()),
     DEFAULT(new OclDefaultToStringExprToJava()),
     INDEX_OF(new OclIndexOfExprToJava()),
     SUBSTRING(new OclSubstringExprToJava()),
@@ -122,6 +123,8 @@ public enum OclOperationExpEnum implements HandleOperationExp {
             return SUBSTRING;
         } else if (name.equals(PredefinedType.INCLUDES_NAME)) {
             return INCLUDES;
+        } else if (name.equals(PredefinedType.INCLUDES_ALL_NAME)) {
+            return INCLUDES_ALL;
         } else if (name.equals(PredefinedType.TO_STRING_NAME)) {
             return TO_STRING;
         } else if (name.equals(PredefinedType.AND_NAME)) {
