@@ -787,6 +787,12 @@
           <ownedComment xmi:type="uml:Comment" xmi:id="_nyaJgEZtEeSsxadmgXYTww" annotatedElement="_GHiSsEZfEeSsxadmgXYTww">
             <body>qualified by BQualifierA.name</body>
           </ownedComment>
+          <ownedComment xmi:type="uml:Comment" xmi:id="_tQBwMPVuEeSJdpUx32gkaA" annotatedElement="_acalo_S9EeS6Vqspg4gDaw">
+            <body>Qualified by name</body>
+          </ownedComment>
+          <ownedComment xmi:type="uml:Comment" xmi:id="_UzYwQPVwEeSJdpUx32gkaA" annotatedElement="_nNlyE_S9EeS6Vqspg4gDaw">
+            <body>Qualified by parameterName</body>
+          </ownedComment>
           <packagedElement xmi:type="uml:Class" xmi:id="_F-NRMPJKEeCeFLHNTzV0LA" name="Nature">
             <generalization xmi:type="uml:Generalization" xmi:id="_dMJlACXIEeKbPYSfIbmXag">
               <general xmi:type="uml:Class" href="umlg-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
@@ -1123,6 +1129,73 @@
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_8VWTQGMjEeS41NgVNzSvIg" name="ConcreteQ2">
             <generalization xmi:type="uml:Generalization" xmi:id="_-3TSoGMjEeS41NgVNzSvIg" general="_9XUm4GLREeS41NgVNzSvIg"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_KI8XIPS9EeS6Vqspg4gDaw" name="AAQualifier" isAbstract="true">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_acaloPS9EeS6Vqspg4gDaw" name="bBQualifier" type="_M0U_UPS9EeS6Vqspg4gDaw" aggregation="composite" isDerived="true" isDerivedUnion="true" association="_acalo_S9EeS6Vqspg4gDaw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_acalofS9EeS6Vqspg4gDaw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_acalovS9EeS6Vqspg4gDaw" value="1"/>
+              <qualifier xmi:type="uml:Property" xmi:id="_7ZEHcPVuEeSJdpUx32gkaA" name="bbQualifierByName">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              </qualifier>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_o0Oc0PV6EeSc2-q4NdO9PA" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_qVkTwPV6EeSc2-q4NdO9PA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_qVlh4PV6EeSc2-q4NdO9PA" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_M0U_UPS9EeS6Vqspg4gDaw" name="BBQualifier" isAbstract="true">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_qTYFwPVWEeSd1uOFspT3cQ" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_r-uNQPVWEeSd1uOFspT3cQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_r-wpgPVWEeSd1uOFspT3cQ" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_P7K0cPS9EeS6Vqspg4gDaw" name="AAQualifierA" isAbstract="true">
+            <generalization xmi:type="uml:Generalization" xmi:id="_S5E1IPVvEeSJdpUx32gkaA" general="_KI8XIPS9EeS6Vqspg4gDaw"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_nNlyEPS9EeS6Vqspg4gDaw" name="bBQualifierB" type="_RdlpcPS9EeS6Vqspg4gDaw" aggregation="composite" isDerived="true" isDerivedUnion="true" subsettedProperty="_acaloPS9EeS6Vqspg4gDaw" association="_nNlyE_S9EeS6Vqspg4gDaw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nNlyEfS9EeS6Vqspg4gDaw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nNlyEvS9EeS6Vqspg4gDaw" value="1"/>
+              <qualifier xmi:type="uml:Property" xmi:id="_et3R0PVvEeSJdpUx32gkaA" name="bBQualifierParameterName">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              </qualifier>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_RdlpcPS9EeS6Vqspg4gDaw" name="BBQualifierB" isAbstract="true">
+            <generalization xmi:type="uml:Generalization" xmi:id="_Tdfw0PVvEeSJdpUx32gkaA" general="_M0U_UPS9EeS6Vqspg4gDaw"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_aniVoPVvEeSJdpUx32gkaA" name="parameterName" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cjJtwPVvEeSJdpUx32gkaA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_cjK74PVvEeSJdpUx32gkaA" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_VOPQkPS9EeS6Vqspg4gDaw" name="AAQualifierAA">
+            <generalization xmi:type="uml:Generalization" xmi:id="_TIqwUPVvEeSJdpUx32gkaA" general="_P7K0cPS9EeS6Vqspg4gDaw"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_ugfX8PS9EeS6Vqspg4gDaw" name="bBQualifierBB" type="_XECUkPS9EeS6Vqspg4gDaw" aggregation="composite" subsettedProperty="_nNlyEPS9EeS6Vqspg4gDaw _acaloPS9EeS6Vqspg4gDaw" association="_ugfX8_S9EeS6Vqspg4gDaw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ugfX8fS9EeS6Vqspg4gDaw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ugfX8vS9EeS6Vqspg4gDaw" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_XECUkPS9EeS6Vqspg4gDaw" name="BBQualifierBB">
+            <generalization xmi:type="uml:Generalization" xmi:id="_TtsI8PVvEeSJdpUx32gkaA" general="_RdlpcPS9EeS6Vqspg4gDaw"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_acalo_S9EeS6Vqspg4gDaw" name="aAQualifier_bBQualifier" memberEnd="_acalpPS9EeS6Vqspg4gDaw _acaloPS9EeS6Vqspg4gDaw" navigableOwnedEnd="_acalpPS9EeS6Vqspg4gDaw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_acalpPS9EeS6Vqspg4gDaw" name="aAQualifier" type="_KI8XIPS9EeS6Vqspg4gDaw" isDerived="true" isDerivedUnion="true" association="_acalo_S9EeS6Vqspg4gDaw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_acalpfS9EeS6Vqspg4gDaw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_acalpvS9EeS6Vqspg4gDaw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_nNlyE_S9EeS6Vqspg4gDaw" name="aAQualifierA_bBQualifierB" memberEnd="_nNlyFPS9EeS6Vqspg4gDaw _nNlyEPS9EeS6Vqspg4gDaw" navigableOwnedEnd="_nNlyFPS9EeS6Vqspg4gDaw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_nNlyFPS9EeS6Vqspg4gDaw" name="aAQualifierA" type="_P7K0cPS9EeS6Vqspg4gDaw" isDerived="true" isDerivedUnion="true" subsettedProperty="_nNlyFPS9EeS6Vqspg4gDaw" association="_nNlyE_S9EeS6Vqspg4gDaw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nNlyFfS9EeS6Vqspg4gDaw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nNlyFvS9EeS6Vqspg4gDaw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_ugfX8_S9EeS6Vqspg4gDaw" name="aAQualifierAA_bBQualifierBB" memberEnd="_ugfX9PS9EeS6Vqspg4gDaw _ugfX8PS9EeS6Vqspg4gDaw" navigableOwnedEnd="_ugfX9PS9EeS6Vqspg4gDaw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_ugfX9PS9EeS6Vqspg4gDaw" name="aAQualifierAA" type="_VOPQkPS9EeS6Vqspg4gDaw" subsettedProperty="_nNlyFPS9EeS6Vqspg4gDaw" association="_ugfX8_S9EeS6Vqspg4gDaw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ugfX9fS9EeS6Vqspg4gDaw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ugfX9vS9EeS6Vqspg4gDaw" value="1"/>
+            </ownedEnd>
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_ossv8BFLEeGoRIAInCGFZA" name="collectiontest">
@@ -3782,4 +3855,6 @@ endif</body>
   <UmlgProfile:ChangeListener xmi:id="_YDINoG0DEeSGYbt32h2qNw" base_Property="_sWkFwbdVEeORtvbQ18esMQ"/>
   <UmlgProfile:ChangeListener xmi:id="_aWKAMG0DEeSGYbt32h2qNw" base_Property="_sWjesLdVEeORtvbQ18esMQ"/>
   <ActionLanguage:TextualRepresentation xmi:id="_mtkJUOTGEeSF5_jQQbOZ8Q" base_Comment="_mtepwOTGEeSF5_jQQbOZ8Q" language="org.eclipse.papyrus.uml.textedit.property.xtext.UmlProperty"/>
+  <UmlgProfile:QualifierListener xmi:id="_dbncQPVuEeSJdpUx32gkaA" base_Property="_qTYFwPVWEeSd1uOFspT3cQ" qualifier="_7ZEHcPVuEeSJdpUx32gkaA"/>
+  <UmlgProfile:QualifierListener xmi:id="_ke3AEPVvEeSJdpUx32gkaA" base_Property="_aniVoPVvEeSJdpUx32gkaA" qualifier="_et3R0PVvEeSJdpUx32gkaA"/>
 </xmi:XMI>

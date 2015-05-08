@@ -565,7 +565,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     public OJPathName javaTumlTypePath(boolean ignoreAssociationClass) {
         OJPathName fieldType;
         if (isOrdered() && isUnique()) {
-            if (hasQualifiers()) {
+            if (hasQualifiers() && !isDerived()) {
                 fieldType = UmlgCollectionKindEnum.QUALIFIED_ORDERED_SET.getInterfacePathName();
             } else {
                 if (ignoreAssociationClass || !isMemberOfAssociationClass()) {
@@ -575,7 +575,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
                 }
             }
         } else if (isOrdered() && !isUnique()) {
-            if (hasQualifiers()) {
+            if (hasQualifiers() && !isDerived()) {
                 fieldType = UmlgCollectionKindEnum.QUALIFIED_SEQUENCE.getInterfacePathName();
             } else {
                 if (ignoreAssociationClass || !isMemberOfAssociationClass()) {
@@ -585,7 +585,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
                 }
             }
         } else if (!isOrdered() && !isUnique()) {
-            if (hasQualifiers()) {
+            if (hasQualifiers() && !isDerived()) {
                 fieldType = UmlgCollectionKindEnum.QUALIFIED_BAG.getInterfacePathName();
             } else {
                 if (ignoreAssociationClass || !isMemberOfAssociationClass()) {
@@ -595,7 +595,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
                 }
             }
         } else if (!isOrdered() && isUnique()) {
-            if (hasQualifiers()) {
+            if (hasQualifiers() && !isDerived()) {
                 fieldType = UmlgCollectionKindEnum.QUALIFIED_SET.getInterfacePathName();
             } else {
                 if (ignoreAssociationClass || !isMemberOfAssociationClass()) {

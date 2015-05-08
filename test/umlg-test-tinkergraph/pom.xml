@@ -57,12 +57,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.umlg</groupId>
-			<artifactId>runtime-domain-neo4j</artifactId>
+			<artifactId>runtime-domain-sqlg</artifactId>
 			<version>${umlg.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.umlg</groupId>
-			<artifactId>runtime-test-neo4j</artifactId>
+			<artifactId>runtime-test-sqlg</artifactId>
 			<version>${umlg.version}</version>
         </dependency>
 		<dependency>

@@ -41,6 +41,7 @@ public enum OclOperationExpEnum implements HandleOperationExp {
     FLATTEN(new OclFlattenExprToJava()),
     CONCAT(new OclConcatExprToJava()),
     INCLUDES(new OclIncludesExpToJava()),
+    //comment for nothing
     INCLUDES_ALL(new OclIncludesAllExpToJava()),
     DEFAULT(new OclDefaultToStringExprToJava()),
     INDEX_OF(new OclIndexOfExprToJava()),

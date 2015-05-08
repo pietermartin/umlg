@@ -155,7 +155,8 @@ import org.umlg.tests.validationtest.TestValidation;
         //TODO neo4j fails
 //        ManyToManyToSelfSequenceTest.class,
         TestAssociationToSelf.class,
-        TestSortedBy.class
+        TestSortedBy.class,
+        TestQualifiedDerivedUnion.class
 })
 public class UmlgAllTestSuite {
 }
