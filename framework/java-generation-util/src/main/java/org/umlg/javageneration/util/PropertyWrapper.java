@@ -692,8 +692,12 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public OJPathName javaTumlMemoryTypePath() {
-        OJPathName memoryCollectionPathName = UmlgCollectionKindEnum.from(this).getMemoryCollection();
-//        memoryCollectionPathName.addToGenerics(UmlgClassOperations.getPathName(this.getType()));
+        OJPathName memoryCollectionPathName;
+        if (isQualified()) {
+            memoryCollectionPathName = UmlgCollectionKindEnum.from(this).getQualifiedMemoryCollection();
+        } else {
+            memoryCollectionPathName = UmlgCollectionKindEnum.from(this).getMemoryCollection();
+        }
         memoryCollectionPathName.addToGenerics(javaBaseTypePath());
         return memoryCollectionPathName;
     }

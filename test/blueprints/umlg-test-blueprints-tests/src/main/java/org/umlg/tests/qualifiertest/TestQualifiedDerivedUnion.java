@@ -33,6 +33,6 @@ public class TestQualifiedDerivedUnion extends BaseLocalDbTest {
         aaQualifierAA1.reload();
         Assert.assertEquals(bbQualifierBB1, aaQualifierAA1.getBBQualifierForBbQualifierByName(Pair.of(Compare.eq, "b1")));
         Assert.assertEquals(bbQualifierBB1, aaQualifierAA1.getBBQualifierBForBBQualifierParameterName(Pair.of(Compare.eq, "p1")));
-
+        Assert.assertEquals(3, aaQualifierAA1.getBBQualifier().size());
     }
 }

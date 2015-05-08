@@ -78,6 +78,10 @@ public class UmlgGenerationUtil {
     public static final OJPathName umlgMemorySet = new OJPathName("org.umlg.runtime.collection.memory.UmlgMemorySet");
     public static final OJPathName umlgMemoryOrderedSet = new OJPathName("org.umlg.runtime.collection.memory.UmlgMemoryOrderedSet");
     public static final OJPathName umlgMemorySequence = new OJPathName("org.umlg.runtime.collection.memory.UmlgMemorySequence");
+    public static final OJPathName umlgQualifiedMemoryBag = new OJPathName("org.umlg.runtime.collection.memory.UmlgQualifiedMemoryBag");
+    public static final OJPathName umlgQualifiedMemorySet = new OJPathName("org.umlg.runtime.collection.memory.UmlgQualifiedMemorySet");
+    public static final OJPathName umlgQualifiedMemoryOrderedSet = new OJPathName("org.umlg.runtime.collection.memory.UmlgQualifiedMemoryOrderedSet");
+    public static final OJPathName umlgQualifiedMemorySequence = new OJPathName("org.umlg.runtime.collection.memory.UmlgQualifiedMemorySequence");
 
     public static final OJPathName umlgOclIsInvalidException = new OJPathName("org.umlg.runtime.domain.ocl.OclIsInvalidException");
     public static final OJPathName umlgUmlgCollections = new OJPathName("org.umlg.runtime.util.UmlgCollections");
