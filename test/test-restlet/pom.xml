@@ -118,7 +118,8 @@
         </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
-            <artifactId>sqlg-hsqldb</artifactId>
+            <!--<artifactId>sqlg-hsqldb</artifactId>-->
+            <artifactId>sqlg-postgres</artifactId>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>org.umlg</groupId>-->
