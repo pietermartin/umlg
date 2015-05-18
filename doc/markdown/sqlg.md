@@ -2,16 +2,16 @@
 
 ##Introduction
 
-**Sqlg** is a implementation of [Tinkerpop3](https://github.com/tinkerpop/tinkerpop3) on a [RDBMS](http://en.wikipedia.org/wiki/Relational_database_management_system).
+**Sqlg** is a implementation of [TinkerPop3](https://github.com/tinkerpop/tinkerpop3) on a [RDBMS](http://en.wikipedia.org/wiki/Relational_database_management_system).
 Currently [HSQLDB](http://hsqldb.org/) and [Postgresql](http://www.postgresql.org/) are supported.
 
 
 Sqlg has a [Google Group](https://groups.google.com/forum/?hl=en#!forum/sqlg).
 
 
-###Tinkerpop supported features
+###TinkerPop supported features
 
-Sqlg passes Tinkerpop's `StructureStandardSuite` and `ProcessStandardSuite` test suites.
+Sqlg passes TinkerPop's `StructureStandardSuite` and `ProcessStandardSuite` test suites.
 
 Graph Features **not** implemented.
 
@@ -24,13 +24,19 @@ Vertex Features **not** implemented.
 * MultiProperties
 * MetaProperties
 * UserSuppliedIds
+* NumericIds
+* AnyIds
 
 Edge Features **not** implemented.
 
 * UserSuppliedIds
+* NumericIds
+* AnyIds
 
 Vertex property features **not** implemented.
 
+* UserSuppliedIds
+* AnyIds
 * MapValues
 * MixedListValues
 * SerializableValues
@@ -56,7 +62,7 @@ Maven coordinates,
     <dependency>
         <groupId>org.umlg</groupId>
         <artifactId>sqlg-hsqldb</artifactId>
-        <version>1.0.0.M1</version>
+        <version>1.0.0.M9</version>
     </dependency>
 
 **Postgresql**
@@ -64,7 +70,7 @@ Maven coordinates,
     <dependency>
         <groupId>org.umlg</groupId>
         <artifactId>sqlg-postgres</artifactId>
-        <version>1.0.0.M1</version>
+        <version>1.0.0.M9</version>
     </dependency>
 
 Sqlg is designed to run as a singleton that can be shared among multiple threads. You can instantiate Sqlg using the standard
@@ -83,13 +89,13 @@ The configuration object requires the following properties.
 
 **Postgresql**
 
-    jdbc.url=jdbc:postgresql://localhost:5432/sqlgraphdb
+    jdbc.url=jdbc:postgresql://localhost:5432/yourdb
     jdbc.username=postgres
     jdbc.password=******
 
 In the case of Postgres the database must already exist.
 
-If you want to run the Tinkerpop tests on Postgres you need to create upfront the various databases that are used.
+If you want to run the TinkerPop tests on Postgres you need to create upfront the various databases that are used.
 These are,
 
 * g1
@@ -100,6 +106,7 @@ These are,
 * temp
 * temp1
 * temp2
+* prototype
 
 <br />
 ###Gremlin Console
@@ -112,7 +119,7 @@ These are,
              \,,,/
              (o o)
     -----oOOo-(3)-oOOo-----
-    gremlin> :install org.umlg sqlg-hsqldb 1.0.0.M1
+    gremlin> :install org.umlg sqlg-hsqldb 1.0.0.M9
     ==>A module with the name sqlg-hsqldb is already installed
     gremlin> :plugin use tinkerpop.sqlg-hsqldb
     ==>tinkerpop.sqlg-hsqldb activated
@@ -131,7 +138,7 @@ These are,
              \,,,/
              (o o)
     -----oOOo-(3)-oOOo-----
-    gremlin> :install org.umlg sqlg-postgres 0.0.2-SNAPSHOT
+    gremlin> :install org.umlg sqlg-postgres 1.0.0.M9
     ==>A module with the name sqlg-postgres is already installed
     gremlin> :plugin use tinkerpop.sqlg-postgres
     ==>tinkerpop.sqlg-postgres activated
@@ -180,7 +187,7 @@ These are,
         <tr>
             <td>Long</td>
             <td>BIGINT</td>
-            <td>BIGINTtd>
+            <td>BIGINT</td>
         </tr>
         <tr>
             <td>Float</td>
@@ -246,7 +253,7 @@ These are,
 ##Architecture
 <br />
 
-With the coming of vertex labels to Tinkerpop3 the mapping of Tinkerpop's graph semantics to that of a RDBMS became natural and useful.
+With the coming of vertex labels to TinkerPop3 the mapping of TinkerPop's graph semantics to that of a RDBMS became natural and useful.
 
 ###Vertex tables
 Every unique vertex label maps to a table. Vertex tables are prefixed with a `V_`. i.e. `V_Person`. The vertex table
@@ -259,54 +266,24 @@ has a foreign key to the adjacent vertex's table.
 
 From a rdbms' perspective each edge table is a classic `many to many` join table between vertices.
 
-###VERTICES and EDGES
+###TinkerPop-modern
 
-There are two special tables in Sqlg. One is for vertices (`VERTICES`) and the other is for edges (`EDGES`).
+Taken from [TinkerPop3](http://tinkerpop.incubator.apache.org/docs/3.0.0-SNAPSHOT/#intro)
 
-####VERTICES
-The `VERTICES` table has one record for every vertex in the graph. The `VERTICES` table's auto generated primary key
-functions as the vertex id. Additionally the `VERTICES` table stores each vertex's label and the unique set of labels of
-each vertex's incident edges.
-
-Every vertex has a label and as such a vertex table. This table's `ID` column has a one to one mapping the `ID` column
-of the `VERTICES` table.
-
-This strategy allows gremlin queries of the form `g.V(1L)` to find a specific vertex in the `VERTICES` table and then know in which
-table the vertex is stored.
-
-For example, a query of the form `g.V().has(T.label, 'Person')` will go directly to the `V_Person`.
-
-####EDGES
-The `EDGES` table has one record for every edge in the graph. The `EDGES` tables' auto generated primary key
-functions as the edge id. Additionally the `EDGES` table stores each edge's label.
-
-Similar to the vertex look-ups the `EDGES` table facilitates implementing queries of the form `g.E(1L)`
-
-###Tinkerpop-classic
-
-Taken from [Tinkerpop3](http://www.tinkerpop.com/docs/3.0.0-SNAPSHOT/#intro)
-
-![image of tinkerpop-classic](images/sqlg/tinkerpop-classic-graph.png)
+![image of tinkerpop-classic](images/sqlg/tinkerpop-modern-graph.png)
 
 ####ER Diagram
 
-![image of tinkerpop-classic](images/sqlg/tinkerpop-classic1-er.png)
-![image of tinkerpop-classic](images/sqlg/tinkerpop-classic2-er.png)
+![image of tinkerpop-classic](images/sqlg/tinkerpop-modern-er.png)
 
-####All tables
-![image of tinkerpop-classic](images/sqlg/tinkerpop-classic.png)
 ####V_person####
-![image of tinkerpop-classic](images/sqlg/person.png)
+![image of tinkerpop-classic](images/sqlg/V_person.png)
 ####V_software
-![image of tinkerpop-classic](images/sqlg/software.png)
+![image of tinkerpop-classic](images/sqlg/V_software.png)
 ####E_knows
-![image of tinkerpop-classic](images/sqlg/knows.png)
+![image of tinkerpop-classic](images/sqlg/E_knows.png)
 ####E_created
-![image of tinkerpop-classic](images/sqlg/created.png)
-####VERTICES
-![image of tinkerpop-classic](images/sqlg/vertices.png)
-####EDGES
-![image of tinkerpop-classic](images/sqlg/edges.png)
+![image of tinkerpop-classic](images/sqlg/E_created.png)
 
 ###Namespacing and Schemas
 
@@ -462,7 +439,7 @@ All tests were run on a standard laptop with the following specs.
 * Intel(R) Core(TM) i7-4800MQ CPU @ 2.70GHz
 * 500G Solid state drive
 
-Running Tinkerpop's `StructurePerformanceTest` produces the following output
+Running TinkerPop's `StructurePerformanceTest` produces the following output
 
 **HSQLDB**
 

@@ -55,6 +55,7 @@
         <div class="col-md-3" id="leftcol">
             <div class="bs-docs-sidebar hidden-print" role="complementary">
                 <ul class="nav bs-docs-sidebar" id="sidebar">
+                    <!-- GENERATED MENU -->
                 </ul>
             </div>
         </div>
