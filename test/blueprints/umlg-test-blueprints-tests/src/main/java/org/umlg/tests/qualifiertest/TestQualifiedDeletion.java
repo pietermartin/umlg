@@ -1,7 +1,7 @@
 package org.umlg.tests.qualifiertest;
 
-import org.apache.tinkerpop.gremlin.structure.Compare;
-import org.apache.tinkerpop.gremlin.structure.Compare;
+import org.apache.tinkerpop.gremlin.process.traversal.Compare;
+import org.apache.tinkerpop.gremlin.process.traversal.Compare;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.componenttest.Space;

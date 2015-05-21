@@ -12,8 +12,8 @@ public class UmlgGenerationUtil {
     public  static final OJPathName UmlgNotificationManager = new OJPathName("org.umlg.runtime.notification.UmlgNotificationManager");
     public static final OJPathName GraphTraversal = new OJPathName("org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal");
     public static final OJPathName Element = new OJPathName("org.apache.tinkerpop.gremlin.structure.Element");
-    public static final OJPathName token = new OJPathName("org.apache.tinkerpop.gremlin.structure.Compare");
-    public static final OJPathName t = new OJPathName("org.apache.tinkerpop.gremlin.process.traversal.T");
+    public static final OJPathName token = new OJPathName("org.apache.tinkerpop.gremlin.process.traversal.Compare");
+    public static final OJPathName t = new OJPathName("org.apache.tinkerpop.gremlin.structure.T");
     public static final String getEntity = "getEntity";
     public static final String Index = "Index";
     public static final String Index_UNIQUE = "UNIQUE";

@@ -1,6 +1,6 @@
 package org.umlg.tests.collectiontest;
 
-import org.apache.tinkerpop.gremlin.structure.Compare;
+import org.apache.tinkerpop.gremlin.process.traversal.Compare;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.collectiontest.Foot;
