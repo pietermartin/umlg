@@ -296,6 +296,7 @@ public final class UmlgPropertyOperations extends PropertyOperations {
     }
 
     public static OJPathName getTypePath(Property p) {
+        Objects.requireNonNull(p.getType(), "property " + p.getName() + "'s type is nnot defined");
         if (!(p.getType() instanceof PrimitiveType) && !(p.getType() instanceof Enumeration) && p.getType() instanceof DataType) {
             return DataTypeEnum.getPathNameFromDataType((DataType) p.getType());
         } else {
