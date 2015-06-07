@@ -12,15 +12,15 @@
     <name>umlg test pom</name>
     <modules>
         <module>test-generation</module>
-        <module>umlg-test-basic</module>
-        <module>umlg-test-ocl</module>
-        <module>umlg-test-tinkergraph</module>
-        <module>test-restlet</module>
+        <!--<module>umlg-test-basic</module>-->
+        <!--<module>umlg-test-ocl</module>-->
+        <!--<module>umlg-test-tinkergraph</module>-->
+        <!--<module>test-restlet</module>-->
+        <!--<module>blueprints</module>-->
         <!--<module>test-neo4j-blueprints</module>-->
         <!--<module>test-orientdb-blueprints</module>-->
         <!--<module>test-titan</module>-->
         <!--<module>test-bitsy</module>-->
-        <module>blueprints</module>
         <!--<module>everfresh</module>-->
     </modules>
     <reporting>
