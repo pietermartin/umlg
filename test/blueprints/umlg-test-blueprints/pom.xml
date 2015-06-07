@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.umlg</groupId>
         <artifactId>blueprints</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0.M9</version>
     </parent>
     <artifactId>umlg-test-blueprints</artifactId>
     <build>

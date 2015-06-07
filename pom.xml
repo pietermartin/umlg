@@ -12,7 +12,7 @@
     <groupId>org.umlg</groupId>
     <artifactId>umlg</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0.M9</version>
     <name>umlg</name>
     <description>Umlg is a uml to java code generator. From uml class diagrams, java entities are generated. The
         entities persist in graph databases.
@@ -48,29 +48,29 @@
         </repository>
     </distributionManagement>
 
-    <repositories>
-        <repository>
-            <id>snapshots.sonata.org</id>
-            <name>Sonata Snapshot Repository</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>snapshots.sonata.org</id>-->
+            <!--<name>Sonata Snapshot Repository</name>-->
+            <!--<url>https://oss.sonatype.org/content/repositories/snapshots/</url>-->
+            <!--<releases>-->
+                <!--<enabled>false</enabled>-->
+            <!--</releases>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+                <!--<updatePolicy>always</updatePolicy>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
         <!--<repository>-->
             <!--<id>apache-snapshot</id>-->
             <!--<url>https://repository.apache.org/content/groups/snapshots/</url>-->
         <!--</repository>-->
-    </repositories>
+    <!--</repositories>-->
 
     <properties>
         <restlet.version>2.2.2</restlet.version>
         <jetty.version>9.1.3.v20140225</jetty.version>
-        <umlg.version>0.0.1-SNAPSHOT</umlg.version>
+        <umlg.version>1.0.0.M9</umlg.version>
     </properties>
 
     <modules>
@@ -175,17 +175,17 @@
             <dependency>
                 <groupId>org.umlg</groupId>
                 <artifactId>sqlg-core</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
+                <version>1.0.0.M9</version>
             </dependency>
             <dependency>
                 <groupId>org.umlg</groupId>
                 <artifactId>sqlg-postgres</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
+                <version>1.0.0.M9</version>
             </dependency>
             <dependency>
                 <groupId>org.umlg</groupId>
                 <artifactId>sqlg-hsqldb</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
+                <version>1.0.0.M9</version>
             </dependency>
             <dependency>
                 <groupId>commons-lang</groupId>
