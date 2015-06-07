@@ -69,12 +69,14 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
                 NotificationListener notificationListener = notificationListenerSetEntry.getKey();
                 List<ChangeHolder> changeHolders = notificationListenerSetEntry.getValue();
                 for (ChangeHolder changeHolder : changeHolders) {
-                    notificationListener.notifyChanged(
-                            NotificationListener.COMMIT_TYPE.AFTER_COMMIT,
-                            changeHolder.getUmlgNode(),
-                            changeHolder.getUmlgRuntimeProperty(),
-                            changeHolder.getChangeType(),
-                            changeHolder.getValue());
+                    new Thread(() -> {
+                        notificationListener.notifyChanged(
+                                NotificationListener.COMMIT_TYPE.AFTER_COMMIT,
+                                changeHolder.getUmlgNode(),
+                                changeHolder.getUmlgRuntimeProperty(),
+                                changeHolder.getChangeType(),
+                                changeHolder.getValue());
+                    }, changeHolder.getUmlgNode().getQualifiedName() + changeHolder.getUmlgRuntimeProperty().getQualifiedName()).start();
                 }
             }
         } finally {

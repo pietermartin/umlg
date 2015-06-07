@@ -233,7 +233,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
             }
             GraphTraversal<Vertex, Vertex> traversal = this.V(recordId);
             if (!traversal.hasNext()) {
-                throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{recordId}));
+                throw new RuntimeException(String.format("No vertex found for id %s", recordId.toString()));
             }
             return instantiateClassifier(traversal.next());
         } catch (Exception e) {
@@ -408,7 +408,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     public Set<Edge> getEdgesBetween(Vertex v1, Vertex v2, String... labels) {
 
         Set<Edge> result = new HashSet<>();
-        Iterator<Edge> edges = v1.edges(Direction.BOTH,labels);
+        Iterator<Edge> edges = v1.edges(Direction.BOTH, labels);
 
         if (!v1.equals(v2)) {
 
@@ -485,12 +485,12 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         return this.sqlG.traversal();
     }
 
-//    @Override
+    //    @Override
     public GraphTraversal<Vertex, Vertex> V(final Object... vertexIds) {
         return this.sqlG.traversal().V(validateIds(vertexIds));
     }
 
-//    @Override
+    //    @Override
     public GraphTraversal<Edge, Edge> E(final Object... edgeIds) {
         return this.sqlG.traversal().E(validateIds(edgeIds));
     }
