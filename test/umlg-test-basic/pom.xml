@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.umlg</groupId>
 		<artifactId>test</artifactId>
-		<version>1.0.0.M9</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>umlg-test-basic</artifactId>
 	<build>

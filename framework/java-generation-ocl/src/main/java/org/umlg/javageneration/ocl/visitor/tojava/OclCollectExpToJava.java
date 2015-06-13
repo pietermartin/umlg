@@ -38,6 +38,7 @@ public class OclCollectExpToJava implements HandleIteratorExp {
 		
 		OCLExpression<Classifier> body = callExp.getBody();
 		String bodyType = UmlgClassOperations.className(body.getType());
+		ojClass.addToImports(UmlgClassOperations.getPathName(body.getType()));
         if (body.getType() instanceof CollectionType) {
             CollectionType collectionType = (CollectionType)body.getType();
             ojClass.addToImports(UmlgCollectionKindEnum.from(collectionType.getKind()).getOjPathName());
@@ -60,8 +61,10 @@ public class OclCollectExpToJava implements HandleIteratorExp {
 		} else {
             if (!(c instanceof PrimitiveType) && !(c instanceof Enumeration) && c instanceof DataType) {
                 flattenedType = DataTypeEnum.getPathNameFromDataType((DataType) c).getLast();
+				ojClass.addToImports(DataTypeEnum.getPathNameFromDataType((DataType) c));
             } else {
                 flattenedType = UmlgClassOperations.className(c);
+				ojClass.addToImports(UmlgClassOperations.getPathName(c));
             }
 		}
 

@@ -3430,6 +3430,61 @@ endif</body>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_qWezo-FLEeSqkZJO8LzYrg" value="1"/>
               </ownedEnd>
             </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_uol40BD9EeWZ7Iu7q0o1bw" name="IncludesAll1">
+              <ownedRule xmi:type="uml:Constraint" xmi:id="_6bFLQBEEEeWZ7Iu7q0o1bw" name="TestIncludesAll">
+                <specification xmi:type="uml:OpaqueExpression" xmi:id="_Jb3C0BEFEeWZ7Iu7q0o1bw">
+                  <language>OCL</language>
+                  <body>self.includesAll4->includesAll(self.includesAll2.includesAll3.includesAll4)</body>
+                </specification>
+              </ownedRule>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_UxNjwBEAEeWZ7Iu7q0o1bw" name="includesAll2" type="_wNO7YBD9EeWZ7Iu7q0o1bw" association="_UxOK0BEAEeWZ7Iu7q0o1bw">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UxNjwREAEeWZ7Iu7q0o1bw"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UxNjwhEAEeWZ7Iu7q0o1bw" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_VOR6QBEAEeWZ7Iu7q0o1bw" name="includesAll4" type="_CPx60BD-EeWZ7Iu7q0o1bw" association="_VOR6QxEAEeWZ7Iu7q0o1bw">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_VOR6QREAEeWZ7Iu7q0o1bw"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_VOR6QhEAEeWZ7Iu7q0o1bw" value="*"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_wNO7YBD9EeWZ7Iu7q0o1bw" name="IncludesAll2">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_aBLaABErEeWVg6o5rvjiCQ" name="includesAll3" type="_Uqr2cBErEeWVg6o5rvjiCQ" association="_aBMoIBErEeWVg6o5rvjiCQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_aBLaARErEeWVg6o5rvjiCQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_aBLaAhErEeWVg6o5rvjiCQ" value="*"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_UxOK0BEAEeWZ7Iu7q0o1bw" name="includesAll1_includesAll2" memberEnd="_UxOK0REAEeWZ7Iu7q0o1bw _UxNjwBEAEeWZ7Iu7q0o1bw">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_UxOK0REAEeWZ7Iu7q0o1bw" name="includesAll1" type="_uol40BD9EeWZ7Iu7q0o1bw" association="_UxOK0BEAEeWZ7Iu7q0o1bw">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UxOK0hEAEeWZ7Iu7q0o1bw" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UxOK0xEAEeWZ7Iu7q0o1bw" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_VOR6QxEAEeWZ7Iu7q0o1bw" name="includesAll1_includesAll4" memberEnd="_VOR6RBEAEeWZ7Iu7q0o1bw _VOR6QBEAEeWZ7Iu7q0o1bw">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_VOR6RBEAEeWZ7Iu7q0o1bw" name="includesAll1" type="_uol40BD9EeWZ7Iu7q0o1bw" association="_VOR6QxEAEeWZ7Iu7q0o1bw">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_VOR6RREAEeWZ7Iu7q0o1bw"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_VOR6RhEAEeWZ7Iu7q0o1bw" value="*"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Package" xmi:id="_klxFABEpEeWVg6o5rvjiCQ" name="testimport">
+              <packagedElement xmi:type="uml:Class" xmi:id="_CPx60BD-EeWZ7Iu7q0o1bw" name="IncludesAll4"/>
+              <packagedElement xmi:type="uml:Class" xmi:id="_Uqr2cBErEeWVg6o5rvjiCQ" name="IncludesAll3">
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_ermhwBErEeWVg6o5rvjiCQ" name="includesAll4" type="_CPx60BD-EeWZ7Iu7q0o1bw" association="_ernI0BErEeWVg6o5rvjiCQ">
+                  <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ermhwRErEeWVg6o5rvjiCQ"/>
+                  <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ermhwhErEeWVg6o5rvjiCQ" value="*"/>
+                </ownedAttribute>
+              </packagedElement>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_aBMoIBErEeWVg6o5rvjiCQ" name="includesAll2_includesAll3" memberEnd="_aBMoIRErEeWVg6o5rvjiCQ _aBLaABErEeWVg6o5rvjiCQ">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_aBMoIRErEeWVg6o5rvjiCQ" name="includesAll2" type="_wNO7YBD9EeWZ7Iu7q0o1bw" association="_aBMoIBErEeWVg6o5rvjiCQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_aBMoIhErEeWVg6o5rvjiCQ" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_aBMoIxErEeWVg6o5rvjiCQ" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_ernI0BErEeWVg6o5rvjiCQ" name="includesAll3_includesAll4" memberEnd="_ernI0RErEeWVg6o5rvjiCQ _ermhwBErEeWVg6o5rvjiCQ">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_ernI0RErEeWVg6o5rvjiCQ" name="includesAll3" type="_Uqr2cBErEeWVg6o5rvjiCQ" association="_ernI0BErEeWVg6o5rvjiCQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ernI0hErEeWVg6o5rvjiCQ" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ernI0xErEeWVg6o5rvjiCQ" value="1"/>
+              </ownedEnd>
+            </packagedElement>
           </packagedElement>
           <packagedElement xmi:type="uml:Package" xmi:id="_X0POkB5KEeSglo_7OnFCeA" name="oclenum">
             <packagedElement xmi:type="uml:Class" xmi:id="_a90OoB5KEeSglo_7OnFCeA" name="OclEnum">
@@ -3645,6 +3700,44 @@ endif</body>
               </ownedEnd>
             </packagedElement>
           </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_HnbJYBEIEeWZ7Iu7q0o1bw" name="collect">
+            <ownedComment xmi:type="uml:Comment" xmi:id="_KzSzABEJEeWZ7Iu7q0o1bw">
+              <body>This is to test collect over classes in different packages</body>
+            </ownedComment>
+            <packagedElement xmi:type="uml:Class" xmi:id="_PhpN8BEIEeWZ7Iu7q0o1bw" name="Collect1">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_-h-D8BELEeWZ7Iu7q0o1bw" name="collect2" type="_T5kwIBELEeWZ7Iu7q0o1bw" association="_-h-rABELEeWZ7Iu7q0o1bw">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-h-D8RELEeWZ7Iu7q0o1bw"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-h-D8hELEeWZ7Iu7q0o1bw" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_LlIYQBEMEeWZ7Iu7q0o1bw" name="collect" visibility="public" type="_Vtw1IBEMEeWZ7Iu7q0o1bw" isDerived="true">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_QjXM0BEMEeWZ7Iu7q0o1bw"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_QjYa8BEMEeWZ7Iu7q0o1bw" value="*"/>
+                <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_ji4K0BEMEeWZ7Iu7q0o1bw">
+                  <language>OCL</language>
+                  <body>self.collect2.collect3->asSet()</body>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_-h-rABELEeWZ7Iu7q0o1bw" name="collect1_collect2" memberEnd="_-h-rARELEeWZ7Iu7q0o1bw _-h-D8BELEeWZ7Iu7q0o1bw">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_-h-rARELEeWZ7Iu7q0o1bw" name="collect1" type="_PhpN8BEIEeWZ7Iu7q0o1bw" association="_-h-rABELEeWZ7Iu7q0o1bw">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-h-rAhELEeWZ7Iu7q0o1bw" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-h-rAxELEeWZ7Iu7q0o1bw" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_T5kwIBELEeWZ7Iu7q0o1bw" name="Collect2">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_XC1xsBEMEeWZ7Iu7q0o1bw" name="collect3" type="_Vtw1IBEMEeWZ7Iu7q0o1bw" association="_XC2YwBEMEeWZ7Iu7q0o1bw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_XC1xsREMEeWZ7Iu7q0o1bw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_XC1xshEMEeWZ7Iu7q0o1bw" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_XC2YwBEMEeWZ7Iu7q0o1bw" name="collect2_collect3" memberEnd="_XC2YwREMEeWZ7Iu7q0o1bw _XC1xsBEMEeWZ7Iu7q0o1bw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_XC2YwREMEeWZ7Iu7q0o1bw" name="collect2" type="_T5kwIBELEeWZ7Iu7q0o1bw" association="_XC2YwBEMEeWZ7Iu7q0o1bw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_XC2YwhEMEeWZ7Iu7q0o1bw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_XC2YwxEMEeWZ7Iu7q0o1bw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_Vtw1IBEMEeWZ7Iu7q0o1bw" name="Collect3"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_c7uUgE8YEeSo664unH6t3Q" name="datatypeassociation">
           <packagedElement xmi:type="uml:Enumeration" xmi:id="_qT0-EE8YEeSo664unH6t3Q" name="VENDOR_TECH">
