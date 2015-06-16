@@ -1,5 +1,6 @@
 package org.umlg.runtime.domain;
 
+import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.collection.Qualifier;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
@@ -10,7 +11,6 @@ import org.umlg.runtime.validation.UmlgConstraintViolation;
 import java.util.List;
 
 public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
-    public static final String ALLINSTANCES_EDGE_LABEL = "allinstances";
 	Vertex getVertex();
 	boolean isTinkerRoot();
 	void initialiseProperties();
@@ -19,7 +19,7 @@ public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
     void initVariables();
 	List<Qualifier> getQualifiers(UmlgRuntimeProperty umlgRuntimeProperty, UmlgNode node, boolean inverse);
 	void delete();
-	int getSize(UmlgRuntimeProperty umlgRuntimeProperty);
+	int getSize(boolean inverse, UmlgRuntimeProperty umlgRuntimeProperty);
 	<E> UmlgSet<E> asSet();
 	List<UmlgConstraintViolation> validateMultiplicities();
     List<UmlgConstraintViolation> checkClassConstraints();
@@ -27,4 +27,7 @@ public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
     boolean hasOnlyOneCompositeParent();
 	<T extends UmlgNode> List<T> getPathToCompositionalRoot();
     UmlgMetaNode getMetaNode();
+	//the get and set edge is for the case of sequences where the indexOf(more of an order by sequence) is stored
+	void setEdge(Edge edge);
+	Edge getEdge();
 }

@@ -102,56 +102,6 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
     }
 
     @Override
-    protected void loadNode(Edge edgeToElement, Vertex vertexToLoad, boolean hyperVertexEdge) {
-        AssociationClassNode node;
-        try {
-
-            //Get the edges between the vertexToLoad and the owner vertex.
-            //Take the first one.
-            Set<Edge> edges = UMLG.get().getEdgesBetween(this.owner.getVertex(), vertexToLoad, getLabel());
-            //Debug check
-            if (edges.size() > 1) {
-                throw new IllegalStateException("Only a bag can have multiple edges between vertices!");
-            }
-            Vertex associationClassVertex = null;
-            for (Edge edge : edges) {
-                Object value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
-                associationClassVertex = UMLG.get().traversal().V(value).next();
-            }
-
-            Class<?> c;
-            if (hyperVertexEdge) {
-                c = Class.forName((String) associationClassVertex.value("className"));
-                //This is a debug check
-                //TODO optimize
-                Vertex debugVertex = edgeToElement.vertices(Direction.IN).next();
-                if (!debugVertex.equals(vertexToLoad)) {
-                    throw new IllegalStateException("Vertexes should be the same, what is going on?");
-                }
-            } else {
-                c = this.getClassToInstantiate(edgeToElement);
-            }
-            if (c.isEnum()) {
-                Object value = vertexToLoad.value(getPersistentName());
-                node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                putToInternalMap(node, vertexToLoad);
-            } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
-                Method m = c.getDeclaredMethod("getInstance", new Class[0]);
-                node = (AssociationClassNode) m.invoke(null);
-            } else if (UmlgNode.class.isAssignableFrom(c)) {
-                node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(associationClassVertex);
-            } else {
-                Object value = vertexToLoad.value(getPersistentName());
-                node = (AssociationClassNode) value;
-                putToInternalMap(value, vertexToLoad);
-            }
-            this.getInternalList().add(node);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @Override
     public boolean add(AssociationClassNode e) {
         throw new RuntimeException("The collection to an association class is immutable!");
     }

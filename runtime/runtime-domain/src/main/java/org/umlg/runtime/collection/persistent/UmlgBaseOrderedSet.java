@@ -2,6 +2,7 @@ package org.umlg.runtime.collection.persistent;
 
 import com.google.common.base.Preconditions;
 import org.apache.commons.collections4.set.ListOrderedSet;
+import org.apache.tinkerpop.gremlin.process.traversal.Order;
 import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
@@ -42,135 +43,68 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
 
     @SuppressWarnings("unchecked")
     protected Edge addToListAtIndex(int indexOf, E e) {
-        Direction inverseDirection;
-        Direction direction;
-        if (isControllingSide()) {
-            inverseDirection = Direction.IN;
-            direction = Direction.OUT;
-        } else {
-            inverseDirection = Direction.OUT;
-            direction = Direction.IN;
-        }
+        //Create the edge to the new element
+        Edge edgeFromParentToElementVertex = addInternal(e);
+        manageLinkedList(indexOf, edgeFromParentToElementVertex);
+        return edgeFromParentToElementVertex;
+    }
 
-        //If it is the last element then the edge (LABEL_TO_LAST_ELEMENT_IN_SEQUENCE) needs to be moved
-        this.getInternalListOrderedSet().add(indexOf, e);
-        //Add the regular edge for the label
-        Edge edge = addInternal(e);
-        //If it is the first element then the edge (LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE) needs to be moved
-        if (indexOf == 0) {
-            if (this.vertex.edges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex)).hasNext()) {
-                Edge edgeToFirstElement = this.vertex.edges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex)).next();
-                edgeToFirstElement.remove();
-            }
-            this.vertex.addEdge(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex), vertexForDirection(edge, inverseDirection));
+    //The element is not yet in the internal list
+    private void manageLinkedList(int indexOfNewElement, Edge edgeFromParentToElementVertex) {
+        E current = this.getInternalList().get(indexOfNewElement);
+        E previous = this.getInternalList().get(indexOfNewElement - 1);
+        Set<Edge> currentEdges = UMLG.get().getEdgesBetween(this.vertex, ((UmlgNode) current).getVertex(), getLabel());
+        if (currentEdges.isEmpty()) {
+            throw new IllegalStateException();
         }
-        if (indexOf == size() - 1) {
-            if (this.vertex.edges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex)).hasNext()) {
-                Edge edgeToLastElement = this.vertex.edges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex)).next();
-                edgeToLastElement.remove();
-            }
-            this.vertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex), vertexForDirection(edge, inverseDirection));
+        Set<Edge> previousEdges = UMLG.get().getEdgesBetween(this.vertex, ((UmlgNode) previous).getVertex(), getLabel());
+        if (previousEdges.isEmpty()) {
+            throw new IllegalStateException();
         }
-        //Shift the linked list
-        //Find the element at the index
-        if (size() > 1) {
-            if (indexOf == 0) {
-                //add a edge to the previous first element
-                E previous = (E) this.getInternalListOrderedSet().get(1);
-                Vertex previousVertex = getVertexFromElement(previous, e);
-                vertexForDirection(edge, inverseDirection).addEdge(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex), previousVertex);
-            } else {
-                E previous = (E) this.getInternalListOrderedSet().get(indexOf - 1);
-                Vertex previousVertex = getVertexFromElement(previous, e);
-                //size already includes the current added element, so if the size is 2 it means that there was only one in the list, i.e. no edge (LABEL_TO_NEXT_IN_SEQUENCE)
-                if (size() > 2 && indexOf + 1 < size()) {
-                    Edge edgeToNextElement = previousVertex.edges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex)).next();
-                    Vertex shiftedVertex = vertexForDirection(edgeToNextElement, inverseDirection);
-                    edgeToNextElement.remove();
-                    vertexForDirection(edge, inverseDirection).addEdge(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex), shiftedVertex);
-                }
-                previousVertex.addEdge(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex), vertexForDirection(edge, inverseDirection));
-            }
-        }
-        return edge;
+        //Take anyone, with bags there may be more than one
+        Edge currentEdge = currentEdges.stream().findFirst().get();
+        Edge previousEdge = previousEdges.stream().findFirst().get();
+
+        Double currentValue = currentEdge.<Double>value(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID);
+        Double previousValue = previousEdge.<Double>value(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID);
+
+        edgeFromParentToElementVertex.property(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID, (currentValue + previousValue) / 2);
+    }
+
+    protected ListOrderedSet<E> getInternalList() {
+        return (ListOrderedSet<E>) this.internalCollection;
+    }
+
+    //By now the element is already added to the internal list
+    @Override
+    protected void addToLinkedList(Edge edge) {
+        //set the sequence number on the edge.
+        //as the vertex is added to the end of the list it equals the size
+        edge.property(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID, (double) this.oclStdLibOrderedSet.size());
     }
 
     @Override
-    protected void addToLinkedList(Edge edge) {
-        Direction direction;
-        if (isControllingSide()) {
-            direction = Direction.OUT;
+    protected void addToInverseLinkedList(Edge edge) {
+        if (!this.isControllingSide()) {
+            edge.property(BaseCollection.IN_EDGE_SEQUENCE_ID, this.inverseCollectionSize);
         } else {
-            direction = Direction.IN;
-        }
-        //Get the new vertex for the element
-        Vertex newElementVertex = getVertexForDirection(edge);
-        if (this.vertex.edges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex)).hasNext()) {
-            Edge edgeToLastVertex = this.vertex.edges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex)).next();
-            Vertex lastVertex = edgeToLastVertex.vertices(Direction.IN).next();
-
-            //move the edge to the last vertex
-            edgeToLastVertex.remove();
-            Edge edgeToLast = this.vertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex), newElementVertex);
-            //add the element to the linked list
-            //last here is the previous last
-            Edge edgeToNext = lastVertex.addEdge(LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex), newElementVertex);
-            System.out.println("");
-        } else {
-            //its the first element in the list
-            Edge edgeToFirst = this.vertex.addEdge(LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex), newElementVertex);
-            Edge edgeToLast = this.vertex.addEdge(LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex), newElementVertex);
-            System.out.println("");
+            edge.property(BaseCollection.OUT_EDGE_SEQUENCE_ID, this.inverseCollectionSize);
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    protected void loadFromVertex() {
-        Direction direction;
-        Direction inverseDirection;
-        if (isControllingSide()) {
-            direction = Direction.OUT;
-            inverseDirection = Direction.IN;
+    @Override
+    protected Iterator<Vertex> getVertices() {
+        if (this.isControllingSide()) {
+            //TODO gremlin/sqlg optimization needed, this is super inefficient now
+            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
+                    .outE(this.getLabel())
+                    .order().by(BaseCollection.IN_EDGE_SEQUENCE_ID, Order.incr)
+                    .inV();
         } else {
-            direction = Direction.IN;
-            inverseDirection = Direction.OUT;
-        }
-        if (getUpper() == 1) {
-            Iterator<Edge> edgeIterator = edgesForDirection(this.vertex, direction, getLabel());
-            if (!edgeIterator.hasNext()) {
-                this.loaded = true;
-            } else {
-                Edge edgeToElement = edgeIterator.next();
-                if (!UMLG.get().hasEdgeBeenDeleted(edgeToElement)) {
-                    Vertex element = vertexForDirection(edgeToElement, inverseDirection);
-                    loadNode(edgeToElement, element);
-                    this.loaded = true;
-                } else {
-                    this.loaded = true;
-                }
-            }
-        } else {
-            Iterator<Edge> edgeIterator = this.vertex.edges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex));
-            if (!edgeIterator.hasNext()) {
-                this.loaded = true;
-            } else {
-                Edge edgeToFirstElement = edgeIterator.next();
-                if (!UMLG.get().hasEdgeBeenDeleted(edgeToFirstElement)) {
-                    Vertex firstVertexInSequence =  edgeToFirstElement.vertices(Direction.IN).next();
-                    loadNode(edgeToFirstElement, firstVertexInSequence);
-                    Vertex elementVertex = firstVertexInSequence;
-                    while (elementVertex.edges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex)).hasNext()) {
-                        Edge edgeToNext = elementVertex.edges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.getIdForLabel(this.vertex)).next();
-                        if (!UMLG.get().hasEdgeBeenDeleted(edgeToNext)) {
-                            elementVertex = edgeToNext.vertices(Direction.IN).next();
-                            loadNode(edgeToNext, elementVertex);
-                        }
-                    }
-                    this.loaded = true;
-                } else {
-                    this.loaded = true;
-                }
-            }
+            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
+                    .inE(this.getLabel())
+                    .order().by(BaseCollection.OUT_EDGE_SEQUENCE_ID, Order.incr)
+                    .outV();
         }
     }
 

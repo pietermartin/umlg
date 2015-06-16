@@ -3,6 +3,7 @@ package org.umlg.runtime.domain;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
+import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Property;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
@@ -19,6 +20,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     private static final long serialVersionUID = 3751023772087546585L;
     protected Vertex vertex;
     protected boolean hasInitBeenCalled = false;
+    private Edge edge;
 
     public BaseUmlg() {
         super();
@@ -205,4 +207,13 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         return o1.equals(o2);
     }
 
+    @Override
+    public void setEdge(Edge edge) {
+        this.edge = edge;
+    }
+
+    @Override
+    public Edge getEdge() {
+        return this.edge;
+    }
 }

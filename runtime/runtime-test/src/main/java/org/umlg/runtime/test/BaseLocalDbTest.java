@@ -27,20 +27,20 @@ public class BaseLocalDbTest {
 
 	@Before
 	public void before() {
+		((UmlgAdminGraph)UMLG.get()).drop();
 		this.db = UMLG.get();
     }
 
     @After
     public void after() {
-        ((UmlgAdminGraph)this.db).drop();
     }
 
 	protected long countVertices() {
-        return ((UmlgAdminGraph)this.db).countVertices() - 182;
+        return ((UmlgAdminGraph)this.db).countVertices();
 	}
 
 	protected long countEdges() {
-        return ((UmlgAdminGraph)this.db).countEdges() - 182;
+        return ((UmlgAdminGraph)this.db).countEdges();
 	}
 
 }

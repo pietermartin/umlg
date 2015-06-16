@@ -1,13 +1,13 @@
 package org.umlg.runtime.collection.persistent;
 
-import com.google.common.base.Preconditions;
-import org.apache.tinkerpop.gremlin.structure.Direction;
+import org.apache.tinkerpop.gremlin.process.traversal.Order;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.Element;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgSequence;
-import org.umlg.runtime.collection.memory.UmlgMemorySequence;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibSequence;
@@ -44,142 +44,95 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
     //By now the element is already added to the internal list
     @Override
     protected void addToLinkedList(Edge edge) {
-        Direction direction;
-        Direction inverseDirection;
-        if (isControllingSide()) {
-            direction = Direction.OUT;
-            inverseDirection = Direction.IN;
-        } else {
-            direction = Direction.IN;
-            inverseDirection = Direction.OUT;
-        }
+        //set the sequence number on the edge.
+        //as the vertex is added to the end of the list it equals the size
+        edge.property(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID, (double) this.oclStdLibSequence.size());
+    }
 
-        //Get the new vertex for the element
-        Vertex newElementVertex = getVertexForDirection(edge);
-        //Get the last hyperVertex
-        //This is size - 2 as the hyperVertexIndex does not yet contain the entry for the new element and it is zero based
-        Vertex lastHyperVertex;
-        if (size() > 1) {
-            Edge edgeToLastHyperVertex = this.vertex.edges(Direction.OUT, LABEL_TO_LAST_HYPER_VERTEX + getLabel() + direction).next();
-            lastHyperVertex = edgeToLastHyperVertex.vertices(Direction.IN) .next();
-            Vertex previousVertex = getVertexFromElement(this.getInternalList().get(size() - 2));
-            //Check is duplicate
-            if (previousVertex.equals(newElementVertex)) {
-                //Add to the hyper vertex
-                lastHyperVertex.addEdge(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX, newElementVertex);
-            } else {
-                //Create a new hyper vertex
-                Vertex newHyperVertex = UMLG.get().addVertex("hyperVertex");
-                newHyperVertex.addEdge(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX, newElementVertex);
-                //Put the new hyper vertex in the linked list
-                lastHyperVertex.addEdge(LABEL_TO_NEXT_HYPER_VERTEX + direction, newHyperVertex);
-                //remove the lastHyperVertex edge to parent, add it to new last hyper vertex
-                edgeToLastHyperVertex.remove();
-                this.vertex.addEdge(LABEL_TO_LAST_HYPER_VERTEX + getLabel() + direction, newHyperVertex);
-            }
+    @Override
+    protected void addToInverseLinkedList(Edge edge) {
+        if (!this.isControllingSide()) {
+            edge.property(BaseCollection.IN_EDGE_SEQUENCE_ID, this.inverseCollectionSize);
         } else {
-            //Is the first element being added, create the hyper vertex
-            Vertex newHyperVertex = UMLG.get().addVertex("hyperVertex");
-            newHyperVertex.addEdge(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX, newElementVertex);
-            //Put the new hyper vertex in the linked list
-            this.vertex.addEdge(LABEL_TO_FIRST_HYPER_VERTEX + getLabel() + direction, newHyperVertex);
-            //remove the lastHyperVertex edge to parent, add it to new last hyper vertex
-            this.vertex.addEdge(LABEL_TO_LAST_HYPER_VERTEX + getLabel() + direction, newHyperVertex);
+            edge.property(BaseCollection.OUT_EDGE_SEQUENCE_ID, this.inverseCollectionSize);
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    protected void loadFromVertex() {
-        Direction direction;
-        Direction inverseDirection;
-        if (isControllingSide()) {
-            direction = Direction.OUT;
-            inverseDirection = Direction.IN;
-        } else {
-            direction = Direction.IN;
-            inverseDirection = Direction.OUT;
-        }
-        //If the multiplicity is a one don't bother with the linked list jol
-        if (getUpper() == 1) {
-            Iterator<Edge> edgeIterable = edgesForDirection(this.vertex, direction, getLabel());
-            if (!edgeIterable.hasNext()) {
-                this.loaded = true;
-            } else {
-                Edge edgeToElement = edgeIterable.next();
-                if (!UMLG.get().hasEdgeBeenDeleted(edgeToElement)) {
-                    Vertex elementVertex = vertexForDirection(edgeToElement, inverseDirection);
-                    loadNode(edgeToElement, elementVertex, false);
-                    this.loaded = true;
+    @Override
+    protected void loadManyNotPrimitiveNotDataType() {
+        GraphTraversal<Vertex, Map<String, Element>> traversal = getVerticesXX();
+        while (traversal.hasNext()) {
+            final Map<String, Element> bindings = traversal.next();
+            Edge edge = (Edge) bindings.get("edge");
+            Vertex vertex = (Vertex) bindings.get("vertex");
+            E node;
+            try {
+                Class<?> c = getClassToInstantiate(vertex);
+                if (c.isEnum()) {
+                    Object value = vertex.value(getPersistentName());
+                    node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+                    putToInternalMap(node, vertex);
+                } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
+                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+                    node = (E) m.invoke(null);
+                } else if (UmlgNode.class.isAssignableFrom(c)) {
+                    node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
+                    ((UmlgNode)node).setEdge(edge);
                 } else {
-                    this.loaded = true;
+                    Object value = vertex.value(getPersistentName());
+                    node = (E) value;
+                    putToInternalMap(value, vertex);
                 }
-            }
-        } else {
-            //Load via hyper vertex
-            if (this.vertex.edges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX + getLabel() + direction).hasNext()) {
-                Edge edgeToFirstHyperVertex = this.vertex.edges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX + getLabel() + direction).next();
-                Vertex hyperVertex = edgeToFirstHyperVertex.vertices(Direction.IN) .next();
-                int toIndex = loadFromHyperVertex(hyperVertex, 0);
-                while (hyperVertex.edges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX + direction).hasNext()) {
-                    Edge edgeToNextHyperVertex = hyperVertex.edges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX + direction).next();
-                    hyperVertex = edgeToNextHyperVertex.vertices(Direction.IN) .next();
-                    toIndex = loadFromHyperVertex(hyperVertex, toIndex);
-                }
-                this.loaded = true;
-            } else {
-                this.loaded = true;
+                this.internalCollection.add(node);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         }
+//        for (Iterator<Vertex> iter = getVerticesXX(); iter.hasNext(); ) {
+//            Vertex vertex = iter.next();
+//            E node;
+//            try {
+//                Class<?> c = getClassToInstantiate(vertex);
+//                if (c.isEnum()) {
+//                    Object value = vertex.value(getPersistentName());
+//                    node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+//                    putToInternalMap(node, vertex);
+//                } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
+//                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+//                    node = (E) m.invoke(null);
+//                } else if (UmlgNode.class.isAssignableFrom(c)) {
+//                    node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
+//                } else {
+//                    Object value = vertex.value(getPersistentName());
+//                    node = (E) value;
+//                    putToInternalMap(value, vertex);
+//                }
+//                this.internalCollection.add(node);
+//            } catch (Exception ex) {
+//                throw new RuntimeException(ex);
+//            }
+//        }
     }
 
-    private int loadFromHyperVertex(Vertex hyperVertex, int fromIndex) {
-        int toIndex = fromIndex;
-        hyperVertex.edges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).forEachRemaining(
-                edgeToElement -> {
-                    Vertex vertexToLoad = edgeToElement.vertices(Direction.IN) .next();
-                    loadNode(edgeToElement, vertexToLoad, true);
-                }
-        );
-        return toIndex;
-    }
-
-    protected void loadNode(Edge edgeToElement, Vertex vertexToLoad, boolean hyperVertexEdge) {
-        E node;
-        try {
-            Class<?> c;
-            if (hyperVertexEdge) {
-                c = this.getClassToInstantiateFromHyperVertexEdge(edgeToElement);
-                //This is a debug check
-                //TODO optimize
-                Vertex debugVertex = edgeToElement.vertices(Direction.IN) .next();
-                if (!debugVertex.equals(vertexToLoad)) {
-                    throw new IllegalStateException("Vertexes should be the same, what is going on?");
-                }
-            } else {
-                c = this.getClassToInstantiate(edgeToElement);
-            }
-            if (c.isEnum()) {
-                Object value = vertexToLoad.value(getPersistentName());
-                node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                putToInternalMap(node, vertexToLoad);
-                this.getInternalList().add(node);
-            } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
-                Method m = c.getDeclaredMethod("getInstance", new Class[0]);
-                node = (E) m.invoke(null);
-                this.getInternalList().add(node);
-            } else if (UmlgNode.class.isAssignableFrom(c)) {
-                node = (E) c.getConstructor(Vertex.class).newInstance(vertexToLoad);
-                this.getInternalList().add(node);
-            } else if (getDataTypeEnum() != null) {
-                loadDataTypeFromVertex(vertexToLoad);
-            } else {
-                Object value = vertexToLoad.value(getPersistentName());
-                node = (E) value;
-                putToInternalMap(value, vertexToLoad);
-                this.getInternalList().add(node);
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+    //    @Override
+    protected GraphTraversal<Vertex, Map<String, Element>> getVerticesXX() {
+        if (this.isControllingSide()) {
+            //TODO gremlin/sqlg optimization needed, this is super inefficient now
+            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
+                    .outE(this.getLabel())
+                    .as("edge")
+                    .order().by(BaseCollection.IN_EDGE_SEQUENCE_ID, Order.incr)
+                    .inV()
+                    .as("vertex")
+                    .select();
+        } else {
+            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
+                    .inE(this.getLabel())
+                    .as("edge")
+                    .order().by(BaseCollection.OUT_EDGE_SEQUENCE_ID, Order.incr)
+                    .outV()
+                    .as("vertex")
+                    .select();
         }
     }
 
@@ -192,150 +145,26 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
         return edgeFromParentToElementVertex;
     }
 
-    private class Triad {
-        Vertex hyperVertex;
-        Vertex elementVertex;
-        Integer count;
-
-        public Triad(Vertex hyperVertex, Vertex elementVertex, Integer count) {
-            this.hyperVertex = hyperVertex;
-            this.elementVertex = elementVertex;
-            this.count = count;
-        }
-    }
-
     //The element is not yet in the internal list
     private void manageLinkedList(int indexOfNewElement, Edge edgeFromParentToElementVertex) {
+        //TODO current may be null
+        E current = this.getInternalList().get(indexOfNewElement);
+        //Take anyone, with bags there may be more than one
+        Edge currentEdge = ((UmlgNode)current).getEdge();
+        Double currentValue = currentEdge.<Double>value(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID);
 
-        Direction direction;
-        Direction inverseDirection;
-        if (isControllingSide()) {
-            direction = Direction.OUT;
-            inverseDirection = Direction.IN;
-        } else {
-            direction = Direction.IN;
-            inverseDirection = Direction.OUT;
-        }
-
-        //Get the new vertex for the element
-        Vertex newElementVertex = getVertexForDirection(edgeFromParentToElementVertex);
-
-        if (this.vertex.edges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX + getLabel() + direction).hasNext()) {
-            Edge edgeToFirstHyperVertex = this.vertex.edges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX + getLabel() + direction).next();
-            Vertex firstHyperVertex = edgeToFirstHyperVertex.vertices(Direction.IN) .next();
-            Triad hyperVertexAtIndexPair = getHyperVertexForIndex(indexOfNewElement, firstHyperVertex, 0, direction);
-            if (hyperVertexAtIndexPair.hyperVertex == null) {
-                //Element needs to be added to the end
-                if (hyperVertexAtIndexPair.count < indexOfNewElement) {
-                    throw new IndexOutOfBoundsException(String.format("List size = %d can not add element at index %d", new Object[]{hyperVertexAtIndexPair.count, indexOfNewElement}));
-                }
-                //Find the last hyper vertex
-                Edge edgeToLastHyperVertex = this.vertex.edges(Direction.OUT, LABEL_TO_LAST_HYPER_VERTEX + getLabel() + direction).next();
-                Vertex lastHyperVertex = edgeToLastHyperVertex.vertices(Direction.IN) .next();
-                //Check if the last hyper vertex hold element equal to the one being added
-
-                Edge edgeToElementFromLastHyperVertex = lastHyperVertex.edges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).next();
-                Vertex elementAtLastHyperVertex = edgeToElementFromLastHyperVertex.vertices(Direction.IN) .next();
-                if (elementAtLastHyperVertex.equals(newElementVertex)) {
-                    //Its a duplicate
-                    lastHyperVertex.addEdge(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX, newElementVertex);
-                } else {
-                    //Create a new last hyper vertex
-                    Vertex newLastHyperVertex = UMLG.get().addVertex("hyperVertex");
-                    //Remove the current edge to last hyper vertex
-                    edgeToLastHyperVertex.remove();
-                    //Create a new edge to last hyper vertex
-                    this.vertex.addEdge(LABEL_TO_LAST_HYPER_VERTEX + getLabel() + direction, newLastHyperVertex);
-                    //Link the previous last hyper vertex to the new on
-                    lastHyperVertex.addEdge(LABEL_TO_NEXT_HYPER_VERTEX + direction, newLastHyperVertex);
-                    //link the last hyper vertex to the new element
-                    newLastHyperVertex.addEdge(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX, newElementVertex);
-                }
-            } else {
-                Vertex hyperVertexAtIndex = hyperVertexAtIndexPair.hyperVertex;
-                Vertex currentElementAtIndex = hyperVertexAtIndexPair.elementVertex;
-
-                //Check if the hyperVertexAtIndex holds elements that are equal to the element being added
-                if (currentElementAtIndex != null && currentElementAtIndex.equals(newElementVertex)) {
-                    //Need to attach the newVertex to the current hyper vertex as its a duplicate
-                    hyperVertexAtIndex.addEdge(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX, newElementVertex);
-                } else {
-                    //Element is not a duplicate.
-                    //Create a new hyper vertex to attach it to
-                    Vertex newHyperVertex = UMLG.get().addVertex("hyperVertex");
-                    newHyperVertex.addEdge(LABEL_TO_ELEMENT_FROM_HYPER_VERTEX, newElementVertex);
-                    //place the hyper vertex in the linked list
-                    if (indexOfNewElement == 0) {
-                        //Need to move the edge (LABEL_TO_FIRST_HYPER_VERTEX) to the parent
-                        //Remove the label to first
-                        Edge edgeFromParent = hyperVertexAtIndex.edges(Direction.IN, LABEL_TO_FIRST_HYPER_VERTEX + getLabel() + direction).next();
-                        edgeFromParent.remove();
-                        //Add the edge (LABEL_TO_FIRST_HYPER_VERTEX) to the new hyper vertex in position 0
-                        this.vertex.addEdge(LABEL_TO_FIRST_HYPER_VERTEX + getLabel() + direction, newHyperVertex);
-                        //Link the new hyper vertex to the next one
-                        newHyperVertex.addEdge(LABEL_TO_NEXT_HYPER_VERTEX + direction, hyperVertexAtIndex);
-                    } else {
-                        //Place the new hyper vertex in the list
-                        //Break the link to the previous hyper edge
-                        Edge edgeToPreviousHyperVertex = hyperVertexAtIndex.edges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX + direction).next();
-                        Vertex previousHyperVertex = edgeToPreviousHyperVertex.vertices(Direction.OUT) .next();
-                        edgeToPreviousHyperVertex.remove();
-                        //Recreate the link from the previous hyper vertex to the new one
-                        previousHyperVertex.addEdge(LABEL_TO_NEXT_HYPER_VERTEX + direction, newHyperVertex);
-                        //Add a edge to the next hyper edge from the new one.
-                        newHyperVertex.addEdge(LABEL_TO_NEXT_HYPER_VERTEX + direction, hyperVertexAtIndex);
-                    }
-                }
+        if (indexOfNewElement > 0) {
+            E previous = this.getInternalList().get(indexOfNewElement - 1);
+            Set<Edge> previousEdges = UMLG.get().getEdgesBetween(this.vertex, ((UmlgNode) previous).getVertex(), getLabel());
+            if (previousEdges.isEmpty()) {
+                throw new IllegalStateException();
             }
+            Edge previousEdge = previousEdges.stream().findFirst().get();
+            Double previousValue = previousEdge.<Double>value(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID);
+            edgeFromParentToElementVertex.property(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID, (currentValue + previousValue) / 2);
         } else {
-            //List is empty
-            if (indexOfNewElement > 0) {
-                throw new IndexOutOfBoundsException("List is empty, can only add an element at index 0");
-            }
-            addToLinkedList(edgeFromParentToElementVertex);
+            edgeFromParentToElementVertex.property(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID, currentValue - 0.1);
         }
-
-    }
-
-    private Triad getHyperVertexForIndex(int indexOfNewElement, Vertex hyperVertex, int count, Direction direction) {
-
-        Iterator<Edge> vertexEdgeGraphTraversal = hyperVertex.edges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
-        while (vertexEdgeGraphTraversal.hasNext()) {
-            Edge edgeToElementVertex = vertexEdgeGraphTraversal.next();
-            Vertex elementVertex = edgeToElementVertex.vertices(Direction.IN) .next();
-            if (indexOfNewElement == count++) {
-                return new Triad(hyperVertex, elementVertex, count);
-            }
-        }
-
-        if (hyperVertex.edges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX + direction).hasNext()) {
-            Edge edgeToNextHyperVertex = hyperVertex.edges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX + direction).next();
-            hyperVertex = edgeToNextHyperVertex.vertices(Direction.IN) .next();
-            return getHyperVertexForIndex(indexOfNewElement, hyperVertex, count, direction);
-        } else {
-            return new Triad(null, null, count);
-        }
-    }
-
-    private Vertex getVertexFromElement(E e) {
-        Vertex previousVertex;
-        if (e instanceof UmlgNode) {
-            UmlgNode node = (UmlgNode) e;
-            previousVertex = node.getVertex();
-        } else if (e.getClass().isEnum()) {
-            List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + e.toString());
-            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
-            previousVertex = vertexes.get(0);
-        } else if (getDataTypeEnum() != null) {
-            List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + e.toString());
-            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
-            previousVertex = vertexes.get(0);
-        } else {
-            List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + e.toString());
-            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
-            previousVertex = vertexes.get(0);
-        }
-        return previousVertex;
     }
 
     @Override

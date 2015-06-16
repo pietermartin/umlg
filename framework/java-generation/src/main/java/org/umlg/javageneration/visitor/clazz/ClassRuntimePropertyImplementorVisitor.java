@@ -29,7 +29,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         addInitialiseProperty(annotatedClass, clazz);
         addInternalInverseAdder(annotatedClass, clazz);
         if (UmlgClassOperations.isAssociationClass(clazz)) {
-            addInternalAdder(annotatedClass, (AssociationClass)clazz);
+            addInternalAdder(annotatedClass, (AssociationClass) clazz);
         }
         addGetMetaDataAsJson(annotatedClass, clazz);
         RuntimePropertyImplementor.addTumlRuntimePropertyEnum(annotatedClass, UmlgClassOperations.propertyEnumName(clazz), clazz,
@@ -105,6 +105,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
     /**
      * inverseAdded is called from the collection classes to manage the inverse side of an association.
      * It must be called before the edge is created. It will attempt to load the collection. Then it will add the element without creating an edge to it.
+     *
      * @param annotatedClass
      * @param clazz
      */
@@ -277,25 +278,31 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
     }
 
     private void addGetSize(OJAnnotatedClass annotatedClass, Class clazz) {
-        OJAnnotatedOperation getQualifiers = new OJAnnotatedOperation("getSize");
-        UmlgGenerationUtil.addOverrideAnnotation(getQualifiers);
-        getQualifiers.setComment("getSize is called from the collection in order to update the index used to implement a sequence's index");
-        getQualifiers.addParam("tumlRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
-        getQualifiers.setReturnType(new OJPathName("int"));
-        annotatedClass.addToOperations(getQualifiers);
+        OJAnnotatedOperation getSize = new OJAnnotatedOperation("getSize");
+        UmlgGenerationUtil.addOverrideAnnotation(getSize);
+        getSize.setComment("getSize is called from the BaseCollection.addInternal in order to save the sice of the inverse collection to update the edge's sequence order");
+        getSize.addParam("inverse", new OJPathName("boolean"));
+        getSize.addParam("tumlRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
+        getSize.setReturnType(new OJPathName("int"));
+        annotatedClass.addToOperations(getSize);
 
         OJField result;
         if (!clazz.getGeneralizations().isEmpty()) {
-            result = new OJField(getQualifiers.getBody(), "result", getQualifiers.getReturnType(), "super.getSize(tumlRuntimeProperty)");
+            result = new OJField(getSize.getBody(), "result", getSize.getReturnType(), "super.getSize(inverse, tumlRuntimeProperty)");
         } else {
-            result = new OJField(getQualifiers.getBody(), "result", getQualifiers.getReturnType(), "0");
+            result = new OJField(getSize.getBody(), "result", getSize.getReturnType(), "0");
         }
 
-        OJField runtimeProperty = new OJField(getQualifiers.getBody(), "runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(clazz)));
-        runtimeProperty.setInitExp(UmlgClassOperations.propertyEnumName(clazz) + ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName())");
+        OJField runtimeProperty = new OJField(getSize.getBody(), "runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(clazz)));
+        OJIfStatement ojIfInverse = new OJIfStatement(
+                "!inverse",
+                "runtimeProperty = " + UmlgClassOperations.propertyEnumName(clazz) + ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName())",
+                "runtimeProperty = " + UmlgClassOperations.propertyEnumName(clazz) + ".fromQualifiedName(tumlRuntimeProperty.getInverseQualifiedName())"
+        );
+        getSize.getBody().addToStatements(ojIfInverse);
 
         OJIfStatement ifRuntimePropertyNotNull = new OJIfStatement(runtimeProperty.getName() + " != null && result == 0");
-        getQualifiers.getBody().addToStatements(ifRuntimePropertyNotNull);
+        getSize.getBody().addToStatements(ifRuntimePropertyNotNull);
 
         OJSwitchStatement ojSwitchStatement = new OJSwitchStatement();
         ojSwitchStatement.setCondition("runtimeProperty");
@@ -317,7 +324,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         ojSwitchCase.getBody().addToStatements("result = 0");
         ojSwitchStatement.setDefCase(ojSwitchCase);
 
-        getQualifiers.getBody().addToStatements("return " + result.getName());
+        getSize.getBody().addToStatements("return " + result.getName());
         annotatedClass.addToImports("java.util.Collections");
     }
 
