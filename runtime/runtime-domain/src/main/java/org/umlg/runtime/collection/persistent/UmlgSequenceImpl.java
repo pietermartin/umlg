@@ -15,12 +15,18 @@ public class UmlgSequenceImpl<E> extends BaseSequence<E> implements UmlgSequence
     @Override
     public void add(int indexOf, E e) {
         maybeLoad();
-        this.edge = addToListAtIndex(indexOf, e);
-        if (this.loaded) {
-            getInternalList().add(indexOf, e);
-        }
-        if (!isInverseUnique()) {
-            this.addToInverseLinkedList(this.edge);
+        if (indexOf == getInternalList().size()) {
+            add(e);
+        } else if (indexOf > getInternalList().size()) {
+            throw new IndexOutOfBoundsException("Index: " + indexOf + ", Size: " + getInternalList().size());
+        } else {
+            this.edge = addToListAtIndex(indexOf, e);
+            if (this.loaded) {
+                getInternalList().add(indexOf, e);
+            }
+            if (!isInverseUnique()) {
+                this.addToInverseLinkedList(this.edge);
+            }
         }
     }
 

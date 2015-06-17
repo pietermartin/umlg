@@ -147,7 +147,6 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
 
     //The element is not yet in the internal list
     private void manageLinkedList(int indexOfNewElement, Edge edgeFromParentToElementVertex) {
-        //TODO current may be null
         E current = this.getInternalList().get(indexOfNewElement);
         //Take anyone, with bags there may be more than one
         Edge currentEdge = ((UmlgNode)current).getEdge();
