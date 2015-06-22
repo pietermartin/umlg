@@ -28,7 +28,7 @@ public class OclStdLibOrderedSetTest extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(5, countEdges());
 
         OrderedSetRoot orderedSetRoot2 = new OrderedSetRoot(true);
         orderedSetRoot2.setName("orderedSetRoot2");
@@ -54,7 +54,7 @@ public class OclStdLibOrderedSetTest extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(5, countEdges());
 
         OrderedSetRoot orderedSetRoot2 = new OrderedSetRoot(true);
         orderedSetRoot2.setName("orderedSetRoot2");
@@ -80,7 +80,7 @@ public class OclStdLibOrderedSetTest extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(5, countEdges());
 
         OrderedSetRoot orderedSetRoot2 = new OrderedSetRoot(true);
         orderedSetRoot2.setName("orderedSetRoot2");
@@ -107,7 +107,7 @@ public class OclStdLibOrderedSetTest extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(5, countEdges());
 
         OrderedSetRoot orderedSetRoot2 = new OrderedSetRoot(true);
         orderedSetRoot2.setName("orderedSetRoot2");
@@ -133,7 +133,7 @@ public class OclStdLibOrderedSetTest extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(5, countEdges());
 
         Assert.assertEquals(orderedSetTest4, orderedSetRoot.getOrderedSetTest().at(3));
     }
@@ -153,7 +153,7 @@ public class OclStdLibOrderedSetTest extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(5, countEdges());
 
         Assert.assertEquals(orderedSetTest1, orderedSetRoot.getOrderedSetTest().first());
     }
@@ -173,7 +173,7 @@ public class OclStdLibOrderedSetTest extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(5, countEdges());
 
         Assert.assertEquals(orderedSetTest4, orderedSetRoot.getOrderedSetTest().last());
     }
@@ -193,7 +193,7 @@ public class OclStdLibOrderedSetTest extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(5, countEdges());
 
         UmlgOrderedSet<OrderedSetTest> reverse = orderedSetRoot.getOrderedSetTest().reverse();
         Assert.assertEquals(orderedSetTest1, reverse.get(3));

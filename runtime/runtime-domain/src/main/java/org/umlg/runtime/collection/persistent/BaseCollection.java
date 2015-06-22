@@ -220,7 +220,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         return result;
     }
 
-
     private void removeFromLinkedList(Vertex v) {
     }
 
@@ -449,7 +448,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 createAudit(e, false);
             }
             if (e instanceof UmlgNode) {
-                ((UmlgNode)e).setEdge(this.edge);
+                ((UmlgNode)e).setEdge(this.umlgRuntimeProperty, edge);
             }
             return edge;
         } else {

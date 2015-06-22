@@ -28,6 +28,6 @@ public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
 	<T extends UmlgNode> List<T> getPathToCompositionalRoot();
     UmlgMetaNode getMetaNode();
 	//the get and set edge is for the case of sequences where the indexOf(more of an order by sequence) is stored
-	void setEdge(Edge edge);
-	Edge getEdge();
+	void setEdge(UmlgRuntimeProperty umlgRuntimeProperty, Edge edge);
+	Edge getEdge(UmlgRuntimeProperty umlgRuntimeProperty);
 }

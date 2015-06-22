@@ -2,7 +2,8 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.tests.collectiontest.SequenceTest;
+import org.umlg.collectiontest.SequenceTestOrderedSet;
+import org.umlg.tests.collectiontest.*;
 import org.umlg.tests.ocl.ocloperator.OclIncludesAllTest;
 
 /**
@@ -11,7 +12,7 @@ import org.umlg.tests.ocl.ocloperator.OclIncludesAllTest;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        SequenceTest.class
+        TestOrderedListKeepsIndex.class
 })
 public class UmlgAnyTestSuite {
 }

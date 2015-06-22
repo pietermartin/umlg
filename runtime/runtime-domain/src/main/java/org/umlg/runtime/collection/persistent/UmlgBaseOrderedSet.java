@@ -3,7 +3,6 @@ package org.umlg.runtime.collection.persistent;
 import com.google.common.base.Preconditions;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.tinkerpop.gremlin.process.traversal.Order;
-import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.UMLG;
@@ -46,29 +45,31 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
         //Create the edge to the new element
         Edge edgeFromParentToElementVertex = addInternal(e);
         manageLinkedList(indexOf, edgeFromParentToElementVertex);
+        ((UmlgNode)e).setEdge(this.umlgRuntimeProperty, edgeFromParentToElementVertex);
         return edgeFromParentToElementVertex;
     }
 
     //The element is not yet in the internal list
     private void manageLinkedList(int indexOfNewElement, Edge edgeFromParentToElementVertex) {
         E current = this.getInternalList().get(indexOfNewElement);
-        E previous = this.getInternalList().get(indexOfNewElement - 1);
         Set<Edge> currentEdges = UMLG.get().getEdgesBetween(this.vertex, ((UmlgNode) current).getVertex(), getLabel());
         if (currentEdges.isEmpty()) {
             throw new IllegalStateException();
         }
-        Set<Edge> previousEdges = UMLG.get().getEdgesBetween(this.vertex, ((UmlgNode) previous).getVertex(), getLabel());
-        if (previousEdges.isEmpty()) {
-            throw new IllegalStateException();
-        }
-        //Take anyone, with bags there may be more than one
         Edge currentEdge = currentEdges.stream().findFirst().get();
-        Edge previousEdge = previousEdges.stream().findFirst().get();
-
         Double currentValue = currentEdge.<Double>value(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID);
-        Double previousValue = previousEdge.<Double>value(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID);
-
-        edgeFromParentToElementVertex.property(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID, (currentValue + previousValue) / 2);
+        if (indexOfNewElement > 0) {
+            E previous = this.getInternalList().get(indexOfNewElement - 1);
+            Set<Edge> previousEdges = UMLG.get().getEdgesBetween(this.vertex, ((UmlgNode) previous).getVertex(), getLabel());
+            if (previousEdges.isEmpty()) {
+                throw new IllegalStateException();
+            }
+            Edge previousEdge = previousEdges.stream().findFirst().get();
+            Double previousValue = previousEdge.<Double>value(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID);
+            edgeFromParentToElementVertex.property(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID, (currentValue + previousValue) / 2);
+        } else {
+            edgeFromParentToElementVertex.property(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID, currentValue - 0.1);
+        }
     }
 
     protected ListOrderedSet<E> getInternalList() {
@@ -86,9 +87,9 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
     @Override
     protected void addToInverseLinkedList(Edge edge) {
         if (!this.isControllingSide()) {
-            edge.property(BaseCollection.IN_EDGE_SEQUENCE_ID, this.inverseCollectionSize);
+            edge.property(BaseCollection.IN_EDGE_SEQUENCE_ID, (double)this.inverseCollectionSize);
         } else {
-            edge.property(BaseCollection.OUT_EDGE_SEQUENCE_ID, this.inverseCollectionSize);
+            edge.property(BaseCollection.OUT_EDGE_SEQUENCE_ID, (double)this.inverseCollectionSize);
         }
     }
 

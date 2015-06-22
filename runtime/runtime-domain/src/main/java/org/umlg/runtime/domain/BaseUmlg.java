@@ -9,18 +9,21 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgExceptionUtilFactory;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.domain.ocl.OclState;
 
 import java.io.Serializable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class BaseUmlg implements UmlgNode, Serializable {
 
     private static final long serialVersionUID = 3751023772087546585L;
     protected Vertex vertex;
     protected boolean hasInitBeenCalled = false;
-    private Edge edge;
+    private Map<UmlgRuntimeProperty, Edge> edgeMap = new ConcurrentHashMap<>();
 
     public BaseUmlg() {
         super();
@@ -208,12 +211,12 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     }
 
     @Override
-    public void setEdge(Edge edge) {
-        this.edge = edge;
+    public void setEdge(UmlgRuntimeProperty umlgRuntimeProperty, Edge edge) {
+        this.edgeMap.put(umlgRuntimeProperty, edge);
     }
 
     @Override
-    public Edge getEdge() {
-        return this.edge;
+    public Edge getEdge(UmlgRuntimeProperty umlgRuntimeProperty) {
+        return this.edgeMap.get(umlgRuntimeProperty);
     }
 }

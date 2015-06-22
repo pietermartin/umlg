@@ -26,8 +26,8 @@ public class TestOrderedListKeepsIndex extends BaseLocalDbTest {
         finger3.setName("finger3");
         db.commit();
 
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(12, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(5, countEdges());
 
         Hand handTest = db.getEntity(hand.getId());
         Finger fingerTest = db.getEntity(finger1.getId());
@@ -52,8 +52,8 @@ public class TestOrderedListKeepsIndex extends BaseLocalDbTest {
         finger3.setName("finger3");
         db.commit();
 
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(12, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(5, countEdges());
 
         Hand handTest = db.getEntity(hand.getId());
         Finger fingerTest = db.getEntity(finger1.getId());

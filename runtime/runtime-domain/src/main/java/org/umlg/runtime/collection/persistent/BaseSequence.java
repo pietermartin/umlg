@@ -52,15 +52,15 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
     @Override
     protected void addToInverseLinkedList(Edge edge) {
         if (!this.isControllingSide()) {
-            edge.property(BaseCollection.IN_EDGE_SEQUENCE_ID, this.inverseCollectionSize);
+            edge.property(BaseCollection.IN_EDGE_SEQUENCE_ID, (double)this.inverseCollectionSize);
         } else {
-            edge.property(BaseCollection.OUT_EDGE_SEQUENCE_ID, this.inverseCollectionSize);
+            edge.property(BaseCollection.OUT_EDGE_SEQUENCE_ID, (double)this.inverseCollectionSize);
         }
     }
 
     @Override
     protected void loadManyNotPrimitiveNotDataType() {
-        GraphTraversal<Vertex, Map<String, Element>> traversal = getVerticesXX();
+        GraphTraversal<Vertex, Map<String, Element>> traversal = getVerticesWithEdge();
         while (traversal.hasNext()) {
             final Map<String, Element> bindings = traversal.next();
             Edge edge = (Edge) bindings.get("edge");
@@ -77,7 +77,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
                     node = (E) m.invoke(null);
                 } else if (UmlgNode.class.isAssignableFrom(c)) {
                     node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
-                    ((UmlgNode)node).setEdge(edge);
+                    ((UmlgNode)node).setEdge(this.umlgRuntimeProperty, edge);
                 } else {
                     Object value = vertex.value(getPersistentName());
                     node = (E) value;
@@ -88,34 +88,9 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
                 throw new RuntimeException(ex);
             }
         }
-//        for (Iterator<Vertex> iter = getVerticesXX(); iter.hasNext(); ) {
-//            Vertex vertex = iter.next();
-//            E node;
-//            try {
-//                Class<?> c = getClassToInstantiate(vertex);
-//                if (c.isEnum()) {
-//                    Object value = vertex.value(getPersistentName());
-//                    node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-//                    putToInternalMap(node, vertex);
-//                } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
-//                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
-//                    node = (E) m.invoke(null);
-//                } else if (UmlgNode.class.isAssignableFrom(c)) {
-//                    node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
-//                } else {
-//                    Object value = vertex.value(getPersistentName());
-//                    node = (E) value;
-//                    putToInternalMap(value, vertex);
-//                }
-//                this.internalCollection.add(node);
-//            } catch (Exception ex) {
-//                throw new RuntimeException(ex);
-//            }
-//        }
     }
 
-    //    @Override
-    protected GraphTraversal<Vertex, Map<String, Element>> getVerticesXX() {
+    protected GraphTraversal<Vertex, Map<String, Element>> getVerticesWithEdge() {
         if (this.isControllingSide()) {
             //TODO gremlin/sqlg optimization needed, this is super inefficient now
             return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
@@ -142,15 +117,24 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
         //Create the edge to the new element
         Edge edgeFromParentToElementVertex = addInternal(e);
         manageLinkedList(indexOf, edgeFromParentToElementVertex);
+        ((UmlgNode)e).setEdge(this.umlgRuntimeProperty, edgeFromParentToElementVertex);
         return edgeFromParentToElementVertex;
     }
 
     //The element is not yet in the internal list
     private void manageLinkedList(int indexOfNewElement, Edge edgeFromParentToElementVertex) {
         E current = this.getInternalList().get(indexOfNewElement);
+        Double currentValue;
         //Take anyone, with bags there may be more than one
-        Edge currentEdge = ((UmlgNode)current).getEdge();
-        Double currentValue = currentEdge.<Double>value(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID);
+        Edge currentEdge = ((UmlgNode)current).getEdge(this.umlgRuntimeProperty);
+        //currentEdge can be null when the element is added via the indexed adders, i.e. x.addToY(0, y);
+        if (currentEdge == null) {
+            E next = this.getInternalList().get(indexOfNewElement + 1);
+            currentEdge = ((UmlgNode)next).getEdge(this.umlgRuntimeProperty);
+            currentValue = currentEdge.<Double>value(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID);
+        } else {
+            currentValue = currentEdge.<Double>value(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID);
+        }
 
         if (indexOfNewElement > 0) {
             E previous = this.getInternalList().get(indexOfNewElement - 1);
