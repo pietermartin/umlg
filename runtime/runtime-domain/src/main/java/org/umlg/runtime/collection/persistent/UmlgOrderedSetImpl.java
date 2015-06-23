@@ -32,12 +32,20 @@ public class UmlgOrderedSetImpl<E> extends UmlgBaseOrderedSet<E> implements Umlg
         } else if (indexOf > getInternalList().size()) {
             throw new IndexOutOfBoundsException("Index: " + indexOf + ", Size: " + getInternalList().size());
         } else if (!this.getInternalListOrderedSet().contains(e)) {
-            this.edge = addToListAtIndex(indexOf, e);
-            if (this.loaded) {
-                getInternalList().add(indexOf, e);
-            }
-            if (isInverseOrdered()) {
-                this.addToInverseLinkedList(this.edge);
+            if (isEmbedded()) {
+                //The BaseCollection.addInternal expects the element to have been loaded already
+                if (this.loaded) {
+                    getInternalList().add(indexOf, e);
+                }
+                addInternal(e);
+            } else {
+                this.edge = addToListAtIndex(indexOf, e);
+                if (this.loaded) {
+                    getInternalList().add(indexOf, e);
+                }
+                if (isInverseOrdered()) {
+                    this.addToInverseLinkedList(this.edge);
+                }
             }
         }
     }

@@ -37,7 +37,7 @@ public class ManyEnumerationTest extends BaseLocalDbTest {
         TestOrderedEnumeration testOrderedEnumeration = new TestOrderedEnumeration(g);
         testOrderedEnumeration.addToTestOrderedEnumBug(TestOrderedEnumBug.EnumerationLiteral3);
         db.commit();
-        Assert.assertEquals(3 + 1/*hyperVertex*/, countVertices());
+        Assert.assertEquals(2, countVertices());
 
         testOrderedEnumeration.reload();
         Assert.assertEquals(1, testOrderedEnumeration.getTestOrderedEnumBug().size());

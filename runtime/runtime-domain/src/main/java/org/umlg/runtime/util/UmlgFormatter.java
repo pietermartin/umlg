@@ -1,6 +1,7 @@
 package org.umlg.runtime.util;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.ArrayUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -8,6 +9,12 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 import org.umlg.runtime.domain.DataTypeEnum;
+import org.umlg.runtime.types.Password;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 //TODO make this threadvar or something
 
@@ -165,35 +172,143 @@ public class UmlgFormatter {
     public static <E> E parse(DataTypeEnum dataTypeEnum, Object s) {
         switch (dataTypeEnum) {
             case DateTime:
-                return (E)parseDateTimeFromPersist((Long)s);
+                return (E) parseDateTimeFromPersist((Long) s);
             case Date:
-                return (E)parseDateFromPersist((Long)s);
+                return (E) parseDateFromPersist((Long) s);
             case Time:
-                return (E)parseTimeFromPersist((String)s);
+                return (E) parseTimeFromPersist((String) s);
             case InternationalPhoneNumber:
-                return (E)s;
+                return (E) s;
             case LocalPhoneNumber:
-                return (E)s;
+                return (E) s;
             case Email:
-                return (E)s;
+                return (E) s;
             case Host:
-                return (E)s;
+                return (E) s;
             case QuartzCron:
-                return (E)s;
+                return (E) s;
             case UnixCron:
-                return (E)s;
+                return (E) s;
             case Password:
-                return (E)s;
+                return (E) s;
             case UnsecurePassword:
-                return (E)s;
+                return (E) s;
             case ByteArray:
-                return (E)s;
+                return (E) s;
 //            case Video:
 //                return format((DateTime)o);
 //            case Audio:
 //                return format((DateTime)o);
 //            case Image:
 //                return format((DateTime)o);
+            default:
+                throw new IllegalStateException("Unhandled dataTypeEnum " + dataTypeEnum.name());
+        }
+    }
+
+    public static <E> Collection<E> convertFromArray(DataTypeEnum dataTypeEnum, Object array) {
+        Collection<E> result = new ArrayList<>();
+        switch (dataTypeEnum) {
+            case DateTime:
+                long[] longArray = (long[]) array;
+                for (long l : longArray) {
+                    result.add((E) parseDateTimeFromPersist(l));
+                }
+                break;
+            case Date:
+                longArray = (long[]) array;
+                for (long l : longArray) {
+                    result.add((E) parseDateFromPersist(l));
+                }
+                break;
+            case Time:
+                String[] stringArray = (String[]) array;
+                for (String s : stringArray) {
+                    result.add((E) parseTimeFromPersist(s));
+                }
+                break;
+            case InternationalPhoneNumber:
+                stringArray = (String[]) array;
+                for (String s : stringArray) {
+                    result.add((E) s);
+                }
+                break;
+            case LocalPhoneNumber:
+                stringArray = (String[]) array;
+                for (String s : stringArray) {
+                    result.add((E) s);
+                }
+                break;
+            case Email:
+                stringArray = (String[]) array;
+                for (String s : stringArray) {
+                    result.add((E) s);
+                }
+                break;
+            case Host:
+                stringArray = (String[]) array;
+                for (String s : stringArray) {
+                    result.add((E) s);
+                }
+                break;
+            case QuartzCron:
+                stringArray = (String[]) array;
+                for (String s : stringArray) {
+                    result.add((E) s);
+                }
+                break;
+            case UnixCron:
+                stringArray = (String[]) array;
+                for (String s : stringArray) {
+                    result.add((E) s);
+                }
+                break;
+            case Password:
+                throw new RuntimeException("Password with a multiplicity > 1 is not supported");
+            case UnsecurePassword:
+                stringArray = (String[]) array;
+                for (String s : stringArray) {
+                    result.add((E) s);
+                }
+                break;
+            case ByteArray:
+                throw new RuntimeException("Password with a multiplicity > 1 is not supported");
+            default:
+                throw new IllegalStateException("Unhandled dataTypeEnum " + dataTypeEnum.name());
+        }
+        return result;
+    }
+
+    public static <E> Object convertToArray(DataTypeEnum dataTypeEnum, Collection<E> internalCollection) {
+        Collection<Object> coll = new ArrayList<>(internalCollection.size());
+        coll.addAll(internalCollection.stream().map(e -> format(dataTypeEnum, e)).collect(Collectors.toList()));
+        switch (dataTypeEnum) {
+            case DateTime:
+                Long[] longArray = coll.toArray(new Long[coll.size()]);
+                return ArrayUtils.toPrimitive(longArray);
+            case Date:
+                longArray = coll.toArray(new Long[coll.size()]);
+                return ArrayUtils.toPrimitive(longArray);
+            case Time:
+                return coll.toArray(new String[coll.size()]);
+            case InternationalPhoneNumber:
+                return coll.toArray(new String[coll.size()]);
+            case LocalPhoneNumber:
+                return coll.toArray(new String[coll.size()]);
+            case Email:
+                return coll.toArray(new String[coll.size()]);
+            case Host:
+                return coll.toArray(new String[coll.size()]);
+            case QuartzCron:
+                return coll.toArray(new String[coll.size()]);
+            case UnixCron:
+                return coll.toArray(new String[coll.size()]);
+            case Password:
+                throw new RuntimeException("Password with a multiplicity > 1 is not supported");
+            case UnsecurePassword:
+                return coll.toArray(new String[coll.size()]);
+            case ByteArray:
+                throw new RuntimeException("Password with a multiplicity > 1 is not supported");
             default:
                 throw new IllegalStateException("Unhandled dataTypeEnum " + dataTypeEnum.name());
         }

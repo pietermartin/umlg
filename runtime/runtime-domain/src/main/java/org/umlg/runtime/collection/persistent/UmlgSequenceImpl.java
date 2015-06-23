@@ -20,12 +20,20 @@ public class UmlgSequenceImpl<E> extends BaseSequence<E> implements UmlgSequence
         } else if (indexOf > getInternalList().size()) {
             throw new IndexOutOfBoundsException("Index: " + indexOf + ", Size: " + getInternalList().size());
         } else {
-            this.edge = addToListAtIndex(indexOf, e);
-            if (this.loaded) {
-                getInternalList().add(indexOf, e);
-            }
-            if (!isInverseUnique()) {
-                this.addToInverseLinkedList(this.edge);
+            if (isEmbedded()) {
+                //The BaseCollection.addInternal expects the element to have been loaded already
+                if (this.loaded) {
+                    getInternalList().add(indexOf, e);
+                }
+                addInternal(e);
+            } else {
+                this.edge = addToListAtIndex(indexOf, e);
+                if (this.loaded) {
+                    getInternalList().add(indexOf, e);
+                }
+                if (!isInverseUnique()) {
+                    this.addToInverseLinkedList(this.edge);
+                }
             }
         }
     }

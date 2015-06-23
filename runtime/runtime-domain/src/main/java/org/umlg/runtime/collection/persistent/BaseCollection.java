@@ -3,6 +3,7 @@ package org.umlg.runtime.collection.persistent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
@@ -74,27 +75,40 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         this.umlgRuntimeProperty = runtimeProperty;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     protected void loadFromVertex() {
-        if (!isOnePrimitive() && !isOneEnumeration() && getDataTypeEnum() == null) {
-            loadManyNotPrimitiveNotDataType();
+        if (isManyPrimitive()) {
+            loadManyPrimitive();
+        } else if (isManyEnumeration()) {
+            loadManyEnumeration();
         } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
             loadManyDataType();
-        } else if (getDataTypeEnum() != null) {
+        } else if (isOnePrimitive()) {
+            loadOnePrimitive();
+        } else if (isOneEnumeration()) {
+            loadOneEnumeration();
+        } else if (getDataTypeEnum() != null && (isOneToOne() || isManyToOne())) {
             loadOneDataType();
         } else {
-            this.vertex.<E>property(getPersistentName()).ifPresent(
-                    value -> {
-                        if (isOneEnumeration()) {
-                            Class<?> c = this.getPropertyType();
-                            this.internalCollection.add((E) Enum.valueOf((Class<? extends Enum>) c, (String) value));
-                        } else {
-                            this.internalCollection.add(value);
-                        }
-                    }
-            );
+            loadManyNotPrimitiveNotDataType();
         }
         this.loaded = true;
+    }
+
+    private void loadOnePrimitive() {
+        this.vertex.<E>property(getPersistentName()).ifPresent(
+                value -> {
+                    this.internalCollection.add(value);
+                }
+        );
+    }
+
+    private void loadOneEnumeration() {
+        this.vertex.<E>property(getPersistentName()).ifPresent(
+                value -> {
+                    Class<?> c = this.getPropertyType();
+                    this.internalCollection.add((E) Enum.valueOf((Class<? extends Enum>) c, (String) value));
+                }
+        );
     }
 
     protected Vertex removeFromInternalMap(Object key) {
@@ -195,8 +209,11 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             this.edge = addInternal(e);
 
             // Edge can only be null on a one primitive
-            if (this.edge == null && !isOnePrimitive() && !isOneEnumeration() && getDataTypeEnum() == null) {
-                throw new IllegalStateException("Edge can only be null on isOne which is a String, Integer, Boolean or primitive");
+//            if (this.edge == null && !isOnePrimitive() && !isOneEnumeration() && getDataTypeEnum() == null) {
+//                throw new IllegalStateException("Edge can only be null on isOne which is a String, Integer, Boolean or primitive");
+//            }
+            if (e instanceof UmlgNode && this.edge == null) {
+                throw new IllegalStateException("Edge can not be null for a UmlgNode");
             }
 
             if (isQualified() || isInverseQualified()) {
@@ -336,15 +353,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 }
 
 
-            } else if (e.getClass().isEnum() && (isManyToMany() || isOneToMany())) {
-                v = removeFromInternalMap(o);
-                if (isOrdered()) {
-                    removeFromLinkedList(v);
-                }
-                if (isInverseOrdered()) {
-                    removeFromInverseLinkedList(v);
-                }
-                v.remove();
             } else if ((isOneEnumeration() || isOnePrimitive()) && getDataTypeEnum() == null) {
                 this.vertex.property(getPersistentName()).remove();
                 if (isOnePrimitivePropertyOfAssociationClass()) {
@@ -358,28 +366,40 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     }
                 }
             } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
-                v = removeFromInternalMap(o.toString());
-                if (isOrdered()) {
-                    removeFromLinkedList(v);
-                }
-                if (isInverseOrdered()) {
-                    removeFromInverseLinkedList(v);
-                }
-                v.remove();
+                this.vertex.property(getPersistentName(), convertToArrayForRemoval());
+//                v = removeFromInternalMap(o.toString());
+//                if (isOrdered()) {
+//                    removeFromLinkedList(v);
+//                }
+//                if (isInverseOrdered()) {
+//                    removeFromInverseLinkedList(v);
+//                }
+//                v.remove();
             } else if (getDataTypeEnum() != null) {
                 this.vertex.property(getPersistentName()).remove();
+            } else if (e.getClass().isEnum() && (isManyToMany() || isOneToMany())) {
+                this.vertex.property(getPersistentName(), convertToArrayForRemoval());
+//                v = removeFromInternalMap(o);
+//                if (isOrdered()) {
+//                    removeFromLinkedList(v);
+//                }
+//                if (isInverseOrdered()) {
+//                    removeFromInverseLinkedList(v);
+//                }
+//                v.remove();
             } else {
-                v = removeFromInternalMap(o);
-                if (this.owner instanceof TinkerAuditableNode) {
-                    createAudit(e, true);
-                }
-                if (isOrdered()) {
-                    removeFromLinkedList(v);
-                }
-                if (isInverseOrdered()) {
-                    removeFromInverseLinkedList(v);
-                }
-                v.remove();
+                this.vertex.property(getPersistentName(), convertToArrayForRemoval());
+//                v = removeFromInternalMap(o);
+//                if (this.owner instanceof TinkerAuditableNode) {
+//                    createAudit(e, true);
+//                }
+//                if (isOrdered()) {
+//                    removeFromLinkedList(v);
+//                }
+//                if (isInverseOrdered()) {
+//                    removeFromInverseLinkedList(v);
+//                }
+//                v.remove();
             }
         }
         return result;
@@ -406,11 +426,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 this.handleInverseSide(node, umlgRuntimeProperty, true, this.owner);
                 this.inverseCollectionSize = node.getSize(true, umlgRuntimeProperty);
             }
-        } else if (e.getClass().isEnum() && (isManyToMany() || isOneToMany())) {
-            v = UMLG.get().addVertex();
-            v.property(getPersistentName(), ((Enum<?>) e).name());
-            v.property("className", e.getClass().getName());
-            putToInternalMap(e, v);
         } else if (isOnePrimitive()) {
             this.vertex.property(getPersistentName(), e);
             if (isOnePrimitivePropertyOfAssociationClass()) {
@@ -429,18 +444,25 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     UMLG.get().traversal().E(edgeIdProperty.value()).next().property(getPersistentName(), ((Enum<?>) e).name());
                 }
             }
-        } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
-            v = UMLG.get().addVertex();
-            v.property("className", e.getClass().getName());
-            setDataTypeOnVertex(v, e);
-            putToInternalMap(e, v);
-        } else if (getDataTypeEnum() != null) {
+//        } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
+//            v = UMLG.get().addVertex();
+//            v.property("className", e.getClass().getName());
+//            setDataTypeOnVertex(v, e);
+//            putToInternalMap(e, v);
+        } else if (getDataTypeEnum() != null && (isOneToOne() || isManyToOne())) {
             setDataTypeOnVertex(this.vertex, e);
+        } else if (e.getClass().isEnum() && (isManyToMany() || isOneToMany())) {
+            this.vertex.property(getPersistentName(), convertToArray(e));
+//            v = UMLG.get().addVertex();
+//            v.property(getPersistentName(), ((Enum<?>) e).name());
+//            v.property("className", e.getClass().getName());
+//            putToInternalMap(e, v);
         } else {
-            v = UMLG.get().addVertex();
-            v.property(getPersistentName(), e);
-            v.property("className", e.getClass().getName());
-            putToInternalMap(e, v);
+            this.vertex.property(getPersistentName(), convertToArray(e));
+//            v = UMLG.get().addVertex();
+//            v.property(getPersistentName(), e);
+//            v.property("className", e.getClass().getName());
+//            putToInternalMap(e, v);
         }
         if (v != null) {
             Edge edge = createEdge(e, v);
@@ -448,7 +470,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 createAudit(e, false);
             }
             if (e instanceof UmlgNode) {
-                ((UmlgNode)e).setEdge(this.umlgRuntimeProperty, edge);
+                ((UmlgNode) e).setEdge(this.umlgRuntimeProperty, edge);
             }
             return edge;
         } else {
@@ -860,19 +882,28 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     @Override
     public boolean isOrdered() {
-        if (this.umlgRuntimeProperty.isOrdered() && this.umlgRuntimeProperty.isQualified() && getUpper() == 1) {
-            return true;
+        if (isManyPrimitive() || isManyEnumeration() || (getDataTypeEnum() != null && (isOneToMany() || isManyToMany()))) {
+            return false;
         } else {
-            return this.umlgRuntimeProperty.isOrdered() && (getUpper() == -1 || getUpper() > 1);
+            if (this.umlgRuntimeProperty.isOrdered() && this.umlgRuntimeProperty.isQualified() && getUpper() == 1) {
+                return true;
+            } else {
+                return this.umlgRuntimeProperty.isOrdered() && (getUpper() == -1 || getUpper() > 1);
+            }
         }
     }
 
     @Override
     public boolean isInverseOrdered() {
-        if (this.umlgRuntimeProperty.isInverseOrdered() && this.umlgRuntimeProperty.isInverseQualified() && getUpper() == 1) {
-            return true;
+        //primitives, enumerations and data types can not have a ordered inverse
+        if (isManyPrimitive() || isManyEnumeration() || (getDataTypeEnum() != null && (isOneToMany() || isManyToMany()))) {
+            return false;
         } else {
-            return this.umlgRuntimeProperty.isInverseOrdered() && (getInverseUpper() == -1 || getInverseUpper() > 1);
+            if (this.umlgRuntimeProperty.isInverseOrdered() && this.umlgRuntimeProperty.isInverseQualified() && getUpper() == 1) {
+                return true;
+            } else {
+                return this.umlgRuntimeProperty.isInverseOrdered() && (getInverseUpper() == -1 || getInverseUpper() > 1);
+            }
         }
     }
 
@@ -1160,14 +1191,11 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     private void loadManyDataType() {
-        for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
-            Edge edge = iter.next();
-            try {
-                Vertex v = this.getVertexForDirection(edge);
-                loadDataTypeFromVertex(v);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
+        Property<Object> manyProperty = this.vertex.property(getPersistentName());
+        if (manyProperty.isPresent()) {
+            this.internalCollection.clear();
+            Collection<E> coll = UmlgFormatter.convertFromArray(this.umlgRuntimeProperty.getDataTypeEnum(), manyProperty.value());
+            this.internalCollection.addAll(coll);
         }
     }
 
@@ -1207,6 +1235,117 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 throw new RuntimeException(ex);
             }
         }
+    }
+
+    protected void loadManyEnumeration() {
+        Property<String[]> manyProperty = this.vertex.property(getPersistentName());
+        if (manyProperty.isPresent()) {
+            this.internalCollection.clear();
+            String[] value = vertex.value(getPersistentName());
+            for (String enumerationAsString : value) {
+                E node = (E) Enum.valueOf((Class<? extends Enum>) this.umlgRuntimeProperty.getPropertyType(), enumerationAsString);
+                this.internalCollection.add(node);
+            }
+        }
+    }
+
+    protected void loadManyPrimitive() {
+        Property<Object> manyProperty = this.vertex.property(getPersistentName());
+        if (manyProperty.isPresent()) {
+            this.internalCollection.clear();
+            Class propertyType = this.umlgRuntimeProperty.getPropertyType();
+            List<E> list;
+            if (propertyType.isAssignableFrom(String.class)) {
+                list = Arrays.asList((E[]) (manyProperty.value()));
+            } else if (propertyType.isAssignableFrom(Integer.class)) {
+                list = Arrays.asList((E[]) ArrayUtils.toObject((int[]) manyProperty.value()));
+            } else if (propertyType.isAssignableFrom(Long.class)) {
+                list = Arrays.asList((E[]) ArrayUtils.toObject((long[]) manyProperty.value()));
+            } else if (propertyType.isAssignableFrom(Double.class)) {
+                list = Arrays.asList((E[]) ArrayUtils.toObject((double[]) manyProperty.value()));
+            } else if (propertyType.isAssignableFrom(Float.class)) {
+                list = Arrays.asList((E[]) ArrayUtils.toObject((float[]) manyProperty.value()));
+            } else if (propertyType.isAssignableFrom(Boolean.class)) {
+                list = Arrays.asList((E[]) ArrayUtils.toObject((boolean[]) manyProperty.value()));
+            } else {
+                throw new IllegalStateException("Unknown propertyType " + propertyType.toString());
+            }
+            this.internalCollection.addAll(list);
+        }
+    }
+
+    protected Collection convertToArrayCollection() {
+        return new ArrayList<>(this.internalCollection.size() + 1);
+    }
+
+    protected Object convertToArray(E e) {
+        //the element has already been added to the internalCollection
+        if (this.umlgRuntimeProperty.getDataTypeEnum() != null) {
+            if (e instanceof UmlgType) {
+                throw new RuntimeException();
+//                ((UmlgType) e).setOnVertex(v, getPersistentName());
+            } else {
+                return UmlgFormatter.convertToArray(getDataTypeEnum(), this.internalCollection);
+//                this.vertex.property(getPersistentName(), UmlgFormatter.format(getDataTypeEnum(), e));
+            }
+        } else if (isManyEnumeration()) {
+            Collection<String> enumerationAsList = convertToArrayCollection();
+            for (E enumeration : this.internalCollection) {
+                enumerationAsList.add(((Enum<?>) enumeration).name());
+            }
+            return enumerationAsList.toArray(new String[enumerationAsList.size()]);
+        } else {
+            Class propertyType = this.umlgRuntimeProperty.getPropertyType();
+            if (propertyType.isAssignableFrom(String.class)) {
+                return this.internalCollection.toArray(new String[this.internalCollection.size()]);
+            } else if (propertyType.isAssignableFrom(Integer.class)) {
+                return ArrayUtils.toPrimitive(this.internalCollection.toArray(new Integer[this.internalCollection.size()]));
+            } else if (propertyType.isAssignableFrom(Long.class)) {
+                return ArrayUtils.toPrimitive(this.internalCollection.toArray(new Long[this.internalCollection.size()]));
+            } else if (propertyType.isAssignableFrom(Double.class)) {
+                return ArrayUtils.toPrimitive(this.internalCollection.toArray(new Double[this.internalCollection.size()]));
+            } else if (propertyType.isAssignableFrom(Float.class)) {
+                return ArrayUtils.toPrimitive(this.internalCollection.toArray(new Float[this.internalCollection.size()]));
+            } else if (propertyType.isAssignableFrom(Boolean.class)) {
+                return ArrayUtils.toPrimitive(this.internalCollection.toArray(new Boolean[this.internalCollection.size()]));
+            } else {
+                throw new IllegalStateException("Unknown propertyType " + propertyType.toString());
+            }
+        }
+    }
+
+    protected Object convertToArrayForRemoval() {
+        if (this.umlgRuntimeProperty.getDataTypeEnum() != null) {
+            return UmlgFormatter.convertToArray(getDataTypeEnum(), this.internalCollection);
+        } else if (isManyEnumeration()) {
+            Collection<String> enumerationAsList = convertToArrayCollection();
+            for (E enumeration : this.internalCollection) {
+                enumerationAsList.add(((Enum<?>) enumeration).name());
+            }
+            return enumerationAsList.toArray(new String[enumerationAsList.size()]);
+        } else {
+            Class propertyType = this.umlgRuntimeProperty.getPropertyType();
+            if (propertyType.isAssignableFrom(String.class)) {
+                return this.internalCollection.toArray(new String[this.internalCollection.size()]);
+            } else if (propertyType.isAssignableFrom(Integer.class)) {
+                return ArrayUtils.toPrimitive(this.internalCollection.toArray(new Integer[this.internalCollection.size()]));
+            } else if (propertyType.isAssignableFrom(Long.class)) {
+                return ArrayUtils.toPrimitive(this.internalCollection.toArray(new Long[this.internalCollection.size()]));
+            } else if (propertyType.isAssignableFrom(Double.class)) {
+                return ArrayUtils.toPrimitive(this.internalCollection.toArray(new Double[this.internalCollection.size()]));
+            } else if (propertyType.isAssignableFrom(Float.class)) {
+                return ArrayUtils.toPrimitive(this.internalCollection.toArray(new Float[this.internalCollection.size()]));
+            } else if (propertyType.isAssignableFrom(Boolean.class)) {
+                return ArrayUtils.toPrimitive(this.internalCollection.toArray(new Boolean[this.internalCollection.size()]));
+            } else {
+                throw new IllegalStateException("Unknown propertyType " + propertyType.toString());
+            }
+        }
+    }
+
+    protected boolean isEmbedded() {
+        return isOnePrimitive() || isManyPrimitive() || isOneEnumeration() || isManyEnumeration() ||
+                (getDataTypeEnum() != null && (isOneToMany() || isManyToMany()));
     }
 
 }

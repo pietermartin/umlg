@@ -1449,7 +1449,7 @@
       </eAnnotations>
       <children xmi:type="notation:DecorationNode" xmi:id="_jq54Jiq2EeOJbevgaGUOXQ" type="5038"/>
       <element xmi:type="uml:Comment" href="umlg-test.uml#_jqtq4Cq2EeOJbevgaGUOXQ"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_jq5RESq2EeOJbevgaGUOXQ" x="40" y="496" width="283"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_jq5RESq2EeOJbevgaGUOXQ" x="1012" y="512" width="283"/>
     </children>
     <element xmi:type="uml:Package" href="umlg-test.uml#_Km9o4O7EEeCKZsw1ityolg"/>
     <edges xmi:type="notation:Edge" xmi:id="_1ceoAQAOEeKpVr_ntT6cLA" type="4001" source="_1bcGIAAOEeKpVr_ntT6cLA" target="_1biMwAAOEeKpVr_ntT6cLA">
@@ -1585,8 +1585,8 @@
       <styles xmi:type="notation:FontStyle" xmi:id="_7daEASq2EeOJbevgaGUOXQ" fontName="Sans"/>
       <element xsi:nil="true"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_7daEAiq2EeOJbevgaGUOXQ" points="[21, 0, -488, -22]$[486, 9, -23, -13]"/>
-      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_7de8gCq2EeOJbevgaGUOXQ" id="(0.9257950530035336,0.359375)"/>
-      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_7de8gSq2EeOJbevgaGUOXQ" id="(0.16489361702127658,0.13)"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_7de8gCq2EeOJbevgaGUOXQ" id="(0.0,0.35365853658536583)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_7de8gSq2EeOJbevgaGUOXQ" id="(1.0,0.13)"/>
     </edges>
   </notation:Diagram>
   <notation:Diagram xmi:id="_1chrRgAOEeKpVr_ntT6cLA" type="PapyrusUMLClassDiagram" name="hierarchy" measurementUnit="Pixel">

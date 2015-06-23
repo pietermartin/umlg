@@ -98,30 +98,38 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>
      * @return
      */
     protected void loadManyNotPrimitiveNotDataType() {
-        for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
-            Edge edge = iter.next();
-            E node;
-            try {
-                Class<?> c = this.getClassToInstantiate(edge);
-                if (c.isEnum()) {
-                    Object value = this.getVertexForDirection(edge).value(getPersistentName());
-                    node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                    putToInternalMap(node, this.getVertexForDirection(edge));
-                } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
-                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
-                    node = (E) m.invoke(null);
-                } else if (UmlgNode.class.isAssignableFrom(c)) {
-                    node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
-                } else {
-                    Object value = this.getVertexForDirection(edge).value(getPersistentName());
-                    node = (E) value;
-                    putToInternalMap(value, this.getVertexForDirection(edge));
-                }
-                this.internalCollection.add(node);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        }
+		if (isManyPrimitive()) {
+			loadManyPrimitive();
+		} else if (isManyEnumeration()) {
+			loadManyEnumeration();
+		} else if (getDataTypeEnum() != null && (isManyToMany() || isManyToOne())) {
+			throw new RuntimeException();
+		} else {
+			for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
+				Edge edge = iter.next();
+				E node;
+				try {
+					Class<?> c = this.getClassToInstantiate(edge);
+					if (c.isEnum()) {
+						Object value = this.getVertexForDirection(edge).value(getPersistentName());
+						node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+						putToInternalMap(node, this.getVertexForDirection(edge));
+					} else if (UmlgMetaNode.class.isAssignableFrom(c)) {
+						Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+						node = (E) m.invoke(null);
+					} else if (UmlgNode.class.isAssignableFrom(c)) {
+						node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
+					} else {
+						Object value = this.getVertexForDirection(edge).value(getPersistentName());
+						node = (E) value;
+						putToInternalMap(value, this.getVertexForDirection(edge));
+					}
+					this.internalCollection.add(node);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		}
     }
 
 

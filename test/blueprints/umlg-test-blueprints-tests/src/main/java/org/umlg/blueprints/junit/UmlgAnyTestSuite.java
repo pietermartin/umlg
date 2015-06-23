@@ -2,9 +2,13 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.collectiontest.SequenceTestOrderedSet;
-import org.umlg.tests.collectiontest.*;
-import org.umlg.tests.ocl.ocloperator.OclIncludesAllTest;
+import org.umlg.tests.datatype.DataTypeTest;
+import org.umlg.tests.deletiontest.EmbeddedSetDeletionTest;
+import org.umlg.tests.embeddedtest.TestEmbeddedTest;
+import org.umlg.tests.enumeration.ManyEnumerationTest;
+import org.umlg.tests.json.JsonTest;
+import org.umlg.tests.qualifiertest.TestQualifiedDeletion;
+import org.umlg.tests.query.TestMetaQueries;
 
 /**
  * Date: 2013/10/19
@@ -12,7 +16,7 @@ import org.umlg.tests.ocl.ocloperator.OclIncludesAllTest;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestOrderedListKeepsIndex.class
+        TestMetaQueries.class
 })
 public class UmlgAnyTestSuite {
 }

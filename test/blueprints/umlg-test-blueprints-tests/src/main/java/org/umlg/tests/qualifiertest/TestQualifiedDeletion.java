@@ -150,8 +150,8 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		many14.addToMany2List(many24);
 
         db.commit();
-        Assert.assertEquals(41, countVertices());
-        Assert.assertEquals(97, countEdges());
+        Assert.assertEquals(9, countVertices());
+        Assert.assertEquals(25, countEdges());
 		Many2 many2Test = new Many2(many21.getVertex());
 		Assert.assertEquals(1, many2Test.getMany1ListForListQualifier1(Pair.of(Compare.eq, "many11")).size());
 

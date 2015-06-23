@@ -70,7 +70,6 @@ public class DataTypeTest extends BaseLocalDbTest {
         dataTypeEntity.reload();
         Assert.assertEquals(null, dataTypeEntity.getEmail1());
         Assert.assertEquals("john@register.com", dataTypeEntity.getEmail2());
-
     }
 
     @Test
@@ -138,8 +137,6 @@ public class DataTypeTest extends BaseLocalDbTest {
         Assert.assertEquals(1, dataTypeEntity.getDateOrderedSet().indexOf(new LocalDate("2000-06-03")));
         Assert.assertFalse(dataTypeEntity.getDateOrderedSet().contains(new LocalDate("2000-06-02")));
     }
-
-
 
     @Test
     public void testDataTypeBag() {
@@ -232,7 +229,6 @@ public class DataTypeTest extends BaseLocalDbTest {
         dataTypeEntity.reload();
         Assert.assertTrue(Arrays.equals(new byte[]{4,5,6}, dataTypeEntity.getByteArray()));
     }
-
 
     @Test
     public void testPassword() throws InvalidKeySpecException, NoSuchAlgorithmException {

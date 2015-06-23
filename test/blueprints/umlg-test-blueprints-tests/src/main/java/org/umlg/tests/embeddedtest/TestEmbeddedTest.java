@@ -22,8 +22,8 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         god.setName("THEGOD");
         god.addToREASON(REASON.GOOD);
         db.commit();
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals(1, g.getREASON().size());
         Assert.assertEquals(REASON.GOOD, g.getREASON().iterator().next());
@@ -35,13 +35,12 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         god.setName("THEGOD");
         god.addToEmbeddedString("testthis");
         db.commit();
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals(1, g.getEmbeddedString().size());
         Assert.assertEquals("testthis", g.getEmbeddedString().iterator().next());
     }
-
 
     @Test
     public void testOneToManyEmbeddedStringWithMany() {
@@ -61,8 +60,8 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         god.setName("THEGOD");
         god.addToEmbeddedInteger(1);
         db.commit();
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals(1, g.getEmbeddedInteger().size());
         Assert.assertEquals(new Integer(1), g.getEmbeddedInteger().iterator().next());
@@ -75,8 +74,8 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         god.addToEmbeddedInteger(1);
         god.addToEmbeddedInteger(2);
         db.commit();
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(3, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals(2, g.getEmbeddedInteger().size());
         Iterator<Integer> iterator = g.getEmbeddedInteger().iterator();
@@ -144,14 +143,14 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         god.addToREASON(REASON.GOOD);
         god.addToREASON(REASON.BAD);
         db.commit();
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(3, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals(2, g.getREASON().size());
         g.removeFromREASON(REASON.GOOD);
         db.commit();
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
     }
 
     @Test
@@ -160,8 +159,8 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         god.setName("THEGOD");
         god.addToEmbeddedString("testthis");
         db.commit();
-        Assert.assertEquals(2 , countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1 , countVertices());
+        Assert.assertEquals(1, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals(1, g.getEmbeddedString().size());
         Assert.assertEquals("testthis", g.getEmbeddedString().iterator().next());
@@ -277,7 +276,7 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         db.commit();
         TestEmbedded testEmbeddedX = new TestEmbedded(testEmbedded.getVertex());
         Assert.assertEquals(2, testEmbeddedX.getManyBoolean().size());
-        testEmbeddedX.setManyBoolean(new UmlgMemoryBag<Boolean>(Arrays.asList(new Boolean[]{true, true})));
+        testEmbeddedX.setManyBoolean(new UmlgMemoryBag<>(Arrays.asList(true, true)));
         db.commit();
         TestEmbedded testEmbeddedY = new TestEmbedded(testEmbeddedX.getVertex());
         Assert.assertEquals(2, testEmbeddedY.getManyBoolean().size());
@@ -295,7 +294,7 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         db.commit();
         TestEmbedded testEmbeddedX = new TestEmbedded(testEmbedded.getVertex());
         Assert.assertEquals(2, testEmbeddedX.getManyBoolean().size());
-        testEmbeddedX.setManyBoolean(new UmlgMemoryBag<Boolean>(Arrays.asList(new Boolean[]{false, false})));
+        testEmbeddedX.setManyBoolean(new UmlgMemoryBag<>(Arrays.asList(false, false)));
         db.commit();
         TestEmbedded testEmbeddedY = new TestEmbedded(testEmbeddedX.getVertex());
         Assert.assertEquals(2, testEmbeddedY.getManyBoolean().size());
@@ -315,9 +314,8 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         testEmbedded.addToManyOrderedString("b");
         testEmbedded.addToManyOrderedString("c");
         testEmbedded.clearManyOrderedString();
-        testEmbedded.setManyRequiredOrderedUniqueString(new UmlgMemoryOrderedSet<String>(Arrays.asList(new String[]{"a", "b"})));
+        testEmbedded.setManyRequiredOrderedUniqueString(new UmlgMemoryOrderedSet<>(Arrays.asList("a", "b")));
         db.commit();
-
     }
 
 }

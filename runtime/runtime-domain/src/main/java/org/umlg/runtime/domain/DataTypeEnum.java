@@ -25,7 +25,7 @@ public enum DataTypeEnum {
 
     Class type;
 
-    private DataTypeEnum(Class type) {
+    DataTypeEnum(Class type) {
         this.type = type;
     }
 

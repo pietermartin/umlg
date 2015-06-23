@@ -52,40 +52,48 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
     @Override
     protected void addToInverseLinkedList(Edge edge) {
         if (!this.isControllingSide()) {
-            edge.property(BaseCollection.IN_EDGE_SEQUENCE_ID, (double)this.inverseCollectionSize);
+            edge.property(BaseCollection.IN_EDGE_SEQUENCE_ID, (double) this.inverseCollectionSize);
         } else {
-            edge.property(BaseCollection.OUT_EDGE_SEQUENCE_ID, (double)this.inverseCollectionSize);
+            edge.property(BaseCollection.OUT_EDGE_SEQUENCE_ID, (double) this.inverseCollectionSize);
         }
     }
 
     @Override
     protected void loadManyNotPrimitiveNotDataType() {
-        GraphTraversal<Vertex, Map<String, Element>> traversal = getVerticesWithEdge();
-        while (traversal.hasNext()) {
-            final Map<String, Element> bindings = traversal.next();
-            Edge edge = (Edge) bindings.get("edge");
-            Vertex vertex = (Vertex) bindings.get("vertex");
-            E node;
-            try {
-                Class<?> c = getClassToInstantiate(vertex);
-                if (c.isEnum()) {
-                    Object value = vertex.value(getPersistentName());
-                    node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                    putToInternalMap(node, vertex);
-                } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
-                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
-                    node = (E) m.invoke(null);
-                } else if (UmlgNode.class.isAssignableFrom(c)) {
-                    node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
-                    ((UmlgNode)node).setEdge(this.umlgRuntimeProperty, edge);
-                } else {
-                    Object value = vertex.value(getPersistentName());
-                    node = (E) value;
-                    putToInternalMap(value, vertex);
+        if (isManyPrimitive()) {
+            loadManyPrimitive();
+        } else if (isManyEnumeration()) {
+            loadManyEnumeration();
+        } else if (getDataTypeEnum() != null && (isManyToMany() || isManyToOne())) {
+            throw new RuntimeException();
+        } else {
+            GraphTraversal<Vertex, Map<String, Element>> traversal = getVerticesWithEdge();
+            while (traversal.hasNext()) {
+                final Map<String, Element> bindings = traversal.next();
+                Edge edge = (Edge) bindings.get("edge");
+                Vertex vertex = (Vertex) bindings.get("vertex");
+                E node;
+                try {
+                    Class<?> c = getClassToInstantiate(vertex);
+                    if (c.isEnum()) {
+                        Object value = vertex.value(getPersistentName());
+                        node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+                        putToInternalMap(node, vertex);
+                    } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
+                        Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+                        node = (E) m.invoke(null);
+                    } else if (UmlgNode.class.isAssignableFrom(c)) {
+                        node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
+                        ((UmlgNode) node).setEdge(this.umlgRuntimeProperty, edge);
+                    } else {
+                        Object value = vertex.value(getPersistentName());
+                        node = (E) value;
+                        putToInternalMap(value, vertex);
+                    }
+                    this.internalCollection.add(node);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
                 }
-                this.internalCollection.add(node);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
             }
         }
     }
@@ -117,7 +125,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
         //Create the edge to the new element
         Edge edgeFromParentToElementVertex = addInternal(e);
         manageLinkedList(indexOf, edgeFromParentToElementVertex);
-        ((UmlgNode)e).setEdge(this.umlgRuntimeProperty, edgeFromParentToElementVertex);
+        ((UmlgNode) e).setEdge(this.umlgRuntimeProperty, edgeFromParentToElementVertex);
         return edgeFromParentToElementVertex;
     }
 
@@ -126,11 +134,11 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
         E current = this.getInternalList().get(indexOfNewElement);
         Double currentValue;
         //Take anyone, with bags there may be more than one
-        Edge currentEdge = ((UmlgNode)current).getEdge(this.umlgRuntimeProperty);
+        Edge currentEdge = ((UmlgNode) current).getEdge(this.umlgRuntimeProperty);
         //currentEdge can be null when the element is added via the indexed adders, i.e. x.addToY(0, y);
         if (currentEdge == null) {
             E next = this.getInternalList().get(indexOfNewElement + 1);
-            currentEdge = ((UmlgNode)next).getEdge(this.umlgRuntimeProperty);
+            currentEdge = ((UmlgNode) next).getEdge(this.umlgRuntimeProperty);
             currentValue = currentEdge.<Double>value(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID);
         } else {
             currentValue = currentEdge.<Double>value(this.isControllingSide() ? IN_EDGE_SEQUENCE_ID : OUT_EDGE_SEQUENCE_ID);

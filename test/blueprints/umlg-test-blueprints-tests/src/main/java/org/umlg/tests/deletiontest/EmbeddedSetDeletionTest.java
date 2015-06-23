@@ -17,20 +17,20 @@ public class EmbeddedSetDeletionTest extends BaseLocalDbTest {
 		god.addToEmbeddedString("s3");
 		god.addToEmbeddedString("s4");
         db.commit();
-		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(5, countEdges());
+		Assert.assertEquals(1, countVertices());
+		Assert.assertEquals(1, countEdges());
 		God godTest = new God(god.getVertex());
 		godTest.removeFromEmbeddedString("s1");
 		godTest.removeFromEmbeddedString("s1");
         db.commit();
-		Assert.assertEquals(4, countVertices());
-		Assert.assertEquals(4, countEdges());
+		Assert.assertEquals(1, countVertices());
+		Assert.assertEquals(1, countEdges());
 
 		godTest = new God(god.getVertex());
 		godTest.removeFromEmbeddedString("s4");
         db.commit();
-		Assert.assertEquals(3, countVertices());
-		Assert.assertEquals(3, countEdges());
+		Assert.assertEquals(1, countVertices());
+		Assert.assertEquals(1, countEdges());
 
 	}
 
@@ -43,20 +43,20 @@ public class EmbeddedSetDeletionTest extends BaseLocalDbTest {
 		god.addToEmbeddedInteger(3);
 		god.addToEmbeddedInteger(4);
         db.commit();
-		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(5, countEdges());
+		Assert.assertEquals(1, countVertices());
+		Assert.assertEquals(1, countEdges());
 		God godTest = new God(god.getVertex());
 		godTest.removeFromEmbeddedInteger(1);
 		godTest.removeFromEmbeddedInteger(1);
         db.commit();
-		Assert.assertEquals(4, countVertices());
-		Assert.assertEquals(4, countEdges());
+		Assert.assertEquals(1, countVertices());
+		Assert.assertEquals(1, countEdges());
 
 		godTest = new God(god.getVertex());
 		godTest.removeFromEmbeddedInteger(4);
         db.commit();
-		Assert.assertEquals(3, countVertices());
-		Assert.assertEquals(3, countEdges());
+		Assert.assertEquals(1, countVertices());
+		Assert.assertEquals(1, countEdges());
 	}
 
 	@Test

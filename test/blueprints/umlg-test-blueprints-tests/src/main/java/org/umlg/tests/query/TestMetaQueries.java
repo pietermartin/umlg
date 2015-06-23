@@ -31,6 +31,7 @@ public class TestMetaQueries extends BaseLocalDbTest {
         Assert.assertEquals(5, countVertices());
         Assert.assertEquals(5, countEdges());
 
+        //ClassQuery is not a root object, does not have an edge to root
         ClassQuery q1 = new ClassQuery(true);
         q1.setName("q1");
         q1.setDescription("q1Desc");
@@ -39,9 +40,8 @@ public class TestMetaQueries extends BaseLocalDbTest {
         DreamMeta.getInstance().addToClassQuery(q1);
 
         db.commit();
-        //One for the enum also
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(8, countEdges());
+        Assert.assertEquals(7, countVertices());
+        Assert.assertEquals(7, countEdges());
 
         ClassQuery q2 = new ClassQuery(true);
         q2.setName("q2");
@@ -52,8 +52,8 @@ public class TestMetaQueries extends BaseLocalDbTest {
 
         db.commit();
         //One for the enum also
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(8, countVertices());
+        Assert.assertEquals(8, countEdges());
 
         Assert.assertEquals(2, DreamMeta.getInstance().getClassQuery().size());
 

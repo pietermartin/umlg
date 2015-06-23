@@ -35,6 +35,10 @@ public class Password implements UmlgType {
 
     @Override
     public void setOnVertex(Vertex v, String persistentName) {
+        encryptPassword(v, persistentName);
+    }
+
+    private void encryptPassword(Vertex v, String persistentName) {
         final PasswordEncryptionService pes = new PasswordEncryptionService();
         try {
             Property<byte[]> saltProperty = v.property(persistentName + SALT);
@@ -46,9 +50,7 @@ public class Password implements UmlgType {
             this.encryptedPassword = pes.getEncryptedPassword(this.password, this.salt);
             v.property(persistentName + SALT, this.salt);
             v.property(persistentName, this.encryptedPassword);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeySpecException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
     }

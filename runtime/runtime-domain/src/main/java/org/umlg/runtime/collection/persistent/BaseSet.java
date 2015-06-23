@@ -32,6 +32,11 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements UmlgSet<E>
 		this.oclStdLibCollection = this.oclStdLibSet;
 	}
 
+	@Override
+	protected Collection convertToArrayCollection() {
+		return new HashSet<>(this.internalCollection.size() + 1);
+	}
+
     @Override
     protected void addToLinkedList(Edge edge) {
         throw new RuntimeException("addToLinkedList and manageLinkedListInverse should never be called for a BaseSet!");
