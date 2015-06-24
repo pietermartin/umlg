@@ -1,6 +1,8 @@
 package org.umlg.runtime.collection.persistent;
 
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.Element;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
 import org.joda.time.DateTime;
@@ -14,6 +16,7 @@ import org.umlg.runtime.domain.UmlgNode;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -57,15 +60,11 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Um
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);
                         if (c.isEnum()) {
-                            Object value = this.getVertexForDirection(edge).value(getPersistentName());
-                            node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                            putToInternalMap(node, this.getVertexForDirection(edge));
+                            throw new RuntimeException();
                         } else if (UmlgNode.class.isAssignableFrom(c)) {
                             node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                         } else {
-                            Object value = this.getVertexForDirection(edge).value(getPersistentName());
-                            node = (AssociationClassNode) value;
-                            putToInternalMap(value, this.getVertexForDirection(edge));
+                            throw new RuntimeException();
                         }
                         this.internalCollection.add(node);
                     } catch (Exception ex) {
@@ -101,6 +100,30 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Um
     }
 
     @Override
+    protected void loadUmlgNodes() {
+        GraphTraversal<Vertex, Map<String, Element>> traversal = getVerticesWithEdge();
+        while (traversal.hasNext()) {
+            final Map<String, Element> bindings = traversal.next();
+            Edge edge = (Edge) bindings.get("edge");
+            AssociationClassNode node;
+            Object value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
+            Vertex associationClassVertex = UMLG.get().traversal().V(value).next();
+            try {
+                Class<?> c = getClassToInstantiate(associationClassVertex);
+                if (UmlgNode.class.isAssignableFrom(c)) {
+                    node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(associationClassVertex);
+                    ((UmlgNode) node).setEdge(this.umlgRuntimeProperty, edge);
+                } else {
+                    throw new IllegalStateException("Unexpected class: " + c.getName());
+                }
+                this.internalCollection.add(node);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
+//    @Override
     protected void loadNode(Edge edgeToElement, Vertex vertex) {
         AssociationClassNode node;
         try {
@@ -122,18 +145,20 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Um
 
             Class<?> c = Class.forName((String) associationClassVertex.value("className"));
             if (c.isEnum()) {
-                Object value = associationClassVertex.value(getPersistentName());
-                node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                putToInternalMap(node, associationClassVertex);
+                throw new RuntimeException();
+//                Object value = associationClassVertex.value(getPersistentName());
+//                node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+//                putToInternalMap(node, associationClassVertex);
             } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
                 Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                 node = (AssociationClassNode) m.invoke(null);
             } else if (UmlgNode.class.isAssignableFrom(c)) {
                 node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(associationClassVertex);
             } else {
-                Object value = associationClassVertex.value(getPersistentName());
-                node = (AssociationClassNode) value;
-                putToInternalMap(value, associationClassVertex);
+                throw new RuntimeException();
+//                Object value = associationClassVertex.value(getPersistentName());
+//                node = (AssociationClassNode) value;
+//                putToInternalMap(value, associationClassVertex);
             }
             this.getInternalListOrderedSet().add(node);
         } catch (Exception ex) {

@@ -70,5 +70,4 @@ public class TestAssociationClassCopiesOnePrimitivePropertiesToEdge extends Base
         Assert.assertEquals("xxx", ((Traversal)result).next());
     }
 
-
 }

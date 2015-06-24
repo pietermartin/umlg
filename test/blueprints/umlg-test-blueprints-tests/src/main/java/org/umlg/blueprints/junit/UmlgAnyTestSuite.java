@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.umlg.tests.associationclass.TestAssociationClassCopiesOnePrimitivePropertiesToEdge;
 import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
+import org.umlg.tests.associationtoself.TestAssociationToSelf;
 
 /**
  * Date: 2013/10/19
@@ -11,7 +12,7 @@ import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestAssociationClassMoveInList.class
+        TestAssociationToSelf.class
 })
 public class UmlgAnyTestSuite {
 }

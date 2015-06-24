@@ -8,7 +8,6 @@ import org.umlg.runtime.collection.UmlgBag;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.UmlgSet;
-import org.umlg.runtime.collection.memory.UmlgMemorySequence;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibBag;
@@ -17,7 +16,9 @@ import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Set;
 
 public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>, OclStdLibBag<E> {
 
@@ -97,7 +98,7 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>
      * bags need to go via the edges as the vertex may be duplicated
      * @return
      */
-    protected void loadManyNotPrimitiveNotDataType() {
+    protected void loadUmlgNodes() {
 		if (isManyPrimitive()) {
 			loadManyPrimitive();
 		} else if (isManyEnumeration()) {
@@ -111,18 +112,20 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>
 				try {
 					Class<?> c = this.getClassToInstantiate(edge);
 					if (c.isEnum()) {
-						Object value = this.getVertexForDirection(edge).value(getPersistentName());
-						node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-						putToInternalMap(node, this.getVertexForDirection(edge));
+						throw new RuntimeException();
+//						Object value = this.getVertexForDirection(edge).value(getPersistentName());
+//						node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+//						putToInternalMap(node, this.getVertexForDirection(edge));
 					} else if (UmlgMetaNode.class.isAssignableFrom(c)) {
 						Method m = c.getDeclaredMethod("getInstance", new Class[0]);
 						node = (E) m.invoke(null);
 					} else if (UmlgNode.class.isAssignableFrom(c)) {
 						node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
 					} else {
-						Object value = this.getVertexForDirection(edge).value(getPersistentName());
-						node = (E) value;
-						putToInternalMap(value, this.getVertexForDirection(edge));
+                        throw new RuntimeException();
+//						Object value = this.getVertexForDirection(edge).value(getPersistentName());
+//						node = (E) value;
+//						putToInternalMap(value, this.getVertexForDirection(edge));
 					}
 					this.internalCollection.add(node);
 				} catch (Exception ex) {

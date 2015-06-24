@@ -1,60 +1,45 @@
 package org.umlg.runtime.adaptor;
 
-import org.apache.commons.lang.time.StopWatch;
-import org.apache.tinkerpop.gremlin.groovy.DefaultImportCustomizerProvider;
-import org.apache.tinkerpop.gremlin.structure.Graph;
+import groovy.lang.Writable;
+import groovy.text.SimpleTemplateEngine;
+import org.apache.commons.lang3.time.StopWatch;
+import org.apache.tinkerpop.gremlin.groovy.engine.GremlinExecutor;
 import org.umlg.runtime.domain.UmlgNode;
 
-import javax.script.ScriptException;
-import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
- * Date: 2013/06/09
- * Time: 8:34 PM
+ * Date: 2015/06/24
+ * Time: 1:06 PM
  */
 public class GroovyExecutor {
 
     public static GroovyExecutor INSTANCE = new GroovyExecutor();
-    private UmlgGremlinGroovyScriptEngine scriptEngine;
-    private boolean isNeo4j;
-
-    private static Set<String> getUmlgImports() {
-        try {
-            Class<?> umlgGroovyImporter = Class.forName("org.umlg.runtime.adaptor.UmlgGroovyImporter");
-            Field imports = umlgGroovyImporter.getField("imports");
-            return (Set<String>) imports.get(null);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static Set<String> getUmlgStaticImports() {
-        try {
-            Class<?> umlgGroovyImporter = Class.forName("org.umlg.runtime.adaptor.UmlgGroovyImporter");
-            Field imports = umlgGroovyImporter.getField("importStatic");
-            return (Set<String>) imports.get(null);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private GremlinExecutor gremlinExecutor;
 
     private GroovyExecutor() {
-        try {
-            Class.forName("org.umlg.runtime.adaptor.UmlgNeo4jGraph");
-            this.isNeo4j = true;
-        } catch (ClassNotFoundException e) {
-            this.isNeo4j = false;
-        }
-        DefaultImportCustomizerProvider.initializeStatically(getUmlgImports(), getUmlgStaticImports());
-        this.refresh();
+        start();
     }
 
-    public void refresh() {
-        this.scriptEngine = new UmlgGremlinGroovyScriptEngine("GremlinExecutorBaseClass");
+    public Object executeGroovy(Object context, String groovy) {
+        groovy = groovy.replaceAll("::", "____");
+        if (context != null) {
+            if (context instanceof UmlgNode) {
+                Object id = ((UmlgNode) context).getId();
+                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.V(\"" + id.toString() + "\")");
+            } else if (!(context instanceof Long)) {
+                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.V(\"" + context.toString() + "\")");
+            } else if (context instanceof Long) {
+                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.V(\"" + context.toString() + "L\")");
+            } else {
+                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.V(" + context.toString() + ")");
+            }
+        }
+        try {
+            return eval(groovy);
+        } catch (Exception e) {
+            throw UmlgExceptionUtilFactory.getTumlExceptionUtil().handle(e);
+        }
     }
 
     /**
@@ -111,52 +96,39 @@ public class GroovyExecutor {
         return sb.toString();
     }
 
-    public Object executeGroovy(Object context, String groovy) {
-        groovy = groovy.replaceAll("::", "____");
-        if (context != null) {
-            if (context instanceof UmlgNode) {
-                Object id = ((UmlgNode) context).getId();
-                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.V(\"" + id.toString() + "\").next()");
-            } else if (!(context instanceof Long)) {
-                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.V(\"" + context.toString() + "\").next()");
-            } else {
-                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.V(" + context + "L).next()");
-            }
-        }
-        Graph graph = ((UmlgAdminGraph)UMLG.get()).getReadOnlyGraph();
-        GremlinExecutorBaseClass.load(graph);
-        this.scriptEngine.put("g", graph);
-        Object result;
-        try {
-            result = this.scriptEngine.eval(groovy);
-        } catch (ScriptException e) {
-            throw UmlgExceptionUtilFactory.getTumlExceptionUtil().handle(e);
-        }
-        return result;
+    public String evalAsTemplate(String script, Map<String, Object> bindings) throws Exception {
+        bindings.put("g", UMLG.get().getUnderlyingGraph().traversal());
+        SimpleTemplateEngine engine = new SimpleTemplateEngine();
+        Writable w = engine.createTemplate(script).make(bindings);
+        return w.toString();
     }
 
-    private void seperateOutDefFromGroovy(String groovy, StringBuilder groovyToIntercept, StringBuilder groovyDef) {
-        while (groovy.indexOf("def") != -1) {
-            int indexOfDef = groovy.indexOf("def");
-            groovyToIntercept.append(groovy.substring(0, indexOfDef));
-            groovy = groovy.substring(indexOfDef, groovy.length());
-            int indexOfCurly = groovy.indexOf("}");
-            groovyDef.append(groovy.substring(0, indexOfCurly + 1));
-            groovy = groovy.substring(indexOfCurly + 1, groovy.length());
+    public Object eval(String script) throws Exception {
+        Map<String, Object> bindings = new HashMap<>();
+        bindings.put("g", UMLG.get().getUnderlyingGraph().traversal());
+        return this.gremlinExecutor.eval(script, bindings).get();
+    }
 
-            //check for semicolon
-            int indexOfSemicolon = groovy.indexOf(";");
-            if (indexOfSemicolon != -1) {
-                groovyDef.append(groovy.substring(0, indexOfSemicolon + 1));
-                groovy = groovy.substring(indexOfSemicolon + 1, groovy.length());
-            }
-            //check for new line
-            int indexOfNewline = groovy.indexOf("\n");
-            if (indexOfNewline != -1) {
-                groovyDef.append(groovy.substring(0, indexOfNewline + 1));
-                groovy = groovy.substring(indexOfNewline + 1, groovy.length());
-            }
-        }
-        groovyToIntercept.append(groovy);
+    public Object eval(String script, Map<String, Object> bindings) throws Exception {
+        bindings.put("g", UMLG.get().getUnderlyingGraph().traversal());
+        return this.gremlinExecutor.eval(script, bindings).get();
+    }
+
+    public void close() throws Exception {
+        this.gremlinExecutor.close();
+    }
+
+    public void start() {
+        List imports = new ArrayList<>();
+        imports.add(UMLG.class.getName());
+        this.gremlinExecutor = GremlinExecutor.build()
+                .addEngineSettings("gremlin-groovy",
+                        imports,
+                        Collections.emptyList(),
+                        Arrays.asList("/home/pieter/Downloads/cm/cm-entity/src/main/resources/groovy/GremlinExecutorInit.groovy"),
+                        Collections.emptyMap())
+                .afterSuccess(t -> UMLG.get().rollback())
+                .afterFailure((t, e) -> UMLG.get().rollback())
+                .create();
     }
 }

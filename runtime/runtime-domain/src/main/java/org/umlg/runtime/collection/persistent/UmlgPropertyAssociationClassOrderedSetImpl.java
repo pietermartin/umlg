@@ -60,22 +60,16 @@ public class UmlgPropertyAssociationClassOrderedSetImpl<E, AC extends Associatio
             UmlgNode node = (UmlgNode) e;
             v = node.getVertex();
         } else if (e.getClass().isEnum()) {
-            v = removeFromInternalMap(e);
-            v.remove();
+            throw new RuntimeException();
         } else if (isOnePrimitive() || getDataTypeEnum() != null) {
             throw new IllegalStateException("one primitive or data type can not have an association class.");
         } else {
-            if (true) {
-                throw new RuntimeException("wtf");
-            }
-            v = removeFromInternalMap(e);
-            v.remove();
+            throw new RuntimeException();
         }
         //remove the edge
         super.remove(e);
-
         //add a new the edge
-        super.add(index, e);
+        add(index, e, associationClass);
         //set association class vertex id on new edge
         this.edge.property(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId().toString());
         this.edge.property("className", associationClass.getClass().getName());
@@ -90,18 +84,11 @@ public class UmlgPropertyAssociationClassOrderedSetImpl<E, AC extends Associatio
             v = node.getVertex();
             removeAssociationClassVertex(v);
         } else if (o.getClass().isEnum()) {
-            v = removeFromInternalMap(o);
-            removeAssociationClassVertex(v);
-            v.remove();
+            throw new RuntimeException();
         } else if (isOnePrimitive() || getDataTypeEnum() != null) {
             throw new IllegalStateException("one primitive or data type can not have an association class.");
         } else {
-            if (true) {
-                throw new RuntimeException("wtf");
-            }
-            v = removeFromInternalMap(o);
-            removeAssociationClassVertex(v);
-            v.remove();
+            throw new RuntimeException();
         }
 
         return super.remove(o);

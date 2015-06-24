@@ -50,15 +50,17 @@ public class UmlgPropertyAssociationClassBagImpl<E, AC extends AssociationClassN
             v = node.getVertex();
             removeEdge(v);
         } else if (o.getClass().isEnum()) {
-            v = removeFromInternalMap(o);
-            removeEdge(v);
-            v.remove();
+            throw new RuntimeException();
+//            v = removeFromInternalMap(o);
+//            removeEdge(v);
+//            v.remove();
         } else if (isOnePrimitive() || getDataTypeEnum() != null) {
             throw new IllegalStateException("one primitive or data type can not have an association class.");
         } else {
-            v = removeFromInternalMap(o);
-            removeEdge(v);
-            v.remove();
+            throw new RuntimeException();
+//            v = removeFromInternalMap(o);
+//            removeEdge(v);
+//            v.remove();
         }
 
         return super.remove(o);

@@ -54,15 +54,17 @@ public class UmlgAssociationClassBagImpl<AssociationClassNode> extends UmlgBagIm
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);
                         if (c.isEnum()) {
-                            Object value = this.getVertexForDirection(edge).value(getPersistentName());
-                            node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                            putToInternalMap(node, this.getVertexForDirection(edge));
+                            throw new RuntimeException();
+//                            Object value = this.getVertexForDirection(edge).value(getPersistentName());
+//                            node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+//                            putToInternalMap(node, this.getVertexForDirection(edge));
                         } else if (UmlgNode.class.isAssignableFrom(c)) {
                             node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                         } else {
-                            Object value = this.getVertexForDirection(edge).value(getPersistentName());
-                            node = (AssociationClassNode) value;
-                            putToInternalMap(value, this.getVertexForDirection(edge));
+                            throw new RuntimeException();
+//                            Object value = this.getVertexForDirection(edge).value(getPersistentName());
+//                            node = (AssociationClassNode) value;
+//                            putToInternalMap(value, this.getVertexForDirection(edge));
                         }
                         this.internalCollection.add(node);
                     } catch (Exception ex) {

@@ -1,7 +1,9 @@
 package org.umlg.runtime.collection.persistent;
 
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.Element;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
 import org.joda.time.DateTime;
@@ -15,6 +17,7 @@ import org.umlg.runtime.domain.UmlgNode;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -23,6 +26,10 @@ import java.util.Set;
  * Time: 10:08 AM
  */
 public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends UmlgSequenceImpl<AssociationClassNode> {
+
+    public UmlgAssociationClassSequenceImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
+        super(owner, runtimeProperty);
+    }
 
     /**
      * This gets invoked from the opposite side in addInternal.
@@ -54,15 +61,11 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);
                         if (c.isEnum()) {
-                            Object value = this.getVertexForDirection(edge).value(getPersistentName());
-                            node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                            putToInternalMap(node, this.getVertexForDirection(edge));
+                            throw new RuntimeException();
                         } else if (UmlgNode.class.isAssignableFrom(c)) {
                             node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                         } else {
-                            Object value = this.getVertexForDirection(edge).value(getPersistentName());
-                            node = (AssociationClassNode) value;
-                            putToInternalMap(value, this.getVertexForDirection(edge));
+                            throw new RuntimeException();
                         }
                         this.internalCollection.add(node);
                     } catch (Exception ex) {
@@ -97,8 +100,79 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
         this.loaded = true;
     }
 
-    public UmlgAssociationClassSequenceImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
-        super(owner, runtimeProperty);
+    @Override
+    protected void loadUmlgNodes() {
+        GraphTraversal<Vertex, Map<String, Element>> traversal = getVerticesWithEdge();
+        while (traversal.hasNext()) {
+            final Map<String, Element> bindings = traversal.next();
+            Edge edge = (Edge) bindings.get("edge");
+            AssociationClassNode node;
+            Object value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
+            Vertex associationClassVertex = UMLG.get().traversal().V(value).next();
+            try {
+                Class<?> c = getClassToInstantiate(associationClassVertex);
+                if (UmlgNode.class.isAssignableFrom(c)) {
+                    node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(associationClassVertex);
+                    ((UmlgNode) node).setEdge(this.umlgRuntimeProperty, edge);
+                } else {
+                    throw new IllegalStateException("Unexpected class: " + c.getName());
+                }
+                this.internalCollection.add(node);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
+    protected void loadNode(Edge edgeToElement, Vertex vertexToLoad, boolean hyperVertexEdge) {
+        AssociationClassNode node;
+        try {
+
+            //Get the edges between the vertexToLoad and the owner vertex.
+            //Take the first one.
+            Set<Edge> edges = UMLG.get().getEdgesBetween(this.owner.getVertex(), vertexToLoad, getLabel());
+            //Debug check
+            if (edges.size() > 1) {
+                throw new IllegalStateException("Only a bag can have multiple edges between vertices!");
+            }
+            Vertex associationClassVertex = null;
+            for (Edge edge : edges) {
+                Object value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
+                associationClassVertex = UMLG.get().traversal().V(value).next();
+            }
+
+            Class<?> c;
+            if (hyperVertexEdge) {
+                c = Class.forName((String) associationClassVertex.value("className"));
+                //This is a debug check
+                //TODO optimize
+                Vertex debugVertex = edgeToElement.vertices(Direction.IN).next();
+                if (!debugVertex.equals(vertexToLoad)) {
+                    throw new IllegalStateException("Vertexes should be the same, what is going on?");
+                }
+            } else {
+                c = this.getClassToInstantiate(edgeToElement);
+            }
+            if (c.isEnum()) {
+                throw new RuntimeException();
+//                Object value = vertexToLoad.value(getPersistentName());
+//                node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+//                putToInternalMap(node, vertexToLoad);
+            } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
+                Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+                node = (AssociationClassNode) m.invoke(null);
+            } else if (UmlgNode.class.isAssignableFrom(c)) {
+                node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(associationClassVertex);
+            } else {
+                throw new RuntimeException();
+//                Object value = vertexToLoad.value(getPersistentName());
+//                node = (AssociationClassNode) value;
+//                putToInternalMap(value, vertexToLoad);
+            }
+            this.getInternalList().add(node);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     @Override

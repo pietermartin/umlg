@@ -1,14 +1,9 @@
 package org.umlg.runtime.collection.persistent;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.tinkerpop.gremlin.process.traversal.Order;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
-import org.apache.tinkerpop.gremlin.structure.Direction;
-import org.apache.tinkerpop.gremlin.structure.Edge;
-import org.apache.tinkerpop.gremlin.structure.Property;
-import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.*;
 import org.joda.time.DateTime;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
 import org.umlg.runtime.adaptor.TransactionThreadVar;
@@ -43,8 +38,8 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     //Used to store the id of an association class instance.
     protected Edge edge;
     protected Class<?> parentClass;
-    //The internal map is used to store the vertex representing a primitive or an enumeration
-    protected ListMultimap<Object, Vertex> internalVertexMap = ArrayListMultimap.create();
+//    //The internal map is used to store the vertex representing a primitive or an enumeration
+//    protected ListMultimap<Object, Vertex> internalVertexMap = ArrayListMultimap.create();
     protected UmlgRuntimeProperty umlgRuntimeProperty;
 
     protected boolean ignoreInverse = false;
@@ -89,7 +84,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         } else if (getDataTypeEnum() != null && (isOneToOne() || isManyToOne())) {
             loadOneDataType();
         } else {
-            loadManyNotPrimitiveNotDataType();
+            loadUmlgNodes();
         }
         this.loaded = true;
     }
@@ -111,17 +106,17 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         );
     }
 
-    protected Vertex removeFromInternalMap(Object key) {
-        List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + key.toString());
-        Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
-        Vertex vertex = vertexes.get(0);
-        this.internalVertexMap.remove(getPersistentName() + key.toString(), vertex);
-        return vertex;
-    }
+//    protected Vertex removeFromInternalMap(Object key) {
+//        List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + key.toString());
+//        Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
+//        Vertex vertex = vertexes.get(0);
+//        this.internalVertexMap.remove(getPersistentName() + key.toString(), vertex);
+//        return vertex;
+//    }
 
-    protected void putToInternalMap(Object key, Vertex vertex) {
-        this.internalVertexMap.put(getPersistentName() + key.toString(), vertex);
-    }
+//    protected void putToInternalMap(Object key, Vertex vertex) {
+//        this.internalVertexMap.put(getPersistentName() + key.toString(), vertex);
+//    }
 
     protected Iterator<Edge> getEdges() {
         if (this.isControllingSide()) {
@@ -144,6 +139,27 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex).out(this.getLabel());
         } else {
             return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex).in(this.getLabel());
+        }
+    }
+
+    protected GraphTraversal<Vertex, Map<String, Element>> getVerticesWithEdge() {
+        if (this.isControllingSide()) {
+            //TODO gremlin/sqlg optimization needed, this is super inefficient now
+            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
+                    .outE(this.getLabel())
+                    .as("edge")
+                    .order().by(BaseCollection.IN_EDGE_SEQUENCE_ID, Order.incr)
+                    .inV()
+                    .as("vertex")
+                    .select();
+        } else {
+            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
+                    .inE(this.getLabel())
+                    .as("edge")
+                    .order().by(BaseCollection.OUT_EDGE_SEQUENCE_ID, Order.incr)
+                    .outV()
+                    .as("vertex")
+                    .select();
         }
     }
 
@@ -1199,36 +1215,21 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         }
     }
 
-    protected E loadDataTypeFromVertex(Vertex v) {
-        E result = null;
-        Object s = v.value(getPersistentName());
-        if (s != null) {
-            result = UmlgFormatter.parse(getDataTypeEnum(), s);
-            putToInternalMap(result, v);
-            this.internalCollection.add(result);
-        }
-        return result;
-    }
-
-    protected void loadManyNotPrimitiveNotDataType() {
+    protected void loadUmlgNodes() {
         for (Iterator<Vertex> iter = getVertices(); iter.hasNext(); ) {
             Vertex vertex = iter.next();
             E node;
             try {
                 Class<?> c = getClassToInstantiate(vertex);
                 if (c.isEnum()) {
-                    Object value = vertex.value(getPersistentName());
-                    node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                    putToInternalMap(node, vertex);
+                    throw new RuntimeException();
                 } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
                     Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                     node = (E) m.invoke(null);
                 } else if (UmlgNode.class.isAssignableFrom(c)) {
                     node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
                 } else {
-                    Object value = vertex.value(getPersistentName());
-                    node = (E) value;
-                    putToInternalMap(value, vertex);
+                    throw new RuntimeException();
                 }
                 this.internalCollection.add(node);
             } catch (Exception ex) {

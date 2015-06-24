@@ -1,6 +1,5 @@
 package org.umlg.runtime.collection.persistent;
 
-import com.google.common.base.Preconditions;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.tinkerpop.gremlin.process.traversal.Order;
 import org.apache.tinkerpop.gremlin.structure.Edge;
@@ -14,10 +13,8 @@ import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibOrderedSet;
 import org.umlg.runtime.collection.ocl.OclStdLibOrderedSetImpl;
-import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -238,55 +235,55 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
         return this.oclStdLibOrderedSet.including(e);
     }
 
-    private Vertex getVertexFromElement(E previous, E e) {
-        Vertex previousVertex;
-        if (previous instanceof UmlgNode) {
-            UmlgNode node = (UmlgNode) previous;
-            previousVertex = node.getVertex();
-        } else if (e.getClass().isEnum()) {
-            List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + previous.toString());
-            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
-            previousVertex = vertexes.get(0);
-        } else if (getDataTypeEnum() != null) {
-            List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + e.toString());
-            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
-            previousVertex = vertexes.get(0);
-        } else {
-            List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + previous.toString());
-            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
-            previousVertex = vertexes.get(0);
-        }
-        return previousVertex;
-    }
+//    private Vertex getVertexFromElement(E previous, E e) {
+//        Vertex previousVertex;
+//        if (previous instanceof UmlgNode) {
+//            UmlgNode node = (UmlgNode) previous;
+//            previousVertex = node.getVertex();
+//        } else if (e.getClass().isEnum()) {
+//            List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + previous.toString());
+//            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
+//            previousVertex = vertexes.get(0);
+//        } else if (getDataTypeEnum() != null) {
+//            List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + e.toString());
+//            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
+//            previousVertex = vertexes.get(0);
+//        } else {
+//            List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + previous.toString());
+//            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
+//            previousVertex = vertexes.get(0);
+//        }
+//        return previousVertex;
+//    }
 
-    protected void loadNode(Edge edgeToElement, Vertex vertex) {
-        E node;
-        try {
-            Class<?> c = Class.forName(vertex.value("className"));
-            if (c.isEnum()) {
-                Object value = vertex.value(getPersistentName());
-                node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                putToInternalMap(node, vertex);
-                this.getInternalListOrderedSet().add(node);
-            } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
-                Method m = c.getDeclaredMethod("getInstance", new Class[0]);
-                node = (E) m.invoke(null);
-                this.getInternalListOrderedSet().add(node);
-            } else if (UmlgNode.class.isAssignableFrom(c)) {
-                node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
-                this.getInternalListOrderedSet().add(node);
-            } else if (getDataTypeEnum() != null) {
-                loadDataTypeFromVertex(vertex);
-            } else {
-                Object value = vertex.value(getPersistentName());
-                node = (E) value;
-                putToInternalMap(node, vertex);
-                this.getInternalListOrderedSet().add(node);
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+//    protected void loadNode(Edge edgeToElement, Vertex vertex) {
+//        E node;
+//        try {
+//            Class<?> c = Class.forName(vertex.value("className"));
+//            if (c.isEnum()) {
+//                Object value = vertex.value(getPersistentName());
+//                node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+//                putToInternalMap(node, vertex);
+//                this.getInternalListOrderedSet().add(node);
+//            } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
+//                Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+//                node = (E) m.invoke(null);
+//                this.getInternalListOrderedSet().add(node);
+//            } else if (UmlgNode.class.isAssignableFrom(c)) {
+//                node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
+//                this.getInternalListOrderedSet().add(node);
+//            } else if (getDataTypeEnum() != null) {
+//                loadDataTypeFromVertex(vertex);
+//            } else {
+//                Object value = vertex.value(getPersistentName());
+//                node = (E) value;
+//                putToInternalMap(node, vertex);
+//                this.getInternalListOrderedSet().add(node);
+//            }
+//        } catch (Exception ex) {
+//            throw new RuntimeException(ex);
+//        }
+//    }
 
     @Override
     public UmlgOrderedSet<E> sortedBy(Comparator comparator) {

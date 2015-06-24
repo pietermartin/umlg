@@ -59,65 +59,31 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
     }
 
     @Override
-    protected void loadManyNotPrimitiveNotDataType() {
-        if (isManyPrimitive()) {
-            loadManyPrimitive();
-        } else if (isManyEnumeration()) {
-            loadManyEnumeration();
-        } else if (getDataTypeEnum() != null && (isManyToMany() || isManyToOne())) {
-            throw new RuntimeException();
-        } else {
-            GraphTraversal<Vertex, Map<String, Element>> traversal = getVerticesWithEdge();
-            while (traversal.hasNext()) {
-                final Map<String, Element> bindings = traversal.next();
-                Edge edge = (Edge) bindings.get("edge");
-                Vertex vertex = (Vertex) bindings.get("vertex");
-                E node;
-                try {
-                    Class<?> c = getClassToInstantiate(vertex);
-                    if (c.isEnum()) {
-                        Object value = vertex.value(getPersistentName());
-                        node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                        putToInternalMap(node, vertex);
-                    } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
-                        Method m = c.getDeclaredMethod("getInstance", new Class[0]);
-                        node = (E) m.invoke(null);
-                    } else if (UmlgNode.class.isAssignableFrom(c)) {
-                        node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
-                        ((UmlgNode) node).setEdge(this.umlgRuntimeProperty, edge);
-                    } else {
-                        Object value = vertex.value(getPersistentName());
-                        node = (E) value;
-                        putToInternalMap(value, vertex);
-                    }
-                    this.internalCollection.add(node);
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
+    protected void loadUmlgNodes() {
+        GraphTraversal<Vertex, Map<String, Element>> traversal = getVerticesWithEdge();
+        while (traversal.hasNext()) {
+            final Map<String, Element> bindings = traversal.next();
+            Edge edge = (Edge) bindings.get("edge");
+            Vertex vertex = (Vertex) bindings.get("vertex");
+            E node;
+            try {
+                Class<?> c = getClassToInstantiate(vertex);
+                if (UmlgMetaNode.class.isAssignableFrom(c)) {
+                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+                    node = (E) m.invoke(null);
+                } else if (UmlgNode.class.isAssignableFrom(c)) {
+                    node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
+                    ((UmlgNode) node).setEdge(this.umlgRuntimeProperty, edge);
+                } else {
+                    throw new IllegalStateException("Unexpected class: " + c.getName());
                 }
+                this.internalCollection.add(node);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         }
     }
 
-    protected GraphTraversal<Vertex, Map<String, Element>> getVerticesWithEdge() {
-        if (this.isControllingSide()) {
-            //TODO gremlin/sqlg optimization needed, this is super inefficient now
-            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
-                    .outE(this.getLabel())
-                    .as("edge")
-                    .order().by(BaseCollection.IN_EDGE_SEQUENCE_ID, Order.incr)
-                    .inV()
-                    .as("vertex")
-                    .select();
-        } else {
-            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
-                    .inE(this.getLabel())
-                    .as("edge")
-                    .order().by(BaseCollection.OUT_EDGE_SEQUENCE_ID, Order.incr)
-                    .outV()
-                    .as("vertex")
-                    .select();
-        }
-    }
 
     //The list is loaded by the time this is called
     @SuppressWarnings("unchecked")

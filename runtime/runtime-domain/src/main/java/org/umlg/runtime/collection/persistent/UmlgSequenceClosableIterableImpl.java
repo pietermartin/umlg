@@ -49,18 +49,20 @@ public class UmlgSequenceClosableIterableImpl<E> extends BaseSequence<E> impleme
 			try {
                 Class<?> c = Class.forName((String) vertex.value("className"));
 				if (c.isEnum()) {
-					Object value = vertex.value(getPersistentName());
-					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                    putToInternalMap(node, vertex);
+					throw new RuntimeException();
+//					Object value = vertex.value(getPersistentName());
+//					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+//                    putToInternalMap(node, vertex);
                 } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
                     Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                     node = (E) m.invoke(null);
 				} else if (UmlgNode.class.isAssignableFrom(c)) {
 					node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
 				} else {
-					Object value = vertex.value(getPersistentName());
-					node = (E) value;
-                    putToInternalMap(value, vertex);
+					throw new RuntimeException();
+//					Object value = vertex.value(getPersistentName());
+//					node = (E) value;
+//                    putToInternalMap(value, vertex);
 				}
 				this.internalCollection.add(node);
 			} catch (Exception ex) {

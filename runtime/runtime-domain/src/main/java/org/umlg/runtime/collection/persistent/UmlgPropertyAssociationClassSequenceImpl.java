@@ -55,25 +55,8 @@ public class UmlgPropertyAssociationClassSequenceImpl<E, AC extends AssociationC
     @Override
     public void move(int index, E e, AC associationClass) {
         maybeLoad();
-        Vertex v;
-        if (e instanceof UmlgNode) {
-            UmlgNode node = (UmlgNode) e;
-            v = node.getVertex();
-        } else if (e.getClass().isEnum()) {
-            v = removeFromInternalMap(e);
-            v.remove();
-        } else if (isOnePrimitive() || getDataTypeEnum() != null) {
-            throw new IllegalStateException("one primitive or data type can not have an association class.");
-        } else {
-            if (true) {
-                throw new RuntimeException("wtf");
-            }
-            v = removeFromInternalMap(e);
-            v.remove();
-        }
         //remove the edge
         super.remove(e);
-
         //add a new the edge
         super.add(index, e);
         //set association class vertex id on new edge
@@ -90,17 +73,12 @@ public class UmlgPropertyAssociationClassSequenceImpl<E, AC extends AssociationC
             v = node.getVertex();
             removeEdge(v);
         } else if (o.getClass().isEnum()) {
-            v = removeFromInternalMap(o);
-            removeEdge(v);
-            v.remove();
+            throw new RuntimeException();
         } else if (isOnePrimitive() || getDataTypeEnum() != null) {
             throw new IllegalStateException("one primitive or data type can not have an association class.");
         } else {
-            v = removeFromInternalMap(o);
-            removeEdge(v);
-            v.remove();
+            throw new RuntimeException();
         }
-
         return super.remove(o);
     }
 
