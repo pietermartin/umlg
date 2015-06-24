@@ -1,6 +1,7 @@
 package org.umlg.tests.bulkcollection;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 import org.umlg.collectiontest.Nightmare;
 import org.umlg.concretetest.God;
@@ -15,6 +16,7 @@ public class TestBulkCollection extends BaseLocalDbTest {
 
     @Test
     public void testBulkCollectionAdd() {
+        Assume.assumeTrue(UMLG.get().supportsBatchMode());
         God god = new God();
         god.setName("GOD");
         UMLG.get().commit();

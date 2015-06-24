@@ -1268,6 +1268,8 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 list = Arrays.asList((E[]) ArrayUtils.toObject((float[]) manyProperty.value()));
             } else if (propertyType.isAssignableFrom(Boolean.class)) {
                 list = Arrays.asList((E[]) ArrayUtils.toObject((boolean[]) manyProperty.value()));
+            } else if (propertyType.isAssignableFrom(Byte.class)) {
+                list = Arrays.asList((E[]) ArrayUtils.toObject((byte[]) manyProperty.value()));
             } else {
                 throw new IllegalStateException("Unknown propertyType " + propertyType.toString());
             }
@@ -1284,10 +1286,8 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         if (this.umlgRuntimeProperty.getDataTypeEnum() != null) {
             if (e instanceof UmlgType) {
                 throw new RuntimeException();
-//                ((UmlgType) e).setOnVertex(v, getPersistentName());
             } else {
                 return UmlgFormatter.convertToArray(getDataTypeEnum(), this.internalCollection);
-//                this.vertex.property(getPersistentName(), UmlgFormatter.format(getDataTypeEnum(), e));
             }
         } else if (isManyEnumeration()) {
             Collection<String> enumerationAsList = convertToArrayCollection();
@@ -1309,6 +1309,8 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 return ArrayUtils.toPrimitive(this.internalCollection.toArray(new Float[this.internalCollection.size()]));
             } else if (propertyType.isAssignableFrom(Boolean.class)) {
                 return ArrayUtils.toPrimitive(this.internalCollection.toArray(new Boolean[this.internalCollection.size()]));
+            } else if (propertyType.isAssignableFrom(Byte.class)) {
+                return ArrayUtils.toPrimitive(this.internalCollection.toArray(new Byte[this.internalCollection.size()]));
             } else {
                 throw new IllegalStateException("Unknown propertyType " + propertyType.toString());
             }

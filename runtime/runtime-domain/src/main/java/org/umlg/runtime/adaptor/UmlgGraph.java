@@ -133,6 +133,10 @@ public interface UmlgGraph extends Graph {
         UmlgNotificationManager.INSTANCE.registerListener(umlgRuntimeProperty, listener);
     }
 
+    public default boolean supportsBatchMode() {
+        return false;
+    }
+
     public default void batchModeOn() {
 
     }

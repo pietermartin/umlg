@@ -23,7 +23,7 @@ import java.util.Map;
 public class TestChangeNotification extends BaseLocalDbTest {
 
     @Test
-    public void testChangeNotification() {
+    public void testChangeNotification() throws InterruptedException {
         List<String> addValues = new ArrayList<>();
         List<String> removeValues = new ArrayList<>();
         List<String> deleteValues = new ArrayList<>();
@@ -39,12 +39,14 @@ public class TestChangeNotification extends BaseLocalDbTest {
                                 removeValues.add((String) value);
                                 break;
                         }
+                        UMLG.get().commit();
                     }
                 }
         );
         God god = new God();
         god.setName("halo");
         UMLG.get().commit();
+        Thread.sleep(2000);
         Assert.assertEquals(2, addValues.size());
         Assert.assertEquals(1, removeValues.size());
         Assert.assertEquals(0, deleteValues.size());

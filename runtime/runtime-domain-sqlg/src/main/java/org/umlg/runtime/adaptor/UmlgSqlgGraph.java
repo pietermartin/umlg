@@ -557,6 +557,11 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
+    public boolean supportsBatchMode() {
+        return this.sqlG.features().supportsBatchMode();
+    }
+
+    @Override
     public Features features() {
         return this.sqlG.features();
     }

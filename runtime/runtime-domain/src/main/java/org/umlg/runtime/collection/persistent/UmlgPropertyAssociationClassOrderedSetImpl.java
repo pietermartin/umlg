@@ -69,10 +69,23 @@ public class UmlgPropertyAssociationClassOrderedSetImpl<E, AC extends Associatio
         //remove the edge
         super.remove(e);
         //add a new the edge
-        add(index, e, associationClass);
+        add(index, e);
         //set association class vertex id on new edge
         this.edge.property(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId().toString());
         this.edge.property("className", associationClass.getClass().getName());
+    }
+
+    //This needs to be overridden because of add that may not be called as it is from the base class
+    @Override
+    public void add(int indexOf, E e) {
+        maybeLoad();
+        if (indexOf == getInternalList().size()) {
+            super.add(e);
+        } else if (indexOf > getInternalList().size()) {
+            throw new IndexOutOfBoundsException("Index: " + indexOf + ", Size: " + getInternalList().size());
+        } else if (!this.getInternalListOrderedSet().contains(e)) {
+            super.add(indexOf, e);
+        }
     }
 
     @Override

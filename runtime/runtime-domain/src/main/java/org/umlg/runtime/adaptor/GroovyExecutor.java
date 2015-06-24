@@ -6,6 +6,7 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.apache.tinkerpop.gremlin.groovy.engine.GremlinExecutor;
 import org.umlg.runtime.domain.UmlgNode;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -22,7 +23,7 @@ public class GroovyExecutor {
     }
 
     public Object executeGroovy(Object context, String groovy) {
-        groovy = groovy.replaceAll("::", "____");
+//        groovy = groovy.replaceAll("::", "____");
         if (context != null) {
             if (context instanceof UmlgNode) {
                 Object id = ((UmlgNode) context).getId();
@@ -118,17 +119,36 @@ public class GroovyExecutor {
         this.gremlinExecutor.close();
     }
 
-    public void start() {
+    public void restart() throws Exception {
+        this.gremlinExecutor.close();
+        INSTANCE = new GroovyExecutor();
+    }
+
+    private void start() {
         List imports = new ArrayList<>();
-        imports.add(UMLG.class.getName());
-        this.gremlinExecutor = GremlinExecutor.build()
-                .addEngineSettings("gremlin-groovy",
-                        imports,
-                        Collections.emptyList(),
-                        Arrays.asList("/home/pieter/Downloads/cm/cm-entity/src/main/resources/groovy/GremlinExecutorInit.groovy"),
-                        Collections.emptyMap())
-                .afterSuccess(t -> UMLG.get().rollback())
-                .afterFailure((t, e) -> UMLG.get().rollback())
-                .create();
+        List staticImports = new ArrayList<>();
+        Class<?> umlgGroovyImporter;
+        try {
+            umlgGroovyImporter = Class.forName("org.umlg.runtime.adaptor.UmlgGroovyImporter");
+            Field importsField = umlgGroovyImporter.getField("imports");
+            imports.addAll((Set<String>) importsField.get(null));
+            Field importsStaticField = umlgGroovyImporter.getField("importStatic");
+            staticImports.addAll((Set<String>) importsStaticField.get(null));
+            this.gremlinExecutor = GremlinExecutor.build()
+                    .addEngineSettings("gremlin-groovy",
+                            imports,
+                            staticImports,
+                            Arrays.asList("/home/pieter/Downloads/cm/cm-entity/src/main/resources/groovy/GremlinExecutorInit.groovy"),
+                            Collections.emptyMap())
+                    .afterSuccess(
+                            t -> UMLG.get().rollback()
+                    )
+                    .afterFailure(
+                            (t, e) -> UMLG.get().rollback()
+                    )
+                    .create();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize GremlinExecutor", e);
+        }
     }
 }
