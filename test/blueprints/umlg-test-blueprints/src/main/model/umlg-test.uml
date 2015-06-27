@@ -533,10 +533,10 @@
             <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_Qz6TUO7EEeCKZsw1ityolg" name="GOOD"/>
             <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_RvS9gO7EEeCKZsw1ityolg" name="BAD"/>
           </packagedElement>
-          <packagedElement xmi:type="uml:Association" xmi:id="_Z6330O7EEeCKZsw1ityolg" name="A_&lt;god>_&lt;rEASON>" memberEnd="_Z6330e7EEeCKZsw1ityolg _Z6331O7EEeCKZsw1ityolg" navigableOwnedEnd="_Z6331O7EEeCKZsw1ityolg">
+          <packagedElement xmi:type="uml:Association" xmi:id="_Z6330O7EEeCKZsw1ityolg" name="A_&lt;god>_&lt;rEASON>" memberEnd="_Z6330e7EEeCKZsw1ityolg _Z6331O7EEeCKZsw1ityolg" navigableOwnedEnd="_Z6331O7EEeCKZsw1ityolg _Z6330e7EEeCKZsw1ityolg">
             <ownedEnd xmi:type="uml:Property" xmi:id="_Z6330e7EEeCKZsw1ityolg" name="god" visibility="public" type="_YuD8sOwiEeCSwqyeEHd1tw" association="_Z6330O7EEeCKZsw1ityolg">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Z6330-7EEeCKZsw1ityolg"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Z6330u7EEeCKZsw1ityolg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Z6330u7EEeCKZsw1ityolg" value="*"/>
             </ownedEnd>
             <ownedEnd xmi:type="uml:Property" xmi:id="_Z6331O7EEeCKZsw1ityolg" name="rEASON" visibility="public" type="_PeTyUO7EEeCKZsw1ityolg" association="_Z6330O7EEeCKZsw1ityolg">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Z6331u7EEeCKZsw1ityolg"/>

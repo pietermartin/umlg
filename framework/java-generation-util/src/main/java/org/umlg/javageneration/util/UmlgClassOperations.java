@@ -182,7 +182,7 @@ public class UmlgClassOperations extends ClassOperations {
      * It does not include inherited properties
      * It does not include properties refined associations
      */
-    public static Set<Property> getAllOwnedProperties(org.eclipse.uml2.uml.Class clazz) {
+    public static Set<Property> getAllOwnedProperties(org.eclipse.uml2.uml.Classifier clazz) {
         return filterOutRefinedProperties(getAllOwnedPropertiesIncludingRefinedAssociationMemberEnds(clazz));
     }
 
@@ -190,7 +190,7 @@ public class UmlgClassOperations extends ClassOperations {
      * These include all properties that are on the other end of an association.
      * It does not include inherited properties
      */
-    public static Set<Property> getAllOwnedPropertiesIncludingRefinedAssociationMemberEnds(org.eclipse.uml2.uml.Class clazz) {
+    public static Set<Property> getAllOwnedPropertiesIncludingRefinedAssociationMemberEnds(org.eclipse.uml2.uml.Classifier clazz) {
 
         Set<Property> result = new HashSet<>(clazz.getAttributes());
         List<Association> associations = clazz.getAssociations();
@@ -208,7 +208,9 @@ public class UmlgClassOperations extends ClassOperations {
                 }
             }
         }
-        result.addAll(getPropertiesOnRealizedInterfaces(clazz));
+        if (clazz instanceof Class) {
+            result.addAll(getPropertiesOnRealizedInterfaces((Class)clazz));
+        }
         return result;
     }
 
@@ -216,9 +218,9 @@ public class UmlgClassOperations extends ClassOperations {
      * These include all properties that are on the other end of an association.
      * It includes inherited properties
      */
-    public static Set<Property> getAllProperties(org.eclipse.uml2.uml.Class clazz) {
-        Set<Property> result = new HashSet<>(clazz.getAllAttributes());
-        Set<Association> associations = getAllAssociations(clazz);
+    public static Set<Property> getAllProperties(Classifier classifier) {
+        Set<Property> result = new HashSet<>(classifier.getAllAttributes());
+        Set<Association> associations = getAllAssociations(classifier);
         for (Association association : associations) {
 
             List<Property> memberEnds = association.getMemberEnds();
@@ -226,21 +228,23 @@ public class UmlgClassOperations extends ClassOperations {
             Property memberEnd2 = memberEnds.get(1);
 
             // This is for the case of hierarchies, i.e association to itself
-            if (isSpecializationOf(clazz, memberEnd1.getType()) && isSpecializationOf(clazz, memberEnd2.getType())) {
+            if (isSpecializationOf(classifier, memberEnd1.getType()) && isSpecializationOf(classifier, memberEnd2.getType())) {
                 result.add(memberEnd1);
                 result.add(memberEnd2);
             }
             // This is to prevent getting the near side of an association
-            if (!isSpecializationOf(clazz, memberEnd1.getType())) {
+            if (!isSpecializationOf(classifier, memberEnd1.getType())) {
                 result.add(memberEnd1);
             }
             // This is to prevent getting the near side of an association
-            if (!isSpecializationOf(clazz, memberEnd2.getType())) {
+            if (!isSpecializationOf(classifier, memberEnd2.getType())) {
                 result.add(memberEnd2);
             }
 
         }
-        result.addAll(getPropertiesOnRealizedInterfaces(clazz));
+        if (classifier instanceof Class) {
+            result.addAll(getPropertiesOnRealizedInterfaces((Class)classifier));
+        }
         return filterOutRefinedProperties(result);
     }
 

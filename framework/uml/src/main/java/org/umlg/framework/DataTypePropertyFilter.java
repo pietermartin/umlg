@@ -16,7 +16,7 @@ public class DataTypePropertyFilter implements ElementFilter {
         if (!(e instanceof Property)) {
             return false;
         } else {
-            Property p = (Property)e;
+            Property p = (Property) e;
             Element owner = p.getOwner();
 
             //Check if it is a qualifier
@@ -25,7 +25,7 @@ public class DataTypePropertyFilter implements ElementFilter {
             } else {
 
                 //Check if it is an association class
-                if (owner instanceof AssociationClass && ((AssociationClass)owner).getOwnedAttributes().contains(p)) {
+                if (owner instanceof AssociationClass && ((AssociationClass) owner).getOwnedAttributes().contains(p)) {
                     return false;
                 } else if (owner instanceof Association) {
                     Association a = (Association) owner;
@@ -40,8 +40,16 @@ public class DataTypePropertyFilter implements ElementFilter {
                     if (otherEnd == null) {
                         throw new IllegalStateException("Oy, where is the other end gone to!!!");
                     }
+//                    //Ignore enumeration to enumeration, that is handled by specific enumeration code
+//                    if ((p.getType() instanceof Enumeration) && (otherEnd.getType() instanceof Enumeration)) {
+//                        return true;
+//                    } else if (otherEnd.getType() instanceof Enumeration) {
+//                        return false;
+//                    } else {
+//                        return otherEnd.getType() instanceof DataType;
+//                    }
                     return otherEnd.getType() instanceof DataType;
-                } else  {
+                } else {
                     return false;
                 }
             }

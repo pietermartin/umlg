@@ -44,9 +44,6 @@ public class UmlgSetClosableIterableImpl<E> extends BaseSet<E> implements UmlgSe
                 Class<?> c = Class.forName((String) vertex.value("className"));
                 if (c.isEnum()) {
                     throw new RuntimeException();
-//                    Object value = vertex.value(getPersistentName());
-//                    node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-//                    putToInternalMap(node, vertex);
                 } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
                     Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                     node = (E) m.invoke(null);
@@ -54,9 +51,6 @@ public class UmlgSetClosableIterableImpl<E> extends BaseSet<E> implements UmlgSe
                     node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
                 } else {
                     throw new RuntimeException();
-//                    Object value = vertex.value(getPersistentName());
-//                    node = (E) value;
-//                    putToInternalMap(value, vertex);
                 }
                 this.internalCollection.add(node);
             } catch (Exception ex) {

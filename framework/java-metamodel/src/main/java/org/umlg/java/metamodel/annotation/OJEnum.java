@@ -72,7 +72,10 @@ public class OJEnum extends OJAnnotatedClass {
 		classInfo.append(JavaStringHelpers.indent(constructors(), 1));
 		classInfo.append("\n");
 		classInfo.append(JavaStringHelpers.indent(operations(), 1));
-		classInfo.append("\n}");
+		classInfo.append("\n");
+		classInfo.append(JavaStringHelpers.indent(innerEnums(), 1));
+		classInfo.append("\n");
+		classInfo.append("}");
 		return classInfo.toString();
 	}
 

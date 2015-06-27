@@ -130,10 +130,11 @@ public class GroovyExecutor {
         Class<?> umlgGroovyImporter;
         try {
             umlgGroovyImporter = Class.forName("org.umlg.runtime.adaptor.UmlgGroovyImporter");
-            Field importsField = umlgGroovyImporter.getField("imports");
-            imports.addAll((Set<String>) importsField.get(null));
-            Field importsStaticField = umlgGroovyImporter.getField("importStatic");
-            staticImports.addAll((Set<String>) importsStaticField.get(null));
+            //TODO this is to slow for every unit tests
+//            Field importsField = umlgGroovyImporter.getField("imports");
+//            imports.addAll((Set<String>) importsField.get(null));
+//            Field importsStaticField = umlgGroovyImporter.getField("importStatic");
+//            staticImports.addAll((Set<String>) importsStaticField.get(null));
             this.gremlinExecutor = GremlinExecutor.build()
                     .addEngineSettings("gremlin-groovy",
                             imports,

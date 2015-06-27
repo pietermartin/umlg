@@ -8,6 +8,7 @@ import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.batch.TestBatchMode;
 import org.umlg.tests.changenotification.TestChangeNotification;
+import org.umlg.tests.enumeration.TestNavigateFromEnum;
 
 /**
  * Date: 2013/10/19
@@ -15,7 +16,7 @@ import org.umlg.tests.changenotification.TestChangeNotification;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestBatchMode.class
+        TestNavigateFromEnum.class
 })
 public class UmlgAnyTestSuite {
 }

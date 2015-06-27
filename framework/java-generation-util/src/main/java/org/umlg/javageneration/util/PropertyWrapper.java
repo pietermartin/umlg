@@ -6,16 +6,15 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Package;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.umlg.framework.ModelLoader;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.javageneration.validation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
@@ -758,7 +757,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     // return impl;
     // }
 
-    public String javaDefaultInitialisation(BehavioredClassifier propertyConcreteOwner) {
+    public String javaDefaultInitialisation(Classifier propertyConcreteOwner) {
         return javaDefaultInitialisation(propertyConcreteOwner, false);
     }
 
@@ -766,11 +765,11 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
      * The property might be owned by an interface but the initialisation is for
      * a realization on a BehavioredClassifier
      */
-    public String javaDefaultInitialisation(BehavioredClassifier propertyConcreteOwner, boolean ignoreAssociationClass) {
+    public String javaDefaultInitialisation(Classifier propertyConcreteOwner, boolean ignoreAssociationClass) {
         return UmlgPropertyOperations.getDefaultTinkerCollectionInitalisation(this.property, propertyConcreteOwner, ignoreAssociationClass).getExpression();
     }
 
-    public String javaDefaultInitialisationForAssociationClass(BehavioredClassifier propertyConcreteOwner) {
+    public String javaDefaultInitialisationForAssociationClass(Classifier propertyConcreteOwner) {
         return UmlgPropertyOperations.getDefaultTinkerCollectionInitalisationForAssociationClass(this.property, propertyConcreteOwner).getExpression();
     }
 

@@ -1,6 +1,8 @@
 package org.umlg.javageneration.visitor.enumeration;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.*;
+import org.eclipse.uml2.uml.Enumeration;
 import org.umlg.framework.ModelLoader;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
@@ -83,13 +85,13 @@ public class EnumerationVisitor extends BaseVisitor implements Visitor<org.eclip
             List<Slot> incomingSlots = ModelLoader.INSTANCE.findSlotsForThisDataType(literal);
             for (StructuralFeature definingFeature : definingFeatures) {
                 OJAnnotatedOperation getter = definingFeatureGetterMap.get(definingFeature);
-                OJSwitchStatement ojSwitchStatement = (OJSwitchStatement)getter.getBody().getStatements().get(0);
+                OJSwitchStatement ojSwitchStatement = (OJSwitchStatement) getter.getBody().getStatements().get(0);
                 OJSwitchCase ojSwitchCase = new OJSwitchCase();
                 ojSwitchCase.setLabel(literal.getName());
                 ojSwitchStatement.addToCases(ojSwitchCase);
 
                 for (Slot slot : incomingSlots) {
-                    InstanceValue instanceValue = (InstanceValue)slot.getValues().get(0);
+                    InstanceValue instanceValue = (InstanceValue) slot.getValues().get(0);
                     if (instanceValue.getInstance().equals(literal)) {
                         ojSwitchCase.getBody().addToStatements(
                                 "result.add(" +
@@ -132,6 +134,32 @@ public class EnumerationVisitor extends BaseVisitor implements Visitor<org.eclip
 
         addToSource(ojEnum);
         ClassBuilder.addGetQualifiedName(ojEnum, enumeration);
+
+        buildGetterToClass(ojEnum, enumeration);
+    }
+
+    private void buildGetterToClass(OJEnum ojEnum, Enumeration enumeration) {
+        for (Property p : UmlgClassOperations.getAllOwnedProperties(enumeration)) {
+            if (!(p.getType() instanceof DataType)) {
+                PropertyWrapper pWrap = PropertyWrapper.from(p);
+                OJAnnotatedOperation getter = new OJAnnotatedOperation("get" + StringUtils.capitalize(p.getName()),
+                        UmlgGenerationUtil.umlgSetCloseableIterablePathName.getCopy().addToGenerics(UmlgClassOperations.getPathName(pWrap.getType())));
+                getter.setComment("This is not a proper UML property, it is always a Set");
+                getter.getBody().addToStatements("GraphTraversalSource graph = UMLG.get().getUnderlyingGraph().traversal()");
+                getter.getBody().addToStatements("GraphTraversal<Vertex, Vertex> traversal = graph.V().has(\"" + p.getType().getName() + "\", \"" + pWrap.getOtherEnd().getName() + "\", " +
+                        (PropertyWrapper.from(pWrap.getOtherEnd()).isMany() ? "P.test(StringArrayContains.within, name())" : "P.within(name())") + ")");
+                getter.getBody().addToStatements("return new UmlgSetClosableIterableImpl<>(traversal, " + pWrap.getTumlRuntimePropertyEnum() + ")");
+
+                ojEnum.addToOperations(getter);
+                ojEnum.addToImports(UmlgGenerationUtil.StringArrayContains);
+                ojEnum.addToImports(UmlgGenerationUtil.P);
+                ojEnum.addToImports(UmlgGenerationUtil.GraphTraversalSource);
+                ojEnum.addToImports(UmlgGenerationUtil.GraphTraversal);
+                ojEnum.addToImports(UmlgGenerationUtil.umlgUmlgSetClosableIterableImpl);
+                ojEnum.addToImports(UmlgGenerationUtil.vertexPathName);
+                ojEnum.addToImports(UmlgGenerationUtil.UMLGPathName);
+            }
+        }
     }
 
     public void visitAfter(org.eclipse.uml2.uml.Enumeration enumeration) {

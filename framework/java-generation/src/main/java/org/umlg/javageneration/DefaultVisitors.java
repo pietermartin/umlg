@@ -30,9 +30,9 @@ public class DefaultVisitors {
         result.add(new QualifiedNameClassNameMapBuilder(Workspace.INSTANCE));
         result.add(new QualifiedNameClassMapCreator(Workspace.INSTANCE));
         result.add(new SchemaCreator(Workspace.INSTANCE));
-        result.add(new ClassRuntimePropertyImplementorVisitor(Workspace.INSTANCE));
         result.add(new InterfaceRuntimePropertyImplementorVisitor(Workspace.INSTANCE));
         result.add(new EnumerationVisitor(Workspace.INSTANCE));
+        result.add(new ClassRuntimePropertyImplementorVisitor(Workspace.INSTANCE));
         result.add(new CompositionVisitor(Workspace.INSTANCE));
 //		result.add(new ComponentProperyVisitor(Workspace.INSTANCE));
         result.add(new PropertyVisitor(Workspace.INSTANCE));

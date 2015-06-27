@@ -7,9 +7,12 @@ import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 
 public class UmlgGenerationUtil {
 
+    public static final OJPathName P = new OJPathName("org.apache.tinkerpop.gremlin.process.traversal.P");
+    public static final OJPathName StringArrayContains = new OJPathName("org.umlg.runtime.adaptor.StringArrayContains");
     public static final OJPathName StringEscapeUtils = new OJPathName("org.apache.commons.lang3.StringEscapeUtils");
     public static final OJPathName ChangeHolder = new OJPathName("org.umlg.runtime.notification.ChangeHolder");
     public  static final OJPathName UmlgNotificationManager = new OJPathName("org.umlg.runtime.notification.UmlgNotificationManager");
+    public static final OJPathName GraphTraversalSource = new OJPathName("org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource");
     public static final OJPathName GraphTraversal = new OJPathName("org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal");
     public static final OJPathName Element = new OJPathName("org.apache.tinkerpop.gremlin.structure.Element");
     public static final OJPathName token = new OJPathName("org.apache.tinkerpop.gremlin.process.traversal.Compare");
@@ -203,9 +206,10 @@ public class UmlgGenerationUtil {
         boolean isControllingSide = UmlgPropertyOperations.isControllingSide(p);
         if (p.getAssociation() != null) {
             if (p.getAssociation().getName() == null) {
-                throw new IllegalStateException(String.format("Association %s belonging to property %s may not have a 'null' name", new String[]{p.getAssociation().getQualifiedName(), p.getQualifiedName()}));
+                return p.getName() + "_" + p.getOtherEnd().getName();
+            } else {
+                return p.getAssociation().getName();
             }
-            return p.getAssociation().getName();
         } else {
             // Note that the properties swap around between inverse and
             // !inverse.

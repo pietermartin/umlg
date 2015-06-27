@@ -1,8 +1,7 @@
 package org.umlg.javageneration.visitor.clazz;
 
-import org.eclipse.uml2.uml.AssociationClass;
+import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
@@ -14,7 +13,7 @@ import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
-public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implements Visitor<Class> {
+public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implements Visitor<Classifier> {
 
     public static final String INITIALISE_PROPERTY = "initialiseProperty";
 
@@ -22,24 +21,38 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         super(workspace);
     }
 
+    /**
+     * Enumeration needs the runtime properties for the collection that implement the getters
+     *
+     * @param classifier
+     */
     @Override
-    @VisitSubclasses({Class.class, AssociationClass.class})
-    public void visitBefore(Class clazz) {
-        OJAnnotatedClass annotatedClass = findOJClass(clazz);
-        addInitialiseProperty(annotatedClass, clazz);
-        addInternalInverseAdder(annotatedClass, clazz);
-        if (UmlgClassOperations.isAssociationClass(clazz)) {
-            addInternalAdder(annotatedClass, (AssociationClass) clazz);
+    @VisitSubclasses({Enumeration.class, Class.class, AssociationClass.class})
+    public void visitBefore(Classifier classifier) {
+        OJAnnotatedClass annotatedClass = findOJClass(classifier);
+        if (!(classifier instanceof Enumeration)) {
+            addInitialiseProperty(annotatedClass, classifier);
+            addInternalInverseAdder(annotatedClass, (Class) classifier);
+            if (UmlgClassOperations.isAssociationClass((Class) classifier)) {
+                addInternalAdder(annotatedClass, (AssociationClass) classifier);
+            }
+            addGetMetaDataAsJson(annotatedClass, (Class) classifier);
         }
-        addGetMetaDataAsJson(annotatedClass, clazz);
-        RuntimePropertyImplementor.addTumlRuntimePropertyEnum(annotatedClass, UmlgClassOperations.propertyEnumName(clazz), clazz,
-                UmlgClassOperations.getAllProperties(clazz), UmlgClassOperations.hasCompositeOwner(clazz), clazz.getModel().getName());
-        addGetQualifiers(annotatedClass, clazz);
-        addGetSize(annotatedClass, clazz);
+        RuntimePropertyImplementor.addTumlRuntimePropertyEnum(
+                annotatedClass,
+                UmlgClassOperations.propertyEnumName(classifier),
+                classifier,
+                UmlgClassOperations.getAllProperties(classifier),
+                UmlgClassOperations.hasCompositeOwner(classifier),
+                classifier.getModel().getName());
+        if (!(classifier instanceof Enumeration)) {
+            addGetQualifiers(annotatedClass, (Class) classifier);
+            addGetSize(annotatedClass, (Class) classifier);
+        }
     }
 
     @Override
-    public void visitAfter(Class clazz) {
+    public void visitAfter(Classifier clazz) {
     }
 
     private void addInternalAdder(OJAnnotatedClass annotatedClass, AssociationClass associationClass) {
@@ -179,22 +192,22 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         }
     }
 
-    private void addInitialiseProperty(OJAnnotatedClass annotatedClass, Class clazz) {
+    private void addInitialiseProperty(OJAnnotatedClass annotatedClass, Classifier classifier) {
         OJAnnotatedOperation initialiseProperty = new OJAnnotatedOperation(INITIALISE_PROPERTY);
         UmlgGenerationUtil.addOverrideAnnotation(initialiseProperty);
         initialiseProperty.addParam("tumlRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
         initialiseProperty.addParam("inverse", "boolean");
-        if (!clazz.getGeneralizations().isEmpty()) {
+        if (!classifier.getGeneralizations().isEmpty()) {
             initialiseProperty.getBody().addToStatements("super.initialiseProperty(tumlRuntimeProperty, inverse)");
         }
         annotatedClass.addToOperations(initialiseProperty);
 
-        OJField runtimePropoerty = new OJField("runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(clazz)));
+        OJField runtimePropoerty = new OJField("runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(classifier)));
         initialiseProperty.getBody().addToLocals(runtimePropoerty);
         OJIfStatement ifInverse = new OJIfStatement("!inverse");
-        ifInverse.addToThenPart("runtimeProperty = " + "(" + UmlgClassOperations.propertyEnumName(clazz)
+        ifInverse.addToThenPart("runtimeProperty = " + "(" + UmlgClassOperations.propertyEnumName(classifier)
                 + ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName()))");
-        ifInverse.addToElsePart("runtimeProperty = " + "(" + UmlgClassOperations.propertyEnumName(clazz)
+        ifInverse.addToElsePart("runtimeProperty = " + "(" + UmlgClassOperations.propertyEnumName(classifier)
                 + ".fromQualifiedName(tumlRuntimeProperty.getInverseQualifiedName()))");
         initialiseProperty.getBody().addToStatements(ifInverse);
 
@@ -204,17 +217,17 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         ojSwitchStatement.setCondition("runtimeProperty");
         ifNotNull.addToThenPart(ojSwitchStatement);
 
-        for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
+        for (Property p : UmlgClassOperations.getAllOwnedProperties(classifier)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
             if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !pWrap.isRefined()) {
                 OJSwitchCase ojSwitchCase = new OJSwitchCase();
                 ojSwitchCase.setLabel(pWrap.fieldname());
-                OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(clazz));
+                OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(classifier));
                 statement.setName(pWrap.fieldname());
                 ojSwitchCase.getBody().addToStatements(statement);
 
                 if (pWrap.isMemberOfAssociationClass()) {
-                    statement = new OJSimpleStatement("this." + pWrap.getAssociationClassFakePropertyName() + " = " + pWrap.javaDefaultInitialisationForAssociationClass(clazz));
+                    statement = new OJSimpleStatement("this." + pWrap.getAssociationClassFakePropertyName() + " = " + pWrap.javaDefaultInitialisationForAssociationClass(classifier));
                     statement.setName(pWrap.getAssociationClassFakePropertyName());
                     ojSwitchCase.getBody().addToStatements(statement);
                 }

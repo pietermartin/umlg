@@ -38,7 +38,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     //Used to store the id of an association class instance.
     protected Edge edge;
     protected Class<?> parentClass;
-//    //The internal map is used to store the vertex representing a primitive or an enumeration
+    //    //The internal map is used to store the vertex representing a primitive or an enumeration
 //    protected ListMultimap<Object, Vertex> internalVertexMap = ArrayListMultimap.create();
     protected UmlgRuntimeProperty umlgRuntimeProperty;
 
@@ -66,6 +66,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         super();
         this.owner = owner;
         this.vertex = owner.getVertex();
+        this.parentClass = owner.getClass();
+        this.umlgRuntimeProperty = runtimeProperty;
+    }
+
+    public BaseCollection(UmlgEnum owner, UmlgRuntimeProperty runtimeProperty) {
+        super();
         this.parentClass = owner.getClass();
         this.umlgRuntimeProperty = runtimeProperty;
     }

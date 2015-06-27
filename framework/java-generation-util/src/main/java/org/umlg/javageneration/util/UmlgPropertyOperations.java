@@ -1,7 +1,5 @@
 package org.umlg.javageneration.util;
 
-import java.util.*;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -13,6 +11,8 @@ import org.eclipse.uml2.uml.util.UMLValidator;
 import org.umlg.framework.ModelLoader;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.OJSimpleStatement;
+
+import java.util.*;
 
 public final class UmlgPropertyOperations extends PropertyOperations {
 
@@ -267,17 +267,17 @@ public final class UmlgPropertyOperations extends PropertyOperations {
         return getDefaultTinkerCollectionInitalisation(p, propertyConcreteOwner, false);
     }
 
-    public static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, BehavioredClassifier propertyConcreteOwner, boolean ignoreAssociationClass) {
+    public static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, Classifier propertyConcreteOwner, boolean ignoreAssociationClass) {
         OJSimpleStatement s = getDefaultTinkerCollectionInitalisation(p, propertyConcreteOwner, getDefaultTinkerCollection(p, ignoreAssociationClass));
         return s;
     }
 
-    public static OJSimpleStatement getDefaultTinkerCollectionInitalisationForAssociationClass(Property p, BehavioredClassifier propertyConcreteOwner) {
+    public static OJSimpleStatement getDefaultTinkerCollectionInitalisationForAssociationClass(Property p, Classifier propertyConcreteOwner) {
         OJSimpleStatement s = getDefaultTinkerCollectionInitalisationForAssociationClass(p, propertyConcreteOwner, getDefaultTinkerCollectionForAssociationClass(p));
         return s;
     }
 
-    private static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, BehavioredClassifier propertyConcreteOwner, OJPathName collectionPathName) {
+    private static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, Classifier propertyConcreteOwner, OJPathName collectionPathName) {
         OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this");
         ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).fieldname());
         if (new PropertyWrapper(p).isMemberOfAssociationClass() && !(propertyConcreteOwner instanceof AssociationClass)) {
@@ -288,7 +288,7 @@ public final class UmlgPropertyOperations extends PropertyOperations {
         return ojSimpleStatement;
     }
 
-    private static OJSimpleStatement getDefaultTinkerCollectionInitalisationForAssociationClass(Property p, BehavioredClassifier propertyConcreteOwner, OJPathName collectionPathName) {
+    private static OJSimpleStatement getDefaultTinkerCollectionInitalisationForAssociationClass(Property p, Classifier propertyConcreteOwner, OJPathName collectionPathName) {
         OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this");
         ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).fieldname());
         ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ")");
