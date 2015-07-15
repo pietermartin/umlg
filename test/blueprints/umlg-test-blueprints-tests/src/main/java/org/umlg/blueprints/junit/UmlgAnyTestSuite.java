@@ -9,6 +9,7 @@ import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.batch.TestBatchMode;
 import org.umlg.tests.changenotification.TestChangeNotification;
 import org.umlg.tests.enumeration.TestNavigateFromEnum;
+import org.umlg.tests.ocl.qualifiers.TestNavigateQualifedProperty;
 
 /**
  * Date: 2013/10/19
@@ -16,7 +17,7 @@ import org.umlg.tests.enumeration.TestNavigateFromEnum;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestNavigateFromEnum.class
+        TestNavigateQualifedProperty.class
 })
 public class UmlgAnyTestSuite {
 }

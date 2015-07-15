@@ -6,14 +6,13 @@ import org.eclipse.ocl.expressions.IteratorExp;
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.ocl.expressions.Variable;
 import org.eclipse.ocl.uml.CollectionType;
+import org.eclipse.ocl.expressions.PropertyCallExp;
 import org.eclipse.ocl.uml.impl.CollectionTypeImpl;
 import org.eclipse.uml2.uml.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.javageneration.ocl.util.UmlgOclUtil;
 import org.umlg.javageneration.ocl.visitor.HandleIteratorExp;
-import org.umlg.javageneration.util.DataTypeEnum;
-import org.umlg.javageneration.util.UmlgClassOperations;
-import org.umlg.javageneration.util.UmlgCollectionKindEnum;
+import org.umlg.javageneration.util.*;
 
 public class OclCollectExpToJava implements HandleIteratorExp {
 
@@ -37,11 +36,28 @@ public class OclCollectExpToJava implements HandleIteratorExp {
 		String variableType = UmlgClassOperations.className(variable.getType());
 		
 		OCLExpression<Classifier> body = callExp.getBody();
+
+        boolean isMany = false;
+        PropertyWrapper sourcePropertyWrapper = null;
+		if (body instanceof PropertyCallExp) {
+			PropertyCallExp<?, Property> propertyPropertyCallExp = (PropertyCallExp<?, Property>) body;
+			//if the source property is qualified but the oocl expression itself has qualifier then the properties multiplicity will be correct
+			//i.e. no need for a collect statement
+			if (propertyPropertyCallExp.getQualifier().isEmpty()) {
+				Property sourceProperty = propertyPropertyCallExp.getReferredProperty();
+				sourcePropertyWrapper = PropertyWrapper.from(sourceProperty);
+				isMany = sourcePropertyWrapper.isQualified() && sourcePropertyWrapper.isMany();
+			}
+		}
+
 		String bodyType = UmlgClassOperations.className(body.getType());
 		ojClass.addToImports(UmlgClassOperations.getPathName(body.getType()));
         if (body.getType() instanceof CollectionType) {
             CollectionType collectionType = (CollectionType)body.getType();
             ojClass.addToImports(UmlgCollectionKindEnum.from(collectionType.getKind()).getOjPathName());
+        } else if (isMany) {
+            bodyType = sourcePropertyWrapper.javaTumlTypePath().getCollectionTypeName();
+            ojClass.addToImports(sourcePropertyWrapper.javaTumlTypePath());
         }
 
         String flattenedType;

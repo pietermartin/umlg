@@ -3587,6 +3587,14 @@ endif</body>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_uofngCruEeWw9q-1uqTs4Q"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_uoiDwCruEeWw9q-1uqTs4Q" value="*"/>
               </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_v6SpwCryEeWw9q-1uqTs4Q" name="oclQualifierBs" visibility="public" type="_-WZZoDANEeSW2N9UJoM5Cg" isDerived="true">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0tYlUCryEeWw9q-1uqTs4Q"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0tZzcCryEeWw9q-1uqTs4Q" value="*"/>
+                <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_QYOfQCr0EeWw9q-1uqTs4Q">
+                  <language>OCL</language>
+                  <body>self.oclQualifierA.oclQualifierB->asSet()</body>
+                </defaultValue>
+              </ownedAttribute>
             </packagedElement>
             <packagedElement xmi:type="uml:Association" xmi:id="_EHQroCruEeWw9q-1uqTs4Q" name="oclQualifierA_oclQualifierAA" memberEnd="_EHTH4CruEeWw9q-1uqTs4Q _EHTu8CruEeWw9q-1uqTs4Q">
               <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_EHSg0CruEeWw9q-1uqTs4Q" source="org.eclipse.papyrus">
