@@ -60,10 +60,10 @@ public class TestGroovyExecutor extends BaseLocalDbTest {
         gremlinResult = GroovyExecutor.INSTANCE.executeGroovy(null, "g.V().has('age').has('age',P.gt(25)).count().next()");
         Assert.assertEquals(0L, gremlinResult);
 
-        //TODO used to work
-        gremlinResult = GroovyExecutor.INSTANCE.executeGroovy(null, "def isGod(v){v.property('name').isPresent() && v.value('name').equals('THEGOD')};g.V().filter{isGod(it.get())}.next()");
-        Assert.assertTrue(gremlinResult instanceof Vertex);
-        Assert.assertEquals(god.getId(), ((Vertex) gremlinResult).id());
+        //TODO the groovy import takes too long, commented out for now in GroovyExecutor
+//        gremlinResult = GroovyExecutor.INSTANCE.executeGroovy(null, "def isGod(v){v.property('name').isPresent() && v.value('name').equals('THEGOD')};g.V().filter{isGod(it.get())}.next()");
+//        Assert.assertTrue(gremlinResult instanceof Vertex);
+//        Assert.assertEquals(god.getId(), ((Vertex) gremlinResult).id());
     }
 
     @Test

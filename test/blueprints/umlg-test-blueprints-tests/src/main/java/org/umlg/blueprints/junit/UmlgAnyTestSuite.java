@@ -17,7 +17,7 @@ import org.umlg.tests.ocl.qualifiers.TestNavigateQualifedProperty;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestNavigateQualifedProperty.class
+        TestGroovyExecutor.class
 })
 public class UmlgAnyTestSuite {
 }
