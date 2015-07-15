@@ -3541,6 +3541,10 @@ endif</body>
                   <body>self.oclQualifierB.oclQualifierC->asSet()</body>
                 </defaultValue>
               </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_EHTu8CruEeWw9q-1uqTs4Q" name="oclQualifierAA" type="__rsfQCrtEeWw9q-1uqTs4Q" association="_EHQroCruEeWw9q-1uqTs4Q">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_v0hVwCruEeWw9q-1uqTs4Q"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_v0ij4CruEeWw9q-1uqTs4Q" value="1"/>
+              </ownedAttribute>
             </packagedElement>
             <packagedElement xmi:type="uml:Class" xmi:id="_-WZZoDANEeSW2N9UJoM5Cg" name="OclQualifierB">
               <ownedAttribute xmi:type="uml:Property" xmi:id="_JE2gYDAOEeSW2N9UJoM5Cg" name="name" visibility="public">
@@ -3574,6 +3578,20 @@ endif</body>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_hqhHMjAREeSW2N9UJoM5Cg" value="1"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_hqhHMzAREeSW2N9UJoM5Cg" value="*"/>
               </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="__rsfQCrtEeWw9q-1uqTs4Q" name="OclQualifierAA">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_BZfd0CruEeWw9q-1uqTs4Q" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_EHTH4CruEeWw9q-1uqTs4Q" name="oclQualifierA" type="_8KRgUDANEeSW2N9UJoM5Cg" association="_EHQroCruEeWw9q-1uqTs4Q">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_uofngCruEeWw9q-1uqTs4Q"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_uoiDwCruEeWw9q-1uqTs4Q" value="*"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_EHQroCruEeWw9q-1uqTs4Q" name="oclQualifierA_oclQualifierAA" memberEnd="_EHTH4CruEeWw9q-1uqTs4Q _EHTu8CruEeWw9q-1uqTs4Q">
+              <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_EHSg0CruEeWw9q-1uqTs4Q" source="org.eclipse.papyrus">
+                <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_EHSg0SruEeWw9q-1uqTs4Q" key="nature" value="UML_Nature"/>
+              </eAnnotations>
             </packagedElement>
           </packagedElement>
           <packagedElement xmi:type="uml:Package" xmi:id="_2-bCgDA5EeSDyJkOzdhL-A" name="operation">

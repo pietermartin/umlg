@@ -29,6 +29,7 @@ import org.umlg.tests.embeddedtest.TestEmbeddedTest;
 import org.umlg.tests.enumeration.ManyEnumerationTest;
 import org.umlg.tests.enumeration.OneEnumerationTest;
 import org.umlg.tests.enumeration.TestEnumerationAttribute;
+import org.umlg.tests.enumeration.TestNavigateFromEnum;
 import org.umlg.tests.hierarchytest.TestHierarchy;
 import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.indexing.TestIndexingDataType;
@@ -156,7 +157,8 @@ import org.umlg.tests.validationtest.TestValidation;
 //        ManyToManyToSelfSequenceTest.class,
         TestAssociationToSelf.class,
         TestSortedBy.class,
-        TestQualifiedDerivedUnion.class
+        TestQualifiedDerivedUnion.class,
+        TestNavigateFromEnum.class
 })
 public class UmlgAllTestSuite {
 }
