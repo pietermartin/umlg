@@ -60,10 +60,9 @@ public class TestGroovyExecutor extends BaseLocalDbTest {
         gremlinResult = GroovyExecutor.INSTANCE.executeGroovy(null, "g.V().has('age').has('age',P.gt(25)).count().next()");
         Assert.assertEquals(0L, gremlinResult);
 
-        //TODO the groovy import takes too long, commented out for now in GroovyExecutor
-//        gremlinResult = GroovyExecutor.INSTANCE.executeGroovy(null, "def isGod(v){v.property('name').isPresent() && v.value('name').equals('THEGOD')};g.V().filter{isGod(it.get())}.next()");
-//        Assert.assertTrue(gremlinResult instanceof Vertex);
-//        Assert.assertEquals(god.getId(), ((Vertex) gremlinResult).id());
+        gremlinResult = GroovyExecutor.INSTANCE.executeGroovy(null, "def isGod(v){v.property('name').isPresent() && v.value('name').equals('THEGOD')};g.V().filter{isGod(it.get())}.next()");
+        Assert.assertTrue(gremlinResult instanceof Vertex);
+        Assert.assertEquals(god.getId(), ((Vertex) gremlinResult).id());
     }
 
     @Test
@@ -105,21 +104,22 @@ public class TestGroovyExecutor extends BaseLocalDbTest {
         Assert.assertEquals(1, God.allInstances().size());
         Assert.assertNotNull(universe1.getGod());
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("God newGod = new God();");
-        sb.append("newGod.setName('THEGOD2');");
-        sb.append("Universe universeNew = new Universe(true);");
-        sb.append("universeNew.setName(\"universeNew\");");
-        sb.append("SpaceTime stNew = new SpaceTime(universeNew);");
-        sb.append("new Space(stNew);");
-        sb.append("new Time(stNew);");
-        sb.append("newGod.addToUniverse(universeNew);");
-        sb.append("UMLG.get().commit();");
-
-        String result = db.executeQueryToJson(UmlgQueryEnum.GROOVY, null, sb.toString());
-        db.commit();
-
-        Assert.assertEquals(2, God.allInstances().size());
+        //TODO the groovy import takes too long, commented out for now in GroovyExecutor
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("God newGod = new God();");
+//        sb.append("newGod.setName('THEGOD2');");
+//        sb.append("Universe universeNew = new Universe(true);");
+//        sb.append("universeNew.setName(\"universeNew\");");
+//        sb.append("SpaceTime stNew = new SpaceTime(universeNew);");
+//        sb.append("new Space(stNew);");
+//        sb.append("new Time(stNew);");
+//        sb.append("newGod.addToUniverse(universeNew);");
+//        sb.append("UMLG.get().commit();");
+//
+//        String result = db.executeQueryToJson(UmlgQueryEnum.GROOVY, null, sb.toString());
+//        db.commit();
+//
+//        Assert.assertEquals(2, God.allInstances().size());
     }
 
     @Test
