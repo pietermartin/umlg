@@ -13,11 +13,10 @@ import org.umlg.java.metamodel.utilities.JavaStringHelpers;
 import org.umlg.java.metamodel.utilities.JavaUtil;
 
 public class OJAnnotatedOperation extends OJOperation implements OJAnnotatedElement {
-    public static final String RESULT = "result";
-    Map<OJPathName, OJAnnotationValue> f_annotations = new TreeMap<OJPathName, OJAnnotationValue>();
+    Map<OJPathName, OJAnnotationValue> f_annotations = new TreeMap<>();
     private OJAnnotatedField resultVariable;
     private boolean interfaceDefault;
-    private String wildCardType;
+    private boolean isSynchronized = false;
 
     public OJAnnotatedOperation(String string, String returnPathName) {
         this(string);
@@ -33,10 +32,6 @@ public class OJAnnotatedOperation extends OJOperation implements OJAnnotatedElem
     public OJAnnotatedOperation(String string) {
         super();
         setName(string);
-    }
-
-    public void setWildCardType(String wildCardType) {
-        this.wildCardType = wildCardType;
     }
 
     public boolean isInterfaceDefault() {
@@ -95,6 +90,9 @@ public class OJAnnotatedOperation extends OJOperation implements OJAnnotatedElem
         if (getAnnotations().size() > 0) {
             result.append(JavaStringHelpers.indent(JavaUtil.collectionToJavaString(getAnnotations(), "\n"), 0));
             result.append("\n");
+        }
+        if (this.isSynchronized()) {
+            result.append("synchronized ");
         }
         // signature
         if (this.isAbstract()) {
@@ -182,5 +180,13 @@ public class OJAnnotatedOperation extends OJOperation implements OJAnnotatedElem
             }
         }
         return null;
+    }
+
+    public void setSynchronized() {
+        this.isSynchronized = true;
+    }
+
+    public boolean isSynchronized() {
+        return this.isSynchronized;
     }
 }

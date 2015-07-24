@@ -99,8 +99,9 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
     private void addMetaClassGetterToRoot(Class clazz, OJAnnotatedClass metaClass) {
 
         OJAnnotatedOperation INSTANCE = new OJAnnotatedOperation("getInstance");
-        INSTANCE.setComment("getInstance() does not need to be synchronized as the edge to the root vertex is created on startup.");
+//        INSTANCE.setComment("getInstance() does not need to be synchronized as the edge to the root vertex is created on startup.");
 
+        INSTANCE.setSynchronized();
         INSTANCE.setStatic(true);
         INSTANCE.setReturnType(metaClass.getPathName());
         metaClass.addToOperations(INSTANCE);
