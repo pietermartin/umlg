@@ -30,7 +30,7 @@ public class UmlgOclExecutor {
      * @return
      */
     public static Object executeOclQuery(Object context, String query) {
-        if (context instanceof String && ((String) context).contains("::")) {
+        if (context instanceof String && !((String) context).contains(":::") && ((String) context).contains("::")) {
             //static ocl
             return executeOclQuery((String)context, query);
         } else if (context instanceof UmlgNode) {

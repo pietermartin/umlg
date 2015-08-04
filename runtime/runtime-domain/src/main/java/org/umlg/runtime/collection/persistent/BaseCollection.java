@@ -157,7 +157,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     .order().by(BaseCollection.IN_EDGE_SEQUENCE_ID, Order.incr)
                     .inV()
                     .as("vertex")
-                    .select();
+                    .select("edge", "vertex");
         } else {
             return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
                     .inE(this.getLabel())
@@ -165,7 +165,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     .order().by(BaseCollection.OUT_EDGE_SEQUENCE_ID, Order.incr)
                     .outV()
                     .as("vertex")
-                    .select();
+                    .select("edge", "vertex");
         }
     }
 
