@@ -51,7 +51,7 @@ import org.umlg.tests.ocl.kindoftypeof.TestKindOfTypeOf;
 import org.umlg.tests.ocl.ocloperator.*;
 import org.umlg.tests.ocl.operation.OclOperationTest;
 import org.umlg.tests.ocl.prefefinediterator.TestSortedBy;
-import org.umlg.tests.ocl.qualifiers.TestNavigateQualifedProperty;
+import org.umlg.tests.ocl.qualifiers.TestNavigateQualifiedProperty;
 import org.umlg.tests.primitive.TestBooleanPrimitive;
 import org.umlg.tests.primitive.TestPrimitiveRemoval;
 import org.umlg.tests.qualifiertest.*;
@@ -135,7 +135,7 @@ import org.umlg.tests.validationtest.TestValidation;
         TestQualifiedOnMultipleProperties.class,
         TestQualifierWithDateAndEnum.class,
         OclIsUniqueTest.class,
-        TestNavigateQualifedProperty.class,
+        TestNavigateQualifiedProperty.class,
         OclOperationTest.class,
         OclOrOperatorTest.class,
         TestChangeNotification.class,

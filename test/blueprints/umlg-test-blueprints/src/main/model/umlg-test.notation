@@ -11568,7 +11568,7 @@
           <stringListValue>name</stringListValue>
           <stringListValue>derived</stringListValue>
         </styles>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_BRXV8zAOEeSW2N9UJoM5Cg" x="20" y="-18"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_BRXV8zAOEeSW2N9UJoM5Cg" x="48" y="-20"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_BRXV9DAOEeSW2N9UJoM5Cg" type="6005">
         <styles xmi:type="notation:StringListValueStyle" xmi:id="_FJVtEDAOEeSW2N9UJoM5Cg" name="maskLabel">

@@ -3,13 +3,7 @@ package org.umlg.blueprints.junit;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.umlg.gremlin.TestGroovyExecutor;
-import org.umlg.tests.associationclass.TestAssociationClassCopiesOnePrimitivePropertiesToEdge;
-import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
-import org.umlg.tests.associationtoself.TestAssociationToSelf;
-import org.umlg.tests.batch.TestBatchMode;
-import org.umlg.tests.changenotification.TestChangeNotification;
-import org.umlg.tests.enumeration.TestNavigateFromEnum;
-import org.umlg.tests.ocl.qualifiers.TestNavigateQualifedProperty;
+import org.umlg.tests.collectiontest.SequenceTest;
 
 /**
  * Date: 2013/10/19
@@ -17,7 +11,7 @@ import org.umlg.tests.ocl.qualifiers.TestNavigateQualifedProperty;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestGroovyExecutor.class
+        SequenceTest.class
 })
 public class UmlgAnyTestSuite {
 }

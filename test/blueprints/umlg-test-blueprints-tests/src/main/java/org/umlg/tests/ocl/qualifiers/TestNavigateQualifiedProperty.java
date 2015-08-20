@@ -15,7 +15,7 @@ import java.util.Arrays;
  * Date: 2014/08/30
  * Time: 8:27 AM
  */
-public class TestNavigateQualifedProperty extends BaseLocalDbTest {
+public class TestNavigateQualifiedProperty extends BaseLocalDbTest {
 
     @Test
     public void testNavQualifiedOneProperty() {
