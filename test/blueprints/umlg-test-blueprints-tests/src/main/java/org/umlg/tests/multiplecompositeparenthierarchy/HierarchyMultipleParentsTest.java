@@ -33,7 +33,10 @@ public class HierarchyMultipleParentsTest extends BaseLocalDbTest {
         db.commit();
 
         rootA.reload();
-        Assert.assertEquals("folderAA", rootA.getFolder().get(0).getSubFolder().get(0).getName());
+        Assert.assertEquals(1, rootA.getFolder().size());
+        FolderX folderXFromDb = rootA.getFolder().get(0);
+        Assert.assertEquals(folderA, folderXFromDb);
+        Assert.assertEquals("folderAA", folderXFromDb.getSubFolder().get(0).getName());
         Assert.assertEquals("folderBB", rootB.getFolder().get(0).getSubFolder().get(0).getName());
 
         folderBB.reload();

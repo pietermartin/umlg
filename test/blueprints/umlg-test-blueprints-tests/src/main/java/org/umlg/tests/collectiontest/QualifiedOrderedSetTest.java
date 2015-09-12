@@ -10,6 +10,21 @@ import org.umlg.runtime.test.BaseLocalDbTest;
 public class QualifiedOrderedSetTest extends BaseLocalDbTest {
 
 	@Test
+	public void testOrderedSetInverseAdder() {
+		God god = new God(true);
+		god.setName("THEGOD");
+		Fantasy fantasy1 = new Fantasy(true);
+		fantasy1.setName("fantasy1");
+		fantasy1.addToGod(god);
+		FWomen fWomen1 = new FWomen(fantasy1);
+		FWomen fWomen2 = new FWomen(fantasy1);
+		db.commit();
+		God godTest = new God(god.getVertex());
+		godTest.reload();
+		Assert.assertEquals(1, godTest.getFantasy().size());
+	}
+
+	@Test
 	public void testOrderedSetIsUnique() {
 		God god = new God(true);
 		god.setName("THEGOD");
@@ -17,15 +32,14 @@ public class QualifiedOrderedSetTest extends BaseLocalDbTest {
 		fantasy1.setName("fantasy1");
 		fantasy1.addToGod(god);
 		god.getFantasy().add(fantasy1);
-
         FWomen fWomen1 = new FWomen(fantasy1);
         FWomen fWomen2 = new FWomen(fantasy1);
-
         db.commit();
 		God godTest = new God(god.getVertex());
+		godTest.reload();
 		Assert.assertEquals(1, godTest.getFantasy().size());
 	}
-	
+
 	@Test
 	public void testOrderedSetIsOrdered() {
 		God god = new God(true);

@@ -124,9 +124,14 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
             ResultSet result = metadata.getTables(catalog, schemaPattern, tableNamePattern, types);
             while (result.next()) {
                 StringBuilder sql = new StringBuilder("DROP TABLE ");
-                sql.append(sqlDialect.maybeWrapInQoutes(result.getString(2)));
+                String schema = result.getString(2);
+                String table = result.getString(3);
+                if (sqlDialect.getGisSchemas().contains(schema) || sqlDialect.getSpacialRefTable().contains(table)) {
+                    continue;
+                }
+                sql.append(sqlDialect.maybeWrapInQoutes(schema));
                 sql.append(".");
-                sql.append(sqlDialect.maybeWrapInQoutes(result.getString(3)));
+                sql.append(sqlDialect.maybeWrapInQoutes(table));
                 sql.append(" CASCADE");
                 if (sqlDialect.needsSemicolon()) {
                     sql.append(";");
@@ -140,6 +145,9 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
             result = metadata.getSchemas(catalog, schemaPattern);
             while (result.next()) {
                 String schema = result.getString(1);
+                if (sqlDialect.getGisSchemas().contains(schema)) {
+                    continue;
+                }
                 if (!sqlDialect.getDefaultSchemas().contains(schema)) {
                     StringBuilder sql = new StringBuilder("DROP SCHEMA ");
                     sql.append(sqlDialect.maybeWrapInQoutes(schema));

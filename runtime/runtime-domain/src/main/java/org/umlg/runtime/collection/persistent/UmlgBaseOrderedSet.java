@@ -2,6 +2,7 @@ package org.umlg.runtime.collection.persistent;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.tinkerpop.gremlin.process.traversal.Order;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.UMLG;
@@ -42,7 +43,7 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
         //Create the edge to the new element
         Edge edgeFromParentToElementVertex = addInternal(e);
         manageLinkedList(indexOf, edgeFromParentToElementVertex);
-        ((UmlgNode)e).setEdge(this.umlgRuntimeProperty, edgeFromParentToElementVertex);
+        ((UmlgNode) e).setEdge(this.umlgRuntimeProperty, edgeFromParentToElementVertex);
         return edgeFromParentToElementVertex;
     }
 
@@ -84,25 +85,28 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
     @Override
     protected void addToInverseLinkedList(Edge edge) {
         if (!this.isControllingSide()) {
-            edge.property(BaseCollection.IN_EDGE_SEQUENCE_ID, (double)this.inverseCollectionSize);
+            edge.property(BaseCollection.IN_EDGE_SEQUENCE_ID, (double) this.inverseCollectionSize);
         } else {
-            edge.property(BaseCollection.OUT_EDGE_SEQUENCE_ID, (double)this.inverseCollectionSize);
+            edge.property(BaseCollection.OUT_EDGE_SEQUENCE_ID, (double) this.inverseCollectionSize);
         }
     }
 
     @Override
     protected Iterator<Vertex> getVertices() {
         if (this.isControllingSide()) {
-            //TODO gremlin/sqlg optimization needed, this is super inefficient now
             return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
-                    .outE(this.getLabel())
-                    .order().by(BaseCollection.IN_EDGE_SEQUENCE_ID, Order.incr)
-                    .inV();
+                    .outE(this.getLabel()).as("e")
+                    .inV().as("v")
+                    .select("e", "v")
+                    .order().by(__.select("e").by(BaseCollection.IN_EDGE_SEQUENCE_ID), Order.incr)
+                    .map(m -> (Vertex)m.get().get("v"));
         } else {
             return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
-                    .inE(this.getLabel())
-                    .order().by(BaseCollection.OUT_EDGE_SEQUENCE_ID, Order.incr)
-                    .outV();
+                    .inE(this.getLabel()).as("e")
+                    .outV().as("v")
+                    .select("e", "v")
+                    .order().by(__.select("e").by(BaseCollection.OUT_EDGE_SEQUENCE_ID), Order.incr)
+                    .map(m -> (Vertex)m.get().get("v"));
         }
     }
 

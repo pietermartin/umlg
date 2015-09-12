@@ -41,6 +41,15 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements UmlgSet<E>
 	}
 
 	@Override
+	protected void addToInverseLinkedList(Edge edge) {
+		if (!this.isControllingSide()) {
+			edge.property(BaseCollection.IN_EDGE_SEQUENCE_ID, (double)this.inverseCollectionSize);
+		} else {
+			edge.property(BaseCollection.OUT_EDGE_SEQUENCE_ID, (double)this.inverseCollectionSize);
+		}
+	}
+
+	@Override
 	protected Collection convertToArrayCollection() {
 		return new HashSet<>(this.internalCollection.size() + 1);
 	}

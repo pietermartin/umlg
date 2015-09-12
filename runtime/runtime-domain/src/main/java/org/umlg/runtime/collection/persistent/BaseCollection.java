@@ -1,5 +1,6 @@
 package org.umlg.runtime.collection.persistent;
 
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.tinkerpop.gremlin.process.traversal.Order;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
@@ -150,22 +151,17 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     protected GraphTraversal<Vertex, Map<String, Element>> getVerticesWithEdge() {
         if (this.isControllingSide()) {
-            //TODO gremlin/sqlg optimization needed, this is super inefficient now
             return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
-                    .outE(this.getLabel())
-                    .as("edge")
-                    .order().by(BaseCollection.IN_EDGE_SEQUENCE_ID, Order.incr)
-                    .inV()
-                    .as("vertex")
-                    .select("edge", "vertex");
+                    .outE(this.getLabel()).as("edge")
+                    .inV().as("vertex")
+                    .<Element>select("edge", "vertex")
+                    .order().by(__.select("edge").by(BaseCollection.IN_EDGE_SEQUENCE_ID), Order.incr);
         } else {
             return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
-                    .inE(this.getLabel())
-                    .as("edge")
-                    .order().by(BaseCollection.OUT_EDGE_SEQUENCE_ID, Order.incr)
-                    .outV()
-                    .as("vertex")
-                    .select("edge", "vertex");
+                    .inE(this.getLabel()).as("edge")
+                    .outV().as("vertex")
+                    .<Element>select("edge", "vertex")
+                    .order().by(__.select("edge").by(BaseCollection.OUT_EDGE_SEQUENCE_ID), Order.incr);
         }
     }
 
@@ -230,10 +226,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             //This is saved on the collection as the edge is needed on UmlgPropertyAssociationClassSet to set the id of the association class vertex
             this.edge = addInternal(e);
 
-            // Edge can only be null on a one primitive
-//            if (this.edge == null && !isOnePrimitive() && !isOneEnumeration() && getDataTypeEnum() == null) {
-//                throw new IllegalStateException("Edge can only be null on isOne which is a String, Integer, Boolean or primitive");
-//            }
             if (e instanceof UmlgNode && this.edge == null) {
                 throw new IllegalStateException("Edge can not be null for a UmlgNode");
             }
@@ -389,39 +381,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 }
             } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
                 this.vertex.property(getPersistentName(), convertToArrayForRemoval());
-//                v = removeFromInternalMap(o.toString());
-//                if (isOrdered()) {
-//                    removeFromLinkedList(v);
-//                }
-//                if (isInverseOrdered()) {
-//                    removeFromInverseLinkedList(v);
-//                }
-//                v.remove();
             } else if (getDataTypeEnum() != null) {
                 this.vertex.property(getPersistentName()).remove();
             } else if (e.getClass().isEnum() && (isManyToMany() || isOneToMany())) {
                 this.vertex.property(getPersistentName(), convertToArrayForRemoval());
-//                v = removeFromInternalMap(o);
-//                if (isOrdered()) {
-//                    removeFromLinkedList(v);
-//                }
-//                if (isInverseOrdered()) {
-//                    removeFromInverseLinkedList(v);
-//                }
-//                v.remove();
             } else {
                 this.vertex.property(getPersistentName(), convertToArrayForRemoval());
-//                v = removeFromInternalMap(o);
-//                if (this.owner instanceof TinkerAuditableNode) {
-//                    createAudit(e, true);
-//                }
-//                if (isOrdered()) {
-//                    removeFromLinkedList(v);
-//                }
-//                if (isInverseOrdered()) {
-//                    removeFromInverseLinkedList(v);
-//                }
-//                v.remove();
             }
         }
         return result;
@@ -907,11 +872,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         if (isManyPrimitive() || isManyEnumeration() || (getDataTypeEnum() != null && (isOneToMany() || isManyToMany()))) {
             return false;
         } else {
-            if (this.umlgRuntimeProperty.isOrdered() && this.umlgRuntimeProperty.isQualified() && getUpper() == 1) {
-                return true;
-            } else {
-                return this.umlgRuntimeProperty.isOrdered() && (getUpper() == -1 || getUpper() > 1);
-            }
+            return this.umlgRuntimeProperty.isOrdered();
+//            if (this.umlgRuntimeProperty.isOrdered() && this.umlgRuntimeProperty.isQualified() && getUpper() == 1) {
+//                return true;
+//            } else {
+//                return this.umlgRuntimeProperty.isOrdered() && (getUpper() == -1 || getUpper() > 1);
+//            }
         }
     }
 
@@ -921,11 +887,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         if (isManyPrimitive() || isManyEnumeration() || (getDataTypeEnum() != null && (isOneToMany() || isManyToMany()))) {
             return false;
         } else {
-            if (this.umlgRuntimeProperty.isInverseOrdered() && this.umlgRuntimeProperty.isInverseQualified() && getUpper() == 1) {
-                return true;
-            } else {
-                return this.umlgRuntimeProperty.isInverseOrdered() && (getInverseUpper() == -1 || getInverseUpper() > 1);
-            }
+            return this.umlgRuntimeProperty.isInverseOrdered();
+//            if (this.umlgRuntimeProperty.isInverseOrdered() && this.umlgRuntimeProperty.isInverseQualified() && getUpper() == 1) {
+//                return true;
+//            } else {
+//                return this.umlgRuntimeProperty.isInverseOrdered() && (getInverseUpper() == -1 || getInverseUpper() > 1);
+//            }
         }
     }
 
