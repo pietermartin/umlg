@@ -3141,6 +3141,10 @@ endif</body>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UH1RUe8CEeOCtvMnpL9cwg" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UH1RUu8CEeOCtvMnpL9cwg" value="1"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_NsiJ4GNvEeWlBoAlg3KdEg" name="testEnumNavigability" type="_MAamUGNvEeWlBoAlg3KdEg" association="_Nshi0GNvEeWlBoAlg3KdEg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_kfi8wGNxEeWlBoAlg3KdEg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_kflZAGNxEeWlBoAlg3KdEg" value="1"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Enumeration" xmi:id="_RWnG4O8CEeOCtvMnpL9cwg" name="Gender">
             <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_R-u20O8CEeOCtvMnpL9cwg" name="MALE"/>
@@ -3166,6 +3170,17 @@ endif</body>
                 <value xmi:type="uml:LiteralString" xmi:id="_RRS-cFFtEeSEt403SChaBA" value="aaaa"/>
               </slot>
             </ownedLiteral>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_MAamUGNvEeWlBoAlg3KdEg" name="TestEnumNavigability">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_Nshi02NvEeWlBoAlg3KdEg" name="human" type="_A3Ag4O8CEeOCtvMnpL9cwg" association="_Nshi0GNvEeWlBoAlg3KdEg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Wo4Z0GNvEeWlBoAlg3KdEg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Wo6PAGNvEeWlBoAlg3KdEg" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_Nshi0GNvEeWlBoAlg3KdEg" name="human_testEnumNavigability" memberEnd="_Nshi02NvEeWlBoAlg3KdEg _NsiJ4GNvEeWlBoAlg3KdEg">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Nshi0WNvEeWlBoAlg3KdEg" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Nshi0mNvEeWlBoAlg3KdEg" key="nature" value="UML_Nature"/>
+            </eAnnotations>
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_2zoC8B0NEeSmCaILr6OaKg" name="ocl">

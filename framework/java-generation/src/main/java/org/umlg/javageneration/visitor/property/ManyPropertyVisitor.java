@@ -1,7 +1,7 @@
 package org.umlg.javageneration.visitor.property;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.uml2.uml.BehavioredClassifier;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.Visitor;
@@ -12,8 +12,8 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedField;
 import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property> {
@@ -25,7 +25,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
     @Override
     public void visitBefore(Property p) {
         PropertyWrapper propertyWrapper = new PropertyWrapper(p);
-        if (propertyWrapper.isMany() && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier() && !propertyWrapper.isRefined()) {
+        if (propertyWrapper.isMany() && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier() && !propertyWrapper.isRefined() && !(propertyWrapper.getOwner() instanceof Enumeration)) {
             OJAnnotatedClass owner = findOJClass(p);
             buildGetter(owner, propertyWrapper);
             if (propertyWrapper.isMemberOfAssociationClass()) {
