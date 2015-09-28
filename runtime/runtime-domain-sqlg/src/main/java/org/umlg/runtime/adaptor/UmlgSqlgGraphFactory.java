@@ -6,7 +6,6 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.sqlg.sql.dialect.SqlDialect;
 import org.umlg.sqlg.structure.SchemaManager;
-import org.umlg.sqlg.structure.SqlgDataSource;
 import org.umlg.sqlg.structure.SqlgGraph;
 
 import java.io.File;
@@ -115,7 +114,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
         SqlgGraph sqlgGraph = (SqlgGraph)this.umlgGraph.getUnderlyingGraph();
         sqlgGraph.getSchemaManager().close();
         SqlDialect sqlDialect = sqlgGraph.getSqlDialect();
-        try (Connection conn = SqlgDataSource.INSTANCE.get(this.configuration.getString("jdbc.url")).getConnection()) {
+        try (Connection conn = sqlgGraph.getSqlgDataSource().get(this.configuration.getString("jdbc.url")).getConnection()) {
             DatabaseMetaData metadata = conn.getMetaData();
             String catalog = null;
             String schemaPattern = null;
@@ -160,7 +159,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
                     }
                 }
             }
-            SqlgDataSource.INSTANCE.close(this.configuration.getString("jdbc.url"));
+            sqlgGraph.getSqlgDataSource().close(this.configuration.getString("jdbc.url"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

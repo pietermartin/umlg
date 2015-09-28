@@ -299,11 +299,6 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
      *******************************/
 
     @Override
-    public boolean equals(Object object) {
-        return this.equals(object);
-    }
-
-    @Override
     public boolean notEquals(Object object) {
         return !equals(object);
     }
