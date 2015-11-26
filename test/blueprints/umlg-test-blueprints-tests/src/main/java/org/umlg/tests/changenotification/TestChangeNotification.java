@@ -44,6 +44,7 @@ public class TestChangeNotification extends BaseLocalDbTest {
         Assert.assertEquals(2, addValues.size());
         Assert.assertEquals(1, removeValues.size());
         Assert.assertEquals(0, deleteValues.size());
+
 //        Assert.assertEquals("whatajol", addValues.get(0));
 //        Assert.assertEquals("halo", addValues.get(1));
 //        Assert.assertEquals("whatajol", removeValues.get(0));
