@@ -62,10 +62,20 @@
 </li><li><a href="#DatatypesID">Data types</a></li><li><a href="#ArchitectureID">Architecture</a><ul class="nav">
 <li><a href="#VertextablesID">Vertex tables</a></li><li><a href="#EdgetablesID">Edge tables</a></li><li><a href="#TinkerPop-modernID">TinkerPop-modern</a><ul class="nav">
 <li><a href="#ERDiagramID">ER Diagram</a></li><li><a href="#V_personID">V_person</a></li><li><a href="#V_softwareID">V_software</a></li><li><a href="#E_knowsID">E_knows</a></li><li><a href="#E_createdID">E_created</a></li></ul>
-</li><li><a href="#NamespacingandSchemasID">Namespacing and Schemas</a></li></ul>
+</li><li><a href="#NamespacingandSchemasID">Namespacing and Schemas</a><ul class="nav">
+<li><a href="#SchemasID">Schemas</a></li></ul>
+</li></ul>
 </li><li><a href="#IndexesID">Indexes</a><ul class="nav">
-<li><a href="#ExampleID">Example</a></li></ul>
-</li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#SqlqueriesID">Sql queries</a></li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#BatchmodeID">Batch mode</a></li><li><a href="#PerformanceIndicatorID">Performance Indicator</a><ul class="nav">
+<li><a href="#ExampleID">Example</a><ul class="nav">
+<li><a href="#TabledefinitionID">Table definition</a></li></ul>
+</li></ul>
+</li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#MultipleJvmID">Multiple Jvm</a><ul class="nav">
+<li><a href="#ExamplePostgresqlID">Example Postgresql</a></li></ul>
+</li><li><a href="#GremlinID">Gremlin</a><ul class="nav">
+<li><a href="#ExampleID">Example</a></li><li><a href="#GremlinpredicatesID">Gremlin predicates </a></li></ul>
+</li><li><a href="#BatchmodeID">Batch mode</a><ul class="nav">
+<li><a href="#ExamplePostgresqlID">Example Postgresql</a></li></ul>
+</li><li><a href="#PerformanceIndicatorID">Performance Indicator</a><ul class="nav">
 <li><a href="#Sometrivialexamples.ID">Some trivial examples.</a><ul class="nav">
 <li><a href="#Create10000objects,eachwith2propertiesID">Create 10000 objects, each with 2 properties</a></li><li><a href="#Create10001Persons,eachwith2propertiesandonefriendID">Create 10001 Persons, each with 2 properties and one friend</a></li><li><a href="#Postgres,Create1000000PersonsandDogswithapetedge.BatchModeon.ID">Postgres, Create 1 000 000 Persons and Dogs with a pet edge. BatchMode on.</a></li><li><a href="#HSQLDB,Create1000000PersonsandDogswithapetedge.ID">HSQLDB, Create 1 000 000 Persons and Dogs with a pet edge.</a></li></ul>
 </li></ul>
@@ -106,6 +116,9 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 <li>MetaProperties</li>
 <li>UserSuppliedIds</li>
 <li>NumericIds</li>
+<li>StringIds</li>
+<li>UuidIds</li>
+<li>CustomIds</li>
 <li>AnyIds</li>
 </ul>
 
@@ -114,13 +127,22 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 <ul>
 <li>UserSuppliedIds</li>
 <li>NumericIds</li>
+<li>StringIds</li>
+<li>UuidIds</li>
+<li>CustomIds</li>
 <li>AnyIds</li>
 </ul>
 
 <p>Vertex property features <strong>not</strong> implemented.</p>
 
 <ul>
+<li>AddProperty</li>
+<li>RemoveProperty</li>
 <li>UserSuppliedIds</li>
+<li>NumericIds</li>
+<li>StringIds</li>
+<li>UuidIds</li>
+<li>CustomIds</li>
 <li>AnyIds</li>
 <li>MapValues</li>
 <li>MixedListValues</li>
@@ -152,7 +174,7 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 <pre class="prettyprint"><code class="language-java">&lt;dependency&gt;
     &lt;groupId&gt;org.umlg&lt;/groupId&gt;
     &lt;artifactId&gt;sqlg-hsqldb&lt;/artifactId&gt;
-    &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.1.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 
@@ -161,7 +183,7 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 <pre class="prettyprint"><code class="language-java">&lt;dependency&gt;
     &lt;groupId&gt;org.umlg&lt;/groupId&gt;
     &lt;artifactId&gt;sqlg-postgres&lt;/artifactId&gt;
-    &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.1.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 
@@ -219,36 +241,66 @@ These are,</p>
          \,,,/
          (o o)
 -----oOOo-(3)-oOOo-----
-gremlin&gt; :install org.umlg sqlg-hsqldb 1.0.0.M9
-==&gt;A module with the name sqlg-hsqldb is already installed
-gremlin&gt; :plugin use tinkerpop.sqlg-hsqldb
-==&gt;tinkerpop.sqlg-hsqldb activated
-gremlin&gt; g = SqlgGraph.open('/home/pieter/Downloads/sqlg/sqlg-hsqldb/src/test/resources/sqlg.properties')
+plugin activated: tinkerpop.server
+plugin activated: tinkerpop.utilities
+plugin activated: tinkerpop.tinkergraph
+gremlin&gt; :install org.umlg sqlg-hsqldb 1.1.0-SNAPSHOT
+log4j:WARN No appenders could be found for logger (org.apache.tinkerpop.gremlin.groovy.util.DependencyGrabber).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+==&gt;Loaded: [org.umlg, sqlg-hsqldb, 1.1.0-SNAPSHOT]
+gremlin&gt; :plugin list
+==&gt;tinkerpop.server[active]
+==&gt;tinkerpop.gephi
+==&gt;tinkerpop.utilities[active]
+==&gt;tinkerpop.sugar
+==&gt;tinkerpop.credentials
+==&gt;tinkerpop.tinkergraph[active]
+==&gt;sqlg.hsqldb
+gremlin&gt; :plugin use sqlg.hsqldb
+==&gt;sqlg.hsqldb activated
+gremlin&gt; graph = SqlgGraph.open('pathTo/sqlg.properties')
 ==&gt;sqlggraph[SqlGraph]
-gremlin&gt; g.loadGraphML('../../data/grateful-dead.xml')
+gremlin&gt; g = graph.traversal()
+==&gt;graphtraversalsource[sqlggraph[SqlGraph], standard]
+gremlin&gt; graph.io(graphml()).readGraph('../data/grateful-dead.xml')
 ==&gt;null
 gremlin&gt; g.V().count()
-==&gt;2424
+==&gt;808
 gremlin&gt;
 </code></pre>
 
 <p><strong>Postgresql</strong></p>
 
-<pre class="prettyprint"><code class="language-java">[pieter@pieter-laptop bin]$ ./gremlin.sh
-
-         \,,,/
+<pre class="prettyprint"><code class="language-java">         \,,,/
          (o o)
 -----oOOo-(3)-oOOo-----
-gremlin&gt; :install org.umlg sqlg-postgres 1.0.0.M9
-==&gt;A module with the name sqlg-postgres is already installed
-gremlin&gt; :plugin use tinkerpop.sqlg-postgres
-==&gt;tinkerpop.sqlg-postgres activated
-gremlin&gt; g = SqlgGraph.open('/home/pieter/Downloads/sqlg/sqlg-postgres/src/test/resources/sqlg.properties')
+plugin activated: tinkerpop.server
+plugin activated: tinkerpop.utilities
+plugin activated: tinkerpop.tinkergraph
+gremlin&gt; :install org.umlg sqlg-postgres 1.1.0-SNAPSHOT
+log4j:WARN No appenders could be found for logger (org.apache.tinkerpop.gremlin.groovy.util.DependencyGrabber).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+==&gt;Loaded: [org.umlg, sqlg-postgres, 1.1.0-SNAPSHOT]
+gremlin&gt; :plugin list
+==&gt;tinkerpop.server[active]
+==&gt;tinkerpop.gephi
+==&gt;tinkerpop.utilities[active]
+==&gt;tinkerpop.sugar
+==&gt;tinkerpop.credentials
+==&gt;tinkerpop.tinkergraph[active]
+==&gt;sqlg.postgres
+gremlin&gt; :plugin use sqlg.postgres
+==&gt;sqlg.postgres activated
+gremlin&gt; graph = SqlgGraph.open('pathTo/sqlg.properties')
 ==&gt;sqlggraph[SqlGraph]
-gremlin&gt; g.loadGraphML('../../data/grateful-dead.xml')
+gremlin&gt; g = graph.traversal()
+==&gt;graphtraversalsource[sqlggraph[SqlGraph], standard]
+gremlin&gt; graph.io(graphml()).readGraph('../data/grateful-dead.xml')
 ==&gt;null
 gremlin&gt; g.V().count()
-==&gt;2424
+==&gt;808
 gremlin&gt;
 </code></pre>
 
@@ -349,9 +401,31 @@ gremlin&gt;
             <td>LONGVARCHAR ARRAY DEFAULT ARRAY[]</td>
             <td>TEXT[]</td>
         </tr>
+        <tr>
+            <td>java.time.LocalDateTime</td>
+            <td>TIMESTAMP WITH TIME ZONE</td>
+            <td>TIMESTAMP WITH TIME ZONE</td>
+        </tr>
+        <tr>
+            <td>java.time.LocalDate</td>
+            <td>DATE</td>
+            <td>DATE</td>
+        </tr>
+        <tr>
+            <td>java.time.LocalTime</td>
+            <td>TIME WITH TIME ZONE</td>
+            <td>TIME WITH TIME ZONE</td>
+        </tr>
+        <tr>
+            <td>com.fasterxml.jackson.databind.JsonNode</td>
+            <td><strong>Not supported</strong></td>
+            <td>JSONB</td>
+        </tr>
     </tbody>
 </table>
 </div>
+
+<p><strong>Note:</strong> <code class="language-java">java.time.LocalTime</code> drops the nano second precision.</p>
 
 <p><br /></p>
 
@@ -410,16 +484,24 @@ is the <code class="language-java">public</code> schema.</p>
 <p>To specify the schema for a label Sqlg uses the dot <code class="language-java">.</code> notation.</p>
 
 <pre class="prettyprint"><code class="language-java">Vertex john = this.sqlgGraph.addVertex(T.label, "manager", "name", "john");
-Vertex palace1 = this.sqlgGraph.addVertex(T.label, "property.house", "name", "palace1");
+Vertex palace1 = this.sqlgGraph.addVertex(T.label, "continent.house", "name", "palace1");
 Vertex corrola = this.sqlgGraph.addVertex(T.label, "fleet.car", "model", "corrola");
 palace1.addEdge("managedBy", john);
 corrola.addEdge("owner", john);
 </code></pre>
 
-<p>This will create a table <code class="language-java">V_manager</code> in the <code class="language-java">public</code> (default) schema. Table <code class="language-java">V_house</code> is in a <code class="language-java">property</code> schema and table <code class="language-java">V_car</code>
-is in a <code class="language-java">fleet</code> schema. For the edges a <code class="language-java">E_managedBy</code> table is created in the <code class="language-java">property</code> schema and a <code class="language-java">E_owner</code> table in the <code class="language-java">fleet</code> schema.</p>
+<p>This will create a table <code class="language-java">V_manager</code> in the <code class="language-java">public</code> (default) schema. Table <code class="language-java">V_house</code> is in a <code class="language-java">continent</code> schema and table <code class="language-java">V_car</code>
+is in a <code class="language-java">fleet</code> schema. For the edges a <code class="language-java">E_managedBy</code> table is created in the <code class="language-java">continent</code> schema and a <code class="language-java">E_owner</code> table in the <code class="language-java">fleet</code> schema.</p>
 
-<p><img src="images/sqlg/schemas.png" alt="image of tinkerpop-classic" title="" /></p>
+<p><br /></p>
+
+<h4 id="SchemasID">Schemas</h4>
+
+<p><br />
+<img src="images/sqlg/schemas.png" alt="image of tinkerpop-classic" title="" />
+<img src="images/sqlg/continent.png" alt="image of tinkerpop-classic" title="" />
+<img src="images/sqlg/fleet.png" alt="image of tinkerpop-classic" title="" />
+<img src="images/sqlg/public.png" alt="image of tinkerpop-classic" title="" /></p>
 
 <p><br /></p>
 
@@ -440,8 +522,10 @@ is in a <code class="language-java">fleet</code> schema. For the edges a <code c
 the column does not yet exist and Sqlg needs to create it.</p>
 
 <p>Outside of creating the index Sqlg has no further direct interaction with index logic. However gremlin queries with a
-<code class="language-java">has</code> step will translate to a <code class="language-java">sql</code> <code class="language-java">where</code> clause. If an index has been created on the property of the <code class="language-java">has</code> step then
+<code class="language-java">has</code> step will translate to a sql <code class="language-java">where</code> clause. If an index has been created on the property of the <code class="language-java">has</code> step then
 the underlying sql engine will utilize that index.</p>
+
+<p>The index does not need to be created upfront. It can be added any time.</p>
 
 <h3 id="ExampleID">Example</h3>
 
@@ -453,7 +537,7 @@ public void testIndexOnVertex() throws SQLException {
         this.sqlgGraph.addVertex(T.label, "Person", "name", "john" + i);
     }
     this.sqlgGraph.tx().commit();
-    assertEquals(1, this.sqlgGraph.V().has(T.label, "Person").has("name", "john50").count().next(), 0);
+    assertEquals(1, this.sqlgGraph.traversal().V().has(T.label, "Person").has("name", "john50").count().next(), 0);
 
     //Check if the index is being used
     Connection conn = this.sqlgGraph.tx().getConnection();
@@ -470,13 +554,19 @@ public void testIndexOnVertex() throws SQLException {
 Output: "Bitmap Heap Scan on "V_Person" a  (cost=4.42..32.42 rows=18 width=40) (actual time=0.016..0.016 rows=1 loops=1)"
 </code></pre>
 
-<p>In the above example, Sqlg will create a table <code class="language-java">V_Person</code> with column <code class="language-java">name</code> together with an index on the <code class="language-java">name</code>.
-At present the default index is created. For postgresql this is a <code class="language-java">Btree</code> index.</p>
+<p><br /></p>
+
+<h4 id="TabledefinitionID">Table definition</h4>
+
+<p><br />
+<img src="images/sqlg/tableDefinition.png" alt="image of tinkerpop-classic" title="" /></p>
+
+<p>In the above example, Sqlg created a table <code class="language-java">V_Person</code> with column <code class="language-java">name</code> and an index on the <code class="language-java">name</code> column.
+Currently Sqlg only supports the default index. For postgresql this is a <code class="language-java">Btree</code> index.</p>
 
 <p>The output shows the result of a postgres query explain plan. The result shows that postgres does indeed utilize the index.</p>
 
-<p>The gremlin query <code class="language-java">this.sqlgGraph.V().has(T.label, "Person").has("name1", "john50")</code> will utilize the index on the <code class="language-java">name</code> field.
-Currently only <code class="language-java">Compare.eq</code> is supported.</p>
+<p>The gremlin query <code class="language-java">this.sqlgGraph.traversal().V().has(T.label, "Person").has("name1", "john50")</code> will utilize the index on the <code class="language-java">name</code> field.</p>
 
 <p><br /></p>
 
@@ -489,25 +579,12 @@ Currently only <code class="language-java">Compare.eq</code> is supported.</p>
 <p><strong>HSQLDB</strong> does not support transactional schema creation. HSQLDB automatically commits any schema creation/alter command
 and immediately starts a new transaction.
 This can have some rather unfortunate consequences, as HSQLDB will silently commit a user transaction thus invalidating
-the user's transaction semantics.</p>
+the user's transaction boundaries and semantics.</p>
 
 <p><strong>Postgres</strong> supports transactional schema creation/alter commands. The user's transaction semantics remain intact.
- However schema creation commands creates table level locks which increases the risk of deadlocks in a multi-threaded environment.</p>
-
-<p><br /></p>
-
-<h2 id="SqlqueriesID">Sql queries</h2>
-
-<p><br /></p>
-
-<p><strong>Note</strong> Experimental Feature</p>
-
-<pre class="prettyprint"><code class="language-java">List&lt;Vertex&gt; SqlgGraph.vertexQuery(String sql)
-</code></pre>
-
-<p>The requirement is that the given sql must return a <code class="language-java">ID</code> column representing any vertex idx.
-Sqlg will then be able to wrap the given sql to retrieve the necessary data to instantiate a SqlgVertex. This way only one
-sql query is executed to retrieve vertices. The performance impact on the original query should be minimal.</p>
+ However schema creation commands creates table level locks which increases the risk of deadlocks in a multi-threaded environment. 
+ Sqlg manages a global lock for schema creation to prevent postgres from dead locking.
+ If multiple jvm(s) are used then a Hazelcast distributed lock is used.</p>
 
 <p><br /></p>
 
@@ -525,17 +602,105 @@ Sqlg uses <a href="http://hazelcast.com/">Hazelcast</a> as a distributed cache o
 in the constructors configuration object. Hazelcast will then automatically set up the distributed cluster for the schema
 information.</p>
 
+<h4 id="ExamplePostgresqlID">Example Postgresql</h4>
+
+<p><strong>Jvm 1</strong></p>
+
+<pre class="prettyprint"><code class="language-java">jdbc.url=jdbc:postgresql://localhost:5432/yourdb
+jdbc.username=postgres
+jdbc.password=******
+hazelcast.members=127.0.0.1,127.0.0.2
+</code></pre>
+
+<p><strong>Jvm 2</strong></p>
+
+<pre class="prettyprint"><code class="language-java">jdbc.url=jdbc:postgresql://localhost:5432/yourdb
+jdbc.username=postgres
+jdbc.password=******
+hazelcast.members=127.0.0.1,127.0.0.2
+</code></pre>
+
+<p><br /></p>
+
+<h2 id="GremlinID">Gremlin</h2>
+
+<p><br /></p>
+
+<p>Sqlg has full support for gremlin and passes the TinkerPop test suite. 
+However gremlin's fine grained graphy nature result in very high latency. </p>
+
+<p>Sqlg optimizes gremlin by analyzing the steps and where possible combining them into a SqlgGraphStepCompiled or SqlgVertexStepCompiled.</p>
+
+<p>Consecutive GraphStep, VertexStep, EdgeVertexStep, EdgeOtherVertexStep, HasStep, RepeatStep and OrderGlobalStep are currently combined.
+The combined step will then in turn generate the sql statements to retrieve the data. It attempts to retrieve the data in as few distinct sql statements as possible.</p>
+
+<h4 id="ExampleID">Example</h4>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void showHighLatency() {
+    Vertex easternUnion = this.sqlgGraph.addVertex(T.label, "Organization", "name", "EasternUnion");
+    Vertex legal = this.sqlgGraph.addVertex(T.label, "Division", "name", "Legal");
+    Vertex distribution = this.sqlgGraph.addVertex(T.label, "Division", "name", "Distribution");
+    Vertex newYork = this.sqlgGraph.addVertex(T.label, "Office", "name", "NewYork");
+    Vertex singapore = this.sqlgGraph.addVertex(T.label, "Office", "name", "Singapore");
+    easternUnion.addEdge("organization_division", legal);
+    easternUnion.addEdge("organization_division", distribution);
+    legal.addEdge("division_distribution", newYork);
+    distribution.addEdge("division_distribution", singapore);
+    this.sqlgGraph.tx().commit();
+
+    GraphTraversal&lt;Vertex, Vertex&gt; traversal = this.sqlgGraph.traversal().V().hasLabel("Organization").out().out();
+    System.out.println(traversal);
+    traversal.hasNext();
+    System.out.println(traversal);
+    List&lt;Vertex&gt; offices = traversal.toList();
+    assertEquals(2, offices.size());
+}
+
+Before optimization:
+[GraphStep([],vertex), HasStep([~label.eq(Organization)]), VertexStep(OUT,vertex), VertexStep(OUT,vertex)]
+After optimization:
+[SqlgGraphStepCompiled([],vertex)]
+</code></pre>
+
+<p>Without optimization the query <code class="language-java">this.sqlgGraph.traversal().V().hasLabel("Organization").out().out()</code> will result
+in a number of database hits. First to get the organizations, then for each organization the divisions and then for each division the offices.
+For an embedded db like HSQLDB this is still ok but for a database server like postgresql the performance impact is significant.</p>
+
+<p>In the above example the GraphStep, HasStep and 2 VertexSteps are all combined into one step, SqlgGraphStepCompiled.</p>
+
+<p>The above example will retrieve the data in one sql query.</p>
+
+<pre class="prettyprint"><code class="language-java">SELECT
+    "public"."V_Office"."ID" AS "alias1",
+    "public"."V_Office"."name" AS "alias2"
+FROM
+    "public"."V_Organization" INNER JOIN
+    "public"."E_organization_division" ON "public"."V_Organization"."ID" = "public"."E_organization_division"."public.Organization__O" INNER JOIN
+    "public"."V_Division" ON "public"."E_organization_division"."public.Division__I" = "public"."V_Division"."ID" INNER JOIN
+    "public"."E_division_distribution" ON "public"."V_Division"."ID" = "public"."E_division_distribution"."public.Division__O" INNER JOIN
+    "public"."V_Office" ON "public"."E_division_distribution"."public.Office__I" = "public"."V_Office"."ID"
+</code></pre>
+
+<p><br /></p>
+
+<h3>Gremlin predicates</h3>
+
+<p><br /></p>
+
 <p><br /></p>
 
 <h2 id="BatchmodeID">Batch mode</h2>
 
 <p><br /></p>
 
-<p>Postgres is significantly slower than HSQLDB. This is expected as Postgres runs as a server. HSQLDB shines when it runs
-in embedded mode. (HSQLDB has not been tested in server mode!)</p>
+<p>Postgres is significantly slower than HSQLDB. This is expected as Postgres runs as a server and suffers from latency. 
+HSQLDB shines in embedded mode. (HSQLDB has not been tested in server mode!)</p>
 
-<p>Sqlg supports a batch mode. This is currently only implemented on Postgres.
+<p>Sqlg supports various batch modes. Batch modes are only implemented on Postgresql.
 Batch mode is activated on the transaction object itself. After every <code class="language-java">commit</code> batchMode needs to be reactivated.</p>
+
+<h4 id="ExamplePostgresqlID">Example Postgresql</h4>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void testBatchMode() {
@@ -554,7 +719,7 @@ public void testBatchMode() {
 </code></pre>
 
 <p>With <code class="language-java">batchMode</code> on Sqlg will cache all modifications to the graph and on <code class="language-java">commit</code> execute bulk sql statements.
-This causes a very significant improvement of performance.</p>
+This has a significant improvement of performance.</p>
 
 <p><br /></p>
 
