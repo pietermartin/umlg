@@ -450,7 +450,6 @@ the user's transaction boundaries and semantics.
  However schema creation commands creates table level locks which increases the risk of deadlocks in a multi-threaded environment. 
  Sqlg manages a global lock for schema creation to prevent postgres from dead locking.
  If multiple jvm(s) are used then a Hazelcast distributed lock is used.
- 
 
 <br />
 ##Multiple Jvm
@@ -467,7 +466,9 @@ To indicate to Sqlg that a `Hazelcast` cluster is required  you must specify `ha
 in the constructors configuration object. Hazelcast will then automatically set up the distributed cluster for the schema
 information.
 
+<br />
 ####Example Postgresql
+<br />
 
 **Jvm 1**
 
@@ -495,22 +496,29 @@ Sqlg optimizes gremlin by analyzing the steps and where possible combining them 
 Consecutive GraphStep, VertexStep, EdgeVertexStep, EdgeOtherVertexStep, HasStep, RepeatStep and OrderGlobalStep are currently combined.
 The combined step will then in turn generate the sql statements to retrieve the data. It attempts to retrieve the data in as few distinct sql statements as possible.
 
+**Note:** Turn sql logging on by setting `log4j.logger.org.umlg.sqlg=debug`
+
+<br />
 ####Example
+<br />
 
     @Test
     public void showHighLatency() {
         Vertex easternUnion = this.sqlgGraph.addVertex(T.label, "Organization", "name", "EasternUnion");
         Vertex legal = this.sqlgGraph.addVertex(T.label, "Division", "name", "Legal");
-        Vertex distribution = this.sqlgGraph.addVertex(T.label, "Division", "name", "Distribution");
+        Vertex dispatch = this.sqlgGraph.addVertex(T.label, "Division", "name", "Dispatch");
         Vertex newYork = this.sqlgGraph.addVertex(T.label, "Office", "name", "NewYork");
         Vertex singapore = this.sqlgGraph.addVertex(T.label, "Office", "name", "Singapore");
         easternUnion.addEdge("organization_division", legal);
-        easternUnion.addEdge("organization_division", distribution);
-        legal.addEdge("division_distribution", newYork);
-        distribution.addEdge("division_distribution", singapore);
+        easternUnion.addEdge("organization_division", dispatch);
+        legal.addEdge("division_office", newYork);
+        dispatch.addEdge("division_office", singapore);
         this.sqlgGraph.tx().commit();
         
-        GraphTraversal<Vertex, Vertex> traversal = this.sqlgGraph.traversal().V().hasLabel("Organization").out().out();
+        GraphTraversal<Vertex, Vertex> traversal = this.sqlgGraph.traversal().V()
+            .hasLabel("Organization")
+            .out()
+            .out();
         System.out.println(traversal);
         traversal.hasNext();
         System.out.println(traversal);
@@ -532,19 +540,304 @@ In the above example the GraphStep, HasStep and 2 VertexSteps are all combined i
 The above example will retrieve the data in one sql query.
 
     SELECT
+	    "public"."V_Office"."ID" AS "alias1",
+    	"public"."V_Office"."name" AS "alias2"
+    FROM
+    	"public"."V_Organization" INNER JOIN
+    	"public"."E_organization_division" ON "public"."V_Organization"."ID" = "public"."E_organization_division"."public.Organization__O" INNER JOIN
+    	"public"."V_Division" ON "public"."E_organization_division"."public.Division__I" = "public"."V_Division"."ID" INNER JOIN
+    	"public"."E_division_office" ON "public"."V_Division"."ID" = "public"."E_division_office"."public.Division__O" INNER JOIN
+    	"public"."V_Office" ON "public"."E_division_office"."public.Office__I" = "public"."V_Office"."ID"
+
+<br />
+###Predicates 
+<br />
+
+TinkerPop's [Compare](http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Compare.html) and 
+[Contains](http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Contains.html) predicates are optimized 
+to execute on the database.
+
+<br />
+####Compare example
+<br />
+
+    @Test
+    public void showComparePredicate() {
+        Vertex easternUnion = this.sqlgGraph.addVertex(T.label, "Organization", "name", "EasternUnion");
+        Vertex legal = this.sqlgGraph.addVertex(T.label, "Division", "name", "Legal");
+        Vertex dispatch = this.sqlgGraph.addVertex(T.label, "Division", "name", "Dispatch");
+        Vertex newYork = this.sqlgGraph.addVertex(T.label, "Office", "name", "NewYork");
+        Vertex singapore = this.sqlgGraph.addVertex(T.label, "Office", "name", "Singapore");
+        easternUnion.addEdge("organization_division", legal);
+        easternUnion.addEdge("organization_division", dispatch);
+        legal.addEdge("division_office", newYork);
+        dispatch.addEdge("division_office", singapore);
+        this.sqlgGraph.tx().commit();
+
+        GraphTraversal<Vertex, Vertex> traversal = this.sqlgGraph.traversal().V()
+            .hasLabel("Organization")
+            .out()
+            .out()
+            .has("name", P.eq("Singapore"));
+        System.out.println(traversal);
+        traversal.hasNext();
+        System.out.println(traversal);
+        List<Vertex> offices = traversal.toList();
+        assertEquals(1, offices.size());
+        assertEquals(singapore, offices.get(0));
+    }
+    
+And the resulting sql,    
+    
+    SELECT
     	"public"."V_Office"."ID" AS "alias1",
     	"public"."V_Office"."name" AS "alias2"
     FROM
     	"public"."V_Organization" INNER JOIN
     	"public"."E_organization_division" ON "public"."V_Organization"."ID" = "public"."E_organization_division"."public.Organization__O" INNER JOIN
     	"public"."V_Division" ON "public"."E_organization_division"."public.Division__I" = "public"."V_Division"."ID" INNER JOIN
-    	"public"."E_division_distribution" ON "public"."V_Division"."ID" = "public"."E_division_distribution"."public.Division__O" INNER JOIN
-    	"public"."V_Office" ON "public"."E_division_distribution"."public.Office__I" = "public"."V_Office"."ID"
-
+    	"public"."E_division_office" ON "public"."V_Division"."ID" = "public"."E_division_office"."public.Division__O" INNER JOIN
+    	"public"."V_Office" ON "public"."E_division_office"."public.Office__I" = "public"."V_Office"."ID"
+    WHERE
+    	( "public"."V_Office"."name" = ?) 
+    	
+The same pattern is used for all the  [Compare](http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Compare.html) predicates.   	
 
 <br />
-###Gremlin predicates 
+####Contains example
 <br />
+
+Sqlg's implementation of [Contains](http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Contains.html) is slightly more complex.
+For HSQLDB a regular `in` clause is used.
+
+For postgresql, instead of using a sql `in` clause, i.e. `where property in (?, ?...)` the values are bulk inserted into a temporary table and then a join to the temporary table is used
+to constrain the results.
+
+    @Test
+    public void showContainsPredicate() {
+        List<Integer> numbers = new ArrayList<>(10000);
+        for (int i = 0; i < 10000; i++) {
+            this.sqlgGraph.addVertex(T.label, "Person", "number", i);
+            numbers.add(i);
+        }
+        this.sqlgGraph.tx().commit();
+
+        List<Vertex> persons = this.sqlgGraph.traversal().V()
+                .hasLabel("Person")
+                .has("number", P.within(numbers))
+                .toList();
+                
+        assertEquals(10000, persons.size());
+    }
+
+And the resulting sql on postgresql,    
+
+    CREATE TEMPORARY TABLE "V_BULK_TEMP_EDGEzf++PItI"("ID" SERIAL PRIMARY KEY, "within" INTEGER) ON COMMIT DROP;
+    COPY "V_BULK_TEMP_EDGEzf++PItI" ("within") FROM stdin DELIMITER '	';
+    SELECT
+	    "public"."V_Person"."ID" AS "alias1",
+    	"public"."V_Person"."number" AS "alias2"
+    FROM
+    	"public"."V_Person"
+    INNER JOIN  "V_BULK_TEMP_EDGEzf++PItI" tmp1 on"public"."V_Person"."number" = tmp1.within
+    
+This pattern makes `P.within` and `p.without` very fast even with millions of values being passed into the query. 
+Benchmarking shows that doing a join on a temporary table is always faster than using the `in` clause. 
+For the case of there being only one value Sqlg will use an `equals` instead of a temporay table or an `in` statement.
+
+<br />
+####Text predicate 
+<br />
+
+Sqlg includes its own Text predicate for full text queries.
+
+* Text.contains (case sensitive string contains)
+* Text.ncontains (case sensitive string does not contain)
+* Text.containsCIS (case insensitive string contains)
+* Text.ncontainsCIS (case insensitive string does not contain)
+* Text.startsWith (case sensitive string starts with)
+* Text.nstartsWith (case sensitive string does not start with)
+* Text.endsWith (case sensitive string ends with)
+* Text.nendsWith (case sensitive string does not end with)
+
+<br />
+
+    @Test
+    public void showTextPredicate() {
+        Vertex john = this.sqlgGraph.addVertex(T.label, "Person", "name", "John XXX Doe");
+        Vertex peter = this.sqlgGraph.addVertex(T.label, "Person", "name", "Peter YYY Snow");
+        this.sqlgGraph.tx().commit();
+
+        List<Vertex> persons = this.sqlgGraph.traversal().V()
+                .hasLabel("Person")
+                .has("name", Text.contains("XXX")).toList();
+        
+        assertEquals(1, persons.size());
+        assertEquals(john, persons.get(0));
+    }
+
+And the resulting sql on postgresql,    
+
+    SELECT
+    	"public"."V_Person"."ID" AS "alias1",
+	    "public"."V_Person"."name" AS "alias2"
+    FROM
+	    "public"."V_Person"
+    WHERE
+	    ( "public"."V_Person"."name" like ?)
+	    
+
+<br />
+####LocalDateTime, LocalDate and LocalTime queries
+<br />
+
+LocalDateTime, LocalDate and LocalTime queries are supported.
+
+    @Test
+    public void showSearchOnLocalDateTime() {
+        LocalDateTime born1 = LocalDateTime.of(1990, 1, 1, 1, 1, 1);
+        LocalDateTime born2 = LocalDateTime.of(1990, 1, 1, 1, 1, 2);
+        LocalDateTime born3 = LocalDateTime.of(1990, 1, 1, 1, 1, 3);
+        Vertex john = this.sqlgGraph.addVertex(T.label, "Person", "name", "John", "born", born1);
+        Vertex peter = this.sqlgGraph.addVertex(T.label, "Person", "name", "Peter", "born", born2);
+        Vertex paul = this.sqlgGraph.addVertex(T.label, "Person", "name", "Paul", "born", born3);
+        this.sqlgGraph.tx().commit();
+
+        List<Vertex> persons = this.sqlgGraph.traversal().V().hasLabel("Person")
+                .has("born", P.eq(born1))
+                .toList();
+        assertEquals(1, persons.size());
+        assertEquals(john, persons.get(0));
+
+        persons = this.sqlgGraph.traversal().V().hasLabel("Person")
+                .has("born", P.between(LocalDateTime.of(1990, 1, 1, 1, 1, 1), LocalDateTime.of(1990, 1, 1, 1, 1, 3)))
+                .toList();
+        //P.between is inclusive to exclusive
+        assertEquals(2, persons.size());
+        assertTrue(persons.contains(john));
+        assertTrue(persons.contains(peter));
+    }
+    
+And the resulting sql,    
+
+    SELECT
+    	"public"."V_Person"."ID" AS "alias1",
+    	"public"."V_Person"."born" AS "alias2",
+    	"public"."V_Person"."name" AS "alias3"
+    FROM
+    	"public"."V_Person"
+    WHERE
+    	( "public"."V_Person"."born" = ?)
+	
+    SELECT
+    	"public"."V_Person"."ID" AS "alias1",
+    	"public"."V_Person"."born" AS "alias2",
+    	"public"."V_Person"."name" AS "alias3"
+    FROM
+    	"public"."V_Person"
+    WHERE
+    	( "public"."V_Person"."born" >= ?) AND ( "public"."V_Person"."born" < ?)	
+    
+    
+<br />
+###Order
+<br />
+
+Sqlg optimizes the OrderGlobalStep if the data that the order applies to can be retrieved in one sql statement.
+If not then order the ordering occurs in java via the OrderGlobalStep as per normal.
+
+    @Test
+    public void testOrderBy() {
+        Vertex a1 = this.sqlgGraph.addVertex(T.label, "A", "name", "a", "surname", "a");
+        Vertex a2 = this.sqlgGraph.addVertex(T.label, "A", "name", "a", "surname", "b");
+        Vertex a3 = this.sqlgGraph.addVertex(T.label, "A", "name", "a", "surname", "c");
+        Vertex b1 = this.sqlgGraph.addVertex(T.label, "A", "name", "b", "surname", "a");
+        Vertex b2 = this.sqlgGraph.addVertex(T.label, "A", "name", "b", "surname", "b");
+        Vertex b3 = this.sqlgGraph.addVertex(T.label, "A", "name", "b", "surname", "c");
+        this.sqlgGraph.tx().commit();
+
+        List<Vertex> result = this.sqlgGraph.traversal().V().hasLabel("A")
+                .order().by("name", Order.incr).by("surname", Order.decr)
+                .toList();
+
+        assertEquals(6, result.size());
+        assertEquals(a3, result.get(0));
+        assertEquals(a2, result.get(1));
+        assertEquals(a1, result.get(2));
+        assertEquals(b3, result.get(3));
+        assertEquals(b2, result.get(4));
+        assertEquals(b1, result.get(5));
+    }
+
+
+And the resulting sql,    
+
+    SELECT
+	    "public"."V_A"."ID" AS "alias1",
+    	"public"."V_A"."surname" AS "alias2",
+    	"public"."V_A"."name" AS "alias3"
+    FROM
+    	"public"."V_A"
+    ORDER BY
+    	 "alias3" ASC,
+    	 "alias2" DESC
+    	 
+<br />
+###RepeatStep
+<br />
+
+Sqlg optimizes the RepeatStep so long as the `until` modulator is not present. 
+`RepeatStep` can be optimized with the modulator `emit` and `times`.
+
+    @Test
+    public void showRepeat() {
+        Vertex john = this.sqlgGraph.addVertex(T.label, "Person", "name", "John");
+        Vertex peterski = this.sqlgGraph.addVertex(T.label, "Person", "name", "Peterski");
+        Vertex paul = this.sqlgGraph.addVertex(T.label, "Person", "name", "Paul");
+        Vertex usa = this.sqlgGraph.addVertex(T.label, "Country", "name", "USA");
+        Vertex russia = this.sqlgGraph.addVertex(T.label, "Country", "name", "Russia");
+        Vertex washington = this.sqlgGraph.addVertex(T.label, "City", "name", "Washington");
+        john.addEdge("lives", usa);
+        peterski.addEdge("lives", russia);
+        usa.addEdge("capital", washington);
+        this.sqlgGraph.tx().commit();
+
+        Tree tree = this.sqlgGraph.traversal().V().hasLabel("Person").emit().times(2).repeat(__.out("lives", "capital")).tree().next();
+        System.out.println(tree);
+    }
+    
+    Output:
+    
+    [John]
+    [John, USA]
+    [John, USA, Washington]
+    [Peterski]
+    [Peterski, Russia]
+    [Paul]
+    
+And the resulting sql,    
+
+    SELECT
+	    "public"."V_City"."ID" AS "alias1",
+    	"public"."V_City"."name" AS "alias2",
+    	"public"."V_Person"."ID" AS "alias3",
+    	"public"."V_Person"."name" AS "alias4",
+    	"public"."V_Country"."ID" AS "alias5",
+    	"public"."V_Country"."name" AS "alias6",
+    	"public"."V_City"."ID" AS "alias7",
+    	"public"."V_City"."name" AS "alias8",
+    	"public"."E_lives"."ID" AS "alias9"
+    FROM
+	    "public"."V_Person" LEFT JOIN
+    	"public"."E_lives" ON "public"."V_Person"."ID" = "public"."E_lives"."public.Person__O" LEFT JOIN
+    	"public"."V_Country" ON "public"."E_lives"."public.Country__I" = "public"."V_Country"."ID" LEFT JOIN
+	    "public"."E_capital" ON "public"."V_Country"."ID" = "public"."E_capital"."public.Country__O" LEFT JOIN
+    	"public"."V_City" ON "public"."E_capital"."public.City__I" = "public"."V_City"."ID"
+
+
+This is an optimized way to retrieve whole sub-graphs with one hit to the db.
+
+**Note:** The generated sql uses a `left join` if the repeat statements has an `emit` modulator.
 
 <br />
 ##Batch mode
