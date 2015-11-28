@@ -684,6 +684,9 @@ For an embedded db like HSQLDB this is still ok but for a database server like p
 
 <p>In the above example the GraphStep, HasStep and 2 VertexSteps are all combined into one step, SqlgGraphStepCompiled.</p>
 
+<p>The before optimization output shows the steps that would have executed with if no optimization is performed. 
+As the query only contains sequential optimizable steps they are all combined into one step. </p>
+
 <p>The above example will retrieve the data in one sql query.</p>
 
 <pre class="prettyprint"><code class="language-java">SELECT
@@ -973,23 +976,24 @@ public void showRepeat() {
     usa.addEdge("capital", washington);
     this.sqlgGraph.tx().commit();
 
-    Tree tree = this.sqlgGraph.traversal().V().hasLabel("Person").emit().times(2).repeat(__.out("lives", "capital")).tree().next();
-    System.out.println(tree);
-}
-
-Output
-
-{
-    v[public.Person:::3]={}, 
-    v[public.Person:::2]={
-        v[public.Country:::2]={}
-    }, 
-    v[public.Person:::1]={
-        v[public.Country:::1]={
-            v[public.City:::1]={}
-        }
+    List&lt;Path&gt; paths = this.sqlgGraph.traversal().V()
+        .hasLabel("Person")
+        .emit().times(2).repeat(__.out("lives", "capital"))
+        .path().by("name")
+        .toList();
+    for (Path path : paths) {
+        System.out.println(path);
     }
 }
+
+Output:
+
+[John]
+[John, USA]
+[John, USA, Washington]
+[Peterski]
+[Peterski, Russia]
+[Paul]
 </code></pre>
 
 <p>And the resulting sql,    </p>
@@ -1012,7 +1016,7 @@ FROM
     "public"."V_City" ON "public"."E_capital"."public.City__I" = "public"."V_City"."ID"
 </code></pre>
 
-<p>This is an optimized way to retrieve whole sub-graphs with one hit to the db.</p>
+<p>The <code class="language-java">RepeatStep</code> together with the <code class="language-java">emit</code> modulater is an optimized way to retrieve whole sub-graphs with one hit to the db.</p>
 
 <p><strong>Note:</strong> The generated sql uses a <code class="language-java">left join</code> if the repeat statements has an <code class="language-java">emit</code> modulator.</p>
 

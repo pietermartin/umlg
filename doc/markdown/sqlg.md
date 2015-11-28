@@ -537,6 +537,9 @@ For an embedded db like HSQLDB this is still ok but for a database server like p
 
 In the above example the GraphStep, HasStep and 2 VertexSteps are all combined into one step, SqlgGraphStepCompiled.
 
+The before optimization output shows the steps that would have executed with if no optimization is performed. 
+As the query only contains sequential optimizable steps they are all combined into one step. 
+
 The above example will retrieve the data in one sql query.
 
     SELECT
@@ -802,8 +805,14 @@ Sqlg optimizes the RepeatStep so long as the `until` modulator is not present.
         usa.addEdge("capital", washington);
         this.sqlgGraph.tx().commit();
 
-        Tree tree = this.sqlgGraph.traversal().V().hasLabel("Person").emit().times(2).repeat(__.out("lives", "capital")).tree().next();
-        System.out.println(tree);
+        List<Path> paths = this.sqlgGraph.traversal().V()
+            .hasLabel("Person")
+            .emit().times(2).repeat(__.out("lives", "capital"))
+            .path().by("name")
+            .toList();
+        for (Path path : paths) {
+            System.out.println(path);
+        }
     }
     
     Output:
@@ -835,7 +844,7 @@ And the resulting sql,
     	"public"."V_City" ON "public"."E_capital"."public.City__I" = "public"."V_City"."ID"
 
 
-This is an optimized way to retrieve whole sub-graphs with one hit to the db.
+The `RepeatStep` together with the `emit` modulater is an optimized way to retrieve whole sub-graphs with one hit to the db.
 
 **Note:** The generated sql uses a `left join` if the repeat statements has an `emit` modulator.
 
