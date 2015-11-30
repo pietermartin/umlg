@@ -64,7 +64,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 
     @Override
     public void batchModeOn() {
-        this.sqlG.tx().batchModeOn();
+        this.sqlG.tx().normalBatchModeOn();
     }
 
     @Override
