@@ -852,31 +852,112 @@ The `RepeatStep` together with the `emit` modulater is an optimized way to retri
 ##Batch mode
 <br />
 
-Postgres is significantly slower than HSQLDB. This is expected as Postgres runs as a server and suffers from latency. 
-HSQLDB shines in embedded mode. (HSQLDB has not been tested in server mode!)
+Sqlg supports 3 distinct batch modes. Normal, streaming and streaming with lock. Batch modes are only implemented on Postgresql.
+Batch mode is activated on the transaction object itself. After every `commit`/`flush` the batchMode needs to be reactivated.
 
-Sqlg supports various batch modes. Batch modes are only implemented on Postgresql.
-Batch mode is activated on the transaction object itself. After every `commit` batchMode needs to be reactivated.
+Sqlg introduces an extra method on the transaction, `flush()`. 
 
-####Example Postgresql
+* In normal batch mode `flush()` will send all the data to postgresql, assign id(s) and clear the cache.
+* In streaming mode `flush()` will close the OutputStream that the data has been written to.
+* In streaming mode with lock `flush()` will close the OutputStream that the data has been written to and assign id(s).
+
+
+<br />
+###Normal batch mode
+<br />
+
+In normal batch mode the standard TinkerPop modification api can be used as per normal. Normal batch mode caches all modifications in memory
+and on `commit` or `flush` sends the modification to the server.
+
+**Note:** Because all modifications are held in memory it is important to call `commit()` or `flush()` to prevent `OutOfMemoryError`.
+
+**Note:** In batch mode vertices and edges returned from `Graph.addVertex` and `vertex.addEdge` respectively do not yet have their `id`s assigned to them.
+This is because the new vertices and edges are cached in memory and are only sent to postgresql on `commit()` or `flush()`.
+After `commit()` or `flush()` every new vertex and edge has its id assigned to it.
+
+The postgresql [copy](http://www.postgresql.org/docs/9.4/static/sql-copy.html) command is used to bulk insert data.
 
     @Test
-    public void testBatchMode() {
+    public void showNormalBatchMode() {
         this.sqlgGraph.tx().batchModeOn();
-        for (int i = 0; i < 1000000; i++) {
-            Vertex person1 = this.sqlgGraph.addVertex(T.label, "Person", "name", "a" + i);
-            Vertex person2 = this.sqlgGraph.addVertex(T.label, "Person", "name", "b" + i);
-            person1.addEdge("friend", person2, "context", 1);
-            if (i != 0 && i % 100000 == 0) {
+        for (int i = 1; i <= 10_000_000; i++) {
+            Vertex person = this.sqlgGraph.addVertex(T.label, "Person", "name", "John" + i);
+            Vertex car = this.sqlgGraph.addVertex(T.label, "Car", "name", "Dodge" + i);
+            person.addEdge("drives", car);
+            //To preserve memory commit or flush every so often
+            if (i % 100_000 == 0) {
                 this.sqlgGraph.tx().commit();
                 this.sqlgGraph.tx().batchModeOn();
             }
         }
         this.sqlgGraph.tx().commit();
     }
+    
+![image of normal batch mode memory usage](images/sqlg/normalBatchModeMemory.png)
+<br />
+Normal batch mode memory usage, test executed with -Xmx2048m
+<br />
 
-With `batchMode` on Sqlg will cache all modifications to the graph and on `commit` execute bulk sql statements.
-This has a significant improvement of performance.
+<br />
+###Streaming batch mode
+<br />
+
+Streaming batch writes any new vertex or edge immediately to postgresql via its `stdin` api. I.e. the data is written
+directly to a postgresql jdbc driver OutputStream.
+
+The benefit of streaming mode is that the memory consumption is very low as nothing is cached. It is also somewhat faster than
+the normal batch mode (+/- 25% faster).
+
+However the caveat is that, per transaction/thread only one label/table can be written between consecutive calls to `SqlgTransaction.flush()`. 
+Further it is not possible to assign an id to the vertex or element. As such the `SqlgGraph.streamVertex(Object... keyValues)` method returns void.
+
+    @Test
+    public void showStreamingBatchMode() {
+        //enable streaming mode
+        this.sqlgGraph.tx().streamingBatchModeOn();
+        for (int i = 1; i <= 10_000_000; i++) {
+            this.sqlgGraph.streamVertex(T.label, "Person", "name", "John" + i);
+        }
+        //flushing is needed before starting streaming Car. Only only one label/table can stream at a time.
+        this.sqlgGraph.tx().flush();
+        for (int i = 1; i <= 10_000_000; i++) {
+            this.sqlgGraph.streamVertex(T.label, "Car", "name", "Dodge" + i);
+        }
+        this.sqlgGraph.tx().commit();
+    }
+
+![image of streaming batch mode memory usage](images/sqlg/streamingBatchModeMemory.png)
+<br />
+Streaming batch mode memory usage, test executed with -Xmx128m
+<br />
+
+<br />
+###Streaming with lock batch mode
+<br />
+
+Streaming batch mode with lock is similar to streaming batch mode. The difference being that the label/table being written to is
+locked. Locking the table ensures that no concurrent changes will occur on the table. This allows Sqlg to query the id sequence and
+assigned ids to the elements.
+
+    @Test
+    public void showStreamingWithLockBatchMode() {
+        //enable streaming mode
+        this.sqlgGraph.tx().streamingWithLockBatchModeOn();
+        for (int i = 1; i <= 10_000_000; i++) {
+            Vertex person = this.sqlgGraph.streamVertexWithLock(T.label, "Person", "name", "John" + i);
+        }
+        //flushing is needed before starting streaming Car. Only only one label/table can stream at a time.
+        this.sqlgGraph.tx().flush();
+        for (int i = 1; i <= 10_000_000; i++) {
+            Vertex car = this.sqlgGraph.streamVertexWithLock(T.label, "Car", "name", "Dodge" + i);
+        }
+        this.sqlgGraph.tx().commit();
+    }
+
+![image of streaming with lock batch mode memory usage](images/sqlg/streamingWithLockBatchModeMemory.png)
+<br />
+Streaming batch mode memory usage, test executed with -Xmx128m
+<br />
 
 <br />
 ##Performance Indicator
