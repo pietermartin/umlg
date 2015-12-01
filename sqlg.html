@@ -66,13 +66,7 @@
 <li><a href="#ComparepredicateID">Compare predicate</a></li><li><a href="#ContainspredicateID">Contains predicate </a></li><li><a href="#TextpredicateID">Text predicate</a></li><li><a href="#DateTimequeriesID">DateTime queries</a></li></ul>
 </li><li><a href="#OrderID">Order</a></li><li><a href="#RepeatStepID">RepeatStep</a></li></ul>
 </li><li><a href="#BatchmodeID">Batch mode</a><ul class="nav">
-<li><a href="#NormalbatchmodeID">Normal batch mode</a><ul class="nav">
-<li><a href="#ExampleillustratingnormalbatchmodeID">Example illustrating normal batch mode</a></li></ul>
-</li><li><a href="#StreamingbatchmodeID">Streaming batch mode</a><ul class="nav">
-<li><a href="#ExampleillustratingstreamingbatchmodeID">Example illustrating streaming batch mode</a></li><li><a href="#Exampleillustratingstreamingbatchmodeincludingbulkedges.ID">Example illustrating streaming batch mode including bulk edges.</a></li></ul>
-</li><li><a href="#StreamingwithlockbatchmodeID">Streaming with lock batch mode</a><ul class="nav">
-<li><a href="#Exampleillustratingstreamingwithlockbatchmode.ID">Example illustrating streaming with lock batch mode.</a></li><li><a href="#ExampleillustratingstreamingwithlockbatchmodeandbulkedgecreationID">Example illustrating streaming with lock batch mode and bulk edge creation</a></li></ul>
-</li></ul>
+<li><a href="#NormalbatchmodeID">Normal batch mode</a></li><li><a href="#StreamingbatchmodeID">Streaming batch mode</a></li><li><a href="#StreamingwithlockbatchmodeID">Streaming with lock batch mode</a></li></ul>
 </li>
                 </ul>
             </div>
@@ -205,9 +199,9 @@ jdbc.username=postgres
 jdbc.password=******
 </code></pre>
 
-<p>In the case of Postgres the database must already exist.</p>
+<p>In the case of Postgresql the database must already exist.</p>
 
-<p>If you want to run the TinkerPop tests on Postgres you need to create upfront the various databases that are used.
+<p>If you want to run the TinkerPop tests on Postgresql you need to create the various databases that are used.
 These are,</p>
 
 <ul>
@@ -310,7 +304,7 @@ gremlin&gt;
         <tr>
             <th>Java</th>
             <th>HSQLDB</th>
-            <th>Postgres</th>
+            <th>Postgresql</th>
         </tr>
     </thead>
     <tbody>
@@ -419,7 +413,7 @@ gremlin&gt;
 </table>
 </div>
 
-<p><strong>Note:</strong> <code class="language-java">java.time.LocalTime</code> drops the nano second precision.</p>
+<p><strong>NOTE</strong> <code class="language-java">java.time.LocalTime</code> drops the nano second precision.</p>
 
 <p><br /></p>
 
@@ -472,7 +466,7 @@ has a foreign key to the adjacent vertex's table.</p>
 
 <p>Many RDBMS databases have the notion of a <code class="language-java">schema</code> as a namespace for tables. Sqlg supports schemas
 for vertex labels. Distinct schemas for edge tables are unnecessary as edge tables are created in the schema of the adjacent <code class="language-java">out</code> vertex.
-By default schemas for vertex tables go into the underlying databases' default schema. For postgresql and hsqldb this
+By default schemas for vertex tables go into the underlying databases' default schema. For Postgresql and hsqldb this
 is the <code class="language-java">public</code> schema.</p>
 
 <p>To specify the schema for a label Sqlg uses the dot <code class="language-java">.</code> notation.</p>
@@ -512,9 +506,9 @@ is in a <code class="language-java">fleet</code> schema. For the edges a <code c
 <p>The <code class="language-java">dummykeyValues</code> are required to indicate to Sqlg the name and type of the property. The type is needed when
 the column does not yet exist and Sqlg needs to create it.</p>
 
-<p>Outside of creating the index Sqlg has no further direct interaction with index logic. However gremlin queries with a
+<p>Outside of creating the index Sqlg has no further direct interaction with the index. However gremlin queries with a
 <code class="language-java">has</code> step will translate to a sql <code class="language-java">where</code> clause. If an index has been created on the property of the <code class="language-java">has</code> step then
-the underlying sql engine will utilize that index.</p>
+the underlying sql engine will utilize that index on that property's column.</p>
 
 <p>The index does not need to be created upfront. It can be added any time.</p>
 
@@ -545,14 +539,14 @@ public void testIndexOnVertex() throws SQLException {
 Output: "Bitmap Heap Scan on "V_Person" a  (cost=4.42..32.42 rows=18 width=40) (actual time=0.016..0.016 rows=1 loops=1)"
 </code></pre>
 
-<p><strong>Table definition</strong></p>
+<p><strong>Table definition (Postgresql)</strong></p>
 
 <p><img src="images/sqlg/tableDefinition.png" alt="image of tinkerpop-classic" title="" /></p>
 
 <p>In the above example, Sqlg created a table <code class="language-java">V_Person</code> with column <code class="language-java">name</code> and an index on the <code class="language-java">name</code> column.
-Currently Sqlg only supports the default index. For postgresql this is a <code class="language-java">Btree</code> index.</p>
+Currently Sqlg only supports the default index. For Postgresql this is a <code class="language-java">Btree</code> index.</p>
 
-<p>The output shows the result of a postgres query explain plan. The result shows that postgres does indeed utilize the index.</p>
+<p>The output shows the result of a Postgresql query explain plan. The result shows that Postgresql does indeed utilize the index.</p>
 
 <p>The gremlin query <code class="language-java">this.sqlgGraph.traversal().V().has(T.label, "Person").has("name1", "john50")</code> will utilize the index on the <code class="language-java">name</code> field.</p>
 
@@ -569,9 +563,9 @@ and immediately starts a new transaction.
 This can have some rather unfortunate consequences, as HSQLDB will silently commit a user transaction thus invalidating
 the user's transaction boundaries and semantics.</p>
 
-<p><strong>Postgres</strong> supports transactional schema creation/alter commands. The user's transaction semantics remain intact.
+<p><strong>Postgresql</strong> supports transactional schema creation/alter commands. The user's transaction semantics remain intact.
  However schema creation commands creates table level locks which increases the risk of deadlocks in a multi-threaded environment. 
- Sqlg manages a global lock for schema creation to prevent postgres from dead locking.
+ Sqlg manages a global lock for schema creation to prevent Postgresql from dead locking.
  If multiple jvm(s) are used then a Hazelcast distributed lock is used.</p>
 
 <p><br /></p>
@@ -614,15 +608,18 @@ hazelcast.members=127.0.0.1,127.0.0.2
 
 <p><br /></p>
 
-<p>Sqlg has full support for gremlin and passes the TinkerPop test suite. 
-However gremlin's fine grained graphy nature result in very high latency. </p>
+<p>Sqlg has full support for gremlin.
+However gremlin's fine grained 'graphy' nature results in very high latency. To overcome the high latency Sqlg optimizes 
+gremlin by reducing the number of calls to the rdbms.</p>
 
-<p>Sqlg optimizes gremlin by analyzing the steps and where possible combining them into a SqlgGraphStepCompiled or SqlgVertexStepCompiled.</p>
+<p>Sqlg optimizes gremlin by analyzing the steps and where possible combining them into a single SqlgGraphStepCompiled or SqlgVertexStepCompiled.</p>
+
+<p><strong>NOTE</strong> This is an ongoing task as gremlin is a large language. </p>
 
 <p>Consecutive GraphStep, VertexStep, EdgeVertexStep, EdgeOtherVertexStep, HasStep, RepeatStep and OrderGlobalStep are currently combined.
 The combined step will then in turn generate the sql statements to retrieve the data. It attempts to retrieve the data in as few distinct sql statements as possible.</p>
 
-<p><strong>Note:</strong> Turn sql logging on by setting <code class="language-java">log4j.logger.org.umlg.sqlg=debug</code></p>
+<p><strong>NOTE:</strong> Turn sql logging on by setting <code class="language-java">log4j.logger.org.umlg.sqlg=debug</code></p>
 
 <p><strong>Example illustrating high latency</strong></p>
 
@@ -749,7 +746,7 @@ WHERE
 <p>Sqlg's implementation of <a href="http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Contains.html">Contains</a> is slightly more complex.
 For HSQLDB a regular <code class="language-java">in</code> clause is used.</p>
 
-<p>For postgresql, instead of using a sql <code class="language-java">in</code> clause, i.e. <code class="language-java">where property in (?, ?...)</code> the values are bulk inserted into a temporary table and then a join to the temporary table is used
+<p>For Postgresql, instead of using a sql <code class="language-java">in</code> clause, i.e. <code class="language-java">where property in (?, ?...)</code> the values are bulk inserted into a temporary table and then a join to the temporary table is used
 to constrain the results.</p>
 
 <pre class="prettyprint"><code class="language-java">@Test
@@ -770,7 +767,7 @@ public void showContainsPredicate() {
 }
 </code></pre>
 
-<p>And the resulting sql on postgresql,    </p>
+<p>And the resulting sql on Postgresql,    </p>
 
 <pre class="prettyprint"><code class="language-java">CREATE TEMPORARY TABLE "V_BULK_TEMP_EDGEzf++PItI"("ID" SERIAL PRIMARY KEY, "within" INTEGER) ON COMMIT DROP;
 COPY "V_BULK_TEMP_EDGEzf++PItI" ("within") FROM stdin DELIMITER '   ';
@@ -822,7 +819,7 @@ public void showTextPredicate() {
 }
 </code></pre>
 
-<p>And the resulting sql on postgresql,    </p>
+<p>And the resulting sql on Postgresql,    </p>
 
 <pre class="prettyprint"><code class="language-java">SELECT
     "public"."V_Person"."ID" AS "alias1",
@@ -998,7 +995,7 @@ FROM
 
 <p>The <code class="language-java">RepeatStep</code> together with the <code class="language-java">emit</code> modulater is an optimized way to retrieve whole sub-graphs with one hit to the db.</p>
 
-<p><strong>Note:</strong> The generated sql uses a <code class="language-java">left join</code> if the repeat statements has an <code class="language-java">emit</code> modulator.</p>
+<p><strong>NOTE</strong> The generated sql uses a <code class="language-java">left join</code> if the repeat statements has an <code class="language-java">emit</code> modulator.</p>
 
 <p><br /></p>
 
@@ -1012,12 +1009,12 @@ Batch mode is activated on the transaction object itself. After every <code clas
 <p>Sqlg introduces an extra method on the transaction, <code class="language-java">flush()</code>. </p>
 
 <ul>
-<li>In normal batch mode <code class="language-java">flush()</code> will send all the data to postgresql, assign id(s) and clear the cache.</li>
+<li>In normal batch mode <code class="language-java">flush()</code> will send all the data to Postgresql, assign id(s) and clear the cache.</li>
 <li>In streaming mode <code class="language-java">flush()</code> will close the OutputStream that the data has been written to.</li>
 <li>In streaming mode with lock <code class="language-java">flush()</code> will close the OutputStream that the data has been written to and assign id(s).</li>
 </ul>
 
-<p>The postgresql <a href="http://www.postgresql.org/docs/9.4/static/sql-copy.html">copy</a> command is used to bulk insert data.</p>
+<p>The Postgresql <a href="http://www.postgresql.org/docs/9.4/static/sql-copy.html">copy</a> command is used to bulk insert data.</p>
 
 <p><br /></p>
 
@@ -1031,7 +1028,7 @@ and on <code class="language-java">commit()</code> or <code class="language-java
 <p>Because all modifications are held in memory it is important to call <code class="language-java">commit()</code> or <code class="language-java">flush()</code> to prevent <code class="language-java">OutOfMemoryError</code>.</p>
 
 <p>In batch mode vertices and edges returned from <code class="language-java">Graph.addVertex</code> and <code class="language-java">vertex.addEdge</code> respectively do <strong>not</strong> yet have their id(s) assigned to them.
-This is because the new vertices and edges are cached in memory and are only sent to postgresql on <code class="language-java">commit()</code> or <code class="language-java">flush()</code>.
+This is because the new vertices and edges are cached in memory and are only sent to Postgresql on <code class="language-java">commit()</code> or <code class="language-java">flush()</code>.
 After <code class="language-java">commit()</code> or <code class="language-java">flush()</code> the new vertices and edges have their id(s) assigned.</p>
 
 <p>The transaction must be manually placed in normal batch mode. i.e. <code class="language-java">Graph.tx().normalBatchModeOn()</code> must occur before any batch processing.
@@ -1040,9 +1037,7 @@ for batch processing to continue.</p>
 
 <p>Vertices and edges can be created as per normal making normal batch mode very convenient.</p>
 
-<p><br /></p>
-
-<h4 id="ExampleillustratingnormalbatchmodeID">Example illustrating normal batch mode</h4>
+<p><strong>Example illustrating normal batch mode</strong></p>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void showNormalBatchMode() {
@@ -1082,8 +1077,8 @@ Normal batch mode memory usage. </p>
 
 <p><br /></p>
 
-<p>Streaming batch writes any new vertex or edge immediately to postgresql via its <code class="language-java">stdin</code> api. I.e. the data is written
-directly to a postgresql jdbc driver OutputStream.</p>
+<p>Streaming batch writes any new vertex or edge immediately to Postgresql via its <code class="language-java">stdin</code> api. I.e. the data is written
+directly to a Postgresql jdbc driver OutputStream.</p>
 
 <p>Streaming batch mode does <strong>not</strong> use the <code class="language-java">Graph.addVertex</code> method. Instead <code class="language-java">Graph.streamVertex</code> is defined.</p>
 
@@ -1097,9 +1092,7 @@ the normal batch mode (+/- 25% faster).</p>
 <p>However the caveat is that, per transaction/thread only one label/table can be written between consecutive calls to <code class="language-java">SqlgTransaction.flush()</code>. 
 Further it is not possible to assign an id to the vertex or element. As such the <code class="language-java">SqlgGraph.streamVertex</code> method returns void.</p>
 
-<p><br /></p>
-
-<h4 id="ExampleillustratingstreamingbatchmodeID">Example illustrating streaming batch mode</h4>
+<p><strong>Example illustrating streaming batch mode</strong></p>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void showStreamingBatchMode() {
@@ -1143,13 +1136,11 @@ Precisely for this scenario there is a bulk edge creation method, <code class="l
 </ul>
 
 <p>Sqlg will then first copy the <code class="language-java">uids</code> into a temporary table. Then it joins the temporary table on the in and out vertex tables to retrieve the in and out ids.
-These ids are then inserted into the edge table. All this happens on postgresql, having minimal processing and memory impact on the java process.</p>
+These ids are then inserted into the edge table. All this happens on Postgresql, having minimal processing and memory impact on the java process.</p>
 
 <p>The unique identifiers do have to be kept in memory.</p>
 
-<p><br /></p>
-
-<h4 id="ExampleillustratingstreamingbatchmodeID">Example illustrating streaming batch mode including bulk edges.</h4>
+<p><strong>Example illustrating streaming batch mode including bulk edges</strong></p>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void showBulkEdgeCreation() {
@@ -1202,9 +1193,7 @@ assigned ids to the elements.</p>
 <code class="language-java">Graph.tx().streamingWithLockBatchModeOn()</code> After every <code class="language-java">commit()</code> or <code class="language-java">flush()</code> the transaction reverts to normal mode and must 
 be placed into streaming batch mode again for streaming batch mode to continue.</p>
 
-<p><br /></p>
-
-<h4 id="Exampleillustratingstreamingwithlockbatchmode.ID">Example illustrating streaming with lock batch mode.</h4>
+<p><strong>Example illustrating streaming with lock batch mode</strong></p>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void showStreamingWithLockBatchMode() {
@@ -1236,9 +1225,7 @@ Streaming with lock batch mode memory usage </p>
 <p>Created 10 000 000 Persons and 10 000 000 cars. <strong>No</strong> edges were created.
 <br /></p>
 
-<p><br /></p>
-
-<h4 id="ExampleillustratingstreamingwithlockbatchmodeandbulkedgecreationID">Example illustrating streaming with lock batch mode and bulk edge creation</h4>
+<p><strong>Example illustrating streaming with lock batch mode and bulk edge creation</strong></p>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void showStreamingWithLockBulkEdgeCreation() {

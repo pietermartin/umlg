@@ -105,9 +105,9 @@ The configuration object requires the following properties.
     jdbc.username=postgres
     jdbc.password=******
 
-In the case of Postgres the database must already exist.
+In the case of Postgresql the database must already exist.
 
-If you want to run the TinkerPop tests on Postgres you need to create upfront the various databases that are used.
+If you want to run the TinkerPop tests on Postgresql you need to create the various databases that are used.
 These are,
 
 * g1
@@ -203,7 +203,7 @@ These are,
         <tr>
             <th>Java</th>
             <th>HSQLDB</th>
-            <th>Postgres</th>
+            <th>Postgresql</th>
         </tr>
     </thead>
     <tbody>
@@ -312,7 +312,7 @@ These are,
 </table>
 </div>
 
-**Note:** `java.time.LocalTime` drops the nano second precision.
+**NOTE** `java.time.LocalTime` drops the nano second precision.
 
 <br />
 ##Architecture
@@ -361,7 +361,7 @@ Taken from [TinkerPop](http://tinkerpop.incubator.apache.org/docs/3.1.0-incubati
 
 Many RDBMS databases have the notion of a `schema` as a namespace for tables. Sqlg supports schemas
 for vertex labels. Distinct schemas for edge tables are unnecessary as edge tables are created in the schema of the adjacent `out` vertex.
-By default schemas for vertex tables go into the underlying databases' default schema. For postgresql and hsqldb this
+By default schemas for vertex tables go into the underlying databases' default schema. For Postgresql and hsqldb this
 is the `public` schema.
 
 To specify the schema for a label Sqlg uses the dot `.` notation.
@@ -396,9 +396,9 @@ Sqlg supports basic indexing.
 The `dummykeyValues` are required to indicate to Sqlg the name and type of the property. The type is needed when
 the column does not yet exist and Sqlg needs to create it.
 
-Outside of creating the index Sqlg has no further direct interaction with index logic. However gremlin queries with a
+Outside of creating the index Sqlg has no further direct interaction with the index. However gremlin queries with a
 `has` step will translate to a sql `where` clause. If an index has been created on the property of the `has` step then
-the underlying sql engine will utilize that index.
+the underlying sql engine will utilize that index on that property's column.
 
 The index does not need to be created upfront. It can be added any time.
 
@@ -428,15 +428,15 @@ The index does not need to be created upfront. It can be added any time.
 
     Output: "Bitmap Heap Scan on "V_Person" a  (cost=4.42..32.42 rows=18 width=40) (actual time=0.016..0.016 rows=1 loops=1)"
 
-**Table definition**
+**Table definition (Postgresql)**
 
 ![image of tinkerpop-classic](images/sqlg/tableDefinition.png)
 
 In the above example, Sqlg created a table `V_Person` with column `name` and an index on the `name` column.
-Currently Sqlg only supports the default index. For postgresql this is a `Btree` index.
+Currently Sqlg only supports the default index. For Postgresql this is a `Btree` index.
 
 
-The output shows the result of a postgres query explain plan. The result shows that postgres does indeed utilize the index.
+The output shows the result of a Postgresql query explain plan. The result shows that Postgresql does indeed utilize the index.
 
 The gremlin query `this.sqlgGraph.traversal().V().has(T.label, "Person").has("name1", "john50")` will utilize the index on the `name` field.
 
@@ -451,9 +451,9 @@ and immediately starts a new transaction.
 This can have some rather unfortunate consequences, as HSQLDB will silently commit a user transaction thus invalidating
 the user's transaction boundaries and semantics.
 
-**Postgres** supports transactional schema creation/alter commands. The user's transaction semantics remain intact.
+**Postgresql** supports transactional schema creation/alter commands. The user's transaction semantics remain intact.
  However schema creation commands creates table level locks which increases the risk of deadlocks in a multi-threaded environment. 
- Sqlg manages a global lock for schema creation to prevent postgres from dead locking.
+ Sqlg manages a global lock for schema creation to prevent Postgresql from dead locking.
  If multiple jvm(s) are used then a Hazelcast distributed lock is used.
 
 <br />
@@ -491,15 +491,18 @@ information.
 ##Gremlin
 <br />
 
-Sqlg has full support for gremlin and passes the TinkerPop test suite. 
-However gremlin's fine grained graphy nature result in very high latency. 
+Sqlg has full support for gremlin.
+However gremlin's fine grained 'graphy' nature results in very high latency. To overcome the high latency Sqlg optimizes 
+gremlin by reducing the number of calls to the rdbms.
 
-Sqlg optimizes gremlin by analyzing the steps and where possible combining them into a SqlgGraphStepCompiled or SqlgVertexStepCompiled.
+Sqlg optimizes gremlin by analyzing the steps and where possible combining them into a single SqlgGraphStepCompiled or SqlgVertexStepCompiled.
+
+**NOTE** This is an ongoing task as gremlin is a large language. 
 
 Consecutive GraphStep, VertexStep, EdgeVertexStep, EdgeOtherVertexStep, HasStep, RepeatStep and OrderGlobalStep are currently combined.
 The combined step will then in turn generate the sql statements to retrieve the data. It attempts to retrieve the data in as few distinct sql statements as possible.
 
-**Note:** Turn sql logging on by setting `log4j.logger.org.umlg.sqlg=debug`
+**NOTE:** Turn sql logging on by setting `log4j.logger.org.umlg.sqlg=debug`
 
 **Example illustrating high latency**
 
@@ -616,7 +619,7 @@ The same pattern is used for all the
 Sqlg's implementation of [Contains](http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Contains.html) is slightly more complex.
 For HSQLDB a regular `in` clause is used.
 
-For postgresql, instead of using a sql `in` clause, i.e. `where property in (?, ?...)` the values are bulk inserted into a temporary table and then a join to the temporary table is used
+For Postgresql, instead of using a sql `in` clause, i.e. `where property in (?, ?...)` the values are bulk inserted into a temporary table and then a join to the temporary table is used
 to constrain the results.
 
     @Test
@@ -636,7 +639,7 @@ to constrain the results.
         assertEquals(10000, persons.size());
     }
 
-And the resulting sql on postgresql,    
+And the resulting sql on Postgresql,    
 
     CREATE TEMPORARY TABLE "V_BULK_TEMP_EDGEzf++PItI"("ID" SERIAL PRIMARY KEY, "within" INTEGER) ON COMMIT DROP;
     COPY "V_BULK_TEMP_EDGEzf++PItI" ("within") FROM stdin DELIMITER '	';
@@ -682,7 +685,7 @@ Sqlg includes its own Text predicate for full text queries.
         assertEquals(john, persons.get(0));
     }
 
-And the resulting sql on postgresql,    
+And the resulting sql on Postgresql,    
 
     SELECT
     	"public"."V_Person"."ID" AS "alias1",
@@ -849,7 +852,7 @@ And the resulting sql,
 
 The `RepeatStep` together with the `emit` modulater is an optimized way to retrieve whole sub-graphs with one hit to the db.
 
-**Note:** The generated sql uses a `left join` if the repeat statements has an `emit` modulator.
+**NOTE** The generated sql uses a `left join` if the repeat statements has an `emit` modulator.
 
 <br />
 ##Batch mode
@@ -860,11 +863,11 @@ Batch mode is activated on the transaction object itself. After every `commit`/`
 
 Sqlg introduces an extra method on the transaction, `flush()`. 
 
-* In normal batch mode `flush()` will send all the data to postgresql, assign id(s) and clear the cache.
+* In normal batch mode `flush()` will send all the data to Postgresql, assign id(s) and clear the cache.
 * In streaming mode `flush()` will close the OutputStream that the data has been written to.
 * In streaming mode with lock `flush()` will close the OutputStream that the data has been written to and assign id(s).
 
-The postgresql [copy](http://www.postgresql.org/docs/9.4/static/sql-copy.html) command is used to bulk insert data.
+The Postgresql [copy](http://www.postgresql.org/docs/9.4/static/sql-copy.html) command is used to bulk insert data.
 
 <br />
 ###Normal batch mode
@@ -876,7 +879,7 @@ and on `commit()` or `flush()` sends the modification to the server.
 Because all modifications are held in memory it is important to call `commit()` or `flush()` to prevent `OutOfMemoryError`.
 
 In batch mode vertices and edges returned from `Graph.addVertex` and `vertex.addEdge` respectively do **not** yet have their id(s) assigned to them.
-This is because the new vertices and edges are cached in memory and are only sent to postgresql on `commit()` or `flush()`.
+This is because the new vertices and edges are cached in memory and are only sent to Postgresql on `commit()` or `flush()`.
 After `commit()` or `flush()` the new vertices and edges have their id(s) assigned.
 
 The transaction must be manually placed in normal batch mode. i.e. `Graph.tx().normalBatchModeOn()` must occur before any batch processing.
@@ -885,8 +888,7 @@ for batch processing to continue.
 
 Vertices and edges can be created as per normal making normal batch mode very convenient.
 
-<br />
-####Example illustrating normal batch mode
+**Example illustrating normal batch mode**
 
     @Test
     public void showNormalBatchMode() {
@@ -923,8 +925,8 @@ Created 10 000 000 Persons each with a car. 20 000 000 vertices and 10 000 000 e
 ###Streaming batch mode
 <br />
 
-Streaming batch writes any new vertex or edge immediately to postgresql via its `stdin` api. I.e. the data is written
-directly to a postgresql jdbc driver OutputStream.
+Streaming batch writes any new vertex or edge immediately to Postgresql via its `stdin` api. I.e. the data is written
+directly to a Postgresql jdbc driver OutputStream.
 
 Streaming batch mode does **not** use the `Graph.addVertex` method. Instead `Graph.streamVertex` is defined.
 
@@ -938,8 +940,7 @@ the normal batch mode (+/- 25% faster).
 However the caveat is that, per transaction/thread only one label/table can be written between consecutive calls to `SqlgTransaction.flush()`. 
 Further it is not possible to assign an id to the vertex or element. As such the `SqlgGraph.streamVertex` method returns void.
 
-<br />
-####Example illustrating streaming batch mode
+**Example illustrating streaming batch mode**
 
     @Test
     public void showStreamingBatchMode() {
@@ -980,12 +981,11 @@ Precisely for this scenario there is a bulk edge creation method, `SqlgGraph.bul
  * `uids` are the actual unique identifies for each in out vertex pairing.
 
 Sqlg will then first copy the `uids` into a temporary table. Then it joins the temporary table on the in and out vertex tables to retrieve the in and out ids.
-These ids are then inserted into the edge table. All this happens on postgresql, having minimal processing and memory impact on the java process.
+These ids are then inserted into the edge table. All this happens on Postgresql, having minimal processing and memory impact on the java process.
 
 The unique identifiers do have to be kept in memory.
 
-<br />
-####Example illustrating streaming batch mode including bulk edges.
+**Example illustrating streaming batch mode including bulk edges**
 
     @Test
     public void showBulkEdgeCreation() {
@@ -1035,8 +1035,7 @@ The transaction must be placed into streaming with lock batch mode manually befo
 `Graph.tx().streamingWithLockBatchModeOn()` After every `commit()` or `flush()` the transaction reverts to normal mode and must 
 be placed into streaming batch mode again for streaming batch mode to continue.
 
-<br />
-####Example illustrating streaming with lock batch mode.
+**Example illustrating streaming with lock batch mode**
 
     @Test
     public void showStreamingWithLockBatchMode() {
@@ -1067,8 +1066,7 @@ Test executed with -Xmx128m
 Created 10 000 000 Persons and 10 000 000 cars. **No** edges were created.
 <br />
 
-<br />
-####Example illustrating streaming with lock batch mode and bulk edge creation
+**Example illustrating streaming with lock batch mode and bulk edge creation**
 
     @Test
     public void showStreamingWithLockBulkEdgeCreation() {
