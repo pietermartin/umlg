@@ -76,10 +76,12 @@
 <li><a href="#CompareexampleID">Compare example</a></li><li><a href="#ContainsexampleID">Contains example</a></li><li><a href="#TextpredicateID">Text predicate </a></li><li><a href="#LocalDateTime,LocalDateandLocalTimequeriesID">LocalDateTime, LocalDate and LocalTime queries</a></li></ul>
 </li><li><a href="#OrderID">Order</a></li><li><a href="#RepeatStepID">RepeatStep</a></li></ul>
 </li><li><a href="#BatchmodeID">Batch mode</a><ul class="nav">
-<li><a href="#NormalbatchmodeID">Normal batch mode</a></li><li><a href="#StreamingbatchmodeID">Streaming batch mode</a></li><li><a href="#StreamingwithlockbatchmodeID">Streaming with lock batch mode</a></li></ul>
-</li><li><a href="#PerformanceIndicatorID">Performance Indicator</a><ul class="nav">
-<li><a href="#Sometrivialexamples.ID">Some trivial examples.</a><ul class="nav">
-<li><a href="#Create10000objects,eachwith2propertiesID">Create 10000 objects, each with 2 properties</a></li><li><a href="#Create10001Persons,eachwith2propertiesandonefriendID">Create 10001 Persons, each with 2 properties and one friend</a></li><li><a href="#Postgres,Create1000000PersonsandDogswithapetedge.BatchModeon.ID">Postgres, Create 1 000 000 Persons and Dogs with a pet edge. BatchMode on.</a></li><li><a href="#HSQLDB,Create1000000PersonsandDogswithapetedge.ID">HSQLDB, Create 1 000 000 Persons and Dogs with a pet edge.</a></li></ul>
+<li><a href="#NormalbatchmodeID">Normal batch mode</a><ul class="nav">
+<li><a href="#ExampleillustratingnormalbatchmodeID">Example illustrating normal batch mode</a></li></ul>
+</li><li><a href="#StreamingbatchmodeID">Streaming batch mode</a><ul class="nav">
+<li><a href="#ExampleillustratingstreamingbatchmodeID">Example illustrating streaming batch mode</a></li><li><a href="#Exampleillustratingstreamingbatchmodeincludingbulkedges.ID">Example illustrating streaming batch mode including bulk edges.</a></li></ul>
+</li><li><a href="#StreamingwithlockbatchmodeID">Streaming with lock batch mode</a><ul class="nav">
+<li><a href="#Exampleillustratingstreamingwithlockbatchmode.ID">Example illustrating streaming with lock batch mode.</a></li><li><a href="#ExampleillustratingstreamingwithlockbatchmodeandbulkedgecreationID">Example illustrating streaming with lock batch mode and bulk edge creation</a></li></ul>
 </li></ul>
 </li>
                 </ul>
@@ -1037,26 +1039,38 @@ Batch mode is activated on the transaction object itself. After every <code clas
 <li>In streaming mode with lock <code class="language-java">flush()</code> will close the OutputStream that the data has been written to and assign id(s).</li>
 </ul>
 
+<p>The postgresql <a href="http://www.postgresql.org/docs/9.4/static/sql-copy.html">copy</a> command is used to bulk insert data.</p>
+
 <p><br /></p>
 
 <h3 id="NormalbatchmodeID">Normal batch mode</h3>
 
 <p><br /></p>
 
-<p>In normal batch mode the standard TinkerPop modification api can be used as per normal. Normal batch mode caches all modifications in memory
-and on <code class="language-java">commit</code> or <code class="language-java">flush</code> sends the modification to the server.</p>
+<p>In normal batch mode the standard TinkerPop modification api can be used. Normal batch mode caches all modifications in memory
+and on <code class="language-java">commit()</code> or <code class="language-java">flush()</code> sends the modification to the server.</p>
 
-<p><strong>Note:</strong> Because all modifications are held in memory it is important to call <code class="language-java">commit()</code> or <code class="language-java">flush()</code> to prevent <code class="language-java">OutOfMemoryError</code>.</p>
+<p>Because all modifications are held in memory it is important to call <code class="language-java">commit()</code> or <code class="language-java">flush()</code> to prevent <code class="language-java">OutOfMemoryError</code>.</p>
 
-<p><strong>Note:</strong> In batch mode vertices and edges returned from <code class="language-java">Graph.addVertex</code> and <code class="language-java">vertex.addEdge</code> respectively do not yet have their <code class="language-java">id</code>s assigned to them.
+<p>In batch mode vertices and edges returned from <code class="language-java">Graph.addVertex</code> and <code class="language-java">vertex.addEdge</code> respectively do <strong>not</strong> yet have their id(s) assigned to them.
 This is because the new vertices and edges are cached in memory and are only sent to postgresql on <code class="language-java">commit()</code> or <code class="language-java">flush()</code>.
-After <code class="language-java">commit()</code> or <code class="language-java">flush()</code> every new vertex and edge has its id assigned to it.</p>
+After <code class="language-java">commit()</code> or <code class="language-java">flush()</code> the new vertices and edges have their id(s) assigned.</p>
 
-<p>The postgresql <a href="http://www.postgresql.org/docs/9.4/static/sql-copy.html">copy</a> command is used to bulk insert data.</p>
+<p>The transaction must be manually placed in normal batch mode. i.e. <code class="language-java">Graph.tx().normalBatchModeOn()</code> must occur before any batch processing.
+After every <code class="language-java">commit()</code> or <code class="language-java">flush()</code> the transaction reverts to a regular transaction and must be placed in normal batch mode again 
+for batch processing to continue.</p>
+
+<p>Vertices and edges can be created as per normal making normal batch mode very convenient.</p>
+
+<p><br /></p>
+
+<h4 id="ExampleID">Example illustrating normal batch mode</h4>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void showNormalBatchMode() {
-    this.sqlgGraph.tx().batchModeOn();
+    StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
+    this.sqlgGraph.tx().normalBatchModeOn();
     for (int i = 1; i &lt;= 10_000_000; i++) {
         Vertex person = this.sqlgGraph.addVertex(T.label, "Person", "name", "John" + i);
         Vertex car = this.sqlgGraph.addVertex(T.label, "Car", "name", "Dodge" + i);
@@ -1064,16 +1078,24 @@ public void showNormalBatchMode() {
         //To preserve memory commit or flush every so often
         if (i % 100_000 == 0) {
             this.sqlgGraph.tx().commit();
-            this.sqlgGraph.tx().batchModeOn();
+            this.sqlgGraph.tx().normalBatchModeOn();
         }
     }
     this.sqlgGraph.tx().commit();
+    stopWatch.stop();
+    System.out.println(stopWatch.toString());
 }
+
+Time taken: 0:03:46.217
 </code></pre>
 
 <p><img src="images/sqlg/normalBatchModeMemory.png" alt="image of normal batch mode memory usage" title="" />
 <br />
-Normal batch mode memory usage, test executed with -Xmx2048m
+Normal batch mode memory usage. </p>
+
+<p>Test executed with -Xmx2048m</p>
+
+<p>Inserted 10 000 000 Persons each with a car. 20 000 000 vertices and 10 000 000 edges.
 <br /></p>
 
 <p><br /></p>
@@ -1085,14 +1107,26 @@ Normal batch mode memory usage, test executed with -Xmx2048m
 <p>Streaming batch writes any new vertex or edge immediately to postgresql via its <code class="language-java">stdin</code> api. I.e. the data is written
 directly to a postgresql jdbc driver OutputStream.</p>
 
+<p>Streaming batch mode does <strong>not</strong> use the <code class="language-java">Graph.addVertex</code> method. Instead <code class="language-java">Graph.streamVertex</code> is defined.</p>
+
+<p>The transaction must be placed in streaming batch mode manually before any streaming batch modification can happen. <code class="language-java">Graph.tx().streamingBatchModeOn()</code>
+After every <code class="language-java">commit()</code> or <code class="language-java">flush()</code> the transaction reverts to normal mode and must be placed into streaming batch mode again 
+for streaming batch mode to continue.</p>
+
 <p>The benefit of streaming mode is that the memory consumption is very low as nothing is cached. It is also somewhat faster than
 the normal batch mode (+/- 25% faster).</p>
 
 <p>However the caveat is that, per transaction/thread only one label/table can be written between consecutive calls to <code class="language-java">SqlgTransaction.flush()</code>. 
-Further it is not possible to assign an id to the vertex or element. As such the <code class="language-java">SqlgGraph.streamVertex(Object... keyValues)</code> method returns void.</p>
+Further it is not possible to assign an id to the vertex or element. As such the <code class="language-java">SqlgGraph.streamVertex</code> method returns void.</p>
+
+<p><br /></p>
+
+<h4 id="ExampleID">Example illustrating streaming batch mode</h4>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void showStreamingBatchMode() {
+    StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
     //enable streaming mode
     this.sqlgGraph.tx().streamingBatchModeOn();
     for (int i = 1; i &lt;= 10_000_000; i++) {
@@ -1104,12 +1138,74 @@ public void showStreamingBatchMode() {
         this.sqlgGraph.streamVertex(T.label, "Car", "name", "Dodge" + i);
     }
     this.sqlgGraph.tx().commit();
+    stopWatch.stop();
+    System.out.println(stopWatch.toString());
 }
+
+Time taken: 0:00:53.787
 </code></pre>
 
 <p><img src="images/sqlg/streamingBatchModeMemory.png" alt="image of streaming batch mode memory usage" title="" />
 <br />
-Streaming batch mode memory usage, test executed with -Xmx128m
+Streaming batch mode memory usage. </p>
+
+<p>Test executed with -Xmx128m</p>
+
+<p>Create 10 000 000 Persons and 10 000 000 cars. <strong>No</strong> edges have been created.
+<br /></p>
+
+<p>As the <code class="language-java">Graph.streamVertex</code> method returns void there is no handle to vertex making edge creation problematic.
+Precisely for this scenario there is a bulk edge creation method, <code class="language-java">SqlgGraph.bulkAddEdges(inLabel, outLabel, edgeLabel, Pair&lt;String, String&gt; idFields, List&lt;? extends Pair&lt;String, String&gt;&gt; uids)</code></p>
+
+<ul>
+<li><code class="language-java">inLabel</code> and <code class="language-java">outLabel</code> specifies the in and out vertex labels that the edges will be between.</li>
+<li><code class="language-java">edgeLabel</code> is the label of the edges to be created.</li>
+<li><code class="language-java">idFields</code> specifies the fields that uniquely identify the in and out vertex.</li>
+<li><code class="language-java">uids</code> are the actual unique identifies for each in out vertex pairing.</li>
+</ul>
+
+<p>Sqlg will then first copy the <code class="language-java">uids</code> into a temporary table. Then it joins the temporary table on the in and out vertex tables to retrieve the in and out ids.
+These ids are then inserted into the edge table. All this happens on postgresql, having minimal processing and memory impact on the java process.</p>
+
+<p>The unique identifiers do have to be kept in memory.</p>
+
+<p><br /></p>
+
+<h4 id="ExampleID">Example illustrating streaming batch mode including bulk edges.</h4>
+
+<pre class="prettyprint"><code class="language-java">@Test
+public void showBulkEdgeCreation() {
+    StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
+    int count = 0;
+    for (int i = 1; i &lt;= 10; i++) {
+        List&lt;Pair&lt;String, String&gt;&gt; identifiers = new ArrayList&lt;&gt;();
+        this.sqlgGraph.tx().streamingBatchModeOn();
+        for (int j = 1; j &lt;= 1_000_000; j++) {
+            this.sqlgGraph.streamVertex(T.label, "Person", "name", "John" + count, "personUid", String.valueOf(count));
+        }
+        this.sqlgGraph.tx().flush();
+        for (int j = 1; j &lt;= 1_000_000; j++) {
+            this.sqlgGraph.streamVertex(T.label, "Car", "name", "Dodge" + count, "carUid", String.valueOf(count));
+            identifiers.add(Pair.of(String.valueOf(count), String.valueOf(count++)));
+        }
+        this.sqlgGraph.tx().flush();
+        this.sqlgGraph.bulkAddEdges("Person", "Car", "drives", Pair.of("personUid", "carUid"), identifiers);
+        this.sqlgGraph.tx().commit();
+    }
+    stopWatch.stop();
+    System.out.println(stopWatch.toString());
+}
+Time taken: 0:04:25.502
+</code></pre>
+
+<p><img src="images/sqlg/streamBatchModeBulkEdgeMemory.png" alt="image of streaming batch mode and bulk edge creation" title="" />
+<br />
+Streaming with lock batch mode memory usage. </p>
+
+<p>Test executed with -Xmx1024m</p>
+
+<p>Creates 10 000 000 Persons each with a car. i.e. 20 000 000 vertices and 10 000 000 edges.
 <br /></p>
 
 <p><br /></p>
@@ -1118,229 +1214,94 @@ Streaming batch mode memory usage, test executed with -Xmx128m
 
 <p><br /></p>
 
-<p>Streaming batch mode with lock is similar to streaming batch mode. The difference being that the label/table being written to is
+<p>Streaming with lock batch mode is similar to streaming batch mode. The difference being that the label/table being written to is
 locked. Locking the table ensures that no concurrent changes will occur on the table. This allows Sqlg to query the id sequence and
 assigned ids to the elements.</p>
 
+<p>Streaming batch mode does <strong>not</strong> use the <code class="language-java">Graph.addVertex</code> method. Instead <code class="language-java">Graph.streamVertexWithLock</code> is defined.</p>
+
+<p>The transaction must be placed into streaming with lock batch mode manually before any streaming with lock batch modification can happen. 
+<code class="language-java">Graph.tx().streamingWithLockBatchModeOn()</code> After every <code class="language-java">commit()</code> or <code class="language-java">flush()</code> the transaction reverts to normal mode and must 
+be placed into streaming batch mode again for streaming batch mode to continue.</p>
+
+<p><br /></p>
+
+<h4 id="ExampleID">Example illustrating streaming with lock batch mode.</h4>
+
 <pre class="prettyprint"><code class="language-java">@Test
 public void showStreamingWithLockBatchMode() {
+    StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
     //enable streaming mode
     this.sqlgGraph.tx().streamingWithLockBatchModeOn();
     for (int i = 1; i &lt;= 10_000_000; i++) {
-        Vertex person = this.sqlgGraph.streamVertexWithLock(T.label, "Person", "name", "John" + i);
+        Vertex person = this.sqlgGraph.addVertex(T.label, "Person", "name", "John" + i);
     }
     //flushing is needed before starting streaming Car. Only only one label/table can stream at a time.
     this.sqlgGraph.tx().flush();
     for (int i = 1; i &lt;= 10_000_000; i++) {
-        Vertex car = this.sqlgGraph.streamVertexWithLock(T.label, "Car", "name", "Dodge" + i);
+        Vertex car = this.sqlgGraph.addVertex(T.label, "Car", "name", "Dodge" + i);
     }
     this.sqlgGraph.tx().commit();
+    stopWatch.stop();
+    System.out.println(stopWatch.toString());
 }
+Time taken: 0:00:54.139
 </code></pre>
 
 <p><img src="images/sqlg/streamingWithLockBatchModeMemory.png" alt="image of streaming with lock batch mode memory usage" title="" />
 <br />
-Streaming batch mode memory usage, test executed with -Xmx128m
+Streaming with lock batch mode memory usage </p>
+
+<p>Test executed with -Xmx128m</p>
+
+<p>Created 10 000 000 Persons and 10 000 000 cars. <strong>No</strong> edges were created.
 <br /></p>
 
 <p><br /></p>
 
-<h2 id="PerformanceIndicatorID">Performance Indicator</h2>
-
-<p><br /></p>
-
-<p>Below are some fairly trivial examples using Sqlg, the purpose of which is to give an indication of the performance that can be
-expected from Sqlg.</p>
-
-<p>All tests were run on a standard laptop with the following specs.</p>
-
-<ul>
-<li>Intel(R) Core(TM) i7-4800MQ CPU @ 2.70GHz</li>
-<li>500G Solid state drive</li>
-</ul>
-
-<p>Running TinkerPop's <code class="language-java">StructurePerformanceTest</code> produces the following output</p>
-
-<p><strong>HSQLDB</strong></p>
-
-<pre class="prettyprint"><code class="language-java">WriteToIO.writeGraphSON: [measured 10 out of 10 rounds, threads: 1 (sequential)]
- round: 1.42 [+- 1.82]...
-WriteToIO.writeKryo: [measured 10 out of 10 rounds, threads: 1 (sequential)]
- round: 0.70 [+- 0.11]...
-WriteToIO.writeGraphML: [measured 10 out of 10 rounds, threads: 1 (sequential)]
- round: 0.77 [+- 0.06]...
-WriteToGraph.writeEmptyVertices: [measured 10 out of 10 rounds, threads: 1 (sequential)]
- round: 3.31 [+- 0.43]...
-WriteToGraph.writeEmptyVerticesAndEdges: [measured 10 out of 10 rounds, threads: 1 (sequential)]
- round: 11.52 [+- 0.63]...
-ReadFromGraph.readAllProperties: [measured 10 out of 10 rounds, threads: 1 (sequential)]
- round: 4.26 [+- 0.97]...
-</code></pre>
-
-<p><strong>Postgres</strong></p>
-
-<pre class="prettyprint"><code class="language-java">WriteToIO.writeGraphSON: [measured 10 out of 10 rounds, threads: 1 (sequential)]
- round: 3.62 [+- 0.46]...
-WriteToIO.writeKryo: [measured 10 out of 10 rounds, threads: 1 (sequential)]
- round: 3.64 [+- 0.11]...
-WriteToIO.writeGraphML: [measured 10 out of 10 rounds, threads: 1 (sequential)]
- round: 4.24 [+- 0.10]...
-WriteToGraph.writeEmptyVertices: [measured 10 out of 10 rounds, threads: 1 (sequential)]
- round: 14.53 [+- 0.19]...
-WriteToGraph.writeEmptyVerticesAndEdges: [measured 10 out of 10 rounds, threads: 1 (sequential)]
- round: 48.64 [+- 0.41]...
-ReadFromGraph.readAllProperties: [measured 10 out of 10 rounds, threads: 1 (sequential)]
- round: 16.00 [+- 0.35]...
-</code></pre>
-
-<h3 id="Sometrivialexamples.ID">Some trivial examples.</h3>
-
-<h4 id="Create10000objects,eachwith2propertiesID">Create 10000 objects, each with 2 properties</h4>
+<h4 id="ExampleID">Example illustrating streaming with lock batch mode and bulk edge creation</h4>
 
 <pre class="prettyprint"><code class="language-java">@Test
-public void testAddPersons() {
+public void showStreamingWithLockBulkEdgeCreation() {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
-    for (int i = 0; i &lt; 10000; i++) {
-        this.sqlgGraph.addVertex(T.label, "Person", "prop1", "property1", "prop2", "property2");
-    }
-    this.sqlgGraph.tx().commit();
-    stopWatch.stop();
-    System.out.println("Time to insert: " + stopWatch.toString());
-    stopWatch.reset();
-    stopWatch.start();
-    Assert.assertEquals(Long.valueOf(10000), this.sqlgGraph.V().has(T.label, "Person").count().next());
-    stopWatch.stop();
-    System.out.println("Time to read: " + stopWatch.toString());
-}
-</code></pre>
-
-<p><strong>HSQLDB</strong></p>
-
-<pre class="prettyprint"><code class="language-java">Time to insert: 0:00:00.672
-Time to read: 0:00:00.124
-</code></pre>
-
-<p><strong>Postgres</strong></p>
-
-<pre class="prettyprint"><code class="language-java">Time to insert: 0:00:01.955
-Time to read: 0:00:00.117
-</code></pre>
-
-<p>Note that the Postgres read time is roughly equivalent to that of HSQLDB. This is because in the above test there is only one call to
-the database. Postgres itself is fast, however round trips between client and server are expensive.</p>
-
-<h4 id="Create10001Persons,eachwith2propertiesandonefriendID">Create 10001 Persons, each with 2 properties and one friend</h4>
-
-<pre class="prettyprint"><code class="language-java">@Test
-public void testAddPersonAndFriends() {
-    StopWatch stopWatch = new StopWatch();
-    stopWatch.start();
-    Vertex previous = this.sqlgGraph.addVertex(T.label, "Person", "name", "first");
-
-    for (int i = 0; i &lt; 10000; i++) {
-        Vertex current = this.sqlgGraph.addVertex(T.label, "Person", "name", "current" + i);
-        previous.addEdge("friend", current);
-    }
-    this.sqlgGraph.tx().commit();
-    stopWatch.stop();
-    System.out.println("Time to insert: " + stopWatch.toString());
-    stopWatch.reset();
-    stopWatch.start();
-    List&lt;Vertex&gt; persons = this.sqlgGraph.V().&lt;Vertex&gt;has(T.label, "Person").toList();
-    Map&lt;Vertex, List&lt;Vertex&gt;&gt; friendMap = new HashMap&lt;&gt;();
-    persons.forEach(
-            p -&gt; friendMap.put(p, p.in("friend").toList())
-    );
-    Assert.assertEquals(10001, friendMap.size());
-    stopWatch.stop();
-    System.out.println("Time to read all vertices: " + stopWatch.toString());
-}
-</code></pre>
-
-<p><strong>HSQLDB</strong></p>
-
-<pre class="prettyprint"><code class="language-java">Time to insert: 0:00:02.095
-Time to read all vertices: 0:00:01.138
-</code></pre>
-
-<p><strong>Postgres</strong></p>
-
-<pre class="prettyprint"><code class="language-java">Time to insert: 0:00:04.810
-Time to read all vertices: 0:00:09.177
-</code></pre>
-
-<p>To retrieve the friends 1001 calls are made made. Postgres is significantly slower in this case.</p>
-
-<h4 id="Postgres,Create1000000PersonsandDogswithapetedge.BatchModeon.ID">Postgres, Create 1 000 000 Persons and Dogs with a pet edge. BatchMode on.</h4>
-
-<pre class="prettyprint"><code class="language-java">@Test
-public void testPostgresBatchMode() {
-    this.sqlgGraph.tx().batchModeOn();
-    StopWatch stopWatch = new StopWatch();
-    stopWatch.start();
-    for (int i = 1; i &lt; 1000001; i++) {
-        Vertex person = this.sqlgGraph.addVertex(T.label, "Person", "name", "John" + i);
-        Vertex dog = this.sqlgGraph.addVertex(T.label, "Dog", "name", "snowy" + i);
-        person.addEdge("pet", dog);
-        if (1 % 100000 == 0) {
-            this.sqlgGraph.tx().commit();
-            this.sqlgGraph.tx().batchModeOn();
+    int count = 0;
+    for (int i = 1; i &lt;= 10; i++) {
+        List&lt;Vertex&gt; persons = new ArrayList&lt;&gt;();
+        this.sqlgGraph.tx().streamingWithLockBatchModeOn();
+        for (int j = 1; j &lt;= 1_000_000; j++) {
+            Vertex person = this.sqlgGraph.addVertex(T.label, "Person", "name", "John" + count);
+            persons.add(person);
         }
-    }
-    this.sqlgGraph.tx().commit();
-    stopWatch.stop();
-    System.out.println("Time to insert: " + stopWatch.toString());
-    stopWatch.reset();
-    stopWatch.start();
-
-    Assert.assertEquals(1000000, this.sqlgGraph.V().&lt;Vertex&gt;has(T.label, "Person").count().next().intValue());
-    Assert.assertEquals(1000000, this.sqlgGraph.V().&lt;Vertex&gt;has(T.label, "Dog").count().next().intValue());
-
-    stopWatch.stop();
-    System.out.println("Time to read all vertices: " + stopWatch.toString());
-}
-</code></pre>
-
-<p><strong>Postgres</strong></p>
-
-<pre class="prettyprint"><code class="language-java">Time to insert: 0:00:51.681
-Time to read all vertices: 0:00:16.130
-</code></pre>
-
-<h4 id="HSQLDB,Create1000000PersonsandDogswithapetedge.ID">HSQLDB, Create 1 000 000 Persons and Dogs with a pet edge.</h4>
-
-<pre class="prettyprint"><code class="language-java">@Test
-public void testHsqldbLargeLoad() {
-    StopWatch stopWatch = new StopWatch();
-    stopWatch.start();
-    for (int i = 1; i &lt; 1000001; i++) {
-        Vertex person = this.sqlgGraph.addVertex(T.label, "Person", "name", "John" + i);
-        Vertex dog = this.sqlgGraph.addVertex(T.label, "Dog", "name", "snowy" + i);
-        person.addEdge("pet", dog);
-        if (i % 100000 == 0) {
-            this.sqlgGraph.tx().commit();
+        this.sqlgGraph.tx().flush();
+        List&lt;Vertex&gt; cars = new ArrayList&lt;&gt;();
+        for (int j = 1; j &lt;= 1_000_000; j++) {
+            Vertex car = this.sqlgGraph.addVertex(T.label, "Car", "name", "Dodge" + count++);
+            cars.add(car);
         }
+        this.sqlgGraph.tx().flush();
+        Iterator&lt;Vertex&gt; carIter = cars.iterator();
+        for (Vertex person : persons) {
+            person.addEdge("drives", carIter.next());
+        }
+        this.sqlgGraph.tx().commit();
     }
-    this.sqlgGraph.tx().commit();
     stopWatch.stop();
-    System.out.println("Time to insert: " + stopWatch.toString());
-    stopWatch.reset();
-    stopWatch.start();
-
-    Assert.assertEquals(1000000, this.sqlgGraph.V().&lt;Vertex&gt;has(T.label, "Person").count().next().intValue());
-    Assert.assertEquals(1000000, this.sqlgGraph.V().&lt;Vertex&gt;has(T.label, "Dog").count().next().intValue());
-
-    stopWatch.stop();
-    System.out.println("Time to read all vertices: " + stopWatch.toString());
+    System.out.println(stopWatch.toString());
 }
+
+Time taken: 0:02:19.672
 </code></pre>
 
-<p><strong>HSQLDB</strong></p>
+<p><img src="images/sqlg/streamingWithLockBatchModeAndEdgesMemory.png" alt="image of streaming with lock batch mode memory usage" title="" />
+<br />
+Streaming with lock batch mode memory usage </p>
 
-<pre class="prettyprint"><code class="language-java">Time to insert: 0:02:32.435
-Time to read all vertices: 0:00:19.026
-</code></pre>
+<p>Test executed with -Xmx1024m</p>
+
+<p>Created 10 000 000 Persons each with a car. 20 000 000 vertices and 10 000 000 edges.
+<br /></p>
 
 
         </div>

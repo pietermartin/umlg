@@ -2,14 +2,12 @@
 
 ##Introduction
 
-**Sqlg** is a implementation of [TinkerPop3](https://github.com/tinkerpop/tinkerpop3) on a [RDBMS](http://en.wikipedia.org/wiki/Relational_database_management_system).
+**Sqlg** is a implementation of [TinkerPop](http://tinkerpop.incubator.apache.org/) on a [RDBMS](http://en.wikipedia.org/wiki/Relational_database_management_system).
 Currently [HSQLDB](http://hsqldb.org/) and [Postgresql](http://www.postgresql.org/) are supported.
-
 
 Sqlg has a [Google Group](https://groups.google.com/forum/?hl=en#!forum/sqlg).
 
-
-###TinkerPop supported features
+###TinkerPop's supported features
 
 Sqlg passes TinkerPop's `StructureStandardSuite` and `ProcessStandardSuite` test suites.
 
@@ -395,8 +393,6 @@ Outside of creating the index Sqlg has no further direct interaction with index 
 the underlying sql engine will utilize that index.
 
 The index does not need to be created upfront. It can be added any time.
-
-###Example
 
     @Test
     public void testIndexOnVertex() throws SQLException {
@@ -884,6 +880,7 @@ Vertices and edges can be created as per normal making normal batch mode very co
 
 <br />
 ####Example illustrating normal batch mode
+<br />
 
     @Test
     public void showNormalBatchMode() {
@@ -904,17 +901,14 @@ Vertices and edges can be created as per normal making normal batch mode very co
         stopWatch.stop();
         System.out.println(stopWatch.toString());
     }
-    
-    Time taken: 0:03:46.217
+    Output: 0:03:46.217
     
 ![image of normal batch mode memory usage](images/sqlg/normalBatchModeMemory.png)
 <br />
 Normal batch mode memory usage. 
-
 Test executed with -Xmx2048m
 
-Inserted 10 000 000 Persons each with a car. 20 000 000 vertices and 10 000 000 edges.
-<br />
+Create 10 000 000 persons each with a car. 20 000 000 vertices and 10 000 000 edges.
 
 <br />
 ###Streaming batch mode
@@ -935,9 +929,6 @@ the normal batch mode (+/- 25% faster).
 However the caveat is that, per transaction/thread only one label/table can be written between consecutive calls to `SqlgTransaction.flush()`. 
 Further it is not possible to assign an id to the vertex or element. As such the `SqlgGraph.streamVertex` method returns void.
 
-<br />
-####Example illustrating streaming batch mode
-
     @Test
     public void showStreamingBatchMode() {
         StopWatch stopWatch = new StopWatch();
@@ -956,8 +947,7 @@ Further it is not possible to assign an id to the vertex or element. As such the
         stopWatch.stop();
         System.out.println(stopWatch.toString());
     }
-    
-    Time taken: 0:00:53.787
+    Output: 0:00:53.787
 
 ![image of streaming batch mode memory usage](images/sqlg/streamingBatchModeMemory.png)
 <br />
@@ -981,13 +971,8 @@ These ids are then inserted into the edge table. All this happens on postgresql,
 
 The unique identifiers do have to be kept in memory.
 
-<br />
-####Example illustrating streaming batch mode including bulk edges.
-
     @Test
     public void showBulkEdgeCreation() {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
         int count = 0;
         for (int i = 1; i <= 10; i++) {
             List<Pair<String, String>> identifiers = new ArrayList<>();
@@ -1004,16 +989,11 @@ The unique identifiers do have to be kept in memory.
             this.sqlgGraph.bulkAddEdges("Person", "Car", "drives", Pair.of("personUid", "carUid"), identifiers);
             this.sqlgGraph.tx().commit();
         }
-        stopWatch.stop();
-        System.out.println(stopWatch.toString());
     }
-    Time taken: 0:04:25.502 
     
 ![image of streaming batch mode and bulk edge creation](images/sqlg/streamBatchModeBulkEdgeMemory.png)
 <br />
-Streaming with lock batch mode memory usage. 
-
-Test executed with -Xmx1024m
+Streaming with lock batch mode memory usage, test executed with -Xmx1024m
 
 Creates 10 000 000 Persons each with a car. i.e. 20 000 000 vertices and 10 000 000 edges.
 <br />
@@ -1032,77 +1012,60 @@ The transaction must be placed into streaming with lock batch mode manually befo
 `Graph.tx().streamingWithLockBatchModeOn()` After every `commit()` or `flush()` the transaction reverts to normal mode and must 
 be placed into streaming batch mode again for streaming batch mode to continue.
 
-<br />
-####Example illustrating streaming with lock batch mode.
-
     @Test
     public void showStreamingWithLockBatchMode() {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
         //enable streaming mode
         this.sqlgGraph.tx().streamingWithLockBatchModeOn();
         for (int i = 1; i <= 10_000_000; i++) {
-            Vertex person = this.sqlgGraph.addVertex(T.label, "Person", "name", "John" + i);
+            Vertex person = this.sqlgGraph.streamVertexWithLock(T.label, "Person", "name", "John" + i);
         }
         //flushing is needed before starting streaming Car. Only only one label/table can stream at a time.
         this.sqlgGraph.tx().flush();
         for (int i = 1; i <= 10_000_000; i++) {
-            Vertex car = this.sqlgGraph.addVertex(T.label, "Car", "name", "Dodge" + i);
+            Vertex car = this.sqlgGraph.streamVertexWithLock(T.label, "Car", "name", "Dodge" + i);
         }
         this.sqlgGraph.tx().commit();
-        stopWatch.stop();
-        System.out.println(stopWatch.toString());
     }
-    Time taken: 0:00:54.139
 
 ![image of streaming with lock batch mode memory usage](images/sqlg/streamingWithLockBatchModeMemory.png)
 <br />
-Streaming with lock batch mode memory usage 
-
-Test executed with -Xmx128m
-
-Created 10 000 000 Persons and 10 000 000 cars. **No** edges were created.
+Streaming with lock batch mode memory usage, test executed with -Xmx128m
 <br />
 
-<br />
-####Example illustrating streaming with lock batch mode and bulk edge creation
+
 
     @Test
     public void showStreamingWithLockBulkEdgeCreation() {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
         int count = 0;
         for (int i = 1; i <= 10; i++) {
-            List<Vertex> persons = new ArrayList<>();
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+            List<MutablePair<SqlgVertex, SqlgVertex>> identifiers = new ArrayList<>();
             this.sqlgGraph.tx().streamingWithLockBatchModeOn();
             for (int j = 1; j <= 1_000_000; j++) {
-                Vertex person = this.sqlgGraph.addVertex(T.label, "Person", "name", "John" + count);
-                persons.add(person);
+                SqlgVertex person = this.sqlgGraph.streamVertexWithLock(T.label, "Person", "name", "John" + count);
+                identifiers.add(MutablePair.of(person, null));
             }
             this.sqlgGraph.tx().flush();
-            List<Vertex> cars = new ArrayList<>();
+            System.out.println(stopWatch.toString());
             for (int j = 1; j <= 1_000_000; j++) {
-                Vertex car = this.sqlgGraph.addVertex(T.label, "Car", "name", "Dodge" + count++);
-                cars.add(car);
+                SqlgVertex car = this.sqlgGraph.streamVertexWithLock(T.label, "Car", "name", "Dodge" + count++);
+                identifiers.get(j - 1).setRight(car);
             }
             this.sqlgGraph.tx().flush();
-            Iterator<Vertex> carIter = cars.iterator();
-            for (Vertex person : persons) {
-                person.addEdge("drives", carIter.next());
+            System.out.println(stopWatch.toString());
+            for (MutablePair<SqlgVertex, SqlgVertex> identifier : identifiers) {
+                identifier.getLeft().streamEdgeWithLock("drives", identifier.getRight());
             }
+            System.out.println(stopWatch.toString());
             this.sqlgGraph.tx().commit();
         }
-        stopWatch.stop();
-        System.out.println(stopWatch.toString());
     }
     
-    Time taken: 0:02:19.672
-    
-![image of streaming with lock batch mode memory usage](images/sqlg/streamingWithLockBatchModeAndEdgesMemory.png)
 <br />
-Streaming with lock batch mode memory usage 
-
-Test executed with -Xmx1024m
-
-Created 10 000 000 Persons each with a car. 20 000 000 vertices and 10 000 000 edges.
+Streaming with lock batch mode memory usage, test executed with -Xmx128m
 <br />
+
+![image of streaming with lock batch mode memory usage](images/sqlg/streamWithLockAndEdgeCreationMemory.png)
+
+
