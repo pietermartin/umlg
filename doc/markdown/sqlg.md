@@ -333,21 +333,28 @@ From a rdbms' perspective each edge table is a classic `many to many` join table
 
 ###TinkerPop-modern
 
-Taken from [TinkerPop3](http://tinkerpop.incubator.apache.org/docs/3.0.0-SNAPSHOT/#intro)
+Taken from [TinkerPop](http://tinkerpop.incubator.apache.org/docs/3.1.0-incubating/#intro)
 
 ![image of tinkerpop-classic](images/sqlg/tinkerpop-modern-graph.png)
 
-####ER Diagram
+**ER Diagram**
 
 ![image of tinkerpop-classic](images/sqlg/tinkerpop-modern-er.png)
 
-####V_person####
+**V_person**
+
 ![image of tinkerpop-classic](images/sqlg/V_person.png)
-####V_software
+
+**V_software**
+
 ![image of tinkerpop-classic](images/sqlg/V_software.png)
-####E_knows
+
+**E_knows**
+
 ![image of tinkerpop-classic](images/sqlg/E_knows.png)
-####E_created
+
+**E_created**
+
 ![image of tinkerpop-classic](images/sqlg/E_created.png)
 
 ###Namespacing and Schemas
@@ -368,9 +375,8 @@ To specify the schema for a label Sqlg uses the dot `.` notation.
 This will create a table `V_manager` in the `public` (default) schema. Table `V_house` is in a `continent` schema and table `V_car`
 is in a `fleet` schema. For the edges a `E_managedBy` table is created in the `continent` schema and a `E_owner` table in the `fleet` schema.
 
-<br />
-####Schemas
-<br />
+**Schemas**
+
 ![image of tinkerpop-classic](images/sqlg/schemas.png)
 ![image of tinkerpop-classic](images/sqlg/continent.png)
 ![image of tinkerpop-classic](images/sqlg/fleet.png)
@@ -396,7 +402,7 @@ the underlying sql engine will utilize that index.
 
 The index does not need to be created upfront. It can be added any time.
 
-###Example
+**Example illustrating indexes**
 
     @Test
     public void testIndexOnVertex() throws SQLException {
@@ -422,9 +428,8 @@ The index does not need to be created upfront. It can be added any time.
 
     Output: "Bitmap Heap Scan on "V_Person" a  (cost=4.42..32.42 rows=18 width=40) (actual time=0.016..0.016 rows=1 loops=1)"
 
-<br />
-####Table definition
-<br />
+**Table definition**
+
 ![image of tinkerpop-classic](images/sqlg/tableDefinition.png)
 
 In the above example, Sqlg created a table `V_Person` with column `name` and an index on the `name` column.
@@ -466,9 +471,7 @@ To indicate to Sqlg that a `Hazelcast` cluster is required  you must specify `ha
 in the constructors configuration object. Hazelcast will then automatically set up the distributed cluster for the schema
 information.
 
-<br />
-####Example Postgresql
-<br />
+**Example Postgresql**
 
 **Jvm 1**
 
@@ -498,9 +501,7 @@ The combined step will then in turn generate the sql statements to retrieve the 
 
 **Note:** Turn sql logging on by setting `log4j.logger.org.umlg.sqlg=debug`
 
-<br />
-####Example
-<br />
+**Example illustrating high latency**
 
     @Test
     public void showHighLatency() {
@@ -528,6 +529,7 @@ The combined step will then in turn generate the sql statements to retrieve the 
     
     Before optimization:
     [GraphStep([],vertex), HasStep([~label.eq(Organization)]), VertexStep(OUT,vertex), VertexStep(OUT,vertex)]
+    
     After optimization:
     [SqlgGraphStepCompiled([],vertex)]
     
@@ -561,7 +563,7 @@ TinkerPop's [Compare](http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core
 to execute on the database.
 
 <br />
-####Compare example
+####Compare predicate
 <br />
 
     @Test
@@ -604,10 +606,11 @@ And the resulting sql,
     WHERE
     	( "public"."V_Office"."name" = ?) 
     	
-The same pattern is used for all the  [Compare](http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Compare.html) predicates.   	
+The same pattern is used for all the 
+[Compare](http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Compare.html) predicates.   	
 
 <br />
-####Contains example
+####Contains predicate 
 <br />
 
 Sqlg's implementation of [Contains](http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Contains.html) is slightly more complex.
@@ -649,7 +652,7 @@ Benchmarking shows that doing a join on a temporary table is always faster than 
 For the case of there being only one value Sqlg will use an `equals` instead of a temporay table or an `in` statement.
 
 <br />
-####Text predicate 
+####Text predicate
 <br />
 
 Sqlg includes its own Text predicate for full text queries.
@@ -691,7 +694,7 @@ And the resulting sql on postgresql,
 	    
 
 <br />
-####LocalDateTime, LocalDate and LocalTime queries
+####DateTime queries
 <br />
 
 LocalDateTime, LocalDate and LocalTime queries are supported.
@@ -913,7 +916,7 @@ Normal batch mode memory usage.
 
 Test executed with -Xmx2048m
 
-Inserted 10 000 000 Persons each with a car. 20 000 000 vertices and 10 000 000 edges.
+Created 10 000 000 Persons each with a car. 20 000 000 vertices and 10 000 000 edges.
 <br />
 
 <br />
@@ -965,7 +968,7 @@ Streaming batch mode memory usage.
 
 Test executed with -Xmx128m
 
-Create 10 000 000 Persons and 10 000 000 cars. **No** edges have been created.
+Created 10 000 000 Persons and 10 000 000 cars. **No** edges have been created.
 <br />
 
 As the `Graph.streamVertex` method returns void there is no handle to vertex making edge creation problematic.
@@ -1015,7 +1018,7 @@ Streaming with lock batch mode memory usage.
 
 Test executed with -Xmx1024m
 
-Creates 10 000 000 Persons each with a car. i.e. 20 000 000 vertices and 10 000 000 edges.
+Created 10 000 000 Persons each with a car. i.e. 20 000 000 vertices and 10 000 000 edges.
 <br />
 
 <br />

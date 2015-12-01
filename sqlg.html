@@ -60,20 +60,10 @@
 </li><li><a href="#GettingStartedID">Getting Started</a><ul class="nav">
 <li><a href="#MavenID">Maven</a></li><li><a href="#GremlinConsoleID">Gremlin Console</a></li></ul>
 </li><li><a href="#DatatypesID">Data types</a></li><li><a href="#ArchitectureID">Architecture</a><ul class="nav">
-<li><a href="#VertextablesID">Vertex tables</a></li><li><a href="#EdgetablesID">Edge tables</a></li><li><a href="#TinkerPop-modernID">TinkerPop-modern</a><ul class="nav">
-<li><a href="#ERDiagramID">ER Diagram</a></li><li><a href="#V_personID">V_person</a></li><li><a href="#V_softwareID">V_software</a></li><li><a href="#E_knowsID">E_knows</a></li><li><a href="#E_createdID">E_created</a></li></ul>
-</li><li><a href="#NamespacingandSchemasID">Namespacing and Schemas</a><ul class="nav">
-<li><a href="#SchemasID">Schemas</a></li></ul>
-</li></ul>
-</li><li><a href="#IndexesID">Indexes</a><ul class="nav">
-<li><a href="#ExampleID">Example</a><ul class="nav">
-<li><a href="#TabledefinitionID">Table definition</a></li></ul>
-</li></ul>
-</li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#MultipleJvmID">Multiple Jvm</a><ul class="nav">
-<li><a href="#ExamplePostgresqlID">Example Postgresql</a></li></ul>
-</li><li><a href="#GremlinID">Gremlin</a><ul class="nav">
-<li><a href="#ExampleID">Example</a></li><li><a href="#PredicatesID">Predicates </a><ul class="nav">
-<li><a href="#CompareexampleID">Compare example</a></li><li><a href="#ContainsexampleID">Contains example</a></li><li><a href="#TextpredicateID">Text predicate </a></li><li><a href="#LocalDateTime,LocalDateandLocalTimequeriesID">LocalDateTime, LocalDate and LocalTime queries</a></li></ul>
+<li><a href="#VertextablesID">Vertex tables</a></li><li><a href="#EdgetablesID">Edge tables</a></li><li><a href="#TinkerPop-modernID">TinkerPop-modern</a></li><li><a href="#NamespacingandSchemasID">Namespacing and Schemas</a></li></ul>
+</li><li><a href="#IndexesID">Indexes</a></li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#GremlinID">Gremlin</a><ul class="nav">
+<li><a href="#PredicatesID">Predicates </a><ul class="nav">
+<li><a href="#ComparepredicateID">Compare predicate</a></li><li><a href="#ContainspredicateID">Contains predicate </a></li><li><a href="#TextpredicateID">Text predicate</a></li><li><a href="#DateTimequeriesID">DateTime queries</a></li></ul>
 </li><li><a href="#OrderID">Order</a></li><li><a href="#RepeatStepID">RepeatStep</a></li></ul>
 </li><li><a href="#BatchmodeID">Batch mode</a><ul class="nav">
 <li><a href="#NormalbatchmodeID">Normal batch mode</a><ul class="nav">
@@ -454,27 +444,27 @@ has a foreign key to the adjacent vertex's table.</p>
 
 <h3 id="TinkerPop-modernID">TinkerPop-modern</h3>
 
-<p>Taken from <a href="http://tinkerpop.incubator.apache.org/docs/3.0.0-SNAPSHOT/#intro">TinkerPop3</a></p>
+<p>Taken from <a href="http://tinkerpop.incubator.apache.org/docs/3.1.0-incubating/#intro">TinkerPop</a></p>
 
 <p><img src="images/sqlg/tinkerpop-modern-graph.png" alt="image of tinkerpop-classic" title="" /></p>
 
-<h4 id="ERDiagramID">ER Diagram</h4>
+<p><strong>ER Diagram</strong></p>
 
 <p><img src="images/sqlg/tinkerpop-modern-er.png" alt="image of tinkerpop-classic" title="" /></p>
 
-<h4 id="V_personID">V_person</h4>
+<p><strong>V_person</strong></p>
 
 <p><img src="images/sqlg/V_person.png" alt="image of tinkerpop-classic" title="" /></p>
 
-<h4 id="V_softwareID">V_software</h4>
+<p><strong>V_software</strong></p>
 
 <p><img src="images/sqlg/V_software.png" alt="image of tinkerpop-classic" title="" /></p>
 
-<h4 id="E_knowsID">E_knows</h4>
+<p><strong>E_knows</strong></p>
 
 <p><img src="images/sqlg/E_knows.png" alt="image of tinkerpop-classic" title="" /></p>
 
-<h4 id="E_createdID">E_created</h4>
+<p><strong>E_created</strong></p>
 
 <p><img src="images/sqlg/E_created.png" alt="image of tinkerpop-classic" title="" /></p>
 
@@ -497,12 +487,9 @@ corrola.addEdge("owner", john);
 <p>This will create a table <code class="language-java">V_manager</code> in the <code class="language-java">public</code> (default) schema. Table <code class="language-java">V_house</code> is in a <code class="language-java">continent</code> schema and table <code class="language-java">V_car</code>
 is in a <code class="language-java">fleet</code> schema. For the edges a <code class="language-java">E_managedBy</code> table is created in the <code class="language-java">continent</code> schema and a <code class="language-java">E_owner</code> table in the <code class="language-java">fleet</code> schema.</p>
 
-<p><br /></p>
+<p><strong>Schemas</strong></p>
 
-<h4 id="SchemasID">Schemas</h4>
-
-<p><br />
-<img src="images/sqlg/schemas.png" alt="image of tinkerpop-classic" title="" />
+<p><img src="images/sqlg/schemas.png" alt="image of tinkerpop-classic" title="" />
 <img src="images/sqlg/continent.png" alt="image of tinkerpop-classic" title="" />
 <img src="images/sqlg/fleet.png" alt="image of tinkerpop-classic" title="" />
 <img src="images/sqlg/public.png" alt="image of tinkerpop-classic" title="" /></p>
@@ -531,7 +518,7 @@ the underlying sql engine will utilize that index.</p>
 
 <p>The index does not need to be created upfront. It can be added any time.</p>
 
-<h3 id="ExampleID">Example</h3>
+<p><strong>Example illustrating indexes</strong></p>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void testIndexOnVertex() throws SQLException {
@@ -558,12 +545,9 @@ public void testIndexOnVertex() throws SQLException {
 Output: "Bitmap Heap Scan on "V_Person" a  (cost=4.42..32.42 rows=18 width=40) (actual time=0.016..0.016 rows=1 loops=1)"
 </code></pre>
 
-<p><br /></p>
+<p><strong>Table definition</strong></p>
 
-<h4 id="TabledefinitionID">Table definition</h4>
-
-<p><br />
-<img src="images/sqlg/tableDefinition.png" alt="image of tinkerpop-classic" title="" /></p>
+<p><img src="images/sqlg/tableDefinition.png" alt="image of tinkerpop-classic" title="" /></p>
 
 <p>In the above example, Sqlg created a table <code class="language-java">V_Person</code> with column <code class="language-java">name</code> and an index on the <code class="language-java">name</code> column.
 Currently Sqlg only supports the default index. For postgresql this is a <code class="language-java">Btree</code> index.</p>
@@ -606,11 +590,7 @@ Sqlg uses <a href="http://hazelcast.com/">Hazelcast</a> as a distributed cache o
 in the constructors configuration object. Hazelcast will then automatically set up the distributed cluster for the schema
 information.</p>
 
-<p><br /></p>
-
-<h4 id="ExamplePostgresqlID">Example Postgresql</h4>
-
-<p><br /></p>
+<p><strong>Example Postgresql</strong></p>
 
 <p><strong>Jvm 1</strong></p>
 
@@ -644,11 +624,7 @@ The combined step will then in turn generate the sql statements to retrieve the 
 
 <p><strong>Note:</strong> Turn sql logging on by setting <code class="language-java">log4j.logger.org.umlg.sqlg=debug</code></p>
 
-<p><br /></p>
-
-<h4 id="ExampleID">Example</h4>
-
-<p><br /></p>
+<p><strong>Example illustrating high latency</strong></p>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void showHighLatency() {
@@ -676,6 +652,7 @@ public void showHighLatency() {
 
 Before optimization:
 [GraphStep([],vertex), HasStep([~label.eq(Organization)]), VertexStep(OUT,vertex), VertexStep(OUT,vertex)]
+
 After optimization:
 [SqlgGraphStepCompiled([],vertex)]
 </code></pre>
@@ -714,7 +691,7 @@ to execute on the database.</p>
 
 <p><br /></p>
 
-<h4 id="CompareexampleID">Compare example</h4>
+<h4 id="ComparepredicateID">Compare predicate</h4>
 
 <p><br /></p>
 
@@ -760,11 +737,12 @@ WHERE
     ( "public"."V_Office"."name" = ?)
 </code></pre>
 
-<p>The same pattern is used for all the  <a href="http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Compare.html">Compare</a> predicates.     </p>
+<p>The same pattern is used for all the 
+<a href="http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Compare.html">Compare</a> predicates.       </p>
 
 <p><br /></p>
 
-<h4 id="ContainsexampleID">Contains example</h4>
+<h4>Contains predicate</h4>
 
 <p><br /></p>
 
@@ -810,7 +788,7 @@ For the case of there being only one value Sqlg will use an <code class="languag
 
 <p><br /></p>
 
-<h4>Text predicate</h4>
+<h4 id="TextpredicateID">Text predicate</h4>
 
 <p><br /></p>
 
@@ -857,7 +835,7 @@ WHERE
 
 <p><br /></p>
 
-<h4 id="LocalDateTime,LocalDateandLocalTimequeriesID">LocalDateTime, LocalDate and LocalTime queries</h4>
+<h4 id="DateTimequeriesID">DateTime queries</h4>
 
 <p><br /></p>
 
@@ -1064,7 +1042,7 @@ for batch processing to continue.</p>
 
 <p><br /></p>
 
-<h4 id="ExampleID">Example illustrating normal batch mode</h4>
+<h4 id="ExampleillustratingnormalbatchmodeID">Example illustrating normal batch mode</h4>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void showNormalBatchMode() {
@@ -1095,7 +1073,7 @@ Normal batch mode memory usage. </p>
 
 <p>Test executed with -Xmx2048m</p>
 
-<p>Inserted 10 000 000 Persons each with a car. 20 000 000 vertices and 10 000 000 edges.
+<p>Created 10 000 000 Persons each with a car. 20 000 000 vertices and 10 000 000 edges.
 <br /></p>
 
 <p><br /></p>
@@ -1121,7 +1099,7 @@ Further it is not possible to assign an id to the vertex or element. As such the
 
 <p><br /></p>
 
-<h4 id="ExampleID">Example illustrating streaming batch mode</h4>
+<h4 id="ExampleillustratingstreamingbatchmodeID">Example illustrating streaming batch mode</h4>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void showStreamingBatchMode() {
@@ -1151,7 +1129,7 @@ Streaming batch mode memory usage. </p>
 
 <p>Test executed with -Xmx128m</p>
 
-<p>Create 10 000 000 Persons and 10 000 000 cars. <strong>No</strong> edges have been created.
+<p>Created 10 000 000 Persons and 10 000 000 cars. <strong>No</strong> edges have been created.
 <br /></p>
 
 <p>As the <code class="language-java">Graph.streamVertex</code> method returns void there is no handle to vertex making edge creation problematic.
@@ -1171,7 +1149,7 @@ These ids are then inserted into the edge table. All this happens on postgresql,
 
 <p><br /></p>
 
-<h4 id="ExampleID">Example illustrating streaming batch mode including bulk edges.</h4>
+<h4 id="ExampleillustratingstreamingbatchmodeID">Example illustrating streaming batch mode including bulk edges.</h4>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void showBulkEdgeCreation() {
@@ -1205,7 +1183,7 @@ Streaming with lock batch mode memory usage. </p>
 
 <p>Test executed with -Xmx1024m</p>
 
-<p>Creates 10 000 000 Persons each with a car. i.e. 20 000 000 vertices and 10 000 000 edges.
+<p>Created 10 000 000 Persons each with a car. i.e. 20 000 000 vertices and 10 000 000 edges.
 <br /></p>
 
 <p><br /></p>
@@ -1226,7 +1204,7 @@ be placed into streaming batch mode again for streaming batch mode to continue.<
 
 <p><br /></p>
 
-<h4 id="ExampleID">Example illustrating streaming with lock batch mode.</h4>
+<h4 id="Exampleillustratingstreamingwithlockbatchmode.ID">Example illustrating streaming with lock batch mode.</h4>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void showStreamingWithLockBatchMode() {
@@ -1260,7 +1238,7 @@ Streaming with lock batch mode memory usage </p>
 
 <p><br /></p>
 
-<h4 id="ExampleID">Example illustrating streaming with lock batch mode and bulk edge creation</h4>
+<h4 id="ExampleillustratingstreamingwithlockbatchmodeandbulkedgecreationID">Example illustrating streaming with lock batch mode and bulk edge creation</h4>
 
 <pre class="prettyprint"><code class="language-java">@Test
 public void showStreamingWithLockBulkEdgeCreation() {
