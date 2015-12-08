@@ -134,11 +134,11 @@ These are,
     plugin activated: tinkerpop.server
     plugin activated: tinkerpop.utilities
     plugin activated: tinkerpop.tinkergraph
-    gremlin> :install org.umlg sqlg-hsqldb 1.1.0-SNAPSHOT
+    gremlin> :install org.umlg sqlg-hsqldb 1.1.0.RC1
     log4j:WARN No appenders could be found for logger (org.apache.tinkerpop.gremlin.groovy.util.DependencyGrabber).
     log4j:WARN Please initialize the log4j system properly.
     log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
-    ==>Loaded: [org.umlg, sqlg-hsqldb, 1.1.0-SNAPSHOT]
+    ==>Loaded: [org.umlg, sqlg-hsqldb, 1.1.0.RC1]
     gremlin> :plugin list
     ==>tinkerpop.server[active]
     ==>tinkerpop.gephi
@@ -168,11 +168,11 @@ These are,
     plugin activated: tinkerpop.server
     plugin activated: tinkerpop.utilities
     plugin activated: tinkerpop.tinkergraph
-    gremlin> :install org.umlg sqlg-postgres 1.1.0-SNAPSHOT
+    gremlin> :install org.umlg sqlg-postgres 1.1.0.RC1
     log4j:WARN No appenders could be found for logger (org.apache.tinkerpop.gremlin.groovy.util.DependencyGrabber).
     log4j:WARN Please initialize the log4j system properly.
     log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
-    ==>Loaded: [org.umlg, sqlg-postgres, 1.1.0-SNAPSHOT]
+    ==>Loaded: [org.umlg, sqlg-postgres, 1.1.0.RC1]
     gremlin> :plugin list
     ==>tinkerpop.server[active]
     ==>tinkerpop.gephi
