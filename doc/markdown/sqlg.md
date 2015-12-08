@@ -74,7 +74,7 @@ Maven coordinates,
     <dependency>
         <groupId>org.umlg</groupId>
         <artifactId>sqlg-hsqldb</artifactId>
-        <version>1.1.0-SNAPSHOT</version>
+        <version>1.1.0.RC1</version>
     </dependency>
 
 **Postgresql**
@@ -82,7 +82,7 @@ Maven coordinates,
     <dependency>
         <groupId>org.umlg</groupId>
         <artifactId>sqlg-postgres</artifactId>
-        <version>1.1.0-SNAPSHOT</version>
+        <version>1.1.0.RC1</version>
     </dependency>
 
 Sqlg is designed to run as a singleton that can be shared among multiple threads. You can instantiate Sqlg using the standard
