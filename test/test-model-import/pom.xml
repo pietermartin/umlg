@@ -6,7 +6,7 @@
 		<artifactId>test</artifactId>
 		<version>1.2.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>umlg-test-tinkergraph</artifactId>
+	<artifactId>test-model-import</artifactId>
 	<build>
 		<plugins>
 			<plugin>
@@ -64,28 +64,11 @@
 			<groupId>org.umlg</groupId>
 			<artifactId>runtime-test-sqlg</artifactId>
 			<version>${umlg.version}</version>
-        </dependency>
+		</dependency>
 		<dependency>
 			<groupId>org.umlg</groupId>
 			<artifactId>ocl</artifactId>
 			<version>${umlg.version}</version>
 		</dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>org.umlg</groupId>-->
-            <!--<artifactId>restlet</artifactId>-->
-            <!--<version>${umlg.version}</version>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>org.umlg</groupId>
-            <artifactId>runtime-restlet</artifactId>
-            <version>${umlg.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.umlg</groupId>
-            <artifactId>runtime-ui</artifactId>
-            <version>${umlg.version}</version>
-        </dependency>
-
 	</dependencies>
 </project>
