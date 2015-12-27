@@ -121,6 +121,7 @@ public class PropertyIndexFinderCreator extends BaseVisitor implements Visitor<P
                 throw new IllegalStateException("Unknown Index literal " + enumerationLiteral.getName());
             }
         }
+        owner.addToImports(UmlgGenerationUtil.umlgFormatter);
         finder.getBody().addToStatements("return result");
         owner.addToOperations(finder);
     }
