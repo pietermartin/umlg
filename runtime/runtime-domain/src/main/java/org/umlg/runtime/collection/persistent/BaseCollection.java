@@ -39,8 +39,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     //Used to store the id of an association class instance.
     protected Edge edge;
     protected Class<?> parentClass;
-    //    //The internal map is used to store the vertex representing a primitive or an enumeration
-//    protected ListMultimap<Object, Vertex> internalVertexMap = ArrayListMultimap.create();
     protected UmlgRuntimeProperty umlgRuntimeProperty;
 
     protected boolean ignoreInverse = false;
@@ -48,14 +46,9 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     protected static final String IN_EDGE_SEQUENCE_ID = "inEdgeSequenceId";
     protected static final String OUT_EDGE_SEQUENCE_ID = "outEdgeSequenceId";
 
-    protected static final String LABEL_TO_FIRST_HYPER_VERTEX = "LTFHV";
-    protected static final String LABEL_TO_LAST_HYPER_VERTEX = "LTLHV";
     protected static final String LABEL_TO_NEXT_HYPER_VERTEX = "LTNHV";
     protected static final String LABEL_TO_ELEMENT_FROM_HYPER_VERTEX = "LTEFHV";
 
-    protected static final String LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE = "LTFEIS";
-    protected static final String LABEL_TO_NEXT_IN_SEQUENCE = "LTNEIS";
-    protected static final String LABEL_TO_LAST_ELEMENT_IN_SEQUENCE = "LTLEIS";
     //This is used to set the IN_EDGE_SEQUENCE_ID, OUT_EDGE_SEQUENCE_ID on the edge
     protected int inverseCollectionSize;
 
@@ -78,6 +71,9 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     protected void loadFromVertex() {
+        if ( UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode()) {
+            return;
+        }
         if (isManyPrimitive()) {
             loadManyPrimitive();
         } else if (isManyEnumeration()) {
@@ -194,6 +190,9 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     @Override
     public boolean addIgnoreInverse(E e) {
+        if (UMLG.get().isInBatchMode()) {
+            throw new IllegalStateException("addIgnoreInverse is not allowed when in batch mode");
+        }
         this.ignoreInverse = true;
         boolean result = add(e);
         this.ignoreInverse = false;
@@ -553,7 +552,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     protected void maybeLoad() {
-        if (!this.loaded) {
+        if (!this.loaded && !(UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode())) {
             loadFromVertex();
         }
     }
