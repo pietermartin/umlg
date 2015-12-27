@@ -42,14 +42,14 @@ public class TestBatchMode extends BaseLocalDbTest {
         UMLG.get().batchModeOn();
         for (int i = 0; i < 10000; i++) {
             Universe universe1 = new Universe();
-            universe1.addToGodIgnoreInverse(god);
+            universe1.addToGod(god);
             universe1.setName("universe" + i);
             SpaceTime st = new SpaceTime();
-            universe1.addToSpaceTimeIgnoreInverse(st);
+            universe1.addToSpaceTime(st);
             Space s = new Space();
-            st.addToSpaceIgnoreInverse(s);
+            st.addToSpace(s);
             Time t = new Time();
-            st.addToTimeIgnoreInverse(t);
+            st.addToTime(t);
         }
         System.out.println("start committing");
         UMLG.get().commit();
