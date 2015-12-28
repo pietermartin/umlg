@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.umlg</groupId>
         <artifactId>umlg</artifactId>
-        <version>1.1.0.RC2</version>
+        <version>1.2.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -17,6 +17,7 @@
         <module>umlg-test-ocl</module>
         <module>umlg-test-tinkergraph</module>
         <module>test-restlet</module>
+        <module>test-model-import</module>
         <!--<module>test-neo4j-blueprints</module>-->
         <!--<module>test-orientdb-blueprints</module>-->
         <!--<module>test-titan</module>-->
