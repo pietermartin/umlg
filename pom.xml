@@ -54,7 +54,6 @@
         <tinkerpop.version>3.1.0-incubating</tinkerpop.version>
         <sqlg.version>1.2.0-SNAPSHOT</sqlg.version>
         <umlg.version>1.2.0-SNAPSHOT</umlg.version>
-        <sqlg.version>1.2.0-SNAPSHOT</sqlg.version>
     </properties>
 
     <modules>
