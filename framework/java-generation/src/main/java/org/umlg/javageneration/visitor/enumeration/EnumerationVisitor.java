@@ -122,6 +122,8 @@ public class EnumerationVisitor extends BaseVisitor implements Visitor<org.eclip
                         literalField.setInitExp("\"" + ((LiteralString) valueSpecification).getValue() + "\"");
                     } else if (valueSpecification instanceof LiteralBoolean) {
                         literalField.setInitExp(String.valueOf(((LiteralBoolean) valueSpecification).isValue()));
+                    } else if (valueSpecification instanceof LiteralInteger) {
+                        literalField.setInitExp(String.valueOf(((LiteralInteger) valueSpecification).getValue()));
                     } else if (valueSpecification instanceof LiteralReal) {
                         literalField.setInitExp(String.valueOf(((LiteralReal) valueSpecification).getValue()));
                     } else {
