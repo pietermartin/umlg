@@ -158,7 +158,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestAssociationToSelf.class,
         TestSortedBy.class,
         TestQualifiedDerivedUnion.class,
-        TestNavigateFromEnum.class
+        TestNavigateFromEnum.class,
+        OclSelectTest.class
 })
 public class UmlgAllTestSuite {
 }

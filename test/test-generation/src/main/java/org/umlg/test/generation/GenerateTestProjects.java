@@ -22,7 +22,7 @@ public class GenerateTestProjects {
             args = new String[]{"."};
         }
 		JavaGenerator javaGenerator = new JavaGenerator();
-//        javaGenerator.generate(new File(args[0] + "/test/blueprints/umlg-test-blueprints/src/main/model/umlg-test.uml"), new File(args[0] + "/test/blueprints/umlg-test-blueprints/"), DefaultVisitors.getDefaultJavaVisitors());
+        javaGenerator.generate(new File(args[0] + "/test/blueprints/umlg-test-blueprints/src/main/model/umlg-test.uml"), new File(args[0] + "/test/blueprints/umlg-test-blueprints/"), DefaultVisitors.getDefaultJavaVisitors());
 //        javaGenerator = new JavaGenerator();
 //		javaGenerator.generate(new File(args[0] + "/test/test-restlet/src/main/model/restAndJson.uml"), new File(args[0] + "/test/test-restlet/"), RestletVisitors.getDefaultJavaVisitors());
 //		javaGenerator = new JavaGenerator();
@@ -34,7 +34,7 @@ public class GenerateTestProjects {
 //
 //
 //        javaGenerator = new JavaGenerator();
-        javaGenerator.generate(new File(args[0] + "/test/test-model-import/src/main/model/model1.uml"),
-                new File(args[0] + "/test/test-model-import/"), DefaultVisitors.getDefaultJavaVisitors());
+//        javaGenerator.generate(new File(args[0] + "/test/test-model-import/src/main/model/model1.uml"),
+//                new File(args[0] + "/test/test-model-import/"), DefaultVisitors.getDefaultJavaVisitors());
     }
 }

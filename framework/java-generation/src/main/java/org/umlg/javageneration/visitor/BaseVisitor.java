@@ -73,6 +73,7 @@ public class BaseVisitor {
         PropertyWrapper pWrap;
         if (p instanceof PropertyWrapper) {
             pWrap = (PropertyWrapper) p;
+            p = pWrap.getProperty();
         } else {
             pWrap = new PropertyWrapper(p);
         }

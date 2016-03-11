@@ -2,12 +2,9 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.gremlin.TestGroovyExecutor;
-import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
-import org.umlg.tests.associationtoself.TestAssociationToSelf;
-import org.umlg.tests.collectiontest.QualifiedOrderedSetTest;
-import org.umlg.tests.collectiontest.SequenceTest;
-import org.umlg.tests.multiplecompositeparenthierarchy.HierarchyMultipleParentsTest;
+import org.umlg.tests.ocl.ocloperator.OclSelectTest;
+import org.umlg.tests.qualifiertest.TestQualifier;
+import org.umlg.tests.qualifiertest.TestQualifierWithDateAndEnum;
 
 /**
  * Date: 2013/10/19
@@ -15,7 +12,7 @@ import org.umlg.tests.multiplecompositeparenthierarchy.HierarchyMultipleParentsT
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestAssociationToSelf.class
+        TestQualifierWithDateAndEnum.class
 })
 public class UmlgAnyTestSuite {
 }

@@ -6,10 +6,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.Order;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.*;
 import org.joda.time.DateTime;
-import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
-import org.umlg.runtime.adaptor.TransactionThreadVar;
-import org.umlg.runtime.adaptor.UMLG;
-import org.umlg.runtime.adaptor.UmlgAdminGraph;
+import org.umlg.runtime.adaptor.*;
 import org.umlg.runtime.collection.*;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
@@ -25,9 +22,12 @@ import org.umlg.runtime.util.UmlgFormatter;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntimeProperty, OclStdLibCollection<E> {
 
+    private static final Logger logger = Logger.getLogger(BaseCollection.class.getPackage().getName());
     protected Collection<E> internalCollection;
     protected OclStdLibCollection<E> oclStdLibCollection;
     protected boolean loaded = false;
@@ -71,7 +71,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     protected void loadFromVertex() {
-        if ( UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode()) {
+        if (!this.isOnePrimitive() && !isOneEnumeration() && UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode()) {
             return;
         }
         if (isManyPrimitive()) {
@@ -552,8 +552,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     protected void maybeLoad() {
-        if (!this.loaded && !(UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode())) {
+        if ((!this.loaded && (this.isOnePrimitive() || isOneEnumeration()))) {
             loadFromVertex();
+        } else if (!this.loaded && !(UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode())) {
+            loadFromVertex();
+        } else {
+            logger.log(Level.FINE, "ignoring call to load collection " + this.getLabel() + " as the transaction is in batch mode.!");
         }
     }
 

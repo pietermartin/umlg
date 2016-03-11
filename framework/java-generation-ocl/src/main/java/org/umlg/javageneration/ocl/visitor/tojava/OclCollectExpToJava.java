@@ -41,7 +41,7 @@ public class OclCollectExpToJava implements HandleIteratorExp {
         PropertyWrapper sourcePropertyWrapper = null;
 		if (body instanceof PropertyCallExp) {
 			PropertyCallExp<?, Property> propertyPropertyCallExp = (PropertyCallExp<?, Property>) body;
-			//if the source property is qualified but the oocl expression itself has qualifier then the properties multiplicity will be correct
+			//if the source property is qualified but the ocl expression itself has qualifier then the properties multiplicity will be correct
 			//i.e. no need for a collect statement
 			if (propertyPropertyCallExp.getQualifier().isEmpty()) {
 				Property sourceProperty = propertyPropertyCallExp.getReferredProperty();

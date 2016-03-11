@@ -3746,6 +3746,12 @@ endif</body>
               <body>This is to test collect over classes in different packages</body>
             </ownedComment>
             <packagedElement xmi:type="uml:Class" xmi:id="_PhpN8BEIEeWZ7Iu7q0o1bw" name="Collect1">
+              <ownedRule xmi:type="uml:Constraint" xmi:id="_Qm0sAMwCEeWxqrMOAg_54g" name="CheckOnlyOneEnumeration1Undefined">
+                <specification xmi:type="uml:OpaqueExpression" xmi:id="_LWkd4MwDEeWxqrMOAg_54g">
+                  <language>OCL</language>
+                  <body>self.collect2->select(c | c.enumeration1.oclIsUndefined())->size() &lt;= 1</body>
+                </specification>
+              </ownedRule>
               <ownedAttribute xmi:type="uml:Property" xmi:id="_-h-D8BELEeWZ7Iu7q0o1bw" name="collect2" type="_T5kwIBELEeWZ7Iu7q0o1bw" association="_-h-rABELEeWZ7Iu7q0o1bw">
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-h-D8RELEeWZ7Iu7q0o1bw"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-h-D8hELEeWZ7Iu7q0o1bw" value="*"/>
@@ -3758,6 +3764,30 @@ endif</body>
                   <body>self.collect2.collect3->asSet()</body>
                 </defaultValue>
               </ownedAttribute>
+              <ownedOperation xmi:type="uml:Operation" xmi:id="_HmqL4MwqEeWxqrMOAg_54g" name="testDataType" bodyCondition="_VMfIYMwqEeWxqrMOAg_54g" isQuery="true">
+                <ownedRule xmi:type="uml:Constraint" xmi:id="_VMfIYMwqEeWxqrMOAg_54g">
+                  <specification xmi:type="uml:OpaqueExpression" xmi:id="_VMfIYcwqEeWxqrMOAg_54g">
+                    <language>OCL</language>
+                    <body>self.collect2->select(c | c.password.oclIsUndefined())</body>
+                  </specification>
+                </ownedRule>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_eiMMIMwtEeWxqrMOAg_54g" type="_T5kwIBELEeWZ7Iu7q0o1bw" direction="return">
+                  <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_G7bgwMwuEeWxqrMOAg_54g"/>
+                  <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_G7cu4MwuEeWxqrMOAg_54g" value="*"/>
+                </ownedParameter>
+              </ownedOperation>
+              <ownedOperation xmi:type="uml:Operation" xmi:id="_XXpz4Mw0EeWxqrMOAg_54g" name="testReal" bodyCondition="_jT1SAMw0EeWxqrMOAg_54g" isQuery="true">
+                <ownedRule xmi:type="uml:Constraint" xmi:id="_jT1SAMw0EeWxqrMOAg_54g">
+                  <specification xmi:type="uml:OpaqueExpression" xmi:id="_jT1SAcw0EeWxqrMOAg_54g">
+                    <language>OCL</language>
+                    <body>self.collect2->select(c | c.really.oclIsUndefined())</body>
+                  </specification>
+                </ownedRule>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_cVHzcMw0EeWxqrMOAg_54g" type="_T5kwIBELEeWZ7Iu7q0o1bw" direction="return">
+                  <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_oR7HMMw1EeWxqrMOAg_54g"/>
+                  <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_oR7uQMw1EeWxqrMOAg_54g" value="*"/>
+                </ownedParameter>
+              </ownedOperation>
             </packagedElement>
             <packagedElement xmi:type="uml:Association" xmi:id="_-h-rABELEeWZ7Iu7q0o1bw" name="collect1_collect2" memberEnd="_-h-rARELEeWZ7Iu7q0o1bw _-h-D8BELEeWZ7Iu7q0o1bw">
               <ownedEnd xmi:type="uml:Property" xmi:id="_-h-rARELEeWZ7Iu7q0o1bw" name="collect1" type="_PhpN8BEIEeWZ7Iu7q0o1bw" association="_-h-rABELEeWZ7Iu7q0o1bw">
@@ -3765,11 +3795,37 @@ endif</body>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-h-rAxELEeWZ7Iu7q0o1bw" value="1"/>
               </ownedEnd>
             </packagedElement>
+            <packagedElement xmi:type="uml:Enumeration" xmi:id="_z1JQYMwBEeWxqrMOAg_54g" name="Enumeration1">
+              <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_0-0OMMwBEeWxqrMOAg_54g" name="EnumerationLiteral1"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_1syHcMwBEeWxqrMOAg_54g" name="enumeration1_collect2" memberEnd="_1szVkMwBEeWxqrMOAg_54g _1szVkcwBEeWxqrMOAg_54g">
+              <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1syugMwBEeWxqrMOAg_54g" source="org.eclipse.papyrus">
+                <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1syugcwBEeWxqrMOAg_54g" key="nature" value="UML_Nature"/>
+              </eAnnotations>
+              <ownedEnd xmi:type="uml:Property" xmi:id="_1szVkcwBEeWxqrMOAg_54g" name="collect2" type="_T5kwIBELEeWZ7Iu7q0o1bw" association="_1syHcMwBEeWxqrMOAg_54g">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_77H5AMwBEeWxqrMOAg_54g" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_77K8UMwBEeWxqrMOAg_54g" value="1"/>
+              </ownedEnd>
+            </packagedElement>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_T5kwIBELEeWZ7Iu7q0o1bw" name="Collect2">
             <ownedAttribute xmi:type="uml:Property" xmi:id="_XC1xsBEMEeWZ7Iu7q0o1bw" name="collect3" type="_Vtw1IBEMEeWZ7Iu7q0o1bw" association="_XC2YwBEMEeWZ7Iu7q0o1bw">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_XC1xsREMEeWZ7Iu7q0o1bw"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_XC1xshEMEeWZ7Iu7q0o1bw" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_1szVkMwBEeWxqrMOAg_54g" name="enumeration1" type="_z1JQYMwBEeWxqrMOAg_54g" association="_1syHcMwBEeWxqrMOAg_54g">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9mQlIMwBEeWxqrMOAg_54g"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9mRzQMwBEeWxqrMOAg_54g" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_hR3bQMwpEeWxqrMOAg_54g" name="password" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_Tyt4EBwUEeS0VvhEKHz6FQ"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_oQrngMwpEeWxqrMOAg_54g"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_oQs1oMwpEeWxqrMOAg_54g" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_QzOdkMw0EeWxqrMOAg_54g" name="really" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Vblv0Mw0EeWxqrMOAg_54g"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_VbmW4Mw0EeWxqrMOAg_54g" value="1"/>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_XC2YwBEMEeWZ7Iu7q0o1bw" name="collect2_collect3" memberEnd="_XC2YwREMEeWZ7Iu7q0o1bw _XC1xsBEMEeWZ7Iu7q0o1bw">

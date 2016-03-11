@@ -1,14 +1,19 @@
 package org.umlg.javageneration.visitor.property;
 
-import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Constraint;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
-import org.umlg.java.metamodel.*;
+import org.umlg.java.metamodel.OJBlock;
+import org.umlg.java.metamodel.OJField;
+import org.umlg.java.metamodel.OJIfStatement;
+import org.umlg.java.metamodel.OJWhileStatement;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.javageneration.util.*;
+import org.umlg.javageneration.util.PropertyWrapper;
+import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgPropertyOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 import java.util.List;

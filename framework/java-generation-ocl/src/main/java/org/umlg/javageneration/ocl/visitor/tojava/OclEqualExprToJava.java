@@ -21,21 +21,26 @@ public class OclEqualExprToJava extends BaseHandleOperationExp {
         StringBuilder result = new StringBuilder();
         result.append(sourceResult);
         DataType datatype = oc.getReferredOperation().getDatatype();
+        String argResult = argumentResults.get(0);
         if (datatype instanceof PrimitiveType) {
             PrimitiveType primitiveType = (PrimitiveType) datatype;
             if (primitiveType.getName().equals("Integer") || primitiveType.getName().equals("Real") || primitiveType.getName().equals("Boolean")) {
                 result.append(" == ");
-                result.append(argumentResults.get(0));
+                result.append(argResult);
             } else if (primitiveType.getName().equals("String")) {
                 result.append(".equals(");
-                result.append(argumentResults.get(0));
+                result.append(argResult);
                 result.append(")");
             } else {
                 throw new RuntimeException("Unhandled primitive " + primitiveType.getName());
             }
         } else {
             result.append(".equals(");
-            result.append(argumentResults.get(0));
+            if (argResult.equals("self")) {
+                result.append("this");
+            } else {
+                result.append(argResult);
+            }
             result.append(")");
         }
         return result.toString();
