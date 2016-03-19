@@ -19,6 +19,7 @@ import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
+import org.umlg.javageneration.util.UmlgAssociationClassOperations;
 import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
@@ -69,11 +70,11 @@ public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 			PropertyWrapper pWrap = new PropertyWrapper(property);
 //			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 				OJEnumLiteral literal = ojEnum.findLiteral(pWrap.fieldname());
-				addTumlUriToLiteral(clazz, pWrap, literal, clazz instanceof AssociationClass);
-                addTumlOverloadedPostUriToLiteral(clazz, pWrap, literal, clazz instanceof AssociationClass);
+				addTumlUriToLiteral(clazz, pWrap, literal, UmlgAssociationClassOperations.extendsAssociationClass(clazz));
+                addTumlOverloadedPostUriToLiteral(clazz, pWrap, literal, UmlgAssociationClassOperations.extendsAssociationClass(clazz));
 
                 //For association classes
-                if (pWrap.isMemberOfAssociationClass() && !(clazz instanceof AssociationClass)) {
+                if (pWrap.isMemberOfAssociationClass() && !(UmlgAssociationClassOperations.extendsAssociationClass(clazz))) {
 
                     literal = ojEnum.findLiteral(pWrap.getAssociationClassFakePropertyName());
                     addTumlUriToLiteral(clazz, pWrap, literal);
@@ -109,8 +110,10 @@ public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements
                     uri = "\"/" + contextPath + "/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
                             + pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
                 } else {
-                    uri = "\"/" + contextPath + "/" + pWrap.getAssociationClass().getName().toLowerCase() + "s/{"
-                            + pWrap.getAssociationClass().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
+//                    uri = "\"/" + contextPath + "/" + pWrap.getAssociationClass().getName().toLowerCase() + "s/{"
+//                            + pWrap.getAssociationClass().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
+					uri = "\"/" + contextPath + "/" + clazz.getName().toLowerCase() + "s/{"
+							+ clazz.getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
                 }
 			} else {
 				uri = "\"\"";
@@ -148,8 +151,10 @@ public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements
                     uri = "\"/" + contextPath + "/overloadedpost/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
                             + pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
                 } else {
-                    uri = "\"/" + contextPath + "/overloadedpost/" + pWrap.getAssociationClass().getName().toLowerCase() + "s/{"
-                            + pWrap.getAssociationClass().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
+//                    uri = "\"/" + contextPath + "/overloadedpost/" + pWrap.getAssociationClass().getName().toLowerCase() + "s/{"
+//                            + pWrap.getAssociationClass().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
+					uri = "\"/" + contextPath + "/overloadedpost/" + clazz.getName().toLowerCase() + "s/{"
+							+ clazz.getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
                 }
 
             } else {

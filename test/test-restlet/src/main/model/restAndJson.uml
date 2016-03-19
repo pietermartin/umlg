@@ -1404,6 +1404,41 @@ endif</body>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_FRCDg9FmEeOjlpjTZXDyqw" value="*"/>
               </ownedEnd>
             </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_CvW7sOg3EeWVUrJPBwtA5w" name="Hour">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_jDnGMOg3EeWVUrJPBwtA5w" name="hour" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_DiV30Og3EeWVUrJPBwtA5w" name="ObjectType">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_mVixAOg3EeWVUrJPBwtA5w" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:AssociationClass" xmi:id="_Ewo28Og3EeWVUrJPBwtA5w" name="Measurement" memberEnd="_Ewr6QOg3EeWVUrJPBwtA5w _EwshUOg3EeWVUrJPBwtA5w" navigableOwnedEnd="_Ewr6QOg3EeWVUrJPBwtA5w _EwshUOg3EeWVUrJPBwtA5w">
+              <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_EwqFEOg3EeWVUrJPBwtA5w" source="org.eclipse.papyrus">
+                <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_EwqFEeg3EeWVUrJPBwtA5w" key="nature" value="UML_Nature"/>
+              </eAnnotations>
+              <generalization xmi:type="uml:Generalization" xmi:id="_SQz3YOg3EeWVUrJPBwtA5w" general="_KcIaIOg3EeWVUrJPBwtA5w"/>
+              <ownedEnd xmi:type="uml:Property" xmi:id="_EwshUOg3EeWVUrJPBwtA5w" name="hour" type="_CvW7sOg3EeWVUrJPBwtA5w" association="_Ewo28Og3EeWVUrJPBwtA5w">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Ty2R4Og3EeWVUrJPBwtA5w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Ty3gAOg3EeWVUrJPBwtA5w" value="*"/>
+              </ownedEnd>
+              <ownedEnd xmi:type="uml:Property" xmi:id="_Ewr6QOg3EeWVUrJPBwtA5w" name="objecttype" type="_DiV30Og3EeWVUrJPBwtA5w" association="_Ewo28Og3EeWVUrJPBwtA5w">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_aoTt0Og3EeWVUrJPBwtA5w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_aoU78Og3EeWVUrJPBwtA5w" value="*"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_KcIaIOg3EeWVUrJPBwtA5w" name="BaseMeasurement" isAbstract="true">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_MidNcOg3EeWVUrJPBwtA5w" name="aggregated" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_A_1-gOg6EeWVUrJPBwtA5w" name="Measurement1">
+              <generalization xmi:type="uml:Generalization" xmi:id="_HEawEOg6EeWVUrJPBwtA5w" general="_Ewo28Og3EeWVUrJPBwtA5w"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_C_lBoOg6EeWVUrJPBwtA5w" name="Measurement2">
+              <generalization xmi:type="uml:Generalization" xmi:id="_GreroOg6EeWVUrJPBwtA5w" general="_Ewo28Og3EeWVUrJPBwtA5w"/>
+            </packagedElement>
           </packagedElement>
           <packagedElement xmi:type="uml:Package" xmi:id="_QhJUcNLoEeOCt7XMZfn16w" name="navigability">
             <packagedElement xmi:type="uml:Class" xmi:id="_UZpQANLoEeOCt7XMZfn16w" name="NavigableRoot">
@@ -1639,8 +1674,15 @@ endif</body>
       <appliedProfile xmi:type="uml:Profile" href="validation.profile.uml#_6Zdd4AV1EeK9oIwdQfC0-w"/>
     </profileApplication>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_NRlIUBv-EeS0VvhEKHz6FQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_QX3OMOg2EeWVUrJPBwtA5w" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QX3OMeg2EeWVUrJPBwtA5w" key="Version" value="0.1.1"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QX3OMug2EeWVUrJPBwtA5w" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QX3OM-g2EeWVUrJPBwtA5w" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QX3ONOg2EeWVUrJPBwtA5w" key="Date" value="2015-01-21"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QX3ONeg2EeWVUrJPBwtA5w" key="Author" value=""/>
+      </eAnnotations>
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NTCg4Bv-EeS0VvhEKHz6FQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
-        <references xmi:type="ecore:EPackage" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_sYse0YZLEeKyw49uR6nx3g"/>
+        <references xmi:type="ecore:EPackage" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_Kv8EIKFXEeS_KNX0nfvIVQ"/>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#ActionLanguage"/>
     </profileApplication>

@@ -41,7 +41,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             addGetObjectRepresentation(pWrap, annotatedClass);
             addOptionsObjectRepresentation(pWrap, annotatedClass);
 
-            if (!pWrap.isDerived()) {
+            if (!pWrap.isDerived() && pWrap.getOtherEnd() != null) {
                 addPostObjectRepresentation(pWrap, annotatedClass);
             }
 

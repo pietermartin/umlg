@@ -15,6 +15,7 @@ import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
+import org.umlg.javageneration.util.UmlgAssociationClassOperations;
 import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.restlet.util.UmlgRestletGenerationUtil;
@@ -49,7 +50,7 @@ public class AddFieldTypeFieldToRuntimeLiteral extends BaseVisitor implements Vi
 			OJEnumLiteral literal = ojEnum.findLiteral(propertyWrapper.fieldname());
 			addFieldTypePropertyToLiteral(literal, UmlgRestletGenerationUtil.getFieldTypeForProperty(property));
 
-            if (propertyWrapper.isMemberOfAssociationClass() && !(clazz instanceof AssociationClass)) {
+            if (propertyWrapper.isMemberOfAssociationClass() && !(UmlgAssociationClassOperations.extendsAssociationClass(clazz))) {
                 literal = ojEnum.findLiteral(propertyWrapper.getAssociationClassFakePropertyName());
                 addFieldTypePropertyToLiteral(literal, UmlgRestletGenerationUtil.getFieldTypeForProperty(property));
             }

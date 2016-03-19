@@ -190,9 +190,10 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     @Override
     public boolean addIgnoreInverse(E e) {
-        if (UMLG.get().isInBatchMode()) {
-            throw new IllegalStateException("addIgnoreInverse is not allowed when in batch mode");
-        }
+//        why it this here?
+//        if (UMLG.get().isInBatchMode()) {
+//            throw new IllegalStateException("addIgnoreInverse is not allowed when in batch mode");
+//        }
         this.ignoreInverse = true;
         boolean result = add(e);
         this.ignoreInverse = false;

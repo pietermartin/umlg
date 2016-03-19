@@ -110,7 +110,20 @@ public class ModelLoader {
         filter(results, this.model, new Filter() {
             @Override
             public boolean filter(Element e) {
-                return e instanceof Slot && ((Slot) e).getDefiningFeature().getType().equals(enumerationLiteral.getOwner());
+                if (e instanceof Slot) {
+                    Slot slot = (Slot)e;
+                    for (ValueSpecification valueSpecification : slot.getValues()) {
+                        if (valueSpecification instanceof InstanceValue) {
+                            InstanceValue instanceValue = (InstanceValue)valueSpecification;
+                            InstanceSpecification instanceSpecification = instanceValue.getInstance();
+                            if (instanceSpecification == enumerationLiteral) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+//                return e instanceof Slot && ((Slot) e).getDefiningFeature().getType().equals(enumerationLiteral.getOwner());
             }
         });
         return results;

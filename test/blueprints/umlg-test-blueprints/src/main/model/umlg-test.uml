@@ -2807,6 +2807,49 @@ endif</body>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8r9vI69kEeSa140Z-U4zOw" value="*"/>
             </ownedEnd>
           </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_tbi_sOdNEeWGDeyXZC6EeQ" name="Hour">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_i22JgOdbEeWLW5qNp04z3Q" name="hour" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nZ4hsOgdEeWMMt1TEkiLoA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_naEu8OgdEeWMMt1TEkiLoA" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_w0_AsOdNEeWGDeyXZC6EeQ" name="ObjectType">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_mHASsOdbEeWLW5qNp04z3Q" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:AssociationClass" xmi:id="_qjGhAOdPEeWV2P9X4Rdgzw" name="Measurement" memberEnd="_qjMAkOdPEeWV2P9X4Rdgzw _qjMnoOdPEeWV2P9X4Rdgzw" navigableOwnedEnd="_qjMAkOdPEeWV2P9X4Rdgzw _qjMnoOdPEeWV2P9X4Rdgzw">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_qjLZgOdPEeWV2P9X4Rdgzw" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qjLZgedPEeWV2P9X4Rdgzw" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <generalization xmi:type="uml:Generalization" xmi:id="_yA6f8OdbEeWLW5qNp04z3Q" general="_tUyIAOdbEeWLW5qNp04z3Q"/>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_qjMnoOdPEeWV2P9X4Rdgzw" name="hour" type="_tbi_sOdNEeWGDeyXZC6EeQ" association="_qjGhAOdPEeWV2P9X4Rdgzw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_qkVEcOgdEeWMMt1TEkiLoA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_qkWSkOgdEeWMMt1TEkiLoA" value="*"/>
+            </ownedEnd>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_qjMAkOdPEeWV2P9X4Rdgzw" name="objecttype" type="_w0_AsOdNEeWGDeyXZC6EeQ" association="_qjGhAOdPEeWV2P9X4Rdgzw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vbK3kOgdEeWMMt1TEkiLoA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vbMFsOgdEeWMMt1TEkiLoA" value="*"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_tUyIAOdbEeWLW5qNp04z3Q" name="BaseMeasurement" isAbstract="true">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_u9ZEkOdbEeWLW5qNp04z3Q" name="aggregated" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_jAo1UOd0EeWMarFyWLxE2w" name="Measurement1">
+            <generalization xmi:type="uml:Generalization" xmi:id="_nrmIkOd0EeWMarFyWLxE2w" general="_qjGhAOdPEeWV2P9X4Rdgzw"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_o4Ph4Od0EeWMarFyWLxE2w" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_k1RbsOd0EeWMarFyWLxE2w" name="Measurement2">
+            <generalization xmi:type="uml:Generalization" xmi:id="_oC_U4Od0EeWMarFyWLxE2w" general="_qjGhAOdPEeWV2P9X4Rdgzw"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_tiN9sOd0EeWMarFyWLxE2w" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            </ownedAttribute>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_fjsrwM8FEeOjlpjTZXDyqw" name="validation">
           <packagedElement xmi:type="uml:Class" xmi:id="_iQoMEM8FEeOjlpjTZXDyqw" name="TestValidation">
@@ -3838,6 +3881,10 @@ endif</body>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_c7uUgE8YEeSo664unH6t3Q" name="datatypeassociation">
           <packagedElement xmi:type="uml:Enumeration" xmi:id="_qT0-EE8YEeSo664unH6t3Q" name="VENDOR_TECH">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_0Mh8QO2YEeWLHdFoHIjt4w" name="vendorTechParser" type="_rXPeYO0bEeWvi_M7Cvr1Vw" association="_0MbOkO2YEeWLHdFoHIjt4w">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_AxlYQO2ZEeWLHdFoHIjt4w"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_AxpCoO2ZEeWLHdFoHIjt4w" value="*"/>
+            </ownedAttribute>
             <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_6YU8cE8YEeSo664unH6t3Q" name="HUAWEI_GSM">
               <slot xmi:type="uml:Slot" xmi:id="_RHEL4E_iEeSeXZdz9VznGw" definingFeature="_57DYRE_hEeSeXZdz9VznGw">
                 <value xmi:type="uml:InstanceValue" xmi:id="_Vif4kE_mEeSeXZdz9VznGw" name="vendorTechErissonInstanceValue" type="_rfxacE_hEeSeXZdz9VznGw" instance="_uk28EE_hEeSeXZdz9VznGw"/>
@@ -3930,6 +3977,35 @@ endif</body>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GAKv9U_iEeSeXZdz9VznGw" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GAKv9k_iEeSeXZdz9VznGw" value="1"/>
             </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_rXPeYO0bEeWvi_M7Cvr1Vw" name="VENDOR_TECH_PARSER">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_p2ziMO0iEeWvi_M7Cvr1Vw" name="parser" type="_lJ9YkO0iEeWvi_M7Cvr1Vw" association="_p2we4O0iEeWvi_M7Cvr1Vw"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_vLU0AO0bEeWvi_M7Cvr1Vw" name="HUAWEI_GSM_CSV">
+              <slot xmi:type="uml:Slot" xmi:id="_7-pYQO2ZEeWLHdFoHIjt4w" definingFeature="_0MijUO2YEeWLHdFoHIjt4w">
+                <value xmi:type="uml:InstanceValue" xmi:id="_Ld7JsO2aEeWLHdFoHIjt4w" type="_qT0-EE8YEeSo664unH6t3Q" instance="_6YU8cE8YEeSo664unH6t3Q"/>
+              </slot>
+              <slot xmi:type="uml:Slot" xmi:id="_Mti-gO2aEeWLHdFoHIjt4w" definingFeature="_p2ziMO0iEeWvi_M7Cvr1Vw">
+                <value xmi:type="uml:InstanceValue" xmi:id="_UKQnsO2aEeWLHdFoHIjt4w" type="_lJ9YkO0iEeWvi_M7Cvr1Vw" instance="_mxUX8O0iEeWvi_M7Cvr1Vw"/>
+              </slot>
+            </ownedLiteral>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_lJ9YkO0iEeWvi_M7Cvr1Vw" name="PARSER">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_mxUX8O0iEeWvi_M7Cvr1Vw" name="HUAWEI_CSV"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_p2we4O0iEeWvi_M7Cvr1Vw" name="vendorTechParser_parser" memberEnd="_p2ziMO0iEeWvi_M7Cvr1Vw _p20JQO0iEeWvi_M7Cvr1Vw" navigableOwnedEnd="_p20JQO0iEeWvi_M7Cvr1Vw">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_p2yUEO0iEeWvi_M7Cvr1Vw" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_p2y7IO0iEeWvi_M7Cvr1Vw" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_p20JQO0iEeWvi_M7Cvr1Vw" name="vendorTechParser" type="_rXPeYO0bEeWvi_M7Cvr1Vw" association="_p2we4O0iEeWvi_M7Cvr1Vw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GuYKcO0jEeWvi_M7Cvr1Vw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GudqAO0jEeWvi_M7Cvr1Vw" value="*"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_0MbOkO2YEeWLHdFoHIjt4w" name="vendorTech_vendorTechParser" memberEnd="_0Mh8QO2YEeWLHdFoHIjt4w _0MijUO2YEeWLHdFoHIjt4w" navigableOwnedEnd="_0MijUO2YEeWLHdFoHIjt4w">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_0MhVMO2YEeWLHdFoHIjt4w" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_0MhVMe2YEeWLHdFoHIjt4w" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_0MijUO2YEeWLHdFoHIjt4w" name="vendorTech" type="_qT0-EE8YEeSo664unH6t3Q" association="_0MbOkO2YEeWLHdFoHIjt4w"/>
           </packagedElement>
         </packagedElement>
       </packagedElement>

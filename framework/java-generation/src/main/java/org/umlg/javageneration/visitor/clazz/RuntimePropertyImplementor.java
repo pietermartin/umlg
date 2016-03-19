@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.uml2.uml.AssociationClass;
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.java.metamodel.OJField;
@@ -17,12 +18,13 @@ import org.umlg.java.metamodel.annotation.OJEnum;
 import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.javageneration.util.DataTypeEnum;
 import org.umlg.javageneration.util.PropertyWrapper;
+import org.umlg.javageneration.util.UmlgAssociationClassOperations;
 import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.validation.Validation;
 
 public class RuntimePropertyImplementor {
 
-    public static OJEnum addTumlRuntimePropertyEnum(OJAnnotatedClass annotatedClass, String enumName, NamedElement className,
+    public static OJEnum addTumlRuntimePropertyEnum(OJAnnotatedClass annotatedClass, String enumName, NamedElement namedElement,
                                                     Set<Property> allOwnedProperties,
                                                     boolean hasCompositeOwner, String modelName) {
 
@@ -265,8 +267,8 @@ public class RuntimePropertyImplementor {
         OJAnnotatedOperation asJson = new OJAnnotatedOperation("asJson", new OJPathName("String"));
         asJson.setStatic(true);
         asJson.getBody().addToStatements("StringBuilder sb = new StringBuilder();");
-        asJson.getBody().addToStatements("name", "sb.append(\"{\\\"name\\\": \\\"" + className.getName() + "\\\", \")");
-        asJson.getBody().addToStatements("qualifiedName", "sb.append(\"\\\"qualifiedName\\\": \\\"" + className.getQualifiedName() + "\\\", \")");
+        asJson.getBody().addToStatements("name", "sb.append(\"{\\\"name\\\": \\\"" + namedElement.getName() + "\\\", \")");
+        asJson.getBody().addToStatements("qualifiedName", "sb.append(\"\\\"qualifiedName\\\": \\\"" + namedElement.getQualifiedName() + "\\\", \")");
         asJson.getBody().addToStatements("uri", "sb.append(\"\\\"uri\\\": \\\"TODO\\\", \")");
         asJson.getBody().addToStatements("properties", "sb.append(\"\\\"properties\\\": [\")");
 
@@ -292,8 +294,8 @@ public class RuntimePropertyImplementor {
             if (pWrap.getOtherEnd() != null) {
                 inverseUpper = pWrap.getOtherEnd().getUpper();
             }
-
-            if (!(className instanceof AssociationClass)) {
+            //!(namedElement instanceof AssociationClass)
+            if (!(namedElement instanceof Classifier && UmlgAssociationClassOperations.extendsAssociationClass((Classifier)namedElement))) {
                 addEnumLiteral(
                         false,
                         pWrap.isMemberOfAssociationClass(),
@@ -349,7 +351,8 @@ public class RuntimePropertyImplementor {
                             new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName(),
                             true,
                             false,
-                            ojEnum, fromLabel,
+                            ojEnum,
+                            fromLabel,
                             fromQualifiedName,
                             fromInverseQualifiedName,
                             pWrap.fieldname(),
@@ -394,7 +397,7 @@ public class RuntimePropertyImplementor {
                 }
             }
 
-            if (pWrap.isMemberOfAssociationClass() && !(className instanceof AssociationClass)) {
+            if (pWrap.isMemberOfAssociationClass() && !((namedElement instanceof Classifier && (UmlgAssociationClassOperations.extendsAssociationClass((Classifier)namedElement))))) {
                 //These are fake properties, simulating navigating from the member end's type to the association class itself
                 addEnumLiteral(
                         true,
@@ -403,7 +406,8 @@ public class RuntimePropertyImplementor {
                         new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName(),
                         false,
                         false,
-                        ojEnum, fromLabel,
+                        ojEnum,
+                        fromLabel,
                         fromQualifiedName,
                         fromInverseQualifiedName,
                         pWrap.getAssociationClassFakePropertyName(),
@@ -440,7 +444,7 @@ public class RuntimePropertyImplementor {
                     modelName,
                     "inverseOf" + modelName, "inverseOf" + modelName, false, false, null,
                     Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, 1, false, false, false, false, false, false, false, false,
-                    "root" + className.getName(),
+                    "root" + namedElement.getName(),
                     "Object",
                     false);
         }

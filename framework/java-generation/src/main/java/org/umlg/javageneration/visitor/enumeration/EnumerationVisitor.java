@@ -91,15 +91,17 @@ public class EnumerationVisitor extends BaseVisitor implements Visitor<org.eclip
                 ojSwitchStatement.addToCases(ojSwitchCase);
 
                 for (Slot slot : incomingSlots) {
-                    InstanceValue instanceValue = (InstanceValue) slot.getValues().get(0);
-                    if (instanceValue.getInstance().equals(literal)) {
-                        ojSwitchCase.getBody().addToStatements(
-                                "result.add(" +
-                                        slot.getOwningInstance().getClassifiers().get(0).getName() +
-                                        "." +
-                                        slot.getOwningInstance().getName() +
-                                        ")"
-                        );
+                    if (slot.getDefiningFeature() == definingFeature) {
+                        InstanceValue instanceValue = (InstanceValue) slot.getValues().get(0);
+                        if (instanceValue.getInstance().equals(literal)) {
+                            ojSwitchCase.getBody().addToStatements(
+                                    "result.add(" +
+                                            slot.getOwningInstance().getClassifiers().get(0).getName() +
+                                            "." +
+                                            slot.getOwningInstance().getName() +
+                                            ")"
+                            );
+                        }
                     }
                 }
             }

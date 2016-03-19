@@ -9,6 +9,7 @@ import org.umlg.tests.allinstances.TestAllInstancesOnAbstractClass;
 import org.umlg.tests.allinstances.TestAllInstancesOnInterface;
 import org.umlg.tests.associationclass.TestAssociationClass;
 import org.umlg.tests.associationclass.TestAssociationClassCopiesOnePrimitivePropertiesToEdge;
+import org.umlg.tests.associationclass.TestAssociationClassInheritance;
 import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.batch.TestBatchMode;
@@ -159,7 +160,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestSortedBy.class,
         TestQualifiedDerivedUnion.class,
         TestNavigateFromEnum.class,
-        OclSelectTest.class
+        OclSelectTest.class,
+        TestAssociationClassInheritance.class
 })
 public class UmlgAllTestSuite {
 }

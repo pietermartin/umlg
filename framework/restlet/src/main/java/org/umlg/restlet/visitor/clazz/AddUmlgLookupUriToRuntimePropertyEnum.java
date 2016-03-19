@@ -17,6 +17,7 @@ import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
+import org.umlg.javageneration.util.UmlgAssociationClassOperations;
 import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
@@ -58,7 +59,7 @@ public class AddUmlgLookupUriToRuntimePropertyEnum extends BaseVisitor implement
                 }
                 doWithLiteral(clazz, pWrap, ojEnum.findLiteral(pWrap.fieldname()));
 
-                if (pWrap.isMemberOfAssociationClass() && !(clazz instanceof AssociationClass)) {
+                if (pWrap.isMemberOfAssociationClass() && !(UmlgAssociationClassOperations.extendsAssociationClass(clazz))) {
                     doWithLiteral(clazz, pWrap, ojEnum.findLiteral(pWrap.getAssociationClassFakePropertyName()), true);
                 }
 

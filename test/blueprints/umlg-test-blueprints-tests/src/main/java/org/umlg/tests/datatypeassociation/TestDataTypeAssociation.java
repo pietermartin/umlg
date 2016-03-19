@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.umlg.datatypeassociation.SOFTWARE_VERSION;
 import org.umlg.datatypeassociation.VENDOR;
 import org.umlg.datatypeassociation.VENDOR_TECH;
+import org.umlg.datatypeassociation.VENDOR_TECH_PARSER;
 
 /**
  * Date: 2014/10/09
@@ -23,6 +24,8 @@ public class TestDataTypeAssociation {
         Assert.assertEquals(VENDOR.ERICSSON, SOFTWARE_VERSION.ERICSSON_UMTS_W12.getVendorTech().getVENDOR());
         Assert.assertEquals(VENDOR.HUAWEI, SOFTWARE_VERSION.HUAWEI_GSM_R15.getVendorTech().getVENDOR());
         Assert.assertEquals(VENDOR.HUAWEI, SOFTWARE_VERSION.HUAWEI_UMTS_R15.getVendorTech().getVENDOR());
+
+        Assert.assertTrue(VENDOR_TECH.HUAWEI_GSM.getVendorTechParser().contains(VENDOR_TECH_PARSER.HUAWEI_GSM_CSV));
     }
 
 }

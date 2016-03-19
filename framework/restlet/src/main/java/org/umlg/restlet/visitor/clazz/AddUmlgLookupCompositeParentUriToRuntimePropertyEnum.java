@@ -17,6 +17,7 @@ import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
+import org.umlg.javageneration.util.UmlgAssociationClassOperations;
 import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
@@ -54,7 +55,7 @@ public class AddUmlgLookupCompositeParentUriToRuntimePropertyEnum extends BaseVi
 				}
 				doWithLiteral(clazz, propertyWrapper, ojEnum.findLiteral(propertyWrapper.fieldname()));
 
-                if (propertyWrapper.isMemberOfAssociationClass() && !(clazz instanceof AssociationClass)) {
+                if (propertyWrapper.isMemberOfAssociationClass() && !(UmlgAssociationClassOperations.extendsAssociationClass(clazz))) {
                     doWithLiteral(clazz, propertyWrapper, ojEnum.findLiteral(propertyWrapper.getAssociationClassFakePropertyName()), true);
                 }
 			}

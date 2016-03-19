@@ -34,7 +34,7 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
             addDefaultConstructor(annotatedClass);
 
             addCompositeParentIdField(pWrap, annotatedClass);
-            if (!pWrap.isDerived()) {
+            if (!pWrap.isDerived() && pWrap.getOtherEnd() != null) {
                 addPostObjectRepresentation(pWrap/*, annotatedInf*/, annotatedClass);
             }
             addServerResourceToRouterEnum(pWrap, annotatedClass);

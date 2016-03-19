@@ -9,6 +9,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
+import org.umlg.javageneration.util.UmlgAssociationClassOperations;
 import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
@@ -65,7 +66,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         annotatedClass.addToOperations(initialiseProperty);
 
         OJField runtimeProperty = new OJField("runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(associationClass)));
-        if (!associationClass.getGeneralizations().isEmpty()) {
+        if (UmlgAssociationClassOperations.hasAssociationClassAsGeneralization(associationClass)) {
 
             OJField fromSuperRuntimeProperty = new OJField("fromSuperRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
             fromSuperRuntimeProperty.setInitExp("super.internalAdder(tumlRuntimeProperty, inverse, umlgNode)");
@@ -75,7 +76,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         initialiseProperty.getBody().addToLocals(runtimeProperty);
 
         OJIfStatement ifRuntimeNull = null;
-        if (!associationClass.getGeneralizations().isEmpty()) {
+        if (UmlgAssociationClassOperations.hasAssociationClassAsGeneralization(associationClass)) {
             ifRuntimeNull = new OJIfStatement("fromSuperRuntimeProperty != null", "return fromSuperRuntimeProperty");
         }
 
@@ -105,7 +106,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
             }
         }
 
-        if (!associationClass.getGeneralizations().isEmpty()) {
+        if (UmlgAssociationClassOperations.hasAssociationClassAsGeneralization(associationClass)) {
             ifRuntimeNull.addToElsePart(ifInverse);
             ifRuntimeNull.addToElsePart(ifNotNull);
             initialiseProperty.getBody().addToStatements(ifRuntimeNull);

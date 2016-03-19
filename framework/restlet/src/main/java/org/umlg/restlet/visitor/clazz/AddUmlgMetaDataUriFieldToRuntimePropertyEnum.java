@@ -14,6 +14,7 @@ import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
+import org.umlg.javageneration.util.UmlgAssociationClassOperations;
 import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
@@ -51,7 +52,7 @@ public class AddUmlgMetaDataUriFieldToRuntimePropertyEnum extends BaseVisitor im
                 OJEnumLiteral literal = ojEnum.findLiteral(pWrap.fieldname());
                 addTumlMetaDataUriToLiteral(clazz, pWrap, literal);
 
-                if (pWrap.isMemberOfAssociationClass() && !(clazz instanceof AssociationClass)) {
+                if (pWrap.isMemberOfAssociationClass() && !(UmlgAssociationClassOperations.extendsAssociationClass(clazz))) {
                     literal = ojEnum.findLiteral(pWrap.getAssociationClassFakePropertyName());
                     addTumlMetaDataUriToLiteral(clazz, pWrap, literal, true);
                 }
