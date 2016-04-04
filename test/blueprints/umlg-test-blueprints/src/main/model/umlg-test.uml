@@ -3878,6 +3878,42 @@ endif</body>
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_Vtw1IBEMEeWZ7Iu7q0o1bw" name="Collect3"/>
+          <packagedElement xmi:type="uml:Package" xmi:id="_m8dHsPfoEeWnNIcKMsy8gg" name="iterate">
+            <packagedElement xmi:type="uml:Class" xmi:id="_qM8oEPfoEeWnNIcKMsy8gg" name="IterateParent">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_vd4WMPfoEeWnNIcKMsy8gg" name="iterateChild" type="_tcpeQPfoEeWnNIcKMsy8gg" isOrdered="true" aggregation="composite" association="_vd2hAPfoEeWnNIcKMsy8gg">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1GYPwPfoEeWnNIcKMsy8gg"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1GZd4PfoEeWnNIcKMsy8gg" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_5InWIPfoEeWnNIcKMsy8gg" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_9wGeoPfoEeWnNIcKMsy8gg" name="iterChild" visibility="public" isDerived="true">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_P7db0PfpEeWnNIcKMsy8gg">
+                  <language>OCL</language>
+                  <body>self.iterateChild->iterate(c : IterateChild; acc : String = '' | acc.concat(c.name))</body>
+                </defaultValue>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_eloX8PfuEeWnNIcKMsy8gg" name="iterWithIf" visibility="public" isDerived="true">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_t2_MsPfvEeWnNIcKMsy8gg">
+                  <language>OCL</language>
+                  <body>self.iterateChild->iterate(c : IterateChild; acc : String = '' | if (acc = '') then 'start'.concat(c.name) else acc.concat(c.name) endif )</body>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_tcpeQPfoEeWnNIcKMsy8gg" name="IterateChild">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_7Hrq4PfoEeWnNIcKMsy8gg" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_vd2hAPfoEeWnNIcKMsy8gg" name="iterateParent_iterateChild" memberEnd="_vd4WMPfoEeWnNIcKMsy8gg _vd49QPfoEeWnNIcKMsy8gg" navigableOwnedEnd="_vd49QPfoEeWnNIcKMsy8gg">
+              <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vd3vIPfoEeWnNIcKMsy8gg" source="org.eclipse.papyrus">
+                <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vd3vIffoEeWnNIcKMsy8gg" key="nature" value="UML_Nature"/>
+              </eAnnotations>
+              <ownedEnd xmi:type="uml:Property" xmi:id="_vd49QPfoEeWnNIcKMsy8gg" name="iterateParent" type="_qM8oEPfoEeWnNIcKMsy8gg" association="_vd2hAPfoEeWnNIcKMsy8gg"/>
+            </packagedElement>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_c7uUgE8YEeSo664unH6t3Q" name="datatypeassociation">
           <packagedElement xmi:type="uml:Enumeration" xmi:id="_qT0-EE8YEeSo664unH6t3Q" name="VENDOR_TECH">

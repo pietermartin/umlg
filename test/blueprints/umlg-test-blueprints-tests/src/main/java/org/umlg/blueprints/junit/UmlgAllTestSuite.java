@@ -47,6 +47,7 @@ import org.umlg.tests.multiplecompositeparenthierarchy.HierarchyMultipleParentsT
 import org.umlg.tests.mvel.TestMvel;
 import org.umlg.tests.nonnavigable.NonNavigableTest;
 import org.umlg.tests.ocl.datatypes.TestOclCollectOnDataTypes;
+import org.umlg.tests.ocl.iterator.TestIterator;
 import org.umlg.tests.ocl.kindoftypeof.TestAsType;
 import org.umlg.tests.ocl.kindoftypeof.TestKindOfTypeOf;
 import org.umlg.tests.ocl.ocloperator.*;
@@ -161,7 +162,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestQualifiedDerivedUnion.class,
         TestNavigateFromEnum.class,
         OclSelectTest.class,
-        TestAssociationClassInheritance.class
+        TestAssociationClassInheritance.class,
+        TestIterator.class
 })
 public class UmlgAllTestSuite {
 }
