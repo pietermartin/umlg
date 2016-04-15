@@ -2,14 +2,7 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.tests.associationclass.TestAssociationClassInheritance;
-import org.umlg.tests.batch.TestBatchMode;
-import org.umlg.tests.bulkcollection.TestBulkCollection;
-import org.umlg.tests.datatypeassociation.TestDataTypeAssociation;
-import org.umlg.tests.ocl.iterator.TestIterator;
-import org.umlg.tests.ocl.ocloperator.OclSelectTest;
-import org.umlg.tests.qualifiertest.TestQualifier;
-import org.umlg.tests.qualifiertest.TestQualifierWithDateAndEnum;
+import org.umlg.gremlin.TestGroovyExecutor;
 
 /**
  * Date: 2013/10/19
@@ -17,7 +10,7 @@ import org.umlg.tests.qualifiertest.TestQualifierWithDateAndEnum;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestIterator.class
+        TestGroovyExecutor.class
 })
 public class UmlgAnyTestSuite {
 }

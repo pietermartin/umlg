@@ -2,10 +2,12 @@ package org.umlg.tests.associationclass;
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.umlg.associationclass.AssociationClass1;
 import org.umlg.associationclass.AssociationClass2;
 import org.umlg.associationclass.AssociationClassAC;
+import org.umlg.runtime.adaptor.GroovyExecutor;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgQueryEnum;
 import org.umlg.runtime.test.BaseLocalDbTest;
@@ -15,6 +17,12 @@ import org.umlg.runtime.test.BaseLocalDbTest;
  * Time: 9:26 PM
  */
 public class TestAssociationClassCopiesOnePrimitivePropertiesToEdge extends BaseLocalDbTest {
+
+    @Before
+    public void before() throws Exception {
+        super.before();
+        GroovyExecutor.INSTANCE.restart();
+    }
 
     @Test
     public void testAssociationClassOnePrimitivePropertiesAreOnEdge() {
