@@ -1,10 +1,5 @@
 package org.umlg.javageneration.visitor.property;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
@@ -12,6 +7,11 @@ import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.visitor.BaseVisitor;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Qualifiers must have a corresponding 'QualifierVisitor' stereotyped property on the class that
@@ -45,7 +45,8 @@ public class QualifierValidator extends BaseVisitor implements Visitor<Property>
 			if (derivedPropertyMap.containsKey(qualifiedClassifier)) {
 				List<Property> qualifiers = derivedPropertyMap.get(qualifiedClassifier);
 				for (Property q : qualifiers) {
-					if (q.getName().equals(qualifier.getName())) {
+//					if (q.getName().equals(qualifier.getName())) {
+                    if (q.equals(qualifier)) {
 						Property owner = (Property) qualifier.getOwner();
 						Property qOwner = (Property) q.getOwner();
 						throw new IllegalStateException(String.format(
