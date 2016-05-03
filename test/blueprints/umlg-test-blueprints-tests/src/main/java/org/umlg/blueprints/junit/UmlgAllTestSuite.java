@@ -27,10 +27,7 @@ import org.umlg.tests.deletiontest.DeletionInheritenceTest;
 import org.umlg.tests.deletiontest.DeletionTest;
 import org.umlg.tests.deletiontest.EmbeddedSetDeletionTest;
 import org.umlg.tests.embeddedtest.TestEmbeddedTest;
-import org.umlg.tests.enumeration.ManyEnumerationTest;
-import org.umlg.tests.enumeration.OneEnumerationTest;
-import org.umlg.tests.enumeration.TestEnumerationAttribute;
-import org.umlg.tests.enumeration.TestNavigateFromEnum;
+import org.umlg.tests.enumeration.*;
 import org.umlg.tests.hierarchytest.TestHierarchy;
 import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.indexing.TestIndexingDataType;
@@ -163,7 +160,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestNavigateFromEnum.class,
         OclSelectTest.class,
         TestAssociationClassInheritance.class,
-        TestIterator.class
+        TestIterator.class,
+        EnumerationOperationTest.class
 })
 public class UmlgAllTestSuite {
 }

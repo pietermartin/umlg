@@ -388,6 +388,9 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             return String.valueOf(literalBoolean.isValue());
         } else if (v instanceof LiteralNull) {
             return "null";
+        } else if (v instanceof InstanceValue) {
+            InstanceValue instanceValue = (InstanceValue) v;
+            return UmlgClassOperations.getPathName(instanceValue.getType()).getTypeName() + "." + instanceValue.getInstance().getName();
         } else {
             throw new RuntimeException(String.format("ValueSpecification %s not supported", v.getClass().getSimpleName()));
         }

@@ -3183,6 +3183,7 @@ endif</body>
             <ownedAttribute xmi:type="uml:Property" xmi:id="_UH1RUO8CEeOCtvMnpL9cwg" name="gender" type="_RWnG4O8CEeOCtvMnpL9cwg" association="_UH-bQO8CEeOCtvMnpL9cwg">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UH1RUe8CEeOCtvMnpL9cwg" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UH1RUu8CEeOCtvMnpL9cwg" value="1"/>
+              <defaultValue xmi:type="uml:InstanceValue" xmi:id="_4ECIcAyIEeaEuvEsUbiClg" type="_RWnG4O8CEeOCtvMnpL9cwg" instance="_R-u20O8CEeOCtvMnpL9cwg"/>
             </ownedAttribute>
             <ownedAttribute xmi:type="uml:Property" xmi:id="_NsiJ4GNvEeWlBoAlg3KdEg" name="testEnumNavigability" type="_MAamUGNvEeWlBoAlg3KdEg" association="_Nshi0GNvEeWlBoAlg3KdEg">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_kfi8wGNxEeWlBoAlg3KdEg"/>
@@ -3190,6 +3191,20 @@ endif</body>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Enumeration" xmi:id="_RWnG4O8CEeOCtvMnpL9cwg" name="Gender">
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_NhNCIAhLEeaH-sBye-Fdjg" name="testEnumOper" bodyCondition="_bDzrgAhLEeaH-sBye-Fdjg" isQuery="true">
+              <ownedRule xmi:type="uml:Constraint" xmi:id="_bDzrgAhLEeaH-sBye-Fdjg">
+                <specification xmi:type="uml:OpaqueExpression" xmi:id="_bDzrgQhLEeaH-sBye-Fdjg">
+                  <language>OCL</language>
+                  <body>test1 = 'halo'</body>
+                </specification>
+              </ownedRule>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_R2WdcAhLEeaH-sBye-Fdjg" name="test1">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              </ownedParameter>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_UV5pEAhLEeaH-sBye-Fdjg" direction="return">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+              </ownedParameter>
+            </ownedOperation>
             <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_R-u20O8CEeOCtvMnpL9cwg" name="MALE"/>
             <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_TIIu4O8CEeOCtvMnpL9cwg" name="FEMALE"/>
           </packagedElement>

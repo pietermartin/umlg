@@ -26,5 +26,10 @@ public class OneEnumerationTest extends BaseLocalDbTest {
 
         human1.reload();
         Assert.assertEquals(Gender.FEMALE, human1.getGender());
+
+        //test the default set to MALE
+        Human human2 = new Human();
+        db.commit();
+        Assert.assertEquals(Gender.MALE, human2.getGender());
     }
 }

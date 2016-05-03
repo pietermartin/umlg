@@ -1,18 +1,24 @@
 package org.umlg.javageneration.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.internal.operations.OperationOperations;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UmlgOperationOperations extends OperationOperations {
 
 	public static String asOclSignature(Operation oper) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(oper.getClass_().getName());
+		if (oper.getClass_() != null) {
+			sb.append(oper.getClass_().getName());
+		} else if (oper.getDatatype() != null) {
+			sb.append(oper.getDatatype().getName());
+		} else {
+			throw new IllegalStateException("Operation only supported on Class and Datatype");
+		}
 		sb.append("::");
 		sb.append(oper.getName());
 		sb.append("(");

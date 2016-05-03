@@ -1,21 +1,17 @@
 package org.umlg.javageneration.visitor.operation;
 
-import java.util.logging.Logger;
-
 import org.eclipse.ocl.expressions.OCLExpression;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.NamedElement;
-import org.eclipse.uml2.uml.Operation;
-import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
-import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
+import org.eclipse.uml2.uml.*;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
+import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
+import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.javageneration.ocl.UmlgOcl2Java;
 import org.umlg.javageneration.util.OperationWrapper;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.ocl.UmlgOcl2Parser;
+
+import java.util.logging.Logger;
 
 public class OperationImplementorSimple extends BaseVisitor implements Visitor<org.eclipse.uml2.uml.Operation> {
 
@@ -36,8 +32,8 @@ public class OperationImplementorSimple extends BaseVisitor implements Visitor<o
 		if (operOwner instanceof Interface) {
 			ojClass = findOJClass((Interface) operOwner);
 			addOperSignature(ojClass, oper);
-		} else if (operOwner instanceof org.eclipse.uml2.uml.Class) {
-			ojClass = findOJClass((org.eclipse.uml2.uml.Class) operOwner);
+		} else if ((operOwner instanceof org.eclipse.uml2.uml.Class) || (operOwner instanceof Enumeration)) {
+			ojClass = findOJClass((org.eclipse.uml2.uml.Classifier) operOwner);
 			OJAnnotatedOperation ojOper = addOperSignature(ojClass, oper);
 			if (oper.isQuery()) {
 				addQueryBody(ojClass, ojOper, oper);
