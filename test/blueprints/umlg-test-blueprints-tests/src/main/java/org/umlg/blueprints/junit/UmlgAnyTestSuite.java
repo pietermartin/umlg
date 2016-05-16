@@ -2,7 +2,7 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.tests.enumeration.OneEnumerationTest;
+import org.umlg.tests.batch.TestBatchMode;
 
 /**
  * Date: 2013/10/19
@@ -10,7 +10,7 @@ import org.umlg.tests.enumeration.OneEnumerationTest;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        OneEnumerationTest.class
+        TestBatchMode.class
 })
 public class UmlgAnyTestSuite {
 }

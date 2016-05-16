@@ -1,15 +1,12 @@
 package org.umlg.runtime.test;
 
-import org.apache.tinkerpop.gremlin.groovy.engine.GremlinExecutor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.umlg.runtime.adaptor.GroovyExecutor;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgAdminGraph;
 import org.umlg.runtime.adaptor.UmlgGraph;
 
-import javax.management.relation.RoleUnresolved;
 import java.net.URL;
 import java.util.logging.LogManager;
 

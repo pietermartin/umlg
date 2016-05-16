@@ -555,7 +555,8 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     protected void maybeLoad() {
         if ((!this.loaded && (this.isOnePrimitive() || isOneEnumeration()))) {
             loadFromVertex();
-        } else if (!this.loaded && !(UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode())) {
+//        } else if (!this.loaded && !(UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode())) {
+        } else if (!this.loaded) {
             loadFromVertex();
         } else {
             logger.log(Level.FINE, "ignoring call to load collection " + this.getLabel() + " as the transaction is in batch mode.!");

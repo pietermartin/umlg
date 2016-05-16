@@ -1,6 +1,6 @@
 package org.umlg.tests.batch;
 
-import org.apache.commons.lang.time.StopWatch;
+import org.apache.commons.lang3.time.StopWatch;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
@@ -10,10 +10,6 @@ import org.umlg.componenttest.Time;
 import org.umlg.concretetest.God;
 import org.umlg.concretetest.Universe;
 import org.umlg.embeddedtest.REASON;
-import org.umlg.inheritencetest.AbstractSpecies;
-import org.umlg.inheritencetest.Biped;
-import org.umlg.inheritencetest.Mamal;
-import org.umlg.inheritencetest.Quadped;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.collection.UmlgSet;
@@ -167,6 +163,28 @@ public class TestBatchMode extends BaseLocalDbTest {
             @Override
             public boolean filter(God t) {
                 return t.getREASON().contains(REASON.BAD);
+            }
+        }).size());
+    }
+
+    @Test
+    public void testQueryInBatchMode() {
+        Assume.assumeTrue(UMLG.get().supportsBatchMode());
+        God god = new God(true);
+        god.setName("THEGOD");
+        UMLG.get().commit();
+        UMLG.get().batchModeOn();
+        for (int i = 0; i < 10; i++) {
+            Universe universe1 = new Universe(god);
+            universe1.setName("universe");
+            SpaceTime st = new SpaceTime(universe1);
+            Space s = new Space(st);
+            Time t = new Time(st);
+        }
+        Assert.assertEquals(10, Universe.allInstances(new Filter<Universe>() {
+            @Override
+            public boolean filter(Universe t) {
+                return t.getName().equals("universe");
             }
         }).size());
     }
