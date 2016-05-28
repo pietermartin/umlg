@@ -9,11 +9,11 @@ import org.joda.time.LocalTime;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
-import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
+import org.umlg.runtime.util.PathTree;
 
-import java.lang.reflect.Method;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * This set is used for navigating from a class to its related association classes.
@@ -23,42 +23,61 @@ import java.util.Iterator;
  */
 public class UmlgAssociationClassSetImpl<AssociationClassNode> extends UmlgSetImpl<AssociationClassNode> implements UmlgAssociationClassSet<AssociationClassNode> {
 
+    private PropertyTree associationClassPropertyTree;
+
+    public UmlgAssociationClassSetImpl(UmlgNode owner, PropertyTree propertyTree, PropertyTree associationClassPropertyTree) {
+        super(owner, propertyTree);
+        this.associationClassPropertyTree = associationClassPropertyTree;
+    }
+
     public UmlgAssociationClassSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
     }
 
-    /**
-     * AssociationClass need to go via the edges as the association class' id is stored there
-     * @return
-     */
+    @Override
     protected void loadUmlgNodes() {
-        for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
-            Edge edge = iter.next();
-            AssociationClassNode node;
+        List<PathTree> pathTrees = this.propertyTree.traversal(UMLG.get().getUnderlyingGraph(), this.vertex);
+        for (PathTree pathTree : pathTrees) {
             try {
-                Class<?> c = this.getClassToInstantiate(edge);
-                if (c.isEnum()) {
-                    throw new RuntimeException();
-//                    Object value = this.getVertexForDirection(edge).value(getPersistentName());
-//                    node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-//                    putToInternalMap(node, this.getVertexForDirection(edge));
-                } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
-                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
-                    node = (AssociationClassNode) m.invoke(null);
-                } else if (UmlgNode.class.isAssignableFrom(c)) {
-                    node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
-                } else {
-                    throw new RuntimeException();
-//                    Object value = this.getVertexForDirection(edge).value(getPersistentName());
-//                    node = (AssociationClassNode) value;
-//                    putToInternalMap(value, this.getVertexForDirection(edge));
-                }
-                this.internalCollection.add(node);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
+                pathTree.loadUmlgAssociationClassNodes(owner, this.associationClassPropertyTree);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
     }
+
+//    /**
+//     * AssociationClass need to go via the edges as the association class' id is stored there
+//     * @return
+//     */
+//    protected void loadUmlgNodes() {
+//        for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
+//            Edge edge = iter.next();
+//            AssociationClassNode node;
+//            try {
+//                Class<?> c = this.getClassToInstantiate(edge);
+//                if (c.isEnum()) {
+//                    throw new RuntimeException();
+////                    Object value = this.getVertexForDirection(edge).value(getPersistentName());
+////                    node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+////                    putToInternalMap(node, this.getVertexForDirection(edge));
+//                } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
+//                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+//                    node = (AssociationClassNode) m.invoke(null);
+//                } else if (UmlgNode.class.isAssignableFrom(c)) {
+//                    node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
+//                } else {
+//                    throw new RuntimeException();
+////                    Object value = this.getVertexForDirection(edge).value(getPersistentName());
+////                    node = (AssociationClassNode) value;
+////                    putToInternalMap(value, this.getVertexForDirection(edge));
+//                }
+//                this.internalCollection.add(node);
+//            } catch (Exception ex) {
+//                throw new RuntimeException(ex);
+//            }
+//        }
+//    }
 
     /**
      * This gets invoked from the opposite side in addInternal.

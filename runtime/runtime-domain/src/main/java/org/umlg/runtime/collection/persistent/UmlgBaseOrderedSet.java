@@ -1,10 +1,7 @@
 package org.umlg.runtime.collection.persistent;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
-import org.apache.tinkerpop.gremlin.process.traversal.Order;
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 import org.apache.tinkerpop.gremlin.structure.Edge;
-import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
@@ -25,6 +22,13 @@ import java.util.*;
 public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements UmlgOrderedSet<E> {
 
     protected OclStdLibOrderedSet<E> oclStdLibOrderedSet;
+
+    public UmlgBaseOrderedSet(UmlgNode owner, PropertyTree propertyTree) {
+        super(owner, propertyTree);
+        this.internalCollection = new ListOrderedSet<>();
+        this.oclStdLibOrderedSet = new OclStdLibOrderedSetImpl<>((ListOrderedSet) this.internalCollection);
+        this.oclStdLibCollection = this.oclStdLibOrderedSet;
+    }
 
     @SuppressWarnings("unchecked")
     public UmlgBaseOrderedSet(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
@@ -91,24 +95,36 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
         }
     }
 
-    @Override
-    protected Iterator<Vertex> getVertices() {
-        if (this.isControllingSide()) {
-            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
-                    .outE(this.getLabel()).as("e")
-                    .inV().as("v")
-                    .select("e", "v")
-                    .order().by(__.select("e").by(BaseCollection.IN_EDGE_SEQUENCE_ID), Order.incr)
-                    .map(m -> (Vertex)m.get().get("v"));
-        } else {
-            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
-                    .inE(this.getLabel()).as("e")
-                    .outV().as("v")
-                    .select("e", "v")
-                    .order().by(__.select("e").by(BaseCollection.OUT_EDGE_SEQUENCE_ID), Order.incr)
-                    .map(m -> (Vertex)m.get().get("v"));
-        }
-    }
+//    @Override
+//    protected void loadUmlgNodes() {
+//        List<PathTree> pathTrees = this.propertyTree.traversal(UMLG.get().getUnderlyingGraph(), this.vertex);
+//        for (PathTree pathTree : pathTrees) {
+//            try {
+//                pathTree.loadUmlgNodes(owner, this.propertyTree);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+
+//    @Override
+//    protected Iterator<Vertex> getVertices() {
+//        if (this.isControllingSide()) {
+//            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
+//                    .outE(this.getLabel()).as("e")
+//                    .inV().as("v")
+//                    .select("e", "v")
+//                    .order().by(__.select("e").by(BaseCollection.IN_EDGE_SEQUENCE_ID), Order.incr)
+//                    .map(m -> (Vertex)m.get().get("v"));
+//        } else {
+//            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
+//                    .inE(this.getLabel()).as("e")
+//                    .outV().as("v")
+//                    .select("e", "v")
+//                    .order().by(__.select("e").by(BaseCollection.OUT_EDGE_SEQUENCE_ID), Order.incr)
+//                    .map(m -> (Vertex)m.get().get("v"));
+//        }
+//    }
 
     @SuppressWarnings("unchecked")
     @Override

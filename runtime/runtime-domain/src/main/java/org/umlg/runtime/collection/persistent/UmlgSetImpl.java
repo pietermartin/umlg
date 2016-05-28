@@ -9,6 +9,10 @@ import java.util.Set;
 
 public class UmlgSetImpl<E> extends BaseSet<E> implements UmlgSet<E> {
 
+	public UmlgSetImpl(UmlgNode owner, PropertyTree propertyTree) {
+		super(owner, propertyTree);
+	}
+
 	public UmlgSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 	}

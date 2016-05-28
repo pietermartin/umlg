@@ -36,7 +36,7 @@ public class TestAssociationClassInheritance  extends BaseLocalDbTest {
         UMLG.get().commit();
 
         hour1.reload();
-        Assert.assertEquals(2, hour1.getMeasurement().size());
+        Assert.assertEquals(2, hour1.getMeasurement_objecttype().size());
 
     }
 

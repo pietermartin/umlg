@@ -1,12 +1,16 @@
 package org.umlg.runtime.collection.persistent;
 
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.tinkerpop.gremlin.process.traversal.Order;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
-import org.apache.tinkerpop.gremlin.structure.*;
+import org.apache.tinkerpop.gremlin.structure.Direction;
+import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.Property;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.joda.time.DateTime;
-import org.umlg.runtime.adaptor.*;
+import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
+import org.umlg.runtime.adaptor.TransactionThreadVar;
+import org.umlg.runtime.adaptor.UMLG;
+import org.umlg.runtime.adaptor.UmlgAdminGraph;
 import org.umlg.runtime.collection.*;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
@@ -18,11 +22,10 @@ import org.umlg.runtime.notification.ChangeHolder;
 import org.umlg.runtime.notification.UmlgNotificationManager;
 import org.umlg.runtime.types.Password;
 import org.umlg.runtime.types.UmlgType;
+import org.umlg.runtime.util.PathTree;
 import org.umlg.runtime.util.UmlgFormatter;
 
-import java.lang.reflect.Method;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntimeProperty, OclStdLibCollection<E> {
@@ -52,8 +55,19 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     //This is used to set the IN_EDGE_SEQUENCE_ID, OUT_EDGE_SEQUENCE_ID on the edge
     protected int inverseCollectionSize;
 
+    protected PropertyTree propertyTree;
+
     public BaseCollection(UmlgRuntimeProperty runtimeProperty) {
         this.umlgRuntimeProperty = runtimeProperty;
+    }
+
+    public BaseCollection(UmlgNode owner, PropertyTree propertyTree) {
+        super();
+        this.owner = owner;
+        this.vertex = owner.getVertex();
+        this.parentClass = owner.getClass();
+        this.propertyTree = propertyTree;
+        this.umlgRuntimeProperty = propertyTree.getUmlgRuntimeProperty();
     }
 
     public BaseCollection(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
@@ -109,18 +123,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         );
     }
 
-//    protected Vertex removeFromInternalMap(Object key) {
-//        List<Vertex> vertexes = this.internalVertexMap.get(getPersistentName() + key.toString());
-//        Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
-//        Vertex vertex = vertexes.get(0);
-//        this.internalVertexMap.remove(getPersistentName() + key.toString(), vertex);
-//        return vertex;
-//    }
-
-//    protected void putToInternalMap(Object key, Vertex vertex) {
-//        this.internalVertexMap.put(getPersistentName() + key.toString(), vertex);
-//    }
-
     protected Iterator<Edge> getEdges() {
         if (this.isControllingSide()) {
             return this.vertex.edges(Direction.OUT, this.getLabel());
@@ -137,29 +139,14 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         }
     }
 
-    protected Iterator<Vertex> getVertices() {
-        if (this.isControllingSide()) {
-            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex).out(this.getLabel());
-        } else {
-            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex).in(this.getLabel());
-        }
-    }
+//    protected Iterator<Vertex> getVertices() {
+//        if (this.isControllingSide()) {
+//            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex).out(this.getLabel());
+//        } else {
+//            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex).in(this.getLabel());
+//        }
+//    }
 
-    protected GraphTraversal<Vertex, Map<String, Element>> getVerticesWithEdge() {
-        if (this.isControllingSide()) {
-            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
-                    .outE(this.getLabel()).as("edge")
-                    .inV().as("vertex")
-                    .<Element>select("edge", "vertex")
-                    .order().by(__.select("edge").by(BaseCollection.IN_EDGE_SEQUENCE_ID), Order.incr);
-        } else {
-            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
-                    .inE(this.getLabel()).as("edge")
-                    .outV().as("vertex")
-                    .<Element>select("edge", "vertex")
-                    .order().by(__.select("edge").by(BaseCollection.OUT_EDGE_SEQUENCE_ID), Order.incr);
-        }
-    }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
@@ -190,10 +177,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     @Override
     public boolean addIgnoreInverse(E e) {
-//        why it this here?
-//        if (UMLG.get().isInBatchMode()) {
-//            throw new IllegalStateException("addIgnoreInverse is not allowed when in batch mode");
-//        }
         this.ignoreInverse = true;
         boolean result = add(e);
         this.ignoreInverse = false;
@@ -254,42 +237,8 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     private void removeFromLinkedList(Vertex v) {
     }
 
-    /**
-     * Find all hyper vertexes from vertexToRemove. There can be many as the list could have duplicates.
-     * Out of all the hyper vertexes find the earliest one in the list. To do that iterate to the beginning of the list looking to see which hyper vertex is before another.
-     *
-     * @param vertex
-     * @param direction
-     * @return
-     */
-    private Vertex getFirstHyperVertexInListForVertex(Vertex vertex, Direction direction) {
-        Set<Vertex> hyperVertexes = new HashSet<>();
-        vertex.edges(Direction.IN, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).forEachRemaining(
-                e -> hyperVertexes.add(e.vertices(Direction.OUT).next())
-        );
-        //Take any hyper vertex and start iterating to the beginning.
-        Vertex firstHyperVertex = hyperVertexes.iterator().next();
-        hyperVertexes.remove(firstHyperVertex);
-        Iterator<Edge> iterator = firstHyperVertex.edges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX + direction);
-        while (iterator.hasNext()) {
-            Edge edge = iterator.next();
-            Vertex previousHyperVertex = edge.vertices(Direction.OUT).next();
-            if (hyperVertexes.contains(previousHyperVertex)) {
-                firstHyperVertex = previousHyperVertex;
-                iterator = firstHyperVertex.edges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX + direction);
-                hyperVertexes.remove(previousHyperVertex);
-            } else {
-                iterator = previousHyperVertex.edges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX + direction);
-            }
-        }
-        return firstHyperVertex;
-    }
 
     private void removeFromInverseLinkedList(Vertex v) {
-    }
-
-    protected String getIdForLabel(Vertex vertexToRemove) {
-        return vertexToRemove.id().toString().replace(".", "_");
     }
 
     /**
@@ -431,25 +380,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     UMLG.get().traversal().E(edgeIdProperty.value()).next().property(getPersistentName(), ((Enum<?>) e).name());
                 }
             }
-//        } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
-//            v = UMLG.get().addVertex();
-//            v.property("className", e.getClass().getName());
-//            setDataTypeOnVertex(v, e);
-//            putToInternalMap(e, v);
         } else if (getDataTypeEnum() != null && (isOneToOne() || isManyToOne())) {
             setDataTypeOnVertex(this.vertex, e);
         } else if (e.getClass().isEnum() && (isManyToMany() || isOneToMany())) {
             this.vertex.property(getPersistentName(), convertToArray(e));
-//            v = UMLG.get().addVertex();
-//            v.property(getPersistentName(), ((Enum<?>) e).name());
-//            v.property("className", e.getClass().getName());
-//            putToInternalMap(e, v);
         } else {
             this.vertex.property(getPersistentName(), convertToArray(e));
-//            v = UMLG.get().addVertex();
-//            v.property(getPersistentName(), e);
-//            v.property("className", e.getClass().getName());
-//            putToInternalMap(e, v);
         }
         if (v != null) {
             Edge edge = createEdge(e, v);
@@ -555,11 +491,8 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     protected void maybeLoad() {
         if ((!this.loaded && (this.isOnePrimitive() || isOneEnumeration()))) {
             loadFromVertex();
-//        } else if (!this.loaded && !(UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode())) {
         } else if (!this.loaded) {
             loadFromVertex();
-        } else {
-            logger.log(Level.FINE, "ignoring call to load collection " + this.getLabel() + " as the transaction is in batch mode.!");
         }
     }
 
@@ -574,9 +507,9 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     protected Class<?> getClassToInstantiate(Edge edge) {
         try {
             if (this.isControllingSide()) {
-                return Class.forName((String) edge.vertices(Direction.IN).next().value("className"));
+                return Class.forName(edge.vertices(Direction.IN).next().value("className"));
             } else {
-                return Class.forName((String) edge.vertices(Direction.OUT).next().value("className"));
+                return Class.forName(edge.vertices(Direction.OUT).next().value("className"));
             }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -586,19 +519,10 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     protected Class<?> getClassToInstantiate(Vertex vertex) {
         try {
             if (this.isControllingSide()) {
-                return Class.forName((String) vertex.value("className"));
+                return Class.forName(vertex.value("className"));
             } else {
-                return Class.forName((String) vertex.value("className"));
+                return Class.forName(vertex.value("className"));
             }
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    protected Class<?> getClassToInstantiateFromHyperVertexEdge(Edge hyperVertexEdge) {
-        try {
-            final Vertex v = hyperVertexEdge.vertices(Direction.IN).next();
-            return Class.forName((String) v.value("className"));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -870,6 +794,11 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     @Override
     public boolean isInverseQualified() {
         return this.umlgRuntimeProperty.isInverseQualified();
+    }
+
+    @Override
+    public String getAssociationClassPropertyName() {
+        return this.umlgRuntimeProperty.getAssociationClassPropertyName();
     }
 
     @Override
@@ -1194,27 +1123,61 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     protected void loadUmlgNodes() {
-        for (Iterator<Vertex> iter = getVertices(); iter.hasNext(); ) {
-            Vertex vertex = iter.next();
-            E node;
+        List<PathTree> pathTrees = this.propertyTree.traversal(UMLG.get().getUnderlyingGraph(), this.vertex);
+        for (PathTree pathTree : pathTrees) {
             try {
-                Class<?> c = getClassToInstantiate(vertex);
-                if (c.isEnum()) {
-                    throw new RuntimeException();
-                } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
-                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
-                    node = (E) m.invoke(null);
-                } else if (UmlgNode.class.isAssignableFrom(c)) {
-                    node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
-                } else {
-                    throw new RuntimeException();
-                }
-                this.internalCollection.add(node);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
+                pathTree.loadUmlgNodes(owner, this.propertyTree);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
     }
+
+    @Override
+    public void z_internalAdder(E e) {
+        this.internalCollection.add(e);
+        this.loaded = true;
+    }
+
+//    protected GraphTraversal<Vertex, Map<String, Element>> getVerticesWithEdge() {
+//        if (this.isControllingSide()) {
+//            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
+//                    .outE(this.getLabel()).as("edge")
+//                    .inV().as("vertex")
+//                    .<Element>select("edge", "vertex")
+//                    .order().by(__.select("edge").by(BaseCollection.IN_EDGE_SEQUENCE_ID), Order.incr);
+//        } else {
+//            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex)
+//                    .inE(this.getLabel()).as("edge")
+//                    .outV().as("vertex")
+//                    .<Element>select("edge", "vertex")
+//                    .order().by(__.select("edge").by(BaseCollection.OUT_EDGE_SEQUENCE_ID), Order.incr);
+//        }
+//    }
+//
+//
+//    protected void loadUmlgNodes() {
+//        for (Iterator<Vertex> iter = getVertices(); iter.hasNext(); ) {
+//            Vertex vertex = iter.next();
+//            E node;
+//            try {
+//                Class<?> c = getClassToInstantiate(vertex);
+//                if (c.isEnum()) {
+//                    throw new RuntimeException();
+//                } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
+//                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+//                    node = (E) m.invoke(null);
+//                } else if (UmlgNode.class.isAssignableFrom(c)) {
+//                    node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
+//                } else {
+//                    throw new RuntimeException();
+//                }
+//                this.internalCollection.add(node);
+//            } catch (Exception ex) {
+//                throw new RuntimeException(ex);
+//            }
+//        }
+//    }
 
     protected void loadManyEnumeration() {
         Property<String[]> manyProperty = this.vertex.property(getPersistentName());

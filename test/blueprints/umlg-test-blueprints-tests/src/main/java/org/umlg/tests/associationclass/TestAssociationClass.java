@@ -35,9 +35,9 @@ public class TestAssociationClass extends BaseLocalDbTest {
         UMLG.get().commit();
 
         vg1.reload();
-        Assert.assertEquals(2, vg1.getVirtualGroupWorkspaceElementAC().size());
+        Assert.assertEquals(2, vg1.getVirtualGroupWorkspaceElementAC_workspaceelement().size());
         //This will null pointer if its the wrong type
-        for (VirtualGroupWorkspaceElementAC virtualGroupWorkspaceElementAC : vg1.getVirtualGroupWorkspaceElementAC()) {
+        for (VirtualGroupWorkspaceElementAC virtualGroupWorkspaceElementAC : vg1.getVirtualGroupWorkspaceElementAC_workspaceelement()) {
             System.out.println(virtualGroupWorkspaceElementAC.getName());
         }
 
@@ -64,8 +64,8 @@ public class TestAssociationClass extends BaseLocalDbTest {
         UMLG.get().commit();
 
         vg1.reload();
-        Assert.assertEquals(2, vg1.getVirtualGroupWorkspaceElementAC().size());
-        for (VirtualGroupWorkspaceElementAC virtualGroupWorkspaceElementAC : vg1.getVirtualGroupWorkspaceElementAC()) {
+        Assert.assertEquals(2, vg1.getVirtualGroupWorkspaceElementAC_workspaceelement().size());
+        for (VirtualGroupWorkspaceElementAC virtualGroupWorkspaceElementAC : vg1.getVirtualGroupWorkspaceElementAC_workspaceelement()) {
             System.out.println(virtualGroupWorkspaceElementAC.getName());
         }
 
@@ -97,8 +97,8 @@ public class TestAssociationClass extends BaseLocalDbTest {
         UMLG.get().commit();
 
         vg1.reload();
-        Assert.assertEquals(2, vg1.getVirtualGroupWorkspaceElementAC().size());
-        for (VirtualGroupWorkspaceElementAC virtualGroupWorkspaceElementAC : vg1.getVirtualGroupWorkspaceElementAC()) {
+        Assert.assertEquals(2, vg1.getVirtualGroupWorkspaceElementAC_workspaceelement().size());
+        for (VirtualGroupWorkspaceElementAC virtualGroupWorkspaceElementAC : vg1.getVirtualGroupWorkspaceElementAC_workspaceelement()) {
             System.out.println(virtualGroupWorkspaceElementAC.getName());
         }
 

@@ -7,6 +7,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 
 public class UmlgGenerationUtil {
 
+    public static final OJPathName PropertyTree = new OJPathName("org.umlg.runtime.collection.persistent.PropertyTree");
     public static final OJPathName P = new OJPathName("org.apache.tinkerpop.gremlin.process.traversal.P");
     public static final OJPathName StringArrayContains = new OJPathName("org.umlg.runtime.adaptor.StringArrayContains");
     public static final OJPathName StringEscapeUtils = new OJPathName("org.apache.commons.lang3.StringEscapeUtils");

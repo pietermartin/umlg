@@ -5,7 +5,6 @@ import org.umlg.runtime.collection.UmlgBag;
 import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgSet;
-import org.umlg.runtime.collection.memory.UmlgMemoryOrderedSet;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibSet;
@@ -13,7 +12,10 @@ import org.umlg.runtime.collection.ocl.OclStdLibSetImpl;
 import org.umlg.runtime.domain.UmlgEnum;
 import org.umlg.runtime.domain.UmlgNode;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class BaseSet<E> extends BaseCollection<E> implements UmlgSet<E>, OclStdLibSet<E> {
 
@@ -21,15 +23,22 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements UmlgSet<E>
 	
 	public BaseSet(UmlgRuntimeProperty runtimeProperty) {
 		super(runtimeProperty);
-		this.internalCollection = new HashSet<E>();
-		this.oclStdLibSet = new OclStdLibSetImpl<E>((Set<E>)this.internalCollection);
+		this.internalCollection = new HashSet<>();
+		this.oclStdLibSet = new OclStdLibSetImpl<>((Set<E>)this.internalCollection);
 		this.oclStdLibCollection = this.oclStdLibSet;
 	}
-	
+
+	public BaseSet(UmlgNode owner, PropertyTree propertyTree) {
+		super(owner, propertyTree);
+		this.internalCollection = new HashSet<>();
+		this.oclStdLibSet = new OclStdLibSetImpl<>((Set<E>)this.internalCollection);
+		this.oclStdLibCollection = this.oclStdLibSet;
+	}
+
 	public BaseSet(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
-		this.internalCollection = new HashSet<E>();
-		this.oclStdLibSet = new OclStdLibSetImpl<E>((Set<E>)this.internalCollection);
+		this.internalCollection = new HashSet<>();
+		this.oclStdLibSet = new OclStdLibSetImpl<>((Set<E>)this.internalCollection);
 		this.oclStdLibCollection = this.oclStdLibSet;
 	}
 
@@ -58,6 +67,8 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements UmlgSet<E>
     protected void addToLinkedList(Edge edge) {
         throw new RuntimeException("addToLinkedList and manageLinkedListInverse should never be called for a BaseSet!");
     }
+
+
 
 	protected Set<E> getInternalSet() {
 		return (Set<E>) this.internalCollection;

@@ -11,6 +11,10 @@ import java.util.Set;
 
 public class UmlgQualifiedBagImpl<E> extends BaseBag<E> implements UmlgQualifiedBag<E> {
 
+	public UmlgQualifiedBagImpl(UmlgNode owner, PropertyTree propertyTree) {
+		super(owner, propertyTree);
+	}
+
 	public UmlgQualifiedBagImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 	}

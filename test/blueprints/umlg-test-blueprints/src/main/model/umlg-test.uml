@@ -4059,6 +4059,43 @@ endif</body>
             <ownedEnd xmi:type="uml:Property" xmi:id="_0MijUO2YEeWLHdFoHIjt4w" name="vendorTech" type="_qT0-EE8YEeSo664unH6t3Q" association="_0MbOkO2YEeWLHdFoHIjt4w"/>
           </packagedElement>
         </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_e3_SoCHEEeaHIolF9mRyNw" name="optional" URI="">
+          <packagedElement xmi:type="uml:Class" xmi:id="_UMLTYCHIEeaHIolF9mRyNw" name="AOptional">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_h1TbgCHIEeaHIolF9mRyNw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_RKrb0CHJEeaHIolF9mRyNw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_RKtRACHJEeaHIolF9mRyNw" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_-qvY8iHMEeaHIolF9mRyNw" name="bOptional" type="_VWwQICHIEeaHIolF9mRyNw" association="_-qux4CHMEeaHIolF9mRyNw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_C16_8CHNEeaHIolF9mRyNw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_C181ICHNEeaHIolF9mRyNw" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_VWwQICHIEeaHIolF9mRyNw" name="BOptional">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_k1HbkCHIEeaHIolF9mRyNw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_RzcE8CHJEeaHIolF9mRyNw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_RzcsACHJEeaHIolF9mRyNw" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_SCc-EiHZEeaHIolF9mRyNw" name="cOptional" type="_QeROgCHZEeaHIolF9mRyNw" association="_SCcXACHZEeaHIolF9mRyNw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_XQ5_8CHZEeaHIolF9mRyNw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_XQ7OECHZEeaHIolF9mRyNw" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_-qux4CHMEeaHIolF9mRyNw" name="aOptional_bOptional" memberEnd="_-qvY8iHMEeaHIolF9mRyNw _-qwAACHMEeaHIolF9mRyNw" navigableOwnedEnd="_-qwAACHMEeaHIolF9mRyNw">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-qvY8CHMEeaHIolF9mRyNw" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-qvY8SHMEeaHIolF9mRyNw" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_-qwAACHMEeaHIolF9mRyNw" name="aOptional" type="_UMLTYCHIEeaHIolF9mRyNw" association="_-qux4CHMEeaHIolF9mRyNw"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_QeROgCHZEeaHIolF9mRyNw" name="COptional"/>
+          <packagedElement xmi:type="uml:Association" xmi:id="_SCcXACHZEeaHIolF9mRyNw" name="bOptional_cOptional" memberEnd="_SCc-EiHZEeaHIolF9mRyNw _SCdlICHZEeaHIolF9mRyNw" navigableOwnedEnd="_SCdlICHZEeaHIolF9mRyNw">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_SCc-ECHZEeaHIolF9mRyNw" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_SCc-ESHZEeaHIolF9mRyNw" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_SCdlICHZEeaHIolF9mRyNw" name="bOptional" type="_VWwQICHIEeaHIolF9mRyNw" association="_SCcXACHZEeaHIolF9mRyNw"/>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_1clVoQAOEeKpVr_ntT6cLA">

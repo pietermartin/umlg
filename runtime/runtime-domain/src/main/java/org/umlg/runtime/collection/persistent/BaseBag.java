@@ -30,7 +30,14 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>
 		this.oclStdLibBag = new OclStdLibBagImpl<E>((Multiset<E>)this.internalCollection); 
 		this.oclStdLibCollection = this.oclStdLibBag;
 	}
-	
+
+	public BaseBag(UmlgNode owner, PropertyTree propertyTree) {
+		super(owner, propertyTree);
+		this.internalCollection = HashMultiset.create();
+		this.oclStdLibBag = new OclStdLibBagImpl<E>((Multiset<E>)this.internalCollection);
+		this.oclStdLibCollection = this.oclStdLibBag;
+	}
+
 	public BaseBag(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = HashMultiset.create();
@@ -113,9 +120,6 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>
 					Class<?> c = this.getClassToInstantiate(edge);
 					if (c.isEnum()) {
 						throw new RuntimeException();
-//						Object value = this.getVertexForDirection(edge).value(getPersistentName());
-//						node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-//						putToInternalMap(node, this.getVertexForDirection(edge));
 					} else if (UmlgMetaNode.class.isAssignableFrom(c)) {
 						Method m = c.getDeclaredMethod("getInstance", new Class[0]);
 						node = (E) m.invoke(null);
@@ -123,9 +127,6 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>
 						node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
 					} else {
                         throw new RuntimeException();
-//						Object value = this.getVertexForDirection(edge).value(getPersistentName());
-//						node = (E) value;
-//						putToInternalMap(value, this.getVertexForDirection(edge));
 					}
 					this.internalCollection.add(node);
 				} catch (Exception ex) {

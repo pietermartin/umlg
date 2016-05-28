@@ -664,12 +664,18 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         if (!isMemberOfAssociationClass()) {
             throw new IllegalStateException("Can not call getAssociationClassFakePropertyName on a property that does not belong to an AssociationClass!");
         }
-//        return fieldname() + "_" + new PropertyWrapper(getOtherEnd()).fieldname() + "_" + UmlgClassOperations.getPathName(getAssociationClass()).getLast();
-        if (isRecursive()) {
+//        if (isRecursive()) {
             return UmlgClassOperations.getPathName(getAssociationClass()).getLast() + "_" + fieldname();
-        } else {
-            return UmlgClassOperations.getPathName(getAssociationClass()).getLast();
+//        } else {
+//            return UmlgClassOperations.getPathName(getAssociationClass()).getLast();
+//        }
+    }
+
+    public String getAssociationClassName() {
+        if (!isMemberOfAssociationClass()) {
+            throw new IllegalStateException("Can not call getAssociationClassFakePropertyName on a property that does not belong to an AssociationClass!");
         }
+        return UmlgClassOperations.getPathName(getAssociationClass()).getLast();
     }
 
     public String associationClassGetter() {

@@ -16,4 +16,8 @@ public interface UmlgCollection<E> extends Collection<E>, OclStdLibCollection<E>
     }
 
     UmlgCollection<E> sortedBy(Comparator<E> e);
+
+    public default void z_internalAdder(E e) {
+
+    }
 }

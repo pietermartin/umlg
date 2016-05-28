@@ -7,6 +7,7 @@ public interface UmlgRuntimeProperty {
      * This returns true for the fake property on the association class to its member ends.
      */
     boolean isAssociationClassProperty();
+	String getAssociationClassPropertyName();
     boolean isOnePrimitivePropertyOfAssociationClass();
 	boolean isOnePrimitive();
 	DataTypeEnum getDataTypeEnum();

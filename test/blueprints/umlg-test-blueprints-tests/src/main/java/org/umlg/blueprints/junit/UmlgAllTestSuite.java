@@ -51,6 +51,7 @@ import org.umlg.tests.ocl.ocloperator.*;
 import org.umlg.tests.ocl.operation.OclOperationTest;
 import org.umlg.tests.ocl.prefefinediterator.TestSortedBy;
 import org.umlg.tests.ocl.qualifiers.TestNavigateQualifiedProperty;
+import org.umlg.tests.optional.TestOptional;
 import org.umlg.tests.primitive.TestBooleanPrimitive;
 import org.umlg.tests.primitive.TestPrimitiveRemoval;
 import org.umlg.tests.qualifiertest.*;
@@ -161,7 +162,8 @@ import org.umlg.tests.validationtest.TestValidation;
         OclSelectTest.class,
         TestAssociationClassInheritance.class,
         TestIterator.class,
-        EnumerationOperationTest.class
+        EnumerationOperationTest.class,
+        TestOptional.class
 })
 public class UmlgAllTestSuite {
 }

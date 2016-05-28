@@ -1,9 +1,7 @@
 package org.umlg.runtime.collection.persistent;
 
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
-import org.apache.tinkerpop.gremlin.structure.Element;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
 import org.joda.time.DateTime;
@@ -14,10 +12,11 @@ import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
+import org.umlg.runtime.util.PathTree;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,8 +26,27 @@ import java.util.Set;
  */
 public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends UmlgSequenceImpl<AssociationClassNode> {
 
+    private PropertyTree associationClassPropertyTree;
+
+    public UmlgAssociationClassSequenceImpl(UmlgNode owner, PropertyTree propertyTree, PropertyTree associationClassPropertyTree) {
+        super(owner, propertyTree);
+        this.associationClassPropertyTree = associationClassPropertyTree;
+    }
+
     public UmlgAssociationClassSequenceImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
+    }
+
+    @Override
+    protected void loadUmlgNodes() {
+        List<PathTree> pathTrees = this.propertyTree.traversal(UMLG.get().getUnderlyingGraph(), this.vertex);
+        for (PathTree pathTree : pathTrees) {
+            try {
+                pathTree.loadUmlgAssociationClassNodes(owner, this.associationClassPropertyTree);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     /**
@@ -100,29 +118,29 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
         this.loaded = true;
     }
 
-    @Override
-    protected void loadUmlgNodes() {
-        GraphTraversal<Vertex, Map<String, Element>> traversal = getVerticesWithEdge();
-        while (traversal.hasNext()) {
-            final Map<String, Element> bindings = traversal.next();
-            Edge edge = (Edge) bindings.get("edge");
-            AssociationClassNode node;
-            Object value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
-            Vertex associationClassVertex = UMLG.get().traversal().V(value).next();
-            try {
-                Class<?> c = getClassToInstantiate(associationClassVertex);
-                if (UmlgNode.class.isAssignableFrom(c)) {
-                    node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(associationClassVertex);
-                    ((UmlgNode) node).setEdge(this.umlgRuntimeProperty, edge);
-                } else {
-                    throw new IllegalStateException("Unexpected class: " + c.getName());
-                }
-                this.internalCollection.add(node);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-    }
+//    @Override
+//    protected void loadUmlgNodes() {
+//        GraphTraversal<Vertex, Map<String, Element>> traversal = getVerticesWithEdge();
+//        while (traversal.hasNext()) {
+//            final Map<String, Element> bindings = traversal.next();
+//            Edge edge = (Edge) bindings.get("edge");
+//            AssociationClassNode node;
+//            Object value = edge.value(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID);
+//            Vertex associationClassVertex = UMLG.get().traversal().V(value).next();
+//            try {
+//                Class<?> c = getClassToInstantiate(associationClassVertex);
+//                if (UmlgNode.class.isAssignableFrom(c)) {
+//                    node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(associationClassVertex);
+//                    ((UmlgNode) node).setEdge(this.umlgRuntimeProperty, edge);
+//                } else {
+//                    throw new IllegalStateException("Unexpected class: " + c.getName());
+//                }
+//                this.internalCollection.add(node);
+//            } catch (Exception ex) {
+//                throw new RuntimeException(ex);
+//            }
+//        }
+//    }
 
     protected void loadNode(Edge edgeToElement, Vertex vertexToLoad, boolean hyperVertexEdge) {
         AssociationClassNode node;

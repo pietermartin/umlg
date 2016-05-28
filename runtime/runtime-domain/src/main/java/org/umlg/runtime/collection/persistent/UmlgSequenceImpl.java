@@ -8,6 +8,10 @@ import java.util.Collection;
 
 public class UmlgSequenceImpl<E> extends BaseSequence<E> implements UmlgSequence<E> {
 
+    public UmlgSequenceImpl(UmlgNode owner, PropertyTree propertyTree) {
+        super(owner, propertyTree);
+    }
+
     public UmlgSequenceImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
     }

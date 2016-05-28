@@ -10,8 +10,10 @@ import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.UmlgNode;
+import org.umlg.runtime.util.PathTree;
 
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * This set is used for navigating from a class to its related association classes.
@@ -20,8 +22,27 @@ import java.util.Iterator;
  */
 public class UmlgAssociationClassBagImpl<AssociationClassNode> extends UmlgBagImpl<AssociationClassNode> {
 
+    private PropertyTree associationClassPropertyTree;
+
+    public UmlgAssociationClassBagImpl(UmlgNode owner, PropertyTree propertyTree, PropertyTree associationClassPropertyTree) {
+        super(owner, propertyTree);
+        this.associationClassPropertyTree = associationClassPropertyTree;
+    }
+
     public UmlgAssociationClassBagImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
+    }
+
+    @Override
+    protected void loadUmlgNodes() {
+        List<PathTree> pathTrees = this.propertyTree.traversal(UMLG.get().getUnderlyingGraph(), this.vertex);
+        for (PathTree pathTree : pathTrees) {
+            try {
+                pathTree.loadUmlgAssociationClassNodes(owner, this.associationClassPropertyTree);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     /**

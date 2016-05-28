@@ -17,6 +17,10 @@ import java.util.Set;
  */
 public class UmlgPropertyAssociationClassOrderedSetImpl<E, AC extends AssociationClassNode> extends UmlgOrderedSetImpl<E> implements UmlgPropertyAssociationClassOrderedSet<E, AC> {
 
+    public UmlgPropertyAssociationClassOrderedSetImpl(UmlgNode owner, PropertyTree propertyTree, PropertyTree associationClassRuntimeProperty) {
+        super(owner, propertyTree);
+    }
+
     public UmlgPropertyAssociationClassOrderedSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty, UmlgRuntimeProperty associationClassRuntimeProperty) {
         super(owner, runtimeProperty);
     }

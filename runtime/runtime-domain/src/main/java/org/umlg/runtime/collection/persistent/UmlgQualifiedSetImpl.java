@@ -6,6 +6,10 @@ import org.umlg.runtime.domain.UmlgNode;
 
 public class UmlgQualifiedSetImpl<E> extends BaseSet<E> implements UmlgQualifiedSet<E> {
 
+	public UmlgQualifiedSetImpl(UmlgNode owner, PropertyTree propertyTree) {
+		super(owner, propertyTree);
+	}
+
 	public UmlgQualifiedSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 	}

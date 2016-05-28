@@ -50,9 +50,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         addInitVariables(annotatedClass, clazz);
         addDelete(annotatedClass, clazz);
         addGetQualifiedName(annotatedClass, clazz);
-//        if (!clazz.isAbstract()) {
-//            addEdgeToMetaNode(annotatedClass, clazz);
-//        }
+
         addAllInstances(annotatedClass, clazz);
         addAllInstancesWithFilter(annotatedClass, clazz);
         addConstraints(annotatedClass, clazz);
@@ -73,6 +71,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         copyOnePrimitivePropertiesToEdge.addToParameters(new OJParameter("edge", UmlgGenerationUtil.edgePathName));
         annotatedClass.addToOperations(copyOnePrimitivePropertiesToEdge);
     }
+
 
     // TODO turn into proper value
     private void addDefaultSerialization(OJAnnotatedClass annotatedClass) {
@@ -137,6 +136,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
             if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !(pWrap.isRefined()) &&
                     (!(classifier instanceof Enumeration && pWrap.getType() instanceof DataType))) {
                 OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(classifier));
+                annotatedClass.addToImports(UmlgGenerationUtil.PropertyTree);
                 statement.setName(pWrap.fieldname());
                 initialiseProperties.getBody().addToStatements(statement);
                 if (pWrap.isOne() && pWrap.isBoolean()) {
@@ -149,7 +149,8 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
                 if (pWrap.isMemberOfAssociationClass()) {
                     //Initialize the collection to the association class
-                    statement = new OJSimpleStatement("this." + pWrap.getAssociationClassFakePropertyName() + " = " + pWrap.javaDefaultInitialisationForAssociationClass(classifier));
+                    statement = new OJSimpleStatement(
+                            "this." + pWrap.getAssociationClassFakePropertyName() + " = " + pWrap.javaDefaultInitialisationForAssociationClass(classifier));
                     statement.setName(pWrap.getAssociationClassFakePropertyName());
                     initialiseProperties.getBody().addToStatements(statement);
                     annotatedClass.addToImports(UmlgPropertyOperations.getDefaultTinkerCollectionForAssociationClass(pWrap.getProperty()));
@@ -167,6 +168,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
                 statement.setName(pWrap.fieldname());
                 initialiseProperties.getBody().addToStatements(statement);
                 annotatedClass.addToImports(UmlgPropertyOperations.getDefaultTinkerCollection(memberEnd, true));
+                annotatedClass.addToImports(UmlgGenerationUtil.PropertyTree);
             }
         }
     }

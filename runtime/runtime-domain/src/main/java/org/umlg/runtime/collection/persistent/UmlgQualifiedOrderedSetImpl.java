@@ -11,6 +11,10 @@ import java.util.Spliterators;
 
 public class UmlgQualifiedOrderedSetImpl<E> extends UmlgBaseOrderedSet<E> implements UmlgQualifiedOrderedSet<E> {
 
+    public UmlgQualifiedOrderedSetImpl(UmlgNode owner, PropertyTree propertyTree) {
+        super(owner, propertyTree);
+    }
+
     @SuppressWarnings("unchecked")
     public UmlgQualifiedOrderedSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);

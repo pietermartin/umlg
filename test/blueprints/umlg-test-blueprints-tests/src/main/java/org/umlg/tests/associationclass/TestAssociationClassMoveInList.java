@@ -29,7 +29,7 @@ public class TestAssociationClassMoveInList extends BaseLocalDbTest {
         associationClass2_1.reload();
         associationClassAC.reload();
         Assert.assertEquals(1, associationClass1_1.getAssociationclass2().size());
-        Assert.assertEquals(1, associationClass1_1.getAssociationClassAC().size());
+        Assert.assertEquals(1, associationClass1_1.getAssociationClassAC_associationclass2().size());
     }
 
     @Test
@@ -80,26 +80,31 @@ public class TestAssociationClassMoveInList extends BaseLocalDbTest {
 
         AssociationClass4 associationClass4_1 = new AssociationClass4();
         associationClass4_1.setName("associationClass4_1");
+
         AssociationClassAC2 associationClassAC2_1 = new AssociationClassAC2();
         associationClassAC2_1.setName("associationClassAC2_1");
 
         AssociationClass4 associationClass4_2 = new AssociationClass4();
         associationClass4_2.setName("associationClass4_2");
+
         AssociationClassAC2 associationClassAC2_2 = new AssociationClassAC2();
         associationClassAC2_2.setName("associationClassAC2_2");
 
         AssociationClass4 associationClass4_3 = new AssociationClass4();
         associationClass4_3.setName("associationClass4_3");
+
         AssociationClassAC2 associationClassAC2_3 = new AssociationClassAC2();
         associationClassAC2_3.setName("associationClassAC2_3");
 
         AssociationClass4 associationClass4_4 = new AssociationClass4();
         associationClass4_4.setName("associationClass4_4");
+
         AssociationClassAC2 associationClassAC2_4 = new AssociationClassAC2();
         associationClassAC2_4.setName("associationClassAC2_4");
 
         AssociationClass4 associationClass4_5 = new AssociationClass4();
         associationClass4_5.setName("associationClass4_5");
+
         AssociationClassAC2 associationClassAC2_5 = new AssociationClassAC2();
         associationClassAC2_5.setName("associationClassAC2_5");
 

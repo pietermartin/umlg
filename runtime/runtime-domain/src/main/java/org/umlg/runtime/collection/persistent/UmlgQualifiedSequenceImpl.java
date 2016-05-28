@@ -9,6 +9,10 @@ import java.util.Collection;
 
 public class UmlgQualifiedSequenceImpl<E> extends BaseSequence<E> implements UmlgQualifiedSequence<E> {
 
+	public UmlgQualifiedSequenceImpl(UmlgNode owner, PropertyTree propertyTree) {
+		super(owner, propertyTree);
+	}
+
 	public UmlgQualifiedSequenceImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
     }

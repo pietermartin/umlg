@@ -1,10 +1,5 @@
 package org.umlg.javageneration.visitor.clazz;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Property;
@@ -21,6 +16,10 @@ import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.util.UmlgAssociationClassOperations;
 import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.validation.Validation;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public class RuntimePropertyImplementor {
 
@@ -299,8 +298,10 @@ public class RuntimePropertyImplementor {
                 addEnumLiteral(
                         false,
                         pWrap.isMemberOfAssociationClass(),
-                        pWrap.isMemberOfAssociationClass() ? pWrap.getAssociationClassFakePropertyName() : null,
-                        pWrap.isMemberOfAssociationClass() ? new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName() : null,
+//                        pWrap.isMemberOfAssociationClass() ? pWrap.getAssociationClassFakePropertyName() : null,
+//                        pWrap.isMemberOfAssociationClass() ? new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName() : null,
+                        pWrap.isMemberOfAssociationClass() ? pWrap.getAssociationClassName() : null,
+                        pWrap.isMemberOfAssociationClass() ? new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassName() : null,
                         false,
                         false,
                         ojEnum,
@@ -347,8 +348,10 @@ public class RuntimePropertyImplementor {
                     addEnumLiteral(
                             true,
                             false,
-                            pWrap.getAssociationClassFakePropertyName(),
-                            new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName(),
+//                            pWrap.getAssociationClassFakePropertyName(),
+//                            new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName(),
+                            pWrap.getAssociationClassName(),
+                            new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassName(),
                             true,
                             false,
                             ojEnum,
@@ -402,8 +405,10 @@ public class RuntimePropertyImplementor {
                 addEnumLiteral(
                         true,
                         false,
-                        pWrap.getAssociationClassFakePropertyName(),
-                        new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName(),
+//                        pWrap.getAssociationClassFakePropertyName(),
+//                        new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName(),
+                        pWrap.getAssociationClassName(),
+                        new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassName(),
                         false,
                         false,
                         ojEnum,
@@ -419,7 +424,8 @@ public class RuntimePropertyImplementor {
                         pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
                         false/*derived*/,
                         true,/*navigable*/
-                        UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_AC",
+                        UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_" + pWrap.getName() + "_AC",
+//                        UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_AC",
                         pWrap.javaBaseTypePath().getTypeName(),
                         pWrap.isChangedListener());
             }

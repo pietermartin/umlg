@@ -3,16 +3,15 @@ package org.umlg.javageneration.visitor.clazz;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
 import org.umlg.framework.VisitSubclasses;
+import org.umlg.framework.Visitor;
+import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.framework.Visitor;
-import org.umlg.generation.Workspace;
-import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.UmlgAssociationClassOperations;
-import org.umlg.javageneration.util.UmlgGenerationUtil;
-import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.*;
 import org.umlg.javageneration.visitor.BaseVisitor;
+
+import java.util.List;
 
 public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implements Visitor<Classifier> {
 
@@ -34,6 +33,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         if (!(classifier instanceof Enumeration)) {
             addInitialiseProperty(annotatedClass, classifier);
             addInternalInverseAdder(annotatedClass, (Class) classifier);
+            addZInternalCollectionAdder(annotatedClass, (Class) classifier);
             if (UmlgClassOperations.isAssociationClass((Class) classifier)) {
                 addInternalAdder(annotatedClass, (AssociationClass) classifier);
             }
@@ -55,6 +55,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
     @Override
     public void visitAfter(Classifier clazz) {
     }
+
 
     private void addInternalAdder(OJAnnotatedClass annotatedClass, AssociationClass associationClass) {
         OJAnnotatedOperation initialiseProperty = new OJAnnotatedOperation("internalAdder");
@@ -193,6 +194,80 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         }
     }
 
+    private void addZInternalCollectionAdder(OJAnnotatedClass annotatedClass, Class clazz) {
+        OJAnnotatedOperation z_addToInternalCollection= new OJAnnotatedOperation("z_addToInternalCollection");
+        UmlgGenerationUtil.addOverrideAnnotation(z_addToInternalCollection);
+        z_addToInternalCollection.addToParameters(new OJParameter("umlgRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName));
+        z_addToInternalCollection.addToParameters(new OJParameter("umlgNode", UmlgGenerationUtil.UMLG_NODE));
+        annotatedClass.addToOperations(z_addToInternalCollection);
+
+        OJField runtimeProperty = new OJField("runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(clazz)));
+        if (!clazz.getGeneralizations().isEmpty()) {
+
+            OJSimpleStatement ojSimpleStatement = new OJSimpleStatement();
+            ojSimpleStatement.setExpression("super.z_addToInternalCollection(umlgRuntimeProperty, umlgNode)");
+            z_addToInternalCollection.getBody().addToStatements(ojSimpleStatement);
+
+        }
+        z_addToInternalCollection.getBody().addToLocals(runtimeProperty);
+
+        OJSimpleStatement ojSimpleStatement = new OJSimpleStatement();
+        ojSimpleStatement.setExpression("runtimeProperty = " + "(" + UmlgClassOperations.propertyEnumName(clazz)
+                + ".fromQualifiedName(umlgRuntimeProperty.getQualifiedName()))");
+        z_addToInternalCollection.getBody().addToStatements(ojSimpleStatement);
+
+        OJIfStatement ojIfStatement = new OJIfStatement();
+        ojIfStatement.setCondition("runtimeProperty != null");
+        OJSwitchStatement ojSwitchStatement = new OJSwitchStatement();
+        ojSwitchStatement.setCondition("runtimeProperty");
+
+        for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+//            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !pWrap.isRefined()) {
+            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !pWrap.isEnumeration() && !pWrap.isRefined() && !pWrap.isPrimitive() && !pWrap.isDataType()) {
+                OJSwitchCase ojSwitchCase = new OJSwitchCase();
+                ojSwitchCase.setLabel(pWrap.fieldname());
+                OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".z_internalAdder((" + pWrap.javaBaseTypePath().getLast() + ")umlgNode)");
+                statement.setName(pWrap.fieldname());
+                ojSwitchCase.getBody().addToStatements(statement);
+                annotatedClass.addToImports(pWrap.javaImplTypePath());
+                ojSwitchStatement.addToCases(ojSwitchCase);
+
+                if (pWrap.isMemberOfAssociationClass()) {
+                    ojSwitchCase = new OJSwitchCase();
+                    ojSwitchCase.setLabel(pWrap.getAssociationClassFakePropertyName());
+                    statement = new OJSimpleStatement("this." + pWrap.getAssociationClassFakePropertyName() + ".z_internalAdder((" + pWrap.getAssociationClassPathName().getLast() + ")umlgNode)");
+                    statement.setName(pWrap.fieldname());
+                    ojSwitchCase.getBody().addToStatements(statement);
+                    annotatedClass.addToImports(pWrap.javaImplTypePath());
+                    ojSwitchStatement.addToCases(ojSwitchCase);
+                }
+            }
+        }
+
+        ojIfStatement.addToThenPart(ojSwitchStatement);
+        z_addToInternalCollection.getBody().addToStatements(ojIfStatement);
+
+        if (clazz instanceof AssociationClass) {
+            //Do the property for the association class
+            AssociationClass associationClass = (AssociationClass) clazz;
+            List<Property> memberEnds = associationClass.getMemberEnds();
+            for (Property memberEnd : memberEnds) {
+                PropertyWrapper pWrap = new PropertyWrapper(memberEnd);
+
+                OJSwitchCase ojSwitchCase = new OJSwitchCase();
+                ojSwitchCase.setLabel(pWrap.fieldname());
+
+                OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".z_internalAdder((" + pWrap.javaBaseTypePath().getLast() + ")umlgNode)");
+                statement.setName(pWrap.fieldname());
+                ojSwitchCase.getBody().addToStatements(statement);
+                ojSwitchStatement.addToCases(ojSwitchCase);
+                annotatedClass.addToImports(UmlgPropertyOperations.getDefaultTinkerCollection(memberEnd, true));
+                annotatedClass.addToImports(UmlgGenerationUtil.PropertyTree);
+            }
+        }
+    }
+
     private void addInitialiseProperty(OJAnnotatedClass annotatedClass, Classifier classifier) {
         OJAnnotatedOperation initialiseProperty = new OJAnnotatedOperation(INITIALISE_PROPERTY);
         UmlgGenerationUtil.addOverrideAnnotation(initialiseProperty);
@@ -237,6 +312,26 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
                 ojSwitchStatement.addToCases(ojSwitchCase);
             }
         }
+
+        if (classifier instanceof AssociationClass) {
+            //Do the property for the association class
+            AssociationClass associationClass = (AssociationClass) classifier;
+            List<Property> memberEnds = associationClass.getMemberEnds();
+            for (Property memberEnd : memberEnds) {
+                PropertyWrapper pWrap = new PropertyWrapper(memberEnd);
+
+                OJSwitchCase ojSwitchCase = new OJSwitchCase();
+                ojSwitchCase.setLabel(pWrap.fieldname());
+
+                OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(classifier, true));
+                statement.setName(pWrap.fieldname());
+                ojSwitchCase.getBody().addToStatements(statement);
+                ojSwitchStatement.addToCases(ojSwitchCase);
+                annotatedClass.addToImports(UmlgPropertyOperations.getDefaultTinkerCollection(memberEnd, true));
+                annotatedClass.addToImports(UmlgGenerationUtil.PropertyTree);
+            }
+        }
+
     }
 
     private void addGetQualifiers(OJAnnotatedClass annotatedClass, Class clazz) {
@@ -294,7 +389,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
     private void addGetSize(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation getSize = new OJAnnotatedOperation("getSize");
         UmlgGenerationUtil.addOverrideAnnotation(getSize);
-        getSize.setComment("getSize is called from the BaseCollection.addInternal in order to save the sice of the inverse collection to update the edge's sequence order");
+        getSize.setComment("getSize is called from the BaseCollection.addInternal in order to save the size of the inverse collection to update the edge's sequence order");
         getSize.addParam("inverse", new OJPathName("boolean"));
         getSize.addParam("tumlRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
         getSize.setReturnType(new OJPathName("int"));

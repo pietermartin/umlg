@@ -8,6 +8,9 @@ import java.util.Collection;
 
 public class UmlgOrderedSetImpl<E> extends UmlgBaseOrderedSet<E> implements UmlgOrderedSet<E> {
 
+    public UmlgOrderedSetImpl(UmlgNode owner, PropertyTree propertyTree) {
+        super(owner, propertyTree);
+    }
 
     @SuppressWarnings("unchecked")
     public UmlgOrderedSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
