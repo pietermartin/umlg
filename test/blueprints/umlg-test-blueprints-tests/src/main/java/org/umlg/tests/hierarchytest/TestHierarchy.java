@@ -1,6 +1,5 @@
 package org.umlg.tests.hierarchytest;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
 import org.umlg.hierarchy.Hierarchy;
@@ -72,7 +71,7 @@ public class TestHierarchy extends BaseLocalDbTest {
 		folder1_1_1.setName("folder1_1_1");
 		Folder folder1_2_1 = new Folder(folder1_1);
 		folder1_2_1.setName("folder1_2_1");
-		
+
 		Folder folder2_1 = new Folder(folder2);
 		folder2_1.setName("folder2_1");
 		Folder folder2_2 = new Folder(folder2);
@@ -84,7 +83,7 @@ public class TestHierarchy extends BaseLocalDbTest {
 		folder2_2_1.setName("folder2_2_1");
 
         db.commit();
-		
-		Assert.assertEquals(10, realRootFolder.getAllChildren().size());
+
+		assertEquals(10, realRootFolder.getAllChildren().size());
 	}
 }

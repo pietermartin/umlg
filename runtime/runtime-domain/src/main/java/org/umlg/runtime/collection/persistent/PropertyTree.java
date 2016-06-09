@@ -1,9 +1,11 @@
 package org.umlg.runtime.collection.persistent;
 
+import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.tinkerpop.gremlin.process.traversal.Order;
+import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
-import org.apache.tinkerpop.gremlin.process.traversal.util.TraversalHelper;
+import org.apache.tinkerpop.gremlin.process.traversal.util.EmptyTraversal;
 import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Graph;
@@ -11,9 +13,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.util.PathTree;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.select;
 
@@ -23,9 +23,15 @@ import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.select
  */
 public class PropertyTree {
 
+    //Only the root may have an label
+    private String label;
     private UmlgRuntimeProperty umlgRuntimeProperty;
     private PropertyTree parent;
-    private Set<PropertyTree> children = new HashSet<>();
+    private ListOrderedSet<PropertyTree> children = new ListOrderedSet<>();
+
+    private PropertyTree(String label) {
+        this.label = label;
+    }
 
     private PropertyTree(UmlgRuntimeProperty umlgRuntimeProperty) {
         this.umlgRuntimeProperty = umlgRuntimeProperty;
@@ -35,87 +41,186 @@ public class PropertyTree {
         return new PropertyTree(umlgRuntimeProperty);
     }
 
-    private void addChild(PropertyTree propertyTree) {
+    public static PropertyTree from(String label) {
+        return new PropertyTree(label);
+    }
+
+    public void addChild(PropertyTree propertyTree) {
         this.children.add(propertyTree);
         propertyTree.parent = this;
     }
 
-    public void addChild(UmlgRuntimeProperty umlgRuntimeProperty) {
-        addChild(new PropertyTree(umlgRuntimeProperty));
+    public PropertyTree addChild(UmlgRuntimeProperty umlgRuntimeProperty) {
+        addChild(PropertyTree.from(umlgRuntimeProperty));
+        return this;
     }
 
     public UmlgRuntimeProperty getUmlgRuntimeProperty() {
         return umlgRuntimeProperty;
     }
 
-    public List<PathTree> traversal(Graph graph, Vertex vertex) {
-        GraphTraversal<Vertex, Vertex> traversal = graph.traversal().V(vertex).as("root");
+    public List<PathTree> traversal(Graph graph) {
+        GraphTraversal<Vertex, Vertex> traversal = graph.traversal().V().hasLabel(this.label).as(this.label);
         walk(traversal);
-        applyOrder(traversal);
+//        applyOrder(traversal);
         return PathTree.from(traversal.path());
     }
 
-    private void applyOrder(GraphTraversal<Vertex, Vertex> traversal) {
-        if (this.umlgRuntimeProperty.isOrdered()) {
-            traversal = traversal.order().by(select("e_" + this.umlgRuntimeProperty.getLabel()).by(
-                    this.umlgRuntimeProperty.isControllingSide() ? BaseCollection.IN_EDGE_SEQUENCE_ID : BaseCollection.OUT_EDGE_SEQUENCE_ID
-            ), Order.incr);
-        }
-        for (PropertyTree child : this.children) {
-            child.walk(traversal);
+    public List<PathTree> traversal(Graph graph, Vertex vertex) {
+        PropertyTree rootPropertyTree = PropertyTree.from("Root");
+        rootPropertyTree.addChild(this);
+        GraphTraversal<Vertex, Vertex> traversal = graph.traversal().V(vertex).as("Root");
+        rootPropertyTree.walk(traversal);
+        rootPropertyTree.applyOrder(traversal);
+        return PathTree.from(traversal.path());
+    }
+
+
+    void walk(GraphTraversal<Vertex, Vertex> traversal) {
+        if (!this.children.isEmpty() && childrenAreUnique()) {
+            Traversal<Vertex, Vertex> outInnerTraversal = outInnerTraversal();
+            if (!(outInnerTraversal instanceof EmptyTraversal)) {
+                for (PropertyTree child : children) {
+                    child.walk((GraphTraversal<Vertex, Vertex>) outInnerTraversal);
+                }
+            }
+
+            Traversal<Vertex, Vertex> inInnerTraversal = inInnerTraversal();
+            if (!(inInnerTraversal instanceof EmptyTraversal)) {
+                for (PropertyTree child : children) {
+                    child.walk((GraphTraversal<Vertex, Vertex>) inInnerTraversal);
+                }
+            }
+            if (!(outInnerTraversal instanceof EmptyTraversal) && !(inInnerTraversal instanceof EmptyTraversal)) {
+                GraphTraversal<Vertex, Vertex> tmpOut = traversal.asAdmin().clone().optional(outInnerTraversal);
+                GraphTraversal<Vertex, Vertex> tmpIn = traversal.asAdmin().clone().optional(inInnerTraversal);
+                traversal.union(tmpOut, tmpIn);
+            } else if (!(outInnerTraversal instanceof EmptyTraversal)) {
+                traversal.optional(outInnerTraversal);
+            } else if (!(inInnerTraversal instanceof EmptyTraversal)) {
+                traversal.optional(inInnerTraversal);
+            } else {
+                throw new IllegalStateException();
+            }
         }
     }
 
-    private void walk(GraphTraversal<Vertex, Vertex> traversal) {
-        if (this.children.isEmpty()) {
-            TraversalHelper.insertTraversal(
-                    traversal.asAdmin().getSteps().size() - 1,
-                    internalOptionalTraversal().asAdmin(),
-                    traversal.asAdmin()
-            );
+//    private GraphTraversal<Vertex, Vertex> innerTraversal() {
+//        String[] labels = labels();
+//        Traversal<Vertex, Vertex> innerTraversal;
+//        if (labels.length == 1) {
+//            innerTraversal =  __.<Vertex>toE(this.direction(), labels).as("e_" + labels[0]).<Edge>otherV();
+//        } else {
+//            String[] edgeLabels = Arrays.copyOfRange(labels, 1, labels.length);
+//            for (int i = 0; i < edgeLabels.length; i++) {
+//                edgeLabels[i] = "e_" + edgeLabels[i];
+//            }
+//            innerTraversal =   __.<Vertex>toE(this.direction(), labels).as("e_" + labels[0], edgeLabels).<Edge>otherV();
+//        }
+//        return (GraphTraversal<Vertex, Vertex>) innerTraversal;
+//    }
+
+    private Traversal<Vertex, Vertex> outInnerTraversal() {
+        String[] labels = outLabels();
+        Traversal<Vertex, Vertex> innerTraversal;
+        if (labels.length == 1) {
+            innerTraversal =  __.<Vertex>toE(Direction.OUT, labels).as("e_" + labels[0]).<Edge>otherV();
+        } else if (labels.length > 1) {
+            String[] edgeLabels = Arrays.copyOfRange(labels, 1, labels.length);
+            for (int i = 0; i < edgeLabels.length; i++) {
+                edgeLabels[i] = "e_" + edgeLabels[i];
+            }
+            innerTraversal =  __.<Vertex>toE(Direction.OUT, labels).as("e_" + labels[0], edgeLabels).<Edge>otherV();
         } else {
-            traversal = traversal
-                    .optional(
-                            internalOptionalTraversal()
-                    );
+            innerTraversal = EmptyTraversal.instance();
+        }
+        return innerTraversal;
+    }
+
+    private Traversal<Vertex, Vertex> inInnerTraversal() {
+        String[] labels = inLabels();
+        Traversal<Vertex, Vertex> innerTraversal;
+        if (labels.length == 1) {
+            innerTraversal =  __.<Vertex>toE(Direction.IN, labels).as("e_" + labels[0]).<Edge>otherV();
+        } else if (labels.length > 1) {
+            String[] edgeLabels = Arrays.copyOfRange(labels, 1, labels.length);
+            for (int i = 0; i < edgeLabels.length; i++) {
+                edgeLabels[i] = "e_" + edgeLabels[i];
+            }
+            innerTraversal =   __.<Vertex>toE(Direction.IN, labels).as("e_" + labels[0], edgeLabels).<Edge>otherV();
+        } else {
+            innerTraversal = EmptyTraversal.instance();
+        }
+        return innerTraversal;
+    }
+
+
+    private void applyOrder(GraphTraversal<Vertex, Vertex> traversal) {
+        if (this.umlgRuntimeProperty != null && this.umlgRuntimeProperty.isOrdered()) {
+            traversal = traversal.order().by(
+                    select("e_" + this.umlgRuntimeProperty.getLabel()).by(
+                            this.umlgRuntimeProperty.isControllingSide() ? BaseCollection.IN_EDGE_SEQUENCE_ID : BaseCollection.OUT_EDGE_SEQUENCE_ID
+                    ), Order.incr);
         }
         for (PropertyTree child : this.children) {
-            child.walk(traversal);
+            child.applyOrder(traversal);
         }
     }
 
-    private GraphTraversal<Vertex, Vertex> internalOptionalTraversal() {
-        return __
-                .<Vertex>toE(direction(), label()).as("e_" + label())
-                .<Edge>otherV().as(label());
+    private String[] labels() {
+        List<String> result = new ArrayList<>();
+        for (PropertyTree child : this.children) {
+            result.add(child.label());
+        }
+        return result.toArray(new String[result.size()]);
     }
 
+    private String[] outLabels() {
+        List<String> result = new ArrayList<>();
+        for (PropertyTree child : this.children) {
+            if (child.getUmlgRuntimeProperty().isControllingSide()) {
+                result.add(child.label());
+            }
+        }
+        return result.toArray(new String[result.size()]);
+    }
 
-    private Direction direction() {
-        return this.umlgRuntimeProperty.isControllingSide() ? Direction.OUT : Direction.IN;
+    private String[] inLabels() {
+        List<String> result = new ArrayList<>();
+        for (PropertyTree child : this.children) {
+            if (!child.getUmlgRuntimeProperty().isControllingSide()) {
+                result.add(child.label());
+            }
+        }
+        return result.toArray(new String[result.size()]);
+    }
+
+    private boolean childrenAreUnique() {
+        Set<String> labels = new HashSet<>();
+        for (PropertyTree child : children) {
+            if (labels.contains(child.label())) {
+                return false;
+            } else {
+                labels.add(child.label());
+            }
+        }
+        return true;
     }
 
     private String label() {
         return this.umlgRuntimeProperty.getLabel();
     }
 
-    public PropertyTree child(Set<String> labels) {
-        for (String label : labels) {
-            for (PropertyTree child : this.children) {
-                if (child.umlgRuntimeProperty.getLabel().equals(label)) {
-                    return child;
-                }
-            }
-        }
-        return null;
-    }
-
-    public Set<PropertyTree> getChildren() {
-        return children;
+    public ListOrderedSet<PropertyTree> getChildren() {
+        return this.children;
     }
 
     @Override
     public String toString() {
-        return this.umlgRuntimeProperty.getLabel();
+        if (this.umlgRuntimeProperty == null) {
+            return "Root " + label;
+        } else {
+            return this.umlgRuntimeProperty.getLabel();
+        }
     }
 }

@@ -8,8 +8,10 @@ import org.apache.tinkerpop.gremlin.structure.*;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
+import org.umlg.runtime.collection.persistent.PropertyTree;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
+import org.umlg.runtime.util.PathTree;
 import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.sqlg.structure.RecordId;
 import org.umlg.sqlg.structure.SqlgGraph;
@@ -274,6 +276,20 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         Stream<PersistentObject> targetStream = StreamSupport.stream(iterable.spliterator(), false)
                 .map(v -> UMLG.get().getEntity(v));
         List<PersistentObject> result = targetStream.collect(Collectors.toList());
+        return result;
+    }
+
+    @Override
+    public List<PersistentObject> get(PropertyTree propertyTree) {
+        List<PathTree> pathTrees = propertyTree.traversal(UMLG.get().getUnderlyingGraph());
+        List<PersistentObject> result = new ArrayList<>();
+        for (PathTree pathTree : pathTrees) {
+            try {
+                result.add(pathTree.loadUmlgNodes(propertyTree.getChildren()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
         return result;
     }
 

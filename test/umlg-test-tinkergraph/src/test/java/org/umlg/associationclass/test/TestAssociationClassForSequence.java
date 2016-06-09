@@ -48,10 +48,10 @@ public class TestAssociationClassForSequence extends BaseLocalDbTest {
         Assert.assertEquals("projectList3", human.getProjectlist().get(2).getName());
         Assert.assertEquals("projectList4", human.getProjectlist().get(3).getName());
 
-        Assert.assertEquals(new Integer(1), human.getAssociationClassSequenceTest().get(0).getWeight());
-        Assert.assertEquals(new Integer(2), human.getAssociationClassSequenceTest().get(1).getWeight());
-        Assert.assertEquals(new Integer(3), human.getAssociationClassSequenceTest().get(2).getWeight());
-        Assert.assertEquals(new Integer(4), human.getAssociationClassSequenceTest().get(3).getWeight());
+        Assert.assertEquals(new Integer(1), human.getAssociationClassSequenceTest_projectlist().get(0).getWeight());
+        Assert.assertEquals(new Integer(2), human.getAssociationClassSequenceTest_projectlist().get(1).getWeight());
+        Assert.assertEquals(new Integer(3), human.getAssociationClassSequenceTest_projectlist().get(2).getWeight());
+        Assert.assertEquals(new Integer(4), human.getAssociationClassSequenceTest_projectlist().get(3).getWeight());
 
     }
 
@@ -87,8 +87,8 @@ public class TestAssociationClassForSequence extends BaseLocalDbTest {
 
         human = new Human(human.getVertex());
         Assert.assertEquals(2, human.getProjectlist().size());
-        Assert.assertEquals(2, human.getAssociationClassSequenceTest().size());
-        Assert.assertEquals(new Integer(2), human.getAssociationClassSequenceTest().get(0).getWeight());
+        Assert.assertEquals(2, human.getAssociationClassSequenceTest_projectlist().size());
+        Assert.assertEquals(new Integer(2), human.getAssociationClassSequenceTest_projectlist().get(0).getWeight());
 
     }
 
@@ -124,9 +124,9 @@ public class TestAssociationClassForSequence extends BaseLocalDbTest {
         Assert.assertEquals(projectList3, human.getProjectlist().get(2));
 
         human.reload();
-        Assert.assertEquals(associationClassSequence1, human.getAssociationClassSequenceTest().get(0));
-        Assert.assertEquals(associationClassSequence2, human.getAssociationClassSequenceTest().get(1));
-        Assert.assertEquals(associationClassSequence3, human.getAssociationClassSequenceTest().get(2));
+        Assert.assertEquals(associationClassSequence1, human.getAssociationClassSequenceTest_projectlist().get(0));
+        Assert.assertEquals(associationClassSequence2, human.getAssociationClassSequenceTest_projectlist().get(1));
+        Assert.assertEquals(associationClassSequence3, human.getAssociationClassSequenceTest_projectlist().get(2));
 
         AssociationClassSequenceTest associationClassSequence4 = new AssociationClassSequenceTest(true);
         associationClassSequence4.setWeight(4);
@@ -142,10 +142,10 @@ public class TestAssociationClassForSequence extends BaseLocalDbTest {
         Assert.assertEquals(projectList4, human.getProjectlist().get(1));
 
         human.reload();
-        Assert.assertEquals(associationClassSequence1, human.getAssociationClassSequenceTest().get(0));
-        Assert.assertEquals(associationClassSequence2, human.getAssociationClassSequenceTest().get(2));
-        Assert.assertEquals(associationClassSequence3, human.getAssociationClassSequenceTest().get(3));
-        Assert.assertEquals(associationClassSequence4, human.getAssociationClassSequenceTest().get(1));
+        Assert.assertEquals(associationClassSequence1, human.getAssociationClassSequenceTest_projectlist().get(0));
+        Assert.assertEquals(associationClassSequence2, human.getAssociationClassSequenceTest_projectlist().get(2));
+        Assert.assertEquals(associationClassSequence3, human.getAssociationClassSequenceTest_projectlist().get(3));
+        Assert.assertEquals(associationClassSequence4, human.getAssociationClassSequenceTest_projectlist().get(1));
     }
 
 }

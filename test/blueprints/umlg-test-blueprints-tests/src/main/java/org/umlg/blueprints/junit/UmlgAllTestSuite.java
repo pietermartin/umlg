@@ -7,10 +7,7 @@ import org.umlg.meta.TestMetaClasses;
 import org.umlg.tests.allinstances.AllInstancesTest;
 import org.umlg.tests.allinstances.TestAllInstancesOnAbstractClass;
 import org.umlg.tests.allinstances.TestAllInstancesOnInterface;
-import org.umlg.tests.associationclass.TestAssociationClass;
-import org.umlg.tests.associationclass.TestAssociationClassCopiesOnePrimitivePropertiesToEdge;
-import org.umlg.tests.associationclass.TestAssociationClassInheritance;
-import org.umlg.tests.associationclass.TestAssociationClassMoveInList;
+import org.umlg.tests.associationclass.*;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.batch.TestBatchMode;
 import org.umlg.tests.bulkcollection.TestBulkCollection;
@@ -28,6 +25,8 @@ import org.umlg.tests.deletiontest.DeletionTest;
 import org.umlg.tests.deletiontest.EmbeddedSetDeletionTest;
 import org.umlg.tests.embeddedtest.TestEmbeddedTest;
 import org.umlg.tests.enumeration.*;
+import org.umlg.tests.globalget.TestGlobalGet;
+import org.umlg.tests.globalget.TestGlobalGetOnAssociationClass;
 import org.umlg.tests.hierarchytest.TestHierarchy;
 import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.indexing.TestIndexingDataType;
@@ -154,7 +153,7 @@ import org.umlg.tests.validationtest.TestValidation;
         TestAssociationClassMoveInList.class,
         TestAssociationClass.class,
         //TODO neo4j fails
-//        ManyToManyToSelfSequenceTest.class,
+        ManyToManyToSelfSequenceTest.class,
         TestAssociationToSelf.class,
         TestSortedBy.class,
         TestQualifiedDerivedUnion.class,
@@ -163,7 +162,9 @@ import org.umlg.tests.validationtest.TestValidation;
         TestAssociationClassInheritance.class,
         TestIterator.class,
         EnumerationOperationTest.class,
-        TestOptional.class
+        TestOptional.class,
+        TestGlobalGetOnAssociationClass.class,
+        TestGlobalGet.class
 })
 public class UmlgAllTestSuite {
 }

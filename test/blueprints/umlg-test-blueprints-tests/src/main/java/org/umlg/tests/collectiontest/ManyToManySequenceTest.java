@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.collectiontest.F;
 import org.umlg.collectiontest.G;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 /**
@@ -11,6 +12,26 @@ import org.umlg.runtime.test.BaseLocalDbTest;
  * Time: 7:41 PM
  */
 public class ManyToManySequenceTest extends BaseLocalDbTest {
+
+    @Test
+    public void testRemovingPreviousToLastElementAndInsertingLast() {
+        F f1 = new F();
+        G g1 = new G();
+        G g2 = new G();
+        G g3 = new G();
+        f1.addToG(g1);
+        f1.addToG(g2);
+        f1.addToG(g3);
+        db.commit();
+        f1.removeFromG(g2);
+        f1.addToG(g2);
+        db.commit();
+        f1.reload();
+        UmlgSequence<G> gs  = f1.getG();
+        Assert.assertEquals(g1, gs.get(0));
+        Assert.assertEquals(g3, gs.get(1));
+        Assert.assertEquals(g2, gs.get(2));
+    }
 
     @Test
     public void testManyToManySequence1() {

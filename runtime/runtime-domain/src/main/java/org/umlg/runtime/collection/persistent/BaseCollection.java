@@ -107,11 +107,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     private void loadOnePrimitive() {
-        this.vertex.<E>property(getPersistentName()).ifPresent(
-                value -> {
-                    this.internalCollection.add(value);
-                }
-        );
+        this.vertex.<E>property(getPersistentName()).ifPresent(value -> this.internalCollection.add(value));
     }
 
     private void loadOneEnumeration() {

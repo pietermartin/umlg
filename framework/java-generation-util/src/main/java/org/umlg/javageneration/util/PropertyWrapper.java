@@ -664,11 +664,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         if (!isMemberOfAssociationClass()) {
             throw new IllegalStateException("Can not call getAssociationClassFakePropertyName on a property that does not belong to an AssociationClass!");
         }
-//        if (isRecursive()) {
-            return UmlgClassOperations.getPathName(getAssociationClass()).getLast() + "_" + fieldname();
-//        } else {
-//            return UmlgClassOperations.getPathName(getAssociationClass()).getLast();
-//        }
+        return UmlgClassOperations.getPathName(getAssociationClass()).getLast() + "_" + fieldname();
     }
 
     public String getAssociationClassName() {

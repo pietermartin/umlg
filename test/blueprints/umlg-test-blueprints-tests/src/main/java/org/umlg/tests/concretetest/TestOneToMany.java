@@ -28,6 +28,7 @@ public class TestOneToMany extends BaseLocalDbTest {
 
         god.addToUniverse(universe1);
         db.commit();
+        universe1.reload();
         Assert.assertNotNull(universe1.getGod());
     }
 
@@ -45,7 +46,7 @@ public class TestOneToMany extends BaseLocalDbTest {
         universe1.addToGod(god);
 
         db.commit();
-        Assert.assertEquals(1, god.getUniverse().size());
+        assertEquals(1, god.getUniverse().size());
 
         Universe universe2 = new Universe(true);
         universe2.setName("universe2");
@@ -56,7 +57,7 @@ public class TestOneToMany extends BaseLocalDbTest {
         universe2.addToGod(god);
 
         db.commit();
-        Assert.assertEquals(2, god.getUniverse().size());
+        assertEquals(2, god.getUniverse().size());
 
     }
 
@@ -81,8 +82,8 @@ public class TestOneToMany extends BaseLocalDbTest {
         uni.setName("ddddddd");
         db.commit();
         Assert.assertNotNull(uni.getGod());
-        Assert.assertEquals(1, god.getUniverse().size());
-        Assert.assertEquals(1, god.getAngel().size());
+        assertEquals(1, god.getUniverse().size());
+        assertEquals(1, god.getAngel().size());
         Assert.assertNotNull(angel.getUniverse());
         Assert.assertNotNull(universe1.getAngel());
         Angel angel1 = new Angel(angel.getVertex());
@@ -113,17 +114,17 @@ public class TestOneToMany extends BaseLocalDbTest {
         Time t3 = new Time(st3);
 
         db.commit();
-        Assert.assertEquals(13, countVertices());
-        Assert.assertEquals(13, countEdges());
+        assertEquals(13, countVertices());
+        assertEquals(13, countEdges());
         god.removeFromUniverse(universe1);
         God god2 = new God(true);
         god2.setName("god2");
         universe1.setGod(god2);
         db.commit();
-        Assert.assertEquals(14, countVertices());
-        Assert.assertEquals(14, countEdges());
-        Assert.assertEquals("god2", universe1.getGod().getName());
-        Assert.assertEquals(2, new God(god.getVertex()).getUniverse().size());
+        assertEquals(14, countVertices());
+        assertEquals(14, countEdges());
+        assertEquals("god2", universe1.getGod().getName());
+        assertEquals(2, new God(god.getVertex()).getUniverse().size());
     }
 
     @SuppressWarnings("unused")
@@ -150,12 +151,12 @@ public class TestOneToMany extends BaseLocalDbTest {
         Time t3 = new Time(st3);
 
         db.commit();
-        Assert.assertEquals(3, god.getUniverse().size());
+        assertEquals(3, god.getUniverse().size());
         Universe u = new Universe(UMLG.get().traversal().V(universe1.getVertex().id()).next());
         god.addToUniverse(u);
         db.commit();
         God g = new God(god.getVertex());
-        Assert.assertEquals(3, g.getUniverse().size());
+        assertEquals(3, g.getUniverse().size());
     }
 
     @SuppressWarnings("unused")
@@ -182,12 +183,12 @@ public class TestOneToMany extends BaseLocalDbTest {
         Time t3 = new Time(st3);
 
         db.commit();
-        Assert.assertEquals(3, god.getUniverse().size());
+        assertEquals(3, god.getUniverse().size());
         Universe u = new Universe(UMLG.get().traversal().V(universe1.getVertex().id()).next());
         god.getUniverse().add(u);
         db.commit();
         God g = new God(god.getVertex());
-        Assert.assertEquals(3, g.getUniverse().size());
+        assertEquals(3, g.getUniverse().size());
     }
 
     @SuppressWarnings("unused")
@@ -222,13 +223,13 @@ public class TestOneToMany extends BaseLocalDbTest {
         Time t1_2 = new Time(st1_2);
 
         db.commit();
-        Assert.assertEquals(3, god.getUniverse().size());
+        assertEquals(3, god.getUniverse().size());
         Universe u = new Universe(UMLG.get().traversal().V(universe1.getVertex().id()).next());
         u.clearGod();
         god2.getUniverse().add(u);
         db.commit();
         God g = new God(god.getVertex());
-        Assert.assertEquals(2, g.getUniverse().size());
+        assertEquals(2, g.getUniverse().size());
     }
 
 }

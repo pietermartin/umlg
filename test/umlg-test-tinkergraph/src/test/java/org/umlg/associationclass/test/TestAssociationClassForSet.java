@@ -39,11 +39,11 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         Assert.assertEquals(project, associationClass1.getProjectset());
         Assert.assertEquals(human, associationClass1.getHuman());
 
-        Assert.assertEquals(1, human.getAssociationClassSetTest().size());
-        Assert.assertEquals(new Integer(1), human.getAssociationClassSetTest().iterator().next().getWeight());
-        Assert.assertNotNull(project.getAssociationClassSetTest());
-        Assert.assertTrue(project.getAssociationClassSetTest() instanceof AssociationClassSetTest);
-        Assert.assertEquals(new Integer(1), project.getAssociationClassSetTest().getWeight());
+        Assert.assertEquals(1, human.getAssociationClassSetTest_projectset().size());
+        Assert.assertEquals(new Integer(1), human.getAssociationClassSetTest_projectset().iterator().next().getWeight());
+        Assert.assertNotNull(project.getAssociationClassSetTest_human());
+        Assert.assertTrue(project.getAssociationClassSetTest_human() instanceof AssociationClassSetTest);
+        Assert.assertEquals(new Integer(1), project.getAssociationClassSetTest_human().getWeight());
     }
 
     @Test
@@ -81,15 +81,15 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         Assert.assertEquals(project, associationClass1.getProjectset());
         Assert.assertEquals(human, associationClass1.getHuman());
 
-        Assert.assertEquals(3, human.getAssociationClassSetTest().size());
-        Assert.assertNotNull(project.getAssociationClassSetTest());
-        Assert.assertTrue(project.getAssociationClassSetTest() instanceof AssociationClassSetTest);
-        Assert.assertEquals(new Integer(1), project.getAssociationClassSetTest().getWeight());
+        Assert.assertEquals(3, human.getAssociationClassSetTest_projectset().size());
+        Assert.assertNotNull(project.getAssociationClassSetTest_human());
+        Assert.assertTrue(project.getAssociationClassSetTest_human() instanceof AssociationClassSetTest);
+        Assert.assertEquals(new Integer(1), project.getAssociationClassSetTest_human().getWeight());
 
         boolean found1 = false;
         boolean found2 = false;
         boolean found3 = false;
-        for (AssociationClassSetTest associationClass11 : human.getAssociationClassSetTest()) {
+        for (AssociationClassSetTest associationClass11 : human.getAssociationClassSetTest_projectset()) {
             if (associationClass11.getWeight().equals(1)) {
                 found1 = true;
             } else if (associationClass11.getWeight().equals(2)) {
@@ -145,15 +145,15 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         Assert.assertEquals(project, associationClass1.getProjectset());
         Assert.assertEquals(human, associationClass1.getHuman());
 
-        Assert.assertEquals(3, human.getAssociationClassSetTest().size());
-        Assert.assertNotNull(project.getAssociationClassSetTest());
-        Assert.assertTrue(project.getAssociationClassSetTest() instanceof AssociationClassSetTest);
-        Assert.assertEquals(new Integer(1), project.getAssociationClassSetTest().getWeight());
+        Assert.assertEquals(3, human.getAssociationClassSetTest_projectset().size());
+        Assert.assertNotNull(project.getAssociationClassSetTest_human());
+        Assert.assertTrue(project.getAssociationClassSetTest_human() instanceof AssociationClassSetTest);
+        Assert.assertEquals(new Integer(1), project.getAssociationClassSetTest_human().getWeight());
 
         boolean found1 = false;
         boolean found2 = false;
         boolean found3 = false;
-        for (AssociationClassSetTest associationClass11 : human.getAssociationClassSetTest()) {
+        for (AssociationClassSetTest associationClass11 : human.getAssociationClassSetTest_projectset()) {
             if (associationClass11.getWeight().equals(1)) {
                 found1 = true;
             } else if (associationClass11.getWeight().equals(2)) {
@@ -194,7 +194,7 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         Assert.assertEquals(7, countVertices());
         Assert.assertEquals(10, countEdges());
 
-        human.getAssociationClassSetTest().add(new AssociationClassSetTest(true));
+        human.getAssociationClassSetTest_projectset().add(new AssociationClassSetTest(true));
 
     }
 
@@ -303,8 +303,8 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         human.addToNoncomposite(nonComposite2, acNonComposite2);
         db.commit();
 
-        Assert.assertNotNull(nonComposite2.getACNonComposite());
-        Assert.assertEquals(nonComposite2.getACNonComposite(), acNonComposite2);
+        Assert.assertNotNull(nonComposite2.getACNonComposite_human());
+        Assert.assertEquals(nonComposite2.getACNonComposite_human(), acNonComposite2);
 
         //Another 3 edges for the association
         //another 2 edges to meta
@@ -326,10 +326,10 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         nonComposite2.setHuman(human2, acNonComposite3);
         db.commit();
 
-        Assert.assertNotNull(nonComposite2.getACNonComposite());
+        Assert.assertNotNull(nonComposite2.getACNonComposite_human());
         Assert.assertEquals(nonComposite2.getHuman().getName(), human2.getName());
-        Assert.assertEquals(nonComposite2.getACNonComposite().getName(), acNonComposite3.getName());
-        Assert.assertEquals(nonComposite2.getACNonComposite(), acNonComposite3);
+        Assert.assertEquals(nonComposite2.getACNonComposite_human().getName(), acNonComposite3.getName());
+        Assert.assertEquals(nonComposite2.getACNonComposite_human(), acNonComposite3);
 
         //acNonComposite2 should have been deleted
         Assert.assertEquals(6, countVertices());
@@ -350,14 +350,14 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         //Assert the inverse side has not been loaded from the db nit is in memory
         Assert.assertTrue(human1 == nonComposite1.getHuman());
         Assert.assertTrue(human1 == acNonComposite1.getHuman());
-        Assert.assertTrue(acNonComposite1 == nonComposite1.getACNonComposite());
+        Assert.assertTrue(acNonComposite1 == nonComposite1.getACNonComposite_human());
 
         //Human and NonComposite has edges to root
         //3 edges between Human, NonComposite and ACNonComposite
         //3 edges to meta
         //2 to root
         Assert.assertEquals(5, countEdges());
-        Assert.assertEquals(1, human1.getACNonComposite().size());
+        Assert.assertEquals(1, human1.getACNonComposite_noncomposite().size());
 
         NonComposite nonComposite2 = new NonComposite(true);
         nonComposite2.setName("nonComposite2");
@@ -366,7 +366,7 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         human1.addToNoncomposite(nonComposite2, acNonComposite2);
         db.commit();
 
-        Assert.assertEquals(2, human1.getACNonComposite().size());
+        Assert.assertEquals(2, human1.getACNonComposite_noncomposite().size());
         Assert.assertTrue(human1 == nonComposite1.getHuman());
         Assert.assertTrue(human1 == acNonComposite1.getHuman());
         Assert.assertTrue(human1 == nonComposite2.getHuman());

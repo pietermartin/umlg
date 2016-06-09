@@ -7,6 +7,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgSet;
+import org.umlg.runtime.collection.persistent.PropertyTree;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.notification.NotificationListener;
@@ -79,6 +80,8 @@ public interface UmlgGraph extends Graph {
      * @return The entity of class T with property with indexedKey that has a value of indexValue.
      */
     <T extends PersistentObject> List<T> getFromIndex(String label, String key, Object value);
+
+    <T extends PersistentObject> List<T> get(PropertyTree propertyTree);
 
     /**
      * Execute a query.

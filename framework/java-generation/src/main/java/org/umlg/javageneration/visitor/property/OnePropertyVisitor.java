@@ -152,7 +152,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             ifNotNull.addToThenPart(ojBlock2);
 
             OJIfStatement ifExist = new OJIfStatement("!this." + propertyWrapper.fieldname() + ".isEmpty()");
-            ifExist.addToThenPart("throw new RuntimeException(\"Property " + propertyWrapper.getQualifiedName() + "is a one and already has a value!\")");
+            ifExist.addToThenPart("throw new RuntimeException(\"Property " + propertyWrapper.getQualifiedName() + " is a one and already has a value!\")");
             ojBlock1.addToStatements(ifExist);
 
             if (isAssociationClass || !propertyWrapper.isMemberOfAssociationClass()) {

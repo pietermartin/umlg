@@ -48,10 +48,10 @@ public class TestAssociationClassForOrderedSet extends BaseLocalDbTest {
         Assert.assertEquals("projectOrderedSet3", human.getProjectorderedset().get(2).getName());
         Assert.assertEquals("projectOrderedSet4", human.getProjectorderedset().get(3).getName());
 
-        Assert.assertEquals(new Integer(1), human.getAssociationClassOrderedSetTest().get(0).getWeight());
-        Assert.assertEquals(new Integer(2), human.getAssociationClassOrderedSetTest().get(1).getWeight());
-        Assert.assertEquals(new Integer(3), human.getAssociationClassOrderedSetTest().get(2).getWeight());
-        Assert.assertEquals(new Integer(4), human.getAssociationClassOrderedSetTest().get(3).getWeight());
+        Assert.assertEquals(new Integer(1), human.getAssociationClassOrderedSetTest_projectorderedset().get(0).getWeight());
+        Assert.assertEquals(new Integer(2), human.getAssociationClassOrderedSetTest_projectorderedset().get(1).getWeight());
+        Assert.assertEquals(new Integer(3), human.getAssociationClassOrderedSetTest_projectorderedset().get(2).getWeight());
+        Assert.assertEquals(new Integer(4), human.getAssociationClassOrderedSetTest_projectorderedset().get(3).getWeight());
 
         boolean added = human.getProjectorderedset().add(projectOrderedSet1, associationClassOrderedSet);
         Assert.assertFalse(added);
@@ -93,8 +93,8 @@ public class TestAssociationClassForOrderedSet extends BaseLocalDbTest {
 
         human = new Human(human.getVertex());
         Assert.assertEquals(2, human.getProjectorderedset().size());
-        Assert.assertEquals(2, human.getAssociationClassOrderedSetTest().size());
-        Assert.assertEquals(new Integer(2), human.getAssociationClassOrderedSetTest().get(0).getWeight());
+        Assert.assertEquals(2, human.getAssociationClassOrderedSetTest_projectorderedset().size());
+        Assert.assertEquals(new Integer(2), human.getAssociationClassOrderedSetTest_projectorderedset().get(0).getWeight());
 
     }
 }

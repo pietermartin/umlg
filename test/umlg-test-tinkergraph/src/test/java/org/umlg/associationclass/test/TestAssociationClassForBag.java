@@ -127,7 +127,7 @@ public class TestAssociationClassForBag extends BaseLocalDbTest {
 
         human = new Human(human.getVertex());
         Assert.assertEquals(2, human.getProjectbag().size());
-        Assert.assertEquals(2, human.getAssociationClassBagTest().size());
+        Assert.assertEquals(2, human.getAssociationClassBagTest_projectbag().size());
 
     }
 }

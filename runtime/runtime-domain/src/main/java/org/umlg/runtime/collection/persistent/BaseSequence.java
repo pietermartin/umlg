@@ -58,33 +58,6 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
         }
     }
 
-//    @Override
-//    protected void loadUmlgNodes() {
-//        GraphTraversal<Vertex, Map<String, Element>> traversal = getVerticesWithEdge();
-//        while (traversal.hasNext()) {
-//            final Map<String, Element> bindings = traversal.next();
-//            Edge edge = (Edge) bindings.get("edge");
-//            Vertex vertex = (Vertex) bindings.get("vertex");
-//            E node;
-//            try {
-//                Class<?> c = getClassToInstantiate(vertex);
-//                if (UmlgMetaNode.class.isAssignableFrom(c)) {
-//                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
-//                    node = (E) m.invoke(null);
-//                } else if (UmlgNode.class.isAssignableFrom(c)) {
-//                    node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
-//                    ((UmlgNode) node).setEdge(this.umlgRuntimeProperty, edge);
-//                } else {
-//                    throw new IllegalStateException("Unexpected class: " + c.getName());
-//                }
-//                this.internalCollection.add(node);
-//            } catch (Exception ex) {
-//                throw new RuntimeException(ex);
-//            }
-//        }
-//    }
-
-
     //The list is loaded by the time this is called
     @SuppressWarnings("unchecked")
     protected Edge addToListAtIndex(int indexOf, E e) {
