@@ -15,4 +15,5 @@ framework/generation/.project
 runtime/runtime-domain-sqlg/target
 runtime/runtime-test-sqlg/target
 test/blueprints/umlg-test-sqlg-blueprints/target
+test/blueprints/umlg-test-sqlg-blueprints/src/test/db
 eclipselib
