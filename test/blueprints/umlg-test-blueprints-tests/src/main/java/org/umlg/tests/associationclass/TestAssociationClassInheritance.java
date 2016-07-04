@@ -20,7 +20,6 @@ public class TestAssociationClassInheritance extends BaseLocalDbTest {
 
     @Test
     public void testInheritanceOnAssociationClass() {
-
         Hour hour1 = new Hour();
         hour1.setHour(1);
         ObjectType objectType1 = new ObjectType();
@@ -46,7 +45,6 @@ public class TestAssociationClassInheritance extends BaseLocalDbTest {
             System.out.println(hourMeasurement.getName());
         }
 
-
         assertEquals(2, hour1.getHourMeasurement_objectType().size());
         boolean found1 = false, found2 = false;
         for (HourMeasurement hourMeasurement : hour1.getHourMeasurement_objectType()) {
@@ -60,8 +58,6 @@ public class TestAssociationClassInheritance extends BaseLocalDbTest {
             }
         }
         assertTrue(found1 && found2);
-
-
     }
 
 }

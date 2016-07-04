@@ -1,5 +1,7 @@
 package org.umlg.runtime.adaptor;
 
+import org.umlg.runtime.collection.UmlgCollection;
+import org.umlg.runtime.domain.AssociationClassNode;
 import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.notification.ChangeHolder;
 import org.umlg.runtime.notification.NotificationListener;
@@ -33,6 +35,11 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
                 ((UmlgAdminGraph) UMLG.get()).incrementTransactionCount();
                 List<UmlgNode> entities = TransactionThreadEntityVar.get();
                 for (UmlgNode umlgNode : entities) {
+                    if (umlgNode instanceof AssociationClassNode) {
+                        if (!umlgNode.getVertex().property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID).isPresent()) {
+                            throw new IllegalStateException(String.format("AssociationClass entity %s %s property %s is not set. This happens when the association end is a Set and was already present.", umlgNode.getClass().getSimpleName(), umlgNode.getId(), UmlgCollection.ASSOCIATION_CLASS_EDGE_ID));
+                        }
+                    }
                     List<UmlgConstraintViolation> requiredConstraintViolations = umlgNode.validateMultiplicities();
                     requiredConstraintViolations.addAll(umlgNode.checkClassConstraints());
                     if (!requiredConstraintViolations.isEmpty()) {

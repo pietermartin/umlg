@@ -164,7 +164,8 @@ import org.umlg.tests.validationtest.TestValidation;
         EnumerationOperationTest.class,
         TestOptional.class,
         TestGlobalGetOnAssociationClass.class,
-        TestGlobalGet.class
+        TestGlobalGet.class,
+        TestAssociationClassDuplicates.class
 })
 public class UmlgAllTestSuite {
 }
