@@ -75,38 +75,26 @@ public class TestAssociationClassMoveInList extends BaseLocalDbTest {
 
     @Test
     public void testMoveACForSequence() {
-        AssociationClass3 associationClass3_1 = new AssociationClass3();
-        associationClass3_1.setName("associationClass3_1");
-
-        AssociationClass4 associationClass4_1 = new AssociationClass4();
-        associationClass4_1.setName("associationClass4_1");
-
         AssociationClassAC2 associationClassAC2_1 = new AssociationClassAC2();
         associationClassAC2_1.setName("associationClassAC2_1");
-
-        AssociationClass4 associationClass4_2 = new AssociationClass4();
-        associationClass4_2.setName("associationClass4_2");
-
         AssociationClassAC2 associationClassAC2_2 = new AssociationClassAC2();
         associationClassAC2_2.setName("associationClassAC2_2");
-
-        AssociationClass4 associationClass4_3 = new AssociationClass4();
-        associationClass4_3.setName("associationClass4_3");
-
         AssociationClassAC2 associationClassAC2_3 = new AssociationClassAC2();
         associationClassAC2_3.setName("associationClassAC2_3");
-
-        AssociationClass4 associationClass4_4 = new AssociationClass4();
-        associationClass4_4.setName("associationClass4_4");
-
         AssociationClassAC2 associationClassAC2_4 = new AssociationClassAC2();
         associationClassAC2_4.setName("associationClassAC2_4");
 
-        AssociationClass4 associationClass4_5 = new AssociationClass4();
-        associationClass4_5.setName("associationClass4_5");
+        AssociationClass4 associationClass4_1 = new AssociationClass4();
+        associationClass4_1.setName("associationClass4_1");
+        AssociationClass4 associationClass4_2 = new AssociationClass4();
+        associationClass4_2.setName("associationClass4_2");
+        AssociationClass4 associationClass4_3 = new AssociationClass4();
+        associationClass4_3.setName("associationClass4_3");
+        AssociationClass4 associationClass4_4 = new AssociationClass4();
+        associationClass4_4.setName("associationClass4_4");
 
-        AssociationClassAC2 associationClassAC2_5 = new AssociationClassAC2();
-        associationClassAC2_5.setName("associationClassAC2_5");
+        AssociationClass3 associationClass3_1 = new AssociationClass3();
+        associationClass3_1.setName("associationClass3_1");
 
         associationClass3_1.addToAssociationclass4(associationClass4_1, associationClassAC2_1);
         associationClass3_1.addToAssociationclass4(associationClass4_2, associationClassAC2_2);
