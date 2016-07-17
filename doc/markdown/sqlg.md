@@ -74,7 +74,7 @@ Maven coordinates,
     <dependency>
         <groupId>org.umlg</groupId>
         <artifactId>sqlg-hsqldb</artifactId>
-        <version>1.1.0.RC1</version>
+        <version>1.2.0-SNAPSHOT</version>
     </dependency>
 
 **Postgresql**
@@ -82,7 +82,7 @@ Maven coordinates,
     <dependency>
         <groupId>org.umlg</groupId>
         <artifactId>sqlg-postgres</artifactId>
-        <version>1.1.0.RC1</version>
+        <version>1.2.0-SNAPSHOT</version>
     </dependency>
 
 Sqlg is designed to run as a singleton that can be shared among multiple threads. You can instantiate Sqlg using the standard
@@ -114,11 +114,12 @@ These are,
 * g2
 * readGraph
 * standard
-* subgraph
 * temp
 * temp1
 * temp2
+* subgraph
 * prototype
+* target
 
 <br />
 ###Gremlin Console
