@@ -55,19 +55,6 @@
         <div class="col-md-3" id="leftcol">
             <div class="bs-docs-sidebar hidden-print" role="complementary">
                 <ul class="nav bs-docs-sidebar" id="sidebar">
-                    <li class="active"><a href="#IntroductionID">Introduction</a><ul class="nav">
-<li><a href="#TinkerPopsupportedfeaturesID">TinkerPop supported features</a></li></ul>
-</li><li><a href="#GettingStartedID">Getting Started</a><ul class="nav">
-<li><a href="#MavenID">Maven</a></li><li><a href="#GremlinConsoleID">Gremlin Console</a></li></ul>
-</li><li><a href="#DatatypesID">Data types</a></li><li><a href="#ArchitectureID">Architecture</a><ul class="nav">
-<li><a href="#VertextablesID">Vertex tables</a></li><li><a href="#EdgetablesID">Edge tables</a></li><li><a href="#TinkerPop-modernID">TinkerPop-modern</a></li><li><a href="#NamespacingandSchemasID">Namespacing and Schemas</a></li></ul>
-</li><li><a href="#IndexesID">Indexes</a></li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#GremlinID">Gremlin</a><ul class="nav">
-<li><a href="#PredicatesID">Predicates </a><ul class="nav">
-<li><a href="#ComparepredicateID">Compare predicate</a></li><li><a href="#ContainspredicateID">Contains predicate </a></li><li><a href="#TextpredicateID">Text predicate</a></li><li><a href="#DateTimequeriesID">DateTime queries</a></li></ul>
-</li><li><a href="#OrderID">Order</a></li><li><a href="#RepeatStepID">RepeatStep</a></li></ul>
-</li><li><a href="#BatchmodeID">Batch mode</a><ul class="nav">
-<li><a href="#NormalbatchmodeID">Normal batch mode</a></li><li><a href="#StreamingbatchmodeID">Streaming batch mode</a></li><li><a href="#StreamingwithlockbatchmodeID">Streaming with lock batch mode</a></li></ul>
-</li>
                 </ul>
             </div>
         </div>
@@ -76,18 +63,18 @@
             <p class="pull-right visible-xs">
                 <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
             </p>
-            <!-- Sqlg -->
+<!-- Sqlg -->
 
-<h2 id="IntroductionID">Introduction</h2>
+<h2>Introduction</h2>
 
 <p><strong>Sqlg</strong> is a implementation of <a href="https://github.com/tinkerpop/tinkerpop3">TinkerPop3</a> on a <a href="http://en.wikipedia.org/wiki/Relational_database_management_system">RDBMS</a>.
 Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgresql.org/">Postgresql</a> are supported.</p>
 
 <p>Sqlg has a <a href="https://groups.google.com/forum/?hl=en#!forum/sqlg">Google Group</a>.</p>
 
-<h3 id="TinkerPopsupportedfeaturesID">TinkerPop supported features</h3>
+<h3>TinkerPop supported features</h3>
 
-<p>Sqlg passes TinkerPop's <code class="language-java">StructureStandardSuite</code> and <code class="language-java">ProcessStandardSuite</code> test suites.</p>
+<p>Sqlg passes TinkerPop's <code>StructureStandardSuite</code> and <code>ProcessStandardSuite</code> test suites.</p>
 
 <p>Graph Features <strong>not</strong> implemented.</p>
 
@@ -147,11 +134,11 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 <li>UniformListValues</li>
 </ul>
 
-<h2 id="GettingStartedID">Getting Started</h2>
+<h2>Getting Started</h2>
 
 <p><br /></p>
 
-<h3 id="MavenID">Maven</h3>
+<h3>Maven</h3>
 
 <p><br /></p>
 
@@ -159,19 +146,19 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 
 <p><strong>HSQLDB</strong></p>
 
-<pre class="prettyprint"><code class="language-java">&lt;dependency&gt;
+<pre><code>&lt;dependency&gt;
     &lt;groupId&gt;org.umlg&lt;/groupId&gt;
     &lt;artifactId&gt;sqlg-hsqldb&lt;/artifactId&gt;
-    &lt;version&gt;1.1.0-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.2.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 
 <p><strong>Postgresql</strong></p>
 
-<pre class="prettyprint"><code class="language-java">&lt;dependency&gt;
+<pre><code>&lt;dependency&gt;
     &lt;groupId&gt;org.umlg&lt;/groupId&gt;
     &lt;artifactId&gt;sqlg-postgres&lt;/artifactId&gt;
-    &lt;version&gt;1.1.0-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.2.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 
@@ -179,22 +166,22 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 tinkerpop3 static constructors.</p>
 
 <ul>
-<li><code class="language-java">SqlgGraph.open(final Configuration configuration)</code></li>
-<li><code class="language-java">SqlgGraph.open(final String pathToSqlgProperties)</code></li>
+<li><code>SqlgGraph.open(final Configuration configuration)</code></li>
+<li><code>SqlgGraph.open(final String pathToSqlgProperties)</code></li>
 </ul>
 
 <p>The configuration object requires the following properties.</p>
 
 <p><strong>HSQLDB</strong></p>
 
-<pre class="prettyprint"><code class="language-java">jdbc.url=jdbc:hsqldb:file:/tmp/sqlg
+<pre><code>jdbc.url=jdbc:hsqldb:file:/tmp/sqlg
 jdbc.username=SA
 jdbc.password=
 </code></pre>
 
 <p><strong>Postgresql</strong></p>
 
-<pre class="prettyprint"><code class="language-java">jdbc.url=jdbc:postgresql://localhost:5432/yourdb
+<pre><code>jdbc.url=jdbc:postgresql://localhost:5432/yourdb
 jdbc.username=postgres
 jdbc.password=******
 </code></pre>
@@ -209,22 +196,23 @@ These are,</p>
 <li>g2</li>
 <li>readGraph</li>
 <li>standard</li>
-<li>subgraph</li>
 <li>temp</li>
 <li>temp1</li>
 <li>temp2</li>
+<li>subgraph</li>
 <li>prototype</li>
+<li>target</li>
 </ul>
 
 <p><br /></p>
 
-<h3 id="GremlinConsoleID">Gremlin Console</h3>
+<h3>Gremlin Console</h3>
 
 <p><br /></p>
 
 <p><strong>HSQLDB</strong></p>
 
-<pre class="prettyprint"><code class="language-java">[pieter@pieter-laptop bin]$ ./gremlin.sh
+<pre><code>[pieter@pieter-laptop bin]$ ./gremlin.sh
 
          \,,,/
          (o o)
@@ -232,11 +220,11 @@ These are,</p>
 plugin activated: tinkerpop.server
 plugin activated: tinkerpop.utilities
 plugin activated: tinkerpop.tinkergraph
-gremlin&gt; :install org.umlg sqlg-hsqldb 1.1.0-SNAPSHOT
+gremlin&gt; :install org.umlg sqlg-hsqldb 1.2.0-SNAPSHOT
 log4j:WARN No appenders could be found for logger (org.apache.tinkerpop.gremlin.groovy.util.DependencyGrabber).
 log4j:WARN Please initialize the log4j system properly.
 log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
-==&gt;Loaded: [org.umlg, sqlg-hsqldb, 1.1.0-SNAPSHOT]
+==&gt;Loaded: [org.umlg, sqlg-hsqldb, 1.2.0-SNAPSHOT]
 gremlin&gt; :plugin list
 ==&gt;tinkerpop.server[active]
 ==&gt;tinkerpop.gephi
@@ -250,8 +238,8 @@ gremlin&gt; :plugin use sqlg.hsqldb
 gremlin&gt; graph = SqlgGraph.open('pathTo/sqlg.properties')
 ==&gt;sqlggraph[SqlGraph]
 gremlin&gt; g = graph.traversal()
-==&gt;graphtraversalsource[sqlggraph[SqlGraph], standard]
-gremlin&gt; graph.io(graphml()).readGraph('../data/grateful-dead.xml')
+==&gt;sqlggraphtraversalsource[sqlggraph[SqlGraph] (jdbc:hsqldb:file:src/test/db/sqlgraphdb), standard]
+gremlin&gt; graph.io(graphml()).readGraph('pathTo/grateful-dead.xml')
 ==&gt;null
 gremlin&gt; g.V().count()
 ==&gt;808
@@ -260,17 +248,17 @@ gremlin&gt;
 
 <p><strong>Postgresql</strong></p>
 
-<pre class="prettyprint"><code class="language-java">         \,,,/
+<pre><code>         \,,,/
          (o o)
 -----oOOo-(3)-oOOo-----
 plugin activated: tinkerpop.server
 plugin activated: tinkerpop.utilities
 plugin activated: tinkerpop.tinkergraph
-gremlin&gt; :install org.umlg sqlg-postgres 1.1.0-SNAPSHOT
+gremlin&gt; :install org.umlg sqlg-postgres 1.2.0-SNAPSHOT
 log4j:WARN No appenders could be found for logger (org.apache.tinkerpop.gremlin.groovy.util.DependencyGrabber).
 log4j:WARN Please initialize the log4j system properly.
 log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
-==&gt;Loaded: [org.umlg, sqlg-postgres, 1.1.0-SNAPSHOT]
+==&gt;Loaded: [org.umlg, sqlg-postgres, 1.2.0-SNAPSHOT]
 gremlin&gt; :plugin list
 ==&gt;tinkerpop.server[active]
 ==&gt;tinkerpop.gephi
@@ -284,8 +272,8 @@ gremlin&gt; :plugin use sqlg.postgres
 gremlin&gt; graph = SqlgGraph.open('pathTo/sqlg.properties')
 ==&gt;sqlggraph[SqlGraph]
 gremlin&gt; g = graph.traversal()
-==&gt;graphtraversalsource[sqlggraph[SqlGraph], standard]
-gremlin&gt; graph.io(graphml()).readGraph('../data/grateful-dead.xml')
+==&gt;sqlggraphtraversalsource[sqlggraph[SqlGraph] (jdbc:postgresql://localhost:5432/sqlgraphdb), standard]
+gremlin&gt; graph.io(graphml()).readGraph('pathTo/grateful-dead.xml')
 ==&gt;null
 gremlin&gt; g.V().count()
 ==&gt;808
@@ -294,7 +282,7 @@ gremlin&gt;
 
 <p><br /></p>
 
-<h2 id="DatatypesID">Data types</h2>
+<h2>Data types</h2>
 
 <p><br /></p>
 
@@ -405,6 +393,51 @@ gremlin&gt;
             <td>TIME WITH TIME ZONE</td>
         </tr>
         <tr>
+            <td>java.time.ZonedDateTime</td>
+            <td>TIMESTAMP WITH TIME ZONE, LONGVARCHAR</td>
+            <td>TIMESTAMP WITH TIME ZONE, TEXT</td>
+        </tr>
+        <tr>
+            <td>java.time.Period</td>
+            <td>INTEGER, INTEGER, INTEGER</td>
+            <td>INTEGER, INTEGER, INTEGER</td>
+        </tr>
+        <tr>
+            <td>java.time.Duration</td>
+            <td>BIGINT, INTEGER</td>
+            <td>BIGINT, INTEGER</td>
+        </tr>
+        <tr>
+            <td>java.time.LocalDateTime[]</td>
+            <td>TIMESTAMP WITH TIME ZONE ARRAY DEFAULT ARRAY[]</td>
+            <td>TIMESTAMP WITH TIME ZONE[]</td>
+        </tr>
+        <tr>
+            <td>java.time.LocalDate[]</td>
+            <td>DATE ARRAY DEFAULT ARRAY[]</td>
+            <td>DATE[]</td>
+        </tr>
+        <tr>
+            <td>java.time.LocalTime[]</td>
+            <td>TIME WITH TIME ZONE ARRAY DEFAULT ARRAY[]</td>
+            <td>TIME WITH TIME ZONE[]</td>
+        </tr>
+        <tr>
+            <td>java.time.ZonedDateTime[]</td>
+            <td>TIMESTAMP WITH TIME ZONE ARRAY DEFAULT ARRAY[], LONGVARCHAR ARRAY DEFAULT ARRAY[]</td>
+            <td>TIMESTAMP WITH TIME ZONE[], TEXT[]</td>
+        </tr>
+        <tr>
+            <td>java.time.Period[]</td>
+            <td>INTEGER ARRAY DEFAULT ARRAY[], INTEGER ARRAY DEFAULT ARRAY[], INTEGER ARRAY DEFAULT ARRAY[]</td>
+            <td>INTEGER[], INTEGER[], INTEGER[]</td>
+        </tr>
+        <tr>
+            <td>java.time.Duration[]</td>
+            <td>BIGINT ARRAY DEFAULT ARRAY[], INTEGER ARRAY DEFAULT ARRAY[]</td>
+            <td>BIGINT[], INTEGER[]</td>
+        </tr>
+        <tr>
             <td>com.fasterxml.jackson.databind.JsonNode</td>
             <td><strong>Not supported</strong></td>
             <td>JSONB</td>
@@ -413,30 +446,30 @@ gremlin&gt;
 </table>
 </div>
 
-<p><strong>NOTE</strong> <code class="language-java">java.time.LocalTime</code> drops the nano second precision.</p>
+<p><strong>NOTE</strong> <code>java.time.LocalTime</code> drops the nano second precision.</p>
 
 <p><br /></p>
 
-<h2 id="ArchitectureID">Architecture</h2>
+<h2>Architecture</h2>
 
 <p><br /></p>
 
 <p>With the coming of vertex labels to TinkerPop3 the mapping of TinkerPop's graph semantics to that of a RDBMS became natural and useful.</p>
 
-<h3 id="VertextablesID">Vertex tables</h3>
+<h3>Vertex tables</h3>
 
-<p>Every unique vertex label maps to a table. Vertex tables are prefixed with a <code class="language-java">V_</code>. i.e. <code class="language-java">V_Person</code>. The vertex table
+<p>Every unique vertex label maps to a table. Vertex tables are prefixed with a <code>V_</code>. i.e. <code>V_Person</code>. The vertex table
 stores the vertex's properties.</p>
 
-<h3 id="EdgetablesID">Edge tables</h3>
+<h3>Edge tables</h3>
 
-<p>Every unique edge label maps to a table. Edge tables are prefixed with a <code class="language-java">E_</code>. i.e. <code class="language-java">E_friend</code>. The edge table stores
-each edge's adjacent vertex ids and the edge properties. The column corresponding to each adjacent vertex id (<code class="language-java">IN</code> and <code class="language-java">OUT</code>)
+<p>Every unique edge label maps to a table. Edge tables are prefixed with a <code>E_</code>. i.e. <code>E_friend</code>. The edge table stores
+each edge's adjacent vertex ids and the edge properties. The column corresponding to each adjacent vertex id (<code>IN</code> and <code>OUT</code>)
 has a foreign key to the adjacent vertex's table.</p>
 
-<p>From a rdbms' perspective each edge table is a classic <code class="language-java">many to many</code> join table between vertices.</p>
+<p>From a rdbms' perspective each edge table is a classic <code>many to many</code> join table between vertices.</p>
 
-<h3 id="TinkerPop-modernID">TinkerPop-modern</h3>
+<h3>TinkerPop-modern</h3>
 
 <p>Taken from <a href="http://tinkerpop.incubator.apache.org/docs/3.1.0-incubating/#intro">TinkerPop</a></p>
 
@@ -462,24 +495,24 @@ has a foreign key to the adjacent vertex's table.</p>
 
 <p><img src="images/sqlg/E_created.png" alt="image of tinkerpop-classic" title="" /></p>
 
-<h3 id="NamespacingandSchemasID">Namespacing and Schemas</h3>
+<h3>Namespacing and Schemas</h3>
 
-<p>Many RDBMS databases have the notion of a <code class="language-java">schema</code> as a namespace for tables. Sqlg supports schemas
-for vertex labels. Distinct schemas for edge tables are unnecessary as edge tables are created in the schema of the adjacent <code class="language-java">out</code> vertex.
+<p>Many RDBMS databases have the notion of a <code>schema</code> as a namespace for tables. Sqlg supports schemas
+for vertex labels. Distinct schemas for edge tables are unnecessary as edge tables are created in the schema of the adjacent <code>out</code> vertex.
 By default schemas for vertex tables go into the underlying databases' default schema. For Postgresql and hsqldb this
-is the <code class="language-java">public</code> schema.</p>
+is the <code>public</code> schema.</p>
 
-<p>To specify the schema for a label Sqlg uses the dot <code class="language-java">.</code> notation.</p>
+<p>To specify the schema for a label Sqlg uses the dot <code>.</code> notation.</p>
 
-<pre class="prettyprint"><code class="language-java">Vertex john = this.sqlgGraph.addVertex(T.label, "manager", "name", "john");
+<pre><code>Vertex john = this.sqlgGraph.addVertex(T.label, "manager", "name", "john");
 Vertex palace1 = this.sqlgGraph.addVertex(T.label, "continent.house", "name", "palace1");
 Vertex corrola = this.sqlgGraph.addVertex(T.label, "fleet.car", "model", "corrola");
 palace1.addEdge("managedBy", john);
 corrola.addEdge("owner", john);
 </code></pre>
 
-<p>This will create a table <code class="language-java">V_manager</code> in the <code class="language-java">public</code> (default) schema. Table <code class="language-java">V_house</code> is in a <code class="language-java">continent</code> schema and table <code class="language-java">V_car</code>
-is in a <code class="language-java">fleet</code> schema. For the edges a <code class="language-java">E_managedBy</code> table is created in the <code class="language-java">continent</code> schema and a <code class="language-java">E_owner</code> table in the <code class="language-java">fleet</code> schema.</p>
+<p>This will create a table <code>V_manager</code> in the <code>public</code> (default) schema. Table <code>V_house</code> is in a <code>continent</code> schema and table <code>V_car</code>
+is in a <code>fleet</code> schema. For the edges a <code>E_managedBy</code> table is created in the <code>continent</code> schema and a <code>E_owner</code> table in the <code>fleet</code> schema.</p>
 
 <p><strong>Schemas</strong></p>
 
@@ -490,31 +523,31 @@ is in a <code class="language-java">fleet</code> schema. For the edges a <code c
 
 <p><br /></p>
 
-<h2 id="IndexesID">Indexes</h2>
+<h2>Indexes</h2>
 
 <p><br /></p>
 
 <p>Sqlg supports basic indexing.</p>
 
-<p><code class="language-java">org.umlg.sqlg.structure.SqlgGraph</code> has two methods on it to create indexes one for vertices and one for edges.</p>
+<p><code>org.umlg.sqlg.structure.SqlgGraph</code> has two methods on it to create indexes one for vertices and one for edges.</p>
 
 <ul>
-<li><code class="language-java">SqlgGraph.createVertexLabeledIndex(String label, Object... dummykeyValues)</code></li>
-<li><code class="language-java">SqlgGraph.createEdgeLabeledIndex(String label, Object... dummykeyValues)</code></li>
+<li><code>SqlgGraph.createVertexLabeledIndex(String label, Object... dummykeyValues)</code></li>
+<li><code>SqlgGraph.createEdgeLabeledIndex(String label, Object... dummykeyValues)</code></li>
 </ul>
 
-<p>The <code class="language-java">dummykeyValues</code> are required to indicate to Sqlg the name and type of the property. The type is needed when
+<p>The <code>dummykeyValues</code> are required to indicate to Sqlg the name and type of the property. The type is needed when
 the column does not yet exist and Sqlg needs to create it.</p>
 
 <p>Outside of creating the index Sqlg has no further direct interaction with the index. However gremlin queries with a
-<code class="language-java">has</code> step will translate to a sql <code class="language-java">where</code> clause. If an index has been created on the property of the <code class="language-java">has</code> step then
+<code>has</code> step will translate to a sql <code>where</code> clause. If an index has been created on the property of the <code>has</code> step then
 the underlying sql engine will utilize that index on that property's column.</p>
 
 <p>The index does not need to be created upfront. It can be added any time.</p>
 
 <p><strong>Example illustrating indexes</strong></p>
 
-<pre class="prettyprint"><code class="language-java">@Test
+<pre><code>@Test
 public void testIndexOnVertex() throws SQLException {
     this.sqlgGraph.createVertexLabeledIndex("Person", "name", "dummy");
     this.sqlgGraph.tx().commit();
@@ -543,16 +576,16 @@ Output: "Bitmap Heap Scan on "V_Person" a  (cost=4.42..32.42 rows=18 width=40) (
 
 <p><img src="images/sqlg/tableDefinition.png" alt="image of tinkerpop-classic" title="" /></p>
 
-<p>In the above example, Sqlg created a table <code class="language-java">V_Person</code> with column <code class="language-java">name</code> and an index on the <code class="language-java">name</code> column.
-Currently Sqlg only supports the default index. For Postgresql this is a <code class="language-java">Btree</code> index.</p>
+<p>In the above example, Sqlg created a table <code>V_Person</code> with column <code>name</code> and an index on the <code>name</code> column.
+Currently Sqlg only supports the default index. For Postgresql this is a <code>Btree</code> index.</p>
 
 <p>The output shows the result of a Postgresql query explain plan. The result shows that Postgresql does indeed utilize the index.</p>
 
-<p>The gremlin query <code class="language-java">this.sqlgGraph.traversal().V().has(T.label, "Person").has("name1", "john50")</code> will utilize the index on the <code class="language-java">name</code> field.</p>
+<p>The gremlin query <code>this.sqlgGraph.traversal().V().has(T.label, "Person").has("name1", "john50")</code> will utilize the index on the <code>name</code> field.</p>
 
 <p><br /></p>
 
-<h2 id="SchemacreationID">Schema creation</h2>
+<h2>Schema creation</h2>
 
 <p><br /></p>
 
@@ -570,7 +603,7 @@ the user's transaction boundaries and semantics.</p>
 
 <p><br /></p>
 
-<h2 id="MultipleJvmID">Multiple Jvm</h2>
+<h2>Multiple Jvm</h2>
 
 <p><br /></p>
 
@@ -580,7 +613,7 @@ but is primarily intended for separate jvm(s) pointing to the same underlying da
 <p>Sqlg caches database schema information. When multiple Sqlg instances point to the same database,
 Sqlg uses <a href="http://hazelcast.com/">Hazelcast</a> as a distributed cache of the schema information.</p>
 
-<p>To indicate to Sqlg that a <code class="language-java">Hazelcast</code> cluster is required  you must specify <code class="language-java">hazelcast.members=ipaddres1,ipaddres2,ipaddres3</code>
+<p>To indicate to Sqlg that a <code>Hazelcast</code> cluster is required  you must specify <code>hazelcast.members=ipaddres1,ipaddres2,ipaddres3</code>
 in the constructors configuration object. Hazelcast will then automatically set up the distributed cluster for the schema
 information.</p>
 
@@ -588,7 +621,7 @@ information.</p>
 
 <p><strong>Jvm 1</strong></p>
 
-<pre class="prettyprint"><code class="language-java">jdbc.url=jdbc:postgresql://localhost:5432/yourdb
+<pre><code>jdbc.url=jdbc:postgresql://localhost:5432/yourdb
 jdbc.username=postgres
 jdbc.password=******
 hazelcast.members=127.0.0.1,127.0.0.2
@@ -596,7 +629,7 @@ hazelcast.members=127.0.0.1,127.0.0.2
 
 <p><strong>Jvm 2</strong></p>
 
-<pre class="prettyprint"><code class="language-java">jdbc.url=jdbc:postgresql://localhost:5432/yourdb
+<pre><code>jdbc.url=jdbc:postgresql://localhost:5432/yourdb
 jdbc.username=postgres
 jdbc.password=******
 hazelcast.members=127.0.0.1,127.0.0.2
@@ -604,7 +637,7 @@ hazelcast.members=127.0.0.1,127.0.0.2
 
 <p><br /></p>
 
-<h2 id="GremlinID">Gremlin</h2>
+<h2>Gremlin</h2>
 
 <p><br /></p>
 
@@ -619,11 +652,11 @@ gremlin by reducing the number of calls to the rdbms.</p>
 <p>Consecutive GraphStep, VertexStep, EdgeVertexStep, EdgeOtherVertexStep, HasStep, RepeatStep and OrderGlobalStep are currently combined.
 The combined step will then in turn generate the sql statements to retrieve the data. It attempts to retrieve the data in as few distinct sql statements as possible.</p>
 
-<p><strong>NOTE:</strong> Turn sql logging on by setting <code class="language-java">log4j.logger.org.umlg.sqlg=debug</code></p>
+<p><strong>NOTE:</strong> Turn sql logging on by setting <code>log4j.logger.org.umlg.sqlg=debug</code></p>
 
 <p><strong>Example illustrating high latency</strong></p>
 
-<pre class="prettyprint"><code class="language-java">@Test
+<pre><code>@Test
 public void showHighLatency() {
     Vertex easternUnion = this.sqlgGraph.addVertex(T.label, "Organization", "name", "EasternUnion");
     Vertex legal = this.sqlgGraph.addVertex(T.label, "Division", "name", "Legal");
@@ -654,7 +687,7 @@ After optimization:
 [SqlgGraphStepCompiled([],vertex)]
 </code></pre>
 
-<p>Without optimization the query <code class="language-java">this.sqlgGraph.traversal().V().hasLabel("Organization").out().out()</code> will result
+<p>Without optimization the query <code>this.sqlgGraph.traversal().V().hasLabel("Organization").out().out()</code> will result
 in a number of database hits. First to get the organizations, then for each organization the divisions and then for each division the offices.
 For an embedded db like HSQLDB this is still ok but for a database server like postgresql the performance impact is significant.</p>
 
@@ -665,7 +698,7 @@ As the query only contains sequential optimizable steps they are all combined in
 
 <p>The above example will retrieve the data in one sql query.</p>
 
-<pre class="prettyprint"><code class="language-java">SELECT
+<pre><code>SELECT
     "public"."V_Office"."ID" AS "alias1",
     "public"."V_Office"."name" AS "alias2"
 FROM
@@ -688,11 +721,11 @@ to execute on the database.</p>
 
 <p><br /></p>
 
-<h4 id="ComparepredicateID">Compare predicate</h4>
+<h4>Compare predicate</h4>
 
 <p><br /></p>
 
-<pre class="prettyprint"><code class="language-java">@Test
+<pre><code>@Test
 public void showComparePredicate() {
     Vertex easternUnion = this.sqlgGraph.addVertex(T.label, "Organization", "name", "EasternUnion");
     Vertex legal = this.sqlgGraph.addVertex(T.label, "Division", "name", "Legal");
@@ -721,7 +754,7 @@ public void showComparePredicate() {
 
 <p>And the resulting sql,    </p>
 
-<pre class="prettyprint"><code class="language-java">SELECT
+<pre><code>SELECT
     "public"."V_Office"."ID" AS "alias1",
     "public"."V_Office"."name" AS "alias2"
 FROM
@@ -744,12 +777,12 @@ WHERE
 <p><br /></p>
 
 <p>Sqlg's implementation of <a href="http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Contains.html">Contains</a> is slightly more complex.
-For HSQLDB a regular <code class="language-java">in</code> clause is used.</p>
+For HSQLDB a regular <code>in</code> clause is used.</p>
 
-<p>For Postgresql, instead of using a sql <code class="language-java">in</code> clause, i.e. <code class="language-java">where property in (?, ?...)</code> the values are bulk inserted into a temporary table and then a join to the temporary table is used
+<p>For Postgresql, instead of using a sql <code>in</code> clause, i.e. <code>where property in (?, ?...)</code> the values are bulk inserted into a temporary table and then a join to the temporary table is used
 to constrain the results.</p>
 
-<pre class="prettyprint"><code class="language-java">@Test
+<pre><code>@Test
 public void showContainsPredicate() {
     List&lt;Integer&gt; numbers = new ArrayList&lt;&gt;(10000);
     for (int i = 0; i &lt; 10000; i++) {
@@ -769,7 +802,7 @@ public void showContainsPredicate() {
 
 <p>And the resulting sql on Postgresql,    </p>
 
-<pre class="prettyprint"><code class="language-java">CREATE TEMPORARY TABLE "V_BULK_TEMP_EDGEzf++PItI"("ID" SERIAL PRIMARY KEY, "within" INTEGER) ON COMMIT DROP;
+<pre><code>CREATE TEMPORARY TABLE "V_BULK_TEMP_EDGEzf++PItI"("ID" SERIAL PRIMARY KEY, "within" INTEGER) ON COMMIT DROP;
 COPY "V_BULK_TEMP_EDGEzf++PItI" ("within") FROM stdin DELIMITER '   ';
 SELECT
     "public"."V_Person"."ID" AS "alias1",
@@ -779,13 +812,13 @@ FROM
 INNER JOIN  "V_BULK_TEMP_EDGEzf++PItI" tmp1 on"public"."V_Person"."number" = tmp1.within
 </code></pre>
 
-<p>This pattern makes <code class="language-java">P.within</code> and <code class="language-java">p.without</code> very fast even with millions of values being passed into the query. 
-Benchmarking shows that doing a join on a temporary table is always faster than using the <code class="language-java">in</code> clause. 
-For the case of there being only one value Sqlg will use an <code class="language-java">equals</code> instead of a temporay table or an <code class="language-java">in</code> statement.</p>
+<p>This pattern makes <code>P.within</code> and <code>p.without</code> very fast even with millions of values being passed into the query. 
+Benchmarking shows that doing a join on a temporary table is always faster than using the <code>in</code> clause. 
+For the case of there being only one value Sqlg will use an <code>equals</code> instead of a temporay table or an <code>in</code> statement.</p>
 
 <p><br /></p>
 
-<h4 id="TextpredicateID">Text predicate</h4>
+<h4>Text predicate</h4>
 
 <p><br /></p>
 
@@ -804,7 +837,7 @@ For the case of there being only one value Sqlg will use an <code class="languag
 
 <p><br /></p>
 
-<pre class="prettyprint"><code class="language-java">@Test
+<pre><code>@Test
 public void showTextPredicate() {
     Vertex john = this.sqlgGraph.addVertex(T.label, "Person", "name", "John XXX Doe");
     Vertex peter = this.sqlgGraph.addVertex(T.label, "Person", "name", "Peter YYY Snow");
@@ -821,7 +854,7 @@ public void showTextPredicate() {
 
 <p>And the resulting sql on Postgresql,    </p>
 
-<pre class="prettyprint"><code class="language-java">SELECT
+<pre><code>SELECT
     "public"."V_Person"."ID" AS "alias1",
     "public"."V_Person"."name" AS "alias2"
 FROM
@@ -832,13 +865,13 @@ WHERE
 
 <p><br /></p>
 
-<h4 id="DateTimequeriesID">DateTime queries</h4>
+<h4>DateTime queries</h4>
 
 <p><br /></p>
 
 <p>LocalDateTime, LocalDate and LocalTime queries are supported.</p>
 
-<pre class="prettyprint"><code class="language-java">@Test
+<pre><code>@Test
 public void showSearchOnLocalDateTime() {
     LocalDateTime born1 = LocalDateTime.of(1990, 1, 1, 1, 1, 1);
     LocalDateTime born2 = LocalDateTime.of(1990, 1, 1, 1, 1, 2);
@@ -866,7 +899,7 @@ public void showSearchOnLocalDateTime() {
 
 <p>And the resulting sql,    </p>
 
-<pre class="prettyprint"><code class="language-java">SELECT
+<pre><code>SELECT
     "public"."V_Person"."ID" AS "alias1",
     "public"."V_Person"."born" AS "alias2",
     "public"."V_Person"."name" AS "alias3"
@@ -887,14 +920,14 @@ WHERE
 
 <p><br /></p>
 
-<h3 id="OrderID">Order</h3>
+<h3>Order</h3>
 
 <p><br /></p>
 
 <p>Sqlg optimizes the OrderGlobalStep if the data that the order applies to can be retrieved in one sql statement.
 If not then order the ordering occurs in java via the OrderGlobalStep as per normal.</p>
 
-<pre class="prettyprint"><code class="language-java">@Test
+<pre><code>@Test
 public void testOrderBy() {
     Vertex a1 = this.sqlgGraph.addVertex(T.label, "A", "name", "a", "surname", "a");
     Vertex a2 = this.sqlgGraph.addVertex(T.label, "A", "name", "a", "surname", "b");
@@ -920,7 +953,7 @@ public void testOrderBy() {
 
 <p>And the resulting sql,    </p>
 
-<pre class="prettyprint"><code class="language-java">SELECT
+<pre><code>SELECT
     "public"."V_A"."ID" AS "alias1",
     "public"."V_A"."surname" AS "alias2",
     "public"."V_A"."name" AS "alias3"
@@ -933,14 +966,14 @@ ORDER BY
 
 <p><br /></p>
 
-<h3 id="RepeatStepID">RepeatStep</h3>
+<h3>RepeatStep</h3>
 
 <p><br /></p>
 
-<p>Sqlg optimizes the RepeatStep so long as the <code class="language-java">until</code> modulator is not present. 
-<code class="language-java">RepeatStep</code> can be optimized with the modulator <code class="language-java">emit</code> and <code class="language-java">times</code>.</p>
+<p>Sqlg optimizes the RepeatStep so long as the <code>until</code> modulator is not present. 
+<code>RepeatStep</code> can be optimized with the modulator <code>emit</code> and <code>times</code>.</p>
 
-<pre class="prettyprint"><code class="language-java">@Test
+<pre><code>@Test
 public void showRepeat() {
     Vertex john = this.sqlgGraph.addVertex(T.label, "Person", "name", "John");
     Vertex peterski = this.sqlgGraph.addVertex(T.label, "Person", "name", "Peterski");
@@ -975,7 +1008,7 @@ Output:
 
 <p>And the resulting sql,    </p>
 
-<pre class="prettyprint"><code class="language-java">SELECT
+<pre><code>SELECT
     "public"."V_City"."ID" AS "alias1",
     "public"."V_City"."name" AS "alias2",
     "public"."V_Person"."ID" AS "alias3",
@@ -993,53 +1026,53 @@ FROM
     "public"."V_City" ON "public"."E_capital"."public.City__I" = "public"."V_City"."ID"
 </code></pre>
 
-<p>The <code class="language-java">RepeatStep</code> together with the <code class="language-java">emit</code> modulater is an optimized way to retrieve whole sub-graphs with one hit to the db.</p>
+<p>The <code>RepeatStep</code> together with the <code>emit</code> modulater is an optimized way to retrieve whole sub-graphs with one hit to the db.</p>
 
-<p><strong>NOTE</strong> The generated sql uses a <code class="language-java">left join</code> if the repeat statements has an <code class="language-java">emit</code> modulator.</p>
+<p><strong>NOTE</strong> The generated sql uses a <code>left join</code> if the repeat statements has an <code>emit</code> modulator.</p>
 
 <p><br /></p>
 
-<h2 id="BatchmodeID">Batch mode</h2>
+<h2>Batch mode</h2>
 
 <p><br /></p>
 
 <p>Sqlg supports 3 distinct batch modes. Normal, streaming and streaming with lock. Batch modes are only implemented on Postgresql.
-Batch mode is activated on the transaction object itself. After every <code class="language-java">commit</code>/<code class="language-java">flush</code> the batchMode needs to be reactivated.</p>
+Batch mode is activated on the transaction object itself. After every <code>commit</code>/<code>flush</code> the batchMode needs to be reactivated.</p>
 
-<p>Sqlg introduces an extra method on the transaction, <code class="language-java">flush()</code>. </p>
+<p>Sqlg introduces an extra method on the transaction, <code>flush()</code>. </p>
 
 <ul>
-<li>In normal batch mode <code class="language-java">flush()</code> will send all the data to Postgresql, assign id(s) and clear the cache.</li>
-<li>In streaming mode <code class="language-java">flush()</code> will close the OutputStream that the data has been written to.</li>
-<li>In streaming mode with lock <code class="language-java">flush()</code> will close the OutputStream that the data has been written to and assign id(s).</li>
+<li>In normal batch mode <code>flush()</code> will send all the data to Postgresql, assign id(s) and clear the cache.</li>
+<li>In streaming mode <code>flush()</code> will close the OutputStream that the data has been written to.</li>
+<li>In streaming mode with lock <code>flush()</code> will close the OutputStream that the data has been written to and assign id(s).</li>
 </ul>
 
 <p>The Postgresql <a href="http://www.postgresql.org/docs/9.4/static/sql-copy.html">copy</a> command is used to bulk insert data.</p>
 
 <p><br /></p>
 
-<h3 id="NormalbatchmodeID">Normal batch mode</h3>
+<h3>Normal batch mode</h3>
 
 <p><br /></p>
 
 <p>In normal batch mode the standard TinkerPop modification api can be used. Normal batch mode caches all modifications in memory
-and on <code class="language-java">commit()</code> or <code class="language-java">flush()</code> sends the modification to the server.</p>
+and on <code>commit()</code> or <code>flush()</code> sends the modification to the server.</p>
 
-<p>Because all modifications are held in memory it is important to call <code class="language-java">commit()</code> or <code class="language-java">flush()</code> to prevent <code class="language-java">OutOfMemoryError</code>.</p>
+<p>Because all modifications are held in memory it is important to call <code>commit()</code> or <code>flush()</code> to prevent <code>OutOfMemoryError</code>.</p>
 
-<p>In batch mode vertices and edges returned from <code class="language-java">Graph.addVertex</code> and <code class="language-java">vertex.addEdge</code> respectively do <strong>not</strong> yet have their id(s) assigned to them.
-This is because the new vertices and edges are cached in memory and are only sent to Postgresql on <code class="language-java">commit()</code> or <code class="language-java">flush()</code>.
-After <code class="language-java">commit()</code> or <code class="language-java">flush()</code> the new vertices and edges have their id(s) assigned.</p>
+<p>In batch mode vertices and edges returned from <code>Graph.addVertex</code> and <code>vertex.addEdge</code> respectively do <strong>not</strong> yet have their id(s) assigned to them.
+This is because the new vertices and edges are cached in memory and are only sent to Postgresql on <code>commit()</code> or <code>flush()</code>.
+After <code>commit()</code> or <code>flush()</code> the new vertices and edges have their id(s) assigned.</p>
 
-<p>The transaction must be manually placed in normal batch mode. i.e. <code class="language-java">Graph.tx().normalBatchModeOn()</code> must occur before any batch processing.
-After every <code class="language-java">commit()</code> or <code class="language-java">flush()</code> the transaction reverts to a regular transaction and must be placed in normal batch mode again 
+<p>The transaction must be manually placed in normal batch mode. i.e. <code>Graph.tx().normalBatchModeOn()</code> must occur before any batch processing.
+After every <code>commit()</code> or <code>flush()</code> the transaction reverts to a regular transaction and must be placed in normal batch mode again 
 for batch processing to continue.</p>
 
 <p>Vertices and edges can be created as per normal making normal batch mode very convenient.</p>
 
 <p><strong>Example illustrating normal batch mode</strong></p>
 
-<pre class="prettyprint"><code class="language-java">@Test
+<pre><code>@Test
 public void showNormalBatchMode() {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
@@ -1073,28 +1106,28 @@ Normal batch mode memory usage. </p>
 
 <p><br /></p>
 
-<h3 id="StreamingbatchmodeID">Streaming batch mode</h3>
+<h3>Streaming batch mode</h3>
 
 <p><br /></p>
 
-<p>Streaming batch writes any new vertex or edge immediately to Postgresql via its <code class="language-java">stdin</code> api. I.e. the data is written
+<p>Streaming batch writes any new vertex or edge immediately to Postgresql via its <code>stdin</code> api. I.e. the data is written
 directly to a Postgresql jdbc driver OutputStream.</p>
 
-<p>Streaming batch mode does <strong>not</strong> use the <code class="language-java">Graph.addVertex</code> method. Instead <code class="language-java">Graph.streamVertex</code> is defined.</p>
+<p>Streaming batch mode does <strong>not</strong> use the <code>Graph.addVertex</code> method. Instead <code>Graph.streamVertex</code> is defined.</p>
 
-<p>The transaction must be placed in streaming batch mode manually before any streaming batch modification can happen. <code class="language-java">Graph.tx().streamingBatchModeOn()</code>
-After every <code class="language-java">commit()</code> or <code class="language-java">flush()</code> the transaction reverts to normal mode and must be placed into streaming batch mode again 
+<p>The transaction must be placed in streaming batch mode manually before any streaming batch modification can happen. <code>Graph.tx().streamingBatchModeOn()</code>
+After every <code>commit()</code> or <code>flush()</code> the transaction reverts to normal mode and must be placed into streaming batch mode again 
 for streaming batch mode to continue.</p>
 
 <p>The benefit of streaming mode is that the memory consumption is very low as nothing is cached. It is also somewhat faster than
 the normal batch mode (+/- 25% faster).</p>
 
-<p>However the caveat is that, per transaction/thread only one label/table can be written between consecutive calls to <code class="language-java">SqlgTransaction.flush()</code>. 
-Further it is not possible to assign an id to the vertex or element. As such the <code class="language-java">SqlgGraph.streamVertex</code> method returns void.</p>
+<p>However the caveat is that, per transaction/thread only one label/table can be written between consecutive calls to <code>SqlgTransaction.flush()</code>. 
+Further it is not possible to assign an id to the vertex or element. As such the <code>SqlgGraph.streamVertex</code> method returns void.</p>
 
 <p><strong>Example illustrating streaming batch mode</strong></p>
 
-<pre class="prettyprint"><code class="language-java">@Test
+<pre><code>@Test
 public void showStreamingBatchMode() {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
@@ -1125,24 +1158,24 @@ Streaming batch mode memory usage. </p>
 <p>Created 10 000 000 Persons and 10 000 000 cars. <strong>No</strong> edges have been created.
 <br /></p>
 
-<p>As the <code class="language-java">Graph.streamVertex</code> method returns void there is no handle to vertex making edge creation problematic.
-Precisely for this scenario there is a bulk edge creation method, <code class="language-java">SqlgGraph.bulkAddEdges(inLabel, outLabel, edgeLabel, Pair&lt;String, String&gt; idFields, List&lt;? extends Pair&lt;String, String&gt;&gt; uids)</code></p>
+<p>As the <code>Graph.streamVertex</code> method returns void there is no handle to vertex making edge creation problematic.
+Precisely for this scenario there is a bulk edge creation method, <code>SqlgGraph.bulkAddEdges(inLabel, outLabel, edgeLabel, Pair&lt;String, String&gt; idFields, List&lt;? extends Pair&lt;String, String&gt;&gt; uids)</code></p>
 
 <ul>
-<li><code class="language-java">inLabel</code> and <code class="language-java">outLabel</code> specifies the in and out vertex labels that the edges will be between.</li>
-<li><code class="language-java">edgeLabel</code> is the label of the edges to be created.</li>
-<li><code class="language-java">idFields</code> specifies the fields that uniquely identify the in and out vertex.</li>
-<li><code class="language-java">uids</code> are the actual unique identifies for each in out vertex pairing.</li>
+<li><code>inLabel</code> and <code>outLabel</code> specifies the in and out vertex labels that the edges will be between.</li>
+<li><code>edgeLabel</code> is the label of the edges to be created.</li>
+<li><code>idFields</code> specifies the fields that uniquely identify the in and out vertex.</li>
+<li><code>uids</code> are the actual unique identifies for each in out vertex pairing.</li>
 </ul>
 
-<p>Sqlg will then first copy the <code class="language-java">uids</code> into a temporary table. Then it joins the temporary table on the in and out vertex tables to retrieve the in and out ids.
+<p>Sqlg will then first copy the <code>uids</code> into a temporary table. Then it joins the temporary table on the in and out vertex tables to retrieve the in and out ids.
 These ids are then inserted into the edge table. All this happens on Postgresql, having minimal processing and memory impact on the java process.</p>
 
 <p>The unique identifiers do have to be kept in memory.</p>
 
 <p><strong>Example illustrating streaming batch mode including bulk edges</strong></p>
 
-<pre class="prettyprint"><code class="language-java">@Test
+<pre><code>@Test
 public void showBulkEdgeCreation() {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
@@ -1179,7 +1212,7 @@ Streaming with lock batch mode memory usage. </p>
 
 <p><br /></p>
 
-<h3 id="StreamingwithlockbatchmodeID">Streaming with lock batch mode</h3>
+<h3>Streaming with lock batch mode</h3>
 
 <p><br /></p>
 
@@ -1187,15 +1220,15 @@ Streaming with lock batch mode memory usage. </p>
 locked. Locking the table ensures that no concurrent changes will occur on the table. This allows Sqlg to query the id sequence and
 assigned ids to the elements.</p>
 
-<p>Streaming batch mode does <strong>not</strong> use the <code class="language-java">Graph.addVertex</code> method. Instead <code class="language-java">Graph.streamVertexWithLock</code> is defined.</p>
+<p>Streaming batch mode does <strong>not</strong> use the <code>Graph.addVertex</code> method. Instead <code>Graph.streamVertexWithLock</code> is defined.</p>
 
 <p>The transaction must be placed into streaming with lock batch mode manually before any streaming with lock batch modification can happen. 
-<code class="language-java">Graph.tx().streamingWithLockBatchModeOn()</code> After every <code class="language-java">commit()</code> or <code class="language-java">flush()</code> the transaction reverts to normal mode and must 
+<code>Graph.tx().streamingWithLockBatchModeOn()</code> After every <code>commit()</code> or <code>flush()</code> the transaction reverts to normal mode and must 
 be placed into streaming batch mode again for streaming batch mode to continue.</p>
 
 <p><strong>Example illustrating streaming with lock batch mode</strong></p>
 
-<pre class="prettyprint"><code class="language-java">@Test
+<pre><code>@Test
 public void showStreamingWithLockBatchMode() {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
@@ -1227,7 +1260,7 @@ Streaming with lock batch mode memory usage </p>
 
 <p><strong>Example illustrating streaming with lock batch mode and bulk edge creation</strong></p>
 
-<pre class="prettyprint"><code class="language-java">@Test
+<pre><code>@Test
 public void showStreamingWithLockBulkEdgeCreation() {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
@@ -1267,7 +1300,6 @@ Streaming with lock batch mode memory usage </p>
 
 <p>Created 10 000 000 Persons each with a car. 20 000 000 vertices and 10 000 000 edges.
 <br /></p>
-
 
         </div>
     </div>

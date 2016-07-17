@@ -135,11 +135,11 @@ These are,
     plugin activated: tinkerpop.server
     plugin activated: tinkerpop.utilities
     plugin activated: tinkerpop.tinkergraph
-    gremlin> :install org.umlg sqlg-hsqldb 1.1.0.RC1
+    gremlin> :install org.umlg sqlg-hsqldb 1.2.0-SNAPSHOT
     log4j:WARN No appenders could be found for logger (org.apache.tinkerpop.gremlin.groovy.util.DependencyGrabber).
     log4j:WARN Please initialize the log4j system properly.
     log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
-    ==>Loaded: [org.umlg, sqlg-hsqldb, 1.1.0.RC1]
+    ==>Loaded: [org.umlg, sqlg-hsqldb, 1.2.0-SNAPSHOT]
     gremlin> :plugin list
     ==>tinkerpop.server[active]
     ==>tinkerpop.gephi
@@ -153,8 +153,8 @@ These are,
     gremlin> graph = SqlgGraph.open('pathTo/sqlg.properties')
     ==>sqlggraph[SqlGraph]
     gremlin> g = graph.traversal()
-    ==>graphtraversalsource[sqlggraph[SqlGraph], standard]
-    gremlin> graph.io(graphml()).readGraph('../data/grateful-dead.xml')
+    ==>sqlggraphtraversalsource[sqlggraph[SqlGraph] (jdbc:hsqldb:file:src/test/db/sqlgraphdb), standard]
+    gremlin> graph.io(graphml()).readGraph('pathTo/grateful-dead.xml')
     ==>null
     gremlin> g.V().count()
     ==>808
@@ -169,11 +169,11 @@ These are,
     plugin activated: tinkerpop.server
     plugin activated: tinkerpop.utilities
     plugin activated: tinkerpop.tinkergraph
-    gremlin> :install org.umlg sqlg-postgres 1.1.0.RC1
+    gremlin> :install org.umlg sqlg-postgres 1.2.0-SNAPSHOT
     log4j:WARN No appenders could be found for logger (org.apache.tinkerpop.gremlin.groovy.util.DependencyGrabber).
     log4j:WARN Please initialize the log4j system properly.
     log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
-    ==>Loaded: [org.umlg, sqlg-postgres, 1.1.0.RC1]
+    ==>Loaded: [org.umlg, sqlg-postgres, 1.2.0-SNAPSHOT]
     gremlin> :plugin list
     ==>tinkerpop.server[active]
     ==>tinkerpop.gephi
@@ -187,8 +187,8 @@ These are,
     gremlin> graph = SqlgGraph.open('pathTo/sqlg.properties')
     ==>sqlggraph[SqlGraph]
     gremlin> g = graph.traversal()
-    ==>graphtraversalsource[sqlggraph[SqlGraph], standard]
-    gremlin> graph.io(graphml()).readGraph('../data/grateful-dead.xml')
+    ==>sqlggraphtraversalsource[sqlggraph[SqlGraph] (jdbc:postgresql://localhost:5432/sqlgraphdb), standard]
+    gremlin> graph.io(graphml()).readGraph('pathTo/grateful-dead.xml')
     ==>null
     gremlin> g.V().count()
     ==>808
@@ -303,6 +303,51 @@ These are,
             <td>java.time.LocalTime</td>
             <td>TIME WITH TIME ZONE</td>
             <td>TIME WITH TIME ZONE</td>
+        </tr>
+        <tr>
+            <td>java.time.ZonedDateTime</td>
+            <td>TIMESTAMP WITH TIME ZONE, LONGVARCHAR</td>
+            <td>TIMESTAMP WITH TIME ZONE, TEXT</td>
+        </tr>
+        <tr>
+            <td>java.time.Period</td>
+            <td>INTEGER, INTEGER, INTEGER</td>
+            <td>INTEGER, INTEGER, INTEGER</td>
+        </tr>
+        <tr>
+            <td>java.time.Duration</td>
+            <td>BIGINT, INTEGER</td>
+            <td>BIGINT, INTEGER</td>
+        </tr>
+        <tr>
+            <td>java.time.LocalDateTime[]</td>
+            <td>TIMESTAMP WITH TIME ZONE ARRAY DEFAULT ARRAY[]</td>
+            <td>TIMESTAMP WITH TIME ZONE[]</td>
+        </tr>
+        <tr>
+            <td>java.time.LocalDate[]</td>
+            <td>DATE ARRAY DEFAULT ARRAY[]</td>
+            <td>DATE[]</td>
+        </tr>
+        <tr>
+            <td>java.time.LocalTime[]</td>
+            <td>TIME WITH TIME ZONE ARRAY DEFAULT ARRAY[]</td>
+            <td>TIME WITH TIME ZONE[]</td>
+        </tr>
+        <tr>
+            <td>java.time.ZonedDateTime[]</td>
+            <td>TIMESTAMP WITH TIME ZONE ARRAY DEFAULT ARRAY[], LONGVARCHAR ARRAY DEFAULT ARRAY[]</td>
+            <td>TIMESTAMP WITH TIME ZONE[], TEXT[]</td>
+        </tr>
+        <tr>
+            <td>java.time.Period[]</td>
+            <td>INTEGER ARRAY DEFAULT ARRAY[], INTEGER ARRAY DEFAULT ARRAY[], INTEGER ARRAY DEFAULT ARRAY[]</td>
+            <td>INTEGER[], INTEGER[], INTEGER[]</td>
+        </tr>
+        <tr>
+            <td>java.time.Duration[]</td>
+            <td>BIGINT ARRAY DEFAULT ARRAY[], INTEGER ARRAY DEFAULT ARRAY[]</td>
+            <td>BIGINT[], INTEGER[]</td>
         </tr>
         <tr>
             <td>com.fasterxml.jackson.databind.JsonNode</td>
