@@ -61,7 +61,7 @@
 <li><a href="#MavenID">Maven</a></li><li><a href="#GremlinConsoleID">Gremlin Console</a></li></ul>
 </li><li><a href="#DatatypesID">Data types</a></li><li><a href="#ArchitectureID">Architecture</a><ul class="nav">
 <li><a href="#VertextablesID">Vertex tables</a></li><li><a href="#EdgetablesID">Edge tables</a></li><li><a href="#TinkerPop-modernID">TinkerPop-modern</a></li><li><a href="#NamespacingandSchemasID">Namespacing and Schemas</a></li></ul>
-</li><li><a href="#IndexesID">Indexes</a></li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#GremlinID">Gremlin</a><ul class="nav">
+</li><li><a href="#IndexesID">Indexes</a></li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#TopologyID">Topology</a></li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#GremlinID">Gremlin</a><ul class="nav">
 <li><a href="#PredicatesID">Predicates </a><ul class="nav">
 <li><a href="#ComparepredicateID">Compare predicate</a></li><li><a href="#ContainspredicateID">Contains predicate </a></li><li><a href="#TextpredicateID">Text predicate</a></li><li><a href="#DateTimequeriesID">DateTime queries</a></li></ul>
 </li><li><a href="#OrderID">Order</a></li><li><a href="#RepeatStepID">RepeatStep</a></li></ul>
@@ -86,6 +86,8 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 <p>Sqlg has a <a href="https://groups.google.com/forum/?hl=en#!forum/sqlg">Google Group</a>.</p>
 
 <h3 id="TinkerPopsupportedfeaturesID">TinkerPop supported features</h3>
+
+<p>Sqlg version 1.2.0 runs on TinkerPop 3.2.0-incubating</p>
 
 <p>Sqlg passes TinkerPop's <code class="language-java">StructureStandardSuite</code> and <code class="language-java">ProcessStandardSuite</code> test suites.</p>
 
@@ -162,7 +164,7 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 <pre class="prettyprint"><code class="language-java">&lt;dependency&gt;
     &lt;groupId&gt;org.umlg&lt;/groupId&gt;
     &lt;artifactId&gt;sqlg-hsqldb&lt;/artifactId&gt;
-    &lt;version&gt;1.2.0-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.2.0&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 
@@ -171,7 +173,7 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 <pre class="prettyprint"><code class="language-java">&lt;dependency&gt;
     &lt;groupId&gt;org.umlg&lt;/groupId&gt;
     &lt;artifactId&gt;sqlg-postgres&lt;/artifactId&gt;
-    &lt;version&gt;1.2.0-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.2.0&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 
@@ -261,7 +263,9 @@ gremlin&gt;
 
 <p><strong>Postgresql</strong></p>
 
-<pre class="prettyprint"><code class="language-java">         \,,,/
+<pre class="prettyprint"><code class="language-java">[pieter@pieter-laptop bin]$ ./gremlin.sh
+
+         \,,,/
          (o o)
 -----oOOo-(3)-oOOo-----
 plugin activated: tinkerpop.server
@@ -310,150 +314,180 @@ gremlin&gt;
     </thead>
     <tbody>
         </tr>
-            <td>Boolean</td>
-            <td>BOOLEAN</td>
-            <td>BOOLEAN</td>
+            <td><small>Boolean</small></td>
+            <td><small>BOOLEAN</small></td>
+            <td><small>BOOLEAN</small></td>
         </tr>
         <tr>
-            <td>Byte</td>
-            <td>TINYINT</td>
-            <td><strong>Not supported</strong></td>
+            <td><small>Byte</small></td>
+            <td><small>TINYINT</small></td>
+            <td><small><strong>Not supported</strong></small></td>
         </tr>
         <tr>
-            <td>Short</td>
-            <td>SMALLINT</td>
-            <td>SMALLINT</td>
+            <td><small>Short</small></td>
+            <td><small>SMALLINT</small></td>
+            <td><small>SMALLINT</small></td>
         </tr>
         <tr>
-            <td>Integer</td>
-            <td>INTEGER</td>
-            <td>INTEGER</td>
+            <td><small>Integer</small></td>
+            <td><small>INTEGER</small></td>
+            <td><small>INTEGER</small></td>
         </tr>
         <tr>
-            <td>Long</td>
-            <td>BIGINT</td>
-            <td>BIGINT</td>
+            <td><small>Long</small></td>
+            <td><small>BIGINT</small></td>
+            <td><small>BIGINT</small></td>
         </tr>
         <tr>
-            <td>Float</td>
-            <td><strong>Not supported</strong></td>
-            <td>REAL</td>
+            <td><small>Float</small></td>
+            <td><small><strong>Not supported</strong></small></td>
+            <td><small>REAL</small></td>
         </tr>
         <tr>
-            <td>Double</td>
-            <td>DOUBLE</td>
-            <td>DOUBLE PRECISION</td>
+            <td><small>Double</small></td>
+            <td><small>DOUBLE</small></td>
+            <td><small>DOUBLE PRECISION</small></td>
         </tr>
         <tr>
-            <td>String</td>
-            <td>LONGVARCHAR</td>
-            <td>TEXT</td>
+            <td><small>String</small></td>
+            <td><small>LONGVARCHAR</small></td>
+            <td><small>TEXT</small></td>
         </tr>
         <!-- Arrays -->
         <tr>
-            <td>Boolean[]</td>
-            <td>BOOLEAN ARRAY DEFAULT ARRAY[]</td>
-            <td>BOOLEAN[]</td>
+            <td><small>Boolean[]</small></td>
+            <td><small>BOOLEAN ARRAY DEFAULT ARRAY[]</small></td>
+            <td><small>BOOLEAN[]</small></td>
         </tr>
         <tr>
-            <td>Byte[]</td>
-            <td>LONGVARBINARY</td>
-            <td>BYTEA</td>
+            <td><small>Byte[]</small></td>
+            <td><small>LONGVARBINARY</small></td>
+            <td><small>BYTEA</small></td>
         </tr>
         <tr>
-            <td>Short[]</td>
-            <td>SMALLINT ARRAY DEFAULT ARRAY[]</td>
-            <td>SMALLINT[]</td>
+            <td><small>Short[]</small></td>
+            <td><small>SMALLINT ARRAY DEFAULT ARRAY[]</small></td>
+            <td><small>SMALLINT[]</small></td>
         </tr>
         <tr>
-            <td>Integer[]</td>
-            <td>INTEGER ARRAY DEFAULT ARRAY[]</td>
-            <td>INTEGER[]</td>
+            <td><small>Integer[]</small></td>
+            <td><small>INTEGER ARRAY DEFAULT ARRAY[]</small></td>
+            <td><small>INTEGER[]</small></td>
         </tr>
         <tr>
-            <td>Long[]</td>
-            <td>BIGINT ARRAY DEFAULT ARRAY[]</td>
-            <td>BIGINT[]</td>
+            <td><small>Long[]</small></td>
+            <td><small>BIGINT ARRAY DEFAULT ARRAY[]</small></td>
+            <td><small>BIGINT[]</small></td>
         </tr>
         <tr>
-            <td>Float[]</td>
-            <td>Not supported</td>
-            <td>REAL[]</td>
+            <td><small>Float[]</small></td>
+            <td><small>Not supported</small></td>
+            <td><small>REAL[]</small></td>
         </tr>
         <tr>
-            <td>Double[]</td>
-            <td>DOUBLE ARRAY DEFAULT ARRAY[]</td>
-            <td>DOUBLE PRECISION[]</td>
+            <td><small>Double[]</small></td>
+            <td><small>DOUBLE ARRAY DEFAULT ARRAY[]</small></td>
+            <td><small>DOUBLE PRECISION[]</small></td>
         </tr>
         <tr>
-            <td>String[]</td>
-            <td>LONGVARCHAR ARRAY DEFAULT ARRAY[]</td>
-            <td>TEXT[]</td>
+            <td><small>String[]</small></td>
+            <td><small>LONGVARCHAR ARRAY DEFAULT ARRAY[]</small></td>
+            <td><small>TEXT[]</small></td>
         </tr>
         <tr>
-            <td>java.time.LocalDateTime</td>
-            <td>TIMESTAMP WITH TIME ZONE</td>
-            <td>TIMESTAMP WITH TIME ZONE</td>
+            <td><small>java.time.LocalDateTime</small></td>
+            <td><small>TIMESTAMP WITH TIME ZONE</small></td>
+            <td><small>TIMESTAMP WITH TIME ZONE</small></td>
         </tr>
         <tr>
-            <td>java.time.LocalDate</td>
-            <td>DATE</td>
-            <td>DATE</td>
+            <td><small>java.time.LocalDate</small></td>
+            <td><small>DATE</small></td>
+            <td><small>DATE</small></td>
         </tr>
         <tr>
-            <td>java.time.LocalTime</td>
-            <td>TIME WITH TIME ZONE</td>
-            <td>TIME WITH TIME ZONE</td>
+            <td><small>java.time.LocalTime</small></td>
+            <td><small>TIME WITH TIME ZONE</small></td>
+            <td><small>TIME WITH TIME ZONE</small></td>
         </tr>
         <tr>
-            <td>java.time.ZonedDateTime</td>
-            <td>TIMESTAMP WITH TIME ZONE<br /> LONGVARCHAR</td>
-            <td>TIMESTAMP WITH TIME ZONE<br /> TEXT</td>
+            <td><small>java.time.ZonedDateTime</small></td>
+            <td><small>TIMESTAMP WITH TIME ZONE<br /> LONGVARCHAR</small></td>
+            <td><small>TIMESTAMP WITH TIME ZONE<br /> TEXT</small></td>
         </tr>
         <tr>
-            <td>java.time.Period</td>
-            <td>INTEGER<br /> INTEGER<br /> INTEGER</td>
-            <td>INTEGER<br /> INTEGER<br /> INTEGER</td>
+            <td><small>java.time.Period</small></td>
+            <td><small>INTEGER<br /> INTEGER<br /> INTEGER</small></td>
+            <td><small>INTEGER<br /> INTEGER<br /> INTEGER</small></td>
         </tr>
         <tr>
-            <td>java.time.Duration</td>
-            <td>BIGINT<br /> INTEGER</td>
-            <td>BIGINT<br /> INTEGER</td>
+            <td><small>java.time.Duration</small></td>
+            <td><small>BIGINT<br /> INTEGER</small></td>
+            <td><small>BIGINT<br /> INTEGER</small></td>
         </tr>
         <tr>
-            <td>java.time.LocalDateTime[]</td>
-            <td>TIMESTAMP WITH TIME ZONE ARRAY DEFAULT ARRAY[]</td>
-            <td>TIMESTAMP WITH TIME ZONE[]</td>
+            <td><small>java.time.LocalDateTime[]</small></td>
+            <td><small>TIMESTAMP WITH TIME ZONE ARRAY DEFAULT ARRAY[]</small></td>
+            <td><small>TIMESTAMP WITH TIME ZONE[]</small></td>
         </tr>
         <tr>
-            <td>java.time.LocalDate[]</td>
-            <td>DATE ARRAY DEFAULT ARRAY[]</td>
-            <td>DATE[]</td>
+            <td><small>java.time.LocalDate[]</small></td>
+            <td><small>DATE ARRAY DEFAULT ARRAY[]</small></td>
+            <td><small>DATE[]</small></td>
         </tr>
         <tr>
-            <td>java.time.LocalTime[]</td>
-            <td>TIME WITH TIME ZONE ARRAY DEFAULT ARRAY[]</td>
-            <td>TIME WITH TIME ZONE[]</td>
+            <td><small>java.time.LocalTime[]</small></td>
+            <td><small>TIME WITH TIME ZONE ARRAY DEFAULT ARRAY[]</small></td>
+            <td><small>TIME WITH TIME ZONE[]</small></td>
         </tr>
         <tr>
-            <td>java.time.ZonedDateTime[]</td>
-            <td>TIMESTAMP WITH TIME ZONE ARRAY DEFAULT ARRAY[]<br \> LONGVARCHAR ARRAY DEFAULT ARRAY[]</td>
-            <td>TIMESTAMP WITH TIME ZONE[]<br \> TEXT[]</td>
+            <td><small>java.time.ZonedDateTime[]</small></td>
+            <td><small>TIMESTAMP WITH TIME ZONE ARRAY DEFAULT ARRAY[]<br \> LONGVARCHAR ARRAY DEFAULT ARRAY[]</small></td>
+            <td><small>TIMESTAMP WITH TIME ZONE[]<br \> TEXT[]</small></td>
         </tr>
         <tr>
-            <td>java.time.Period[]</td>
-            <td>INTEGER ARRAY DEFAULT ARRAY[]<br /> INTEGER ARRAY DEFAULT ARRAY[]<br /> INTEGER ARRAY DEFAULT ARRAY[]</td>
-            <td>INTEGER[]<br /> INTEGER[]<br /> INTEGER[]</td>
+            <td><small>java.time.Period[]</small></td>
+            <td><small>INTEGER ARRAY DEFAULT ARRAY[]<br /> INTEGER ARRAY DEFAULT ARRAY[]<br /> INTEGER ARRAY DEFAULT ARRAY[]</small></td>
+            <td><small>INTEGER[]<br /> INTEGER[]<br /> INTEGER[]</small></td>
         </tr>
         <tr>
-            <td>java.time.Duration[]</td>
-            <td>BIGINT ARRAY DEFAULT ARRAY[]<br /> INTEGER ARRAY DEFAULT ARRAY[]</td>
-            <td>BIGINT[]<br /> INTEGER[]</td>
+            <td><small>java.time.Duration[]</small></td>
+            <td><small>BIGINT ARRAY DEFAULT ARRAY[]<br /> INTEGER ARRAY DEFAULT ARRAY[]</small></td>
+            <td><small>BIGINT[]<br /> INTEGER[]</small></td>
         </tr>
         <tr>
-            <td>com.fasterxml.jackson.databind.JsonNode</td>
-            <td><strong>Not supported</strong></td>
-            <td>JSONB</td>
+            <td><small>com.fasterxml.jackson.databind.JsonNode</small></td>
+            <td><small><strong>Not supported</strong></small></td>
+            <td><small>JSONB</small></td>
+        </tr>
+        <tr>
+            <td><small>com.fasterxml.jackson.databind.JsonNode[]</small></td>
+            <td><small><strong>Not supported</strong></small></td>
+            <td><small>JSONB[]</small></td>
+        </tr>
+        <tr>
+            <td><small>org.postgis.Point</small></td>
+            <td><small><strong>Not supported</strong></small></td>
+            <td><small>geometry(POINT)</small></td>
+        </tr>
+        <tr>
+            <td><small>org.umlg.sqlg.gis.GeographyPoint</small></td>
+            <td><small><strong>Not supported</strong></small></td>
+            <td><small>geography(POINT, 4326)</small></td>
+        </tr>
+        <tr>
+            <td><small>org.postgis.LineString</small></td>
+            <td><small><strong>Not supported</strong></small></td>
+            <td><small>geometry(LINESTRING)</small></td>
+        </tr>
+        <tr>
+            <td><small>org.postgis.Polygon</small></td>
+            <td><small><strong>Not supported</strong></small></td>
+            <td><small>geometry(POLYGON)</small></td>
+        </tr>
+        <tr>
+            <td><small>org.umlg.sqlg.gis.GeographyPolygon</small></td>
+            <td><small><strong>Not supported</strong></small></td>
+            <td><small>geography(POLYGON, 4326)</small></td>
         </tr>
     </tbody>
 </table>
@@ -467,7 +501,7 @@ gremlin&gt;
 
 <p><br /></p>
 
-<p>With the coming of vertex labels to TinkerPop3 the mapping of TinkerPop's graph semantics to that of a RDBMS became natural and useful.</p>
+<p>With the coming of vertex labels to TinkerPop the mapping of TinkerPop's graph semantics to that of a RDBMS became natural and useful.</p>
 
 <h3 id="VertextablesID">Vertex tables</h3>
 
@@ -480,7 +514,7 @@ stores the vertex's properties.</p>
 each edge's adjacent vertex ids and the edge properties. The column corresponding to each adjacent vertex id (<code class="language-java">IN</code> and <code class="language-java">OUT</code>)
 has a foreign key to the adjacent vertex's table.</p>
 
-<p>From a rdbms' perspective each edge table is a classic <code class="language-java">many to many</code> join table between vertices.</p>
+<p>From a rdbms' perspective each edge table is the classic <code class="language-java">many to many</code> join table between vertices.</p>
 
 <h3 id="TinkerPop-modernID">TinkerPop-modern</h3>
 
@@ -554,7 +588,7 @@ the column does not yet exist and Sqlg needs to create it.</p>
 
 <p>Outside of creating the index Sqlg has no further direct interaction with the index. However gremlin queries with a
 <code class="language-java">has</code> step will translate to a sql <code class="language-java">where</code> clause. If an index has been created on the property of the <code class="language-java">has</code> step then
-the underlying sql engine will utilize that index on that property's column.</p>
+the underlying rdbms will utilize that index on that property's column.</p>
 
 <p>The index does not need to be created upfront. It can be added any time.</p>
 
@@ -613,6 +647,75 @@ the user's transaction boundaries and semantics.</p>
  However schema creation commands creates table level locks which increases the risk of deadlocks in a multi-threaded environment. 
  Sqlg manages a global lock for schema creation to prevent Postgresql from dead locking.
  If multiple jvm(s) are used then a Hazelcast distributed lock is used.</p>
+
+<p><br /></p>
+
+<h2 id="TopologyID">Topology</h2>
+
+<p><br /></p>
+
+<p>As of version 1.2.0 Sqlg stores the graph's topology (schema, meta data) natively. The topology is itself stored in the graph.
+The topology is stored in the 'sqlg_schema' rdbms schema.</p>
+
+<p><img src="images/sqlg/sqlg_topology.png" alt="image of sqlg-topology" title="" /></p>
+
+<p>This is a uml diagram of TinkerPop's meta model.</p>
+
+<p>The topology is itself being stored in the graph allows it to be queried using Gremlin.
+To query the topology the <code class="language-java">TopologyStrategy</code> is used. To facilitate ease of use, <code class="language-java">SqlgGraph.topology()</code> method is added to enable the strategy.
+Being able to query the topology is very helpful to understand a graph's structure.</p>
+
+<p><strong>Example illustrating querying the topology</strong></p>
+
+<pre class="prettyprint"><code class="language-java">[pieter@pieter-laptop bin]$ ./gremlin.sh 
+
+         \,,,/
+         (o o)
+-----oOOo-(3)-oOOo-----
+plugin activated: tinkerpop.server
+plugin activated: tinkerpop.utilities
+plugin activated: sqlg.hsqldb
+plugin activated: sqlg.postgres
+plugin activated: tinkerpop.tinkergraph
+gremlin&gt; :plugin use sqlg.postgres
+==&gt;sqlg.postgres activated
+gremlin&gt; graph = SqlgGraph.open('pathTo/sqlg.properties')
+log4j:WARN No appenders could be found for logger (org.apache.commons.configuration.PropertiesConfiguration).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+==&gt;sqlggraph[SqlGraph] (jdbc:postgresql://localhost:5432/sqlgraphdb)
+gremlin&gt; graph.io(graphml()).readGraph('pathTo/tinkerpop-modern.xml')
+==&gt;null
+gremlin&gt; t = graph.topology()
+==&gt;sqlggraphtraversalsource[sqlggraph[SqlGraph] (jdbc:postgresql://localhost:5432/sqlgraphdb), standard]
+gremlin&gt; t.V().hasLabel("sqlg_schema.schema").values("name")
+==&gt;public
+gremlin&gt; t.V().hasLabel("sqlg_schema.vertex").values("name")
+==&gt;person
+==&gt;software
+gremlin&gt; t.V().hasLabel("sqlg_schema.vertex").has("name", "person").out("vertex_property").values("name")
+==&gt;name
+==&gt;age
+gremlin&gt; t.V().hasLabel("sqlg_schema.vertex").has("name", "person").out("out_edges").values("name")
+==&gt;knows
+==&gt;created
+gremlin&gt; t.V().hasLabel("sqlg_schema.vertex").has("name", "person").out("in_edges").values("name")
+==&gt;knows
+gremlin&gt; t.V().hasLabel("sqlg_schema.vertex").has("name", "software").out("in_edges").values("name")
+==&gt;created
+gremlin&gt; t.V().hasLabel("sqlg_schema.vertex").has("name", "person").out("out_edges").out("edge_property").values("name")
+==&gt;weight
+==&gt;weight
+gremlin&gt; t.V().hasLabel("sqlg_schema.vertex").has("name", "software").out("vertex_property").values("name","type")
+==&gt;name
+==&gt;STRING
+==&gt;lang
+==&gt;STRING
+</code></pre>
+
+<p><strong>NOTE</strong></p>
+
+<p>Sqlg will automatically upgrade versions prior to 1.2.0. It does so by reading the <code class="language-java">information_schema</code> tables and populating the <code class="language-java">sqlg_schema</code>.</p>
 
 <p><br /></p>
 
