@@ -199,7 +199,7 @@ These are,
 <br />
 
 <div>
-<table class="table table-striped table-bordered">
+<table class="table table-striped table-bordered table-small">
     <thead>
         <tr>
             <th>Java</th>
@@ -306,18 +306,18 @@ These are,
         </tr>
         <tr>
             <td>java.time.ZonedDateTime</td>
-            <td>TIMESTAMP WITH TIME ZONE, LONGVARCHAR</td>
-            <td>TIMESTAMP WITH TIME ZONE, TEXT</td>
+            <td>TIMESTAMP WITH TIME ZONE<br /> LONGVARCHAR</td>
+            <td>TIMESTAMP WITH TIME ZONE<br /> TEXT</td>
         </tr>
         <tr>
             <td>java.time.Period</td>
-            <td>INTEGER, INTEGER, INTEGER</td>
-            <td>INTEGER, INTEGER, INTEGER</td>
+            <td>INTEGER<br /> INTEGER<br /> INTEGER</td>
+            <td>INTEGER<br /> INTEGER<br /> INTEGER</td>
         </tr>
         <tr>
             <td>java.time.Duration</td>
-            <td>BIGINT, INTEGER</td>
-            <td>BIGINT, INTEGER</td>
+            <td>BIGINT<br /> INTEGER</td>
+            <td>BIGINT<br /> INTEGER</td>
         </tr>
         <tr>
             <td>java.time.LocalDateTime[]</td>
@@ -336,18 +336,18 @@ These are,
         </tr>
         <tr>
             <td>java.time.ZonedDateTime[]</td>
-            <td>TIMESTAMP WITH TIME ZONE ARRAY DEFAULT ARRAY[], LONGVARCHAR ARRAY DEFAULT ARRAY[]</td>
-            <td>TIMESTAMP WITH TIME ZONE[], TEXT[]</td>
+            <td>TIMESTAMP WITH TIME ZONE ARRAY DEFAULT ARRAY[]<br \> LONGVARCHAR ARRAY DEFAULT ARRAY[]</td>
+            <td>TIMESTAMP WITH TIME ZONE[]<br \> TEXT[]</td>
         </tr>
         <tr>
             <td>java.time.Period[]</td>
-            <td>INTEGER ARRAY DEFAULT ARRAY[], INTEGER ARRAY DEFAULT ARRAY[], INTEGER ARRAY DEFAULT ARRAY[]</td>
-            <td>INTEGER[], INTEGER[], INTEGER[]</td>
+            <td>INTEGER ARRAY DEFAULT ARRAY[]<br /> INTEGER ARRAY DEFAULT ARRAY[]<br /> INTEGER ARRAY DEFAULT ARRAY[]</td>
+            <td>INTEGER[]<br /> INTEGER[]<br /> INTEGER[]</td>
         </tr>
         <tr>
             <td>java.time.Duration[]</td>
-            <td>BIGINT ARRAY DEFAULT ARRAY[], INTEGER ARRAY DEFAULT ARRAY[]</td>
-            <td>BIGINT[], INTEGER[]</td>
+            <td>BIGINT ARRAY DEFAULT ARRAY[]<br /> INTEGER ARRAY DEFAULT ARRAY[]</td>
+            <td>BIGINT[]<br /> INTEGER[]</td>
         </tr>
         <tr>
             <td>com.fasterxml.jackson.databind.JsonNode</td>
