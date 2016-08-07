@@ -45,14 +45,15 @@ public class PropertyTree {
         return new PropertyTree(label);
     }
 
-    public void addChild(PropertyTree propertyTree) {
+    public PropertyTree addChild(PropertyTree propertyTree) {
         this.children.add(propertyTree);
         propertyTree.parent = this;
+        return propertyTree;
     }
 
     public PropertyTree addChild(UmlgRuntimeProperty umlgRuntimeProperty) {
-        addChild(PropertyTree.from(umlgRuntimeProperty));
-        return this;
+        PropertyTree propertyTree = PropertyTree.from(umlgRuntimeProperty);
+        return addChild(propertyTree);
     }
 
     public UmlgRuntimeProperty getUmlgRuntimeProperty() {
