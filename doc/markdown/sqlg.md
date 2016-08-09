@@ -2,7 +2,7 @@
 
 ##Introduction
 
-**Sqlg** is a implementation of [TinkerPop3](https://github.com/tinkerpop/tinkerpop3) on a [RDBMS](http://en.wikipedia.org/wiki/Relational_database_management_system).
+**Sqlg** is a implementation of [Apache TinkerPop](http://tinkerpop.apache.org/) on a [RDBMS](http://en.wikipedia.org/wiki/Relational_database_management_system).
 Currently [HSQLDB](http://hsqldb.org/) and [Postgresql](http://www.postgresql.org/) are supported.
 
 
@@ -88,7 +88,7 @@ Maven coordinates,
     </dependency>
 
 Sqlg is designed to run as a singleton that can be shared among multiple threads. You can instantiate Sqlg using the standard
-tinkerpop3 static constructors.
+TinkerPop static constructors.
 
 * `SqlgGraph.open(final Configuration configuration)`
 * `SqlgGraph.open(final String pathToSqlgProperties)`
@@ -413,7 +413,7 @@ From a rdbms' perspective each edge table is the classic `many to many` join tab
 
 ###TinkerPop-modern
 
-Taken from [TinkerPop](http://tinkerpop.incubator.apache.org/docs/3.1.0-incubating/#intro)
+Taken from [TinkerPop](http://tinkerpop.apache.org/docs/current/reference/#intro)
 
 ![image of tinkerpop-classic](images/sqlg/tinkerpop-modern-graph.png)
 
@@ -708,8 +708,8 @@ The above example will retrieve the data in one sql query.
 ###Predicates 
 <br />
 
-TinkerPop's [Compare](http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Compare.html) and 
-[Contains](http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Contains.html) predicates are optimized 
+TinkerPop's [Compare](http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/Compare.html) and 
+[Contains](http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/Contains.html) predicates are optimized 
 to execute on the database.
 
 <br />
@@ -757,13 +757,13 @@ And the resulting sql,
     	( "public"."V_Office"."name" = ?) 
     	
 The same pattern is used for all the 
-[Compare](http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Compare.html) predicates.   	
+[Compare](http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/Compare.html) predicates.   	
 
 <br />
 ####Contains predicate 
 <br />
 
-Sqlg's implementation of [Contains](http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Contains.html) is slightly more complex.
+Sqlg's implementation of [Contains](http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/Contains.html) is slightly more complex.
 For HSQLDB a regular `in` clause is used.
 
 For Postgresql, instead of using a sql `in` clause, i.e. `where property in (?, ?...)` the values are bulk inserted into a temporary table and then a join to the temporary table is used
@@ -799,7 +799,7 @@ And the resulting sql on Postgresql,
     
 This pattern makes `P.within` and `p.without` very fast even with millions of values being passed into the query. 
 Benchmarking shows that doing a join on a temporary table is always faster than using the `in` clause. 
-For the case of there being only one value Sqlg will use an `equals` instead of a temporay table or an `in` statement.
+For the case of there being only one value Sqlg will use an `equals` instead of a temporary table or an `in` statement.
 
 <br />
 ####Text predicate
@@ -1000,6 +1000,12 @@ And the resulting sql,
 The `RepeatStep` together with the `emit` modulater is an optimized way to retrieve whole sub-graphs with one hit to the db.
 
 **NOTE** The generated sql uses a `left join` if the repeat statements has an `emit` modulator.
+
+<br />
+###OptionalStep
+<br />
+
+Sqlg optimizes the OptionalStep.
 
 <br />
 ##Batch mode
