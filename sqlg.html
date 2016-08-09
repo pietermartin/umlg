@@ -64,7 +64,7 @@
 </li><li><a href="#IndexesID">Indexes</a></li><li><a href="#SchemacreationID">Schema creation</a></li><li><a href="#TopologyID">Topology</a></li><li><a href="#MultipleJvmID">Multiple Jvm</a></li><li><a href="#GremlinID">Gremlin</a><ul class="nav">
 <li><a href="#PredicatesID">Predicates </a><ul class="nav">
 <li><a href="#ComparepredicateID">Compare predicate</a></li><li><a href="#ContainspredicateID">Contains predicate </a></li><li><a href="#TextpredicateID">Text predicate</a></li><li><a href="#DateTimequeriesID">DateTime queries</a></li></ul>
-</li><li><a href="#OrderID">Order</a></li><li><a href="#RepeatStepID">RepeatStep</a></li></ul>
+</li><li><a href="#OrderID">Order</a></li><li><a href="#RepeatStepID">RepeatStep</a></li><li><a href="#OptionalStepID">OptionalStep</a></li></ul>
 </li><li><a href="#BatchmodeID">Batch mode</a><ul class="nav">
 <li><a href="#NormalbatchmodeID">Normal batch mode</a></li><li><a href="#StreamingbatchmodeID">Streaming batch mode</a></li><li><a href="#StreamingwithlockbatchmodeID">Streaming with lock batch mode</a></li></ul>
 </li>
@@ -80,7 +80,7 @@
 
 <h2 id="IntroductionID">Introduction</h2>
 
-<p><strong>Sqlg</strong> is a implementation of <a href="https://github.com/tinkerpop/tinkerpop3">TinkerPop3</a> on a <a href="http://en.wikipedia.org/wiki/Relational_database_management_system">RDBMS</a>.
+<p><strong>Sqlg</strong> is a implementation of <a href="http://tinkerpop.apache.org/">Apache TinkerPop</a> on a <a href="http://en.wikipedia.org/wiki/Relational_database_management_system">RDBMS</a>.
 Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgresql.org/">Postgresql</a> are supported.</p>
 
 <p>Sqlg has a <a href="https://groups.google.com/forum/?hl=en#!forum/sqlg">Google Group</a>.</p>
@@ -178,7 +178,7 @@ Currently <a href="http://hsqldb.org/">HSQLDB</a> and <a href="http://www.postgr
 </code></pre>
 
 <p>Sqlg is designed to run as a singleton that can be shared among multiple threads. You can instantiate Sqlg using the standard
-tinkerpop3 static constructors.</p>
+TinkerPop static constructors.</p>
 
 <ul>
 <li><code class="language-java">SqlgGraph.open(final Configuration configuration)</code></li>
@@ -518,7 +518,7 @@ has a foreign key to the adjacent vertex's table.</p>
 
 <h3 id="TinkerPop-modernID">TinkerPop-modern</h3>
 
-<p>Taken from <a href="http://tinkerpop.incubator.apache.org/docs/3.1.0-incubating/#intro">TinkerPop</a></p>
+<p>Taken from <a href="http://tinkerpop.apache.org/docs/current/reference/#intro">TinkerPop</a></p>
 
 <p><img src="images/sqlg/tinkerpop-modern-graph.png" alt="image of tinkerpop-classic" title="" /></p>
 
@@ -831,8 +831,8 @@ FROM
 
 <p><br /></p>
 
-<p>TinkerPop's <a href="http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Compare.html">Compare</a> and 
-<a href="http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Contains.html">Contains</a> predicates are optimized 
+<p>TinkerPop's <a href="http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/Compare.html">Compare</a> and 
+<a href="http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/Contains.html">Contains</a> predicates are optimized 
 to execute on the database.</p>
 
 <p><br /></p>
@@ -884,7 +884,7 @@ WHERE
 </code></pre>
 
 <p>The same pattern is used for all the 
-<a href="http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Compare.html">Compare</a> predicates.       </p>
+<a href="http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/Compare.html">Compare</a> predicates.    </p>
 
 <p><br /></p>
 
@@ -892,7 +892,7 @@ WHERE
 
 <p><br /></p>
 
-<p>Sqlg's implementation of <a href="http://tinkerpop.apache.org/javadocs/3.1.0-incubating/core/org/apache/tinkerpop/gremlin/process/traversal/Contains.html">Contains</a> is slightly more complex.
+<p>Sqlg's implementation of <a href="http://tinkerpop.apache.org/javadocs/current/full/org/apache/tinkerpop/gremlin/process/traversal/Contains.html">Contains</a> is slightly more complex.
 For HSQLDB a regular <code class="language-java">in</code> clause is used.</p>
 
 <p>For Postgresql, instead of using a sql <code class="language-java">in</code> clause, i.e. <code class="language-java">where property in (?, ?...)</code> the values are bulk inserted into a temporary table and then a join to the temporary table is used
@@ -930,7 +930,7 @@ INNER JOIN  "V_BULK_TEMP_EDGEzf++PItI" tmp1 on"public"."V_Person"."number" = tmp
 
 <p>This pattern makes <code class="language-java">P.within</code> and <code class="language-java">p.without</code> very fast even with millions of values being passed into the query. 
 Benchmarking shows that doing a join on a temporary table is always faster than using the <code class="language-java">in</code> clause. 
-For the case of there being only one value Sqlg will use an <code class="language-java">equals</code> instead of a temporay table or an <code class="language-java">in</code> statement.</p>
+For the case of there being only one value Sqlg will use an <code class="language-java">equals</code> instead of a temporary table or an <code class="language-java">in</code> statement.</p>
 
 <p><br /></p>
 
@@ -1145,6 +1145,14 @@ FROM
 <p>The <code class="language-java">RepeatStep</code> together with the <code class="language-java">emit</code> modulater is an optimized way to retrieve whole sub-graphs with one hit to the db.</p>
 
 <p><strong>NOTE</strong> The generated sql uses a <code class="language-java">left join</code> if the repeat statements has an <code class="language-java">emit</code> modulator.</p>
+
+<p><br /></p>
+
+<h3 id="OptionalStepID">OptionalStep</h3>
+
+<p><br /></p>
+
+<p>Sqlg optimizes the OptionalStep.</p>
 
 <p><br /></p>
 
