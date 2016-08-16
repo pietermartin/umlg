@@ -51,8 +51,8 @@
     <properties>
         <restlet.version>2.3.6</restlet.version>
         <jetty.version>9.3.9.v20160517</jetty.version>
-        <tinkerpop.version>3.2.0-incubating</tinkerpop.version>
-        <sqlg.version>1.2.0-SNAPSHOT</sqlg.version>
+        <tinkerpop.version>3.2.2-SNAPSHOT</tinkerpop.version>
+        <sqlg.version>1.2.1-SNAPSHOT</sqlg.version>
         <umlg.version>1.2.0-SNAPSHOT</umlg.version>
     </properties>
 
