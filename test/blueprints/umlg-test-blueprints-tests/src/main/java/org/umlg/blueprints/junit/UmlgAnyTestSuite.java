@@ -2,7 +2,7 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.tests.associationclass.TestAssociationClassDuplicates;
+import org.umlg.tests.manytomany.TestManyToMany;
 
 /**
  * Date: 2013/10/19
@@ -10,7 +10,7 @@ import org.umlg.tests.associationclass.TestAssociationClassDuplicates;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestAssociationClassDuplicates.class,
+        TestManyToMany.class,
 })
 public class UmlgAnyTestSuite {
 }

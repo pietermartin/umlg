@@ -37,8 +37,4 @@ public interface UmlgAdminGraph {
      */
     void drop();
 
-    /**
-     * Removes all vertices and edges.
-     */
-    void clear();
 }

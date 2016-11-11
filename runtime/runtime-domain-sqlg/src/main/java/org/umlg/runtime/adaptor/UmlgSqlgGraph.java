@@ -392,11 +392,6 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public void clear() {
-        this.sqlG.getSchemaManager().clear();
-    }
-
-    @Override
     public Vertex getRoot() {
         if (this.rootVertex == null) {
             this.rootVertex = this.V().has(T.label, UmlgGraph.ROOT_VERTEX).next();

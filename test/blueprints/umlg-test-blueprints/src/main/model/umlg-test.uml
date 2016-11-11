@@ -4144,6 +4144,24 @@ endif</body>
             </ownedEnd>
           </packagedElement>
         </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_vgQWQJLfEeaXH6RvC9nWPA" name="manytomany">
+          <packagedElement xmi:type="uml:Class" xmi:id="_0AMsUJLfEeaXH6RvC9nWPA" name="ManyTestA">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_2v7pAJLfEeaXH6RvC9nWPA" name="manyB" type="_1FgHgJLfEeaXH6RvC9nWPA" association="_2v5z0JLfEeaXH6RvC9nWPA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_57N5QJLfEeaXH6RvC9nWPA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_57PucJLfEeaXH6RvC9nWPA" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_1FgHgJLfEeaXH6RvC9nWPA" name="ManyTestB"/>
+          <packagedElement xmi:type="uml:Association" xmi:id="_2v5z0JLfEeaXH6RvC9nWPA" name="manyA_manyB" memberEnd="_2v7pAJLfEeaXH6RvC9nWPA _2v8QEJLfEeaXH6RvC9nWPA" navigableOwnedEnd="_2v8QEJLfEeaXH6RvC9nWPA">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_2v7B8JLfEeaXH6RvC9nWPA" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2v7B8ZLfEeaXH6RvC9nWPA" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_2v8QEJLfEeaXH6RvC9nWPA" name="manyA" type="_0AMsUJLfEeaXH6RvC9nWPA" isUnique="false" association="_2v5z0JLfEeaXH6RvC9nWPA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6wIvEJLfEeaXH6RvC9nWPA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6wJ9MJLfEeaXH6RvC9nWPA" value="*"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_1clVoQAOEeKpVr_ntT6cLA">
