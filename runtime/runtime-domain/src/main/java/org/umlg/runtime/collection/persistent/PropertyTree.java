@@ -5,6 +5,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.Order;
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
+import org.apache.tinkerpop.gremlin.process.traversal.step.util.HasContainer;
 import org.apache.tinkerpop.gremlin.process.traversal.util.EmptyTraversal;
 import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
@@ -28,6 +29,11 @@ public class PropertyTree {
     private UmlgRuntimeProperty umlgRuntimeProperty;
     private PropertyTree parent;
     private ListOrderedSet<PropertyTree> children = new ListOrderedSet<>();
+    private Set<HasContainer> hasContainers = new HashSet<>();
+
+    public void addHasContainer(HasContainer hasContainer) {
+        this.hasContainers.add(hasContainer);
+    }
 
     private PropertyTree(String label) {
         this.label = label;
@@ -62,6 +68,9 @@ public class PropertyTree {
 
     public List<PathTree> traversal(Graph graph) {
         GraphTraversal<Vertex, Vertex> traversal = graph.traversal().V().hasLabel(this.label).as(this.label);
+        for (HasContainer hasContainer : hasContainers) {
+            traversal.has(hasContainer.getKey(), hasContainer.getValue());
+        }
         walk(traversal);
 //        applyOrder(traversal);
         return PathTree.from(traversal.path());
@@ -126,12 +135,20 @@ public class PropertyTree {
         Traversal<Vertex, Vertex> innerTraversal;
         if (labels.length == 1) {
             innerTraversal =  __.<Vertex>toE(Direction.OUT, labels).as("e_" + labels[0]).<Edge>otherV();
+            Set<HasContainer> hasContainers = getChildrenHasContainers();
+            for (HasContainer hasContainer : hasContainers) {
+                ((GraphTraversal)innerTraversal).has(hasContainer.getKey(), hasContainer.getPredicate());
+            }
         } else if (labels.length > 1) {
             String[] edgeLabels = Arrays.copyOfRange(labels, 1, labels.length);
             for (int i = 0; i < edgeLabels.length; i++) {
                 edgeLabels[i] = "e_" + edgeLabels[i];
             }
             innerTraversal =  __.<Vertex>toE(Direction.OUT, labels).as("e_" + labels[0], edgeLabels).<Edge>otherV();
+            Set<HasContainer> hasContainers = getChildrenHasContainers();
+            for (HasContainer hasContainer : hasContainers) {
+                ((GraphTraversal)innerTraversal).has(hasContainer.getKey(), hasContainer.getPredicate());
+            }
         } else {
             innerTraversal = EmptyTraversal.instance();
         }
@@ -143,12 +160,20 @@ public class PropertyTree {
         Traversal<Vertex, Vertex> innerTraversal;
         if (labels.length == 1) {
             innerTraversal =  __.<Vertex>toE(Direction.IN, labels).as("e_" + labels[0]).<Edge>otherV();
+            Set<HasContainer> hasContainers = getChildrenHasContainers();
+            for (HasContainer hasContainer : hasContainers) {
+                ((GraphTraversal)innerTraversal).has(hasContainer.getKey(), hasContainer.getPredicate());
+            }
         } else if (labels.length > 1) {
             String[] edgeLabels = Arrays.copyOfRange(labels, 1, labels.length);
             for (int i = 0; i < edgeLabels.length; i++) {
                 edgeLabels[i] = "e_" + edgeLabels[i];
             }
             innerTraversal =   __.<Vertex>toE(Direction.IN, labels).as("e_" + labels[0], edgeLabels).<Edge>otherV();
+            Set<HasContainer> hasContainers = getChildrenHasContainers();
+            for (HasContainer hasContainer : hasContainers) {
+                ((GraphTraversal)innerTraversal).has(hasContainer.getKey(), hasContainer.getPredicate());
+            }
         } else {
             innerTraversal = EmptyTraversal.instance();
         }
@@ -194,6 +219,18 @@ public class PropertyTree {
             }
         }
         return result.toArray(new String[result.size()]);
+    }
+
+    private Set<HasContainer> getChildrenHasContainers() {
+        Set<HasContainer> result = new HashSet<>();
+        for (PropertyTree child : this.children) {
+            if (child.getUmlgRuntimeProperty().isControllingSide() && !child.hasContainers.isEmpty()) {
+                for (HasContainer hasContainer : child.hasContainers) {
+                    result.add(hasContainer);
+                }
+            }
+        }
+        return result;
     }
 
     private boolean childrenAreUnique() {

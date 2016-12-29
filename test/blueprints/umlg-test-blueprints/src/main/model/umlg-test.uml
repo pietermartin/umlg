@@ -4143,6 +4143,9 @@ endif</body>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9p_jYCe7Eea5Vdy8JUGEkA" value="*"/>
             </ownedEnd>
           </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_Pcl3kM2aEea1sugpV7WUMQ" name="nodeconnectionspec">
+            <packagedElement xmi:type="uml:Class" xmi:id="_T5fgsM2aEea1sugpV7WUMQ" name="NetworkSoftwareVersion"/>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_vgQWQJLfEeaXH6RvC9nWPA" name="manytomany">
           <packagedElement xmi:type="uml:Class" xmi:id="_0AMsUJLfEeaXH6RvC9nWPA" name="ManyTestA">

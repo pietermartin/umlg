@@ -84,6 +84,13 @@ public class PathTree {
     }
 
     private void loadUmlgNodes(UmlgNode owner, ListOrderedSet<PropertyTree> propertyTreesToNavigateTo, String edgeLabel) throws Exception {
+        if (this.children.isEmpty()) {
+            for (PropertyTree propertyTree : propertyTreesToNavigateTo) {
+                //set the collection as loaded even though there is nothing to load.
+                //else it will execute a query to get the nothing.
+                owner.z_addToInternalCollection(propertyTree.getUmlgRuntimeProperty(), null);
+            }
+        }
         for (PathTree pathTree : this.children.values()) {
             Object object = pathTree.element;
             PropertyTree propertyTreeToNav = null;
@@ -91,6 +98,11 @@ public class PathTree {
                 Vertex vertex = (Vertex) object;
                 Class<?> c = getClassToInstantiate(vertex);
                 UmlgNode umlgNode = instantiateUmlgNode(vertex, c);
+                for (PropertyTree propertyTree : propertyTreesToNavigateTo) {
+                    //set the collection as loaded even though there is nothing to load.
+                    //else it will execute a query to get the nothing.
+                    owner.z_addToInternalCollection(propertyTree.getUmlgRuntimeProperty(), null);
+                }
                 for (PropertyTree propertyTree : propertyTreesToNavigateTo) {
                     if (edgeLabel.equals(propertyTree.getUmlgRuntimeProperty().getLabel())) {
                         propertyTreeToNav = propertyTree;

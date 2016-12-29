@@ -1,6 +1,8 @@
 package org.umlg.tests.globalget;
 
 import org.apache.commons.lang3.time.StopWatch;
+import org.apache.tinkerpop.gremlin.process.traversal.P;
+import org.apache.tinkerpop.gremlin.process.traversal.step.util.HasContainer;
 import org.junit.Assume;
 import org.junit.Test;
 import org.umlg.collectiontest.Finger;
@@ -10,17 +12,13 @@ import org.umlg.optional.AOptional;
 import org.umlg.optional.BBOptional;
 import org.umlg.optional.BOptional;
 import org.umlg.optional.COptional;
-import org.umlg.rootallinstances.TopRoot;
-import org.umlg.rootallinstances.TopRootChild;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.persistent.PropertyTree;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.umlg.collectiontest.Hand.HandRuntimePropertyEnum.finger;
 import static org.umlg.concretetest.God.GodRuntimePropertyEnum.hand;
 
@@ -30,59 +28,59 @@ import static org.umlg.concretetest.God.GodRuntimePropertyEnum.hand;
  */
 public class TestGlobalGet extends BaseLocalDbTest {
 
-    @Test
-    public void test() {
-        TopRoot topRoot1 = new TopRoot();
-        topRoot1.setNameUnique("a");
-        topRoot1.setIndexedName("aaa");
-        TopRootChild topRootChild1 = new TopRootChild(topRoot1);
-        topRootChild1.setName("topRootChild1");
-
-        TopRoot topRoot2 = new TopRoot();
-        topRoot2.setNameUnique("ab");
-        topRoot2.setIndexedName("aaab");
-        TopRootChild topRootChild2 = new TopRootChild(topRoot2);
-        topRootChild2.setName("topRootChild2");
-        UMLG.get().commit();
-
-        //This must happen with only 2 queries to the db, 1 really but the optional 2
-        PropertyTree topRootPt = PropertyTree.from("TopRoot");
-        topRootPt.addChild(TopRoot.TopRootRuntimePropertyEnum.topRootChild);
-        List<TopRoot> topRoots = UMLG.get().get(topRootPt);
-        for (TopRoot topRoot : topRoots) {
-            for (TopRootChild topRootChild : topRoot.getTopRootChild()) {
-                System.out.println(topRootChild2.getName());
-            }
-        }
-        assertTrue(topRoots.containsAll(Arrays.asList(topRoot1, topRoot2)));
-    }
-
-    @Test
-    public void testGlobalGet2Ways() {
-        AOptional aOptional1 = new AOptional();
-        aOptional1.setName("aOptional1");
-        BOptional bOptional1 = new BOptional();
-        bOptional1.setName("bOptional1");
-        BBOptional bbOptional1 = new BBOptional();
-        bbOptional1.setName("bbOptional1");
-        aOptional1.addToBOptional(bOptional1);
-        aOptional1.addToBBoptional(bbOptional1);
-        UMLG.get().commit();
-
-        PropertyTree aOptionalPT = PropertyTree.from("AOptional");
-        aOptionalPT.addChild(AOptional.AOptionalRuntimePropertyEnum.bOptional);
-        aOptionalPT.addChild(AOptional.AOptionalRuntimePropertyEnum.bBoptional);
-        List<AOptional> aOptionals = UMLG.get().get(aOptionalPT);
-
-        for (AOptional aOptional : aOptionals) {
-            for (BOptional bOptional : aOptional.getBOptional()) {
-                System.out.println(bOptional.getName());
-            }
-            for (BBOptional bbOptional : aOptional.getBBoptional()) {
-                System.out.println(bbOptional.getName());
-            }
-        }
-    }
+//    @Test
+//    public void test() {
+//        TopRoot topRoot1 = new TopRoot();
+//        topRoot1.setNameUnique("a");
+//        topRoot1.setIndexedName("aaa");
+//        TopRootChild topRootChild1 = new TopRootChild(topRoot1);
+//        topRootChild1.setName("topRootChild1");
+//
+//        TopRoot topRoot2 = new TopRoot();
+//        topRoot2.setNameUnique("ab");
+//        topRoot2.setIndexedName("aaab");
+//        TopRootChild topRootChild2 = new TopRootChild(topRoot2);
+//        topRootChild2.setName("topRootChild2");
+//        UMLG.get().commit();
+//
+//        //This must happen with only 2 queries to the db, 1 really but the optional 2
+//        PropertyTree topRootPt = PropertyTree.from("TopRoot");
+//        topRootPt.addChild(TopRoot.TopRootRuntimePropertyEnum.topRootChild);
+//        List<TopRoot> topRoots = UMLG.get().get(topRootPt);
+//        for (TopRoot topRoot : topRoots) {
+//            for (TopRootChild topRootChild : topRoot.getTopRootChild()) {
+//                System.out.println(topRootChild2.getName());
+//            }
+//        }
+//        Assert.assertTrue(topRoots.containsAll(Arrays.asList(topRoot1, topRoot2)));
+//    }
+//
+//    @Test
+//    public void testGlobalGet2Ways() {
+//        AOptional aOptional1 = new AOptional();
+//        aOptional1.setName("aOptional1");
+//        BOptional bOptional1 = new BOptional();
+//        bOptional1.setName("bOptional1");
+//        BBOptional bbOptional1 = new BBOptional();
+//        bbOptional1.setName("bbOptional1");
+//        aOptional1.addToBOptional(bOptional1);
+//        aOptional1.addToBBoptional(bbOptional1);
+//        UMLG.get().commit();
+//
+//        PropertyTree aOptionalPT = PropertyTree.from("AOptional");
+//        aOptionalPT.addChild(AOptional.AOptionalRuntimePropertyEnum.bOptional);
+//        aOptionalPT.addChild(AOptional.AOptionalRuntimePropertyEnum.bBoptional);
+//        List<AOptional> aOptionals = UMLG.get().get(aOptionalPT);
+//
+//        for (AOptional aOptional : aOptionals) {
+//            for (BOptional bOptional : aOptional.getBOptional()) {
+//                System.out.println(bOptional.getName());
+//            }
+//            for (BBOptional bbOptional : aOptional.getBBoptional()) {
+//                System.out.println(bbOptional.getName());
+//            }
+//        }
+//    }
 
     @Test
     public void test3Levels() {
@@ -92,6 +90,8 @@ public class TestGlobalGet extends BaseLocalDbTest {
         bOptional1.setName("bOptional1");
         BOptional bOptional2 = new BOptional();
         bOptional2.setName("bOptional2");
+        BOptional bOptional3 = new BOptional();
+        bOptional3.setName("bOptional3");
         COptional cOptional1 = new COptional();
         cOptional1.setName("cOptional1");
         COptional cOptional2 = new COptional();
@@ -104,8 +104,10 @@ public class TestGlobalGet extends BaseLocalDbTest {
         cOptional22.setName("cOptional22");
         COptional cOptional33 = new COptional();
         cOptional33.setName("cOptional33");
+
         aOptional1.addToBOptional(bOptional1);
         aOptional1.addToBOptional(bOptional2);
+        aOptional1.addToBOptional(bOptional3);
         bOptional1.addToCOptional(cOptional1);
         bOptional1.addToCOptional(cOptional2);
         bOptional1.addToCOptional(cOptional3);
@@ -115,16 +117,27 @@ public class TestGlobalGet extends BaseLocalDbTest {
         UMLG.get().commit();
 
         PropertyTree aOptionalPT = PropertyTree.from("AOptional");
+        aOptionalPT.addHasContainer(new HasContainer("name", P.eq("aOptional1")));
+
         PropertyTree bOptionalPT = PropertyTree.from(AOptional.AOptionalRuntimePropertyEnum.bOptional);
+        bOptionalPT.addHasContainer(new HasContainer("name", P.within("bOptional1", "bOptional2", "bOptional3")));
+        bOptionalPT.addChild(BOptional.BOptionalRuntimePropertyEnum.cOptional);
+
         aOptionalPT.addChild(bOptionalPT);
         aOptionalPT.addChild(AOptional.AOptionalRuntimePropertyEnum.bBoptional);
-        bOptionalPT.addChild(BOptional.BOptionalRuntimePropertyEnum.cOptional);
+
         List<AOptional> aOptionals = UMLG.get().get(aOptionalPT);
         assertEquals(1, aOptionals.size());
         for (AOptional aOptional : aOptionals) {
-            assertEquals(2, aOptional.getBOptional().size());
+            assertEquals(3, aOptional.getBOptional().size());
             for (BOptional bOptional : aOptional.getBOptional()) {
-                assertEquals(3, bOptional.getCOptional().size());
+                if (bOptional.getName().equals("bOptional1")) {
+                    assertEquals(3, bOptional.getCOptional().size());
+                } else if (bOptional.getName().equals("bOptional2")) {
+                    assertEquals(3, bOptional.getCOptional().size());
+                } else {
+                    assertEquals(0, bOptional.getCOptional().size());
+                }
                 for (COptional cOptional : bOptional.getCOptional()) {
                     System.out.println(cOptional.getName());
                 }
@@ -135,7 +148,7 @@ public class TestGlobalGet extends BaseLocalDbTest {
         }
     }
 
-//    @Test
+    //    @Test
     public void testHandFingerNail() {
         Assume.assumeTrue(UMLG.get().supportsBatchMode());
         God god = new God();
@@ -206,4 +219,22 @@ public class TestGlobalGet extends BaseLocalDbTest {
 //        }
 //        System.out.println("done sleeping");
     }
+
+//    @Test
+//    public void test() {
+//        PropertyTree nsvPT = PropertyTree.from("NetworkSoftwareVersion");
+//        PropertyTree networkNodePT = PropertyTree.from(networkNode);
+//        nsvPT.addChild(networkNodePT);
+//        PropertyTree networkNodeGroupPT = PropertyTree.from(networkNodeGroup);
+//        networkNodePT.addChild(networkNodeGroupPT);
+//        PropertyTree nodeConnectionSpecPT = PropertyTree.from(nodeConnectionSpec);
+//        networkNodePT.addChild(nodeConnectionSpecPT);
+//
+//        PropertyTree nodeDefinitionPT = PropertyTree.from(nodeDefinition);
+//        networkNodePT.addChild(nodeDefinitionPT);
+//        PropertyTree planSourcePT = PropertyTree.from(planSource);
+//        nodeDefinitionPT.addChild(planSourcePT);
+//        List<NetworkSoftwareVersion> networkSoftwareVersionList = UMLG.get().get(nsvPT);
+//
+//    }
 }

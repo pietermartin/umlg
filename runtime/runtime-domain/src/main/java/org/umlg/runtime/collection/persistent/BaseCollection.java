@@ -1131,7 +1131,10 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     @Override
     public void z_internalAdder(E e) {
-        this.internalCollection.add(e);
+        //nulls indicate that there is nothing to load but that the load attempt has been made.
+        if (e != null) {
+            this.internalCollection.add(e);
+        }
         this.loaded = true;
     }
 

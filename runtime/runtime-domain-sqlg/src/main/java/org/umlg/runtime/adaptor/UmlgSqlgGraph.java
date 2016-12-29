@@ -1,5 +1,6 @@
 package org.umlg.runtime.adaptor;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.configuration.Configuration;
 import org.apache.tinkerpop.gremlin.process.computer.GraphComputer;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
@@ -13,6 +14,8 @@ import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.util.PathTree;
 import org.umlg.runtime.util.UmlgProperties;
+import org.umlg.sqlg.structure.EdgeLabel;
+import org.umlg.sqlg.structure.IndexType;
 import org.umlg.sqlg.structure.RecordId;
 import org.umlg.sqlg.structure.SqlgGraph;
 
@@ -95,7 +98,15 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
             }
         } else if (Edge.class.isAssignableFrom(elementClass)) {
             this.tx().readWrite();
-            this.sqlG.createEdgeLabeledIndex(labelUmlgParameter.getValue(), key);
+            String[] schemaTable = labelUmlgParameter.getValue().split("\\.");
+            Optional<EdgeLabel> edgeLabelOptional = this.sqlG.getTopology().getEdgeLabel(schemaTable[0], schemaTable[1]);
+            Preconditions.checkState(edgeLabelOptional.isPresent());
+            edgeLabelOptional.get()
+                    .ensureIndexExists(
+                            IndexType.NON_UNIQUE,
+                            new ArrayList<>(edgeLabelOptional.get().getProperties().values())
+                    );
+//            this.sqlG.createEdgeLabeledIndex(labelUmlgParameter.getValue(), key);
         } else {
             throw Exceptions.classIsNotIndexable(elementClass);
         }

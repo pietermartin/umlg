@@ -112,7 +112,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
     public void drop() {
         this.umlgGraph.rollback();
         SqlgGraph sqlgGraph = (SqlgGraph)this.umlgGraph.getUnderlyingGraph();
-        sqlgGraph.getSchemaManager().close();
+//        sqlgGraph.getSchemaManager().close();
         SqlDialect sqlDialect = sqlgGraph.getSqlDialect();
         try (Connection conn = sqlgGraph.getSqlgDataSource().get(this.configuration.getString("jdbc.url")).getConnection()) {
             DatabaseMetaData metadata = conn.getMetaData();
@@ -161,6 +161,12 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
             }
             sqlgGraph.getSqlgDataSource().close(this.configuration.getString("jdbc.url"));
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            sqlgGraph.close();
+            UMLG.remove();
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
