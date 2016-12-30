@@ -115,21 +115,6 @@ public class PropertyTree {
         }
     }
 
-//    private GraphTraversal<Vertex, Vertex> innerTraversal() {
-//        String[] labels = labels();
-//        Traversal<Vertex, Vertex> innerTraversal;
-//        if (labels.length == 1) {
-//            innerTraversal =  __.<Vertex>toE(this.direction(), labels).as("e_" + labels[0]).<Edge>otherV();
-//        } else {
-//            String[] edgeLabels = Arrays.copyOfRange(labels, 1, labels.length);
-//            for (int i = 0; i < edgeLabels.length; i++) {
-//                edgeLabels[i] = "e_" + edgeLabels[i];
-//            }
-//            innerTraversal =   __.<Vertex>toE(this.direction(), labels).as("e_" + labels[0], edgeLabels).<Edge>otherV();
-//        }
-//        return (GraphTraversal<Vertex, Vertex>) innerTraversal;
-//    }
-
     private Traversal<Vertex, Vertex> outInnerTraversal() {
         String[] labels = outLabels();
         Traversal<Vertex, Vertex> innerTraversal;
