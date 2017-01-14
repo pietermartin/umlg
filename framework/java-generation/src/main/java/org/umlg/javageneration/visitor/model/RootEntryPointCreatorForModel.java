@@ -1,25 +1,28 @@
 package org.umlg.javageneration.visitor.model;
 
-import java.util.*;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
 import org.umlg.framework.ModelLoader;
+import org.umlg.framework.Visitor;
+import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 import org.umlg.java.metamodel.annotation.OJEnum;
-import org.umlg.framework.Visitor;
-import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.Condition;
-import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgModelOperations;
 import org.umlg.javageneration.validation.Validation;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.javageneration.visitor.clazz.RuntimePropertyImplementor;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 public class RootEntryPointCreatorForModel extends BaseVisitor implements Visitor<Model> {
 
@@ -31,7 +34,7 @@ public class RootEntryPointCreatorForModel extends BaseVisitor implements Visito
     public void visitBefore(Model model) {
         OJAnnotatedClass root = new OJAnnotatedClass(StringUtils.capitalize(model.getName()));
         root.setComment(String.format("This class represents the model %s.\nIt is a singleton and allows on access to all the root classes in the model.", model.getQualifiedName()));
-        root.addToImplementedInterfaces(UmlgGenerationUtil.UmlgApplicationNode);
+//        root.addToImplementedInterfaces(UmlgGenerationUtil.UmlgApplicationNode);
         OJPackage ojPackage = new OJPackage(UmlgGenerationUtil.UmlgRootPackage.toJavaString());
         root.setMyPackage(ojPackage);
         addToSource(root);
@@ -40,11 +43,11 @@ public class RootEntryPointCreatorForModel extends BaseVisitor implements Visito
         root.addToImports(UmlgGenerationUtil.UMLGPathName);
         root.addToImports(UmlgGenerationUtil.vertexPathName);
 
-        addINSTANCE(root, model);
-        addGetRootVertex(root);
+//        addINSTANCE(root, model);
+//        addGetRootVertex(root);
         addModelAndRebuildAsJson(model, root);
-        implementTumlRootNode(root);
-        addGetMetaClassForQualifiedName(root);
+//        implementTumlRootNode(root);
+//        addGetMetaClassForQualifiedName(root);
 
         generateInternalPropertyFile(model);
     }

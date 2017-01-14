@@ -4,9 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
 import org.umlg.interfacetest.*;
-import org.umlg.interfacetest.meta.IManyAMeta;
-import org.umlg.interfacetest.meta.IManyBMeta;
-import org.umlg.interfacetest.meta.IManyMeta;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 /**

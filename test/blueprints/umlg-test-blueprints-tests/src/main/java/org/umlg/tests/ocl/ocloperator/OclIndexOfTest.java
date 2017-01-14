@@ -2,7 +2,6 @@ package org.umlg.tests.ocl.ocloperator;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.umlg.ocl.ocloperator.OclAnd;
 import org.umlg.ocl.ocloperator.OclIndexOf;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.test.BaseLocalDbTest;

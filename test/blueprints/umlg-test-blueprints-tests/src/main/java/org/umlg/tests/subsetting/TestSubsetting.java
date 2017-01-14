@@ -3,7 +3,6 @@ package org.umlg.tests.subsetting;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.runtime.adaptor.UMLG;
-import org.umlg.runtime.adaptor.UmlgAdminGraph;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.subsetting.*;
 

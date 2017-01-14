@@ -69,7 +69,7 @@ public class ClassInterfacePropertyLookupGenerator extends BaseVisitor implement
                         lookupOnParent.getBody().addToStatements("result.addAll(" + UmlgClassOperations.getPathName(c) + ".allInstances())");
                     }
 
-                    annotatedClass.addToImports(UmlgClassOperations.getMetaClassPathName(c));
+//                    annotatedClass.addToImports(UmlgClassOperations.getMetaClassPathName(c));
                 }
                 lookupOnParent.getBody().addToStatements("return result");
                 annotatedClass.addToOperations(lookupOnParent);

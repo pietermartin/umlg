@@ -2,7 +2,8 @@ package org.umlg.tests.associationtoself;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.umlg.associationtoself.*;
+import org.umlg.associationtoself.E;
+import org.umlg.associationtoself.EAC;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.test.BaseLocalDbTest;
 

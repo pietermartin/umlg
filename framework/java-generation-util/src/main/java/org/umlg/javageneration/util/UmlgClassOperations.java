@@ -1,17 +1,17 @@
 package org.umlg.javageneration.util;
 
-import java.util.*;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.ocl.uml.CollectionType;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.internal.operations.ClassOperations;
+import org.umlg.framework.ModelLoader;
 import org.umlg.java.metamodel.OJPackage;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.OJVisibilityKind;
-import org.umlg.framework.ModelLoader;
+
+import java.util.*;
 
 public class UmlgClassOperations extends ClassOperations {
 
@@ -522,7 +522,6 @@ public class UmlgClassOperations extends ClassOperations {
         OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".meta");
         OJPathName result = ojPackage.getPathName().append(UmlgClassOperations.getMetaClassName(clazz));
         return result;
-
     }
 
     public static String propertyEnumName(Type type) {

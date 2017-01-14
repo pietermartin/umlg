@@ -7,13 +7,11 @@ import org.umlg.framework.ModelLoader;
 import org.umlg.framework.VisitSubclasses;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
-import org.umlg.java.metamodel.OJField;
 import org.umlg.java.metamodel.OJPathName;
-import org.umlg.java.metamodel.OJWhileStatement;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class> {
@@ -29,9 +27,9 @@ public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class>
 			OJAnnotatedClass root = this.workspace.findOJClass(UmlgGenerationUtil.UmlgRootPackage.toJavaString() + "." + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()));
 			addGetterToAppRootForRootEntity(clazz, root);
 		}
-        if (!clazz.isAbstract()) {
-            addGetterToMetaClassForRootEntity(clazz);
-        }
+//        if (!clazz.isAbstract()) {
+//            addGetterToMetaClassForRootEntity(clazz);
+//        }
 	}
 
     private void addGetterToMetaClassForRootEntity(Class clazz) {
@@ -48,6 +46,7 @@ public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class>
     private void addGetterToAppRootForRootEntity(Class clazz, OJAnnotatedClass root) {
 		OJAnnotatedOperation getter = new OJAnnotatedOperation("get" + UmlgClassOperations.className(clazz),
 				UmlgGenerationUtil.umlgSet.getCopy().addToGenerics("? extends " + UmlgClassOperations.getPathName(clazz).getLast()));
+		getter.setStatic(true);
 		root.addToOperations(getter);
 		getter.getBody().addToStatements("return " + UmlgClassOperations.getPathName(clazz) + ".allInstances()");
         root.addToImports(UmlgClassOperations.getPathName(clazz));

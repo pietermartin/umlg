@@ -73,7 +73,7 @@ public class TestHandFinger extends BaseLocalDbTest {
         finger6.addToManyRequiredInteger(1);
         db.commit();
 
-        Assert.assertTrue(RestAndJson.INSTANCE.getHuman().size() > 0);
+        Assert.assertTrue(RestAndJson.getHuman().size() > 0);
 
     }
 }

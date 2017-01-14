@@ -1,14 +1,14 @@
 package org.umlg.restlet.generation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.DefaultVisitors;
 import org.umlg.restlet.router.RestletRouterEnumGenerator;
 import org.umlg.restlet.visitor.clazz.*;
 import org.umlg.restlet.visitor.model.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RestletVisitors {
 
@@ -39,7 +39,7 @@ public class RestletVisitors {
         result.add(new AddUriToRootRuntimePropertyEnum(Workspace.INSTANCE, Workspace.RESTLET_SOURCE_FOLDER));
 
         result.add(new AddFieldTypeFieldToRuntimeLiteral(Workspace.INSTANCE, Workspace.RESTLET_SOURCE_FOLDER));
-        result.add(new AddFieldTypeFieldToRootRuntimeLiteral(Workspace.INSTANCE, Workspace.RESTLET_SOURCE_FOLDER));
+//        result.add(new AddFieldTypeFieldToRootRuntimeLiteral(Workspace.INSTANCE, Workspace.RESTLET_SOURCE_FOLDER));
         result.add(new AddUmlgLookupUriToRuntimePropertyEnum(Workspace.INSTANCE, Workspace.RESTLET_SOURCE_FOLDER));
         result.add(new AddUmlgLookupCompositeParentUriToRuntimePropertyEnum(Workspace.INSTANCE, Workspace.RESTLET_SOURCE_FOLDER));
         result.add(new LookupForOneResourceBuilder(Workspace.INSTANCE, Workspace.RESTLET_SOURCE_FOLDER));

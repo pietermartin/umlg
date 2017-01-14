@@ -2,20 +2,11 @@ package org.umlg.tests.allinstances;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.umlg.BaseModelUmlg;
 import org.umlg.concretetest.God;
-import org.umlg.hierarchytest.Folder;
-import org.umlg.hierarchytest.RealRootFolder;
 import org.umlg.inheritencetest.AbstractSpecies;
 import org.umlg.inheritencetest.Biped;
 import org.umlg.inheritencetest.Mamal;
 import org.umlg.inheritencetest.Quadped;
-import org.umlg.interfacetest.ManyA;
-import org.umlg.interfacetest.ManyB;
-import org.umlg.query.InstanceQuery;
-import org.umlg.query.QueryEnum;
-import org.umlg.rootallinstances.BaseRoot;
-import org.umlg.rootallinstances.TopRoot;
 import org.umlg.runtime.collection.Filter;
 import org.umlg.runtime.test.BaseLocalDbTest;
 

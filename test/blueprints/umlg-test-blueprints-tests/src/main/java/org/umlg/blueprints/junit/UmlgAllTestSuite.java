@@ -3,7 +3,6 @@ package org.umlg.blueprints.junit;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.umlg.gremlin.TestGroovyExecutor;
-import org.umlg.meta.TestMetaClasses;
 import org.umlg.tests.allinstances.AllInstancesTest;
 import org.umlg.tests.allinstances.TestAllInstancesOnAbstractClass;
 import org.umlg.tests.allinstances.TestAllInstancesOnInterface;
@@ -54,10 +53,8 @@ import org.umlg.tests.optional.TestOptional;
 import org.umlg.tests.primitive.TestBooleanPrimitive;
 import org.umlg.tests.primitive.TestPrimitiveRemoval;
 import org.umlg.tests.qualifiertest.*;
-import org.umlg.tests.query.TestMetaQueries;
 import org.umlg.tests.query.TestQueryBaseModelUmlgAssociation;
 import org.umlg.tests.ringtest.TestFingerRing;
-import org.umlg.tests.root.TestRootMethods;
 import org.umlg.tests.speed.SpeedTest;
 import org.umlg.tests.subsetting.TestSubsetting;
 import org.umlg.tests.validationtest.TestValidation;
@@ -69,7 +66,7 @@ import org.umlg.tests.validationtest.TestValidation;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         TestGroovyExecutor.class,
-        TestMetaClasses.class,
+//        TestMetaClasses.class,
 
         AllInstancesTest.class,
         BagTestTest.class,
@@ -112,7 +109,7 @@ import org.umlg.tests.validationtest.TestValidation;
         TestQualifier.class,
 //        //Fails::TestQualifierChangeEvent.class,
         TestQualifierOnManyToMany.class,
-        TestMetaQueries.class,
+//        TestMetaQueries.class,
         TestQueryBaseModelUmlgAssociation.class,
         TestFingerRing.class,
         SpeedTest.class,
@@ -121,7 +118,7 @@ import org.umlg.tests.validationtest.TestValidation;
         TestIndexing.class,
         ManyToManyOrderedSetTest.class,
         ManyToManySequenceTest.class,
-        TestRootMethods.class,
+//        TestRootMethods.class,
         TestJavaPrimitiveTypes.class,
         TestJavaPrimitiveTypesWithValidation.class,
         TestJavaManyPrimitiveTypesWithValidation.class,

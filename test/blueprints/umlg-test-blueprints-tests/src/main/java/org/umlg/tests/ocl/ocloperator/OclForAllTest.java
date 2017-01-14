@@ -3,8 +3,6 @@ package org.umlg.tests.ocl.ocloperator;
 import org.junit.Test;
 import org.umlg.ocl.ocloperator.ForAll1;
 import org.umlg.ocl.ocloperator.ForAll2;
-import org.umlg.ocl.ocloperator.OclExists1;
-import org.umlg.ocl.ocloperator.OclExists2;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.runtime.validation.UmlgConstraintViolationException;

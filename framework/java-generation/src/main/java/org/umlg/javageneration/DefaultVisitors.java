@@ -8,7 +8,6 @@ import org.umlg.javageneration.visitor.enumeration.EnumerationVisitor;
 import org.umlg.javageneration.visitor.enumeration.TofromJsonForEnumCreator;
 import org.umlg.javageneration.visitor.interfaze.InterfaceVisitor;
 import org.umlg.javageneration.visitor.model.IndexCreator;
-import org.umlg.javageneration.visitor.model.MetaNodeCreator;
 import org.umlg.javageneration.visitor.model.RootEntryPointCreatorForModel;
 import org.umlg.javageneration.visitor.operation.OperationImplementorSimple;
 import org.umlg.javageneration.visitor.property.*;
@@ -25,8 +24,10 @@ public class DefaultVisitors {
         result.add(new InterfaceVisitor(Workspace.INSTANCE));
         result.add(new ClassCreator(Workspace.INSTANCE));
         result.add(new ClassBuilder(Workspace.INSTANCE));
+
         result.add(new RootEntryPointCreatorForModel(Workspace.INSTANCE));
         result.add(new RootEntryPointBuilder(Workspace.INSTANCE));
+
         result.add(new QualifiedNameClassNameMapBuilder(Workspace.INSTANCE));
         result.add(new QualifiedNameClassMapCreator(Workspace.INSTANCE));
         result.add(new SchemaCreator(Workspace.INSTANCE));
@@ -55,9 +56,9 @@ public class DefaultVisitors {
 
         result.add(new ClassValidateMultiplicitiesBuilder(Workspace.INSTANCE));
         result.add(new ClassCheckConstraintsBuilder(Workspace.INSTANCE));
-        result.add(new MetaClassBuilder(Workspace.INSTANCE, Workspace.META_SOURCE_FOLDER));
-        result.add(new MetaInterfaceBuilder(Workspace.INSTANCE, Workspace.META_SOURCE_FOLDER));
-        result.add(new MetaNodeCreator(Workspace.INSTANCE, Workspace.META_SOURCE_FOLDER));
+//        result.add(new MetaClassBuilder(Workspace.INSTANCE, Workspace.META_SOURCE_FOLDER));
+//        result.add(new MetaInterfaceBuilder(Workspace.INSTANCE, Workspace.META_SOURCE_FOLDER));
+//        result.add(new MetaNodeCreator(Workspace.INSTANCE, Workspace.META_SOURCE_FOLDER));
         result.add(new IndexCreator(Workspace.INSTANCE));
         result.add(new IndexSetValidator(Workspace.INSTANCE));
         result.add(new PropertyIndexFinderCreator(Workspace.INSTANCE));

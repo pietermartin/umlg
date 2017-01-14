@@ -7,7 +7,6 @@ import org.umlg.inheritencetest.AbstractSpecies;
 import org.umlg.inheritencetest.Biped;
 import org.umlg.inheritencetest.Mamal;
 import org.umlg.inheritencetest.Quadped;
-import org.umlg.inheritencetest.meta.AbstractSpeciesMeta;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 /**
