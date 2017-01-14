@@ -312,7 +312,7 @@ public class JsonTest extends BaseLocalDbTest {
 		ObjectMapper objectMapper = new ObjectMapper();
 		@SuppressWarnings("unchecked")
 		Map<String, Object> jsonMap = objectMapper.readValue(quadped1.toJson(), Map.class);
-		Assert.assertEquals(8, jsonMap.size());
+		Assert.assertEquals(7, jsonMap.size());
 		Assert.assertEquals(jsonMap.get("name"), "quadped1");
 	}
 
