@@ -32,9 +32,9 @@ public abstract class BaseUmlgAudit extends BaseUmlg implements TinkerAuditableN
 		getAuditVertex().property("deletedOn", UmlgFormatter.format(deletedOn));
 	}
 
-	public void defaultCreate() {
-		super.defaultCreate();
-		this.vertex.property("deletedOn", UmlgFormatter.format(new DateTime(1000L * 60 * 60 * 24 * 365 * 1000)));
-	}
+//	public void defaultCreate() {
+//		super.defaultCreate();
+//		this.vertex.property("deletedOn", UmlgFormatter.format(new DateTime(1000L * 60 * 60 * 24 * 365 * 1000)));
+//	}
 
 }

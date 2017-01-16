@@ -17,20 +17,20 @@ public class EmbeddedSetDeletionTest extends BaseLocalDbTest {
 		god.addToEmbeddedString("s3");
 		god.addToEmbeddedString("s4");
         db.commit();
-		Assert.assertEquals(1, countVertices());
-		Assert.assertEquals(1, countEdges());
+		Assert.assertEquals(0, countVertices());
+		Assert.assertEquals(0, countEdges());
 		God godTest = new God(god.getVertex());
 		godTest.removeFromEmbeddedString("s1");
 		godTest.removeFromEmbeddedString("s1");
         db.commit();
-		Assert.assertEquals(1, countVertices());
-		Assert.assertEquals(1, countEdges());
+		Assert.assertEquals(0, countVertices());
+		Assert.assertEquals(0, countEdges());
 
 		godTest = new God(god.getVertex());
 		godTest.removeFromEmbeddedString("s4");
         db.commit();
-		Assert.assertEquals(1, countVertices());
-		Assert.assertEquals(1, countEdges());
+		Assert.assertEquals(0, countVertices());
+		Assert.assertEquals(0, countEdges());
 
 	}
 
@@ -43,20 +43,20 @@ public class EmbeddedSetDeletionTest extends BaseLocalDbTest {
 		god.addToEmbeddedInteger(3);
 		god.addToEmbeddedInteger(4);
         db.commit();
-		Assert.assertEquals(1, countVertices());
-		Assert.assertEquals(1, countEdges());
+		Assert.assertEquals(0, countVertices());
+		Assert.assertEquals(0, countEdges());
 		God godTest = new God(god.getVertex());
 		godTest.removeFromEmbeddedInteger(1);
 		godTest.removeFromEmbeddedInteger(1);
         db.commit();
-		Assert.assertEquals(1, countVertices());
-		Assert.assertEquals(1, countEdges());
+		Assert.assertEquals(0, countVertices());
+		Assert.assertEquals(0, countEdges());
 
 		godTest = new God(god.getVertex());
 		godTest.removeFromEmbeddedInteger(4);
         db.commit();
-		Assert.assertEquals(1, countVertices());
-		Assert.assertEquals(1, countEdges());
+		Assert.assertEquals(0, countVertices());
+		Assert.assertEquals(0, countEdges());
 	}
 
 	@Test
@@ -77,16 +77,16 @@ public class EmbeddedSetDeletionTest extends BaseLocalDbTest {
 		god.addToAnimalFarm(mamal3);
 		god.addToAnimalFarm(mamal4);
         db.commit();
-		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(9, countEdges());
+		Assert.assertEquals(4, countVertices());
+		Assert.assertEquals(8, countEdges());
 		God godTest = new God(god.getVertex());
 		for (Mamal animal : godTest.getAnimalFarm()) {
 			System.out.println(animal.getVertex().toString());
 		}
 		godTest.removeFromAnimalFarm(mamal3);
         db.commit();
-		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(8, countEdges());
+		Assert.assertEquals(4, countVertices());
+		Assert.assertEquals(7, countEdges());
 	}
 
 }

@@ -52,14 +52,14 @@ public class OclStdLibBagTest extends BaseLocalDbTest {
         test.add(bagTest2);
         test.add(bagTest1);
 
-        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(4, countVertices());
         //5 for allInstances
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(5, countEdges());
         Assert.assertTrue(bagRoot.getBagTest().equals(test));
 
         test.remove(bagTest2);
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(5, countEdges());
         Assert.assertFalse(bagRoot.getBagTest().equals(test));
     }
 
@@ -85,8 +85,8 @@ public class OclStdLibBagTest extends BaseLocalDbTest {
         test.add(bagTest2);
         test.add(bagTest1);
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(5, countEdges());
         Assert.assertEquals(10, bagRoot.getBagTest().union(test).size());
         Assert.assertEquals(10, bagRoot.getBagTest().size());
         Assert.assertEquals(10, test.size());
@@ -114,8 +114,8 @@ public class OclStdLibBagTest extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(5, countEdges());
         Assert.assertEquals(9, bagRoot.getBagTest().union(test).size());
     }
 
@@ -139,8 +139,8 @@ public class OclStdLibBagTest extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(5, countEdges());
         Assert.assertEquals(2, bagRoot.getBagTest().intersection(test).size());
     }
 
@@ -160,8 +160,8 @@ public class OclStdLibBagTest extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
         Assert.assertEquals(5, bagRoot.getBagTest().including(bagTest1).size());
         Assert.assertEquals(4, bagRoot.getBagTest().size());
     }
@@ -170,6 +170,7 @@ public class OclStdLibBagTest extends BaseLocalDbTest {
     public void testExcluding() {
         BagRoot bagRoot = new BagRoot(true);
         bagRoot.setName("bagRoot");
+
         BagTest bagTest1 = new BagTest(bagRoot);
         bagTest1.setName("bagTest1");
         BagTest bagTest2 = new BagTest(bagRoot);
@@ -182,8 +183,8 @@ public class OclStdLibBagTest extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
         Assert.assertEquals(3, bagRoot.getBagTest().excluding(bagTest1).size());
         Assert.assertEquals(4, bagRoot.getBagTest().size());
     }

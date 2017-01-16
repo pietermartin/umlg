@@ -2,9 +2,9 @@ package org.umlg.runtime.domain;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Property;
+import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
 import org.umlg.runtime.adaptor.UMLG;
@@ -16,6 +16,7 @@ import org.umlg.runtime.domain.ocl.OclState;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class BaseUmlg implements UmlgNode, Serializable {
@@ -58,17 +59,12 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
 
     public BaseUmlg(Boolean persistent) {
         super();
-        this.vertex = UMLG.get().addVertex(this.getClass().getName());
-        this.vertex.property("className", getClass().getName());
+//        Map<String, Boolean> booleanProperties = booleanProperties();
+        this.vertex = UMLG.get().addVertex(T.label, this.getClass().getName(), "className", getClass().getName(), "uid", UUID.randomUUID().toString());
         addToThreadEntityVar();
-        defaultCreate();
         initialiseProperties();
         initVariables();
     }
-
-//    protected GraphTraversal v(Vertex v) {
-//        UMLG.get()
-//    }
 
     @Override
     public void doBeforeCommit() {
@@ -96,10 +92,6 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
 
     public void setVertex(Vertex vertex) {
         this.vertex = vertex;
-    }
-
-    public void defaultCreate() {
-        getUid();
     }
 
     public String getName() {

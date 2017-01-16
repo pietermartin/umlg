@@ -26,7 +26,7 @@ public class TestMetaNode extends BaseLocalDbTest {
         employee3.setName("employee3");
         bank.addToEmployee(employee3);
         db.commit();
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(8, countEdges());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(7, countEdges());
     }
 }

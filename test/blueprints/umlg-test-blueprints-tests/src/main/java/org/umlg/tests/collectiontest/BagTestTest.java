@@ -19,14 +19,14 @@ public class BagTestTest extends BaseLocalDbTest {
 		bag1.setName("bag1");
         db.commit();
 		
-		Assert.assertEquals(3, countVertices());
-		Assert.assertEquals(3, countEdges());
+		Assert.assertEquals(2, countVertices());
+		Assert.assertEquals(2, countEdges());
 		
 		nightmare.addToBag(bag1);
 
         db.commit();
-		Assert.assertEquals(3, countVertices());
-		Assert.assertEquals(4, countEdges());
+		Assert.assertEquals(2, countVertices());
+		Assert.assertEquals(3, countEdges());
 		Nightmare nTest = new Nightmare(nightmare.getVertex());
 		Assert.assertEquals(2, nTest.getBag().size());
 		Bag b1 = nTest.getBag().asSequence().at(0);

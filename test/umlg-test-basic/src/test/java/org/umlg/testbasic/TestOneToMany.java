@@ -24,8 +24,8 @@ public class TestOneToMany extends BaseLocalDbTest {
             universe.setName("u");
         }
         db.commit();
-        org.junit.Assert.assertEquals(10001, countVertices());
-        org.junit.Assert.assertEquals(10001, countEdges());
+        org.junit.Assert.assertEquals(10000, countVertices());
+        org.junit.Assert.assertEquals(10000, countEdges());
         stopWatch.stop();
         System.out.println(stopWatch.toString());
     }
@@ -37,8 +37,8 @@ public class TestOneToMany extends BaseLocalDbTest {
         one.setDateTime(new DateTime());
         Many many = new Many(one);
         db.commit();
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
         One testOne = new One(one.getVertex());
         Assert.assertEquals(1, testOne.getMany().size());
         Many testMany = new Many(many.getVertex());
@@ -60,8 +60,8 @@ public class TestOneToMany extends BaseLocalDbTest {
         Many many22 = new Many(one2);
 
         db.commit();
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(5, countEdges());
 
         // This is to ensure the collection is loaded, to test that it gets
         // cleared again to ensure the correct one get loaded on the next call
@@ -69,8 +69,8 @@ public class TestOneToMany extends BaseLocalDbTest {
         one1.addToMany(many21);
         db.commit();
 
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(5, countEdges());
 
         Many testMany21 = new Many(many21.getVertex());
         Assert.assertEquals(one1, testMany21.getOne());
@@ -85,13 +85,13 @@ public class TestOneToMany extends BaseLocalDbTest {
         one1.setDateTime(new DateTime());
         Many many11 = new Many(one1);
         db.commit();
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
 
         many11.delete();
         db.commit();
-        Assert.assertEquals(1, countVertices());
-        Assert.assertEquals(1, countEdges());
+        Assert.assertEquals(0, countVertices());
+        Assert.assertEquals(0, countEdges());
 
     }
 

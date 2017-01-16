@@ -5,5 +5,5 @@ package org.umlg.runtime.domain;
  * Time: 2:20 PM
  */
 public interface UmlgRootNode {
-    String getEdgeToRootLabel();
+//    String getEdgeToRootLabel();
 }

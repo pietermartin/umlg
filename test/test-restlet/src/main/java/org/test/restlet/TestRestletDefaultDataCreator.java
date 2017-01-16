@@ -4,7 +4,6 @@ import org.joda.time.LocalDate;
 import org.umlg.runtime.adaptor.DefaultDataCreator;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.test.manytomany.*;
-import org.umlg.test.manytomany.meta.Root1Meta;
 import org.umlg.test.standard.*;
 
 /**

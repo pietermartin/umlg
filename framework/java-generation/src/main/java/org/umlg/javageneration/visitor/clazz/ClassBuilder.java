@@ -23,6 +23,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
     public static final String INIT_VARIABLES = "initVariables";
     public static final String INITIALISE_PROPERTIES = "initialiseProperties";
+    public static final String BOOLEAN_PROPERTIES = "booleanProperties";
 
     public ClassBuilder(Workspace workspace) {
         super(workspace);
@@ -43,6 +44,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         addPersistentConstructor(annotatedClass);
         callPersistentConstructorFromDefault(annotatedClass);
         addInitialiseProperties(annotatedClass, clazz);
+        addGetBooleanProperties(annotatedClass, clazz);
         addContructorWithVertexAndConstructorWithId(annotatedClass, clazz);
         if (clazz.getGeneralizations().isEmpty()) {
             persistUid(annotatedClass);
@@ -122,6 +124,13 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
     private void callPersistentConstructorFromDefault(OJAnnotatedClass annotatedClass) {
         annotatedClass.getDefaultConstructor().getBody().addToStatements("this(true)");
+    }
+
+    public static void addGetBooleanProperties(OJAnnotatedClass annotatedClass, Classifier classifier) {
+//        OJAnnotatedOperation booleanProperties = new OJAnnotatedOperation(BOOLEAN_PROPERTIES);
+//        booleanProperties.setReturnType(new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Boolean"));
+//        UmlgGenerationUtil.addOverrideAnnotation(booleanProperties);
+//        annotatedClass.addToOperations(booleanProperties);
     }
 
     public static void addInitialiseProperties(OJAnnotatedClass annotatedClass, Classifier classifier) {

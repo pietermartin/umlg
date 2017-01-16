@@ -33,10 +33,10 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
         } else {
             if (UmlgClassOperations.getSpecializations(clazz).isEmpty() && !(clazz instanceof AssociationClass)) {
                 addImplementRootNodeInterface(annotatedClass);
-                addEdgeToRoot(annotatedClass, clazz);
+//                addEdgeToRoot(annotatedClass, clazz);
             }
             if (!clazz.isAbstract()) {
-                implementRootNode(clazz, annotatedClass);
+//                implementRootNode(clazz, annotatedClass);
             }
         }
         //This adds a constructor for every composite owner
@@ -49,12 +49,12 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
     public void visitAfter(Class clazz) {
     }
 
-    private void implementRootNode(Class clazz, OJAnnotatedClass annotatedClass) {
-        OJAnnotatedOperation getEdgeToRootLabel = new OJAnnotatedOperation("getEdgeToRootLabel", new OJPathName("String"));
-        getEdgeToRootLabel.getBody().addToStatements("return " + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategy(clazz) + "\")");
-        annotatedClass.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);
-        annotatedClass.addToOperations(getEdgeToRootLabel);
-    }
+//    private void implementRootNode(Class clazz, OJAnnotatedClass annotatedClass) {
+//        OJAnnotatedOperation getEdgeToRootLabel = new OJAnnotatedOperation("getEdgeToRootLabel", new OJPathName("String"));
+//        getEdgeToRootLabel.getBody().addToStatements("return " + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategy(clazz) + "\")");
+//        annotatedClass.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);
+//        annotatedClass.addToOperations(getEdgeToRootLabel);
+//    }
 
     private void addImplementRootNodeInterface(OJAnnotatedClass annotatedClass) {
         annotatedClass.addToImplementedInterfaces(UmlgGenerationUtil.UMLG_ROOT_NODE);

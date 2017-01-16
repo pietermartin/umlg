@@ -112,25 +112,25 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         }
     }
 
-    /**
-     * Generic for all graphs start
-     */
-    @Override
-    public void incrementTransactionCount() {
-//        this.getRoot().property("transactionCount", (Integer) this.getRoot().value("transactionCount") + 1);
-    }
-
-    @Override
-    public long getTransactionCount() {
-        return this.getRoot().value("transactionCount");
-    }
-
-    @Override
-    public void addRoot() {
-        Vertex root = addVertex(ROOT_VERTEX);
-        root.property("transactionCount", 1);
-        root.property("className", ROOT_CLASS_NAME);
-    }
+//    /**
+//     * Generic for all graphs start
+//     */
+//    @Override
+//    public void incrementTransactionCount() {
+////        this.getRoot().property("transactionCount", (Integer) this.getRoot().value("transactionCount") + 1);
+//    }
+//
+//    @Override
+//    public long getTransactionCount() {
+//        return this.getRoot().value("transactionCount");
+//    }
+//
+//    @Override
+//    public void addRoot() {
+//        Vertex root = addVertex(ROOT_VERTEX);
+//        root.property("transactionCount", 1);
+//        root.property("className", ROOT_CLASS_NAME);
+//    }
 
     public void commit() {
         try {
@@ -196,14 +196,20 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public Vertex addVertex(String className) {
-        String label;
-        if (className != null) {
-            label = shortenClassName(className);
-            return this.sqlG.addVertex(T.label, label);
-        } else {
-            return this.sqlG.addVertex();
+    public Vertex addVertex(Object...keyValues) {
+        Object[] keyvaluesAsArray = keyValues;
+        for (int i = 0; i < keyvaluesAsArray.length; i++) {
+            if (keyvaluesAsArray[i] == T.label) {
+                keyvaluesAsArray[i+1] = shortenClassName((String)keyvaluesAsArray[i+1]);
+            }
         }
+        return this.sqlG.addVertex(keyvaluesAsArray);
+//        if (className != null) {
+//            label = shortenClassName(className);
+//            return this.sqlG.addVertex(T.label, label, keyValues);
+//        } else {
+//            return this.sqlG.addVertex();
+//        }
     }
 
 
@@ -221,19 +227,19 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         }
     }
 
-    @Override
-    public void addDeletionNode() {
-        Vertex v = addVertex(DELETION_VERTEX);
-        getRoot().addEdge(DELETED_VERTEX_EDGE, v);
-    }
-
-    private Vertex getDeletionVertex() {
-        if (getRoot() != null && getRoot().edges(Direction.OUT, DELETED_VERTEX_EDGE).hasNext()) {
-            return getRoot().edges(Direction.OUT, DELETED_VERTEX_EDGE).next().vertices(Direction.IN).next();
-        } else {
-            return null;
-        }
-    }
+//    @Override
+//    public void addDeletionNode() {
+//        Vertex v = addVertex(DELETION_VERTEX);
+//        getRoot().addEdge(DELETED_VERTEX_EDGE, v);
+//    }
+//
+//    private Vertex getDeletionVertex() {
+//        if (getRoot() != null && getRoot().edges(Direction.OUT, DELETED_VERTEX_EDGE).hasNext()) {
+//            return getRoot().edges(Direction.OUT, DELETED_VERTEX_EDGE).next().vertices(Direction.IN).next();
+//        } else {
+//            return null;
+//        }
+//    }
 
     @Override
     public <T extends PersistentObject> T getEntity(Object id) {
@@ -402,13 +408,13 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         UmlgGraphManager.INSTANCE.deleteGraph();
     }
 
-    @Override
-    public Vertex getRoot() {
-        if (this.rootVertex == null) {
-            this.rootVertex = this.V().has(T.label, UmlgGraph.ROOT_VERTEX).next();
-        }
-        return this.rootVertex;
-    }
+//    @Override
+//    public Vertex getRoot() {
+//        if (this.rootVertex == null) {
+//            this.rootVertex = this.V().has(T.label, UmlgGraph.ROOT_VERTEX).next();
+//        }
+//        return this.rootVertex;
+//    }
 
     @Override
     public UmlgApplicationNode getUmlgApplicationNode() {
@@ -497,10 +503,10 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         return this.sqlG;
     }
 
-    @Override
-    public Vertex addVertex(Object... keyValues) {
-        return this.sqlG.addVertex(keyValues);
-    }
+//    @Override
+//    public Vertex addVertex(Object... keyValues) {
+//        return this.sqlG.addVertex(keyValues);
+//    }
 
     @Override
     public GraphTraversalSource traversal() {

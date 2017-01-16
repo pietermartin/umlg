@@ -32,7 +32,7 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
         try {
             if (!this.bypass && UMLG.get() != null && !UMLG.get().isInBatchMode()) {
                 TransactionThreadVar.clear();
-                ((UmlgAdminGraph) UMLG.get()).incrementTransactionCount();
+//                ((UmlgAdminGraph) UMLG.get()).incrementTransactionCount();
                 List<UmlgNode> entities = TransactionThreadEntityVar.get();
                 for (UmlgNode umlgNode : entities) {
                     if (umlgNode instanceof AssociationClassNode) {

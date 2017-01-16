@@ -47,13 +47,13 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
         sequenceTestListMany4.setName("sequenceTestListMany4");
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
 
         Assert.assertTrue(sequenceRoot.getSequenceTestListMany().includes(sequenceTestListMany2));
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
     }
 
     @Test
@@ -70,8 +70,8 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
         sequenceTestListMany4.setName("sequenceTestListMany4");
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
 
         SequenceTestListMany sequenceTestListMany5 = new SequenceTestListMany(true);
         sequenceTestListMany5.setName("sequenceTestListMany5");
@@ -92,14 +92,14 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
         sequenceTestListMany4.setName("sequenceTestListMany4");
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
 
 
         Assert.assertEquals(1, sequenceRoot.getSequenceTestListMany().count(sequenceTestListMany2));
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
     }
 
     @Test
@@ -121,21 +121,21 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
         test.add(sequenceTestListMany4);
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
 
         Assert.assertTrue(sequenceRoot.getSequenceTestListMany().includesAll(test));
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
 
         sequenceTestListMany3.delete();
         db.commit();
 
         //This fails with hard delete as test still references a deleted vertex
 //        Assert.assertFalse(sequenceRoot.getSequenceTestListMany().includesAll(test));
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3, countEdges());
     }
 
     @Test
@@ -157,14 +157,14 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
         test.add(sequenceTestListMany4);
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
 
 
         Assert.assertFalse(sequenceRoot.getSequenceTestListMany().excludesAll(test));
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
 
         test.remove(3);
         Assert.assertFalse(sequenceRoot.getSequenceTestListMany().excludesAll(test));

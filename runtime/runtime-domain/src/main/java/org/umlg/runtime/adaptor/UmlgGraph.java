@@ -109,12 +109,12 @@ public interface UmlgGraph extends Graph {
      */
     <T> T executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
 
-    /**
-     * @return The singleton root node of the application/model
-     */
-    Vertex getRoot();
+//    /**
+//     * @return The singleton root node of the application/model
+//     */
+//    Vertex getRoot();
 
-    Vertex addVertex(String className);
+    Vertex addVertex(Object... keyValues);
 
     Set<Edge> getEdgesBetween(Vertex v1, Vertex v2, String... labels);
 

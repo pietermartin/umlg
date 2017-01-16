@@ -21,11 +21,11 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         project.setName("project1");
         db.commit();
 
-        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(2, countVertices());
         //Human has edge to root
         //3 edges between Human, Project and AssociationClass1
         //3 edges to meta
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(3, countEdges());
 
         human = new Human(human.getVertex());
         Assert.assertEquals(1, human.getProjectset().size());
@@ -67,8 +67,8 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(9, countEdges());
 
         human = new Human(human.getVertex());
         Assert.assertEquals(3, human.getProjectset().size());
@@ -131,8 +131,8 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(9, countEdges());
 
         human = new Human(human.getVertex());
         Assert.assertEquals(3, human.getProjectset().size());
@@ -191,8 +191,8 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(9, countEdges());
 
         human.getAssociationClassSetTest_projectset().add(new AssociationClassSetTest(true));
 
@@ -219,8 +219,8 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(9, countEdges());
 
         human = new Human(human.getVertex());
         project = new ProjectSetTest(project.getVertex());
@@ -229,8 +229,8 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(7, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(6, countEdges());
 
     }
 
@@ -258,8 +258,8 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(9, countEdges());
 
         human = new Human(human.getVertex());
         project = new ProjectSetTest(project.getVertex());
@@ -268,8 +268,8 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(7, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(6, countEdges());
 
     }
 
@@ -287,7 +287,7 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(2, countVertices());
 
         //Human and NonComposite has edges to root
         //3 edges between Human, NonComposite and ACNonComposite
@@ -309,16 +309,16 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         //Another 3 edges for the association
         //another 2 edges to meta
         //another 1 to root
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(9, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(8, countEdges());
 
         //Create another
         Human human2 = new Human(true);
         human2.setName("human2");
 
         db.commit();
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(9, countEdges());
 
 
         ACNonComposite acNonComposite3 = new ACNonComposite(true);
@@ -332,8 +332,8 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         Assert.assertEquals(nonComposite2.getACNonComposite_human(), acNonComposite3);
 
         //acNonComposite2 should have been deleted
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(9, countEdges());
     }
 
     @Test
@@ -346,7 +346,7 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         acNonComposite1.setName("acNonComposite1");
         human1.addToNoncomposite(nonComposite1, acNonComposite1);
         db.commit();
-        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(2, countVertices());
         //Assert the inverse side has not been loaded from the db nit is in memory
         Assert.assertTrue(human1 == nonComposite1.getHuman());
         Assert.assertTrue(human1 == acNonComposite1.getHuman());

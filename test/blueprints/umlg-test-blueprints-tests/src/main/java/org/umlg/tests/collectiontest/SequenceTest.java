@@ -60,8 +60,8 @@ public class SequenceTest extends BaseLocalDbTest {
         god.setHand(new UmlgMemorySequence<>(Arrays.asList(hand1, hand2, hand3, hand4)));
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
 
         god.getHand().clear();
 
@@ -101,8 +101,8 @@ public class SequenceTest extends BaseLocalDbTest {
         god.setHand(new UmlgMemorySequence<>(Arrays.asList(hand1, hand2, hand3, hand4)));
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
 
         Hand hand5 = new Hand(true);
         hand5.setLeft(true);
@@ -119,8 +119,8 @@ public class SequenceTest extends BaseLocalDbTest {
         hand4.delete();
 
         db.commit();
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(3, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2, countEdges());
 
         God gTest = new God(god.getVertex());
         gTest.getHand().get(1);
@@ -318,8 +318,8 @@ public class SequenceTest extends BaseLocalDbTest {
         Assert.assertEquals("hand2", godTest2.getHand().get(1).getName());
         Assert.assertEquals("hand1", godTest2.getHand().get(2).getName());
         Assert.assertEquals("hand2", godTest2.getHand().get(3).getName());
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(4, countEdges());
     }
 
     @Test
@@ -380,8 +380,8 @@ public class SequenceTest extends BaseLocalDbTest {
         many1_4.addToMany2UnqualifiedList(many2_4);
 
         db.commit();
-        Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(25, countEdges());
+        Assert.assertEquals(8, countVertices());
+        Assert.assertEquals(24, countEdges());
 
         //Some duplicates
         many1_1.addToMany2UnqualifiedList(many2_1);
@@ -390,30 +390,30 @@ public class SequenceTest extends BaseLocalDbTest {
         many1_1.addToMany2UnqualifiedList(many2_4);
 
         db.commit();
-        Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(29, countEdges());
+        Assert.assertEquals(8, countVertices());
+        Assert.assertEquals(28, countEdges());
 
         //Some duplicates
         many2_1.addToMany1UnqualifiedList(many1_1);
 
         db.commit();
-        Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(30, countEdges());
+        Assert.assertEquals(8, countVertices());
+        Assert.assertEquals(29, countEdges());
 
         many2_1.addToMany1UnqualifiedList(many1_2);
         db.commit();
-        Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(31, countEdges());
+        Assert.assertEquals(8, countVertices());
+        Assert.assertEquals(30, countEdges());
 
         many2_1.addToMany1UnqualifiedList(many1_3);
         db.commit();
-        Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(32, countEdges());
+        Assert.assertEquals(8, countVertices());
+        Assert.assertEquals(31, countEdges());
 
         many2_1.addToMany1UnqualifiedList(many1_4);
         db.commit();
-        Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(33, countEdges());
+        Assert.assertEquals(8, countVertices());
+        Assert.assertEquals(32, countEdges());
 
         many1_1 = new Many1(many1_1.getVertex());
         Assert.assertEquals(9, many1_1.getMany2UnqualifiedList().size());
@@ -439,13 +439,13 @@ public class SequenceTest extends BaseLocalDbTest {
         hand2.setLeft(false);
         hand2.setName("hand2");
         db.commit();
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(3, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2, countEdges());
 
         god.addToHand(hand1);
         db.commit();
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(3, countEdges());
         God gTest = new God(god.getVertex());
         Assert.assertEquals(3, gTest.getHand().size());
 
@@ -467,8 +467,8 @@ public class SequenceTest extends BaseLocalDbTest {
         hand1.setLeft(true);
         hand1.setName("hand1");
         db.commit();
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
     }
 
     @Test
@@ -480,15 +480,15 @@ public class SequenceTest extends BaseLocalDbTest {
         hand1.setName("hand1");
         db.commit();
 
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
 
         Finger finger = new Finger(hand1);
         finger.setName("finger");
         db.commit();
 
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(3, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2, countEdges());
     }
 
     @Test
@@ -507,21 +507,21 @@ public class SequenceTest extends BaseLocalDbTest {
         Finger finger4 = new Finger(hand1);
         finger4.setName("finger4");
         db.commit();
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(5, countEdges());
 
         int indexToTest = 2;
         hand1.getFinger().add(indexToTest, finger2);
         db.commit();
         //Check nothing happened as the element is already in the set, first remove it then add
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(5, countEdges());
 
         hand1.getFinger().remove(finger2);
         hand1.getFinger().add(indexToTest, finger2);
         db.commit();
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(5, countEdges());
 
         hand1 = new Hand(hand1.getVertex());
 
@@ -563,8 +563,8 @@ public class SequenceTest extends BaseLocalDbTest {
         sequenceList2 = new SequenceList2(sequenceList2.getVertex());
         Assert.assertNotNull(sequenceList2.getSequenceRoot());
         Assert.assertEquals(1, sequenceRoot.getSequenceList2().size());
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
     }
 
     //This test is primarily for coverage testing
@@ -595,8 +595,8 @@ public class SequenceTest extends BaseLocalDbTest {
         Assert.assertEquals(2, sequenceRoot.getSequenceTestListMany().size());
         sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
         Assert.assertEquals(2, sequenceRoot.getSequenceTestListMany().size());
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(3, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(2, countEdges());
 
         sequenceRoot.reload();
         sequenceRoot.getSequenceTestListMany().add(0, sequenceTestListMany1);
@@ -606,8 +606,8 @@ public class SequenceTest extends BaseLocalDbTest {
         sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
         Assert.assertEquals(3, sequenceRoot.getSequenceTestListMany().size());
 
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(3, countEdges());
 
         SequenceTestListMany sequenceTestListMany2 = new SequenceTestListMany(true);
         sequenceTestListMany2.setName("sequenceTestListMany2");
@@ -623,8 +623,8 @@ public class SequenceTest extends BaseLocalDbTest {
 
         sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
         Assert.assertEquals(4, sequenceRoot.getSequenceTestListMany().size());
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(4, countEdges());
 
         Assert.assertEquals("sequenceTestListMany2", sequenceRoot.getSequenceTestListMany().get(0).getName());
         Assert.assertEquals("sequenceTestListMany1", sequenceRoot.getSequenceTestListMany().get(1).getName());
@@ -654,8 +654,8 @@ public class SequenceTest extends BaseLocalDbTest {
         Assert.assertEquals("sequenceTestListMany1", sequenceRoot.getSequenceTestListMany().get(0).getName());
         Assert.assertEquals("sequenceTestListMany2", sequenceRoot.getSequenceTestListMany().get(1).getName());
 
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(3, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2, countEdges());
 
         sequenceRoot.getSequenceTestListMany().add(2, sequenceTestListMany2);
         db.commit();
@@ -670,8 +670,8 @@ public class SequenceTest extends BaseLocalDbTest {
         Assert.assertEquals("sequenceTestListMany2", sequenceRoot.getSequenceTestListMany().get(1).getName());
         Assert.assertEquals("sequenceTestListMany2", sequenceRoot.getSequenceTestListMany().get(2).getName());
 
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(3, countEdges());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -712,20 +712,20 @@ public class SequenceTest extends BaseLocalDbTest {
         SequenceTestListMany sequenceTestListMany3 = new SequenceTestListMany(sequenceRoot);
         sequenceTestListMany3.setName("sequenceTestListMany3");
         db.commit();
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3, countEdges());
 
         sequenceRoot.getSequenceTestListMany().remove(0);
         sequenceTestListMany1.delete();
         db.commit();
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(3, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2, countEdges());
 
         sequenceRoot.getSequenceTestListMany().remove(1);
         sequenceTestListMany3.delete();
         db.commit();
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
     }
 
     @Test
@@ -739,14 +739,14 @@ public class SequenceTest extends BaseLocalDbTest {
         SequenceTestListMany sequenceTestListMany3 = new SequenceTestListMany(sequenceRoot);
         sequenceTestListMany3.setName("sequenceTestListMany3");
         db.commit();
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3, countEdges());
 
         sequenceRoot.getSequenceTestListMany().remove(1);
         sequenceTestListMany2.delete();
         db.commit();
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(3, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2, countEdges());
     }
 
     @Test
@@ -767,20 +767,20 @@ public class SequenceTest extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(6, countEdges());
-        sequenceTestOrderedSet3.delete();
-        db.commit();
         Assert.assertEquals(5, countVertices());
         Assert.assertEquals(5, countEdges());
-        sequenceTestOrderedSet4.delete();
+        sequenceTestOrderedSet3.delete();
         db.commit();
         Assert.assertEquals(4, countVertices());
         Assert.assertEquals(4, countEdges());
-        sequenceTestOrderedSet5.delete();
+        sequenceTestOrderedSet4.delete();
         db.commit();
         Assert.assertEquals(3, countVertices());
         Assert.assertEquals(3, countEdges());
+        sequenceTestOrderedSet5.delete();
+        db.commit();
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2, countEdges());
 
         sequenceRoot.reload();
         Assert.assertEquals(2, sequenceRoot.getSequenceTestOrderedSet().size());
@@ -816,41 +816,41 @@ public class SequenceTest extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(5, countEdges());
 
         sequenceTestOrderedSet1.delete();
         db.commit();
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
         sequenceRoot.reload();
         Assert.assertEquals(sequenceTestOrderedSet2, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
 
         sequenceTestOrderedSet2.delete();
         db.commit();
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3, countEdges());
         sequenceRoot.reload();
         Assert.assertEquals(sequenceTestOrderedSet3, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
 
         sequenceTestOrderedSet3.delete();
         db.commit();
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(3, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2, countEdges());
         sequenceRoot.reload();
         Assert.assertEquals(sequenceTestOrderedSet4, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
 
         sequenceTestOrderedSet4.delete();
         db.commit();
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
         sequenceRoot.reload();
         Assert.assertEquals(sequenceTestOrderedSet5, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
 
         sequenceTestOrderedSet5.delete();
         db.commit();
-        Assert.assertEquals(1, countVertices());
-        Assert.assertEquals(1, countEdges());
+        Assert.assertEquals(0, countVertices());
+        Assert.assertEquals(0, countEdges());
         sequenceRoot.reload();
         Assert.assertEquals(0, sequenceRoot.getSequenceTestOrderedSet().size());
     }
@@ -873,13 +873,13 @@ public class SequenceTest extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(5, countEdges());
 
         sequenceTestOrderedSet5.delete();
         db.commit();
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
         sequenceRoot.reload();
         Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
         Assert.assertEquals(sequenceTestOrderedSet4, sequenceRoot.getSequenceTestOrderedSet().get(3));
@@ -891,45 +891,45 @@ public class SequenceTest extends BaseLocalDbTest {
         sequenceRoot.reload();
         Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
         Assert.assertEquals(sequenceTestOrderedSet6, sequenceRoot.getSequenceTestOrderedSet().get(4));
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(5, countEdges());
 
         sequenceTestOrderedSet6.delete();
         db.commit();
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
         sequenceRoot.reload();
         Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
         Assert.assertEquals(sequenceTestOrderedSet4, sequenceRoot.getSequenceTestOrderedSet().get(3));
 
         sequenceTestOrderedSet4.delete();
         db.commit();
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3, countEdges());
         sequenceRoot.reload();
         Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
         Assert.assertEquals(sequenceTestOrderedSet3, sequenceRoot.getSequenceTestOrderedSet().get(2));
 
         sequenceTestOrderedSet3.delete();
         db.commit();
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(3, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2, countEdges());
         sequenceRoot.reload();
         Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
         Assert.assertEquals(sequenceTestOrderedSet2, sequenceRoot.getSequenceTestOrderedSet().get(1));
 
         sequenceTestOrderedSet2.delete();
         db.commit();
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
         sequenceRoot.reload();
         Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
         Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().get(0));
 
         sequenceTestOrderedSet1.delete();
         db.commit();
-        Assert.assertEquals(1, countVertices());
-        Assert.assertEquals(1, countEdges());
+        Assert.assertEquals(0, countVertices());
+        Assert.assertEquals(0, countEdges());
         sequenceRoot.reload();
         Assert.assertEquals(0, sequenceRoot.getSequenceTestOrderedSet().size());
     }
@@ -958,8 +958,8 @@ public class SequenceTest extends BaseLocalDbTest {
         sequenceRoot.addToSequenceTestOrderedSet(4, sequenceTestOrderedSet1);
 
         db.commit();
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(5, countEdges());
 
         sequenceRoot.reload();
         Assert.assertEquals(sequenceTestOrderedSet5.reload(), sequenceRoot.getSequenceTestOrderedSet().get(0));

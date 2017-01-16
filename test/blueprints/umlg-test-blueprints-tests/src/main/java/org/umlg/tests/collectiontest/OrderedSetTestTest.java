@@ -91,14 +91,14 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         sequenceTestOrderedSet1.setName("sequenceTestOrderedSet1");
         db.commit();
 
-        Assert.assertEquals(2, countVertices());
-        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
 
         sequenceRoot.getSequenceTestOrderedSet().remove(0);
         sequenceTestOrderedSet1.delete();
         db.commit();
-        Assert.assertEquals(1, countVertices());
-        Assert.assertEquals(1, countEdges());
+        Assert.assertEquals(0, countVertices());
+        Assert.assertEquals(0, countEdges());
     }
 
     @Test
@@ -115,14 +115,14 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         sequenceTestOrderedSet4.setName("sequenceTestOrderedSet4");
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
 
         sequenceRoot.getSequenceTestOrderedSet().remove(0);
         sequenceTestOrderedSet1.delete();
         db.commit();
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3, countEdges());
     }
 
     @Test
@@ -139,14 +139,14 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         sequenceTestOrderedSet4.setName("sequenceTestOrderedSet4");
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
 
         sequenceRoot.getSequenceTestOrderedSet().remove(1);
         sequenceTestOrderedSet2.delete();
         db.commit();
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3, countEdges());
     }
 
     @Test
@@ -163,14 +163,14 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         sequenceTestOrderedSet4.setName("sequenceTestOrderedSet4");
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(4, countEdges());
 
         sequenceRoot.getSequenceTestOrderedSet().remove(3);
         sequenceTestOrderedSet4.delete();
         db.commit();
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3, countEdges());
     }
 
     @Test
@@ -187,8 +187,8 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         sequenceTestOrderedSet3.setName("sequenceTestOrderedSet3");
         sequenceRoot.getSequenceTestOrderedSet().add(2, sequenceTestOrderedSet3);
         db.commit();
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3, countEdges());
         Assert.assertEquals("sequenceTestOrderedSet2", sequenceRoot.getSequenceTestOrderedSet().get(0).getName());
         Assert.assertEquals("sequenceTestOrderedSet1", sequenceRoot.getSequenceTestOrderedSet().get(1).getName());
         Assert.assertEquals("sequenceTestOrderedSet3", sequenceRoot.getSequenceTestOrderedSet().get(2).getName());
@@ -213,8 +213,8 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         sequenceTestOrderedSet3.setName("sequenceTestOrderedSet3");
         sequenceRoot.getSequenceTestOrderedSet().add(2, sequenceTestOrderedSet3);
         db.commit();
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3, countEdges());
         Assert.assertEquals("sequenceTestOrderedSet1", sequenceRoot.getSequenceTestOrderedSet().get(0).getName());
         Assert.assertEquals("sequenceTestOrderedSet2", sequenceRoot.getSequenceTestOrderedSet().get(1).getName());
         Assert.assertEquals("sequenceTestOrderedSet3", sequenceRoot.getSequenceTestOrderedSet().get(2).getName());
@@ -230,8 +230,8 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         removed.delete();
         db.commit();
 
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(4, countEdges());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3, countEdges());
         Assert.assertEquals("sequenceTestOrderedSet1", sequenceRoot.getSequenceTestOrderedSet().get(0).getName());
         Assert.assertEquals("sequenceTestOrderedSet4", sequenceRoot.getSequenceTestOrderedSet().get(1).getName());
         Assert.assertEquals("sequenceTestOrderedSet3", sequenceRoot.getSequenceTestOrderedSet().get(2).getName());

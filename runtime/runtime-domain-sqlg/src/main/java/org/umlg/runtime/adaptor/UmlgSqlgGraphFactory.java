@@ -80,7 +80,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
             this.umlgGraph = new UmlgSqlgGraph(sqlgGraph);
             if (!sqlgGraph.getSchemaManager().tableExist(sqlgGraph.getSqlDialect().getPublicSchema(), SchemaManager.VERTEX_PREFIX + UmlgGraph.ROOT_VERTEX)) {
                 try {
-                    this.umlgGraph.addRoot();
+//                    this.umlgGraph.addRoot();
                     this.umlgGraph.commit();
                     //This is to bypass the beforeCommit
                     this.umlgGraph.setBypass(true);

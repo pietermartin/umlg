@@ -21,18 +21,18 @@ public class TestHierarchy extends BaseLocalDbTest {
 		Folder folder1 = new Folder(realRootFolder);
 		folder1.setName("folder1");
         db.commit();
-		assertEquals(3, countVertices());
-		assertEquals(3, countEdges());
+		assertEquals(2, countVertices());
+		assertEquals(2, countEdges());
 		Folder folder2 = new Folder(realRootFolder);
 		folder2.setName("folder2");
         db.commit();
-		assertEquals(4, countVertices());
-		assertEquals(4, countEdges());
+		assertEquals(3, countVertices());
+		assertEquals(3, countEdges());
 		Folder folder11 = new Folder(folder1);
 		folder11.setName("folder11");
         db.commit();
-		assertEquals(5, countVertices());
-		assertEquals(5, countEdges());
+		assertEquals(4, countVertices());
+		assertEquals(4, countEdges());
 		assertTrue(folder11.getParent().getParent() instanceof RealRootFolder);
 		Folder folder111 = new Folder(folder11);
 		folder111.setName("folder111");
@@ -45,8 +45,8 @@ public class TestHierarchy extends BaseLocalDbTest {
 			countLevels++;
 			hierarchy = hierarchy.getParent();
 		}
-		assertEquals(7, countVertices());
-		assertEquals(7, countEdges());
+		assertEquals(6, countVertices());
+		assertEquals(6, countEdges());
 		assertEquals(4, countLevels);
 		assertEquals("THEGOD", ((RealRootFolder)hierarchy).getGod().getName());
 	}
