@@ -196,14 +196,13 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     }
 
     @Override
-    public Vertex addVertex(Object...keyValues) {
-        Object[] keyvaluesAsArray = keyValues;
-        for (int i = 0; i < keyvaluesAsArray.length; i++) {
-            if (keyvaluesAsArray[i] == T.label) {
-                keyvaluesAsArray[i+1] = shortenClassName((String)keyvaluesAsArray[i+1]);
-            }
-        }
-        return this.sqlG.addVertex(keyvaluesAsArray);
+    public Vertex addVertex(Object... keyvalues) {
+        return this.sqlG.addVertex(keyvalues);
+    }
+
+    @Override
+    public Vertex addVertex(String label, Map<String, Object> properties) {
+        return this.sqlG.addVertex(shortenClassName(label), properties);
 //        if (className != null) {
 //            label = shortenClassName(className);
 //            return this.sqlG.addVertex(T.label, label, keyValues);

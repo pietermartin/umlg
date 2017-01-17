@@ -47,8 +47,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     protected static final String IN_EDGE_SEQUENCE_ID = "inEdgeSequenceId";
     protected static final String OUT_EDGE_SEQUENCE_ID = "outEdgeSequenceId";
 
-    protected static final String LABEL_TO_NEXT_HYPER_VERTEX = "LTNHV";
-    protected static final String LABEL_TO_ELEMENT_FROM_HYPER_VERTEX = "LTEFHV";
 
     //This is used to set the IN_EDGE_SEQUENCE_ID, OUT_EDGE_SEQUENCE_ID on the edge
     protected int inverseCollectionSize;
@@ -68,6 +66,22 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         this.umlgRuntimeProperty = propertyTree.getUmlgRuntimeProperty();
     }
 
+    /**
+     * This constructor is for for new objects where the collections are empty this loaded should be true as there is nothing to load.
+     * @param owner
+     * @param propertyTree
+     * @param loaded
+     */
+    public BaseCollection(UmlgNode owner, PropertyTree propertyTree, boolean loaded) {
+        super();
+        this.owner = owner;
+        this.vertex = owner.getVertex();
+        this.parentClass = owner.getClass();
+        this.propertyTree = propertyTree;
+        this.umlgRuntimeProperty = propertyTree.getUmlgRuntimeProperty();
+        this.loaded = loaded;
+    }
+
     public BaseCollection(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super();
         this.owner = owner;
@@ -83,8 +97,11 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     protected void loadFromVertex() {
-        if (!this.isOnePrimitive() && !isOneEnumeration() && UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode()) {
-            return;
+//        if (!this.isOnePrimitive() && !isOneEnumeration() && UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode()) {
+//            return;
+//        }
+        if (UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode()) {
+            logger.warning("In batch mode but collection is not loaded. Collection: " + this.umlgRuntimeProperty.getQualifiedName());
         }
         if (isManyPrimitive()) {
             loadManyPrimitive();

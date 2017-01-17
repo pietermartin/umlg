@@ -17,8 +17,12 @@ import java.util.Set;
  */
 public class UmlgPropertyAssociationClassBagImpl<E, AC extends AssociationClassNode> extends UmlgBagImpl<E> implements UmlgPropertyAssociationClassBag<E, AC> {
 
-    public UmlgPropertyAssociationClassBagImpl(UmlgNode owner, PropertyTree propertyTree, PropertyTree associationClassRuntimeProperty) {
+    public UmlgPropertyAssociationClassBagImpl(UmlgNode owner, PropertyTree propertyTree, boolean loaded1, PropertyTree associationClassRuntimeProperty, boolean loaded2) {
         super(owner, propertyTree);
+    }
+
+    public UmlgPropertyAssociationClassBagImpl(UmlgNode owner, PropertyTree propertyTree, PropertyTree associationClassRuntimeProperty, boolean loaded) {
+        super(owner, propertyTree, loaded);
     }
 
     public UmlgPropertyAssociationClassBagImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty, UmlgRuntimeProperty associationClassRuntimeProperty) {

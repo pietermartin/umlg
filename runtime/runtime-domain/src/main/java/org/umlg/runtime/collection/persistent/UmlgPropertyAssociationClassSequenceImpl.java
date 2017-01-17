@@ -17,8 +17,12 @@ import java.util.Set;
  */
 public class UmlgPropertyAssociationClassSequenceImpl<E, AC extends AssociationClassNode> extends UmlgSequenceImpl<E> implements UmlgPropertyAssociationClassSequence<E, AC> {
 
-    public UmlgPropertyAssociationClassSequenceImpl(UmlgNode owner, PropertyTree propertyTree, PropertyTree associationClassRuntimeProperty) {
+    public UmlgPropertyAssociationClassSequenceImpl(UmlgNode owner, PropertyTree propertyTree, boolean loaded1, PropertyTree associationClassRuntimeProperty, boolean loaded2) {
         super(owner, propertyTree);
+    }
+
+    public UmlgPropertyAssociationClassSequenceImpl(UmlgNode owner, PropertyTree propertyTree, PropertyTree associationClassRuntimeProperty, boolean loaded) {
+        super(owner, propertyTree, loaded);
     }
 
     public UmlgPropertyAssociationClassSequenceImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty, UmlgRuntimeProperty associationClassRuntimeProperty) {

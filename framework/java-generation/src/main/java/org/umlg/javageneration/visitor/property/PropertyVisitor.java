@@ -1,22 +1,22 @@
 package org.umlg.javageneration.visitor.property;
 
-import java.util.Set;
-import java.util.logging.Logger;
-
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.uml2.uml.*;
+import org.umlg.framework.Visitor;
+import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJIfStatement;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.framework.Visitor;
-import org.umlg.generation.Workspace;
 import org.umlg.javageneration.ocl.UmlgOcl2Java;
 import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.javageneration.visitor.clazz.ClassBuilder;
 import org.umlg.ocl.UmlgOcl2Parser;
+
+import java.util.Set;
+import java.util.logging.Logger;
 
 public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 
@@ -67,6 +67,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 
     private void addInitialization(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
         OJAnnotatedOperation initVariables;
+        OJAnnotatedOperation initPrimitiveVariablesWithDefaultValues;
         if (owner instanceof OJAnnotatedInterface) {
             Interface inf = (Interface) propertyWrapper.getOwner();
             Set<Classifier> concreteClassifiers = UmlgClassOperations.getConcreteRealization(inf);
@@ -74,10 +75,14 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
                 OJAnnotatedClass infOwner = findOJClass(concreteClassifier);
                 initVariables = infOwner.findOperation(ClassBuilder.INIT_VARIABLES);
                 buildInitialization(propertyWrapper, initVariables, owner);
+                initPrimitiveVariablesWithDefaultValues = infOwner.findOperation(ClassBuilder.INIT_PRIMITIVE_VARIABLES_WITH_DEFAULT_VALUES);
+                buildInitializationPrimitiveVariablesWithDefaultValues(propertyWrapper, initPrimitiveVariablesWithDefaultValues, owner);
             }
         } else {
             initVariables = owner.findOperation(ClassBuilder.INIT_VARIABLES);
             buildInitialization(propertyWrapper, initVariables, owner);
+            initPrimitiveVariablesWithDefaultValues = owner.findOperation(ClassBuilder.INIT_PRIMITIVE_VARIABLES_WITH_DEFAULT_VALUES);
+            buildInitializationPrimitiveVariablesWithDefaultValues(propertyWrapper, initPrimitiveVariablesWithDefaultValues, owner);
         }
     }
 
@@ -96,8 +101,20 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 //			java = "//TODO " + constraint.toString();
             initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
         } else {
-            java = propertyWrapper.getDefaultValueAsJava();
-            initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
+            if (!propertyWrapper.isOne() || !propertyWrapper.isPrimitive()) {
+                java = propertyWrapper.getDefaultValueAsJava();
+                initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
+            }
+        }
+    }
+
+    private void buildInitializationPrimitiveVariablesWithDefaultValues(PropertyWrapper propertyWrapper, OJAnnotatedOperation initVariables, OJAnnotatedClass owner) {
+        String java;
+        if (!propertyWrapper.hasOclDefaultValue()) {
+            if (propertyWrapper.isPrimitive()) {
+                java = propertyWrapper.getDefaultValueAsJava();
+                initVariables.getBody().addToStatements( "this.z_addToPrimitiveInternalCollection(" + UmlgClassOperations.propertyEnumName(propertyWrapper.getOwningType()) + "." + propertyWrapper.fieldname() + ", " + java + ")");
+            }
         }
     }
 

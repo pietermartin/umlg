@@ -30,6 +30,11 @@ public class UmlgAssociationClassSetImpl<AssociationClassNode> extends UmlgSetIm
         this.associationClassPropertyTree = associationClassPropertyTree;
     }
 
+    public UmlgAssociationClassSetImpl(UmlgNode owner, PropertyTree propertyTree, PropertyTree associationClassPropertyTree, boolean loaded) {
+        super(owner, propertyTree, loaded);
+        this.associationClassPropertyTree = associationClassPropertyTree;
+    }
+
     public UmlgAssociationClassSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
     }

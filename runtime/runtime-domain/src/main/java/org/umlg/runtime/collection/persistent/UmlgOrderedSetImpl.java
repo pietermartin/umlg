@@ -12,6 +12,10 @@ public class UmlgOrderedSetImpl<E> extends UmlgBaseOrderedSet<E> implements Umlg
         super(owner, propertyTree);
     }
 
+    public UmlgOrderedSetImpl(UmlgNode owner, PropertyTree propertyTree, boolean loaded) {
+        super(owner, propertyTree, loaded);
+    }
+
     @SuppressWarnings("unchecked")
     public UmlgOrderedSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);

@@ -15,6 +15,10 @@ public class UmlgQualifiedBagImpl<E> extends BaseBag<E> implements UmlgQualified
 		super(owner, propertyTree);
 	}
 
+	public UmlgQualifiedBagImpl(UmlgNode owner, PropertyTree propertyTree, boolean loaded) {
+		super(owner, propertyTree, loaded);
+	}
+
 	public UmlgQualifiedBagImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 	}

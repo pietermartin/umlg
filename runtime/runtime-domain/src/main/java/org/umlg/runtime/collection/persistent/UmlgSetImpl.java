@@ -13,6 +13,10 @@ public class UmlgSetImpl<E> extends BaseSet<E> implements UmlgSet<E> {
 		super(owner, propertyTree);
 	}
 
+	public UmlgSetImpl(UmlgNode owner, PropertyTree propertyTree, boolean loaded) {
+		super(owner, propertyTree, loaded);
+	}
+
 	public UmlgSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 	}

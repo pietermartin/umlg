@@ -9,6 +9,7 @@ import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
+import org.umlg.java.metamodel.annotation.OJAnnotatedField;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 import org.umlg.javageneration.ocl.UmlgOcl2Java;
@@ -22,8 +23,10 @@ import java.util.Set;
 public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
     public static final String INIT_VARIABLES = "initVariables";
+    public static final String INIT_PRIMITIVE_VARIABLES_WITH_DEFAULT_VALUES = "initPrimitiveVariablesWithDefaultValues";
     public static final String INITIALISE_PROPERTIES = "initialiseProperties";
-    public static final String BOOLEAN_PROPERTIES = "booleanProperties";
+    public static final String BOOLEAN_PROPERTIES = "z_internalBooleanProperties";
+    public static final String PRIMITIVE_PROPERTIES_WITH_DEFAULT_VALUES = "z_internalPrimitivePropertiesWithDefaultValues";
 
     public ClassBuilder(Workspace workspace) {
         super(workspace);
@@ -45,11 +48,13 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         callPersistentConstructorFromDefault(annotatedClass);
         addInitialiseProperties(annotatedClass, clazz);
         addGetBooleanProperties(annotatedClass, clazz);
+        addGetPrimitivePropertiesWithDefaultValues(annotatedClass, clazz);
         addContructorWithVertexAndConstructorWithId(annotatedClass, clazz);
         if (clazz.getGeneralizations().isEmpty()) {
             persistUid(annotatedClass);
         }
         addInitVariables(annotatedClass, clazz);
+        addPrimitiveInitVariables(annotatedClass, clazz);
         addDelete(annotatedClass, clazz);
         addGetQualifiedName(annotatedClass, clazz);
 
@@ -127,33 +132,89 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     }
 
     public static void addGetBooleanProperties(OJAnnotatedClass annotatedClass, Classifier classifier) {
-//        OJAnnotatedOperation booleanProperties = new OJAnnotatedOperation(BOOLEAN_PROPERTIES);
-//        booleanProperties.setReturnType(new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Boolean"));
-//        UmlgGenerationUtil.addOverrideAnnotation(booleanProperties);
-//        annotatedClass.addToOperations(booleanProperties);
+        OJAnnotatedOperation booleanProperties = new OJAnnotatedOperation(BOOLEAN_PROPERTIES);
+        booleanProperties.setReturnType(new OJPathName("java.util.Set").addToGenerics(UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy()));
+        annotatedClass.addToImports("java.util.HashSet");
+        UmlgGenerationUtil.addOverrideAnnotation(booleanProperties);
+        annotatedClass.addToOperations(booleanProperties);
+        OJAnnotatedField result = new OJAnnotatedField("result", booleanProperties.getReturnType());
+        booleanProperties.getBody().addToLocals(result);
+        if (!classifier.getGeneralizations().isEmpty()) {
+            result.setInitExp("super." + BOOLEAN_PROPERTIES + "()");
+        } else {
+            result.setInitExp("new HashSet<" + UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy() + ">()");
+        }
+        for (Property p : UmlgClassOperations.getAllOwnedProperties(classifier)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !(pWrap.isRefined()) &&
+                    (!(classifier instanceof Enumeration && pWrap.getType() instanceof DataType))
+                    && pWrap.isOne() && pWrap.isBoolean()) {
+
+                String propertyRuntimeEnumName = UmlgClassOperations.propertyEnumName(classifier) + "." + pWrap.fieldname();
+                OJSimpleStatement addBooleanStatement = new OJSimpleStatement("result.add(" + propertyRuntimeEnumName + ")");
+                booleanProperties.getBody().addToStatements(addBooleanStatement);
+            }
+        }
+        booleanProperties.getBody().addToStatements("return result");
+    }
+
+    public static void addGetPrimitivePropertiesWithDefaultValues(OJAnnotatedClass annotatedClass, Classifier classifier) {
+        OJAnnotatedOperation primitiveProperties = new OJAnnotatedOperation(PRIMITIVE_PROPERTIES_WITH_DEFAULT_VALUES);
+        primitiveProperties.setReturnType(new OJPathName("java.util.Map").addToGenerics(UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy()).addToGenerics("Object"));
+        annotatedClass.addToImports("java.util.HashMap");
+        UmlgGenerationUtil.addOverrideAnnotation(primitiveProperties);
+        annotatedClass.addToOperations(primitiveProperties);
+        OJAnnotatedField result = new OJAnnotatedField("result", primitiveProperties.getReturnType());
+        primitiveProperties.getBody().addToLocals(result);
+        if (!classifier.getGeneralizations().isEmpty()) {
+            result.setInitExp("super." + PRIMITIVE_PROPERTIES_WITH_DEFAULT_VALUES + "()");
+        } else {
+            result.setInitExp("new HashMap<" + UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy() + ", Object>()");
+        }
+        for (Property p : UmlgClassOperations.getAllOwnedProperties(classifier)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !(pWrap.isRefined()) &&
+                    (!(classifier instanceof Enumeration && pWrap.getType() instanceof DataType))
+                    && pWrap.isOne() && (pWrap.getDefaultValue() != null && !pWrap.hasOclDefaultValue())) {
+
+                String propertyRuntimeEnumName = UmlgClassOperations.propertyEnumName(classifier) + "." + pWrap.fieldname();
+                OJSimpleStatement addPrimitiveDefaultValueStatement;
+                if (pWrap.isEnumeration()) {
+                    addPrimitiveDefaultValueStatement = new OJSimpleStatement("result.put(" + propertyRuntimeEnumName + ", " + pWrap.getDefaultValueAsJava() + ".name())");
+                } else {
+                    addPrimitiveDefaultValueStatement = new OJSimpleStatement("result.put(" + propertyRuntimeEnumName + ", " + pWrap.getDefaultValueAsJava() + ")");
+                }
+                primitiveProperties.getBody().addToStatements(addPrimitiveDefaultValueStatement);
+            }
+        }
+        primitiveProperties.getBody().addToStatements("return result");
     }
 
     public static void addInitialiseProperties(OJAnnotatedClass annotatedClass, Classifier classifier) {
         OJAnnotatedOperation initialiseProperties = new OJAnnotatedOperation(INITIALISE_PROPERTIES);
+        annotatedClass.addToImports(UmlgGenerationUtil.PropertyTree);
+        initialiseProperties.setComment("boolean properties' default values are initialized in the constructor via z_internalBooleanProperties");
+        initialiseProperties.addParam("loaded", new OJPathName("boolean"));
         UmlgGenerationUtil.addOverrideAnnotation(initialiseProperties);
         if (!classifier.getGeneralizations().isEmpty()) {
-            initialiseProperties.getBody().addToStatements("super." + INITIALISE_PROPERTIES + "()");
+            initialiseProperties.getBody().addToStatements("super." + INITIALISE_PROPERTIES + "(loaded)");
         }
         annotatedClass.addToOperations(initialiseProperties);
         for (Property p : UmlgClassOperations.getAllOwnedProperties(classifier)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
             if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !(pWrap.isRefined()) &&
-                    (!(classifier instanceof Enumeration && pWrap.getType() instanceof DataType))) {
+                    !(classifier instanceof Enumeration && pWrap.getType() instanceof DataType)) {
+
                 OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(classifier));
                 annotatedClass.addToImports(UmlgGenerationUtil.PropertyTree);
                 statement.setName(pWrap.fieldname());
                 initialiseProperties.getBody().addToStatements(statement);
-                if (pWrap.isOne() && pWrap.isBoolean()) {
-                    OJIfStatement ifEmpty = new OJIfStatement("this." + pWrap.fieldname() + ".isEmpty()");
-                    ifEmpty.setComment("Booleans are defaulted to false if the entity already exist then it will already have a value");
-                    ifEmpty.addToThenPart("this." + pWrap.fieldname() + ".add(false)");
-                    initialiseProperties.getBody().addToStatements(ifEmpty);
-                }
+//                if (pWrap.isOne() && pWrap.isBoolean()) {
+//                    OJIfStatement ifEmpty = new OJIfStatement("this." + pWrap.fieldname() + ".isEmpty()");
+//                    ifEmpty.setComment("Booleans are defaulted to false if the entity already exist then it will already have a value");
+//                    ifEmpty.addToThenPart("this." + pWrap.fieldname() + ".z_internalAdder(false)");
+//                    initialiseProperties.getBody().addToStatements(ifEmpty);
+//                }
                 annotatedClass.addToImports(pWrap.javaImplTypePath());
 
                 if (pWrap.isMemberOfAssociationClass()) {
@@ -207,6 +268,19 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         OJOperation initVariables = new OJAnnotatedOperation(INIT_VARIABLES);
         if (UmlgClassOperations.hasSupertype(clazz)) {
             OJSimpleStatement simpleStatement = new OJSimpleStatement("super.initVariables()");
+            if (initVariables.getBody().getStatements().isEmpty()) {
+                initVariables.getBody().addToStatements(simpleStatement);
+            } else {
+                initVariables.getBody().getStatements().set(0, simpleStatement);
+            }
+        }
+        annotatedClass.addToOperations(initVariables);
+    }
+
+    private void addPrimitiveInitVariables(OJAnnotatedClass annotatedClass, Class clazz) {
+        OJOperation initVariables = new OJAnnotatedOperation(INIT_PRIMITIVE_VARIABLES_WITH_DEFAULT_VALUES);
+        if (UmlgClassOperations.hasSupertype(clazz)) {
+            OJSimpleStatement simpleStatement = new OJSimpleStatement("super." + INIT_PRIMITIVE_VARIABLES_WITH_DEFAULT_VALUES + "()");
             if (initVariables.getBody().getStatements().isEmpty()) {
                 initVariables.getBody().addToStatements(simpleStatement);
             } else {

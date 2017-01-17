@@ -2,7 +2,7 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.tests.concretetest.TestOneToMany;
+import org.umlg.tests.json.JsonTest;
 
 /**
  * Date: 2013/10/19
@@ -10,7 +10,9 @@ import org.umlg.tests.concretetest.TestOneToMany;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestOneToMany.class,
+//        TestBatchMode.class,
+//        TestBulkCollection.class,
+        JsonTest.class
 })
 public class UmlgAnyTestSuite {
 }

@@ -15,6 +15,10 @@ public class UmlgQualifiedOrderedSetImpl<E> extends UmlgBaseOrderedSet<E> implem
         super(owner, propertyTree);
     }
 
+    public UmlgQualifiedOrderedSetImpl(UmlgNode owner, PropertyTree propertyTree, boolean loaded) {
+        super(owner, propertyTree, loaded);
+    }
+
     @SuppressWarnings("unchecked")
     public UmlgQualifiedOrderedSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);

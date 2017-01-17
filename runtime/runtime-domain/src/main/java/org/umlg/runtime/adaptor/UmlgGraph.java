@@ -14,6 +14,7 @@ import org.umlg.runtime.notification.NotificationListener;
 import org.umlg.runtime.notification.UmlgNotificationManager;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface UmlgGraph extends Graph {
@@ -114,7 +115,7 @@ public interface UmlgGraph extends Graph {
 //     */
 //    Vertex getRoot();
 
-    Vertex addVertex(Object... keyValues);
+    Vertex addVertex(String label, Map<String, Object> properties);
 
     Set<Edge> getEdgesBetween(Vertex v1, Vertex v2, String... labels);
 

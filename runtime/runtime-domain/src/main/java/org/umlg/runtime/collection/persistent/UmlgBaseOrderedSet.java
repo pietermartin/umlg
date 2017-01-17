@@ -30,6 +30,13 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
         this.oclStdLibCollection = this.oclStdLibOrderedSet;
     }
 
+    public UmlgBaseOrderedSet(UmlgNode owner, PropertyTree propertyTree, boolean loaded) {
+        super(owner, propertyTree, loaded);
+        this.internalCollection = new ListOrderedSet<>();
+        this.oclStdLibOrderedSet = new OclStdLibOrderedSetImpl<>((ListOrderedSet) this.internalCollection);
+        this.oclStdLibCollection = this.oclStdLibOrderedSet;
+    }
+
     @SuppressWarnings("unchecked")
     public UmlgBaseOrderedSet(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);

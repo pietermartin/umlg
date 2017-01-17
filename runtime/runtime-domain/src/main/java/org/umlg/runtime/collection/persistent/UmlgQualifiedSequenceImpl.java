@@ -13,6 +13,10 @@ public class UmlgQualifiedSequenceImpl<E> extends BaseSequence<E> implements Uml
 		super(owner, propertyTree);
 	}
 
+	public UmlgQualifiedSequenceImpl(UmlgNode owner, PropertyTree propertyTree, boolean loaded) {
+		super(owner, propertyTree, loaded);
+	}
+
 	public UmlgQualifiedSequenceImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
     }

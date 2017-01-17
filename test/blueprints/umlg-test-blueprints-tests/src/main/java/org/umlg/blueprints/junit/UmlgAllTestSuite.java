@@ -19,6 +19,7 @@ import org.umlg.tests.constraint.ConstrainedClassTest;
 import org.umlg.tests.constraint.ConstrainedPropertyTest;
 import org.umlg.tests.datatype.DataTypeTest;
 import org.umlg.tests.datatypeassociation.TestDataTypeAssociation;
+import org.umlg.tests.defaultvalues.TestDefaultValues;
 import org.umlg.tests.deletiontest.DeletionInheritenceTest;
 import org.umlg.tests.deletiontest.DeletionTest;
 import org.umlg.tests.deletiontest.EmbeddedSetDeletionTest;
@@ -53,7 +54,6 @@ import org.umlg.tests.optional.TestOptional;
 import org.umlg.tests.primitive.TestBooleanPrimitive;
 import org.umlg.tests.primitive.TestPrimitiveRemoval;
 import org.umlg.tests.qualifiertest.*;
-import org.umlg.tests.query.TestQueryBaseModelUmlgAssociation;
 import org.umlg.tests.ringtest.TestFingerRing;
 import org.umlg.tests.speed.SpeedTest;
 import org.umlg.tests.subsetting.TestSubsetting;
@@ -110,7 +110,6 @@ import org.umlg.tests.validationtest.TestValidation;
 //        //Fails::TestQualifierChangeEvent.class,
         TestQualifierOnManyToMany.class,
 //        TestMetaQueries.class,
-        TestQueryBaseModelUmlgAssociation.class,
         TestFingerRing.class,
         SpeedTest.class,
         TestValidation.class,
@@ -162,7 +161,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestOptional.class,
         TestGlobalGetOnAssociationClass.class,
         TestGlobalGet.class,
-        TestAssociationClassDuplicates.class
+        TestAssociationClassDuplicates.class,
+        TestDefaultValues.class
 })
 public class UmlgAllTestSuite {
 }

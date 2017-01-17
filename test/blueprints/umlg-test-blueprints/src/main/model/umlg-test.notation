@@ -560,6 +560,14 @@
           <element xmi:type="uml:Property" href="umlg-test.uml#_3LhnAAD7EeKS1vh1F4YVWQ"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_-qhvMQD7EeKS1vh1F4YVWQ" x="84" y="22"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_3-3DYNyjEeamYqhAgtmbFQ" type="Property_ClassAttributeLabel">
+          <element xmi:type="uml:Property" href="umlg-test.uml#_36dEgNyjEeamYqhAgtmbFQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_3-3DYdyjEeamYqhAgtmbFQ"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_Ws0JANylEeamYqhAgtmbFQ" type="Property_ClassAttributeLabel">
+          <element xmi:type="uml:Property" href="umlg-test.uml#_Wq9H0NylEeamYqhAgtmbFQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_Ws0JAdylEeamYqhAgtmbFQ"/>
+        </children>
       </children>
       <children xmi:type="notation:BasicCompartment" xmi:id="_1bJyQwAOEeKpVr_ntT6cLA" type="Class_NestedClassifierCompartment"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_1ecW1wAOEeKpVr_ntT6cLA" type="Class_NameLabel"/>
@@ -5832,7 +5840,7 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_zkjHQSrtEeWw9q-1uqTs4Q" y="5"/>
       </children>
       <element xmi:type="uml:Class" href="umlg-test.uml#_GRhV4DChEeOJbevgaGUOXQ"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GRh88TChEeOJbevgaGUOXQ" x="95" y="45" width="209"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GRh88TChEeOJbevgaGUOXQ" x="108" y="41" width="332"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_DyRFMTChEeOJbevgaGUOXQ"/>
     <styles xmi:type="notation:StringValueStyle" xmi:id="_zkjuUCrtEeWw9q-1uqTs4Q" name="diagram_compatibility_version" stringValue="1.2.0"/>

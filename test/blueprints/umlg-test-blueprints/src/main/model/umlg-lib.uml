@@ -60,16 +60,9 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
         </packagedElement>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_sPG5sCQOEeKOmc56p_1Osg" name="query">
-        <ownedComment xmi:type="uml:Comment" xmi:id="_juEXwH-jEeOYhpiy1kqM8Q" annotatedElement="_JkrskCQPEeKOmc56p_1Osg">
-          <body>InstanceQuery is used to store queries against a particular instance of a class. Add BaseUmlgWithQuery to the root of your inheritence hierarchy to be able to capture InstanceQueries.</body>
-        </ownedComment>
         <ownedComment xmi:type="uml:Comment" xmi:id="_2jmRUH-5EeOYhpiy1kqM8Q" annotatedElement="_2GNhsCQOEeKOmc56p_1Osg">
           <body>If you which to have createdOn and updatedOn automatically saved add BaseModelTuml to the root of your inheritence hierarchy</body>
         </ownedComment>
-        <packagedElement xmi:type="uml:Class" xmi:id="_JkrskCQPEeKOmc56p_1Osg" name="InstanceQuery">
-          <generalization xmi:type="uml:Generalization" xmi:id="_4cJHkCRsEeKzTel_Vwmhog" general="_2GNhsCQOEeKOmc56p_1Osg"/>
-          <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_wK4jIE6JEeK4HckrDYI0ug" name="InterfaceRealization1" client="_JkrskCQPEeKOmc56p_1Osg" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
-        </packagedElement>
         <packagedElement xmi:type="uml:Enumeration" xmi:id="_NOrSECQPEeKOmc56p_1Osg" name="QueryEnum">
           <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_OirQkCQPEeKOmc56p_1Osg" name="OCL"/>
           <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_8_zeIIAZEeOYhpiy1kqM8Q" name="GROOVY"/>
@@ -77,56 +70,21 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_FAMz0CXHEeKbPYSfIbmXag" name="BaseUmlgWithQuery" isAbstract="true">
           <generalization xmi:type="uml:Generalization" xmi:id="_Q4ZJ0CXHEeKbPYSfIbmXag" general="_2GNhsCQOEeKOmc56p_1Osg"/>
-          <ownedAttribute xmi:type="uml:Property" xmi:id="_7L5ZgE6JEeK4HckrDYI0ug" name="instanceQuery" type="_JkrskCQPEeKOmc56p_1Osg" isOrdered="true" aggregation="composite" association="_7L6AkE6JEeK4HckrDYI0ug">
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7L5ZgU6JEeK4HckrDYI0ug"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7L5Zgk6JEeK4HckrDYI0ug" value="*"/>
-          </ownedAttribute>
-        </packagedElement>
-        <packagedElement xmi:type="uml:Interface" xmi:id="_djoUIE6JEeK4HckrDYI0ug" name="IQuery">
-          <ownedAttribute xmi:type="uml:Property" xmi:id="_gHafgE6JEeK4HckrDYI0ug" name="name">
-            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-          </ownedAttribute>
-          <ownedAttribute xmi:type="uml:Property" xmi:id="_mST7gE6JEeK4HckrDYI0ug" name="description" visibility="public">
-            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mpVUYE6JEeK4HckrDYI0ug"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mpV7cE6JEeK4HckrDYI0ug" value="1"/>
-          </ownedAttribute>
-          <ownedAttribute xmi:type="uml:Property" xmi:id="_qi9RUE6JEeK4HckrDYI0ug" name="queryString" visibility="public">
-            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_q02SkE6JEeK4HckrDYI0ug" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_q025oE6JEeK4HckrDYI0ug" value="1"/>
-          </ownedAttribute>
-        </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="_7L6AkE6JEeK4HckrDYI0ug" name="baseUmlgWithQuery_instanceQuery_1" memberEnd="_7L6AkU6JEeK4HckrDYI0ug _7L5ZgE6JEeK4HckrDYI0ug" navigableOwnedEnd="_7L6AkU6JEeK4HckrDYI0ug">
-          <ownedEnd xmi:type="uml:Property" xmi:id="_7L6AkU6JEeK4HckrDYI0ug" name="baseUmlgWithQuery" type="_FAMz0CXHEeKbPYSfIbmXag" association="_7L6AkE6JEeK4HckrDYI0ug">
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7L6Akk6JEeK4HckrDYI0ug" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7L6Ak06JEeK4HckrDYI0ug" value="1"/>
-          </ownedEnd>
-        </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="_BdnZwE6LEeK4HckrDYI0ug" name="iQuery_queryEnum_1" memberEnd="_BdnZxE6LEeK4HckrDYI0ug _BdnZwU6LEeK4HckrDYI0ug" navigableOwnedEnd="_BdnZwU6LEeK4HckrDYI0ug">
-          <ownedEnd xmi:type="uml:Property" xmi:id="_BdnZwU6LEeK4HckrDYI0ug" name="queryEnum" type="_NOrSECQPEeKOmc56p_1Osg" association="_BdnZwE6LEeK4HckrDYI0ug">
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BdnZwk6LEeK4HckrDYI0ug" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BdnZw06LEeK4HckrDYI0ug" value="1"/>
-          </ownedEnd>
-          <ownedEnd xmi:type="uml:Property" xmi:id="_BdnZxE6LEeK4HckrDYI0ug" name="iQuery" type="_djoUIE6JEeK4HckrDYI0ug" association="_BdnZwE6LEeK4HckrDYI0ug">
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BdnZxU6LEeK4HckrDYI0ug"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BdnZxk6LEeK4HckrDYI0ug" value="*"/>
-          </ownedEnd>
         </packagedElement>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_2GNhsCQOEeKOmc56p_1Osg" name="BaseModelUmlg" isAbstract="true">
-        <ownedAttribute xmi:type="uml:Property" xmi:id="_5NteICQOEeKOmc56p_1Osg" name="createdOn" isReadOnly="true">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_FOzbYNzkEeaLduPtvYpqaQ" name="createdOn" visibility="public">
           <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
-          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_UqbDMCQVEeKzTel_Vwmhog" name="createdOnDefaultValue">
-            <language>Java</language>
-            <body>new DateTime()</body>
+          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_Pss9oNzkEeaLduPtvYpqaQ">
+            <language>OCL</language>
+            <body>new DateTime</body>
           </defaultValue>
         </ownedAttribute>
-        <ownedAttribute xmi:type="uml:Property" xmi:id="_EG4nICQPEeKOmc56p_1Osg" name="updatedOn" isReadOnly="true">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_I2laYNzkEeaLduPtvYpqaQ" name="updatedOn" visibility="public">
           <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
-          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_usdMQCQWEeKzTel_Vwmhog" name="updatedOnDefaultTime">
-            <language>Java</language>
-            <body>new DateTime()</body>
+          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_Scx4kNzkEeaLduPtvYpqaQ">
+            <language>OCL</language>
+            <body>new DateTime</body>
           </defaultValue>
         </ownedAttribute>
       </packagedElement>
@@ -146,7 +104,6 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_1o2LME6KEeK4HckrDYI0ug" name="ClassQuery">
           <generalization xmi:type="uml:Generalization" xmi:id="_QdOMoE6LEeK4HckrDYI0ug" general="_2GNhsCQOEeKOmc56p_1Osg"/>
-          <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_9zji0E6KEeK4HckrDYI0ug" name="InterfaceRealization1" client="_1o2LME6KEeK4HckrDYI0ug" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="__iJM4E-NEeKwIp56YBZIxw" name="baseClassUmlg_classQuery_1" memberEnd="__iJM4U-NEeKwIp56YBZIxw __iH-wE-NEeKwIp56YBZIxw" navigableOwnedEnd="__iJM4U-NEeKwIp56YBZIxw">
           <ownedEnd xmi:type="uml:Property" xmi:id="__iJM4U-NEeKwIp56YBZIxw" name="baseClassUmlg" type="_xkJmsE6KEeK4HckrDYI0ug" association="__iJM4E-NEeKwIp56YBZIxw">
@@ -156,7 +113,6 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_-m6csJFuEeOfTrD4sy-PQQ" name="RootQuery">
           <generalization xmi:type="uml:Generalization" xmi:id="_IGJ-UJFvEeOfTrD4sy-PQQ" general="_2GNhsCQOEeKOmc56p_1Osg"/>
-          <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_bifbMJFvEeOfTrD4sy-PQQ" name="InterfaceRealization1" client="_-m6csJFuEeOfTrD4sy-PQQ" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
         </packagedElement>
       </packagedElement>
     </packagedElement>

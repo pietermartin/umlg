@@ -35,6 +35,13 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements UmlgSet<E>
 		this.oclStdLibCollection = this.oclStdLibSet;
 	}
 
+	public BaseSet(UmlgNode owner, PropertyTree propertyTree, boolean loaded) {
+		super(owner, propertyTree, loaded);
+		this.internalCollection = new HashSet<>();
+		this.oclStdLibSet = new OclStdLibSetImpl<>((Set<E>)this.internalCollection);
+		this.oclStdLibCollection = this.oclStdLibSet;
+	}
+
 	public BaseSet(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = new HashSet<>();

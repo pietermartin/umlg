@@ -30,7 +30,7 @@ public class TestBatchMode extends BaseLocalDbTest {
         god.setName("god");
         UMLG.get().commit();
         UMLG.get().batchModeOn();
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 10_000; i++) {
             Universe universe1 = new Universe();
             universe1.addToGodIgnoreInverse(god);
             universe1.setName("universe" + i);

@@ -66,6 +66,10 @@ public class UmlgProperties {
         return this.properties.getString("umlg.db.location", System.getProperty("java.io.tmpdir"));
     }
 
+    public boolean getCreatedOnUpdatedOnInit() {
+        return this.properties.getBoolean("createdon.updatedon.init", true);
+    }
+
     public String getModelFileName() {
         return this.properties.getString("umlg.model.file.name");
     }

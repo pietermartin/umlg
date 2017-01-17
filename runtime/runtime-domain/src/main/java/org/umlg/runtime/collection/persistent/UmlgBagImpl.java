@@ -10,6 +10,10 @@ public class UmlgBagImpl<E> extends BaseBag<E> implements UmlgBag<E> {
 		super(owner, propertyTree);
 	}
 
+	public UmlgBagImpl(UmlgNode owner, PropertyTree propertyTree, boolean loaded) {
+		super(owner, propertyTree, loaded);
+	}
+
 	public UmlgBagImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 	}

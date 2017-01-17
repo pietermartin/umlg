@@ -10,6 +10,10 @@ public class UmlgQualifiedSetImpl<E> extends BaseSet<E> implements UmlgQualified
 		super(owner, propertyTree);
 	}
 
+	public UmlgQualifiedSetImpl(UmlgNode owner, PropertyTree propertyTree, boolean loaded) {
+		super(owner, propertyTree, loaded);
+	}
+
 	public UmlgQualifiedSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 	}

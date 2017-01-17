@@ -30,6 +30,13 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
         this.oclStdLibCollection = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
     }
 
+    public BaseSequence(UmlgNode owner, PropertyTree propertyTree, boolean loaded) {
+        super(owner, propertyTree, loaded);
+        this.internalCollection = new ArrayList<E>();
+        this.oclStdLibSequence = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
+        this.oclStdLibCollection = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
+    }
+
     public BaseSequence(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
         this.internalCollection = new ArrayList<E>();

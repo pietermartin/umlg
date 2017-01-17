@@ -3,9 +3,8 @@ package org.umlg.runtime.domain;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.tinkerpop.gremlin.structure.Edge;
-import org.apache.tinkerpop.gremlin.structure.Property;
-import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.joda.time.DateTime;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgExceptionUtilFactory;
@@ -13,9 +12,13 @@ import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.domain.ocl.OclState;
+import org.umlg.runtime.util.UmlgFormatter;
+import org.umlg.runtime.util.UmlgProperties;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,38 +35,48 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
 
     public BaseUmlg(Vertex vertex) {
         super();
-        //check if it has been deleted
-        vertex.<Boolean>property("_deleted").ifPresent(
-                deleted -> {
-                    if (deleted) {
-                        throw new IllegalStateException("Vertex has been deleted!");
-                    }
-                }
-        );
         this.vertex = vertex;
         TransactionThreadEntityVar.setNewEntity(this);
-        initialiseProperties();
+        initialiseProperties(false);
     }
 
     public BaseUmlg(Object id) {
         super();
         //check if it has been deleted
         this.vertex = UMLG.get().traversal().V(id).next();
-        Property<Boolean> deletedProperty = this.vertex.property("deleted");
-        if (deletedProperty.isPresent() && deletedProperty.value()) {
-            throw new IllegalStateException("Vertex has been deleted!");
-        }
         TransactionThreadEntityVar.setNewEntity(this);
-        initialiseProperties();
+        initialiseProperties(false);
     }
 
     public BaseUmlg(Boolean persistent) {
         super();
-//        Map<String, Boolean> booleanProperties = booleanProperties();
-        this.vertex = UMLG.get().addVertex(T.label, this.getClass().getName(), "className", getClass().getName(), "uid", UUID.randomUUID().toString());
+        Set<UmlgRuntimeProperty> booleanProperties = z_internalBooleanProperties();
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("className", getClass().getName());
+        properties.put("uid", UUID.randomUUID().toString());
+        if (UmlgProperties.INSTANCE.getCreatedOnUpdatedOnInit()) {
+            DateTime dateTime = new DateTime();
+            properties.put("createdOn", UmlgFormatter.formatToPersist(dateTime));
+            properties.put("updatedOn", UmlgFormatter.formatToPersist(dateTime));
+        }
+        for (UmlgRuntimeProperty booleanProperty : booleanProperties) {
+            properties.put(booleanProperty.getLabel(), Boolean.FALSE);
+        }
+        Map<UmlgRuntimeProperty, Object> primitiveDefaultValueProperties = z_internalPrimitivePropertiesWithDefaultValues();
+        for (Map.Entry<UmlgRuntimeProperty, Object> umlgRuntimePropertyObjectEntry : primitiveDefaultValueProperties.entrySet()) {
+            properties.put(umlgRuntimePropertyObjectEntry.getKey().getLabel(), umlgRuntimePropertyObjectEntry.getValue());
+        }
+        this.vertex = UMLG.get().addVertex(this.getClass().getName(), properties);
         addToThreadEntityVar();
-        initialiseProperties();
+        initialiseProperties(true);
+        for (UmlgRuntimeProperty booleanProperty : booleanProperties) {
+            this.z_addToPrimitiveInternalCollection(booleanProperty, false);
+        }
+        for (Map.Entry<UmlgRuntimeProperty, Object> umlgRuntimePropertyObjectEntry : primitiveDefaultValueProperties.entrySet()) {
+            this.z_addToPrimitiveInternalCollection(umlgRuntimePropertyObjectEntry.getKey(), umlgRuntimePropertyObjectEntry.getValue());
+        }
         initVariables();
+        initPrimitiveVariablesWithDefaultValues();
     }
 
     @Override
@@ -73,7 +86,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
 
     public BaseUmlg reload() {
         this.vertex = UMLG.get().traversal().V(this.vertex.id()).next();
-        initialiseProperties();
+        initialiseProperties(false);
         return this;
     }
 

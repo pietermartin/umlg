@@ -355,6 +355,14 @@
                 <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
               </qualifier>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_36dEgNyjEeamYqhAgtmbFQ" name="name2" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_-GX0MNyjEeamYqhAgtmbFQ" value="evenMoreOfAJol"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_Wq9H0NylEeamYqhAgtmbFQ" name="anumber" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+              <defaultValue xmi:type="uml:LiteralReal" xmi:id="_ablg0NylEeamYqhAgtmbFQ" value="10.123"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_FTxxYOzqEeCemKc79Sc_aw" name="Universe">
             <generalization xmi:type="uml:Generalization" xmi:id="_LJ6HkCXIEeKbPYSfIbmXag">

@@ -267,21 +267,21 @@ public final class UmlgPropertyOperations extends PropertyOperations {
         return getDefaultTinkerCollectionInitalisation(p, propertyConcreteOwner, false);
     }
 
-    public static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, Classifier propertyConcreteOwner, boolean ignoreAssociationClass) {
+    static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, Classifier propertyConcreteOwner, boolean ignoreAssociationClass) {
         OJSimpleStatement s = getDefaultTinkerCollectionInitalisation(p, propertyConcreteOwner, getDefaultTinkerCollection(p, ignoreAssociationClass));
         return s;
     }
 
-    public static OJSimpleStatement getDefaultTinkerCollectionInitalisationForAssociationClass(Property p, Classifier propertyConcreteOwner) {
+    static OJSimpleStatement getDefaultTinkerCollectionInitalisationForAssociationClass(Property p, Classifier propertyConcreteOwner) {
         return getDefaultTinkerCollectionInitalisationForAssociationClass(p, propertyConcreteOwner, getDefaultTinkerCollectionForAssociationClass(p));
     }
 
     private static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, Classifier propertyConcreteOwner, OJPathName collectionPathName) {
         OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this");
-        ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + UmlgGenerationUtil.PropertyTree.getLast() + ".from(" + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).fieldname() + ")");
+        ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + UmlgGenerationUtil.PropertyTree.getLast() + ".from(" + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).fieldname() + "), loaded");
         if (new PropertyWrapper(p).isMemberOfAssociationClass() && !(propertyConcreteOwner instanceof AssociationClass)) {
             //The constructor for an UmlgPropertyAssociationClassSet takes 2 runtime properties, one to the property end and one to the fake property end to the association class
-            ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + UmlgGenerationUtil.PropertyTree.getLast() + ".from(" + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).getAssociationClassFakePropertyName() + ")");
+            ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + UmlgGenerationUtil.PropertyTree.getLast() + ".from(" + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).getAssociationClassFakePropertyName() + "), loaded");
         }
         ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ")");
         return ojSimpleStatement;

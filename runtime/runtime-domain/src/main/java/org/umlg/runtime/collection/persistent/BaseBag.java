@@ -38,6 +38,13 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>
 		this.oclStdLibCollection = this.oclStdLibBag;
 	}
 
+	public BaseBag(UmlgNode owner, PropertyTree propertyTree, boolean loaded) {
+		super(owner, propertyTree, loaded);
+		this.internalCollection = HashMultiset.create();
+		this.oclStdLibBag = new OclStdLibBagImpl<E>((Multiset<E>)this.internalCollection);
+		this.oclStdLibCollection = this.oclStdLibBag;
+	}
+
 	public BaseBag(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = HashMultiset.create();
