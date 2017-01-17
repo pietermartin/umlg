@@ -75,16 +75,16 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
       <packagedElement xmi:type="uml:Class" xmi:id="_2GNhsCQOEeKOmc56p_1Osg" name="BaseModelUmlg" isAbstract="true">
         <ownedAttribute xmi:type="uml:Property" xmi:id="_FOzbYNzkEeaLduPtvYpqaQ" name="createdOn" visibility="public">
           <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
-          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_Pss9oNzkEeaLduPtvYpqaQ">
+          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_Pss9oNzkEeaLduPtvYpqaQ" name="createdOnDateTime">
             <language>OCL</language>
-            <body>new DateTime</body>
+            <body>new DateTime()</body>
           </defaultValue>
         </ownedAttribute>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_I2laYNzkEeaLduPtvYpqaQ" name="updatedOn" visibility="public">
           <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
-          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_Scx4kNzkEeaLduPtvYpqaQ">
+          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_Scx4kNzkEeaLduPtvYpqaQ" name="updatedOnDateTime">
             <language>OCL</language>
-            <body>new DateTime</body>
+            <body>new DateTime()</body>
           </defaultValue>
         </ownedAttribute>
       </packagedElement>
