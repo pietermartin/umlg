@@ -68,6 +68,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     /**
      * This constructor is for for new objects where the collections are empty this loaded should be true as there is nothing to load.
+     *
      * @param owner
      * @param propertyTree
      * @param loaded
@@ -364,14 +365,28 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             if (this.isUnique() && (this.isOneToMany() || this.isOneToOne())) {
                 // Check that the existing one from the element does not exist,
                 // the user must first remove it
-                Iterator<Edge> iteratorToOne = getEdges(v);
-                if (iteratorToOne.hasNext()) {
-                    throw new IllegalStateException(String.format("Property %s has a multiplicity of 1 and is already set. First remove the value before setting it.", new String[]{getInverseQualifiedName()}));
+                UmlgCollection<?> umlgCollection = node.z_internalGetCollectionFor(this.umlgRuntimeProperty, true);
+                if (umlgCollection.isLoaded()) {
+                    if (!umlgCollection.isEmpty()) {
+                        throw new IllegalStateException(String.format("Property %s has a multiplicity of 1 and is already set. First remove the value before setting it.", new String[]{getInverseQualifiedName()}));
+                    }
+                } else {
+                    Iterator<Edge> iteratorToOne = getEdges(v);
+                    if (iteratorToOne.hasNext()) {
+                        throw new IllegalStateException(String.format("Property %s has a multiplicity of 1 and is already set. First remove the value before setting it.", new String[]{getInverseQualifiedName()}));
+                    }
                 }
             }
             if (!this.ignoreInverse) {
                 this.handleInverseSide(node, umlgRuntimeProperty, true, this.owner);
-                this.inverseCollectionSize = node.getSize(true, umlgRuntimeProperty);
+                //This can be null on non datatype (classifier) properties that are not a association member end.
+                //i.e. just a direct property of a class
+                UmlgCollection<?> inverseCollection = node.z_internalGetCollectionFor(this.umlgRuntimeProperty, true);
+                this.inverseCollectionSize = (inverseCollection != null ? inverseCollection.size() : 0);
+//                this.inverseCollectionSize = node.getSize(true, this.umlgRuntimeProperty);
+            } else {
+                node.initialiseProperty(this.umlgRuntimeProperty, true);
+
             }
         } else if (isOnePrimitive()) {
             this.vertex.property(getPersistentName(), e);
@@ -1304,6 +1319,11 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     protected boolean isEmbedded() {
         return isOnePrimitive() || isManyPrimitive() || isOneEnumeration() || isManyEnumeration() ||
                 (getDataTypeEnum() != null && (isOneToMany() || isManyToMany()));
+    }
+
+    @Override
+    public boolean isLoaded() {
+        return this.loaded;
     }
 
 }

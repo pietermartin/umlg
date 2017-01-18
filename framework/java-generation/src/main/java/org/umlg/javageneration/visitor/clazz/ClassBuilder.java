@@ -27,6 +27,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     public static final String INITIALISE_PROPERTIES = "initialiseProperties";
     public static final String BOOLEAN_PROPERTIES = "z_internalBooleanProperties";
     public static final String PRIMITIVE_PROPERTIES_WITH_DEFAULT_VALUES = "z_internalPrimitivePropertiesWithDefaultValues";
+    public static final String GET_COLLECTION_FOR = "z_internalGetCollectionFor";
 
     public ClassBuilder(Workspace workspace) {
         super(workspace);
@@ -49,6 +50,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         addInitialiseProperties(annotatedClass, clazz);
         addGetBooleanProperties(annotatedClass, clazz);
         addGetPrimitivePropertiesWithDefaultValues(annotatedClass, clazz);
+        addGetCollectionForRuntimeProperty(annotatedClass, clazz);
         addContructorWithVertexAndConstructorWithId(annotatedClass, clazz);
         if (clazz.getGeneralizations().isEmpty()) {
             persistUid(annotatedClass);
@@ -78,7 +80,6 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         copyOnePrimitivePropertiesToEdge.addToParameters(new OJParameter("edge", UmlgGenerationUtil.edgePathName));
         annotatedClass.addToOperations(copyOnePrimitivePropertiesToEdge);
     }
-
 
     // TODO turn into proper value
     private void addDefaultSerialization(OJAnnotatedClass annotatedClass) {
@@ -179,16 +180,70 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
                 String propertyRuntimeEnumName = UmlgClassOperations.propertyEnumName(classifier) + "." + pWrap.fieldname();
                 OJSimpleStatement addPrimitiveDefaultValueStatement;
-                if (pWrap.isEnumeration()) {
-                    addPrimitiveDefaultValueStatement = new OJSimpleStatement("result.put(" + propertyRuntimeEnumName + ", " + pWrap.getDefaultValueAsJava() + ".name())");
-                } else {
+//                if (pWrap.isEnumeration()) {
+//                    addPrimitiveDefaultValueStatement = new OJSimpleStatement("result.put(" + propertyRuntimeEnumName + ", " + pWrap.getDefaultValueAsJava() + ".name())");
+//                } else if (pWrap.isDateTime()) {
+//                    addPrimitiveDefaultValueStatement = new OJSimpleStatement("result.put(" + propertyRuntimeEnumName + ", " + UmlgGenerationUtil.umlgFormatter.getLast() + ".formatToPersist(" + pWrap.getDefaultValueAsJava() + "))");
+//                } else {
                     addPrimitiveDefaultValueStatement = new OJSimpleStatement("result.put(" + propertyRuntimeEnumName + ", " + pWrap.getDefaultValueAsJava() + ")");
-                }
+//                }
                 primitiveProperties.getBody().addToStatements(addPrimitiveDefaultValueStatement);
             }
         }
         primitiveProperties.getBody().addToStatements("return result");
     }
+
+    private void addGetCollectionForRuntimeProperty(OJAnnotatedClass annotatedClass, Class clazz) {
+        OJAnnotatedOperation getCollectionFor = new OJAnnotatedOperation(GET_COLLECTION_FOR);
+        getCollectionFor.addParam("tumlRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
+        getCollectionFor.addParam("inverse", "boolean");
+        getCollectionFor.setReturnType(new OJPathName("UmlgCollection<? extends Object>"));
+        annotatedClass.addToImports(UmlgGenerationUtil.umlgCollection);
+        UmlgGenerationUtil.addOverrideAnnotation(getCollectionFor);
+        annotatedClass.addToOperations(getCollectionFor);
+        OJField result = new OJField("result", new OJPathName("UmlgCollection<? extends Object>"));
+        result.setInitExp("null");
+        getCollectionFor.getBody().addToLocals(result);
+        if (!clazz.getGeneralizations().isEmpty()) {
+            getCollectionFor.getBody().addToStatements("result = super." + GET_COLLECTION_FOR + "(tumlRuntimeProperty, inverse)");
+        }
+
+        OJField runtimeProperty = new OJField("runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(clazz)));
+
+        OJIfStatement isInverse = new OJIfStatement("!inverse");
+        isInverse.setThenPart(new OJBlock());
+        isInverse.setElsePart(new OJBlock());
+        isInverse.getThenPart().addToStatements("runtimeProperty = (" + UmlgClassOperations.propertyEnumName(clazz) + ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName()))");
+        isInverse.getElsePart().addToStatements("runtimeProperty = (" + UmlgClassOperations.propertyEnumName(clazz) + ".fromQualifiedName(tumlRuntimeProperty.getInverseQualifiedName()))");
+
+        OJIfStatement ifResultNull = new OJIfStatement("result == null");
+        ifResultNull.setThenPart(new OJBlock());
+        getCollectionFor.getBody().addToStatements(ifResultNull);
+        ifResultNull.getThenPart().addToLocals(runtimeProperty);
+        ifResultNull.getThenPart().addToStatements(isInverse);
+
+        OJIfStatement ifRuntimeNull = new OJIfStatement("runtimeProperty != null");
+        ifResultNull.getThenPart().addToStatements(ifRuntimeNull);
+
+        OJSwitchStatement ojSwitchStatement = new OJSwitchStatement();
+        ojSwitchStatement.setCondition("runtimeProperty");
+        ifRuntimeNull.getThenPart().addToStatements(ojSwitchStatement);
+        for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+            //Boolean are defaulted in the constructor
+            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !pWrap.isRefined()) {
+                OJSwitchCase ojSwitchCase = new OJSwitchCase();
+                ojSwitchCase.setLabel(pWrap.fieldname());
+                OJSimpleStatement statement = new OJSimpleStatement("result = this." + pWrap.fieldname());
+                statement.setName(pWrap.fieldname());
+                ojSwitchCase.getBody().addToStatements(statement);
+                ojSwitchStatement.addToCases(ojSwitchCase);
+                annotatedClass.addToImports(pWrap.javaImplTypePath());
+            }
+        }
+        getCollectionFor.getBody().addToStatements("return result");
+    }
+
 
     public static void addInitialiseProperties(OJAnnotatedClass annotatedClass, Classifier classifier) {
         OJAnnotatedOperation initialiseProperties = new OJAnnotatedOperation(INITIALISE_PROPERTIES);

@@ -3,6 +3,7 @@ package org.umlg.runtime.domain;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.collection.Qualifier;
+import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.domain.ocl.OclAny;
@@ -37,4 +38,5 @@ public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
 	void z_addToPrimitiveInternalCollection(UmlgRuntimeProperty umlgRuntimeProperty, Object object);
 	Set<UmlgRuntimeProperty> z_internalBooleanProperties();
 	Map<UmlgRuntimeProperty, Object> z_internalPrimitivePropertiesWithDefaultValues();
+	UmlgCollection<? extends Object> z_internalGetCollectionFor(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse);
 }

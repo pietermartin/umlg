@@ -101,17 +101,25 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 //			java = "//TODO " + constraint.toString();
             initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
         } else {
-            if (!propertyWrapper.isOne() || !propertyWrapper.isPrimitive()) {
-                java = propertyWrapper.getDefaultValueAsJava();
-                initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
-            }
+            //java default values are initialized in the constructor via z_internalPrimitivePropertiesWithDefaultValues
+//            if (!propertyWrapper.isOne() || !propertyWrapper.isPrimitive()) {
+//                if (propertyWrapper.isDateTime()) {
+//                    java = propertyWrapper.getDefaultValueAsJava();
+//                    if (!java.equals("new DateTime()")) {
+//                        initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
+//                    }
+//                } else {
+//                    java = propertyWrapper.getDefaultValueAsJava();
+//                    initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
+//                }
+//            }
         }
     }
 
     private void buildInitializationPrimitiveVariablesWithDefaultValues(PropertyWrapper propertyWrapper, OJAnnotatedOperation initVariables, OJAnnotatedClass owner) {
         String java;
         if (!propertyWrapper.hasOclDefaultValue()) {
-            if (propertyWrapper.isPrimitive()) {
+            if (propertyWrapper.isDataType()) {
                 java = propertyWrapper.getDefaultValueAsJava();
                 initVariables.getBody().addToStatements( "this.z_addToPrimitiveInternalCollection(" + UmlgClassOperations.propertyEnumName(propertyWrapper.getOwningType()) + "." + propertyWrapper.fieldname() + ", " + java + ")");
             }

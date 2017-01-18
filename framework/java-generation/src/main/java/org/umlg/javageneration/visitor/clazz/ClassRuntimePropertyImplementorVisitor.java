@@ -297,7 +297,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 
         for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !pWrap.isEnumeration() && !pWrap.isRefined() && (pWrap.isPrimitive() || pWrap.isDataType())) {
+            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !pWrap.isRefined() && pWrap.isDataType()) {
                 OJSwitchCase ojSwitchCase = new OJSwitchCase();
                 ojSwitchCase.setLabel(pWrap.fieldname());
                 OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".z_internalAdder((" + pWrap.javaBaseTypePath().getLast() + ")object)");

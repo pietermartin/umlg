@@ -4,7 +4,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.joda.time.DateTime;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgExceptionUtilFactory;
@@ -13,7 +12,6 @@ import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.domain.ocl.OclState;
 import org.umlg.runtime.util.UmlgFormatter;
-import org.umlg.runtime.util.UmlgProperties;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -54,17 +52,18 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         Map<String, Object> properties = new HashMap<>();
         properties.put("className", getClass().getName());
         properties.put("uid", UUID.randomUUID().toString());
-        if (UmlgProperties.INSTANCE.getCreatedOnUpdatedOnInit()) {
-            DateTime dateTime = new DateTime();
-            properties.put("createdOn", UmlgFormatter.formatToPersist(dateTime));
-            properties.put("updatedOn", UmlgFormatter.formatToPersist(dateTime));
-        }
         for (UmlgRuntimeProperty booleanProperty : booleanProperties) {
             properties.put(booleanProperty.getLabel(), Boolean.FALSE);
         }
         Map<UmlgRuntimeProperty, Object> primitiveDefaultValueProperties = z_internalPrimitivePropertiesWithDefaultValues();
         for (Map.Entry<UmlgRuntimeProperty, Object> umlgRuntimePropertyObjectEntry : primitiveDefaultValueProperties.entrySet()) {
-            properties.put(umlgRuntimePropertyObjectEntry.getKey().getLabel(), umlgRuntimePropertyObjectEntry.getValue());
+            if (umlgRuntimePropertyObjectEntry.getKey().isOneEnumeration()) {
+                properties.put(umlgRuntimePropertyObjectEntry.getKey().getLabel(), ((Enum)umlgRuntimePropertyObjectEntry.getValue()).name());
+            } else if (umlgRuntimePropertyObjectEntry.getKey().getDataTypeEnum() != null) {
+                properties.put(umlgRuntimePropertyObjectEntry.getKey().getLabel(), UmlgFormatter.format(umlgRuntimePropertyObjectEntry.getKey().getDataTypeEnum(), umlgRuntimePropertyObjectEntry.getValue()));
+            } else {
+                properties.put(umlgRuntimePropertyObjectEntry.getKey().getLabel(), umlgRuntimePropertyObjectEntry.getValue());
+            }
         }
         this.vertex = UMLG.get().addVertex(this.getClass().getName(), properties);
         addToThreadEntityVar();

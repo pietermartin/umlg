@@ -8373,7 +8373,7 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_zGn1ISrtEeWw9q-1uqTs4Q" y="5"/>
       </children>
       <element xmi:type="uml:Class" href="umlg-test.uml#_Mt6_ELKqEeOR4f3Enm7Mow"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mt7mIbKqEeOR4f3Enm7Mow" x="74" y="196" width="197"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mt7mIbKqEeOR4f3Enm7Mow" x="105" y="208" width="197"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_QDyHoLKqEeOR4f3Enm7Mow" type="Class_Shape" fontName="Sans" fontHeight="10" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_QDyHorKqEeOR4f3Enm7Mow" source="ShadowFigure">

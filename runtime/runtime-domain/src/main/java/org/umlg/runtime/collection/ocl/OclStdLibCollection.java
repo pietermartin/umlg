@@ -336,5 +336,4 @@ public interface OclStdLibCollection<E> extends OclAny, Iterable<E> {
     //Predefined Iterator Expressions
     UmlgCollection<E> sortedBy(Comparator<E> e);
 
-
 }

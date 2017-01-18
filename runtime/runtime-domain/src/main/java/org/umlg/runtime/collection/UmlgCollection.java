@@ -20,4 +20,8 @@ public interface UmlgCollection<E> extends Collection<E>, OclStdLibCollection<E>
     public default void z_internalAdder(E e) {
 
     }
+
+    public default boolean isLoaded() {
+        return true;
+    }
 }
