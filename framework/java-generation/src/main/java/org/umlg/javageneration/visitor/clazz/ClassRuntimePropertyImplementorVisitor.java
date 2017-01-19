@@ -196,7 +196,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
     }
 
     private void addZInternalCollectionAdder(OJAnnotatedClass annotatedClass, Class clazz) {
-        OJAnnotatedOperation z_addToInternalCollection= new OJAnnotatedOperation("z_addToInternalCollection");
+        OJAnnotatedOperation z_addToInternalCollection= new OJAnnotatedOperation(ClassBuilder.INTERNAL_ADD_TO_COLLECTION);
         UmlgGenerationUtil.addOverrideAnnotation(z_addToInternalCollection);
         z_addToInternalCollection.addToParameters(new OJParameter("umlgRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName));
         z_addToInternalCollection.addToParameters(new OJParameter("umlgNode", UmlgGenerationUtil.UMLG_NODE));
@@ -206,7 +206,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         if (!clazz.getGeneralizations().isEmpty()) {
 
             OJSimpleStatement ojSimpleStatement = new OJSimpleStatement();
-            ojSimpleStatement.setExpression("super.z_addToInternalCollection(umlgRuntimeProperty, umlgNode)");
+            ojSimpleStatement.setExpression("super." + ClassBuilder.INTERNAL_ADD_TO_COLLECTION + "(umlgRuntimeProperty, umlgNode)");
             z_addToInternalCollection.getBody().addToStatements(ojSimpleStatement);
 
         }
@@ -269,7 +269,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
     }
 
     private void addZInternalCollectionPrimitiveAdder(OJAnnotatedClass annotatedClass, Class clazz) {
-        OJAnnotatedOperation z_addToInternalCollection= new OJAnnotatedOperation("z_addToPrimitiveInternalCollection");
+        OJAnnotatedOperation z_addToInternalCollection= new OJAnnotatedOperation(ClassBuilder.INTERNAL_ADD_DATATYPE_TO_COLLECTION);
         UmlgGenerationUtil.addOverrideAnnotation(z_addToInternalCollection);
         z_addToInternalCollection.addToParameters(new OJParameter("umlgRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName));
         z_addToInternalCollection.addToParameters(new OJParameter("object", "Object"));
@@ -279,7 +279,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         if (!clazz.getGeneralizations().isEmpty()) {
 
             OJSimpleStatement ojSimpleStatement = new OJSimpleStatement();
-            ojSimpleStatement.setExpression("super.z_addToPrimitiveInternalCollection(umlgRuntimeProperty, object)");
+            ojSimpleStatement.setExpression("super." + ClassBuilder.INTERNAL_ADD_DATATYPE_TO_COLLECTION + "(umlgRuntimeProperty, object)");
             z_addToInternalCollection.getBody().addToStatements(ojSimpleStatement);
 
         }

@@ -88,7 +88,7 @@ public class PathTree {
             for (PropertyTree propertyTree : propertyTreesToNavigateTo) {
                 //set the collection as loaded even though there is nothing to load.
                 //else it will execute a query to get the nothing.
-                owner.z_addToInternalCollection(propertyTree.getUmlgRuntimeProperty(), null);
+                owner.z_internalAddToCollection(propertyTree.getUmlgRuntimeProperty(), null);
             }
         }
         for (PathTree pathTree : this.children.values()) {
@@ -101,7 +101,7 @@ public class PathTree {
                 for (PropertyTree propertyTree : propertyTreesToNavigateTo) {
                     //set the collection as loaded even though there is nothing to load.
                     //else it will execute a query to get the nothing.
-                    owner.z_addToInternalCollection(propertyTree.getUmlgRuntimeProperty(), null);
+                    owner.z_internalAddToCollection(propertyTree.getUmlgRuntimeProperty(), null);
                 }
                 for (PropertyTree propertyTree : propertyTreesToNavigateTo) {
                     if (edgeLabel.equals(propertyTree.getUmlgRuntimeProperty().getLabel())) {
@@ -109,7 +109,7 @@ public class PathTree {
                         break;
                     }
                 }
-                owner.z_addToInternalCollection(propertyTreeToNav.getUmlgRuntimeProperty(), umlgNode);
+                owner.z_internalAddToCollection(propertyTreeToNav.getUmlgRuntimeProperty(), umlgNode);
                 owner = umlgNode;
                 Preconditions.checkState(pathTree.parent.element instanceof Edge, "Expected the PathTree.parent to hold an edge!");
                 umlgNode.setEdge(propertyTreeToNav.getUmlgRuntimeProperty(), (Edge) pathTree.parent.element);
@@ -143,7 +143,7 @@ public class PathTree {
                 Vertex associationClassVertex = UMLG.get().traversal().V(value).next();
                 Class<?> c = getClassToInstantiate(associationClassVertex);
                 UmlgNode umlgNode = instantiateUmlgNode(associationClassVertex, c);
-                owner.z_addToInternalCollection(propertyTreeToNav.getUmlgRuntimeProperty(), umlgNode);
+                owner.z_internalAddToCollection(propertyTreeToNav.getUmlgRuntimeProperty(), umlgNode);
                 owner = umlgNode;
                 umlgNode.setEdge(propertyTreeToNav.getUmlgRuntimeProperty(), edge);
                 pathTree.loadUmlgAssociationClassNodes(owner, new ArrayList<>(propertyTreeToNav.getChildren()), edgeLabel);

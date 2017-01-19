@@ -34,8 +34,8 @@ public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
 	//the get and set edge is for the case of sequences where the indexOf(more of an order by sequence) is stored
 	void setEdge(UmlgRuntimeProperty umlgRuntimeProperty, Edge edge);
 	Edge getEdge(UmlgRuntimeProperty umlgRuntimeProperty);
-	void z_addToInternalCollection(UmlgRuntimeProperty umlgRuntimeProperty, UmlgNode umlgNode);
-	void z_addToPrimitiveInternalCollection(UmlgRuntimeProperty umlgRuntimeProperty, Object object);
+	void z_internalAddToCollection(UmlgRuntimeProperty umlgRuntimeProperty, UmlgNode umlgNode);
+	void z_internalAddDataTypeToCollection(UmlgRuntimeProperty umlgRuntimeProperty, Object object);
 	Set<UmlgRuntimeProperty> z_internalBooleanProperties();
 	Map<UmlgRuntimeProperty, Object> z_internalPrimitivePropertiesWithDefaultValues();
 	UmlgCollection<? extends Object> z_internalGetCollectionFor(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse);

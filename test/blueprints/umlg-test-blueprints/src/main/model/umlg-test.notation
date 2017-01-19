@@ -8757,7 +8757,7 @@
           <stringListValue>name</stringListValue>
           <stringListValue>derived</stringListValue>
         </styles>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_5u5dQbQ-EeORtvbQ18esMQ" x="-24" y="90"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_5u5dQbQ-EeORtvbQ18esMQ" x="74" y="14"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_5u5dQrQ-EeORtvbQ18esMQ" type="AssociationClass_TargetRoleLabel">
         <styles xmi:type="notation:StringListValueStyle" xmi:id="_emP_wCSgEeaBN4TljPEFdQ" name="maskLabel">
@@ -8765,7 +8765,7 @@
           <stringListValue>name</stringListValue>
           <stringListValue>derived</stringListValue>
         </styles>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_5u5dQ7Q-EeORtvbQ18esMQ" x="105" y="-23"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_5u5dQ7Q-EeORtvbQ18esMQ" x="-77" y="-15"/>
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_5u42MbQ-EeORtvbQ18esMQ" fontName="Sans" fontHeight="10"/>
       <element xmi:type="uml:AssociationClass" href="umlg-test.uml#_5u2Z8LQ-EeORtvbQ18esMQ"/>

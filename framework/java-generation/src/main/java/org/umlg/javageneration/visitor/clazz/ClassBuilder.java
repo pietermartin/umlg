@@ -29,6 +29,9 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     public static final String PRIMITIVE_PROPERTIES_WITH_DEFAULT_VALUES = "z_internalPrimitivePropertiesWithDefaultValues";
     public static final String GET_COLLECTION_FOR = "z_internalGetCollectionFor";
 
+    public static final String INTERNAL_ADD_TO_COLLECTION =  "z_internalAddToCollection";
+    public static final String INTERNAL_ADD_DATATYPE_TO_COLLECTION = "z_internalAddDataTypeToCollection";
+
     public ClassBuilder(Workspace workspace) {
         super(workspace);
     }

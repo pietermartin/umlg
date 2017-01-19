@@ -121,7 +121,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
         if (!propertyWrapper.hasOclDefaultValue()) {
             if (propertyWrapper.isDataType()) {
                 java = propertyWrapper.getDefaultValueAsJava();
-                initVariables.getBody().addToStatements( "this.z_addToPrimitiveInternalCollection(" + UmlgClassOperations.propertyEnumName(propertyWrapper.getOwningType()) + "." + propertyWrapper.fieldname() + ", " + java + ")");
+                initVariables.getBody().addToStatements( "this." + ClassBuilder.INTERNAL_ADD_DATATYPE_TO_COLLECTION + "(" + UmlgClassOperations.propertyEnumName(propertyWrapper.getOwningType()) + "." + propertyWrapper.fieldname() + ", " + java + ")");
             }
         }
     }

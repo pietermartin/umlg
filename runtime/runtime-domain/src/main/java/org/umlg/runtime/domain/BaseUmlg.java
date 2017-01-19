@@ -58,21 +58,21 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         Map<UmlgRuntimeProperty, Object> primitiveDefaultValueProperties = z_internalPrimitivePropertiesWithDefaultValues();
         for (Map.Entry<UmlgRuntimeProperty, Object> umlgRuntimePropertyObjectEntry : primitiveDefaultValueProperties.entrySet()) {
             if (umlgRuntimePropertyObjectEntry.getKey().isOneEnumeration()) {
-                properties.put(umlgRuntimePropertyObjectEntry.getKey().getLabel(), ((Enum)umlgRuntimePropertyObjectEntry.getValue()).name());
+                properties.put(umlgRuntimePropertyObjectEntry.getKey().getPersistentName(), ((Enum)umlgRuntimePropertyObjectEntry.getValue()).name());
             } else if (umlgRuntimePropertyObjectEntry.getKey().getDataTypeEnum() != null) {
-                properties.put(umlgRuntimePropertyObjectEntry.getKey().getLabel(), UmlgFormatter.format(umlgRuntimePropertyObjectEntry.getKey().getDataTypeEnum(), umlgRuntimePropertyObjectEntry.getValue()));
+                properties.put(umlgRuntimePropertyObjectEntry.getKey().getPersistentName(), UmlgFormatter.format(umlgRuntimePropertyObjectEntry.getKey().getDataTypeEnum(), umlgRuntimePropertyObjectEntry.getValue()));
             } else {
-                properties.put(umlgRuntimePropertyObjectEntry.getKey().getLabel(), umlgRuntimePropertyObjectEntry.getValue());
+                properties.put(umlgRuntimePropertyObjectEntry.getKey().getPersistentName(), umlgRuntimePropertyObjectEntry.getValue());
             }
         }
         this.vertex = UMLG.get().addVertex(this.getClass().getName(), properties);
         addToThreadEntityVar();
         initialiseProperties(true);
         for (UmlgRuntimeProperty booleanProperty : booleanProperties) {
-            this.z_addToPrimitiveInternalCollection(booleanProperty, false);
+            this.z_internalAddDataTypeToCollection(booleanProperty, false);
         }
         for (Map.Entry<UmlgRuntimeProperty, Object> umlgRuntimePropertyObjectEntry : primitiveDefaultValueProperties.entrySet()) {
-            this.z_addToPrimitiveInternalCollection(umlgRuntimePropertyObjectEntry.getKey(), umlgRuntimePropertyObjectEntry.getValue());
+            this.z_internalAddDataTypeToCollection(umlgRuntimePropertyObjectEntry.getKey(), umlgRuntimePropertyObjectEntry.getValue());
         }
         initVariables();
         initPrimitiveVariablesWithDefaultValues();
