@@ -152,7 +152,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
                 OJIfStatement ifNotNull2 = new OJIfStatement(propertyWrapper.fieldname() + " != null");
                 ifNotNull2.addToThenPart(propertyWrapper.fieldname() + "." + otherEnd.clearer() + "()");
                 ifNotNull2.addToThenPart(propertyWrapper.fieldname() + ".initialiseProperty(" + UmlgClassOperations.propertyEnumName(otherEnd.getOwningType()) + "."
-                        + otherEnd.fieldname() + ", false)");
+                        + otherEnd.fieldname() + ", false, true)");
                 ifNotNull2.addToThenPart(propertyWrapper.remover() + "(" + propertyWrapper.fieldname() + ")");
                 owner.addToImports(UmlgClassOperations.getPathName(otherEnd.getOwningType()).append(UmlgClassOperations.propertyEnumName(otherEnd.getOwningType())));
                 singleAdder.getBody().addToStatements(ifNotNull2);

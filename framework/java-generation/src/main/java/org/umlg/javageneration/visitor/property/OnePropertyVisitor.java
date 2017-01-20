@@ -205,7 +205,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             OJIfStatement ifNotNull = new OJIfStatement(pWrap.fieldname() + " != null");
             ifNotNull.addToThenPart(pWrap.fieldname() + "." + otherEnd.clearer() + "()");
             ifNotNull.addToThenPart(pWrap.fieldname() + ".initialiseProperty(" + UmlgClassOperations.propertyEnumName(otherEnd.getOwningType()) + "."
-                    + otherEnd.fieldname() + ", false)");
+                    + otherEnd.fieldname() + ", false, true)");
             owner.addToImports(UmlgClassOperations.getPathName(otherEnd.getOwningType()).append(UmlgClassOperations.propertyEnumName(otherEnd.getOwningType())));
             setter.getBody().addToStatements(ifNotNull);
         }

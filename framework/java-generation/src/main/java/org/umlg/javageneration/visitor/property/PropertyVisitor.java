@@ -75,13 +75,13 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
                 OJAnnotatedClass infOwner = findOJClass(concreteClassifier);
                 initVariables = infOwner.findOperation(ClassBuilder.INIT_VARIABLES);
                 buildInitialization(propertyWrapper, initVariables, owner);
-                initPrimitiveVariablesWithDefaultValues = infOwner.findOperation(ClassBuilder.INIT_PRIMITIVE_VARIABLES_WITH_DEFAULT_VALUES);
+                initPrimitiveVariablesWithDefaultValues = infOwner.findOperation(ClassBuilder.INIT_DATE_TYPE_VARIABLES_WITH_DEFAULT_VALUES);
                 buildInitializationPrimitiveVariablesWithDefaultValues(propertyWrapper, initPrimitiveVariablesWithDefaultValues, owner);
             }
         } else {
             initVariables = owner.findOperation(ClassBuilder.INIT_VARIABLES);
             buildInitialization(propertyWrapper, initVariables, owner);
-            initPrimitiveVariablesWithDefaultValues = owner.findOperation(ClassBuilder.INIT_PRIMITIVE_VARIABLES_WITH_DEFAULT_VALUES);
+            initPrimitiveVariablesWithDefaultValues = owner.findOperation(ClassBuilder.INIT_DATE_TYPE_VARIABLES_WITH_DEFAULT_VALUES);
             buildInitializationPrimitiveVariablesWithDefaultValues(propertyWrapper, initPrimitiveVariablesWithDefaultValues, owner);
         }
     }
@@ -121,7 +121,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
         if (!propertyWrapper.hasOclDefaultValue()) {
             if (propertyWrapper.isDataType()) {
                 java = propertyWrapper.getDefaultValueAsJava();
-                initVariables.getBody().addToStatements( "this." + ClassBuilder.INTERNAL_ADD_DATATYPE_TO_COLLECTION + "(" + UmlgClassOperations.propertyEnumName(propertyWrapper.getOwningType()) + "." + propertyWrapper.fieldname() + ", " + java + ")");
+                initVariables.getBody().addToStatements( "this." + ClassBuilder.INTERNAL_ADD_TO_COLLECTION + "(" + UmlgClassOperations.propertyEnumName(propertyWrapper.getOwningType()) + "." + propertyWrapper.fieldname() + ", " + java + ")");
             }
         }
     }

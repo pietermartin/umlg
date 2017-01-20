@@ -55,7 +55,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         for (UmlgRuntimeProperty booleanProperty : booleanProperties) {
             properties.put(booleanProperty.getLabel(), Boolean.FALSE);
         }
-        Map<UmlgRuntimeProperty, Object> primitiveDefaultValueProperties = z_internalPrimitivePropertiesWithDefaultValues();
+        Map<UmlgRuntimeProperty, Object> primitiveDefaultValueProperties = z_internalDataTypePropertiesWithDefaultValues();
         for (Map.Entry<UmlgRuntimeProperty, Object> umlgRuntimePropertyObjectEntry : primitiveDefaultValueProperties.entrySet()) {
             if (umlgRuntimePropertyObjectEntry.getKey().isOneEnumeration()) {
                 properties.put(umlgRuntimePropertyObjectEntry.getKey().getPersistentName(), ((Enum)umlgRuntimePropertyObjectEntry.getValue()).name());
@@ -69,13 +69,13 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         addToThreadEntityVar();
         initialiseProperties(true);
         for (UmlgRuntimeProperty booleanProperty : booleanProperties) {
-            this.z_internalAddDataTypeToCollection(booleanProperty, false);
+            this.z_internalAddToCollection(booleanProperty, false);
         }
         for (Map.Entry<UmlgRuntimeProperty, Object> umlgRuntimePropertyObjectEntry : primitiveDefaultValueProperties.entrySet()) {
-            this.z_internalAddDataTypeToCollection(umlgRuntimePropertyObjectEntry.getKey(), umlgRuntimePropertyObjectEntry.getValue());
+            this.z_internalAddToCollection(umlgRuntimePropertyObjectEntry.getKey(), umlgRuntimePropertyObjectEntry.getValue());
         }
         initVariables();
-        initPrimitiveVariablesWithDefaultValues();
+        initDataTypeVariablesWithDefaultValues();
     }
 
     @Override

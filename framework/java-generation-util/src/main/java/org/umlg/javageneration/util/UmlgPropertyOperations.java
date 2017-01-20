@@ -278,7 +278,10 @@ public final class UmlgPropertyOperations extends PropertyOperations {
 
     private static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, Classifier propertyConcreteOwner, OJPathName collectionPathName) {
         OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this");
-        ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + UmlgGenerationUtil.PropertyTree.getLast() + ".from(" + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).fieldname() + "), loaded");
+        ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " +
+                UmlgGenerationUtil.PropertyTree.getLast() + ".from(" +
+                UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).fieldname() + "), " +
+                "loaded");
         if (new PropertyWrapper(p).isMemberOfAssociationClass() && !(propertyConcreteOwner instanceof AssociationClass)) {
             //The constructor for an UmlgPropertyAssociationClassSet takes 2 runtime properties, one to the property end and one to the fake property end to the association class
             ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + UmlgGenerationUtil.PropertyTree.getLast() + ".from(" + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).getAssociationClassFakePropertyName() + "), loaded");

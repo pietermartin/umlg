@@ -322,7 +322,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     edge.remove();
 
                     //TODO optimize this to remove only the node, not initialize the collection
-                    node.initialiseProperty(umlgRuntimeProperty, true);
+                    node.initialiseProperty(umlgRuntimeProperty, true, false);
                     //Need to break here for bag logic. There will only be more than one edge in the case of the collection being a bag.
                     break;
                 }
@@ -383,10 +383,8 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 //i.e. just a direct property of a class
                 UmlgCollection<?> inverseCollection = node.z_internalGetCollectionFor(this.umlgRuntimeProperty, true);
                 this.inverseCollectionSize = (inverseCollection != null ? inverseCollection.size() : 0);
-//                this.inverseCollectionSize = node.getSize(true, this.umlgRuntimeProperty);
             } else {
-                node.initialiseProperty(this.umlgRuntimeProperty, true);
-
+                node.initialiseProperty(this.umlgRuntimeProperty, true, false);
             }
         } else if (isOnePrimitive()) {
             this.vertex.property(getPersistentName(), e);

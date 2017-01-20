@@ -34,7 +34,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
             addInitialiseProperty(annotatedClass, classifier);
             addInternalInverseAdder(annotatedClass, (Class) classifier);
             addZInternalCollectionAdder(annotatedClass, (Class) classifier);
-            addZInternalCollectionPrimitiveAdder(annotatedClass, (Class) classifier);
+//            addZInternalCollectionPrimitiveAdder(annotatedClass, (Class) classifier);
             if (UmlgClassOperations.isAssociationClass((Class) classifier)) {
                 addInternalAdder(annotatedClass, (AssociationClass) classifier);
             }
@@ -199,7 +199,8 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         OJAnnotatedOperation z_addToInternalCollection= new OJAnnotatedOperation(ClassBuilder.INTERNAL_ADD_TO_COLLECTION);
         UmlgGenerationUtil.addOverrideAnnotation(z_addToInternalCollection);
         z_addToInternalCollection.addToParameters(new OJParameter("umlgRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName));
-        z_addToInternalCollection.addToParameters(new OJParameter("umlgNode", UmlgGenerationUtil.UMLG_NODE));
+//        z_addToInternalCollection.addToParameters(new OJParameter("umlgNode", UmlgGenerationUtil.UMLG_NODE));
+        z_addToInternalCollection.addToParameters(new OJParameter("umlgNode", "Object"));
         annotatedClass.addToOperations(z_addToInternalCollection);
 
         OJField runtimeProperty = new OJField("runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(clazz)));
@@ -224,7 +225,8 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 
         for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !pWrap.isEnumeration() && !pWrap.isRefined() && !pWrap.isPrimitive() && !pWrap.isDataType()) {
+            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !pWrap.isRefined()) {
+
                 OJSwitchCase ojSwitchCase = new OJSwitchCase();
                 ojSwitchCase.setLabel(pWrap.fieldname());
                 OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".z_internalAdder((" + pWrap.javaBaseTypePath().getLast() + ")umlgNode)");
@@ -268,93 +270,89 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         }
     }
 
-    private void addZInternalCollectionPrimitiveAdder(OJAnnotatedClass annotatedClass, Class clazz) {
-        OJAnnotatedOperation z_addToInternalCollection= new OJAnnotatedOperation(ClassBuilder.INTERNAL_ADD_DATATYPE_TO_COLLECTION);
-        UmlgGenerationUtil.addOverrideAnnotation(z_addToInternalCollection);
-        z_addToInternalCollection.addToParameters(new OJParameter("umlgRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName));
-        z_addToInternalCollection.addToParameters(new OJParameter("object", "Object"));
-        annotatedClass.addToOperations(z_addToInternalCollection);
-
-        OJField runtimeProperty = new OJField("runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(clazz)));
-        if (!clazz.getGeneralizations().isEmpty()) {
-
-            OJSimpleStatement ojSimpleStatement = new OJSimpleStatement();
-            ojSimpleStatement.setExpression("super." + ClassBuilder.INTERNAL_ADD_DATATYPE_TO_COLLECTION + "(umlgRuntimeProperty, object)");
-            z_addToInternalCollection.getBody().addToStatements(ojSimpleStatement);
-
-        }
-        z_addToInternalCollection.getBody().addToLocals(runtimeProperty);
-
-        OJSimpleStatement ojSimpleStatement = new OJSimpleStatement();
-        ojSimpleStatement.setExpression("runtimeProperty = " + "(" + UmlgClassOperations.propertyEnumName(clazz)
-                + ".fromQualifiedName(umlgRuntimeProperty.getQualifiedName()))");
-        z_addToInternalCollection.getBody().addToStatements(ojSimpleStatement);
-
-        OJIfStatement ojIfStatement = new OJIfStatement();
-        ojIfStatement.setCondition("runtimeProperty != null");
-        OJSwitchStatement ojSwitchStatement = new OJSwitchStatement();
-        ojSwitchStatement.setCondition("runtimeProperty");
-
-        for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
-            PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !pWrap.isRefined() && pWrap.isDataType()) {
-                OJSwitchCase ojSwitchCase = new OJSwitchCase();
-                ojSwitchCase.setLabel(pWrap.fieldname());
-                OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".z_internalAdder((" + pWrap.javaBaseTypePath().getLast() + ")object)");
-                statement.setName(pWrap.fieldname());
-                ojSwitchCase.getBody().addToStatements(statement);
-                annotatedClass.addToImports(pWrap.javaImplTypePath());
-                ojSwitchStatement.addToCases(ojSwitchCase);
-
-                if (pWrap.isMemberOfAssociationClass()) {
-                    ojSwitchCase = new OJSwitchCase();
-                    ojSwitchCase.setLabel(pWrap.getAssociationClassFakePropertyName());
-                    statement = new OJSimpleStatement("this." + pWrap.getAssociationClassFakePropertyName() + ".z_internalAdder((" + pWrap.getAssociationClassPathName().getLast() + ")object)");
-                    statement.setName(pWrap.fieldname());
-                    ojSwitchCase.getBody().addToStatements(statement);
-                    annotatedClass.addToImports(pWrap.javaImplTypePath());
-                    ojSwitchStatement.addToCases(ojSwitchCase);
-                }
-            }
-        }
-
-        ojIfStatement.addToThenPart(ojSwitchStatement);
-        z_addToInternalCollection.getBody().addToStatements(ojIfStatement);
-
-        if (clazz instanceof AssociationClass) {
-            //Do the property for the association class
-            AssociationClass associationClass = (AssociationClass) clazz;
-            List<Property> memberEnds = associationClass.getMemberEnds();
-            for (Property memberEnd : memberEnds) {
-                PropertyWrapper pWrap = new PropertyWrapper(memberEnd);
-
-                OJSwitchCase ojSwitchCase = new OJSwitchCase();
-                ojSwitchCase.setLabel(pWrap.fieldname());
-
-                OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".z_internalAdder((" + pWrap.javaBaseTypePath().getLast() + ")object)");
-                statement.setName(pWrap.fieldname());
-                ojSwitchCase.getBody().addToStatements(statement);
-                ojSwitchStatement.addToCases(ojSwitchCase);
-                annotatedClass.addToImports(UmlgPropertyOperations.getDefaultTinkerCollection(memberEnd, true));
-                annotatedClass.addToImports(UmlgGenerationUtil.PropertyTree);
-            }
-        }
-    }
+//    private void addZInternalCollectionPrimitiveAdder(OJAnnotatedClass annotatedClass, Class clazz) {
+//        OJAnnotatedOperation z_addToInternalCollection= new OJAnnotatedOperation(ClassBuilder.INTERNAL_ADD_DATATYPE_TO_COLLECTION);
+//        UmlgGenerationUtil.addOverrideAnnotation(z_addToInternalCollection);
+//        z_addToInternalCollection.addToParameters(new OJParameter("umlgRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName));
+//        z_addToInternalCollection.addToParameters(new OJParameter("object", "Object"));
+//        annotatedClass.addToOperations(z_addToInternalCollection);
+//
+//        OJField runtimeProperty = new OJField("runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(clazz)));
+//        if (!clazz.getGeneralizations().isEmpty()) {
+//
+//            OJSimpleStatement ojSimpleStatement = new OJSimpleStatement();
+//            ojSimpleStatement.setExpression("super." + ClassBuilder.INTERNAL_ADD_DATATYPE_TO_COLLECTION + "(umlgRuntimeProperty, object)");
+//            z_addToInternalCollection.getBody().addToStatements(ojSimpleStatement);
+//
+//        }
+//        z_addToInternalCollection.getBody().addToLocals(runtimeProperty);
+//
+//        OJSimpleStatement ojSimpleStatement = new OJSimpleStatement();
+//        ojSimpleStatement.setExpression("runtimeProperty = " + "(" + UmlgClassOperations.propertyEnumName(clazz)
+//                + ".fromQualifiedName(umlgRuntimeProperty.getQualifiedName()))");
+//        z_addToInternalCollection.getBody().addToStatements(ojSimpleStatement);
+//
+//        OJIfStatement ojIfStatement = new OJIfStatement();
+//        ojIfStatement.setCondition("runtimeProperty != null");
+//        OJSwitchStatement ojSwitchStatement = new OJSwitchStatement();
+//        ojSwitchStatement.setCondition("runtimeProperty");
+//
+//        for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
+//            PropertyWrapper pWrap = new PropertyWrapper(p);
+//            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && !pWrap.isRefined() && pWrap.isDataType()) {
+//                OJSwitchCase ojSwitchCase = new OJSwitchCase();
+//                ojSwitchCase.setLabel(pWrap.fieldname());
+//                OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".z_internalAdder((" + pWrap.javaBaseTypePath().getLast() + ")object)");
+//                statement.setName(pWrap.fieldname());
+//                ojSwitchCase.getBody().addToStatements(statement);
+//                annotatedClass.addToImports(pWrap.javaImplTypePath());
+//                ojSwitchStatement.addToCases(ojSwitchCase);
+//
+//                if (pWrap.isMemberOfAssociationClass()) {
+//                    ojSwitchCase = new OJSwitchCase();
+//                    ojSwitchCase.setLabel(pWrap.getAssociationClassFakePropertyName());
+//                    statement = new OJSimpleStatement("this." + pWrap.getAssociationClassFakePropertyName() + ".z_internalAdder((" + pWrap.getAssociationClassPathName().getLast() + ")object)");
+//                    statement.setName(pWrap.fieldname());
+//                    ojSwitchCase.getBody().addToStatements(statement);
+//                    annotatedClass.addToImports(pWrap.javaImplTypePath());
+//                    ojSwitchStatement.addToCases(ojSwitchCase);
+//                }
+//            }
+//        }
+//
+//        ojIfStatement.addToThenPart(ojSwitchStatement);
+//        z_addToInternalCollection.getBody().addToStatements(ojIfStatement);
+//
+//        if (clazz instanceof AssociationClass) {
+//            //Do the property for the association class
+//            AssociationClass associationClass = (AssociationClass) clazz;
+//            List<Property> memberEnds = associationClass.getMemberEnds();
+//            for (Property memberEnd : memberEnds) {
+//                PropertyWrapper pWrap = new PropertyWrapper(memberEnd);
+//
+//                OJSwitchCase ojSwitchCase = new OJSwitchCase();
+//                ojSwitchCase.setLabel(pWrap.fieldname());
+//
+//                OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".z_internalAdder((" + pWrap.javaBaseTypePath().getLast() + ")object)");
+//                statement.setName(pWrap.fieldname());
+//                ojSwitchCase.getBody().addToStatements(statement);
+//                ojSwitchStatement.addToCases(ojSwitchCase);
+//                annotatedClass.addToImports(UmlgPropertyOperations.getDefaultTinkerCollection(memberEnd, true));
+//                annotatedClass.addToImports(UmlgGenerationUtil.PropertyTree);
+//            }
+//        }
+//    }
 
     private void addInitialiseProperty(OJAnnotatedClass annotatedClass, Classifier classifier) {
         OJAnnotatedOperation initialiseProperty = new OJAnnotatedOperation(INITIALISE_PROPERTY);
         UmlgGenerationUtil.addOverrideAnnotation(initialiseProperty);
         initialiseProperty.addParam("tumlRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
         initialiseProperty.addParam("inverse", "boolean");
+        initialiseProperty.addParam("loaded", "boolean");
         if (!classifier.getGeneralizations().isEmpty()) {
-            initialiseProperty.getBody().addToStatements("super.initialiseProperty(tumlRuntimeProperty, inverse)");
+            initialiseProperty.getBody().addToStatements("super.initialiseProperty(tumlRuntimeProperty, inverse, loaded)");
         }
         annotatedClass.addToOperations(initialiseProperty);
-        OJField loaded = new OJField();
-        loaded.setType(new OJPathName("boolean"));
-        loaded.setName("loaded");
-        loaded.setInitExp("false");
-        initialiseProperty.getBody().addToLocals(loaded);
 
         OJField runtimePropoerty = new OJField("runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(classifier)));
         initialiseProperty.getBody().addToLocals(runtimePropoerty);
