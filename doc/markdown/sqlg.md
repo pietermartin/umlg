@@ -8,6 +8,7 @@ Currently [HSQLDB](http://hsqldb.org/) and [Postgresql](http://www.postgresql.or
 
 Sqlg has a [Google Group](https://groups.google.com/forum/?hl=en#!forum/sqlg).
 
+Latest version of the documentation is [here](https://pietermartin.github.io/).
 
 ###TinkerPop supported features
 
