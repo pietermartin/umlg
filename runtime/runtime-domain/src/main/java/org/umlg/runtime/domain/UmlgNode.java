@@ -20,7 +20,7 @@ public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
 	void initialiseProperty(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse, boolean loaded);
     UmlgRuntimeProperty inverseAdder(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse, UmlgNode umlgNode);
     void initVariables();
-    void initDataTypeVariablesWithDefaultValues();
+//    void initDataTypeVariablesWithDefaultValues();
 	List<Qualifier> getQualifiers(UmlgRuntimeProperty umlgRuntimeProperty, UmlgNode node, boolean inverse);
 	void delete();
 	int getSize(boolean inverse, UmlgRuntimeProperty umlgRuntimeProperty);
@@ -36,8 +36,11 @@ public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
 	Edge getEdge(UmlgRuntimeProperty umlgRuntimeProperty);
 //	void z_internalAddToCollection(UmlgRuntimeProperty umlgRuntimeProperty, UmlgNode umlgNode);
 	void z_internalAddToCollection(UmlgRuntimeProperty umlgRuntimeProperty, Object umlgNode);
+	void z_internalAddPersistentValueToCollection(UmlgRuntimeProperty umlgRuntimeProperty, Object umlgNode);
 //	void z_internalAddDataTypeToCollection(UmlgRuntimeProperty umlgRuntimeProperty, Object object);
 	Set<UmlgRuntimeProperty> z_internalBooleanProperties();
 	Map<UmlgRuntimeProperty, Object> z_internalDataTypePropertiesWithDefaultValues();
+	Set<UmlgRuntimeProperty> z_internalDataTypeProperties();
 	UmlgCollection<? extends Object> z_internalGetCollectionFor(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse);
+	void z_internalMarkCollectionLoaded(UmlgRuntimeProperty umlgRuntimeProperty, boolean loaded);
 }

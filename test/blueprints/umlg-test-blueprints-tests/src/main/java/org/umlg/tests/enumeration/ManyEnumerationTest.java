@@ -20,6 +20,24 @@ import java.util.Collection;
  */
 public class ManyEnumerationTest extends BaseLocalDbTest {
 
+    @Test
+    public void testManyEnumerationLoadFromVertex() {
+        God g = new God(true);
+        g.setName("g");
+        g.addToREASON(REASON.BAD);
+        g.addToREASON(REASON.GOOD);
+        db.commit();
+
+        Assert.assertEquals(2, g.getREASON().size());
+        db.rollback();
+        g.reload();
+        Assert.assertEquals(2, g.getREASON().size());
+        db.rollback();
+
+        God godAgain = new God(g.getVertex());
+        Assert.assertEquals(2, godAgain.getREASON().size());
+    }
+
     @Test(expected = IllegalStateException.class)
     public void testManyEnumeration() {
         God g = new God(true);
@@ -28,6 +46,7 @@ public class ManyEnumerationTest extends BaseLocalDbTest {
         UmlgSet<REASON> reasons = new UmlgMemorySet<REASON>((Collection<REASON>) s);
         g.addToREASON(reasons);
         db.commit();
+
     }
 
     @Test

@@ -76,13 +76,13 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
                 initVariables = infOwner.findOperation(ClassBuilder.INIT_VARIABLES);
                 buildInitialization(propertyWrapper, initVariables, owner);
                 initPrimitiveVariablesWithDefaultValues = infOwner.findOperation(ClassBuilder.INIT_DATE_TYPE_VARIABLES_WITH_DEFAULT_VALUES);
-                buildInitializationPrimitiveVariablesWithDefaultValues(propertyWrapper, initPrimitiveVariablesWithDefaultValues, owner);
+//                buildInitializationPrimitiveVariablesWithDefaultValues(propertyWrapper, initPrimitiveVariablesWithDefaultValues, owner);
             }
         } else {
             initVariables = owner.findOperation(ClassBuilder.INIT_VARIABLES);
             buildInitialization(propertyWrapper, initVariables, owner);
             initPrimitiveVariablesWithDefaultValues = owner.findOperation(ClassBuilder.INIT_DATE_TYPE_VARIABLES_WITH_DEFAULT_VALUES);
-            buildInitializationPrimitiveVariablesWithDefaultValues(propertyWrapper, initPrimitiveVariablesWithDefaultValues, owner);
+//            buildInitializationPrimitiveVariablesWithDefaultValues(propertyWrapper, initPrimitiveVariablesWithDefaultValues, owner);
         }
     }
 
@@ -100,31 +100,18 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
             }
 //			java = "//TODO " + constraint.toString();
             initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
-        } else {
-            //java default values are initialized in the constructor via z_internalPrimitivePropertiesWithDefaultValues
-//            if (!propertyWrapper.isOne() || !propertyWrapper.isPrimitive()) {
-//                if (propertyWrapper.isDateTime()) {
-//                    java = propertyWrapper.getDefaultValueAsJava();
-//                    if (!java.equals("new DateTime()")) {
-//                        initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
-//                    }
-//                } else {
-//                    java = propertyWrapper.getDefaultValueAsJava();
-//                    initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
-//                }
-//            }
         }
     }
 
-    private void buildInitializationPrimitiveVariablesWithDefaultValues(PropertyWrapper propertyWrapper, OJAnnotatedOperation initVariables, OJAnnotatedClass owner) {
-        String java;
-        if (!propertyWrapper.hasOclDefaultValue()) {
-            if (propertyWrapper.isDataType()) {
-                java = propertyWrapper.getDefaultValueAsJava();
-                initVariables.getBody().addToStatements( "this." + ClassBuilder.INTERNAL_ADD_TO_COLLECTION + "(" + UmlgClassOperations.propertyEnumName(propertyWrapper.getOwningType()) + "." + propertyWrapper.fieldname() + ", " + java + ")");
-            }
-        }
-    }
+//    private void buildInitializationPrimitiveVariablesWithDefaultValues(PropertyWrapper propertyWrapper, OJAnnotatedOperation initVariables, OJAnnotatedClass owner) {
+//        String java;
+//        if (!propertyWrapper.hasOclDefaultValue()) {
+//            if (propertyWrapper.isDataType()) {
+//                java = propertyWrapper.getDefaultValueAsJava();
+//                initVariables.getBody().addToStatements( "this." + ClassBuilder.INTERNAL_ADD_TO_COLLECTION + "(" + UmlgClassOperations.propertyEnumName(propertyWrapper.getOwningType()) + "." + propertyWrapper.fieldname() + ", " + java + ")");
+//            }
+//        }
+//    }
 
     private static void buildMovePropertyInstanceForAssociationClass(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
         OJAnnotatedOperation mover = new OJAnnotatedOperation(propertyWrapper.associationClassMoverForProperty());

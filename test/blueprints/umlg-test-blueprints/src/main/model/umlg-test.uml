@@ -3222,6 +3222,10 @@ endif</body>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_kfi8wGNxEeWlBoAlg3KdEg"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_kflZAGNxEeWlBoAlg3KdEg" value="1"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_ctQ8YN_CEeaHX-lrogJrsg" name="enumMany" type="_Yd-RcN_CEeaHX-lrogJrsg" association="_ctOgIN_CEeaHX-lrogJrsg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_iJetcN_CEeaHX-lrogJrsg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_iJhJsN_CEeaHX-lrogJrsg" value="*"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Enumeration" xmi:id="_RWnG4O8CEeOCtvMnpL9cwg" name="Gender">
             <ownedOperation xmi:type="uml:Operation" xmi:id="_NhNCIAhLEeaH-sBye-Fdjg" name="testEnumOper" bodyCondition="_bDzrgAhLEeaH-sBye-Fdjg" isQuery="true">
@@ -3272,6 +3276,17 @@ endif</body>
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Nshi0WNvEeWlBoAlg3KdEg" source="org.eclipse.papyrus">
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Nshi0mNvEeWlBoAlg3KdEg" key="nature" value="UML_Nature"/>
             </eAnnotations>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_Yd-RcN_CEeaHX-lrogJrsg" name="EnumMany">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_ZfsNIN_CEeaHX-lrogJrsg" name="MANY1"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_aT4qMN_CEeaHX-lrogJrsg" name="MANY2"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_bWGVIN_CEeaHX-lrogJrsg" name="MANY3"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_ctOgIN_CEeaHX-lrogJrsg" name="human_enumMany" memberEnd="_ctQ8YN_CEeaHX-lrogJrsg _ctQ8Yd_CEeaHX-lrogJrsg">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ctPuQN_CEeaHX-lrogJrsg" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ctPuQd_CEeaHX-lrogJrsg" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_ctQ8Yd_CEeaHX-lrogJrsg" name="human" type="_A3Ag4O8CEeOCtvMnpL9cwg" association="_ctOgIN_CEeaHX-lrogJrsg"/>
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_2zoC8B0NEeSmCaILr6OaKg" name="ocl">

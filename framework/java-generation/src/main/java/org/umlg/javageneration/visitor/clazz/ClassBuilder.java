@@ -31,7 +31,8 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     public static final String GET_COLLECTION_FOR = "z_internalGetCollectionFor";
 
     public static final String INTERNAL_ADD_TO_COLLECTION = "z_internalAddToCollection";
-//    public static final String INTERNAL_ADD_DATATYPE_TO_COLLECTION = "z_internalAddDataTypeToCollection";
+    public static final String INTERNAL_ADD_PERSISTENT_VALUE_TO_COLLECTION = "z_internalAddPersistentValueToCollection";
+    public static final String INTERNAL_MARK_TO_COLLECTION_LOADED = "z_internalMarkCollectionLoaded";
 
     public ClassBuilder(Workspace workspace) {
         super(workspace);
@@ -195,8 +196,8 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
     public static void addGetDataTypeProperties(OJAnnotatedClass annotatedClass, Classifier classifier) {
         OJAnnotatedOperation primitiveProperties = new OJAnnotatedOperation(DATE_TYPE_PROPERTIES);
-        primitiveProperties.setReturnType(new OJPathName("java.util.Map").addToGenerics(UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy()).addToGenerics("Object"));
-        annotatedClass.addToImports("java.util.HashMap");
+        primitiveProperties.setReturnType(new OJPathName("java.util.Set").addToGenerics(UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy()));
+        annotatedClass.addToImports("java.util.HashSet");
         UmlgGenerationUtil.addOverrideAnnotation(primitiveProperties);
         annotatedClass.addToOperations(primitiveProperties);
         OJAnnotatedField result = new OJAnnotatedField("result", primitiveProperties.getReturnType());
@@ -204,7 +205,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         if (!classifier.getGeneralizations().isEmpty()) {
             result.setInitExp("super." + DATE_TYPE_PROPERTIES + "()");
         } else {
-            result.setInitExp("new HashMap<" + UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy() + ", Object>()");
+            result.setInitExp("new HashSet<" + UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy() + ">()");
         }
         for (Property p : UmlgClassOperations.getAllOwnedProperties(classifier)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
@@ -213,7 +214,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
                 String propertyRuntimeEnumName = UmlgClassOperations.propertyEnumName(classifier) + "." + pWrap.fieldname();
                 OJSimpleStatement addPrimitiveDefaultValueStatement;
-                addPrimitiveDefaultValueStatement = new OJSimpleStatement("result.put(" + propertyRuntimeEnumName + ", " + pWrap.getDefaultValueAsJava() + ")");
+                addPrimitiveDefaultValueStatement = new OJSimpleStatement("result.add(" + propertyRuntimeEnumName + ")");
                 primitiveProperties.getBody().addToStatements(addPrimitiveDefaultValueStatement);
             }
         }

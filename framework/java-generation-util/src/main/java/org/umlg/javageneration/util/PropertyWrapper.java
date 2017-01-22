@@ -32,6 +32,39 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         this.property = property;
     }
 
+    public String asJavaPrimiteType() {
+        if (!isPrimitive()) {
+            throw new IllegalStateException("PropertyWrapper.asJavaPrimitive may only be called on a PrimitiveType, found " + toString());
+        }
+        switch (getType().getName()) {
+            case "Boolean":
+                return "boolean";
+            case "Integer":
+                return "int";
+            case "Real":
+                return "double";
+            case "String":
+                return "String";
+            case "UnlimitedNatural":
+                return "int";
+            case "boolean":
+                return "boolean";
+            case "int":
+                return "int";
+            case "float":
+                return "float";
+            case "double":
+                return "double";
+            case "long":
+                return "long";
+            case "byte":
+                return "byte";
+            default:
+                throw new IllegalStateException("Unknown Primitive, found " + getType().getName());
+        }
+
+    }
+
     public boolean isInverseUnique() {
         if (getOtherEnd() != null) {
             return new PropertyWrapper(getOtherEnd()).isUnique();
@@ -225,7 +258,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         }
         Property owner = (Property) getOwner();
         Stereotype qualifierVisitor = ModelLoader.INSTANCE.findStereotype("QualifierListener");
-        for (Element e : UmlgClassOperations.getAllProperties((Class)owner.getType())) {
+        for (Element e : UmlgClassOperations.getAllProperties((Class) owner.getType())) {
             if (e instanceof Property) {
                 Property p = (Property) e;
                 if (p.isStereotypeApplied(qualifierVisitor)) {
@@ -334,6 +367,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     /**
      * Qualifier's corresponding property gets defaulted to make the ui work.
+     *
      * @return
      */
     public String getQualifierJippoDefaultValue() {
@@ -346,9 +380,9 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         } else if (isDate()) {
             return "LocalDate.now()";
         } else if (isEnumeration()) {
-            Enumeration enumeration = (Enumeration)getType();
+            Enumeration enumeration = (Enumeration) getType();
             String name = Namer.qualifiedName(enumeration);
-            return name  + "." + enumeration.getOwnedLiterals().get(0).getName();
+            return name + "." + enumeration.getOwnedLiterals().get(0).getName();
         } else {
             throw new IllegalStateException(String.format("Qualified property %s is a %s, this is not supported for default values", new String[]{getQualifiedName(), getType().getQualifiedName()}));
         }
@@ -2298,4 +2332,5 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         Stereotype changeListener = ModelLoader.INSTANCE.findStereotype("ChangeListener");
         return this.isStereotypeApplied(changeListener);
     }
+
 }

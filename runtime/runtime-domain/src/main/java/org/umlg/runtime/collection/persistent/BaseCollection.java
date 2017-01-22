@@ -97,10 +97,11 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         this.umlgRuntimeProperty = runtimeProperty;
     }
 
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
+    }
+
     protected void loadFromVertex() {
-//        if (!this.isOnePrimitive() && !isOneEnumeration() && UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode()) {
-//            return;
-//        }
         if (UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode()) {
             logger.warning("In batch mode but collection is not loaded. Collection: " + this.umlgRuntimeProperty.getQualifiedName());
         }
@@ -150,15 +151,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             return v.edges(Direction.IN, this.getLabel());
         }
     }
-
-//    protected Iterator<Vertex> getVertices() {
-//        if (this.isControllingSide()) {
-//            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex).out(this.getLabel());
-//        } else {
-//            return UMLG.get().getUnderlyingGraph().traversal().V(this.vertex).in(this.getLabel());
-//        }
-//    }
-
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
@@ -310,9 +302,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
                 Set<Edge> edges = UMLG.get().getEdgesBetween(this.vertex, v, this.getLabel());
                 for (Edge edge : edges) {
-//                    if (o instanceof TinkerAuditableNode) {
-//                        createAudit(e, true);
-//                    }
                     if (isOrdered()) {
                         removeFromLinkedList(((UmlgNode) o).getVertex());
                     }
@@ -413,9 +402,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         }
         if (v != null) {
             Edge edge = createEdge(e, v);
-//            if (this.owner instanceof TinkerAuditableNode) {
-//                createAudit(e, false);
-//            }
             if (e instanceof UmlgNode) {
                 ((UmlgNode) e).setEdge(this.umlgRuntimeProperty, edge);
             }
@@ -436,14 +422,8 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         Edge edge;
         if (this.isControllingSide()) {
             edge = this.vertex.addEdge(this.getLabel(), v);
-            if (this.isManyToMany()) {
-                edge.property("manyToManyCorrelationInverseTRUE", "SETTED");
-            }
         } else {
             edge = v.addEdge(this.getLabel(), this.vertex);
-            if (this.isManyToMany()) {
-                edge.property("manyToManyCorrelationInverseFALSE", "SETTED");
-            }
         }
         return edge;
     }
@@ -456,61 +436,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         auditOwner.getAuditVertex().property(getLabel(), e);
     }
 
-//    protected void createAudit(E e, boolean deletion) {
-//        if (!(owner instanceof TinkerAuditableNode)) {
-//            throw new IllegalStateException("if the collection member is an TinkerAuditableNode, then the owner must be a TinkerAuditableNode!");
-//        }
-//        TinkerAuditableNode auditOwner = (TinkerAuditableNode) owner;
-//        if (TransactionThreadVar.hasNoAuditEntry(owner.getClass().getName() + owner.getUid())) {
-//            auditOwner.createAuditVertex(false);
-//        }
-//        if (e instanceof TinkerAuditableNode) {
-//            TinkerAuditableNode node = (TinkerAuditableNode) e;
-//            if (TransactionThreadVar.hasNoAuditEntry(node.getClass().getName() + node.getUid())) {
-//                node.createAuditVertex(false);
-//            }
-//            Edge auditEdge;
-//            if (isControllingSide()) {
-//                auditEdge = auditOwner.getAuditVertex().addEdge(this.getLabel(), node.getAuditVertex());
-//                auditEdge.property("outClass", auditOwner.getClass().getName() + "Audit");
-//                auditEdge.property("inClass", node.getClass().getName() + "Audit");
-//            } else {
-//                auditEdge = node.getAuditVertex().addEdge(this.getLabel(), auditOwner.getAuditVertex());
-//                auditEdge.property("inClass", auditOwner.getClass().getName() + "Audit");
-//                auditEdge.property("outClass", node.getClass().getName() + "Audit");
-//            }
-//            if (deletion) {
-//                auditEdge.property("deletedOn", UmlgFormatter.format(new DateTime()));
-//            }
-//        } else if (e.getClass().isEnum()) {
-//            Vertex v = UMLG.get().addVertex();
-//            v.property(getPersistentName(), ((Enum<?>) e).name());
-//            Edge auditEdge = auditOwner.getAuditVertex().addEdge(this.getLabel(), v);
-//            auditEdge.property("outClass", auditOwner.getClass().getName() + "Audit");
-//            auditEdge.property("inClass", e.getClass().getName());
-//        } else {
-//            if (TransactionThreadVar.hasNoAuditEntry(owner.getClass().getName() + e.getClass().getName() + e.toString())) {
-//                Vertex auditVertex = UMLG.get().addVertex();
-//                auditVertex.property(getPersistentName(), e);
-//                TransactionThreadVar.putAuditVertexFalse(owner.getClass().getName() + e.getClass().getName() + e.toString(), auditVertex);
-//                auditVertex.property("transactionNo", ((UmlgAdminGraph) UMLG.get()).getTransactionCount());
-//                Edge auditEdge;
-//                if (isControllingSide()) {
-//                    auditEdge = auditOwner.getAuditVertex().addEdge(this.getLabel(), auditVertex);
-//                    auditEdge.property("outClass", this.parentClass.getName());
-//                    auditEdge.property("inClass", e.getClass().getName() + "Audit");
-//                } else {
-//                    auditEdge = auditVertex.addEdge(this.getLabel(), auditOwner.getAuditVertex());
-//                    auditEdge.property("inClass", this.parentClass.getName());
-//                    auditEdge.property("outClass", e.getClass().getName() + "Audit");
-//                }
-//                if (deletion) {
-//                    auditEdge.property("transactionNo", ((UmlgAdminGraph) UMLG.get()).getTransactionCount());
-//                    auditEdge.property("deletedOn", UmlgFormatter.format(new DateTime()));
-//                }
-//            }
-//        }
-//    }
 
     protected void maybeLoad() {
         if ((!this.loaded && (this.isOnePrimitive() || isOneEnumeration()))) {
@@ -534,18 +459,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 return Class.forName(edge.vertices(Direction.IN).next().value("className"));
             } else {
                 return Class.forName(edge.vertices(Direction.OUT).next().value("className"));
-            }
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    protected Class<?> getClassToInstantiate(Vertex vertex) {
-        try {
-            if (this.isControllingSide()) {
-                return Class.forName(vertex.value("className"));
-            } else {
-                return Class.forName(vertex.value("className"));
             }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);

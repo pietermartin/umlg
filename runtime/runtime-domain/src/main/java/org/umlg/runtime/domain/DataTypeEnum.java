@@ -3,7 +3,6 @@ package org.umlg.runtime.domain;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-import org.umlg.runtime.types.Password;
 
 public enum DataTypeEnum {
 

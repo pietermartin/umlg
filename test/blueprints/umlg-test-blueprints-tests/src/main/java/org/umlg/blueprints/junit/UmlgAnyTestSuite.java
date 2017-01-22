@@ -2,7 +2,7 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.tests.embeddedtest.TestEmbeddedTest;
+import org.umlg.tests.collectiontest.SequenceTest;
 
 /**
  * Date: 2013/10/19
@@ -10,8 +10,7 @@ import org.umlg.tests.embeddedtest.TestEmbeddedTest;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestEmbeddedTest.class
-//        TestBulkCollection.class,
+        SequenceTest.class,
 })
 public class UmlgAnyTestSuite {
 }

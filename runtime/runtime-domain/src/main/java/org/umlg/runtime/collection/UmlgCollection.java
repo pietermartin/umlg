@@ -24,4 +24,8 @@ public interface UmlgCollection<E> extends Collection<E>, OclStdLibCollection<E>
     public default boolean isLoaded() {
         return true;
     }
+
+    public default void setLoaded(boolean loaded) {
+    }
+
 }

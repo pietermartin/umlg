@@ -3,6 +3,7 @@ package org.umlg.runtime.domain;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.Property;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
 import org.umlg.runtime.adaptor.UMLG;
@@ -36,6 +37,14 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         this.vertex = vertex;
         TransactionThreadEntityVar.setNewEntity(this);
         initialiseProperties(false);
+        Set<UmlgRuntimeProperty> dataTypes = z_internalDataTypeProperties();
+        for (UmlgRuntimeProperty dataType : dataTypes) {
+            Property p = this.vertex.property(dataType.getPersistentName());
+            if (p.isPresent()) {
+                z_internalMarkCollectionLoaded(dataType, true);
+                z_internalAddPersistentValueToCollection(dataType, p.value());
+            }
+        }
     }
 
     public BaseUmlg(Object id) {
@@ -44,17 +53,27 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         this.vertex = UMLG.get().traversal().V(id).next();
         TransactionThreadEntityVar.setNewEntity(this);
         initialiseProperties(false);
+        Set<UmlgRuntimeProperty> dataTypes = z_internalDataTypeProperties();
+        for (UmlgRuntimeProperty dataType : dataTypes) {
+            Property p = this.vertex.property(dataType.getPersistentName());
+            if (p.isPresent()) {
+                z_internalMarkCollectionLoaded(dataType, true);
+                z_internalAddPersistentValueToCollection(dataType, p.value());
+            }
+        }
     }
 
     public BaseUmlg(Boolean persistent) {
         super();
-        Set<UmlgRuntimeProperty> booleanProperties = z_internalBooleanProperties();
         Map<String, Object> properties = new HashMap<>();
         properties.put("className", getClass().getName());
         properties.put("uid", UUID.randomUUID().toString());
+        //Get all boolean properties, default them to false.
+        Set<UmlgRuntimeProperty> booleanProperties = z_internalBooleanProperties();
         for (UmlgRuntimeProperty booleanProperty : booleanProperties) {
             properties.put(booleanProperty.getLabel(), Boolean.FALSE);
         }
+        //Get all properties with default values. This will include booleans.
         Map<UmlgRuntimeProperty, Object> primitiveDefaultValueProperties = z_internalDataTypePropertiesWithDefaultValues();
         for (Map.Entry<UmlgRuntimeProperty, Object> umlgRuntimePropertyObjectEntry : primitiveDefaultValueProperties.entrySet()) {
             if (umlgRuntimePropertyObjectEntry.getKey().isOneEnumeration()) {
@@ -64,10 +83,12 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
             } else {
                 properties.put(umlgRuntimePropertyObjectEntry.getKey().getPersistentName(), umlgRuntimePropertyObjectEntry.getValue());
             }
+            booleanProperties.remove(umlgRuntimePropertyObjectEntry.getKey());
         }
         this.vertex = UMLG.get().addVertex(this.getClass().getName(), properties);
         addToThreadEntityVar();
         initialiseProperties(true);
+
         for (UmlgRuntimeProperty booleanProperty : booleanProperties) {
             this.z_internalAddToCollection(booleanProperty, false);
         }
@@ -75,7 +96,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
             this.z_internalAddToCollection(umlgRuntimePropertyObjectEntry.getKey(), umlgRuntimePropertyObjectEntry.getValue());
         }
         initVariables();
-        initDataTypeVariablesWithDefaultValues();
+//        initDataTypeVariablesWithDefaultValues();
     }
 
     @Override

@@ -4,28 +4,34 @@ import org.eclipse.uml2.uml.DataType;
 import org.umlg.java.metamodel.OJPathName;
 
 public enum DataTypeEnum {
-    DateTime("org.joda.time.DateTime", "DataTypeEnum.DateTime"),
-    Date("org.joda.time.LocalDate", "DataTypeEnum.Date"),
-    Time("org.joda.time.LocalTime", "DataTypeEnum.Time"),
-    InternationalPhoneNumber("java.lang.String", "DataTypeEnum.InternationalPhoneNumber"),
-    LocalPhoneNumber("java.lang.String", "DataTypeEnum.LocalPhoneNumber"),
-    Email("java.lang.String", "DataTypeEnum.Email"),
-    Video("byte[]", "DataTypeEnum.Video"),
-    Audio("byte[]", "DataTypeEnum.Audio"),
-    Image("byte[]", "DataTypeEnum.Image"),
-    Host("java.lang.String", "DataTypeEnum.Host"),
-    QuartzCron("java.lang.String", "DataTypeEnum.QuartzCron"),
-    UnixCron("java.lang.String", "DataTypeEnum.UnixCron"),
-    Password("org.umlg.runtime.types.Password", "DataTypeEnum.Password"),
-    UnsecurePassword("java.lang.String", "DataTypeEnum.UnsecurePassword"),
-    ByteArray("byte[]", "DataTypeEnum.ByteArray");
+    DateTime("org.joda.time.DateTime", "DataTypeEnum.DateTime", "long"),
+    Date("org.joda.time.LocalDate", "DataTypeEnum.Date", "long"),
+    Time("org.joda.time.LocalTime", "DataTypeEnum.Time", "long"),
+    InternationalPhoneNumber("java.lang.String", "DataTypeEnum.InternationalPhoneNumber", "String"),
+    LocalPhoneNumber("java.lang.String", "DataTypeEnum.LocalPhoneNumber", "String"),
+    Email("java.lang.String", "DataTypeEnum.Email", "String"),
+    Video("byte[]", "DataTypeEnum.Video", "byte[]"),
+    Audio("byte[]", "DataTypeEnum.Audio", "byte[]"),
+    Image("byte[]", "DataTypeEnum.Image", "byte[]"),
+    Host("java.lang.String", "DataTypeEnum.Host", "String"),
+    QuartzCron("java.lang.String", "DataTypeEnum.QuartzCron", "String"),
+    UnixCron("java.lang.String", "DataTypeEnum.UnixCron", "String"),
+    Password("org.umlg.runtime.types.Password", "DataTypeEnum.Password", "byte[]"),
+    UnsecurePassword("java.lang.String", "DataTypeEnum.UnsecurePassword", "String"),
+    ByteArray("byte[]", "DataTypeEnum.ByteArray", "byte[]");
 
     private OJPathName pathName;
     private String initExpression;
+    private String persistentType;
 
-    private DataTypeEnum(String s, String initExpression) {
+    private DataTypeEnum(String s, String initExpression, String persistentType) {
         this.pathName = new OJPathName(s);
         this.initExpression = initExpression;
+        this.persistentType = persistentType;
+    }
+
+    public String getPersistentType() {
+        return persistentType;
     }
 
     public String getInitExpression() {
