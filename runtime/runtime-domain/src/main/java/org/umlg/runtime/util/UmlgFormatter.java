@@ -9,10 +9,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 import org.umlg.runtime.domain.DataTypeEnum;
-import org.umlg.runtime.types.Password;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -190,6 +188,12 @@ public class UmlgFormatter {
             case UnixCron:
                 return (E) s;
             case Password:
+                //this is a f up, need the salt also
+//                byte[] salt = v.<byte[]>property(persistentName + SALT).value();
+//                this.encryptedPassword = v.<byte[]>property(persistentName).value();
+//                Password password = new Password();
+//                password.loadFromVertex(this.vertex, getPersistentName());
+//                result = (E) password;
                 return (E) s;
             case UnsecurePassword:
                 return (E) s;

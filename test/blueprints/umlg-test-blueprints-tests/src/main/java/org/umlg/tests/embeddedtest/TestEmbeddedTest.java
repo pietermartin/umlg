@@ -16,6 +16,7 @@ import java.util.Iterator;
 
 public class TestEmbeddedTest extends BaseLocalDbTest {
 
+
     @Test
     public void testOneToManyEnum() {
         God god = new God(true);

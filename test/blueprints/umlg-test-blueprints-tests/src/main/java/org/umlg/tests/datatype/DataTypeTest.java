@@ -244,6 +244,10 @@ public class DataTypeTest extends BaseLocalDbTest {
         dataTypeEntity.reload();
         password = dataTypeEntity.getPassword();
         Assert.assertTrue(new PasswordEncryptionService().authenticate("password123", password.getEncryptedPassword(), password.getSalt()));
+
+        dataTypeEntity = new DataTypeEntity(dataTypeEntity.getVertex());
+        password = dataTypeEntity.getPassword();
+        Assert.assertTrue(new PasswordEncryptionService().authenticate("password123", password.getEncryptedPassword(), password.getSalt()));
     }
 
     @Test

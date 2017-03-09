@@ -114,7 +114,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
         SqlgGraph sqlgGraph = (SqlgGraph)this.umlgGraph.getUnderlyingGraph();
 //        sqlgGraph.getSchemaManager().close();
         SqlDialect sqlDialect = sqlgGraph.getSqlDialect();
-        try (Connection conn = sqlgGraph.getSqlgDataSource().get(this.configuration.getString("jdbc.url")).getConnection()) {
+        try (Connection conn = sqlgGraph.getSqlgDataSource().getDatasource().getConnection()) {
             DatabaseMetaData metadata = conn.getMetaData();
             String catalog = null;
             String schemaPattern = null;
@@ -159,7 +159,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
                     }
                 }
             }
-            sqlgGraph.getSqlgDataSource().close(this.configuration.getString("jdbc.url"));
+            sqlgGraph.getSqlgDataSource().close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

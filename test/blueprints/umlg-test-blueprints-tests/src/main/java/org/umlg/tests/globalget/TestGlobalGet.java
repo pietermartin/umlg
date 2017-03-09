@@ -1,13 +1,8 @@
 package org.umlg.tests.globalget;
 
-import org.apache.commons.lang3.time.StopWatch;
 import org.apache.tinkerpop.gremlin.process.traversal.P;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.HasContainer;
-import org.junit.Assume;
 import org.junit.Test;
-import org.umlg.collectiontest.Finger;
-import org.umlg.collectiontest.Hand;
-import org.umlg.concretetest.God;
 import org.umlg.optional.AOptional;
 import org.umlg.optional.BBOptional;
 import org.umlg.optional.BOptional;
@@ -19,8 +14,6 @@ import org.umlg.runtime.test.BaseLocalDbTest;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.umlg.collectiontest.Hand.HandRuntimePropertyEnum.finger;
-import static org.umlg.concretetest.God.GodRuntimePropertyEnum.hand;
 
 /**
  * Date: 2016/05/28
@@ -86,12 +79,21 @@ public class TestGlobalGet extends BaseLocalDbTest {
     public void test3Levels() {
         AOptional aOptional1 = new AOptional();
         aOptional1.setName("aOptional1");
+
         BOptional bOptional1 = new BOptional();
         bOptional1.setName("bOptional1");
         BOptional bOptional2 = new BOptional();
         bOptional2.setName("bOptional2");
         BOptional bOptional3 = new BOptional();
         bOptional3.setName("bOptional3");
+
+        BBOptional bbOptional1 = new BBOptional();
+        bbOptional1.setName("bbOptional1");
+        BBOptional bbOptional2 = new BBOptional();
+        bbOptional2.setName("bbOptional2");
+        BBOptional bbOptional3 = new BBOptional();
+        bbOptional3.setName("bbOptional3");
+
         COptional cOptional1 = new COptional();
         cOptional1.setName("cOptional1");
         COptional cOptional2 = new COptional();
@@ -108,6 +110,11 @@ public class TestGlobalGet extends BaseLocalDbTest {
         aOptional1.addToBOptional(bOptional1);
         aOptional1.addToBOptional(bOptional2);
         aOptional1.addToBOptional(bOptional3);
+
+        aOptional1.addToBBoptional(bbOptional1);
+        aOptional1.addToBBoptional(bbOptional2);
+        aOptional1.addToBBoptional(bbOptional3);
+
         bOptional1.addToCOptional(cOptional1);
         bOptional1.addToCOptional(cOptional2);
         bOptional1.addToCOptional(cOptional3);
@@ -121,10 +128,11 @@ public class TestGlobalGet extends BaseLocalDbTest {
 
         PropertyTree bOptionalPT = PropertyTree.from(AOptional.AOptionalRuntimePropertyEnum.bOptional);
         bOptionalPT.addHasContainer(new HasContainer("name", P.within("bOptional1", "bOptional2", "bOptional3")));
-        bOptionalPT.addChild(BOptional.BOptionalRuntimePropertyEnum.cOptional);
-
         aOptionalPT.addChild(bOptionalPT);
-        aOptionalPT.addChild(AOptional.AOptionalRuntimePropertyEnum.bBoptional);
+
+        PropertyTree bbOptionalPT = PropertyTree.from(AOptional.AOptionalRuntimePropertyEnum.bBoptional);
+        bbOptionalPT.addHasContainer(new HasContainer("name", P.within("bbOptional1", "bbOptional2", "bbOptional3")));
+        aOptionalPT.addChild(bbOptionalPT);
 
         List<AOptional> aOptionals = UMLG.get().get(aOptionalPT);
         assertEquals(1, aOptionals.size());
@@ -142,75 +150,49 @@ public class TestGlobalGet extends BaseLocalDbTest {
                     System.out.println(cOptional.getName());
                 }
             }
-            for (BBOptional bbOptional : aOptional.getBBoptional()) {
-                System.out.println(bbOptional.getName());
-            }
+            assertEquals(3, aOptional.getBBoptional().size());
         }
     }
 
-    //    @Test
-    public void testHandFingerNail() {
-        Assume.assumeTrue(UMLG.get().supportsBatchMode());
-        God god = new God();
-        god.setName("god");
-        for (int j = 0; j < 1; j++) {
-            Hand hand = new Hand();
-            god.addToHand(hand);
-            hand.setName("hand_" + j);
-            for (int k = 0; k < 1; k++) {
-                Finger finger = new Finger();
-                hand.addToFinger(finger);
-                finger.setName("finger_" + k);
-            }
-        }
-        UMLG.get().commit();
-        god.delete();
-        UMLG.get().commit();
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        UMLG.get().batchModeOn();
-        int count = 10_000;
-        for (int i = 1; i < count + 1; i++) {
-            god = new God();
-            god.setName("god_" + i);
-            for (int j = 0; j < 2; j++) {
-                Hand hand = new Hand(god);
-                hand.setName("hand_" + j);
-                for (int k = 0; k < 5; k++) {
-                    Finger finger = new Finger(hand);
-                    finger.setName("finger_" + k);
-                }
-            }
-        }
-        UMLG.get().commit();
-        stopWatch.stop();
-        System.out.println("Time to insert " + stopWatch.toString());
-        stopWatch.reset();
-
-        System.out.println("start sleeping");
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("done sleeping");
-
-        stopWatch.start();
-        PropertyTree godPT = PropertyTree.from("God");
-        PropertyTree handPT = PropertyTree.from(hand);
-        handPT.addChild(finger);
-        godPT.addChild(handPT);
-        List<God> gods = UMLG.get().get(godPT);
-        assertEquals(count, gods.size());
-        for (God godAgain : gods) {
-            assertEquals(2, godAgain.getHand().size());
-            for (Hand hand : godAgain.getHand()) {
-                assertEquals(5, hand.getFinger().size());
-            }
-        }
-        stopWatch.stop();
-        System.out.println("Time to query " + stopWatch.toString());
-
+//    @Test
+//    public void testHandFingerNail() {
+//        Assume.assumeTrue(UMLG.get().supportsBatchMode());
+//        God god = new God();
+//        god.setName("god");
+//        for (int j = 0; j < 1; j++) {
+//            Hand hand = new Hand();
+//            god.addToHand(hand);
+//            hand.setName("hand_" + j);
+//            for (int k = 0; k < 1; k++) {
+//                Finger finger = new Finger();
+//                hand.addToFinger(finger);
+//                finger.setName("finger_" + k);
+//            }
+//        }
+//        UMLG.get().commit();
+//        god.delete();
+//        UMLG.get().commit();
+//        StopWatch stopWatch = new StopWatch();
+//        stopWatch.start();
+//        UMLG.get().batchModeOn();
+//        int count = 10_000;
+//        for (int i = 1; i < count + 1; i++) {
+//            god = new God();
+//            god.setName("god_" + i);
+//            for (int j = 0; j < 2; j++) {
+//                Hand hand = new Hand(god);
+//                hand.setName("hand_" + j);
+//                for (int k = 0; k < 5; k++) {
+//                    Finger finger = new Finger(hand);
+//                    finger.setName("finger_" + k);
+//                }
+//            }
+//        }
+//        UMLG.get().commit();
+//        stopWatch.stop();
+//        System.out.println("Time to insert " + stopWatch.toString());
+//        stopWatch.reset();
+//
 //        System.out.println("start sleeping");
 //        try {
 //            Thread.sleep(10000);
@@ -218,7 +200,31 @@ public class TestGlobalGet extends BaseLocalDbTest {
 //            throw new RuntimeException(e);
 //        }
 //        System.out.println("done sleeping");
-    }
+//
+//        stopWatch.start();
+//        PropertyTree godPT = PropertyTree.from("God");
+//        PropertyTree handPT = PropertyTree.from(hand);
+//        handPT.addChild(finger);
+//        godPT.addChild(handPT);
+//        List<God> gods = UMLG.get().get(godPT);
+//        assertEquals(count, gods.size());
+//        for (God godAgain : gods) {
+//            assertEquals(2, godAgain.getHand().size());
+//            for (Hand hand : godAgain.getHand()) {
+//                assertEquals(5, hand.getFinger().size());
+//            }
+//        }
+//        stopWatch.stop();
+//        System.out.println("Time to query " + stopWatch.toString());
+//
+////        System.out.println("start sleeping");
+////        try {
+////            Thread.sleep(10000);
+////        } catch (InterruptedException e) {
+////            throw new RuntimeException(e);
+////        }
+////        System.out.println("done sleeping");
+//    }
 
 //    @Test
 //    public void test() {

@@ -568,6 +568,10 @@
           <element xmi:type="uml:Property" href="umlg-test.uml#_Wq9H0NylEeamYqhAgtmbFQ"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_Ws0JAdylEeamYqhAgtmbFQ"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_ob0VcOFHEeatsIBdarkCIQ" type="Property_ClassAttributeLabel">
+          <element xmi:type="uml:Property" href="umlg-test.uml#_oViuUOFHEeatsIBdarkCIQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_ob0VceFHEeatsIBdarkCIQ"/>
+        </children>
       </children>
       <children xmi:type="notation:BasicCompartment" xmi:id="_1bJyQwAOEeKpVr_ntT6cLA" type="Class_NestedClassifierCompartment"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_1ecW1wAOEeKpVr_ntT6cLA" type="Class_NameLabel"/>
@@ -8644,7 +8648,7 @@
           <stringListValue>modifiers</stringListValue>
           <stringListValue>derived</stringListValue>
         </styles>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_4kqPc7PVEeORtvbQ18esMQ" x="119" y="17"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_4kqPc7PVEeORtvbQ18esMQ" x="105" y="17"/>
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_4kpBUbPVEeORtvbQ18esMQ" fontName="Sans" fontHeight="10"/>
       <element xmi:type="uml:AssociationClass" href="umlg-test.uml#_4kWtcbPVEeORtvbQ18esMQ"/>

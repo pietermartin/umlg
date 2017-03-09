@@ -356,6 +356,8 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
                             statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".z_internalAdder(" + pWrap.javaBaseTypePath().getLast() + ".valueOf((String)umlgNode))");
                         } else if (pWrap.isPrimitive()) {
                             statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".z_internalAdder((" + pWrap.asJavaPrimiteType() + ")umlgNode)");
+                        } else if (pWrap.isPassword()) {
+                            statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".setLoaded(false)");
                         } else {
                             statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".z_internalAdder(UmlgFormatter.parse(" + pWrap.getTumlRuntimePropertyEnum() + ".getDataTypeEnum(), umlgNode))");
                         }

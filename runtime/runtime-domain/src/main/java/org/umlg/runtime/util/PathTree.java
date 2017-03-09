@@ -88,7 +88,7 @@ public class PathTree {
             for (PropertyTree propertyTree : propertyTreesToNavigateTo) {
                 //set the collection as loaded even though there is nothing to load.
                 //else it will execute a query to get the nothing.
-                owner.z_internalAddToCollection(propertyTree.getUmlgRuntimeProperty(), null);
+                owner.z_internalMarkCollectionLoaded(propertyTree.getUmlgRuntimeProperty(), true);
             }
         }
         for (PathTree pathTree : this.children.values()) {
@@ -102,7 +102,6 @@ public class PathTree {
                     //set the collection as loaded even though there is nothing to load.
                     //else it will execute a query to get the nothing.
                     owner.z_internalMarkCollectionLoaded(propertyTree.getUmlgRuntimeProperty(), true);
-//                    owner.z_internalAddToCollection(propertyTree.getUmlgRuntimeProperty(), null);
                 }
                 for (PropertyTree propertyTree : propertyTreesToNavigateTo) {
                     if (edgeLabel.equals(propertyTree.getUmlgRuntimeProperty().getLabel())) {

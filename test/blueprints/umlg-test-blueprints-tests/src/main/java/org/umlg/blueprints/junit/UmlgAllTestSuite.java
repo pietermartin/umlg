@@ -162,7 +162,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestGlobalGetOnAssociationClass.class,
         TestGlobalGet.class,
         TestAssociationClassDuplicates.class,
-        TestDefaultValues.class
+        TestDefaultValues.class,
+        SequenceOrderedPropertyTreeTest.class
 })
 public class UmlgAllTestSuite {
 }

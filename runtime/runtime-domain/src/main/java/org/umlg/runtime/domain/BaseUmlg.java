@@ -40,8 +40,8 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         Set<UmlgRuntimeProperty> dataTypes = z_internalDataTypeProperties();
         for (UmlgRuntimeProperty dataType : dataTypes) {
             Property p = this.vertex.property(dataType.getPersistentName());
+            z_internalMarkCollectionLoaded(dataType, true);
             if (p.isPresent()) {
-                z_internalMarkCollectionLoaded(dataType, true);
                 z_internalAddPersistentValueToCollection(dataType, p.value());
             }
         }
