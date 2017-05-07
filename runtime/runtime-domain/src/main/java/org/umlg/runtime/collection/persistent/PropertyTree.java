@@ -122,7 +122,7 @@ public class PropertyTree {
             innerTraversal =  __.<Vertex>toE(Direction.OUT, labels).as("e_" + labels[0]).<Edge>otherV();
             Set<HasContainer> hasContainers = getChildrenHasContainers();
             for (HasContainer hasContainer : hasContainers) {
-                ((GraphTraversal)innerTraversal).has(hasContainer.getKey(), hasContainer.getPredicate());
+                ((GraphTraversal<?,?>)innerTraversal).has(hasContainer.getKey(), hasContainer.getPredicate());
             }
         } else if (labels.length > 1) {
             String[] edgeLabels = Arrays.copyOfRange(labels, 1, labels.length);
@@ -132,7 +132,7 @@ public class PropertyTree {
             innerTraversal =  __.<Vertex>toE(Direction.OUT, labels).as("e_" + labels[0], edgeLabels).<Edge>otherV();
             Set<HasContainer> hasContainers = getChildrenHasContainers();
             for (HasContainer hasContainer : hasContainers) {
-                ((GraphTraversal)innerTraversal).has(hasContainer.getKey(), hasContainer.getPredicate());
+                ((GraphTraversal<?, ?>)innerTraversal).has(hasContainer.getKey(), hasContainer.getPredicate());
             }
         } else {
             innerTraversal = EmptyTraversal.instance();
