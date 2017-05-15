@@ -81,39 +81,53 @@ public class PropertyTree {
         rootPropertyTree.addChild(this);
         GraphTraversal<Vertex, Vertex> traversal = graph.traversal().V(vertex).as("Root");
         rootPropertyTree.walk(traversal);
-        rootPropertyTree.applyOrder(traversal);
+//        rootPropertyTree.applyOrder(traversal);
         return PathTree.from(traversal.path());
     }
 
-
+    /**
+     * g.V(id).local(
+     *     optional(
+     *         outE().as('e')
+     *     )
+     * )
+     * @param traversal
+     */
     void walk(GraphTraversal<Vertex, Vertex> traversal) {
-        if (!this.children.isEmpty() && childrenAreUnique()) {
-            Traversal<Vertex, Vertex> outInnerTraversal = outInnerTraversal();
-            if (!(outInnerTraversal instanceof EmptyTraversal)) {
-                for (PropertyTree child : children) {
-                    child.walk((GraphTraversal<Vertex, Vertex>) outInnerTraversal);
-                }
-            }
+        if (!this.children.isEmpty()) {
 
-            Traversal<Vertex, Vertex> inInnerTraversal = inInnerTraversal();
-            if (!(inInnerTraversal instanceof EmptyTraversal)) {
-                for (PropertyTree child : children) {
-                    child.walk((GraphTraversal<Vertex, Vertex>) inInnerTraversal);
-                }
-            }
-            if (!(outInnerTraversal instanceof EmptyTraversal) && !(inInnerTraversal instanceof EmptyTraversal)) {
-                GraphTraversal<Vertex, Vertex> tmpOut = traversal.asAdmin().clone().optional(outInnerTraversal);
-                GraphTraversal<Vertex, Vertex> tmpIn = traversal.asAdmin().clone().optional(inInnerTraversal);
-                traversal.union(tmpOut, tmpIn);
-            } else if (!(outInnerTraversal instanceof EmptyTraversal)) {
-                traversal.optional(outInnerTraversal);
-            } else if (!(inInnerTraversal instanceof EmptyTraversal)) {
-                traversal.optional(inInnerTraversal);
-            } else {
-                throw new IllegalStateException();
-            }
         }
+
     }
+
+//    void walk(GraphTraversal<Vertex, Vertex> traversal) {
+//        if (!this.children.isEmpty() && this.childrenAreUnique()) {
+//            Traversal<Vertex, Vertex> outInnerTraversal = outInnerTraversal();
+//            if (!(outInnerTraversal instanceof EmptyTraversal)) {
+//                for (PropertyTree child : children) {
+//                    child.walk((GraphTraversal<Vertex, Vertex>) outInnerTraversal);
+//                }
+//            }
+//
+//            Traversal<Vertex, Vertex> inInnerTraversal = inInnerTraversal();
+//            if (!(inInnerTraversal instanceof EmptyTraversal)) {
+//                for (PropertyTree child : children) {
+//                    child.walk((GraphTraversal<Vertex, Vertex>) inInnerTraversal);
+//                }
+//            }
+//            if (!(outInnerTraversal instanceof EmptyTraversal) && !(inInnerTraversal instanceof EmptyTraversal)) {
+//                GraphTraversal<Vertex, Vertex> tmpOut = traversal.asAdmin().clone().optional(outInnerTraversal);
+//                GraphTraversal<Vertex, Vertex> tmpIn = traversal.asAdmin().clone().optional(inInnerTraversal);
+//                traversal.union(tmpOut, tmpIn);
+//            } else if (!(outInnerTraversal instanceof EmptyTraversal)) {
+//                traversal.optional(outInnerTraversal);
+//            } else if (!(inInnerTraversal instanceof EmptyTraversal)) {
+//                traversal.optional(inInnerTraversal);
+//            } else {
+//                throw new IllegalStateException();
+//            }
+//        }
+//    }
 
     private Traversal<Vertex, Vertex> outInnerTraversal() {
         String[] labels = outLabels();
@@ -210,9 +224,7 @@ public class PropertyTree {
         Set<HasContainer> result = new HashSet<>();
         for (PropertyTree child : this.children) {
             if (child.getUmlgRuntimeProperty().isControllingSide() && !child.hasContainers.isEmpty()) {
-                for (HasContainer hasContainer : child.hasContainers) {
-                    result.add(hasContainer);
-                }
+                result.addAll(child.hasContainers);
             }
         }
         return result;
