@@ -517,7 +517,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
                 ojSwitchCase.getBody().addToStatements(statement);
 
                 if (pWrap.isMemberOfAssociationClass()) {
-                    statement = new OJSimpleStatement("this." + pWrap.getAssociationClassFakePropertyName() + " = " + pWrap.javaDefaultInitialisationForAssociationClass(classifier));
+                    statement = new OJSimpleStatement("this." + pWrap.getAssociationClassFakePropertyName() + " = " + pWrap.javaDefaultInitialisationForAssociationClass(classifier, true));
                     statement.setName(pWrap.getAssociationClassFakePropertyName());
                     ojSwitchCase.getBody().addToStatements(statement);
                 }

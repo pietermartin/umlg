@@ -272,8 +272,8 @@ public final class UmlgPropertyOperations extends PropertyOperations {
         return s;
     }
 
-    static OJSimpleStatement getDefaultTinkerCollectionInitalisationForAssociationClass(Property p, Classifier propertyConcreteOwner) {
-        return getDefaultTinkerCollectionInitalisationForAssociationClass(p, propertyConcreteOwner, getDefaultTinkerCollectionForAssociationClass(p));
+    static OJSimpleStatement getDefaultTinkerCollectionInitalisationForAssociationClass(Property p, Classifier propertyConcreteOwner, boolean withLoaded) {
+        return getDefaultTinkerCollectionInitalisationForAssociationClass(p, propertyConcreteOwner, getDefaultTinkerCollectionForAssociationClass(p), withLoaded);
     }
 
     private static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, Classifier propertyConcreteOwner, OJPathName collectionPathName) {
@@ -290,16 +290,27 @@ public final class UmlgPropertyOperations extends PropertyOperations {
         return ojSimpleStatement;
     }
 
-    private static OJSimpleStatement getDefaultTinkerCollectionInitalisationForAssociationClass(Property p, Classifier propertyConcreteOwner, OJPathName collectionPathName) {
+    private static OJSimpleStatement getDefaultTinkerCollectionInitalisationForAssociationClass(Property p, Classifier propertyConcreteOwner, OJPathName collectionPathName, boolean withLoaded) {
         OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this");
-        ojSimpleStatement.setExpression(
-                ojSimpleStatement.getExpression() + ", " +
-                        UmlgGenerationUtil.PropertyTree.getLast() +
-                        ".from(" + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).fieldname() + "), " +
-                        UmlgGenerationUtil.PropertyTree.getLast() +
-                        ".from(" + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).getAssociationClassFakePropertyName() + ")"
+        if (withLoaded) {
+            ojSimpleStatement.setExpression(
+                    ojSimpleStatement.getExpression() + ", " +
+                            UmlgGenerationUtil.PropertyTree.getLast() +
+                            ".from(" + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).fieldname() + "), " +
+                            UmlgGenerationUtil.PropertyTree.getLast() +
+                            ".from(" + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).getAssociationClassFakePropertyName() + "), loaded"
 
-        );
+            );
+        } else {
+            ojSimpleStatement.setExpression(
+                    ojSimpleStatement.getExpression() + ", " +
+                            UmlgGenerationUtil.PropertyTree.getLast() +
+                            ".from(" + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).fieldname() + "), " +
+                            UmlgGenerationUtil.PropertyTree.getLast() +
+                            ".from(" + UmlgClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).getAssociationClassFakePropertyName() + ")"
+
+            );
+        }
         ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ")");
         return ojSimpleStatement;
     }

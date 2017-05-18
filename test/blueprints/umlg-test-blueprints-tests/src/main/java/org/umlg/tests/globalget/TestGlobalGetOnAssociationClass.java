@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class TestGlobalGetOnAssociationClass extends BaseLocalDbTest {
 
-    @Test
+//    @Test
     public void testGlobalGetOnAssociationClass() {
         Hour hour1 = new Hour();
         hour1.setHour(1);
@@ -61,9 +61,10 @@ public class TestGlobalGetOnAssociationClass extends BaseLocalDbTest {
         }
     }
 
-//    @Test
+    @Test
     public void testAssociationClassPerformance() {
-        int count = 100_000;
+//        UMLG.get().batchModeOn();
+        int count = 10_000;
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         for (int i = 0; i < count; i++) {
@@ -89,9 +90,9 @@ public class TestGlobalGetOnAssociationClass extends BaseLocalDbTest {
         assertEquals(count, hourMeasurements.size());
         stopWatch.stop();
         System.out.println("Read time " + stopWatch.toString());
-//        for (HourMeasurement hourMeasurement : hourMeasurements) {
-//            System.out.println(hourMeasurement.getObjectType().getName());
-//            System.out.println(hourMeasurement.getHour().getHour());
-//        }
+        for (HourMeasurement hourMeasurement : hourMeasurements) {
+            System.out.println(hourMeasurement.getObjectType().getName());
+            System.out.println(hourMeasurement.getHour().getHour());
+        }
     }
 }

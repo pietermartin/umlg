@@ -300,7 +300,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
                     //Initialize the collection to the association class
                     statement = new OJSimpleStatement(
                             "this." + pWrap.getAssociationClassFakePropertyName() + " = " +
-                                    pWrap.javaDefaultInitialisationForAssociationClass(classifier));
+                                    pWrap.javaDefaultInitialisationForAssociationClass(classifier, true));
                     statement.setName(pWrap.getAssociationClassFakePropertyName());
                     initialiseProperties.getBody().addToStatements(statement);
                     annotatedClass.addToImports(UmlgPropertyOperations.getDefaultTinkerCollectionForAssociationClass(pWrap.getProperty()));

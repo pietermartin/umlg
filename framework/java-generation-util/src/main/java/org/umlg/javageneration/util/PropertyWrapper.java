@@ -809,7 +809,11 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public String javaDefaultInitialisationForAssociationClass(Classifier propertyConcreteOwner) {
-        return UmlgPropertyOperations.getDefaultTinkerCollectionInitalisationForAssociationClass(this.property, propertyConcreteOwner).getExpression();
+        return javaDefaultInitialisationForAssociationClass(propertyConcreteOwner, false);
+    }
+
+    public String javaDefaultInitialisationForAssociationClass(Classifier propertyConcreteOwner, boolean withLoaded) {
+        return UmlgPropertyOperations.getDefaultTinkerCollectionInitalisationForAssociationClass(this.property, propertyConcreteOwner, withLoaded).getExpression();
     }
 
     public boolean isOne() {

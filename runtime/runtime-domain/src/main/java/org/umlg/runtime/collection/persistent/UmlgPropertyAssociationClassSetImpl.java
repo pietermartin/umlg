@@ -18,7 +18,7 @@ import java.util.Set;
 public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassNode> extends UmlgSetImpl<E> implements UmlgPropertyAssociationClassSet<E, AC> {
 
     public UmlgPropertyAssociationClassSetImpl(UmlgNode owner, PropertyTree propertyTree, boolean loaded1, PropertyTree associationClassRuntimeProperty, boolean loaded2) {
-        super(owner, propertyTree);
+        super(owner, propertyTree, loaded1);
     }
 
     public UmlgPropertyAssociationClassSetImpl(UmlgNode owner, PropertyTree propertyTree, PropertyTree associationClassRuntimeProperty, boolean loaded) {

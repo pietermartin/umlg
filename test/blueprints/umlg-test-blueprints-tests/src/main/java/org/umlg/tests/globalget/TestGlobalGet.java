@@ -1,16 +1,25 @@
 package org.umlg.tests.globalget;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.tinkerpop.gremlin.process.traversal.P;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.HasContainer;
+import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
+import org.umlg.collectiontest.Finger;
+import org.umlg.collectiontest.Hand;
+import org.umlg.concretetest.God;
 import org.umlg.optional.AOptional;
 import org.umlg.optional.BBOptional;
 import org.umlg.optional.BOptional;
 import org.umlg.optional.COptional;
+import org.umlg.rootallinstances.TopRoot;
+import org.umlg.rootallinstances.TopRootChild;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.persistent.PropertyTree;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -21,59 +30,33 @@ import static org.junit.Assert.assertEquals;
  */
 public class TestGlobalGet extends BaseLocalDbTest {
 
-//    @Test
-//    public void test() {
-//        TopRoot topRoot1 = new TopRoot();
-//        topRoot1.setNameUnique("a");
-//        topRoot1.setIndexedName("aaa");
-//        TopRootChild topRootChild1 = new TopRootChild(topRoot1);
-//        topRootChild1.setName("topRootChild1");
-//
-//        TopRoot topRoot2 = new TopRoot();
-//        topRoot2.setNameUnique("ab");
-//        topRoot2.setIndexedName("aaab");
-//        TopRootChild topRootChild2 = new TopRootChild(topRoot2);
-//        topRootChild2.setName("topRootChild2");
-//        UMLG.get().commit();
-//
-//        //This must happen with only 2 queries to the db, 1 really but the optional 2
-//        PropertyTree topRootPt = PropertyTree.from("TopRoot");
-//        topRootPt.addChild(TopRoot.TopRootRuntimePropertyEnum.topRootChild);
-//        List<TopRoot> topRoots = UMLG.get().get(topRootPt);
-//        for (TopRoot topRoot : topRoots) {
-//            for (TopRootChild topRootChild : topRoot.getTopRootChild()) {
-//                System.out.println(topRootChild2.getName());
-//            }
-//        }
-//        Assert.assertTrue(topRoots.containsAll(Arrays.asList(topRoot1, topRoot2)));
-//    }
-//
-//    @Test
-//    public void testGlobalGet2Ways() {
-//        AOptional aOptional1 = new AOptional();
-//        aOptional1.setName("aOptional1");
-//        BOptional bOptional1 = new BOptional();
-//        bOptional1.setName("bOptional1");
-//        BBOptional bbOptional1 = new BBOptional();
-//        bbOptional1.setName("bbOptional1");
-//        aOptional1.addToBOptional(bOptional1);
-//        aOptional1.addToBBoptional(bbOptional1);
-//        UMLG.get().commit();
-//
-//        PropertyTree aOptionalPT = PropertyTree.from("AOptional");
-//        aOptionalPT.addChild(AOptional.AOptionalRuntimePropertyEnum.bOptional);
-//        aOptionalPT.addChild(AOptional.AOptionalRuntimePropertyEnum.bBoptional);
-//        List<AOptional> aOptionals = UMLG.get().get(aOptionalPT);
-//
-//        for (AOptional aOptional : aOptionals) {
-//            for (BOptional bOptional : aOptional.getBOptional()) {
-//                System.out.println(bOptional.getName());
-//            }
-//            for (BBOptional bbOptional : aOptional.getBBoptional()) {
-//                System.out.println(bbOptional.getName());
-//            }
-//        }
-//    }
+    @Test
+    public void test() {
+        TopRoot topRoot1 = new TopRoot();
+        topRoot1.setNameUnique("a");
+        topRoot1.setIndexedName("aaa");
+        TopRootChild topRootChild1 = new TopRootChild(topRoot1);
+        topRootChild1.setName("topRootChild1");
+
+        TopRoot topRoot2 = new TopRoot();
+        topRoot2.setNameUnique("ab");
+        topRoot2.setIndexedName("aaab");
+        TopRootChild topRootChild2 = new TopRootChild(topRoot2);
+        topRootChild2.setName("topRootChild2");
+        UMLG.get().commit();
+
+        //This must happen with only 2 queries to the db, 1 really but the optional 2
+        PropertyTree topRootPt = PropertyTree.from("TopRoot");
+        topRootPt.addChild(TopRoot.TopRootRuntimePropertyEnum.topRootChild);
+        List<TopRoot> topRoots = UMLG.get().get(topRootPt);
+        for (TopRoot topRoot : topRoots) {
+            for (TopRootChild topRootChild : topRoot.getTopRootChild()) {
+                System.out.println(topRootChild.getName());
+            }
+        }
+        Assert.assertTrue(topRoots.containsAll(Arrays.asList(topRoot1, topRoot2)));
+    }
+
 
     @Test
     public void test3Levels() {
@@ -154,93 +137,63 @@ public class TestGlobalGet extends BaseLocalDbTest {
         }
     }
 
-//    @Test
-//    public void testHandFingerNail() {
-//        Assume.assumeTrue(UMLG.get().supportsBatchMode());
-//        God god = new God();
-//        god.setName("god");
-//        for (int j = 0; j < 1; j++) {
-//            Hand hand = new Hand();
-//            god.addToHand(hand);
-//            hand.setName("hand_" + j);
-//            for (int k = 0; k < 1; k++) {
-//                Finger finger = new Finger();
-//                hand.addToFinger(finger);
-//                finger.setName("finger_" + k);
-//            }
-//        }
-//        UMLG.get().commit();
-//        god.delete();
-//        UMLG.get().commit();
-//        StopWatch stopWatch = new StopWatch();
-//        stopWatch.start();
-//        UMLG.get().batchModeOn();
-//        int count = 10_000;
-//        for (int i = 1; i < count + 1; i++) {
-//            god = new God();
-//            god.setName("god_" + i);
-//            for (int j = 0; j < 2; j++) {
-//                Hand hand = new Hand(god);
-//                hand.setName("hand_" + j);
-//                for (int k = 0; k < 5; k++) {
-//                    Finger finger = new Finger(hand);
-//                    finger.setName("finger_" + k);
-//                }
-//            }
-//        }
-//        UMLG.get().commit();
-//        stopWatch.stop();
-//        System.out.println("Time to insert " + stopWatch.toString());
-//        stopWatch.reset();
-//
-//        System.out.println("start sleeping");
-//        try {
-//            Thread.sleep(10000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//        System.out.println("done sleeping");
-//
-//        stopWatch.start();
-//        PropertyTree godPT = PropertyTree.from("God");
-//        PropertyTree handPT = PropertyTree.from(hand);
-//        handPT.addChild(finger);
-//        godPT.addChild(handPT);
-//        List<God> gods = UMLG.get().get(godPT);
-//        assertEquals(count, gods.size());
-//        for (God godAgain : gods) {
-//            assertEquals(2, godAgain.getHand().size());
-//            for (Hand hand : godAgain.getHand()) {
-//                assertEquals(5, hand.getFinger().size());
-//            }
-//        }
-//        stopWatch.stop();
-//        System.out.println("Time to query " + stopWatch.toString());
-//
-////        System.out.println("start sleeping");
-////        try {
-////            Thread.sleep(10000);
-////        } catch (InterruptedException e) {
-////            throw new RuntimeException(e);
-////        }
-////        System.out.println("done sleeping");
-//    }
+    @Test
+    public void testHandFingerNail() {
+        Assume.assumeTrue(UMLG.get().supportsBatchMode());
+        God god = new God();
+        god.setName("god");
+        for (int j = 0; j < 1; j++) {
+            Hand hand = new Hand();
+            god.addToHand(hand);
+            hand.setName("hand_" + j);
+            for (int k = 0; k < 1; k++) {
+                Finger finger = new Finger();
+                hand.addToFinger(finger);
+                finger.setName("finger_" + k);
+            }
+        }
+        UMLG.get().commit();
+        god.delete();
+        UMLG.get().commit();
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        UMLG.get().batchModeOn();
+        int count = 10;
+        for (int i = 1; i < count + 1; i++) {
+            god = new God();
+            god.setName("god_" + i);
+            for (int j = 0; j < 2; j++) {
+                Hand hand = new Hand(god);
+                hand.setName("hand_" + j);
+                for (int k = 0; k < 5; k++) {
+                    Finger finger = new Finger(hand);
+                    finger.setName("finger_" + k);
+                }
+            }
+        }
+        UMLG.get().commit();
+        stopWatch.stop();
+        System.out.println("Time to insert " + stopWatch.toString());
+        stopWatch.reset();
 
-//    @Test
-//    public void test() {
-//        PropertyTree nsvPT = PropertyTree.from("NetworkSoftwareVersion");
-//        PropertyTree networkNodePT = PropertyTree.from(networkNode);
-//        nsvPT.addChild(networkNodePT);
-//        PropertyTree networkNodeGroupPT = PropertyTree.from(networkNodeGroup);
-//        networkNodePT.addChild(networkNodeGroupPT);
-//        PropertyTree nodeConnectionSpecPT = PropertyTree.from(nodeConnectionSpec);
-//        networkNodePT.addChild(nodeConnectionSpecPT);
-//
-//        PropertyTree nodeDefinitionPT = PropertyTree.from(nodeDefinition);
-//        networkNodePT.addChild(nodeDefinitionPT);
-//        PropertyTree planSourcePT = PropertyTree.from(planSource);
-//        nodeDefinitionPT.addChild(planSourcePT);
-//        List<NetworkSoftwareVersion> networkSoftwareVersionList = UMLG.get().get(nsvPT);
-//
-//    }
+        stopWatch.start();
+        PropertyTree godPT = PropertyTree.from("God");
+        PropertyTree handPT = PropertyTree.from(God.GodRuntimePropertyEnum.hand);
+        godPT.addChild(handPT);
+        PropertyTree fingerPT = PropertyTree.from(Hand.HandRuntimePropertyEnum.finger);
+        handPT.addChild(fingerPT);
+
+        List<God> gods = UMLG.get().get(godPT);
+        assertEquals(count, gods.size());
+        for (God godAgain : gods) {
+            assertEquals(2, godAgain.getHand().size());
+            for (Hand hand : godAgain.getHand()) {
+                assertEquals(5, hand.getFinger().size());
+            }
+        }
+        stopWatch.stop();
+        System.out.println("Time to query " + stopWatch.toString());
+
+    }
+
 }

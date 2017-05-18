@@ -38,6 +38,40 @@ public class PathTree {
         }
     };
 
+    public static List<PathTree> from(List<GraphTraversal<Vertex, Path>> traversals) {
+        ListOrderedMap<PathTree, PathTree> roots = new ListOrderedMap<>();
+        for (GraphTraversal<Vertex, Path> traversal : traversals) {
+            PathTree current = null;
+            while (traversal.hasNext()) {
+                Path path = traversal.next();
+                List<Object> objects = path.objects();
+                int count = 0;
+                for (Object object : objects) {
+                    PathTree pathTree = new PathTree();
+                    pathTree.element = object;
+                    if (count == 0) {
+                        if (!roots.containsKey(pathTree)) {
+                            roots.put(pathTree, pathTree);
+                            current = pathTree;
+                        } else {
+                            current = roots.get(pathTree);
+                        }
+                    } else {
+                        if (!current.children.containsKey(pathTree)) {
+                            current.children.put(pathTree, pathTree);
+                            pathTree.parent = current;
+                            current = pathTree;
+                        } else {
+                            current = current.children.get(pathTree);
+                        }
+                    }
+                    count++;
+                }
+            }
+        }
+        return roots.keyList();
+    }
+
     public static List<PathTree> from(GraphTraversal<? extends Element, Path> traversal) {
         ListOrderedMap<PathTree, PathTree> roots = new ListOrderedMap<>();
         PathTree current = null;

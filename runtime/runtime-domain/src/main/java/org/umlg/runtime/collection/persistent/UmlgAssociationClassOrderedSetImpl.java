@@ -29,6 +29,11 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Um
         this.associationClassPropertyTree = associationClassPropertyTree;
     }
 
+    public UmlgAssociationClassOrderedSetImpl(UmlgNode owner, PropertyTree propertyTree, PropertyTree associationClassPropertyTree, boolean loaded) {
+        super(owner, propertyTree, loaded);
+        this.associationClassPropertyTree = associationClassPropertyTree;
+    }
+
     public UmlgAssociationClassOrderedSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
     }
