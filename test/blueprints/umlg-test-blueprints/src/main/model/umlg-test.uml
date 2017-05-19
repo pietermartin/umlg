@@ -4130,7 +4130,7 @@ endif</body>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_RzcE8CHJEeaHIolF9mRyNw"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_RzcsACHJEeaHIolF9mRyNw" value="1"/>
             </ownedAttribute>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_SCc-EiHZEeaHIolF9mRyNw" name="cOptional" type="_QeROgCHZEeaHIolF9mRyNw" association="_SCcXACHZEeaHIolF9mRyNw">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_SCc-EiHZEeaHIolF9mRyNw" name="cOptional" type="_QeROgCHZEeaHIolF9mRyNw" isOrdered="true" association="_SCcXACHZEeaHIolF9mRyNw">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_XQ5_8CHZEeaHIolF9mRyNw"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_XQ7OECHZEeaHIolF9mRyNw" value="*"/>
             </ownedAttribute>

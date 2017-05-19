@@ -124,8 +124,14 @@ public class TestGlobalGet extends BaseLocalDbTest {
             for (BOptional bOptional : aOptional.getBOptional()) {
                 if (bOptional.getName().equals("bOptional1")) {
                     assertEquals(3, bOptional.getCOptional().size());
+                    assertEquals(cOptional1.getId(), bOptional.getCOptional().get(0).getId());
+                    assertEquals(cOptional2.getId(), bOptional.getCOptional().get(1).getId());
+                    assertEquals(cOptional3.getId(), bOptional.getCOptional().get(2).getId());
                 } else if (bOptional.getName().equals("bOptional2")) {
                     assertEquals(3, bOptional.getCOptional().size());
+                    assertEquals(cOptional11.getId(), bOptional.getCOptional().get(0).getId());
+                    assertEquals(cOptional22.getId(), bOptional.getCOptional().get(1).getId());
+                    assertEquals(cOptional33.getId(), bOptional.getCOptional().get(2).getId());
                 } else {
                     assertEquals(0, bOptional.getCOptional().size());
                 }
