@@ -5,7 +5,6 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.sqlg.sql.dialect.SqlDialect;
-import org.umlg.sqlg.structure.SchemaManager;
 import org.umlg.sqlg.structure.SqlgGraph;
 
 import java.io.File;
@@ -78,7 +77,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
             TransactionThreadNotificationVar.remove();
             SqlgGraph sqlgGraph = SqlgGraph.open(configuration);
             this.umlgGraph = new UmlgSqlgGraph(sqlgGraph);
-            if (!sqlgGraph.getSchemaManager().tableExist(sqlgGraph.getSqlDialect().getPublicSchema(), SchemaManager.VERTEX_PREFIX + UmlgGraph.ROOT_VERTEX)) {
+            if (!sqlgGraph.getTopology().getVertexLabel(sqlgGraph.getSqlDialect().getPublicSchema(), UmlgGraph.ROOT_VERTEX).isPresent()) {
                 try {
 //                    this.umlgGraph.addRoot();
                     this.umlgGraph.commit();
@@ -147,7 +146,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
                 if (sqlDialect.getGisSchemas().contains(schema)) {
                     continue;
                 }
-                if (!sqlDialect.getDefaultSchemas().contains(schema)) {
+                if (!sqlDialect.getInternalSchemas().contains(schema)) {
                     StringBuilder sql = new StringBuilder("DROP SCHEMA ");
                     sql.append(sqlDialect.maybeWrapInQoutes(schema));
                     sql.append(" CASCADE");

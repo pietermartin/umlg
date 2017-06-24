@@ -153,7 +153,8 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
     @Override
     public void clear() {
         maybeLoad();
-        for (E e : new HashSet<E>(this.getInternalListOrderedSet())) {
+        //Use an ArrayList to avoid set logic calling getUid in hashCode
+        for (E e : new ArrayList<E>(this.getInternalListOrderedSet())) {
             this.remove(e);
         }
     }

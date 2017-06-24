@@ -123,7 +123,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
     @Override
     public void clear() {
         maybeLoad();
-        for (E e : new ArrayList<E>(this.getInternalList())) {
+        for (E e : new ArrayList<>(this.getInternalList())) {
             this.remove(e);
         }
     }

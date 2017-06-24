@@ -12,10 +12,7 @@ import org.umlg.runtime.collection.ocl.OclStdLibSetImpl;
 import org.umlg.runtime.domain.UmlgEnum;
 import org.umlg.runtime.domain.UmlgNode;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public abstract class BaseSet<E> extends BaseCollection<E> implements UmlgSet<E>, OclStdLibSet<E> {
 
@@ -84,7 +81,8 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements UmlgSet<E>
 	@Override
 	public void clear() {
 		maybeLoad();
-		for (E e : new HashSet<E>(this.getInternalSet())) {
+		//Use an ArrayList to avoid set logic calling getUid in hashCode
+		for (E e : new ArrayList<>(this.getInternalSet())) {
 			this.remove(e);
 		}
 	}	

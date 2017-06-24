@@ -2,7 +2,7 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.tests.globalget.TestGlobalGet;
+import org.umlg.tests.collectiontest.OrderedSetTestTest;
 
 /**
  * Date: 2013/10/19
@@ -10,7 +10,8 @@ import org.umlg.tests.globalget.TestGlobalGet;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestGlobalGet.class,
+        OrderedSetTestTest.class,
+//        TestGlobalGet.class,
 //        TestGlobalGetOnAssociationClass.class
 //        BagTestTest.class
 })
