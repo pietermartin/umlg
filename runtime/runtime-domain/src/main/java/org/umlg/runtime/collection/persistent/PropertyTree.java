@@ -87,7 +87,7 @@ public class PropertyTree {
         Set<PropertyTree> leafNodes = leafNodes();
         List<GraphTraversal<Vertex, Path>> graphTraversals = new ArrayList<>();
         for (PropertyTree leafNode : leafNodes) {
-            GraphTraversal<Object, Vertex> leafTraversal = null;
+            GraphTraversal<Vertex, Vertex> leafTraversal = null;
             List<PropertyTree> rootToLeafPropertyTrees = rootToLeaf(leafNode);
             for (PropertyTree node : rootToLeafPropertyTrees) {
                 if (leafTraversal == null) {
@@ -115,7 +115,7 @@ public class PropertyTree {
                     }
                 } else {
                     if (node.umlgRuntimeProperty.isControllingSide()) {
-                        GraphTraversal<Object, Vertex> tmpTraversal = __.outE(node.label()).as("e_" + node.umlgRuntimeProperty.getLabel()).inV();
+                        GraphTraversal<Vertex, Vertex> tmpTraversal = __.outE(node.label()).as("e_" + node.umlgRuntimeProperty.getLabel()).inV();
                         for (HasContainer hasContainer : node.hasContainers) {
                             tmpTraversal.has(hasContainer.getKey(), hasContainer.getPredicate());
                         }
@@ -126,7 +126,7 @@ public class PropertyTree {
                         }
                         leafTraversal.local(__.optional(tmpTraversal));
                     } else {
-                        GraphTraversal<Object, Vertex> tmpTraversal = __.inE(node.label()).as("e_" + node.umlgRuntimeProperty.getLabel()).outV();
+                        GraphTraversal<Vertex, Vertex> tmpTraversal = __.inE(node.label()).as("e_" + node.umlgRuntimeProperty.getLabel()).outV();
                         for (HasContainer hasContainer : node.hasContainers) {
                             tmpTraversal.has(hasContainer.getKey(), hasContainer.getPredicate());
                         }

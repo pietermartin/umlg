@@ -4,6 +4,8 @@ import groovy.lang.Writable;
 import groovy.text.SimpleTemplateEngine;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.tinkerpop.gremlin.groovy.engine.GremlinExecutor;
+import org.apache.tinkerpop.gremlin.groovy.jsr223.GroovyCompilerGremlinPlugin;
+import org.apache.tinkerpop.gremlin.jsr223.ScriptFileGremlinPlugin;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.*;
@@ -135,12 +137,22 @@ public class GroovyExecutor {
 //            Field importsStaticField = umlgGroovyImporter.getField("importStatic");
 //            staticImports.addAll((Set<String>) importsStaticField.get(null));
 
+            final Map<String, Map<String, Object>> config = new HashMap<>();
+            final Map<String, Object> scriptPluginConfig = new HashMap<>();
+            scriptPluginConfig.put("files", Collections.singletonList("/usr/share/rorotika/cm/groovy/GremlinExecutorInit.groovy"));
+            config.put(ScriptFileGremlinPlugin.class.getName(), scriptPluginConfig);
+
+            final Map<String, Object> groovyPluginConfig = new HashMap<>();
+            groovyPluginConfig.put("timedInterrupt", 250);
+            config.put(GroovyCompilerGremlinPlugin.class.getName(), groovyPluginConfig);
             this.gremlinExecutor = GremlinExecutor.build()
-                    .addEngineSettings("gremlin-groovy",
-                            imports,
-                            staticImports,
-                            Arrays.asList("/usr/share/rorotika/cm/groovy/GremlinExecutorInit.groovy"),
-                            Collections.emptyMap())
+                    .addPlugins("gremlin-groovy",
+                            config
+//                            imports,
+//                            staticImports,
+//                            Arrays.asList("/usr/share/rorotika/cm/groovy/GremlinExecutorInit.groovy"),
+//                            Collections.emptyMap()
+                    )
                     .afterSuccess(
                             t -> UMLG.get().rollback()
                     )

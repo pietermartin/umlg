@@ -14,8 +14,8 @@ import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.util.PathTree;
 import org.umlg.runtime.util.UmlgProperties;
-import org.umlg.sqlg.structure.EdgeLabel;
-import org.umlg.sqlg.structure.IndexType;
+import org.umlg.sqlg.structure.topology.EdgeLabel;
+import org.umlg.sqlg.structure.topology.IndexType;
 import org.umlg.sqlg.structure.RecordId;
 import org.umlg.sqlg.structure.SqlgGraph;
 
