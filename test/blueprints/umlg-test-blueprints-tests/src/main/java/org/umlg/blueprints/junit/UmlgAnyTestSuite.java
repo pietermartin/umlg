@@ -2,7 +2,7 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.tests.collectiontest.ManyToManySequenceTest;
+import org.umlg.gremlin.TestGroovyExecutor;
 
 /**
  * Date: 2013/10/19
@@ -10,10 +10,7 @@ import org.umlg.tests.collectiontest.ManyToManySequenceTest;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ManyToManySequenceTest.class,
-//        TestGlobalGet.class,
-//        TestGlobalGetOnAssociationClass.class
-//        BagTestTest.class
+        TestGroovyExecutor.class,
 })
 public class UmlgAnyTestSuite {
 }

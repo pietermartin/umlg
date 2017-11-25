@@ -4,10 +4,10 @@ import groovy.lang.Writable;
 import groovy.text.SimpleTemplateEngine;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.tinkerpop.gremlin.groovy.engine.GremlinExecutor;
-import org.apache.tinkerpop.gremlin.groovy.jsr223.GroovyCompilerGremlinPlugin;
-import org.apache.tinkerpop.gremlin.jsr223.ScriptFileGremlinPlugin;
+import org.apache.tinkerpop.gremlin.jsr223.ImportGremlinPlugin;
 import org.umlg.runtime.domain.UmlgNode;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -132,27 +132,22 @@ public class GroovyExecutor {
         try {
             umlgGroovyImporter = Class.forName("org.umlg.runtime.adaptor.UmlgGroovyImporter");
             //TODO this is to slow for every unit tests
-//            Field importsField = umlgGroovyImporter.getField("imports");
-//            imports.addAll((Set<String>) importsField.get(null));
+            Field importsField = umlgGroovyImporter.getField("imports");
+            imports.addAll((Set<String>) importsField.get(null));
+            imports.addAll(umlgAdaptorClasses());
 //            Field importsStaticField = umlgGroovyImporter.getField("importStatic");
 //            staticImports.addAll((Set<String>) importsStaticField.get(null));
 
             final Map<String, Map<String, Object>> config = new HashMap<>();
-            final Map<String, Object> scriptPluginConfig = new HashMap<>();
-            scriptPluginConfig.put("files", Collections.singletonList("/usr/share/rorotika/cm/groovy/GremlinExecutorInit.groovy"));
-            config.put(ScriptFileGremlinPlugin.class.getName(), scriptPluginConfig);
+//            final Map<String, Object> scriptPluginConfig = new HashMap<>();
+//            scriptPluginConfig.put("files", Collections.singletonList("/usr/share/rorotika/cm/groovy/GremlinExecutorInit.groovy"));
+//            config.put(ScriptFileGremlinPlugin.class.getName(), scriptPluginConfig);
+            final Map<String, Object> importGremlinPluginConfig = new HashMap<>();
+            importGremlinPluginConfig.put("classImports", imports);
+            config.put(ImportGremlinPlugin.class.getName(), importGremlinPluginConfig);
 
-            final Map<String, Object> groovyPluginConfig = new HashMap<>();
-            groovyPluginConfig.put("timedInterrupt", 250);
-            config.put(GroovyCompilerGremlinPlugin.class.getName(), groovyPluginConfig);
             this.gremlinExecutor = GremlinExecutor.build()
-                    .addPlugins("gremlin-groovy",
-                            config
-//                            imports,
-//                            staticImports,
-//                            Arrays.asList("/usr/share/rorotika/cm/groovy/GremlinExecutorInit.groovy"),
-//                            Collections.emptyMap()
-                    )
+                    .addPlugins("gremlin-groovy", config)
                     .afterSuccess(
                             t -> UMLG.get().rollback()
                     )
@@ -163,5 +158,48 @@ public class GroovyExecutor {
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize GremlinExecutor", e);
         }
+    }
+
+    private List<String> umlgAdaptorClasses() {
+        return Arrays.asList(
+                ArrayIterator.class.getName(),
+                DefaultDataCreator.class.getName(),
+                EdgeSchemaCreator.class.getName(),
+                GroovyExecutor.class.getName(),
+                StringArrayContains.class.getName(),
+                TransactionIdentifier.class.getName(),
+                TransactionThreadEntityVar.class.getName(),
+                TransactionThreadMetaNodeVar.class.getName(),
+                TransactionThreadNotificationVar.class.getName(),
+                UMLG.class.getName(),
+                UmlgAdaptorImplementation.class.getName(),
+                UmlgAdminApp.class.getName(),
+                UmlgAdminAppFactory.class.getName(),
+                UmlgAssociationClassManager.class.getName(),
+                UmlgDefaultDbExceptionUtilImpl.class.getName(),
+                UmlgDefaultLabelConverter.class.getName(),
+                UmlgDefaultQualifierId.class.getName(),
+                UmlgExceptionUtil.class.getName(),
+                UmlgExceptionUtilFactory.class.getName(),
+                UmlgGraph.class.getName(),
+                UmlgGraphManager.class.getName(),
+                UmlGIndexFactory.class.getName(),
+                UmlgIndexManager.class.getName(),
+                UmlgLabelConverter.class.getName(),
+                UmlgLabelConverterFactory.class.getName(),
+                UmlgMetaNodeManager.class.getName(),
+                UmlgParameter.class.getName(),
+                UmlgQualifierId.class.getName(),
+                UmlgQualifierIdFactory.class.getName(),
+                UmlgQueryEnum.class.getName(),
+                UmlgSchemaCreator.class.getName(),
+                UmlgSchemaCreatorFactory.class.getName(),
+                UmlgSchemaFactory.class.getName(),
+                UmlgSchemaMap.class.getName(),
+                UmlgTmpIdManager.class.getName(),
+                UmlgTransactionEventHandler.class.getName(),
+                UmlgTransactionEventHandlerImpl.class.getName(),
+                VertexSchemaCreator.class.getName()
+        );
     }
 }
