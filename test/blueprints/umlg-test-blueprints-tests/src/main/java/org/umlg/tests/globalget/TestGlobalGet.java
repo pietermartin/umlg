@@ -22,8 +22,6 @@ import org.umlg.runtime.test.BaseLocalDbTest;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-
 /**
  * Date: 2016/05/28
  * Time: 8:42 PM
@@ -52,6 +50,7 @@ public class TestGlobalGet extends BaseLocalDbTest {
         for (TopRoot topRoot : topRoots) {
             for (TopRootChild topRootChild : topRoot.getTopRootChild()) {
                 System.out.println(topRootChild.getName());
+                System.out.println(topRootChild.getTopRoot().getName());
             }
         }
         Assert.assertTrue(topRoots.containsAll(Arrays.asList(topRoot1, topRoot2)));
@@ -118,28 +117,28 @@ public class TestGlobalGet extends BaseLocalDbTest {
         aOptionalPT.addChild(bbOptionalPT);
 
         List<AOptional> aOptionals = UMLG.get().get(aOptionalPT);
-        assertEquals(1, aOptionals.size());
+        Assert.assertEquals(1, aOptionals.size());
         for (AOptional aOptional : aOptionals) {
-            assertEquals(3, aOptional.getBOptional().size());
+            Assert.assertEquals(3, aOptional.getBOptional().size());
             for (BOptional bOptional : aOptional.getBOptional()) {
                 if (bOptional.getName().equals("bOptional1")) {
-                    assertEquals(3, bOptional.getCOptional().size());
-                    assertEquals(cOptional1.getId(), bOptional.getCOptional().get(0).getId());
-                    assertEquals(cOptional2.getId(), bOptional.getCOptional().get(1).getId());
-                    assertEquals(cOptional3.getId(), bOptional.getCOptional().get(2).getId());
+                    Assert.assertEquals(3, bOptional.getCOptional().size());
+                    Assert.assertEquals(cOptional1.getId(), bOptional.getCOptional().get(0).getId());
+                    Assert.assertEquals(cOptional2.getId(), bOptional.getCOptional().get(1).getId());
+                    Assert.assertEquals(cOptional3.getId(), bOptional.getCOptional().get(2).getId());
                 } else if (bOptional.getName().equals("bOptional2")) {
-                    assertEquals(3, bOptional.getCOptional().size());
-                    assertEquals(cOptional11.getId(), bOptional.getCOptional().get(0).getId());
-                    assertEquals(cOptional22.getId(), bOptional.getCOptional().get(1).getId());
-                    assertEquals(cOptional33.getId(), bOptional.getCOptional().get(2).getId());
+                    Assert.assertEquals(3, bOptional.getCOptional().size());
+                    Assert.assertEquals(cOptional11.getId(), bOptional.getCOptional().get(0).getId());
+                    Assert.assertEquals(cOptional22.getId(), bOptional.getCOptional().get(1).getId());
+                    Assert.assertEquals(cOptional33.getId(), bOptional.getCOptional().get(2).getId());
                 } else {
-                    assertEquals(0, bOptional.getCOptional().size());
+                    Assert.assertEquals(0, bOptional.getCOptional().size());
                 }
                 for (COptional cOptional : bOptional.getCOptional()) {
                     System.out.println(cOptional.getName());
                 }
             }
-            assertEquals(3, aOptional.getBBoptional().size());
+            Assert.assertEquals(3, aOptional.getBBoptional().size());
         }
     }
 
@@ -190,11 +189,11 @@ public class TestGlobalGet extends BaseLocalDbTest {
         handPT.addChild(fingerPT);
 
         List<God> gods = UMLG.get().get(godPT);
-        assertEquals(count, gods.size());
+        Assert.assertEquals(count, gods.size());
         for (God godAgain : gods) {
-            assertEquals(2, godAgain.getHand().size());
+            Assert.assertEquals(2, godAgain.getHand().size());
             for (Hand hand : godAgain.getHand()) {
-                assertEquals(5, hand.getFinger().size());
+                Assert.assertEquals(5, hand.getFinger().size());
             }
         }
         stopWatch.stop();

@@ -19,6 +19,7 @@ public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
 	void initialiseProperties(boolean loaded);
 	void initialiseProperty(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse, boolean loaded);
     UmlgRuntimeProperty inverseAdder(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse, UmlgNode umlgNode);
+	UmlgRuntimeProperty z_internalInverseAdder(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse, UmlgNode umlgNode);
     void initVariables();
 //    void initDataTypeVariablesWithDefaultValues();
 	List<Qualifier> getQualifiers(UmlgRuntimeProperty umlgRuntimeProperty, UmlgNode node, boolean inverse);

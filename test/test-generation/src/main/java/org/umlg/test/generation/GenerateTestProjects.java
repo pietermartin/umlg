@@ -5,13 +5,12 @@ import org.umlg.javageneration.DefaultVisitors;
 import org.umlg.restlet.generation.RestletVisitors;
 
 import java.io.File;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.logging.LogManager;
 
 public class GenerateTestProjects {
 
-    public static void main(String[] args) throws URISyntaxException {
+    public static void main(String[] args) {
         try {
             URL url = GenerateTestProjects.class.getResource("/logging.properties");
             LogManager.getLogManager().readConfiguration(url.openStream());

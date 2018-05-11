@@ -144,6 +144,10 @@ public class PathTree {
                     }
                 }
                 owner.z_internalAddToCollection(propertyTreeToNav.getUmlgRuntimeProperty(), umlgNode);
+                if (propertyTreeToNav.getUmlgRuntimeProperty().isOneToMany() || propertyTreeToNav.getUmlgRuntimeProperty().isOneToOne()) {
+                    umlgNode.z_internalInverseAdder(propertyTreeToNav.getUmlgRuntimeProperty(), true, owner);
+                }
+
                 owner = umlgNode;
                 Preconditions.checkState(pathTree.parent.element instanceof Edge, "Expected the PathTree.parent to hold an edge!");
                 umlgNode.setEdge(propertyTreeToNav.getUmlgRuntimeProperty(), (Edge) pathTree.parent.element);
