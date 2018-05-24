@@ -1,6 +1,5 @@
 package org.umlg.tests.mvel;
 
-import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mvel2.MVEL;
@@ -14,6 +13,7 @@ import org.umlg.embeddedtest.REASON;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ public class TestMvel extends BaseLocalDbTest {
 	@Test
 	public void testMvel() {
 		God g = new God(true);
-		g.setBeginning(new DateTime());
+		g.setBeginning(LocalDateTime.now());
 		g.setReason(REASON.BAD);
 		g.setName("god");
 		Universe u1 = new Universe(g);

@@ -1,10 +1,11 @@
 package org.test.restlet;
 
-import org.joda.time.LocalDate;
 import org.umlg.runtime.adaptor.DefaultDataCreator;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.test.manytomany.*;
 import org.umlg.test.standard.*;
+
+import java.time.LocalDate;
 
 /**
  * Date: 2012/12/31
@@ -30,7 +31,7 @@ public class TestRestletDefaultDataCreator implements DefaultDataCreator {
                 Human human = new Human(true);
                 human.setName("human1" + i);
                 human.setName2("human2" + i);
-                human.setBirthDate(new LocalDate());
+                human.setBirthDate(LocalDate.now());
                 human.setGender(Gender.MALE);
                 Home home = new Home(human);
                 home.setName("home" + i);

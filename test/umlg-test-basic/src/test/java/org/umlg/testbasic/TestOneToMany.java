@@ -1,13 +1,13 @@
 package org.umlg.testbasic;
 
-import org.junit.Assert;
-
 import org.apache.commons.lang.time.StopWatch;
-import org.joda.time.DateTime;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.Many;
 import org.umlg.One;
 import org.umlg.runtime.test.BaseLocalDbTest;
+
+import java.time.LocalDateTime;
 
 public class TestOneToMany extends BaseLocalDbTest {
 
@@ -18,7 +18,7 @@ public class TestOneToMany extends BaseLocalDbTest {
 
         One g = new One(true);
         g.setName("g");
-        g.setDateTime(new DateTime());
+        g.setDateTime(LocalDateTime.now());
         for (int i = 0; i < 10000; i++) {
             Many universe = new Many(g);
             universe.setName("u");
@@ -34,7 +34,7 @@ public class TestOneToMany extends BaseLocalDbTest {
     public void testBasicOneToMany() {
         One one = new One(true);
         one.setName("asd");
-        one.setDateTime(new DateTime());
+        one.setDateTime(LocalDateTime.now());
         Many many = new Many(one);
         db.commit();
         Assert.assertEquals(1, countVertices());
@@ -49,13 +49,13 @@ public class TestOneToMany extends BaseLocalDbTest {
     public void testOneToMany() {
         One one1 = new One(true);
         one1.setName("asd");
-        one1.setDateTime(new DateTime());
+        one1.setDateTime(LocalDateTime.now());
         Many many11 = new Many(one1);
         Many many12 = new Many(one1);
 
         One one2 = new One(true);
         one2.setName("asdasd");
-        one2.setDateTime(new DateTime());
+        one2.setDateTime(LocalDateTime.now());
         Many many21 = new Many(one2);
         Many many22 = new Many(one2);
 
@@ -82,7 +82,7 @@ public class TestOneToMany extends BaseLocalDbTest {
     public void testDelete() {
         One one1 = new One(true);
         one1.setName("asd");
-        one1.setDateTime(new DateTime());
+        one1.setDateTime(LocalDateTime.now());
         Many many11 = new Many(one1);
         db.commit();
         Assert.assertEquals(1, countVertices());

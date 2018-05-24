@@ -1,7 +1,6 @@
 package org.umlg.tests.qualifiertest;
 
 import org.apache.tinkerpop.gremlin.process.traversal.Compare;
-import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.qualifiertest.ENUM1;
@@ -10,6 +9,8 @@ import org.umlg.qualifiertest.QualifierD;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.runtime.util.Pair;
+
+import java.time.LocalDate;
 
 /**
  * Date: 2014/08/11

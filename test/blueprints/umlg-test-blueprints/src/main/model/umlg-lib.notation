@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:style="http://www.eclipse.org/papyrus/infra/gmfdiag/style" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
   <notation:Diagram xmi:id="_mdWGkCM2EeK-Trh8Ll0qUQ" type="PapyrusUMLClassDiagram" name="NewDiagram" measurementUnit="Pixel">
     <children xmi:type="notation:Shape" xmi:id="_YOsSsCM6EeK-Trh8Ll0qUQ" type="2007" fontName="Sans" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_YOs5wCM6EeK-Trh8Ll0qUQ" source="ShadowFigure">
@@ -148,7 +148,10 @@
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_uPO5UU6KEeK4HckrDYI0ug" x="488" y="176"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_c-m-cSM6EeK-Trh8Ll0qUQ"/>
-    <styles xmi:type="notation:StringValueStyle" xmi:id="_KzG5cdyMEea2vMi2SY6VHQ" name="diagram_compatibility_version" stringValue="1.2.0"/>
+    <styles xmi:type="notation:StringValueStyle" xmi:id="_KzG5cdyMEea2vMi2SY6VHQ" name="diagram_compatibility_version" stringValue="1.3.0"/>
+    <styles xmi:type="style:PapyrusDiagramStyle" xmi:id="_wtO-4F8cEeitoYBF35IXqw" diagramKindId="org.eclipse.papyrus.uml.diagram.class">
+      <owner xmi:type="uml:Package" href="umlg-lib.uml#_bdslUCM6EeK-Trh8Ll0qUQ"/>
+    </styles>
     <element xmi:type="uml:Package" href="umlg-lib.uml#_bdslUCM6EeK-Trh8Ll0qUQ"/>
   </notation:Diagram>
   <notation:Diagram xmi:id="_gj3N4CM6EeK-Trh8Ll0qUQ" type="PapyrusUMLClassDiagram" name="HierarchyClassDiagram" measurementUnit="Pixel">
@@ -219,7 +222,10 @@
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GlZS8SP5EeKOmc56p_1Osg" x="136" y="56" height="93"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_gj3N4SM6EeK-Trh8Ll0qUQ"/>
-    <styles xmi:type="notation:StringValueStyle" xmi:id="_Kv2KENyMEea2vMi2SY6VHQ" name="diagram_compatibility_version" stringValue="1.2.0"/>
+    <styles xmi:type="notation:StringValueStyle" xmi:id="_Kv2KENyMEea2vMi2SY6VHQ" name="diagram_compatibility_version" stringValue="1.3.0"/>
+    <styles xmi:type="style:PapyrusDiagramStyle" xmi:id="_wsAP0F8cEeitoYBF35IXqw" diagramKindId="org.eclipse.papyrus.uml.diagram.class">
+      <owner xmi:type="uml:Package" href="umlg-lib.uml#_fEtIQCM6EeK-Trh8Ll0qUQ"/>
+    </styles>
     <element xmi:type="uml:Package" href="umlg-lib.uml#_fEtIQCM6EeK-Trh8Ll0qUQ"/>
   </notation:Diagram>
   <notation:Diagram xmi:id="_vBwngCQOEeKOmc56p_1Osg" type="PapyrusUMLClassDiagram" name="TagClassDiagram" measurementUnit="Pixel">
@@ -314,7 +320,10 @@
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GsPAQX-jEeOYhpiy1kqM8Q" x="200" y="240" width="293" height="41"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_vBwngSQOEeKOmc56p_1Osg"/>
-    <styles xmi:type="notation:StringValueStyle" xmi:id="_KypmcNyMEea2vMi2SY6VHQ" name="diagram_compatibility_version" stringValue="1.2.0"/>
+    <styles xmi:type="notation:StringValueStyle" xmi:id="_KypmcNyMEea2vMi2SY6VHQ" name="diagram_compatibility_version" stringValue="1.3.0"/>
+    <styles xmi:type="style:PapyrusDiagramStyle" xmi:id="_ws3LcF8cEeitoYBF35IXqw" diagramKindId="org.eclipse.papyrus.uml.diagram.class">
+      <owner xmi:type="uml:Package" href="umlg-lib.uml#_qyfKsCQOEeKOmc56p_1Osg"/>
+    </styles>
     <element xmi:type="uml:Package" href="umlg-lib.uml#_qyfKsCQOEeKOmc56p_1Osg"/>
     <edges xmi:type="notation:Connector" xmi:id="_3wFNECQPEeKzTel_Vwmhog" type="Association_Edge" source="_yXafQCQPEeKzTel_Vwmhog" target="_wdMOQCQPEeKzTel_Vwmhog" lineColor="0">
       <children xmi:type="notation:DecorationNode" xmi:id="_3wF0ICQPEeKzTel_Vwmhog" type="Association_StereotypeLabel">
@@ -473,7 +482,10 @@
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2jm4YX-5EeOYhpiy1kqM8Q" x="20" y="24" width="249" height="57"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_wlBKASQOEeKOmc56p_1Osg"/>
-    <styles xmi:type="notation:StringValueStyle" xmi:id="_Kxa3YNyMEea2vMi2SY6VHQ" name="diagram_compatibility_version" stringValue="1.2.0"/>
+    <styles xmi:type="notation:StringValueStyle" xmi:id="_Kxa3YNyMEea2vMi2SY6VHQ" name="diagram_compatibility_version" stringValue="1.3.0"/>
+    <styles xmi:type="style:PapyrusDiagramStyle" xmi:id="_wsc7wF8cEeitoYBF35IXqw" diagramKindId="org.eclipse.papyrus.uml.diagram.class">
+      <owner xmi:type="uml:Package" href="umlg-lib.uml#_sPG5sCQOEeKOmc56p_1Osg"/>
+    </styles>
     <element xmi:type="uml:Package" href="umlg-lib.uml#_sPG5sCQOEeKOmc56p_1Osg"/>
     <edges xmi:type="notation:Connector" xmi:id="_Q4nzUCXHEeKbPYSfIbmXag" type="Generalization_Edge" source="_FAQeMCXHEeKbPYSfIbmXag" target="_gQ4-wCQPEeKzTel_Vwmhog" lineColor="0">
       <children xmi:type="notation:DecorationNode" xmi:id="_Q4oaYCXHEeKbPYSfIbmXag" type="Generalization_StereotypeLabel">
@@ -666,7 +678,10 @@
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_v1ZSUYAZEeOYhpiy1kqM8Q" x="852" y="40"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_wJwsUU6KEeK4HckrDYI0ug"/>
-    <styles xmi:type="notation:StringValueStyle" xmi:id="_KzgiENyMEea2vMi2SY6VHQ" name="diagram_compatibility_version" stringValue="1.2.0"/>
+    <styles xmi:type="notation:StringValueStyle" xmi:id="_KzgiENyMEea2vMi2SY6VHQ" name="diagram_compatibility_version" stringValue="1.3.0"/>
+    <styles xmi:type="style:PapyrusDiagramStyle" xmi:id="_wtmyUF8cEeitoYBF35IXqw" diagramKindId="org.eclipse.papyrus.uml.diagram.class">
+      <owner xmi:type="uml:Package" href="umlg-lib.uml#_uPD6ME6KEeK4HckrDYI0ug"/>
+    </styles>
     <element xmi:type="uml:Package" href="umlg-lib.uml#_uPD6ME6KEeK4HckrDYI0ug"/>
     <edges xmi:type="notation:Connector" xmi:id="_zd8Z4E6KEeK4HckrDYI0ug" type="Generalization_Edge" source="_xkSJkE6KEeK4HckrDYI0ug" target="_xNy8ME6KEeK4HckrDYI0ug" lineColor="0">
       <children xmi:type="notation:DecorationNode" xmi:id="_zd9A8E6KEeK4HckrDYI0ug" type="Generalization_StereotypeLabel">
@@ -827,7 +842,10 @@
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_SXuUwZFvEeOfTrD4sy-PQQ" x="770" y="75"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_-ANCAZFuEeOfTrD4sy-PQQ"/>
-    <styles xmi:type="notation:StringValueStyle" xmi:id="_K0ZS4NyMEea2vMi2SY6VHQ" name="diagram_compatibility_version" stringValue="1.2.0"/>
+    <styles xmi:type="notation:StringValueStyle" xmi:id="_K0ZS4NyMEea2vMi2SY6VHQ" name="diagram_compatibility_version" stringValue="1.3.0"/>
+    <styles xmi:type="style:PapyrusDiagramStyle" xmi:id="_wt9XoF8cEeitoYBF35IXqw" diagramKindId="org.eclipse.papyrus.uml.diagram.class">
+      <owner xmi:type="uml:Package" href="umlg-lib.uml#_uPD6ME6KEeK4HckrDYI0ug"/>
+    </styles>
     <element xmi:type="uml:Package" href="umlg-lib.uml#_uPD6ME6KEeK4HckrDYI0ug"/>
     <edges xmi:type="notation:Connector" xmi:id="_IHCIEJFvEeOfTrD4sy-PQQ" type="Generalization_Edge" source="_-o0hMJFuEeOfTrD4sy-PQQ" target="_GcqQ8JFvEeOfTrD4sy-PQQ" lineColor="0">
       <children xmi:type="notation:DecorationNode" xmi:id="_IHFLYJFvEeOfTrD4sy-PQQ" type="Generalization_StereotypeLabel">

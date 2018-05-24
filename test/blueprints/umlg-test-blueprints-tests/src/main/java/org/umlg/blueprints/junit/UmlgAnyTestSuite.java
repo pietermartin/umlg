@@ -2,7 +2,9 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.tests.globalget.TestGlobalGet;
+import org.umlg.tests.datatype.DataTypeTest;
+import org.umlg.tests.indexing.TestIndexingDataType;
+import org.umlg.tests.qualifiertest.TestQualifierWithDateAndEnum;
 
 /**
  * Date: 2013/10/19
@@ -10,7 +12,9 @@ import org.umlg.tests.globalget.TestGlobalGet;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestGlobalGet.class,
+        TestIndexingDataType.class,
+        DataTypeTest.class,
+        TestQualifierWithDateAndEnum.class
 })
 public class UmlgAnyTestSuite {
 }

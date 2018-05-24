@@ -1,7 +1,6 @@
 package org.umlg.tests.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
@@ -15,6 +14,7 @@ import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.runtime.util.UmlgFormatter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -266,7 +266,7 @@ public class JsonTest extends BaseLocalDbTest {
 	public void testDates() throws IOException {
 		God g1 = new God(true);
 		g1.setName("g1");
-		DateTime beginning = new DateTime();
+		LocalDateTime beginning = LocalDateTime.now();
 		g1.setBeginning(beginning);
         db.commit();
 
@@ -298,7 +298,7 @@ public class JsonTest extends BaseLocalDbTest {
 	public void testWithInheritence() throws IOException {
 		God g1 = new God(true);
 		g1.setName("g1");
-		DateTime beginning = new DateTime();
+		LocalDateTime beginning = LocalDateTime.now();
 		g1.setBeginning(beginning);
 		Mamal mamal1 = new Mamal(g1);
 		mamal1.setName("mamal1");

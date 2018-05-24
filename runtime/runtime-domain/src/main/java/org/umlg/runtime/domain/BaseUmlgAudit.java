@@ -1,11 +1,11 @@
 package org.umlg.runtime.domain;
 
 import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.joda.time.DateTime;
 import org.umlg.runtime.adaptor.TransactionThreadVar;
 import org.umlg.runtime.util.UmlgFormatter;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 public abstract class BaseUmlgAudit extends BaseUmlg implements TinkerAuditableNode, Serializable {
 
@@ -20,11 +20,11 @@ public abstract class BaseUmlgAudit extends BaseUmlg implements TinkerAuditableN
 		return auditVertex;
 	}
 
-	public DateTime getDeletedOn() {
+	public LocalDateTime getDeletedOn() {
 		return UmlgFormatter.parseDateTime((String) this.vertex.value("deletedOn"));
 	}
 
-	public void setDeletedOn(DateTime deletedOn) {
+	public void setDeletedOn(LocalDateTime deletedOn) {
 		this.vertex.property("deletedOn", UmlgFormatter.format(deletedOn));
 		if ( TransactionThreadVar.hasNoAuditEntry(getClass().getName() + getUid()) ) {
 			createAuditVertex(false);

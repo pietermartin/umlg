@@ -1,12 +1,12 @@
 package org.umlg.runtime.domain;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public enum DataTypeEnum {
 
-    DateTime(DateTime.class),
+    DateTime(LocalDateTime.class),
     Date(LocalDate.class),
     Time(LocalTime.class),
     InternationalPhoneNumber(String.class),

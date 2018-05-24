@@ -1,13 +1,13 @@
 package org.umlg.testbasic.inheritance;
 
 import org.junit.Assert;
-
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.umlg.inheritence.Biped;
 import org.umlg.inheritence.God2;
 import org.umlg.inheritence.Mamal;
 import org.umlg.runtime.test.BaseLocalDbTest;
+
+import java.time.LocalDateTime;
 
 public class TestInheritance extends BaseLocalDbTest {
 
@@ -15,7 +15,7 @@ public class TestInheritance extends BaseLocalDbTest {
 	public void testInheritance() {
 		God2 god = new God2(true);
 		god.setName("GOD");
-		god.setTestDatetime(new DateTime());
+		god.setTestDatetime(LocalDateTime.now());
 		Mamal mamal = new Mamal(god);
 		mamal.setName("mamal");
 		Biped biped = new Biped(god);

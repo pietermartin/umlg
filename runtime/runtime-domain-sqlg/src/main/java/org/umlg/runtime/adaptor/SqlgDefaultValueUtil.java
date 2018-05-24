@@ -1,8 +1,8 @@
 package org.umlg.runtime.adaptor;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * Date: 2014/08/18
@@ -13,12 +13,12 @@ public class SqlgDefaultValueUtil {
     public static Object valueFor(Class clazz) {
         if (clazz.equals(String.class)) {
             return "";
-        } else if (clazz.equals(DateTime.class)) {
-            return 0L;
+        } else if (clazz.equals(LocalDateTime.class)) {
+            return LocalDateTime.now();
         } else if (clazz.equals(LocalDate.class)) {
-            return 0L;
+            return LocalDate.now();
         } else if (clazz.equals(LocalTime.class)) {
-            return "";
+            return LocalTime.now();
         } else if (clazz.isEnum()) {
             return "";
         } else if (clazz.equals(Integer.class)) {

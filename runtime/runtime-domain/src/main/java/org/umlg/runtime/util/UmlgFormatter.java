@@ -2,14 +2,11 @@ package org.umlg.runtime.util;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.ArrayUtils;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.umlg.runtime.domain.DataTypeEnum;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -34,10 +31,10 @@ public class UmlgFormatter {
         }
     }
 
-    public static DateTime parseDateTime(String dateTime) {
+    public static LocalDateTime parseDateTime(String dateTime) {
         if (dateTime != null && !dateTime.isEmpty()) {
-            DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-            return fmt.parseDateTime(dateTime);
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            return LocalDateTime.parse(dateTime, formatter);
         } else {
             return null;
         }
@@ -52,10 +49,10 @@ public class UmlgFormatter {
     }
 
     //TODO use stereotypes on model to specify the format
-    public static String format(DateTime dateTime) {
+    public static String format(LocalDateTime dateTime) {
         if (dateTime != null) {
-            DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-            return fmt.print(dateTime);
+            java.time.format.DateTimeFormatter fmt = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            return fmt.format(dateTime);
         } else {
             return "";
         }
@@ -64,8 +61,8 @@ public class UmlgFormatter {
     //TODO use stereotypes on model to specify the format
     public static String format(LocalDate date) {
         if (date != null) {
-            DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
-            return fmt.print(date);
+            java.time.format.DateTimeFormatter fmt = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            return fmt.format(date);
         } else {
             return "";
         }
@@ -74,52 +71,52 @@ public class UmlgFormatter {
     //TODO use stereotypes on model to specify the format
     public static String format(LocalTime time) {
         if (time != null) {
-            DateTimeFormatter fmt = DateTimeFormat.forPattern("HH:mm");
-            return fmt.print(time);
+            java.time.format.DateTimeFormatter fmt = java.time.format.DateTimeFormatter.ofPattern("HH:mm");
+            return fmt.format(time);
         } else {
             return "";
         }
     }
 
-    public static Long formatToPersist(DateTime dateTime) {
-        if (dateTime != null) {
-            return dateTime.getMillis();
-        } else {
-            return 0L;
-        }
-    }
-
-    public static Long formatToPersist(LocalDate date) {
-        if (date != null) {
-            return date.toDateTimeAtStartOfDay().getMillis();
-        } else {
-            return 0L;
-        }
-    }
-
-    public static String formatToPersist(LocalTime time) {
-        if (time != null) {
-            return ISODateTimeFormat.time().print(time);
-        } else {
-            return "";
-        }
-    }
-
-    public static DateTime parseDateTimeFromPersist(long dateTime) {
-        return new DateTime(dateTime);
-    }
-
-    public static LocalDate parseDateFromPersist(long date) {
-        return new LocalDate(date);
-    }
-
-    public static LocalTime parseTimeFromPersist(String time) {
-        if (time != null && !time.isEmpty()) {
-            return LocalTime.parse(time);
-        } else {
-            return null;
-        }
-    }
+//    public static Long formatToPersist(LocalDateTime dateTime) {
+//        if (dateTime != null) {
+//            return dateTime.getMillis();
+//        } else {
+//            return 0L;
+//        }
+//    }
+//
+//    public static Long formatToPersist(LocalDate date) {
+//        if (date != null) {
+//            return date.toDateTimeAtStartOfDay().getMillis();
+//        } else {
+//            return 0L;
+//        }
+//    }
+//
+//    public static String formatToPersist(LocalTime time) {
+//        if (time != null) {
+//            return ISODateTimeFormat.time().print(time);
+//        } else {
+//            return "";
+//        }
+//    }
+//
+//    public static LocalDateTime parseDateTimeFromPersist(long dateTime) {
+//        return new LocalDateTime(dateTime);
+//    }
+//
+//    public static LocalDate parseDateFromPersist(long date) {
+//        return new LocalDate(date);
+//    }
+//
+//    public static LocalTime parseTimeFromPersist(String time) {
+//        if (time != null && !time.isEmpty()) {
+//            return LocalTime.parse(time);
+//        } else {
+//            return null;
+//        }
+//    }
 
 
     public static String encode(byte[] bytes) {
@@ -133,11 +130,12 @@ public class UmlgFormatter {
     public static Object format(DataTypeEnum dataTypeEnum, Object o) {
         switch (dataTypeEnum) {
             case DateTime:
-                return formatToPersist((DateTime) o);
+//                return formatToPersist((LocalDateTime) o);
             case Date:
-                return formatToPersist((LocalDate) o);
+//                return formatToPersist((LocalDate) o);
             case Time:
-                return formatToPersist((LocalTime) o);
+//                return formatToPersist((LocalTime) o);
+                return o;
             case InternationalPhoneNumber:
                 return o;
             case LocalPhoneNumber:
@@ -170,11 +168,12 @@ public class UmlgFormatter {
     public static <E> E parse(DataTypeEnum dataTypeEnum, Object s) {
         switch (dataTypeEnum) {
             case DateTime:
-                return (E) parseDateTimeFromPersist((Long) s);
+//                return (E) parseDateTimeFromPersist((Long) s);
             case Date:
-                return (E) parseDateFromPersist((Long) s);
+//                return (E) parseDateFromPersist((Long) s);
             case Time:
-                return (E) parseTimeFromPersist((String) s);
+//                return (E) parseTimeFromPersist((String) s);
+                return (E) s;
             case InternationalPhoneNumber:
                 return (E) s;
             case LocalPhoneNumber:
@@ -214,25 +213,25 @@ public class UmlgFormatter {
         Collection<E> result = new ArrayList<>();
         switch (dataTypeEnum) {
             case DateTime:
-                long[] longArray = (long[]) array;
-                for (long l : longArray) {
-                    result.add((E) parseDateTimeFromPersist(l));
+                LocalDateTime[] localDateTimeArray = (LocalDateTime[]) array;
+                for (LocalDateTime l : localDateTimeArray) {
+                    result.add((E) l);
                 }
                 break;
             case Date:
-                longArray = (long[]) array;
-                for (long l : longArray) {
-                    result.add((E) parseDateFromPersist(l));
+                LocalDate[] localDateArray = (LocalDate[]) array;
+                for (LocalDate l : localDateArray) {
+                    result.add((E) l);
                 }
                 break;
             case Time:
-                String[] stringArray = (String[]) array;
-                for (String s : stringArray) {
-                    result.add((E) parseTimeFromPersist(s));
+                LocalTime[] localTimeArray = (LocalTime[]) array;
+                for (LocalTime s : localTimeArray) {
+                    result.add((E) s);
                 }
                 break;
             case InternationalPhoneNumber:
-                stringArray = (String[]) array;
+                String[] stringArray = (String[]) array;
                 for (String s : stringArray) {
                     result.add((E) s);
                 }
@@ -288,13 +287,15 @@ public class UmlgFormatter {
         coll.addAll(internalCollection.stream().map(e -> format(dataTypeEnum, e)).collect(Collectors.toList()));
         switch (dataTypeEnum) {
             case DateTime:
-                Long[] longArray = coll.toArray(new Long[coll.size()]);
-                return ArrayUtils.toPrimitive(longArray);
+                LocalDateTime[] localDateTimes = coll.toArray(new LocalDateTime[coll.size()]);
+                return ArrayUtils.toPrimitive(localDateTimes);
             case Date:
-                longArray = coll.toArray(new Long[coll.size()]);
-                return ArrayUtils.toPrimitive(longArray);
+                LocalDate[] longDates = coll.toArray(new LocalDate[coll.size()]);
+                return ArrayUtils.toPrimitive(longDates);
             case Time:
-                return coll.toArray(new String[coll.size()]);
+                LocalTime[] times = coll.toArray(new LocalTime[coll.size()]);
+                return ArrayUtils.toPrimitive(times);
+//                return coll.toArray(new String[coll.size()]);
             case InternationalPhoneNumber:
                 return coll.toArray(new String[coll.size()]);
             case LocalPhoneNumber:

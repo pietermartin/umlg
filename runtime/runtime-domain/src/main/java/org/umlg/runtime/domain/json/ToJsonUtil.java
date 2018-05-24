@@ -1,13 +1,14 @@
 package org.umlg.runtime.domain.json;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
+import org.umlg.runtime.domain.DataTypeEnum;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.domain.UmlgEnum;
 import org.umlg.runtime.util.UmlgFormatter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collection;
 
 public class ToJsonUtil {
@@ -85,7 +86,7 @@ public class ToJsonUtil {
             for (LocalDate p : localDates) {
                 count++;
                 json.append("\"");
-                json.append(UmlgFormatter.format(p));
+                json.append(UmlgFormatter.format(DataTypeEnum.Date, p));
                 json.append("\"");
                 if (count != localDates.size()) {
                     json.append(",");
@@ -100,15 +101,15 @@ public class ToJsonUtil {
 
     }
 
-    public static String toJsonDateTime(Collection<DateTime> dateTimes) {
+    public static String toJsonDateTime(Collection<LocalDateTime> dateTimes) {
         StringBuilder json = new StringBuilder();
         if (dateTimes != null) {
             json.append("[");
             int count = 0;
-                for (DateTime p : dateTimes) {
+                for (LocalDateTime p : dateTimes) {
                 count++;
                 json.append("\"");
-                json.append(UmlgFormatter.format(p));
+                json.append(UmlgFormatter.format(DataTypeEnum.DateTime, p));
                 json.append("\"");
                 if (count != dateTimes.size()) {
                     json.append(",");
@@ -129,7 +130,7 @@ public class ToJsonUtil {
             for (LocalTime localTime : localTimes) {
                 count++;
                 json.append("\"");
-                json.append(UmlgFormatter.format(localTime));
+                json.append(UmlgFormatter.format(DataTypeEnum.Time, localTime));
                 json.append("\"");
                 if (count != localTimes.size()) {
                     json.append(",");

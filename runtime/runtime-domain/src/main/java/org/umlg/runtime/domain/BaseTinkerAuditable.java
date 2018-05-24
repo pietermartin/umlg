@@ -1,10 +1,10 @@
 package org.umlg.runtime.domain;
 
-import org.joda.time.DateTime;
 import org.umlg.runtime.adaptor.TransactionThreadVar;
 import org.umlg.runtime.util.UmlgFormatter;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 public abstract class BaseTinkerAuditable extends BaseUmlgAudit implements TinkerAuditableNode, Serializable{
 
@@ -14,7 +14,7 @@ public abstract class BaseTinkerAuditable extends BaseUmlgAudit implements Tinke
 		super();
 	}
 	
-	public void setDeletedOn(DateTime deletedOn) {
+	public void setDeletedOn(LocalDateTime deletedOn) {
 		super.setDeletedOn(deletedOn);
 		if ( TransactionThreadVar.hasNoAuditEntry(getClass().getName() + getUid()) ) {
 			createAuditVertex(false);

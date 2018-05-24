@@ -1,13 +1,15 @@
 package org.umlg.tests.indexing;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.indexing.PTYPE;
 import org.umlg.indexing.Product;
 import org.umlg.runtime.test.BaseLocalDbTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 /**
  * Date: 2014/05/29
@@ -17,29 +19,35 @@ public class TestIndexingDataType extends BaseLocalDbTest {
 
     @Test
     public void testIndexDate() {
+        LocalDate localDate = LocalDate.now();
         Product product = new Product();
-        product.setCreated(new LocalDate(10000));
+        product.setCreated(localDate);
         db.commit();
-        Assert.assertEquals(1, Product.product_findByCreated(new LocalDate(10000)).size());
+        Assert.assertEquals(1, Product.product_findByCreated(localDate).size());
     }
 
     @Test
     public void testIndexDateTime() {
+        LocalDateTime localDateTime = LocalDateTime.now();
         Product product = new Product();
-        product.setDeleted(new DateTime(10000123));
+        product.setDeleted(localDateTime);
         db.commit();
-        Assert.assertNotNull(Product.product_findByDeleted(new DateTime(10000123)));
-        Assert.assertNull(Product.product_findByDeleted(new DateTime(10000124)));
+        Assert.assertNotNull(Product.product_findByDeleted(localDateTime));
+        LocalDateTime localDateTime2 = LocalDateTime.now().plus(2, ChronoUnit.SECONDS);
+        Assert.assertNull(Product.product_findByDeleted(localDateTime2));
     }
 
     @Test
     public void testIndexTime() {
         Product product = new Product();
         db.commit();
-        product.setTime(new LocalTime(10000123));
+        LocalTime localTime = LocalTime.now();
+        product.setTime(localTime);
         db.commit();
-        Assert.assertNotNull(Product.product_findByTime(new LocalTime(10000123)));
-        Assert.assertNull(Product.product_findByTime(new LocalTime(10000124)));
+        Assert.assertNotNull(Product.product_findByTime(localTime));
+
+        LocalTime localTime2 = LocalTime.now().plus(3, ChronoUnit.SECONDS);
+        Assert.assertNull(Product.product_findByTime(localTime2));
     }
 
     @Test

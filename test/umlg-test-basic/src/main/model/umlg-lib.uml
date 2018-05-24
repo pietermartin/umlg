@@ -119,14 +119,14 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
           <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
           <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_UqbDMCQVEeKzTel_Vwmhog" name="createdOnDefaultValue">
             <language>Java</language>
-            <body>new DateTime()</body>
+            <body>LocalDateTime.now()</body>
           </defaultValue>
         </ownedAttribute>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_EG4nICQPEeKOmc56p_1Osg" name="updatedOn" isReadOnly="true">
           <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
           <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_usdMQCQWEeKzTel_Vwmhog" name="updatedOnDefaultTime">
             <language>Java</language>
-            <body>new DateTime()</body>
+            <body>LocalDateTime.now()</body>
           </defaultValue>
         </ownedAttribute>
       </packagedElement>

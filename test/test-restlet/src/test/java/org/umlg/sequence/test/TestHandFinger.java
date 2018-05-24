@@ -1,11 +1,12 @@
 package org.umlg.sequence.test;
 
-import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.model.RestAndJson;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.test.standard.*;
+
+import java.time.LocalDate;
 
 /**
  * Date: 2013/05/05
@@ -18,7 +19,7 @@ public class TestHandFinger extends BaseLocalDbTest {
 
         Human h1 = new Human(true);
         h1.setName("human1");
-        h1.setBirthDate(new LocalDate());
+        h1.setBirthDate(LocalDate.now());
         h1.setGender(Gender.FEMALE);
         Home home = new Home(h1);
         home.setEmail("aaa@aaa.com");

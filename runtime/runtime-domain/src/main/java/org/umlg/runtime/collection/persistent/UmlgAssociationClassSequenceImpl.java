@@ -4,9 +4,6 @@ import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
@@ -97,28 +94,32 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
                 }
             }
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isDateTime()) {
-            String s = this.vertex.value(getLabel());
-            if (s != null) {
-                AssociationClassNode property = (AssociationClassNode) new DateTime(s);
-                this.internalCollection.add(property);
-            }
+            throw new RuntimeException("fix me");
+//            String s = this.vertex.value(getLabel());
+//            if (s != null) {
+//                AssociationClassNode property = (AssociationClassNode) new DateTime(s);
+//                this.internalCollection.add(property);
+//            }
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isDate()) {
-            String s = this.vertex.value(getLabel());
-            if (s != null) {
-                AssociationClassNode property = (AssociationClassNode) new LocalDate(s);
-                this.internalCollection.add(property);
-            }
+            throw new RuntimeException("fix me");
+//            String s = this.vertex.value(getLabel());
+//            if (s != null) {
+//                AssociationClassNode property = (AssociationClassNode) new LocalDate(s);
+//                this.internalCollection.add(property);
+//            }
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isTime()) {
-            String s = this.vertex.value(getLabel());
-            if (s != null) {
-                AssociationClassNode property = (AssociationClassNode) new LocalTime(s);
-                this.internalCollection.add(property);
-            }
+            throw new RuntimeException("fix me");
+//            String s = this.vertex.value(getLabel());
+//            if (s != null) {
+//                AssociationClassNode property = (AssociationClassNode) new LocalTime(s);
+//                this.internalCollection.add(property);
+//            }
         } else {
-            AssociationClassNode property = this.vertex.value(getLabel());
-            if (property != null) {
-                this.internalCollection.add(property);
-            }
+            throw new RuntimeException("fix me");
+//            AssociationClassNode property = this.vertex.value(getLabel());
+//            if (property != null) {
+//                this.internalCollection.add(property);
+//            }
         }
         this.loaded = true;
     }

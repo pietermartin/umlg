@@ -1,6 +1,5 @@
 package org.umlg.tests.datatype;
 
-import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.componenttest.Space;
@@ -17,6 +16,7 @@ import org.umlg.runtime.validation.UmlgConstraintViolationException;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.time.LocalDate;
 import java.util.Arrays;
 
 /**
@@ -75,100 +75,100 @@ public class DataTypeTest extends BaseLocalDbTest {
     @Test
     public void testManyDataTypeDateSet() {
         DataTypeEntity dataTypeEntity = new DataTypeEntity(true);
-        dataTypeEntity.addToDateSet(new LocalDate("2000-06-01"));
-        dataTypeEntity.addToDateSet(new LocalDate("2000-06-02"));
-        dataTypeEntity.addToDateSet(new LocalDate("2000-06-03"));
-        dataTypeEntity.addToDateSet(new LocalDate("2000-06-04"));
+        dataTypeEntity.addToDateSet(LocalDate.parse("2000-06-01"));
+        dataTypeEntity.addToDateSet(LocalDate.parse("2000-06-02"));
+        dataTypeEntity.addToDateSet(LocalDate.parse("2000-06-03"));
+        dataTypeEntity.addToDateSet(LocalDate.parse("2000-06-04"));
         db.commit();
         dataTypeEntity.reload();
         Assert.assertEquals(4, dataTypeEntity.getDateSet().size());
-        dataTypeEntity.getDateSet().remove(new LocalDate("2000-06-03"));
+        dataTypeEntity.getDateSet().remove(LocalDate.parse("2000-06-03"));
         db.commit();
         dataTypeEntity.reload();
         Assert.assertEquals(3, dataTypeEntity.getDateSet().size());
-        Assert.assertTrue(dataTypeEntity.getDateSet().contains(new LocalDate("2000-06-01")));
-        Assert.assertTrue(dataTypeEntity.getDateSet().contains(new LocalDate("2000-06-02")));
-        Assert.assertTrue(dataTypeEntity.getDateSet().contains(new LocalDate("2000-06-04")));
-        Assert.assertFalse(dataTypeEntity.getDateSet().contains(new LocalDate("2000-06-03")));
+        Assert.assertTrue(dataTypeEntity.getDateSet().contains(LocalDate.parse("2000-06-01")));
+        Assert.assertTrue(dataTypeEntity.getDateSet().contains(LocalDate.parse("2000-06-02")));
+        Assert.assertTrue(dataTypeEntity.getDateSet().contains(LocalDate.parse("2000-06-04")));
+        Assert.assertFalse(dataTypeEntity.getDateSet().contains(LocalDate.parse("2000-06-03")));
     }
 
     @Test
     public void testDataTypeDataList() {
         DataTypeEntity dataTypeEntity = new DataTypeEntity(true);
-        dataTypeEntity.addToDateList(new LocalDate("2000-06-01"));
-        dataTypeEntity.addToDateList(new LocalDate("2000-06-02"));
-        dataTypeEntity.addToDateList(new LocalDate("2000-06-03"));
+        dataTypeEntity.addToDateList(LocalDate.parse("2000-06-01"));
+        dataTypeEntity.addToDateList(LocalDate.parse("2000-06-02"));
+        dataTypeEntity.addToDateList(LocalDate.parse("2000-06-03"));
         db.commit();
         dataTypeEntity.reload();
         Assert.assertEquals(3, dataTypeEntity.getDateList().size());
-        Assert.assertEquals(0, dataTypeEntity.getDateList().indexOf(new LocalDate("2000-06-01")));
-        Assert.assertEquals(1, dataTypeEntity.getDateList().indexOf(new LocalDate("2000-06-02")));
-        Assert.assertEquals(2, dataTypeEntity.getDateList().indexOf(new LocalDate("2000-06-03")));
+        Assert.assertEquals(0, dataTypeEntity.getDateList().indexOf(LocalDate.parse("2000-06-01")));
+        Assert.assertEquals(1, dataTypeEntity.getDateList().indexOf(LocalDate.parse("2000-06-02")));
+        Assert.assertEquals(2, dataTypeEntity.getDateList().indexOf(LocalDate.parse("2000-06-03")));
 
-        dataTypeEntity.getDateList().remove(new LocalDate("2000-06-02"));
+        dataTypeEntity.getDateList().remove(LocalDate.parse("2000-06-02"));
 
         db.commit();
         dataTypeEntity.reload();
         Assert.assertEquals(2, dataTypeEntity.getDateList().size());
-        Assert.assertEquals(0, dataTypeEntity.getDateList().indexOf(new LocalDate("2000-06-01")));
-        Assert.assertEquals(1, dataTypeEntity.getDateList().indexOf(new LocalDate("2000-06-03")));
-        Assert.assertFalse(dataTypeEntity.getDateList().contains(new LocalDate("2000-06-02")));
+        Assert.assertEquals(0, dataTypeEntity.getDateList().indexOf(LocalDate.parse("2000-06-01")));
+        Assert.assertEquals(1, dataTypeEntity.getDateList().indexOf(LocalDate.parse("2000-06-03")));
+        Assert.assertFalse(dataTypeEntity.getDateList().contains(LocalDate.parse("2000-06-02")));
     }
 
     @Test
     public void testDataTypeOrderedSet() {
 
         DataTypeEntity dataTypeEntity = new DataTypeEntity(true);
-        dataTypeEntity.addToDateOrderedSet(new LocalDate("2000-06-01"));
-        dataTypeEntity.addToDateOrderedSet(new LocalDate("2000-06-02"));
-        dataTypeEntity.addToDateOrderedSet(new LocalDate("2000-06-03"));
+        dataTypeEntity.addToDateOrderedSet(LocalDate.parse("2000-06-01"));
+        dataTypeEntity.addToDateOrderedSet(LocalDate.parse("2000-06-02"));
+        dataTypeEntity.addToDateOrderedSet(LocalDate.parse("2000-06-03"));
         db.commit();
         dataTypeEntity.reload();
         Assert.assertEquals(3, dataTypeEntity.getDateOrderedSet().size());
-        Assert.assertEquals(0, dataTypeEntity.getDateOrderedSet().indexOf(new LocalDate("2000-06-01")));
-        Assert.assertEquals(1, dataTypeEntity.getDateOrderedSet().indexOf(new LocalDate("2000-06-02")));
-        Assert.assertEquals(2, dataTypeEntity.getDateOrderedSet().indexOf(new LocalDate("2000-06-03")));
+        Assert.assertEquals(0, dataTypeEntity.getDateOrderedSet().indexOf(LocalDate.parse("2000-06-01")));
+        Assert.assertEquals(1, dataTypeEntity.getDateOrderedSet().indexOf(LocalDate.parse("2000-06-02")));
+        Assert.assertEquals(2, dataTypeEntity.getDateOrderedSet().indexOf(LocalDate.parse("2000-06-03")));
 
-        dataTypeEntity.removeFromDateOrderedSet(new LocalDate("2000-06-02"));
+        dataTypeEntity.removeFromDateOrderedSet(LocalDate.parse("2000-06-02"));
         db.commit();
         dataTypeEntity.reload();
         Assert.assertEquals(2, dataTypeEntity.getDateOrderedSet().size());
-        Assert.assertEquals(0, dataTypeEntity.getDateOrderedSet().indexOf(new LocalDate("2000-06-01")));
-        Assert.assertEquals(1, dataTypeEntity.getDateOrderedSet().indexOf(new LocalDate("2000-06-03")));
-        Assert.assertFalse(dataTypeEntity.getDateOrderedSet().contains(new LocalDate("2000-06-02")));
+        Assert.assertEquals(0, dataTypeEntity.getDateOrderedSet().indexOf(LocalDate.parse("2000-06-01")));
+        Assert.assertEquals(1, dataTypeEntity.getDateOrderedSet().indexOf(LocalDate.parse("2000-06-03")));
+        Assert.assertFalse(dataTypeEntity.getDateOrderedSet().contains(LocalDate.parse("2000-06-02")));
     }
 
     @Test
     public void testDataTypeBag() {
         DataTypeEntity dataTypeEntity = new DataTypeEntity(true);
-        dataTypeEntity.addToDateBag(new LocalDate("2000-06-01"));
-        dataTypeEntity.addToDateBag(new LocalDate("2000-06-02"));
-        dataTypeEntity.addToDateBag(new LocalDate("2000-06-03"));
+        dataTypeEntity.addToDateBag(LocalDate.parse("2000-06-01"));
+        dataTypeEntity.addToDateBag(LocalDate.parse("2000-06-02"));
+        dataTypeEntity.addToDateBag(LocalDate.parse("2000-06-03"));
         db.commit();
 
         dataTypeEntity.reload();
         Assert.assertEquals(3, dataTypeEntity.getDateBag().size());
-        Assert.assertTrue(dataTypeEntity.getDateBag().contains(new LocalDate("2000-06-01")));
-        Assert.assertTrue(dataTypeEntity.getDateBag().contains(new LocalDate("2000-06-02")));
-        Assert.assertTrue(dataTypeEntity.getDateBag().contains(new LocalDate("2000-06-03")));
+        Assert.assertTrue(dataTypeEntity.getDateBag().contains(LocalDate.parse("2000-06-01")));
+        Assert.assertTrue(dataTypeEntity.getDateBag().contains(LocalDate.parse("2000-06-02")));
+        Assert.assertTrue(dataTypeEntity.getDateBag().contains(LocalDate.parse("2000-06-03")));
 
-        dataTypeEntity.addToDateBag(new LocalDate("2000-06-03"));
+        dataTypeEntity.addToDateBag(LocalDate.parse("2000-06-03"));
         db.commit();
 
         dataTypeEntity.reload();
         Assert.assertEquals(4, dataTypeEntity.getDateBag().size());
-        Assert.assertTrue(dataTypeEntity.getDateBag().contains(new LocalDate("2000-06-01")));
-        Assert.assertTrue(dataTypeEntity.getDateBag().contains(new LocalDate("2000-06-02")));
-        Assert.assertTrue(dataTypeEntity.getDateBag().contains(new LocalDate("2000-06-03")));
+        Assert.assertTrue(dataTypeEntity.getDateBag().contains(LocalDate.parse("2000-06-01")));
+        Assert.assertTrue(dataTypeEntity.getDateBag().contains(LocalDate.parse("2000-06-02")));
+        Assert.assertTrue(dataTypeEntity.getDateBag().contains(LocalDate.parse("2000-06-03")));
 
-        dataTypeEntity.removeFromDateBag(new LocalDate("2000-06-03"));
+        dataTypeEntity.removeFromDateBag(LocalDate.parse("2000-06-03"));
         db.commit();
 
         dataTypeEntity.reload();
         Assert.assertEquals(3, dataTypeEntity.getDateBag().size());
-        Assert.assertTrue(dataTypeEntity.getDateBag().contains(new LocalDate("2000-06-01")));
-        Assert.assertTrue(dataTypeEntity.getDateBag().contains(new LocalDate("2000-06-02")));
-        Assert.assertTrue(dataTypeEntity.getDateBag().contains(new LocalDate("2000-06-03")));
+        Assert.assertTrue(dataTypeEntity.getDateBag().contains(LocalDate.parse("2000-06-01")));
+        Assert.assertTrue(dataTypeEntity.getDateBag().contains(LocalDate.parse("2000-06-02")));
+        Assert.assertTrue(dataTypeEntity.getDateBag().contains(LocalDate.parse("2000-06-03")));
     }
 
     @Test
@@ -251,7 +251,7 @@ public class DataTypeTest extends BaseLocalDbTest {
     }
 
     @Test
-    public void testUnsecurePassword() throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public void testUnsecurePassword() {
         DataTypeEntity dataTypeEntity = new DataTypeEntity();
         dataTypeEntity.setUnsecurePassword("12345");
         UMLG.get().commit();
