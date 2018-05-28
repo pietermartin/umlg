@@ -24,6 +24,7 @@ public interface UmlgGraph extends Graph {
     static final String DELETED_VERTEX_EDGE = "deletedVertexEdgeToRoot";
     static final String ROOT_CLASS_NAME = "org.umlg.root.Root";
 
+    void commit(boolean validate);
     void commit();
     void rollback();
 

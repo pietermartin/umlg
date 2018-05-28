@@ -133,9 +133,13 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 //    }
 
     public void commit() {
+        commit(true);
+    }
+
+    public void commit(boolean validate) {
         try {
             //This null check is here for when a graph is created. It calls commit before the listener has been set.
-            if (this.transactionEventHandler != null) {
+            if (validate && this.transactionEventHandler != null) {
                 this.transactionEventHandler.beforeCommit();
             }
             this.sqlG.tx().commit();
@@ -143,7 +147,9 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
             //This may start a new transaction
-            this.transactionEventHandler.afterCommit();
+            if (validate) {
+                this.transactionEventHandler.afterCommit();
+            }
             TransactionThreadNotificationVar.remove();
         }
     }
