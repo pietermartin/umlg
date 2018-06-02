@@ -139,7 +139,12 @@ public class PropertyTree {
                     }
                 }
             }
-            graphTraversals.add(traversal.asAdmin().clone().local(__.optional(leafTraversal)).path());
+            if (leafTraversal != null) {
+                graphTraversals.add(traversal.asAdmin().clone().local(__.optional(leafTraversal)).path());
+            }
+        }
+        if (graphTraversals.isEmpty()) {
+            graphTraversals.add(traversal.path());
         }
         return graphTraversals;
     }

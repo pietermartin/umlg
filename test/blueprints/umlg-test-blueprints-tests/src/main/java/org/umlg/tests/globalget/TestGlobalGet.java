@@ -201,4 +201,49 @@ public class TestGlobalGet extends BaseLocalDbTest {
 
     }
 
+    @Test
+    public void testGlobalGetWtihNoAssociation() {
+        Assume.assumeTrue(UMLG.get().supportsBatchMode());
+        God god = new God();
+        god.setName("god");
+        for (int j = 0; j < 1; j++) {
+            Hand hand = new Hand();
+            god.addToHand(hand);
+            hand.setName("hand_" + j);
+            for (int k = 0; k < 1; k++) {
+                Finger finger = new Finger();
+                hand.addToFinger(finger);
+                finger.setName("finger_" + k);
+            }
+        }
+        UMLG.get().commit();
+        god.delete();
+        UMLG.get().commit();
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        UMLG.get().batchModeOn();
+        int count = 10;
+        for (int i = 1; i < count + 1; i++) {
+            god = new God();
+            god.setName("god_" + i);
+            for (int j = 0; j < 2; j++) {
+                Hand hand = new Hand(god);
+                hand.setName("hand_" + j);
+                for (int k = 0; k < 5; k++) {
+                    Finger finger = new Finger(hand);
+                    finger.setName("finger_" + k);
+                }
+            }
+        }
+        UMLG.get().commit();
+        stopWatch.stop();
+        System.out.println("Time to insert " + stopWatch.toString());
+        stopWatch.reset();
+
+        stopWatch.start();
+        PropertyTree godPT = PropertyTree.from("God");
+        List<God> gods = UMLG.get().get(godPT);
+        Assert.assertEquals(count, gods.size());
+    }
+
 }
