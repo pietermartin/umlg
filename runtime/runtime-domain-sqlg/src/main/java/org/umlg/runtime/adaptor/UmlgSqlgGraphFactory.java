@@ -4,11 +4,10 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.umlg.runtime.util.UmlgProperties;
-import org.umlg.sqlg.sql.dialect.SqlDialect;
 import org.umlg.sqlg.structure.SqlgGraph;
+import org.umlg.sqlg.util.SqlgUtil;
 
 import java.io.File;
-import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -111,63 +110,9 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
     public void drop() {
         this.umlgGraph.rollback();
         SqlgGraph sqlgGraph = (SqlgGraph)this.umlgGraph.getUnderlyingGraph();
-//        sqlgGraph.getSchemaManager().close();
-        SqlDialect sqlDialect = sqlgGraph.getSqlDialect();
-        try (Connection conn = sqlgGraph.getSqlgDataSource().getDatasource().getConnection()) {
-            DatabaseMetaData metadata = conn.getMetaData();
-            String catalog = null;
-            String schemaPattern = null;
-            String tableNamePattern = "%";
-            String[] types = {"TABLE"};
-            ResultSet result = metadata.getTables(catalog, schemaPattern, tableNamePattern, types);
-            while (result.next()) {
-                StringBuilder sql = new StringBuilder("DROP TABLE ");
-                String schema = result.getString(2);
-                String table = result.getString(3);
-                if (sqlDialect.getGisSchemas().contains(schema) || sqlDialect.getSpacialRefTable().contains(table)) {
-                    continue;
-                }
-                sql.append(sqlDialect.maybeWrapInQoutes(schema));
-                sql.append(".");
-                sql.append(sqlDialect.maybeWrapInQoutes(table));
-                sql.append(" CASCADE");
-                if (sqlDialect.needsSemicolon()) {
-                    sql.append(";");
-                }
-                try (PreparedStatement preparedStatement = conn.prepareStatement(sql.toString())) {
-                    preparedStatement.executeUpdate();
-                }
-            }
-            catalog = null;
-            schemaPattern = null;
-            result = metadata.getSchemas(catalog, schemaPattern);
-            while (result.next()) {
-                String schema = result.getString(1);
-                if (sqlDialect.getGisSchemas().contains(schema)) {
-                    continue;
-                }
-                if (!sqlDialect.getInternalSchemas().contains(schema)) {
-                    StringBuilder sql = new StringBuilder("DROP SCHEMA ");
-                    sql.append(sqlDialect.maybeWrapInQoutes(schema));
-                    sql.append(" CASCADE");
-                    if (sqlDialect.needsSemicolon()) {
-                        sql.append(";");
-                    }
-                    try (PreparedStatement preparedStatement = conn.prepareStatement(sql.toString())) {
-                        preparedStatement.executeUpdate();
-                    }
-                }
-            }
-            sqlgGraph.getSqlgDataSource().close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            sqlgGraph.close();
-            UMLG.remove();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        SqlgUtil.dropDb(sqlgGraph);
+        sqlgGraph.tx().commit();
+        sqlgGraph.close();
     }
 
     @Override
