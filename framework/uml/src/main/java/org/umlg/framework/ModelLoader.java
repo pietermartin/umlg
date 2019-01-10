@@ -66,7 +66,7 @@ public class ModelLoader {
                     EcoreUtil.resolveAll(pi.getImportedPackage());
                 }
             }
-            logger.info(String.format("Done loading the model"));
+            logger.info("Done loading the model");
             for (ModelLoadedEvent e : this.events) {
                 e.loaded(this.model);
             }
