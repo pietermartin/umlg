@@ -413,6 +413,11 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         UmlgGraphManager.INSTANCE.deleteGraph();
     }
 
+    @Override
+    public void close() {
+        UmlgGraphManager.INSTANCE.close();
+    }
+
 //    @Override
 //    public Vertex getRoot() {
 //        if (this.rootVertex == null) {
@@ -584,10 +589,6 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         return this.sqlG.variables();
     }
 
-    @Override
-    public void close() throws Exception {
-        this.sqlG.close();
-    }
 
     @Override
     public boolean supportsBatchMode() {

@@ -33,7 +33,8 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
         if (this.umlgGraph != null) {
             this.umlgGraph.rollback();
             try {
-                this.umlgGraph.close();
+                this.umlgGraph.sqlG.close();
+                this.clear();
             } catch (Exception e) {
                 if (e instanceof RuntimeException) {
                     throw (RuntimeException) e;

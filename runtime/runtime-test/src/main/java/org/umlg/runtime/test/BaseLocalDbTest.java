@@ -32,6 +32,11 @@ public class BaseLocalDbTest {
 
     @After
     public void after() {
+        try {
+            UMLG.get().close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected long countVertices() {

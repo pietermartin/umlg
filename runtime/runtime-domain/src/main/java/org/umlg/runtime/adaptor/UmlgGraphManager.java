@@ -49,6 +49,31 @@ public class UmlgGraphManager {
     /**
      * Delete graph invokes drop on the db and then deletes the files.
      */
+    public void close() {
+        try {
+            if (this.nakedGraphFactory == null) {
+                UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgUtil.getBlueprintsImplementation());
+                @SuppressWarnings("unchecked")
+                Class<UmlgGraphFactory> factory = (Class<UmlgGraphFactory>) Class.forName(umlgAdaptorImplementation.getTumlGraphFactory());
+                Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
+                this.nakedGraphFactory = (UmlgGraphFactory) m.invoke(null);
+            }
+            nakedGraphFactory.shutdown();
+            nakedGraphFactory.clear();
+            //Remove threadvars
+            UMLG.remove();
+            TransactionThreadVar.remove();
+            TransactionThreadEntityVar.remove();
+            TransactionThreadMetaNodeVar.remove();
+            TransactionThreadNotificationVar.remove();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Delete graph invokes drop on the db and then deletes the files.
+     */
     public void deleteGraph() {
         try {
             if (this.nakedGraphFactory == null) {
