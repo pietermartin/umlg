@@ -12,7 +12,8 @@ public class GenerateTestBasic {
 	public static void main(String[] args) {
 		JavaGenerator javaGenerator = new JavaGenerator();
         List<Visitor<?>> visitors = DefaultVisitors.getDefaultJavaVisitors();
-		javaGenerator.generate(new File("src/main/model/tests-test-basic.uml"), new File("./"),
+		javaGenerator.generate(new File("src/main/model/umlg-test-basic.uml"),
+				new File("./"),
                 visitors);
 	}
 
