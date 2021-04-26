@@ -13,11 +13,11 @@
     <modules>
         <module>test-generation</module>
         <module>blueprints</module>
-        <module>umlg-test-basic</module>
-        <module>umlg-test-ocl</module>
-        <module>umlg-test-tinkergraph</module>
-        <module>test-restlet</module>
-        <module>test-model-import</module>
+<!--        <module>umlg-test-basic</module>-->
+<!--        <module>umlg-test-ocl</module>-->
+<!--        <module>umlg-test-tinkergraph</module>-->
+<!--        <module>test-restlet</module>-->
+<!--        <module>test-model-import</module>-->
     </modules>
     <reporting>
         <plugins>
