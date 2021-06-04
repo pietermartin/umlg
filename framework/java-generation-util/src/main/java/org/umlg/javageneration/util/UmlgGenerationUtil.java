@@ -208,7 +208,11 @@ public class UmlgGenerationUtil {
         boolean isControllingSide = UmlgPropertyOperations.isControllingSide(p);
         if (p.getAssociation() != null) {
             if (p.getAssociation().getName() == null) {
-                return p.getName() + "_" + p.getOtherEnd().getName();
+                if (isControllingSide) {
+                    return p.getName() + "_" + p.getOtherEnd().getName();
+                } else {
+                    return p.getOtherEnd().getName() + "_" + p.getName();
+                }
             } else {
                 return p.getAssociation().getName();
             }
