@@ -67,7 +67,7 @@
         <jetty.version>9.4.8.v20171121</jetty.version>
         <tinkerpop.version>3.4.10</tinkerpop.version>
         <sqlg.version>2.1.0</sqlg.version>
-        <umlg.version>2.0.2-SNAPSHOT</umlg.version>
+        <umlg.version>2.0.2</umlg.version>
         <slf4j.version>1.7.25</slf4j.version>
     </properties>
 
