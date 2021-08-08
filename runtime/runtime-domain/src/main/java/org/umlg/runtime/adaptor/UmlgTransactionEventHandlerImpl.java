@@ -18,11 +18,6 @@ import java.util.Map;
  */
 public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHandler {
 
-    //This is needed in Neo4j when starting up the graph.
-    //In Particular when creating indexes and doing schema updates the transaction count should not be updated as updates
-    // are not allowed when doing schema updates.
-    private boolean bypass = false;
-
     public UmlgTransactionEventHandlerImpl() {
         super();
     }
@@ -30,8 +25,7 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
     @Override
     public void beforeCommit() {
         try {
-            if (!this.bypass && UMLG.get() != null && !UMLG.get().isInBatchMode()) {
-                TransactionThreadVar.clear();
+            if (!TransactionThreadBypassValidationVar.get() && UMLG.get() != null && !UMLG.get().isInBatchMode()) {
 //                ((UmlgAdminGraph) UMLG.get()).incrementTransactionCount();
                 List<UmlgNode> entities = TransactionThreadEntityVar.get();
                 for (UmlgNode umlgNode : entities) {
@@ -65,7 +59,9 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
             }
         } finally {
             TransactionThreadEntityVar.remove();
+            TransactionThreadBypassValidationVar.remove();
             TransactionThreadMetaNodeVar.remove();
+            TransactionThreadBypassValidationVar.remove();
         }
     }
 
@@ -89,10 +85,6 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
         } finally {
             TransactionThreadNotificationVar.remove();
         }
-    }
-
-    public void setBypass(boolean bypass) {
-        this.bypass = bypass;
     }
 
 }

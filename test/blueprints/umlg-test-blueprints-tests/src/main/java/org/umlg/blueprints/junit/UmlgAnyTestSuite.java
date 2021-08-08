@@ -2,7 +2,7 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.tests.javaprimitivetypes.TestJavaManyPrimitiveTypesWithValidation;
+import org.umlg.tests.validationtest.TestValidation;
 
 /**
  * Date: 2013/10/19
@@ -10,7 +10,7 @@ import org.umlg.tests.javaprimitivetypes.TestJavaManyPrimitiveTypesWithValidatio
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestJavaManyPrimitiveTypesWithValidation.class
+        TestValidation.class
 })
 public class UmlgAnyTestSuite {
 }

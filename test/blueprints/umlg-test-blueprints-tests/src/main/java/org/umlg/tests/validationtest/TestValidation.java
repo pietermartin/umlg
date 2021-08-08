@@ -12,6 +12,7 @@ import org.umlg.componenttest.Time;
 import org.umlg.componenttest.ValidationTest;
 import org.umlg.concretetest.God;
 import org.umlg.concretetest.Universe;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.runtime.validation.UmlgConstraintViolationException;
 import org.umlg.validation.TestManyValidation;
@@ -194,6 +195,27 @@ public class TestValidation extends BaseLocalDbTest {
             ValidationTest validationTest = new ValidationTest(g);
             db.commit();
             Assert.fail("Expected TransactionFailureException");
+        } catch (Exception e) {
+            Assert.assertTrue("excepting UmlgConstraintViolationException", e instanceof UmlgConstraintViolationException);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @Test
+    public void testValidationRequiredFailByPassed() {
+        UMLG.get().bypassValidation();
+        God g = new God(true);
+        ValidationTest validationTest = new ValidationTest(g);
+        try {
+            db.commit();
+        } catch (Exception e) {
+            Assert.fail("validation should have been bypassed");
+        }
+        g = new God(true);
+        validationTest = new ValidationTest(g);
+        try {
+            db.commit();
+            Assert.fail("validation should not have been bypassed");
         } catch (Exception e) {
             Assert.assertTrue("excepting UmlgConstraintViolationException", e instanceof UmlgConstraintViolationException);
         }

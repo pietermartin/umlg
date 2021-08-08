@@ -74,6 +74,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
                 }
             }
             TransactionThreadEntityVar.remove();
+            TransactionThreadBypassValidationVar.remove();
             TransactionThreadNotificationVar.remove();
             SqlgGraph sqlgGraph = SqlgGraph.open(configuration);
             this.umlgGraph = new UmlgSqlgGraph(sqlgGraph);
@@ -82,13 +83,12 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
 //                    this.umlgGraph.addRoot();
                     this.umlgGraph.commit();
                     //This is to bypass the beforeCommit
-                    this.umlgGraph.setBypass(true);
+                    this.umlgGraph.bypassValidation();
                     UmlGIndexFactory.getUmlgIndexManager().createIndexes();
                     if (this.configuration.getBoolean("generate.meta.nodes", false)) {
                         UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
                     }
                     this.umlgGraph.commit();
-                    this.umlgGraph.setBypass(false);
                 } catch (Exception e) {
                     logger.log(Level.SEVERE, "Could not start sqlg db!", e);
                     if (this.umlgGraph != null) {

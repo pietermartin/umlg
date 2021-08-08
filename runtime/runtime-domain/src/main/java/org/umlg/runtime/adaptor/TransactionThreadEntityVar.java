@@ -20,12 +20,6 @@ public class TransactionThreadEntityVar {
         }
     };
 
-    public static boolean hasNoAuditEntry(String clazzAndId) {
-        Map<Object, UmlgNode> newVertexMap = transactionEntityVar.get();
-        UmlgNode newVertex = newVertexMap.get(clazzAndId);
-        return newVertex == null;
-    }
-
     public static void remove() {
         transactionEntityVar.remove();
     }

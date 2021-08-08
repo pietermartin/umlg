@@ -150,6 +150,8 @@ public interface UmlgGraph extends Graph {
         return false;
     }
 
+    public void bypassValidation();
+
     public static class Exceptions {
         public static IllegalArgumentException classForElementCannotBeNull() {
             return new IllegalArgumentException("elementClass argument cannot be null.");

@@ -48,8 +48,9 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
-    void setBypass(boolean bypasss) {
-        this.transactionEventHandler.setBypass(bypasss);
+    @Override
+    public void bypassValidation() {
+        TransactionThreadBypassValidationVar.set(true);
     }
 
     @Override
@@ -145,6 +146,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
             this.sqlG.tx().commit();
         } finally {
             TransactionThreadEntityVar.remove();
+            TransactionThreadBypassValidationVar.remove();
             TransactionThreadMetaNodeVar.remove();
             //This may start a new transaction
             if (validate) {
@@ -159,6 +161,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
             this.sqlG.tx().rollback();
         } finally {
             TransactionThreadEntityVar.remove();
+            TransactionThreadBypassValidationVar.remove();
             TransactionThreadMetaNodeVar.remove();
             TransactionThreadNotificationVar.remove();
         }
@@ -502,6 +505,7 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
 //            throw new RuntimeException("wtf");
 //        }
         TransactionThreadEntityVar.remove();
+        TransactionThreadBypassValidationVar.remove();
         TransactionThreadMetaNodeVar.remove();
         TransactionThreadNotificationVar.remove();
         UmlgAssociationClassManager.remove();

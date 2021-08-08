@@ -62,8 +62,8 @@ public class UmlgGraphManager {
             nakedGraphFactory.clear();
             //Remove threadvars
             UMLG.remove();
-            TransactionThreadVar.remove();
             TransactionThreadEntityVar.remove();
+            TransactionThreadBypassValidationVar.remove();
             TransactionThreadMetaNodeVar.remove();
             TransactionThreadNotificationVar.remove();
         } catch (Exception e) {
@@ -102,8 +102,8 @@ public class UmlgGraphManager {
             }
             //Remove threadvars
             UMLG.remove();
-            TransactionThreadVar.remove();
             TransactionThreadEntityVar.remove();
+            TransactionThreadBypassValidationVar.remove();
             TransactionThreadMetaNodeVar.remove();
             TransactionThreadNotificationVar.remove();
         } catch (Exception e) {

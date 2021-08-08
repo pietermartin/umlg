@@ -7,14 +7,16 @@ import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Property;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
-import org.umlg.runtime.adaptor.TransactionThreadVar;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.*;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.IterateExpressionAccumulator;
 import org.umlg.runtime.collection.ocl.OclStdLibCollection;
-import org.umlg.runtime.domain.*;
+import org.umlg.runtime.domain.DataTypeEnum;
+import org.umlg.runtime.domain.UmlgEnum;
+import org.umlg.runtime.domain.UmlgMetaNode;
+import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.domain.ocl.OclState;
 import org.umlg.runtime.notification.ChangeHolder;
 import org.umlg.runtime.notification.UmlgNotificationManager;
@@ -407,9 +409,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             }
             return edge;
         } else {
-            if (owner instanceof TinkerAuditableNode) {
-                createPrimitiveAudit(e);
-            }
             return null;
         }
     }
@@ -427,15 +426,6 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         }
         return edge;
     }
-
-    private void createPrimitiveAudit(E e) {
-        TinkerAuditableNode auditOwner = (TinkerAuditableNode) owner;
-        if (TransactionThreadVar.hasNoAuditEntry(owner.getClass().getName() + owner.getUid())) {
-            auditOwner.createAuditVertex(false);
-        }
-        auditOwner.getAuditVertex().property(getLabel(), e);
-    }
-
 
     protected void maybeLoad() {
         if ((!this.loaded && (this.isOnePrimitive() || isOneEnumeration()))) {
