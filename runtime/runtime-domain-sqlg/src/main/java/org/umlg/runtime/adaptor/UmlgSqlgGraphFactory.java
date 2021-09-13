@@ -102,7 +102,7 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
                 }
             }
             //Prepare groovy
-            GroovyExecutor ge = GroovyExecutor.INSTANCE;
+//            GroovyExecutor ge = GroovyExecutor.INSTANCE;
         }
         return this.umlgGraph;
     }
