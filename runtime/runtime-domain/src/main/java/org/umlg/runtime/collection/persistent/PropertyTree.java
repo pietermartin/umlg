@@ -99,7 +99,7 @@ public class PropertyTree {
                         if (node.umlgRuntimeProperty.isOrdered()) {
                             leafTraversal.order()
                                     .by(select("e_" + node.umlgRuntimeProperty.getLabel())
-                                            .by(BaseCollection.IN_EDGE_SEQUENCE_ID), Order.incr);
+                                            .by(BaseCollection.IN_EDGE_SEQUENCE_ID), Order.asc);
                         }
                     } else {
                         leafTraversal = __.inE(node.label()).as("e_" + node.umlgRuntimeProperty.getLabel()).outV();
@@ -109,7 +109,7 @@ public class PropertyTree {
                         if (node.umlgRuntimeProperty.isOrdered()) {
                             leafTraversal.order()
                                     .by(select("e_" + node.umlgRuntimeProperty.getLabel())
-                                            .by(BaseCollection.OUT_EDGE_SEQUENCE_ID), Order.incr);
+                                            .by(BaseCollection.OUT_EDGE_SEQUENCE_ID), Order.asc);
                         }
                         leafTraversal = __.local(__.optional(leafTraversal));
                     }
@@ -122,7 +122,7 @@ public class PropertyTree {
                         if (node.umlgRuntimeProperty.isOrdered()) {
                             tmpTraversal.order()
                                     .by(select("e_" + node.umlgRuntimeProperty.getLabel())
-                                            .by(BaseCollection.IN_EDGE_SEQUENCE_ID), Order.incr);
+                                            .by(BaseCollection.IN_EDGE_SEQUENCE_ID), Order.asc);
                         }
                         leafTraversal.local(__.optional(tmpTraversal));
                     } else {
@@ -133,7 +133,7 @@ public class PropertyTree {
                         if (node.umlgRuntimeProperty.isOrdered()) {
                             tmpTraversal.order()
                                     .by(select("e_" + node.umlgRuntimeProperty.getLabel())
-                                            .by(BaseCollection.OUT_EDGE_SEQUENCE_ID), Order.incr);
+                                            .by(BaseCollection.OUT_EDGE_SEQUENCE_ID), Order.asc);
                         }
                         leafTraversal.local(__.optional(tmpTraversal));
                     }
@@ -291,7 +291,7 @@ public class PropertyTree {
             traversal = traversal.order().by(
                     select("e_" + this.umlgRuntimeProperty.getLabel()).by(
                             this.umlgRuntimeProperty.isControllingSide() ? BaseCollection.IN_EDGE_SEQUENCE_ID : BaseCollection.OUT_EDGE_SEQUENCE_ID
-                    ), Order.incr);
+                    ), Order.asc);
         }
         for (PropertyTree child : this.children) {
             child.applyOrder(traversal);

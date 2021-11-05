@@ -148,7 +148,7 @@ public class GroovyExecutor {
 
             this.gremlinExecutor = GremlinExecutor.build()
                     .addPlugins("gremlin-groovy", config)
-                    .scriptEvaluationTimeout(1000 * 180)
+//                    .scriptEvaluationTimeout(1000 * 180)
                     .afterSuccess(
                             t -> UMLG.get().rollback()
                     )

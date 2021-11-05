@@ -1,10 +1,16 @@
 package org.umlg.runtime.util;
 
-import org.apache.commons.configuration.CompositeConfiguration;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
+import com.google.common.base.Preconditions;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.FileBasedConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Configurations;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 
 import java.io.File;
+import java.net.URL;
 
 /**
  * Date: 2013/01/02
@@ -13,21 +19,29 @@ import java.io.File;
 public class UmlgProperties {
 
     public static UmlgProperties INSTANCE = new UmlgProperties();
-    private CompositeConfiguration properties;
-    private CompositeConfiguration internalProperties;
+    private final Configuration properties;
+    private final Configuration internalProperties;
 
     private UmlgProperties() {
         try {
-            this.properties = new CompositeConfiguration();
-            PropertiesConfiguration pc = new PropertiesConfiguration("umlg.env.properties");
-            this.properties.addConfiguration(pc);
+            URL url = Thread.currentThread().getContextClassLoader().getResource("umlg.env.properties");
+            Preconditions.checkState(url != null, "Did not find 'umlg.env.properties' on the class path.");
+            Parameters params = new Parameters();
+            FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class)
+                            .configure(params.properties()
+                                    .setFileName("umlg.env.properties").setListDelimiterHandler(new DefaultListDelimiterHandler(',')));
+            this.properties = builder.getConfiguration();
         } catch (Exception e) {
             throw new RuntimeException("Expecting \"umlg.env.properties\" file on the classpath with ");
         }
         try {
-            this.internalProperties = new CompositeConfiguration();
-            PropertiesConfiguration internalPc = new PropertiesConfiguration("umlg.internal.properties");
-            this.internalProperties.addConfiguration(internalPc);
+            URL url = Thread.currentThread().getContextClassLoader().getResource("umlg.internal.properties");
+            Preconditions.checkState(url != null, "Did not find 'umlg.internal.properties' on the class path.");
+            Parameters params = new Parameters();
+            FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class)
+                    .configure(params.properties()
+                            .setFileName("umlg.internal.properties").setListDelimiterHandler(new DefaultListDelimiterHandler(',')));
+            this.internalProperties = builder.getConfiguration();
         } catch (Exception e) {
             throw new RuntimeException("Expecting \"umlg.internal.properties\" file on the classpath with ");
         }
@@ -36,23 +50,25 @@ public class UmlgProperties {
             if (isDistribution() && Thread.currentThread().getContextClassLoader().getResource("WEB-INF/web.xml") != null) {
                 //own assembly
                 File f = new File("../resources/" + this.properties.getProperty("umlg.model.file.name") + ".umlg.env.properties");
-                overrideProperties = new PropertiesConfiguration(f.getAbsolutePath());
+                Configurations configs = new Configurations();
+                overrideProperties = configs.properties(f.getAbsolutePath());
             } else if (isWebContainer()) {
                 //tomcat or glasfish or jetty
-                overrideProperties = new PropertiesConfiguration(this.properties.getProperty("umlg.model.file.name") + ".umlg.env.properties");
+                Configurations configs = new Configurations();
+                overrideProperties = configs.properties(new File(this.properties.getProperty("umlg.model.file.name") + ".umlg.env.properties"));
             }
             if (overrideProperties != null) {
-                overrideProperties.setReloadingStrategy(new FileChangedReloadingStrategy());
-                this.properties.addConfiguration(overrideProperties);
+//                overrideProperties.setReloadingStrategy(new FileChangedReloadingStrategy());
+//                this.properties.addConfiguration(overrideProperties);
             }
         } catch (Exception e) {
             throw new RuntimeException("Could not find " + "../resources/" + this.properties.getProperty("model.name") + ".umlg.env.properties");
         }
     }
 
-    public CompositeConfiguration getProperties() {
-        return properties;
-    }
+//    public CompositeConfiguration getProperties() {
+//        return properties;
+//    }
 
     private boolean isDistribution() {
         return Boolean.valueOf(System.getProperty("UMLGServerDistribution", "false"));
@@ -113,4 +129,5 @@ public class UmlgProperties {
     public String[] getSqlgPropertiesLocation() {
         return this.properties.getStringArray("sqlg.properties.location");
     }
+
 }
