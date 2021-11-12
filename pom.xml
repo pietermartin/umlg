@@ -66,7 +66,7 @@
         <restlet.version>2.3.12</restlet.version>
         <jetty.version>9.4.8.v20171121</jetty.version>
         <tinkerpop.version>3.5.1</tinkerpop.version>
-        <sqlg.version>2.1.5-SNAPSHOT</sqlg.version>
+        <sqlg.version>2.1.5</sqlg.version>
         <umlg.version>2.0.7-SNAPSHOT</umlg.version>
         <slf4j.version>1.7.25</slf4j.version>
     </properties>
