@@ -69,6 +69,7 @@
         <sqlg.version>2.1.6-SNAPSHOT</sqlg.version>
         <umlg.version>2.0.8-SNAPSHOT</umlg.version>
         <slf4j.version>1.7.25</slf4j.version>
+        <log4j2.version>2.17.0</log4j2.version>
     </properties>
 
     <modules>
@@ -185,6 +186,11 @@
             <dependency>
                 <groupId>org.umlg</groupId>
                 <artifactId>sqlg-hsqldb</artifactId>
+                <version>${sqlg.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.umlg</groupId>
+                <artifactId>sqlg-c3p0</artifactId>
                 <version>${sqlg.version}</version>
             </dependency>
             <dependency>
