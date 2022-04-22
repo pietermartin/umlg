@@ -403,7 +403,7 @@ public class ModelLoader {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends Element> void filter(List<T> result, Element element, Filter f) {
+    public static <T extends Element> void filter(List<T> result, Element element, Filter f) {
         if (f.filter(element)) {
             result.add((T) element);
         }
