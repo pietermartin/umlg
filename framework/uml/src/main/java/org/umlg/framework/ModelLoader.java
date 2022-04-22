@@ -435,7 +435,7 @@ public class ModelLoader {
         return RESOURCE_SET;
     }
 
-    private static interface Filter {
+    public static interface Filter {
         boolean filter(Element e);
     }
 }
