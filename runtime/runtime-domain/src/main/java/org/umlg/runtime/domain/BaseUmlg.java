@@ -41,7 +41,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         for (UmlgRuntimeProperty dataType : dataTypes) {
             Property p = this.vertex.property(dataType.getPersistentName());
             z_internalMarkCollectionLoaded(dataType, true);
-            if (p.isPresent()) {
+            if (p.isPresent() && p.value() != null) {
                 z_internalAddPersistentValueToCollection(dataType, p.value());
             }
         }
@@ -56,7 +56,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         Set<UmlgRuntimeProperty> dataTypes = z_internalDataTypeProperties();
         for (UmlgRuntimeProperty dataType : dataTypes) {
             Property p = this.vertex.property(dataType.getPersistentName());
-            if (p.isPresent()) {
+            if (p.isPresent() && p.value() != null) {
                 z_internalMarkCollectionLoaded(dataType, true);
                 z_internalAddPersistentValueToCollection(dataType, p.value());
             }
@@ -77,7 +77,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         Map<UmlgRuntimeProperty, Object> primitiveDefaultValueProperties = z_internalDataTypePropertiesWithDefaultValues();
         for (Map.Entry<UmlgRuntimeProperty, Object> umlgRuntimePropertyObjectEntry : primitiveDefaultValueProperties.entrySet()) {
             if (umlgRuntimePropertyObjectEntry.getKey().isOneEnumeration()) {
-                properties.put(umlgRuntimePropertyObjectEntry.getKey().getPersistentName(), ((Enum)umlgRuntimePropertyObjectEntry.getValue()).name());
+                properties.put(umlgRuntimePropertyObjectEntry.getKey().getPersistentName(), ((Enum) umlgRuntimePropertyObjectEntry.getValue()).name());
             } else if (umlgRuntimePropertyObjectEntry.getKey().getDataTypeEnum() != null) {
                 properties.put(umlgRuntimePropertyObjectEntry.getKey().getPersistentName(), UmlgFormatter.format(umlgRuntimePropertyObjectEntry.getKey().getDataTypeEnum(), umlgRuntimePropertyObjectEntry.getValue()));
             } else {

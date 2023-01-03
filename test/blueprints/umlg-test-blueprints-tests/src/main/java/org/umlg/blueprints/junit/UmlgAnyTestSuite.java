@@ -2,7 +2,7 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.tests.validationtest.TestValidation;
+import org.umlg.tests.indexing.TestIndexing;
 
 /**
  * Date: 2013/10/19
@@ -10,7 +10,7 @@ import org.umlg.tests.validationtest.TestValidation;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestValidation.class
+        TestIndexing.class
 })
 public class UmlgAnyTestSuite {
 }

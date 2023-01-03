@@ -2,10 +2,7 @@ package org.umlg.runtime.collection.persistent;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
-import org.apache.tinkerpop.gremlin.structure.Direction;
-import org.apache.tinkerpop.gremlin.structure.Edge;
-import org.apache.tinkerpop.gremlin.structure.Property;
-import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.*;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.*;
@@ -30,7 +27,7 @@ import java.util.logging.Logger;
 
 public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntimeProperty, OclStdLibCollection<E> {
 
-    private static final Logger logger = Logger.getLogger(BaseCollection.class.getPackage().getName());
+    private static final Logger LOGGER = Logger.getLogger(BaseCollection.class.getPackage().getName());
     protected Collection<E> internalCollection;
     protected OclStdLibCollection<E> oclStdLibCollection;
     protected boolean loaded = false;
@@ -105,7 +102,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     protected void loadFromVertex() {
         if (UMLG.get().supportsBatchMode() && UMLG.get().isInBatchMode()) {
-            logger.warning("In batch mode but collection is not loaded. Collection: " + this.umlgRuntimeProperty.getQualifiedName());
+            LOGGER.warning("In batch mode but collection is not loaded. Collection: " + this.umlgRuntimeProperty.getQualifiedName());
         }
         if (isManyPrimitive()) {
             loadManyPrimitive();
@@ -126,16 +123,18 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     private void loadOnePrimitive() {
-        this.vertex.<E>property(getPersistentName()).ifPresent(value -> this.internalCollection.add(value));
+        VertexProperty<E> property = this.vertex.property(getPersistentName());
+        if (property.isPresent() && property.value() != null) {
+            this.internalCollection.add(property.value());
+        }
     }
 
     private void loadOneEnumeration() {
-        this.vertex.<E>property(getPersistentName()).ifPresent(
-                value -> {
-                    Class<?> c = this.getPropertyType();
-                    this.internalCollection.add((E) Enum.valueOf((Class<? extends Enum>) c, (String) value));
-                }
-        );
+        VertexProperty<E> property = this.vertex.<E>property(getPersistentName());
+        if (property.isPresent() && property.value() != null) {
+            Class<?> c = this.getPropertyType();
+            this.internalCollection.add((E) Enum.valueOf((Class<? extends Enum>) c, (String) property.value()));
+        }
     }
 
     protected Iterator<Edge> getEdges() {
@@ -324,7 +323,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 if (isOnePrimitivePropertyOfAssociationClass()) {
                     //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
                     Property edgeIdProperty = this.vertex.property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
-                    if (edgeIdProperty.isPresent()) {
+                    if (edgeIdProperty.isPresent() && edgeIdProperty.value() != null) {
                         Edge edge1 = UMLG.get().traversal().E(edgeIdProperty.value()).next();
                         edge1.property(getPersistentName()).remove();
                         //This is here because Titan has the nasty habit of recreating edges and changing the id.
@@ -382,7 +381,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             if (isOnePrimitivePropertyOfAssociationClass()) {
                 Property edgeIdProperty = this.vertex.property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
                 //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
-                if (edgeIdProperty.isPresent()) {
+                if (edgeIdProperty.isPresent() && edgeIdProperty.value() != null) {
                     UMLG.get().traversal().E(edgeIdProperty.value()).next().property(getPersistentName(), e);
                 }
             }
@@ -391,7 +390,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             if (isOnePrimitivePropertyOfAssociationClass()) {
                 //edgeId can be null when the property is set on association class that is not yet been added to its member ends.
                 Property edgeIdProperty = this.vertex.property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
-                if (edgeIdProperty.isPresent()) {
+                if (edgeIdProperty.isPresent() && edgeIdProperty.value() != null) {
                     UMLG.get().traversal().E(edgeIdProperty.value()).next().property(getPersistentName(), ((Enum<?>) e).name());
                 }
             }
@@ -1021,28 +1020,25 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     private void loadOneDataType() {
-        this.vertex.property(getPersistentName()).ifPresent(
-                s -> {
-                    E result;
-                    DataTypeEnum dte = getDataTypeEnum();
-                    switch (dte) {
-                        case Password:
-                            Password password = new Password();
-                            password.loadFromVertex(this.vertex, getPersistentName());
-                            result = (E) password;
-                            break;
-                        default:
-                            result = UmlgFormatter.parse(getDataTypeEnum(), s);
-                    }
-                    this.internalCollection.add(result);
-                }
-        );
+        VertexProperty<Object> property = this.vertex.property(getPersistentName());
+        if (property.isPresent() && property.value() != null) {
+            E result;
+            DataTypeEnum dte = getDataTypeEnum();
+            if (Objects.requireNonNull(dte) == DataTypeEnum.Password) {
+                Password password = new Password();
+                password.loadFromVertex(this.vertex, getPersistentName());
+                result = (E) password;
+            } else {
+                result = UmlgFormatter.parse(getDataTypeEnum(), property.value());
+            }
+            this.internalCollection.add(result);
+        }
         this.loaded = true;
     }
 
     private void loadManyDataType() {
         Property<Object> manyProperty = this.vertex.property(getPersistentName());
-        if (manyProperty.isPresent()) {
+        if (manyProperty.isPresent() && manyProperty.value() != null) {
             this.internalCollection.clear();
             Collection<E> coll = UmlgFormatter.convertFromArray(this.umlgRuntimeProperty.getDataTypeEnum(), manyProperty.value());
             this.internalCollection.addAll(coll);
@@ -1111,7 +1107,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     protected void loadManyEnumeration() {
         Property<String[]> manyProperty = this.vertex.property(getPersistentName());
-        if (manyProperty.isPresent()) {
+        if (manyProperty.isPresent() && manyProperty.value() != null) {
             this.internalCollection.clear();
             String[] value = vertex.value(getPersistentName());
             for (String enumerationAsString : value) {
@@ -1123,7 +1119,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     protected void loadManyPrimitive() {
         Property<Object> manyProperty = this.vertex.property(getPersistentName());
-        if (manyProperty.isPresent()) {
+        if (manyProperty.isPresent() && manyProperty.value() != null) {
             this.internalCollection.clear();
             Class propertyType = this.umlgRuntimeProperty.getPropertyType();
             List<E> list;

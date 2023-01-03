@@ -42,7 +42,7 @@ public class Password implements UmlgType {
         final PasswordEncryptionService pes = new PasswordEncryptionService();
         try {
             Property<byte[]> saltProperty = v.property(persistentName + SALT);
-            if (saltProperty.isPresent()) {
+            if (saltProperty.isPresent() && saltProperty.value() != null) {
                 this.salt = saltProperty.value();
             } else {
                 this.salt = pes.generateSalt();

@@ -5,18 +5,18 @@ package org.umlg.jetty.websocket;
  * Time: 6:50 PM
  */
 
-import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
-import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
+import org.eclipse.jetty.websocket.server.JettyWebSocketServlet;
+import org.eclipse.jetty.websocket.server.JettyWebSocketServletFactory;
 
 import java.util.logging.Logger;
 
-public class UmlgWebsocketServlet extends WebSocketServlet {
+public class UmlgWebsocketServlet extends JettyWebSocketServlet {
 
     private static Logger logger = Logger.getLogger(UmlgWebsocketServlet.class.getPackage().getName());
     @Override
-    public void configure(WebSocketServletFactory factory) {
+    public void configure(JettyWebSocketServletFactory factory) {
         logger.fine("UmlgWebsocketServlet start");
-        factory.getPolicy().setIdleTimeout(10000);
+//        factory.getPolicy().setIdleTimeout(10000);
         factory.register(UmlgWebsocket.class);
     }
 

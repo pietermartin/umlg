@@ -12,7 +12,7 @@
     <groupId>org.umlg</groupId>
     <artifactId>umlg</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.9-SNAPSHOT</version>
+    <version>2.0.10-SNAPSHOT</version>
     <name>umlg</name>
     <description>Umlg is a uml to java code generator. From uml class diagrams, java entities are generated. The
         entities persist in graph databases.
@@ -64,12 +64,10 @@
 
     <properties>
         <restlet.version>2.3.12</restlet.version>
-        <jetty.version>9.4.8.v20171121</jetty.version>
-        <tinkerpop.version>3.5.1</tinkerpop.version>
-        <sqlg.version>2.1.6</sqlg.version>
-        <umlg.version>2.0.9-SNAPSHOT</umlg.version>
-        <slf4j.version>1.7.25</slf4j.version>
-        <log4j2.version>2.17.0</log4j2.version>
+        <jetty.version>11.0.12</jetty.version>
+        <tinkerpop.version>3.6.2-SNAPSHOT</tinkerpop.version>
+        <sqlg.version>3.0.0-SNAPSHOT</sqlg.version>
+        <umlg.version>2.0.10-SNAPSHOT</umlg.version>
     </properties>
 
     <modules>

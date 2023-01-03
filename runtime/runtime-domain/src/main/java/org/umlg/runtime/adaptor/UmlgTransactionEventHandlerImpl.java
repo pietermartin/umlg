@@ -1,5 +1,6 @@
 package org.umlg.runtime.adaptor;
 
+import org.apache.tinkerpop.gremlin.structure.VertexProperty;
 import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.domain.AssociationClassNode;
 import org.umlg.runtime.domain.UmlgNode;
@@ -30,7 +31,8 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
                 List<UmlgNode> entities = TransactionThreadEntityVar.get();
                 for (UmlgNode umlgNode : entities) {
                     if (umlgNode instanceof AssociationClassNode) {
-                        if (!umlgNode.getVertex().property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID).isPresent()) {
+                        VertexProperty<Object> vertexProperty = umlgNode.getVertex().property(UmlgCollection.ASSOCIATION_CLASS_EDGE_ID);
+                        if (!vertexProperty.isPresent() || vertexProperty.value() == null) {
                             throw new IllegalStateException(String.format("AssociationClass entity %s %s property %s is not set. This happens when the association end is a Set and was already present.", umlgNode.getClass().getSimpleName(), umlgNode.getId(), UmlgCollection.ASSOCIATION_CLASS_EDGE_ID));
                         }
                     }

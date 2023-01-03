@@ -30,7 +30,7 @@ public abstract class BaseMetaNode implements UmlgMetaNode {
     @Override
     public String getUid() {
         Property<String> uidProperty = this.vertex.property("uid");
-        if ( !uidProperty.isPresent() || uidProperty.value().trim().length()==0 ) {
+        if ( !uidProperty.isPresent() || (uidProperty.value() == null) || uidProperty.value().trim().length()==0 ) {
             String uid = UUID.randomUUID().toString();
             this.vertex.property("uid", uid);
             return uid;

@@ -83,10 +83,9 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
             this.umlgGraph = new UmlgSqlgGraph(sqlgGraph);
             if (!sqlgGraph.getTopology().getVertexLabel(sqlgGraph.getSqlDialect().getPublicSchema(), UmlgGraph.ROOT_VERTEX).isPresent()) {
                 try {
-//                    this.umlgGraph.addRoot();
-                    this.umlgGraph.commit();
                     //This is to bypass the beforeCommit
                     this.umlgGraph.bypassValidation();
+                    this.umlgGraph.commit();
                     UmlGIndexFactory.getUmlgIndexManager().createIndexes();
                     if (this.configuration.getBoolean("generate.meta.nodes", false)) {
                         UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();

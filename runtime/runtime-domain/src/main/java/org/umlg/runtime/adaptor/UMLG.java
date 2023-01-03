@@ -6,12 +6,7 @@ public class UMLG {
     private UMLG() {
     }
 
-    private static ThreadLocal<UmlgGraph> dbVar = new ThreadLocal<UmlgGraph>() {
-        @Override
-        protected UmlgGraph initialValue() {
-            return UmlgGraphManager.INSTANCE.startupGraph();
-        }
-    };
+    private static final ThreadLocal<UmlgGraph> dbVar = ThreadLocal.withInitial(() -> UmlgGraphManager.INSTANCE.startupGraph());
 
     public static UmlgGraph get() {
         return dbVar.get();

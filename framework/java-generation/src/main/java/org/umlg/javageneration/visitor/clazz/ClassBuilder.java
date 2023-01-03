@@ -115,7 +115,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         getUid.getBody().removeAllFromStatements();
 
         new OJField(getUid.getBody(), "uid", "String");
-        OJIfStatement ifUidNotPresent = new OJIfStatement("!this.vertex.property(\"uid\").isPresent()");
+        OJIfStatement ifUidNotPresent = new OJIfStatement("!this.vertex.property(\"uid\").isPresent() && this.vertex.property(\"uid\").value() != null");
         ifUidNotPresent.addToThenPart("uid=UUID.randomUUID().toString()");
         ifUidNotPresent.addToThenPart("this.vertex.property(\"uid\", uid)");
         ifUidNotPresent.addToElsePart("uid=this.vertex.value(\"uid\")");
