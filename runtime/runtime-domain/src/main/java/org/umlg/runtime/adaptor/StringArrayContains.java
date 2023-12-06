@@ -1,13 +1,14 @@
 package org.umlg.runtime.adaptor;
 
+import org.apache.tinkerpop.gremlin.process.traversal.PBiPredicate;
+
 import java.util.Arrays;
-import java.util.function.BiPredicate;
 
 /**
  * Date: 2015/06/27
  * Time: 2:15 PM
  */
-public enum StringArrayContains implements BiPredicate<String[], Object> {
+public enum StringArrayContains implements PBiPredicate<String[], Object> {
 
     within {
         @Override
