@@ -9,9 +9,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.ocl.Environment;
 import org.eclipse.ocl.uml.UMLEnvironment;
 import org.eclipse.ocl.uml.UMLEnvironmentFactory;
-import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Package;
+import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.resource.UMLResource;
 import org.eclipse.uml2.uml.resources.ResourcesPlugin;
 import org.eclipse.uml2.uml.util.UMLUtil;
@@ -34,6 +34,9 @@ public class ModelLoader {
     private List<ModelLoadedEvent> events = new ArrayList<ModelLoadedEvent>();
     private final Logger logger = Logger.getLogger(ModelLoader.class.getPackage().getName());
     private List<Property> allIndexedFields;
+
+    private final List<Generalization> GENERALIZATION_CACHE = new ArrayList<>();
+    private final List<Abstraction> ABSTRACTION_CACHE = new ArrayList<>();
 
     private ModelLoader() {
         this.RESOURCE_SET = new ResourceSetImpl();
@@ -263,34 +266,44 @@ public class ModelLoader {
     }
 
     public List<Generalization> getSpecifics(final Classifier c) {
-        List<Generalization> results = new ArrayList<Generalization>();
-        filter(results, this.model, new Filter() {
-
-            @Override
-            public boolean filter(Element e) {
-                //For debug
-//				if (e instanceof NamedElement) {
-//					NamedElement namedElement = (NamedElement)e;
-//					if (namedElement.getName() != null) {
-//						if (namedElement.getName().equals("Query")) {
-//							System.out.println();
-//						}
-//					}
-//				}
-//				if (e instanceof Generalization && ((Generalization)e).getGeneral() == c) {
-//					Classifier specific = ((Generalization)e).getSpecific();
-//					if (specific.getName().equals("Query")) {
-//						System.out.println();
-//					}
-//					return true;
-//				} else {
-//					return false;
-//				}
-                return e instanceof Generalization && ((Generalization) e).getGeneral() == c;
+        List<Generalization> results = new ArrayList<>();
+        if (GENERALIZATION_CACHE.isEmpty()) {
+            populateGeneralizations();
+        }
+        for (Generalization generalization : GENERALIZATION_CACHE) {
+            if (generalization.getGeneral() == c) {
+                results.add(generalization);
             }
-        });
-
+        }
+//        filter(results, this.model, e -> {
+//            //For debug
+////				if (e instanceof NamedElement) {
+////					NamedElement namedElement = (NamedElement)e;
+////					if (namedElement.getName() != null) {
+////						if (namedElement.getName().equals("Query")) {
+////							System.out.println();
+////						}
+////					}
+////				}
+////				if (e instanceof Generalization && ((Generalization)e).getGeneral() == c) {
+////					Classifier specific = ((Generalization)e).getSpecific();
+////					if (specific.getName().equals("Query")) {
+////						System.out.println();
+////					}
+////					return true;
+////				} else {
+////					return false;
+////				}
+//            return e instanceof Generalization && ((Generalization) e).getGeneral() == c;
+//        });
         return results;
+    }
+
+    private void populateGeneralizations() {
+        if (!GENERALIZATION_CACHE.isEmpty()) {
+            throw new IllegalStateException("populateGeneralizations must be called on an empty cache");
+        }
+        filter(GENERALIZATION_CACHE, this.model, e -> e instanceof Generalization);
     }
 
     public List<Abstraction> getOriginalAbstractionForRefinedAssociation(final Association association) {
@@ -332,15 +345,20 @@ public class ModelLoader {
     }
 
     public List<Abstraction> getAbstractions() {
-        List<Abstraction> results = new ArrayList<>();
-        filter(results, this.model, new Filter() {
-            @Override
-            public boolean filter(Element e) {
-                return e instanceof Abstraction;
-            }
-        });
+//        List<Abstraction> results = new ArrayList<>();
+        if (ABSTRACTION_CACHE.isEmpty()) {
+            filter(ABSTRACTION_CACHE, this.model, e -> e instanceof Abstraction);
 
-        return results;
+        }
+        return Collections.unmodifiableList(ABSTRACTION_CACHE);
+//        filter(results, this.model, new Filter() {
+//            @Override
+//            public boolean filter(Element e) {
+//                return e instanceof Abstraction;
+//            }
+//        });
+//
+//        return results;
     }
 
 
