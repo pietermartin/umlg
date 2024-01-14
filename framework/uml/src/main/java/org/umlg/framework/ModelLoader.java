@@ -200,6 +200,18 @@ public class ModelLoader {
         return results;
     }
 
+    public List<Class> getAllClasses() {
+        List<Class> results = new ArrayList<Class>();
+        filter(results, this.model, new Filter() {
+            @Override
+            public boolean filter(Element e) {
+                return e instanceof Class && !(e instanceof Behavior);
+            }
+        });
+
+        return results;
+    }
+
     public List<Package> getAllPackages() {
         List<Package> results = new ArrayList<Package>();
         filter(results, this.model, new Filter() {

@@ -21,6 +21,10 @@ public interface UmlgCollection<E> extends Collection<E>, OclStdLibCollection<E>
 
     }
 
+    public default void z_internalClear() {
+
+    }
+
     public default boolean isLoaded() {
         return true;
     }

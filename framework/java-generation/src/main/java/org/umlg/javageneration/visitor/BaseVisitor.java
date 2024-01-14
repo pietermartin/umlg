@@ -1,15 +1,15 @@
 package org.umlg.javageneration.visitor;
 
-import java.util.List;
-
 import org.eclipse.uml2.uml.*;
+import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJIfStatement;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedField;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.Namer;
 import org.umlg.javageneration.util.PropertyWrapper;
+
+import java.util.List;
 
 public class BaseVisitor {
 
@@ -175,6 +175,12 @@ public class BaseVisitor {
 //        if (propertyWrapper.isChangedListener()) {
 //            PropertyChangeNotificationBuilder.buildChangeNotification(owner, remover, propertyWrapper, PropertyChangeNotificationBuilder.CHANGE_TYPE.REMOVE, false);
 //        }
+    }
+
+    protected void buildInternalClearer(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
+        OJAnnotatedOperation remover = new OJAnnotatedOperation(propertyWrapper.internalClearer());
+        remover.getBody().addToStatements("this." + propertyWrapper.fieldname() + ".z_internalClear()");
+        owner.addToOperations(remover);
     }
 
 }

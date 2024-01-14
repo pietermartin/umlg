@@ -403,6 +403,10 @@ public final class UmlgPropertyOperations extends PropertyOperations {
         return "clear" + StringUtils.capitalize(property.getName());
     }
 
+    public static String internalClearer(Property property) {
+        return "z_internalClear" + StringUtils.capitalize(property.getName());
+    }
+
     public static String internalAdder(Property property) {
         return "z_internalAddTo" + StringUtils.capitalize(property.getName());
     }

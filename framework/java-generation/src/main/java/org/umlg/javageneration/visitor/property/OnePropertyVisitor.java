@@ -209,7 +209,15 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             owner.addToImports(UmlgClassOperations.getPathName(otherEnd.getOwningType()).append(UmlgClassOperations.propertyEnumName(otherEnd.getOwningType())));
             setter.getBody().addToStatements(ifNotNull);
         }
-        setter.getBody().addToStatements(pWrap.clearer() + "()");
+
+        if (pWrap.isDataType()) {
+            OJIfStatement ifNull = new OJIfStatement(pWrap.fieldname() + " == null");
+            ifNull.addToThenPart(pWrap.clearer() + "()");
+            ifNull.addToElsePart(pWrap.internalClearer() + "()");
+            setter.getBody().addToStatements(ifNull);
+        } else {
+            setter.getBody().addToStatements(pWrap.clearer() + "()");
+        }
         if (!pWrap.isMemberOfAssociationClass()) {
             setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname() + ")");
         } else {

@@ -36,6 +36,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
                 buildField(owner, propertyWrapper);
                 buildRemover(owner, propertyWrapper);
                 buildClearer(owner, propertyWrapper);
+                buildInternalClearer(owner, propertyWrapper);
             }
             if (!propertyWrapper.isDerived() && propertyWrapper.getDefaultValue() != null) {
                 addInitialization(owner, propertyWrapper);

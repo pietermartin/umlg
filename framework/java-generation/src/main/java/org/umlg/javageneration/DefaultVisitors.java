@@ -59,7 +59,9 @@ public class DefaultVisitors {
 //        result.add(new MetaClassBuilder(Workspace.INSTANCE, Workspace.META_SOURCE_FOLDER));
 //        result.add(new MetaInterfaceBuilder(Workspace.INSTANCE, Workspace.META_SOURCE_FOLDER));
 //        result.add(new MetaNodeCreator(Workspace.INSTANCE, Workspace.META_SOURCE_FOLDER));
+
         result.add(new IndexCreator(Workspace.INSTANCE));
+
         result.add(new IndexSetValidator(Workspace.INSTANCE));
         result.add(new PropertyIndexFinderCreator(Workspace.INSTANCE));
 

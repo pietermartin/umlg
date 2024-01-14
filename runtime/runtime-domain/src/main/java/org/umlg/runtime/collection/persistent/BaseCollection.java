@@ -1,5 +1,6 @@
 package org.umlg.runtime.collection.persistent;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.*;
@@ -269,6 +270,15 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             List<Qualifier> qualifiers = node.getQualifiers(this.umlgRuntimeProperty, this.owner, true);
             validateQualifiedMultiplicity(true, node.getVertex(), qualifiers);
         }
+    }
+
+    @Override
+    public void z_internalClear() {
+        Preconditions.checkState(
+                this.umlgRuntimeProperty.isOnePrimitive() ||
+                        this.umlgRuntimeProperty.isOneEnumeration() ||
+                        this.umlgRuntimeProperty.getDataTypeEnum() != null, "BaseCollection.z_internalClear() failed for " + this.umlgRuntimeProperty.getQualifiedName());
+        this.internalCollection.clear();
     }
 
     @Override

@@ -560,6 +560,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return UmlgPropertyOperations.clearer(this.property);
     }
 
+    public String internalClearer() {
+        return UmlgPropertyOperations.internalClearer(this.property);
+    }
+
     public String internalRemover() {
         return UmlgPropertyOperations.internalRemover(this.property);
     }

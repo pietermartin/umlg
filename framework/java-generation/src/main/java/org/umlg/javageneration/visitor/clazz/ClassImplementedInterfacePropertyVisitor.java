@@ -1,24 +1,23 @@
 package org.umlg.javageneration.visitor.clazz;
 
-import java.util.List;
-import java.util.Set;
-
 import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.VisitSubclasses;
-import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
-import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
+import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
+import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.javageneration.visitor.property.ManyPropertyVisitor;
 import org.umlg.javageneration.visitor.property.OnePropertyVisitor;
-import org.umlg.javageneration.visitor.property.PropertyConstraintBuilder;
 import org.umlg.javageneration.visitor.property.PropertyValidatorBuilder;
+
+import java.util.List;
+import java.util.Set;
 
 public class ClassImplementedInterfacePropertyVisitor extends BaseVisitor implements Visitor<Class> {
 
@@ -55,6 +54,7 @@ public class ClassImplementedInterfacePropertyVisitor extends BaseVisitor implem
 				buildField(owner, propertyWrapper);
 				buildRemover(owner, propertyWrapper);
 				buildClearer(owner, propertyWrapper);
+				buildInternalClearer(owner, propertyWrapper);
 
 				if (propertyWrapper.isMany()) {
 					ManyPropertyVisitor.buildGetter(owner, propertyWrapper);
