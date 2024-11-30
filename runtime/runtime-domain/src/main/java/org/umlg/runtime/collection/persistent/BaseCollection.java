@@ -12,7 +12,6 @@ import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.IterateExpressionAccumulator;
 import org.umlg.runtime.collection.ocl.OclStdLibCollection;
 import org.umlg.runtime.domain.DataTypeEnum;
-import org.umlg.runtime.domain.UmlgEnum;
 import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.domain.ocl.OclState;
@@ -91,7 +90,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         this.umlgRuntimeProperty = runtimeProperty;
     }
 
-    public BaseCollection(UmlgEnum owner, UmlgRuntimeProperty runtimeProperty) {
+    public BaseCollection(Enum owner, UmlgRuntimeProperty runtimeProperty) {
         super();
         this.parentClass = owner.getClass();
         this.umlgRuntimeProperty = runtimeProperty;
@@ -596,7 +595,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     sb.append("\"");
                     sb.append(e);
                     sb.append("\"");
-                } else if (e instanceof UmlgEnum) {
+                } else if (e instanceof Enum) {
                     sb.append("\"");
                     sb.append(e);
                     sb.append("\"");
@@ -1010,8 +1009,8 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 throw new IllegalStateException(String.format("Expected primitive got %s", e.getClass().getName()));
             }
         } else if (this.umlgRuntimeProperty.isManyEnumeration() || this.umlgRuntimeProperty.isOneEnumeration()) {
-            if (!(e instanceof UmlgEnum)) {
-                throw new IllegalStateException(String.format("Expected %s got %s", UmlgEnum.class.getName(), e.getClass().getName()));
+            if (!(e instanceof Enum)) {
+                throw new IllegalStateException(String.format("Expected %s got %s", Enum.class.getName(), e.getClass().getName()));
             }
         } else if (this.umlgRuntimeProperty.getDataTypeEnum() != null) {
             if (!(e.getClass().equals(this.umlgRuntimeProperty.getDataTypeEnum().getType()))) {

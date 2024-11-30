@@ -1,7 +1,6 @@
 package org.umlg.runtime.collection.ocl;
 
 import org.umlg.runtime.collection.*;
-import org.umlg.runtime.domain.UmlgEnum;
 import org.umlg.runtime.domain.ocl.OclAny;
 
 import java.util.Comparator;
@@ -21,7 +20,7 @@ public interface OclStdLibCollection<E> extends OclAny, Iterable<E> {
                 sb.append("\"");
                 sb.append(e);
                 sb.append("\"");
-            } else if (e instanceof UmlgEnum) {
+            } else if (e instanceof Enum) {
                 sb.append("\"");
                 sb.append(e);
                 sb.append("\"");

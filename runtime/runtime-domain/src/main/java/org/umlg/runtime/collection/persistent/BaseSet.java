@@ -9,7 +9,6 @@ import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibSet;
 import org.umlg.runtime.collection.ocl.OclStdLibSetImpl;
-import org.umlg.runtime.domain.UmlgEnum;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.*;
@@ -46,7 +45,7 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements UmlgSet<E>
 		this.oclStdLibCollection = this.oclStdLibSet;
 	}
 
-	public BaseSet(UmlgEnum owner, UmlgRuntimeProperty runtimeProperty) {
+	public BaseSet(Enum owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = new HashSet<E>();
 		this.oclStdLibSet = new OclStdLibSetImpl<E>((Set<E>)this.internalCollection);

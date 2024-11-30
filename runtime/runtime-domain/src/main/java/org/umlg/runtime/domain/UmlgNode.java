@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
+public interface UmlgNode extends OclAny, PersistentObject {
 	Vertex getVertex();
 	boolean isTinkerRoot();
 	void initialiseProperties(boolean loaded);
@@ -44,4 +44,5 @@ public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
 	Set<UmlgRuntimeProperty> z_internalDataTypeProperties();
 	UmlgCollection<? extends Object> z_internalGetCollectionFor(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse);
 	void z_internalMarkCollectionLoaded(UmlgRuntimeProperty umlgRuntimeProperty, boolean loaded);
+	String getQualifiedName();
 }

@@ -1,7 +1,5 @@
 package org.umlg.runtime.adaptor;
 
-import groovy.lang.Writable;
-import groovy.text.SimpleTemplateEngine;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.tinkerpop.gremlin.groovy.engine.GremlinExecutor;
 import org.apache.tinkerpop.gremlin.jsr223.ImportGremlinPlugin;
@@ -98,12 +96,12 @@ public class GroovyExecutor {
         return sb.toString();
     }
 
-    public String evalAsTemplate(String script, Map<String, Object> bindings) throws Exception {
-        bindings.put("g", UMLG.get().getUnderlyingGraph().traversal());
-        SimpleTemplateEngine engine = new SimpleTemplateEngine();
-        Writable w = engine.createTemplate(script).make(bindings);
-        return w.toString();
-    }
+//    public String evalAsTemplate(String script, Map<String, Object> bindings) throws Exception {
+//        bindings.put("g", UMLG.get().getUnderlyingGraph().traversal());
+//        SimpleTemplateEngine engine = new SimpleTemplateEngine();
+//        Writable w = engine.createTemplate(script).make(bindings);
+//        return w.toString();
+//    }
 
     public Object eval(String script) throws Exception {
         Map<String, Object> bindings = new HashMap<>();

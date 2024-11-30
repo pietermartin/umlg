@@ -3,7 +3,6 @@ package org.umlg.runtime.domain.json;
 import org.umlg.runtime.domain.DataTypeEnum;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
-import org.umlg.runtime.domain.UmlgEnum;
 import org.umlg.runtime.util.UmlgFormatter;
 
 import java.time.LocalDate;
@@ -17,14 +16,14 @@ public class ToJsonUtil {
         System.out.println("restAndJson/humans/{humanId}".replaceAll("\\{(\\s*?.*?)*?\\}", String.valueOf(5)));
     }
 
-    public static String enumsToJson(Collection<? extends UmlgEnum> enums) {
+    public static String enumsToJson(Collection<? extends Enum> enums) {
         StringBuilder json = new StringBuilder();
         if (enums != null) {
             int count = 0;
-            for (UmlgEnum p : enums) {
+            for (Enum p : enums) {
                 count++;
                 json.append("\"");
-                json.append(p.toJson());
+                json.append(p.name());
                 json.append("\"");
                 if (count != enums.size()) {
                     json.append(",");

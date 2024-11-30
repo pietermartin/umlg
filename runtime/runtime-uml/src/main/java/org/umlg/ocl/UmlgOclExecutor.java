@@ -1,25 +1,23 @@
 package org.umlg.ocl;
 
-import java.util.Collection;
-import java.util.Map;
-
-import org.apache.commons.lang.time.StopWatch;
 import org.eclipse.ocl.ParserException;
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.uml2.uml.Classifier;
-import org.ruml.runtime.groovy.UmlgGroovyShell;
+import org.umlg.framework.ModelLoader;
 import org.umlg.java.metamodel.OJConstructor;
 import org.umlg.java.metamodel.OJPackage;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.framework.ModelLoader;
 import org.umlg.javageneration.ocl.UmlgOcl2Java;
 import org.umlg.javageneration.util.Namer;
-import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgNode;
+
+import java.util.Collection;
+import java.util.Map;
 
 public class UmlgOclExecutor {
 
@@ -77,8 +75,8 @@ public class UmlgOclExecutor {
             throw new RuntimeException(e);
         }
         String javaString = oclClass.toJavaString();
-        Object result = UmlgGroovyShell.executeQuery(javaString);
-        return result;
+//        Object result = UmlgGroovyShell.executeQuery(javaString);
+        return "";
     }
 
     public static <T> T executeOclQuery(UmlgNode contextTumlNode, String query) {
@@ -105,8 +103,8 @@ public class UmlgOclExecutor {
             throw new RuntimeException(e);
         }
         String javaString = oclClass.toJavaString();
-        Object result = UmlgGroovyShell.executeQuery(javaString, contextTumlNode.getVertex());
-        return (T) result;
+//        Object result = UmlgGroovyShell.executeQuery(javaString, contextTumlNode.getVertex());
+        return (T) "";
     }
 
     //This is called via reflection from UmlgGraph
