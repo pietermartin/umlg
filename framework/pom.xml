@@ -15,7 +15,7 @@
 		<module>java-generation</module>
 		<module>java-metamodel</module>
 		<module>ocl</module>
-		<module>restlet</module>
+<!--		<module>restlet</module>-->
 		<module>generation</module>
 		<module>java-generation-util</module>
 		<module>java-generation-ocl</module>

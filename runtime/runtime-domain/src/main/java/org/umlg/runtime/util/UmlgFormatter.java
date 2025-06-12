@@ -1,6 +1,5 @@
 package org.umlg.runtime.util;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.ArrayUtils;
 import org.umlg.runtime.domain.DataTypeEnum;
 
@@ -117,15 +116,15 @@ public class UmlgFormatter {
 //            return null;
 //        }
 //    }
-
-
-    public static String encode(byte[] bytes) {
-        return Base64.encodeBase64String(bytes);
-    }
-
-    public static byte[] decode(String base64String) {
-        return Base64.decodeBase64(base64String);
-    }
+//
+//
+//    public static String encode(byte[] bytes) {
+//        return Base64.encodeBase64String(bytes);
+//    }
+//
+//    public static byte[] decode(String base64String) {
+//        return Base64.decodeBase64(base64String);
+//    }
 
     public static Object format(DataTypeEnum dataTypeEnum, Object o) {
         switch (dataTypeEnum) {

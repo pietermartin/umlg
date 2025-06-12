@@ -14,16 +14,16 @@
         <module>runtime-domain</module>
         <module>runtime-test</module>
         <module>runtime-test-sqlg</module>
-        <module>runtime-test-restlet</module>
+<!--        <module>runtime-test-restlet</module>-->
         <module>runtime-domain-sqlg</module>
-        <module>runtime-ui</module>
-        <module>runtime-groovy</module>
+<!--        <module>runtime-ui</module>-->
+<!--        <module>runtime-groovy</module>-->
         <module>runtime-uml</module>
-        <module>runtime-restlet</module>
-        <module>runtime-restlet-client</module>
-        <module>runtime-servlet</module>
-        <module>runtime-jetty</module>
-        <module>runtime-jetty-websocket</module>
-        <module>runtime-jetty-websocket-client</module>
+<!--        <module>runtime-restlet</module>-->
+<!--        <module>runtime-restlet-client</module>-->
+<!--        <module>runtime-servlet</module>-->
+<!--        <module>runtime-jetty</module>-->
+<!--        <module>runtime-jetty-websocket</module>-->
+<!--        <module>runtime-jetty-websocket-client</module>-->
     </modules>
 </project>
