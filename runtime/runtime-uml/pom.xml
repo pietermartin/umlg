@@ -4,10 +4,11 @@
 	<parent>
 		<groupId>org.umlg</groupId>
 		<artifactId>runtime</artifactId>
-		<version>2.0.18-SNAPSHOT</version>
+		<version>2.0.18</version>
         <relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>runtime-uml</artifactId>
+	<name>umlg :: runtime-uml</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.umlg</groupId>
@@ -21,7 +22,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.umlg</groupId>
-			<artifactId>runtime-groovy</artifactId>
+			<artifactId>runtime-domain</artifactId>
 			<version>${umlg.version}</version>
 		</dependency>
 	</dependencies>

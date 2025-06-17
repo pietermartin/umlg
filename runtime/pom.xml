@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.umlg</groupId>
         <artifactId>umlg</artifactId>
-        <version>2.0.18-SNAPSHOT</version>
+        <version>2.0.18</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -16,14 +16,5 @@
         <module>runtime-test-sqlg</module>
         <module>runtime-domain-sqlg</module>
         <module>runtime-uml</module>
-<!--        <module>runtime-ui</module>-->
-<!--        <module>runtime-groovy</module>-->
-        <!--        <module>runtime-test-restlet</module>-->
-<!--        <module>runtime-restlet</module>-->
-<!--        <module>runtime-restlet-client</module>-->
-<!--        <module>runtime-servlet</module>-->
-<!--        <module>runtime-jetty</module>-->
-<!--        <module>runtime-jetty-websocket</module>-->
-<!--        <module>runtime-jetty-websocket-client</module>-->
     </modules>
 </project>
