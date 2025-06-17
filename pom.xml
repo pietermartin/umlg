@@ -37,30 +37,6 @@
         </developer>
     </developers>
 
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>apache</id>-->
-<!--            <name>Apache Snapshots</name>-->
-<!--            <snapshots>-->
-<!--                <enabled>true</enabled>-->
-<!--                <updatePolicy>never</updatePolicy>-->
-<!--                <checksumPolicy>fail</checksumPolicy>-->
-<!--            </snapshots>-->
-<!--            <url>https://repository.apache.org/content/groups/snapshots</url>-->
-<!--            <layout>default</layout>-->
-<!--        </repository>-->
-<!--    </repositories>-->
-
-<!--    <distributionManagement>-->
-<!--        <snapshotRepository>-->
-<!--            <id>ossrh</id>-->
-<!--            <url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
-<!--        </snapshotRepository>-->
-<!--        <repository>-->
-<!--            <id>ossrh</id>-->
-<!--            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
-<!--        </repository>-->
-<!--    </distributionManagement>-->
     <distributionManagement>
         <snapshotRepository>
             <id>central</id>
@@ -72,16 +48,30 @@
         <restlet.version>2.3.12</restlet.version>
         <jetty.version>11.0.12</jetty.version>
         <tinkerpop.version>3.7.3</tinkerpop.version>
-        <sqlg.version>3.1.2-SNAPSHOT</sqlg.version>
+        <sqlg.version>3.1.2</sqlg.version>
         <umlg.version>2.0.18-SNAPSHOT</umlg.version>
     </properties>
+
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <name>Central Portal Snapshots</name>-->
+<!--            <id>central-portal-snapshots</id>-->
+<!--            <url>https://central.sonatype.com/repository/maven-snapshots/</url>-->
+<!--            <releases>-->
+<!--                <enabled>false</enabled>-->
+<!--            </releases>-->
+<!--            <snapshots>-->
+<!--                <enabled>true</enabled>-->
+<!--            </snapshots>-->
+<!--        </repository>-->
+<!--    </repositories>-->
 
     <modules>
         <module>framework</module>
         <module>runtime</module>
         <!--<module>archetypes</module>-->
         <!--<module>eclipselib</module>-->
-        <module>test</module>
+<!--        <module>test</module>-->
     </modules>
     <build>
         <plugins>

@@ -14,11 +14,11 @@
         <module>runtime-domain</module>
         <module>runtime-test</module>
         <module>runtime-test-sqlg</module>
-<!--        <module>runtime-test-restlet</module>-->
         <module>runtime-domain-sqlg</module>
+        <module>runtime-uml</module>
 <!--        <module>runtime-ui</module>-->
 <!--        <module>runtime-groovy</module>-->
-        <module>runtime-uml</module>
+        <!--        <module>runtime-test-restlet</module>-->
 <!--        <module>runtime-restlet</module>-->
 <!--        <module>runtime-restlet-client</module>-->
 <!--        <module>runtime-servlet</module>-->
