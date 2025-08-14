@@ -12,7 +12,7 @@
     <groupId>org.umlg</groupId>
     <artifactId>umlg</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.19-SNAPSHOT</version>
+    <version>2.0.19</version>
     <name>umlg</name>
     <description>Umlg is a uml to java code generator. From uml class diagrams, java entities are generated. The
         entities persist in graph databases.
@@ -48,8 +48,8 @@
         <restlet.version>2.3.12</restlet.version>
         <jetty.version>11.0.12</jetty.version>
         <tinkerpop.version>3.7.3</tinkerpop.version>
-        <sqlg.version>3.1.2</sqlg.version>
-        <umlg.version>2.0.19-SNAPSHOT</umlg.version>
+        <sqlg.version>3.1.3</sqlg.version>
+        <umlg.version>2.0.19</umlg.version>
     </properties>
 
 <!--    <repositories>-->
@@ -78,7 +78,7 @@
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.7.0</version>
+                <version>0.8.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <publishingServerId>central</publishingServerId>
@@ -185,6 +185,12 @@
                 <groupId>org.umlg</groupId>
                 <artifactId>sqlg-core</artifactId>
                 <version>${sqlg.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-lang3</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.umlg</groupId>
