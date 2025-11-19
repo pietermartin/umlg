@@ -48,7 +48,7 @@
         <restlet.version>2.3.12</restlet.version>
         <jetty.version>11.0.12</jetty.version>
         <tinkerpop.version>3.7.4</tinkerpop.version>
-        <sqlg.version>3.1.5</sqlg.version>
+        <sqlg.version>3.1.6-SNAPSHOT</sqlg.version>
         <umlg.version>2.0.22-SNAPSHOT</umlg.version>
     </properties>
 
@@ -98,7 +98,7 @@
                             <rules>
                                 <DependencyConvergence/>
                                 <requireJavaVersion>
-                                    <version>[10,)</version>
+                                    <version>[17,)</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>

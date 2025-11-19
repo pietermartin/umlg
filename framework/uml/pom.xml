@@ -37,6 +37,14 @@
                     <groupId>org.eclipse.emf.mapping</groupId>
                     <artifactId>ecore2xml</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.core</groupId>
+                    <artifactId>runtime</artifactId>
+                </exclusion>
+<!--                <exclusion>-->
+<!--                    <groupId>org.eclipse.equinox</groupId>-->
+<!--                    <artifactId>preferences</artifactId>-->
+<!--                </exclusion>-->
             </exclusions>
         </dependency>
         <!-- OCL -->
@@ -59,6 +67,14 @@
                 <exclusion>
                     <groupId>org.eclipse.emf.mapping</groupId>
                     <artifactId>ecore2xml</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.uml2.uml</groupId>
+                    <artifactId>resources</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.core</groupId>
+                    <artifactId>runtime</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
