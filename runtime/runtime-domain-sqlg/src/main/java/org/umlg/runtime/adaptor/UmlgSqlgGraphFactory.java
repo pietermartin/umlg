@@ -1,15 +1,9 @@
 package org.umlg.runtime.adaptor;
 
 import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.builder.fluent.Configurations;
-import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.sqlg.structure.SqlgGraph;
 import org.umlg.sqlg.util.SqlgUtil;
 
-import java.io.File;
-import java.net.URL;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -49,60 +43,61 @@ public class UmlgSqlgGraphFactory implements UmlgGraphFactory {
     @Override
     public UmlgGraph getTumlGraph(String url) {
         if (this.umlgGraph == null) {
-            Configurations configs = new Configurations();
-            URL URL = Thread.currentThread().getContextClassLoader().getResource("sqlg.properties");
-            try {
-                if (URL != null) {
-                    this.configuration = configs.properties(URL);
-                    logger.info("loading sqlg.properties from the classpath");
-                } else {
-                    System.out.println(new File(".").getAbsolutePath());
-                    String[] propertiesFileLoacation = UmlgProperties.INSTANCE.getSqlgPropertiesLocation();
-                    boolean foundPropertiesFile = false;
-                    for (String location : propertiesFileLoacation) {
-                        File propertiesFile = new File(location);
-                        if (propertiesFile.exists()) {
-                            this.configuration = configs.properties(propertiesFile);
-                            foundPropertiesFile = true;
-                            logger.info(String.format("loading sqlg.properties from the %s", propertiesFile.getAbsolutePath()));
-                            break;
-                        }
-                    }
-                    if (!foundPropertiesFile) {
-                        throw new RuntimeException("sqlg.properties must be on the classpath or umlg.env.properties must specify its location in a property sqlg.properties.location");
-                    }
-
-                }
-            } catch (ConfigurationException e) {
-                throw new RuntimeException("sqlg.properties must be on the classpath or umlg.env.properties must specify its location in a property sqlg.properties.location", e);
-            }
+//            Configurations configs = new Configurations();
+//            URL URL = Thread.currentThread().getContextClassLoader().getResource("sqlg.properties");
+//            try {
+//                if (URL != null) {
+//                    this.configuration = configs.properties(URL);
+//                    logger.info("loading sqlg.properties from the classpath");
+//                } else {
+//                    System.out.println(new File(".").getAbsolutePath());
+//                    String[] propertiesFileLoacation = UmlgProperties.INSTANCE.getSqlgPropertiesLocation();
+//                    boolean foundPropertiesFile = false;
+//                    for (String location : propertiesFileLoacation) {
+//                        File propertiesFile = new File(location);
+//                        if (propertiesFile.exists()) {
+//                            this.configuration = configs.properties(propertiesFile);
+//                            foundPropertiesFile = true;
+//                            logger.info(String.format("loading sqlg.properties from the %s", propertiesFile.getAbsolutePath()));
+//                            break;
+//                        }
+//                    }
+//                    if (!foundPropertiesFile) {
+//                        throw new RuntimeException("sqlg.properties must be on the classpath or umlg.env.properties must specify its location in a property sqlg.properties.location");
+//                    }
+//
+//                }
+//            } catch (ConfigurationException e) {
+//                throw new RuntimeException("sqlg.properties must be on the classpath or umlg.env.properties must specify its location in a property sqlg.properties.location", e);
+//            }
             TransactionThreadEntityVar.remove();
             TransactionThreadBypassValidationVar.remove();
             TransactionThreadNotificationVar.remove();
-            SqlgGraph sqlgGraph = SqlgGraph.open(configuration);
-            this.umlgGraph = new UmlgSqlgGraph(sqlgGraph);
-            if (!sqlgGraph.getTopology().getVertexLabel(sqlgGraph.getSqlDialect().getPublicSchema(), UmlgGraph.ROOT_VERTEX).isPresent()) {
-                try {
-                    //This is to bypass the beforeCommit
-                    this.umlgGraph.bypassValidation();
-                    this.umlgGraph.commit();
-                    UmlGIndexFactory.getUmlgIndexManager().createIndexes();
-                    if (this.configuration.getBoolean("generate.meta.nodes", false)) {
-                        UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
-                    }
-                    this.umlgGraph.commit();
-                } catch (Exception e) {
-                    logger.log(Level.SEVERE, "Could not start sqlg db!", e);
-                    if (this.umlgGraph != null) {
-                        this.umlgGraph.rollback();
-                    }
-                    if (e instanceof RuntimeException) {
-                        throw (RuntimeException) e;
-                    } else {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
+//            SqlgGraph sqlgGraph = SqlgGraph.open(configuration);
+            this.umlgGraph = new UmlgSqlgGraph();
+//            this.umlgGraph.set(sqlgGraph);
+//            if (!sqlgGraph.getTopology().getVertexLabel(sqlgGraph.getSqlDialect().getPublicSchema(), UmlgGraph.ROOT_VERTEX).isPresent()) {
+//                try {
+//                    //This is to bypass the beforeCommit
+//                    this.umlgGraph.bypassValidation();
+//                    this.umlgGraph.commit();
+//                    UmlGIndexFactory.getUmlgIndexManager().createIndexes();
+//                    if (this.configuration.getBoolean("generate.meta.nodes", false)) {
+//                        UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
+//                    }
+//                    this.umlgGraph.commit();
+//                } catch (Exception e) {
+//                    logger.log(Level.SEVERE, "Could not start sqlg db!", e);
+//                    if (this.umlgGraph != null) {
+//                        this.umlgGraph.rollback();
+//                    }
+//                    if (e instanceof RuntimeException) {
+//                        throw (RuntimeException) e;
+//                    } else {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//            }
             //Prepare groovy
 //            GroovyExecutor ge = GroovyExecutor.INSTANCE;
         }

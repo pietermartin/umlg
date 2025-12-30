@@ -38,14 +38,22 @@ public class UmlgSqlgGraph implements UmlgGraph, UmlgAdminGraph {
     //cache the root vertex
     private Vertex rootVertex;
 
-    public UmlgSqlgGraph(Configuration config) {
-        this.sqlG = SqlgGraph.open(config);
+//    public UmlgSqlgGraph(Configuration config) {
+//        this.sqlG = SqlgGraph.open(config);
+//        this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
+//    }
+//
+//    public UmlgSqlgGraph(SqlgGraph sqlgGraph) {
+//        this.sqlG = sqlgGraph;
+//        this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
+//    }
+    
+    public UmlgSqlgGraph() {
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
-    public UmlgSqlgGraph(SqlgGraph sqlgGraph) {
-        this.sqlG = sqlgGraph;
-        this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
+    public void set(Graph graph) {
+        this.sqlG = (SqlgGraph) graph;
     }
 
     @Override
