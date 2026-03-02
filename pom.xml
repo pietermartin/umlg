@@ -48,7 +48,7 @@
         <restlet.version>2.3.12</restlet.version>
         <jetty.version>11.0.12</jetty.version>
         <tinkerpop.version>3.7.4</tinkerpop.version>
-        <sqlg.version>3.1.6</sqlg.version>
+        <sqlg.version>3.1.7-SNAPSHOT</sqlg.version>
         <umlg.version>2.0.23-SNAPSHOT</umlg.version>
     </properties>
 
@@ -250,12 +250,12 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>2.19.1</version>
+                <version>2.21.1</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
-                <version>2.19.1</version>
+                <version>2.21.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
