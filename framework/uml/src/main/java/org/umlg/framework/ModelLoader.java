@@ -456,9 +456,11 @@ public class ModelLoader {
     public void clear() {
         this.model = null;
         this.RESOURCE_SET = new ResourceSetImpl();
+        this.GENERALIZATION_CACHE.clear();
+        this.ABSTRACTION_CACHE.clear();
         this.umlgProfile = null;
         this.umlgValidationProfile = null;
-        this.importedModelLibraries = new ArrayList<Model>();
+        this.importedModelLibraries = new ArrayList<>();
     }
 
     public ResourceSet getRESOURCE_SET() {
